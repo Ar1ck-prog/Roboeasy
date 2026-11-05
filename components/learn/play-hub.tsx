@@ -1,7 +1,7 @@
 'use client'
 
 import Link from 'next/link'
-import { ArrowRight, Blocks, Brain, Gauge, Puzzle, Repeat, Route, Star, Zap } from 'lucide-react'
+import { ArrowRight, Blocks, Box, Brain, Gauge, Puzzle, Repeat, Route, Star, Zap } from 'lucide-react'
 
 import { QuestsCard } from '@/components/learn/quests-card'
 import { Card, CardTitle } from '@/components/ui/card'
@@ -44,6 +44,7 @@ export function PlayHub({ lang, t }: { lang: Lang; t: PlayText }) {
     { href: '/path/challenge', icon: Star, ...t.play.challenge },
     { href: '/learn/placement', icon: Gauge, ...t.play.placement },
     { href: '/sandbox', icon: Blocks, ...t.play.sandbox },
+    { href: '/compete/simulator', icon: Box, ...t.play.simulator },
   ]
 
   return (
@@ -84,7 +85,7 @@ export function PlayHub({ lang, t }: { lang: Lang; t: PlayText }) {
 
       <section className="grid gap-3">
         <h2 className="m-0 text-2xl">{t.play.practice}</h2>
-        <ul className="m-0 grid list-none gap-3 p-0 sm:grid-cols-2 lg:grid-cols-4">
+        <ul className="m-0 grid list-none gap-3 p-0 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5">
           {practice.map(({ href, icon: Icon, title, text }) => (
             <li key={href}>
               <Link

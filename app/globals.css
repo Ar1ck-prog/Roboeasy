@@ -2950,3 +2950,18 @@
     display: none;
   }
 }
+
+/* 3D simulator loading bar (components/fll/field-simulator.tsx) */
+@keyframes sim-loading {
+  from {
+    transform: translateX(-100%);
+  }
+  to {
+    transform: translateX(300%);
+  }
+}
+@media (prefers-reduced-motion: no-preference) {
+  .sim-loading-bar {
+    animation: sim-loading 1.3s ease-in-out infinite;
+  }
+}

@@ -44,7 +44,7 @@ export interface LearnLandingCopy {
   stats: { value: string; label: string }[]
   motivation: { eyebrow: string; title: string; items: { title: string; text: string }[]; note: string }
   mentor: { eyebrow: string; title: string; text: string; levels: string[]; question: string; answer: string }
-  compete: { eyebrow: string; title: string; text: string; cta: string }
+  compete: { eyebrow: string; title: string; text: string; cta: string; sim: string }
   self: { eyebrow: string; title: string; items: { title: string; text: string }[]; parents: { title: string; items: string[] } }
   faq: { title: string; items: { q: string; a: string }[] }
   final: { title: string; text: string; cta: string }
@@ -166,6 +166,7 @@ const ru: LearnLandingCopy = {
     title: 'До уровня FIRST LEGO League',
     text: 'В последнем треке — стратегия заездов, насадки, работа в команде и защита робота. FLL-тренер поможет спланировать сезон.',
     cta: 'Открыть FLL-тренер',
+    sim: '3D-симулятор поля',
   },
   self: {
     eyebrow: 'Самостоятельно',
@@ -313,6 +314,7 @@ const en: LearnLandingCopy = {
     title: 'All the way to FIRST LEGO League',
     text: 'The last track covers run strategy, attachments, teamwork and presenting your robot. The FLL coach helps plan the season.',
     cta: 'Open the FLL coach',
+    sim: '3D field simulator',
   },
   self: {
     eyebrow: 'On your own',
@@ -457,6 +459,7 @@ const kk: LearnLandingCopy = {
     title: 'FIRST LEGO League деңгейіне дейін',
     text: 'Соңғы тректе — заездер стратегиясы, саптамалар, командалық жұмыс және роботты қорғау. FLL-жаттықтырушы маусымды жоспарлауға көмектеседі.',
     cta: 'FLL-жаттықтырушыны ашу',
+    sim: 'Алаңның 3D-симуляторы',
   },
   self: {
     eyebrow: 'Өз бетіңше',

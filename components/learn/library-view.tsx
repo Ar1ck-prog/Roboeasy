@@ -2,7 +2,7 @@
 
 import { useId, useState } from 'react'
 import Link from 'next/link'
-import { Blocks, ExternalLink, Search, Sparkles, Trophy } from 'lucide-react'
+import { Blocks, Box, ExternalLink, Search, Sparkles, Trophy } from 'lucide-react'
 
 import { Card, CardTitle } from '@/components/ui/card'
 import type { LearnText } from '@/lib/i18n/learn'
@@ -21,6 +21,7 @@ export function LibraryView({ lang, t, nav }: { lang: Lang; t: PlayText; nav: Le
   const tools = [
     { href: '/sandbox', icon: Blocks, title: nav.sandbox },
     { href: '/compete', icon: Trophy, title: nav.compete },
+    { href: '/compete/simulator', icon: Box, title: t.play.simulator.title },
     { href: '/ai', icon: Sparkles, title: 'RoboEasy AI' },
   ]
 

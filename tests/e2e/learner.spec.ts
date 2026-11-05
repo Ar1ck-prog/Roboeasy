@@ -15,7 +15,9 @@ test('new learner: placement, first lesson, XP, achievement, streak next day', a
   const errors: string[] = []
   page.on('pageerror', (e) => errors.push(e.message))
   await page.clock.setFixedTime(DAY1)
-  await page.route('**/api/learn/mentor', (route) => route.fulfill({ json: { ok: true, hint: 'Посчитай клетки до финиша: одна клетка — 10 см.', source: 'ai', remaining: 29 } }))
+  await page.route('**/api/learn/mentor', (route) =>
+    route.fulfill({ json: { ok: true, hint: 'Посчитай клетки до финиша: одна клетка — 10 см.', source: 'ai', remaining: 29 } }),
+  )
 
   // Onboarding
   await page.goto('/ru/path')
@@ -134,4 +136,16 @@ test('legal pages and redirects', async ({ page }) => {
   await expect(page).toHaveURL(/\/ru\/sandbox$/)
   await page.goto('/ru/fll')
   await expect(page).toHaveURL(/\/ru\/compete$/)
+  await page.goto('/ru/class')
+  await expect(page).toHaveURL(/\/ru\/path$/)
+})
+
+test('the 3D field simulator page frames the simulator with a new-tab fallback', async ({ page }) => {
+  await page.goto('/ru/compete')
+  await page.getByRole('link', { name: /3D-симулятор поля BIOGLOW/ }).click()
+  await expect(page).toHaveURL(/\/ru\/compete\/simulator$/)
+  await expect(page.getByRole('heading', { name: '3D-симулятор поля FLL' })).toBeVisible()
+  const frame = page.locator('iframe[title*="BIOGLOW"]')
+  await expect(frame).toHaveAttribute('src', /^https:\/\//)
+  await expect(page.getByRole('link', { name: 'В новой вкладке' })).toHaveAttribute('target', '_blank')
 })

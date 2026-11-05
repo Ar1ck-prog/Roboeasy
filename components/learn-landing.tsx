@@ -5,6 +5,7 @@ import {
   Blocks,
   BookOpen,
   Bot,
+  Box,
   Brain,
   Check,
   CircleCheckBig,
@@ -431,10 +432,16 @@ export function LearnLanding({ lang, t }: { lang: Locale; t: LearnLandingCopy })
               <h2 className="m-0 text-(length:--text-2xl)">{t.compete.title}</h2>
               <p className="m-0 max-w-[60ch] text-muted-foreground">{t.compete.text}</p>
             </div>
-            <Link className={buttonVariants({ size: 'lg' })} href={`/${lang}/compete`}>
-              <Trophy aria-hidden="true" />
-              {t.compete.cta}
-            </Link>
+            <div className="flex flex-wrap gap-3">
+              <Link className={buttonVariants({ variant: 'primary', size: 'lg' })} href={`/${lang}/compete/simulator`}>
+                <Box aria-hidden="true" />
+                {t.compete.sim}
+              </Link>
+              <Link className={buttonVariants({ size: 'lg' })} href={`/${lang}/compete`}>
+                <Trophy aria-hidden="true" />
+                {t.compete.cta}
+              </Link>
+            </div>
           </Card>
         </div>
       </section>

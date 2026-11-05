@@ -148,7 +148,8 @@ export function credits(state: LearnState): Credit[] {
     }
   }
 
-  // Days: the daily goal and the daily quests.
+  // Days: the daily goal and the daily quests (they need the learner's goal and time zone, so a profile).
+  if (!state.profile) return out
   for (const [day, events] of byDay) {
     const at = events[events.length - 1].at
     let lessons = 0
