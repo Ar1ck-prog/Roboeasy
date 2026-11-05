@@ -140,12 +140,18 @@ test('legal pages and redirects', async ({ page }) => {
   await expect(page).toHaveURL(/\/ru\/path$/)
 })
 
-test('the 3D field simulator page frames the simulator with a new-tab fallback', async ({ page }) => {
+test('field simulator: a run from missions drives the robot and the score sheet counts', async ({ page }) => {
   await page.goto('/ru/compete')
-  await page.getByRole('link', { name: /3D-симулятор поля BIOGLOW/ }).click()
+  await page.getByRole('link', { name: /Симулятор поля BIOGLOW/ }).click()
   await expect(page).toHaveURL(/\/ru\/compete\/simulator$/)
-  await expect(page.getByRole('heading', { name: '3D-симулятор поля FLL' })).toBeVisible()
-  const frame = page.locator('iframe[title*="BIOGLOW"]')
-  await expect(frame).toHaveAttribute('src', /^https:\/\//)
-  await expect(page.getByRole('link', { name: 'В новой вкладке' })).toHaveAttribute('target', '_blank')
+  await expect(page.getByRole('heading', { name: 'Симулятор поля FLL' })).toBeVisible()
+  const robot = page.locator('[data-robot]')
+  const start = await robot.getAttribute('transform')
+  await page.getByTestId('sim-missions').getByText('Взрывающиеся семена').click()
+  await page.getByRole('button', { name: 'Запустить' }).click()
+  await expect.poll(() => robot.getAttribute('transform'), { timeout: 10_000 }).not.toBe(start)
+  // Start of a match: habitats in place (20) and six precision tokens (50).
+  await expect(page.getByTestId('score-total')).toContainText('70')
+  await page.getByRole('button', { name: 'Дрон больше не касается мата' }).click()
+  await expect(page.getByTestId('score-total')).toContainText('90')
 })

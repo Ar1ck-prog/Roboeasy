@@ -270,7 +270,7 @@ export const kk: Dictionary = {
     seasonStatus: { current: 'ағымдағы', archived: 'мұрағат' },
     editions: { founders: 'Founders Edition', future: 'Future Edition' },
     platforms: { spike: 'LEGO SPIKE Prime', csai: 'CSAI' },
-    seasonTodo: 'Бұл маусымның деректері әлі толтырылмаған. Миссиялар, старт аймақтары және тыйым салынған аймақтар ресми Robot Game Rulebook бойынша алаң редакторында енгізіледі — оған дейін маршруттар шартты.',
+    seasonTodo: 'Бұл маусымның миссиялары мен координаттары алдын ала енгізілген — ресми Robot Game Rulebook-пен салыстырып, алаң редакторында түзетіңіз.',
     noMissions: 'Маусымда әзірге миссиялар жоқ. Оларды алаң редакторында орналастырып, JSON экспорттаңыз және файлды data/seasons/ ішіне салыңыз.',
     openEditor: 'Алаң редакторы',
     emptyMapTitle: 'Маусым картасы әлі белгіленбеген',

@@ -85,7 +85,7 @@ const ru = {
     challenge: { title: 'Задание недели', text: 'Большая задача на симуляторе — 30 монет.' },
     placement: { title: 'Тест на уровень', text: 'Покажи, что уже знаешь, и пропусти лишнее.' },
     sandbox: { title: 'Песочница', text: 'Свободное программирование робота без заданий.' },
-    simulator: { title: '3D-симулятор FLL', text: 'Поле BIOGLOW в 3D: код на Python и матч на время.' },
+    simulator: { title: 'Симулятор поля FLL', text: 'Поле BIOGLOW: заезды, матч 2:30 и протокол очков.' },
   },
   game: {
     back: 'Все игры',
@@ -246,7 +246,7 @@ const kk: PlayText = {
     challenge: { title: 'Апта тапсырмасы', text: 'Симулятордағы үлкен тапсырма — 30 тиын.' },
     placement: { title: 'Деңгей тесті', text: 'Білетініңді көрсетіп, артығын өткізіп жібер.' },
     sandbox: { title: 'Құмсалғыш', text: 'Тапсырмасыз роботты еркін бағдарламалау.' },
-    simulator: { title: 'FLL 3D-симуляторы', text: 'BIOGLOW алаңы 3D-да: Python коды және уақытқа матч.' },
+    simulator: { title: 'FLL алаңының симуляторы', text: 'BIOGLOW алаңы: заездер, 2:30 матч және ұпай хаттамасы.' },
   },
   game: {
     back: 'Барлық ойындар',
@@ -405,7 +405,7 @@ const en: PlayText = {
     challenge: { title: 'Weekly challenge', text: 'A big task in the simulator — 30 coins.' },
     placement: { title: 'Placement test', text: 'Show what you know and skip the rest.' },
     sandbox: { title: 'Sandbox', text: 'Program the robot freely, no tasks.' },
-    simulator: { title: '3D FLL simulator', text: 'The BIOGLOW field in 3D: Python code and a timed match.' },
+    simulator: { title: 'FLL field simulator', text: 'The BIOGLOW field: runs, a 2:30 match and a score sheet.' },
   },
   game: {
     back: 'All games',

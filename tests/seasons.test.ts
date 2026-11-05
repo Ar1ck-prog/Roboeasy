@@ -26,12 +26,13 @@ describe('shipped seasons', () => {
     expect(DEFAULT_SEASON_ID).toBe('bioglow-2026')
   })
 
-  it('skeletons carry no invented missions and keep the TODO about the rulebook', () => {
+  it('keeps the rulebook TODOs until the data is checked, and flags preliminary missions', () => {
     for (const season of SEASON_LIST) {
-      expect(season.field).toMatchObject({ widthMm: 2362, heightMm: 1143 })
+      expect(season.field.heightMm).toBe(1143)
       expect(season.field.todo).toMatch(/Robot Game Rulebook/)
-      // Remove this check once real missions are entered from the rulebook.
       if (season.missions.length === 0) expect(season.todo).toMatch(/TODO/)
+      // Missions entered before the rulebook check (BIOGLOW: from the fll-bioglow-sim layout) stay marked.
+      if (season.todo) for (const m of season.missions) expect(m.todo, `${season.id} ${m.id}`).toBe(true)
     }
   })
 

@@ -24,12 +24,26 @@ export function Label({ at, children, className, size = 34 }: { at: Point; child
 }
 
 /** Mat, optional user background, grid. Must be outside <FieldFrame>. */
-export function MatBase({ width, height, background, backgroundOpacity = 1, grid = 100, unit = 'mm' }: { width: number; height: number; background?: string | null; backgroundOpacity?: number; grid?: number; unit?: string }) {
+export function MatBase({
+  width,
+  height,
+  background,
+  backgroundOpacity = 1,
+  grid = 100,
+  unit = 'mm',
+}: {
+  width: number
+  height: number
+  background?: string | null
+  backgroundOpacity?: number
+  grid?: number
+  unit?: string
+}) {
   const id = `fll-grid-${grid}`
   return (
     <>
       <defs>
-        <pattern id={id} width={grid} height={grid} patternUnits="userSpaceOnUse" y={height % grid}>
+        <pattern id={id} width={grid || 1} height={grid || 1} patternUnits="userSpaceOnUse" y={grid > 0 ? height % grid : 0}>
           <path d={`M${grid} 0H0V${grid}`} fill="none" stroke="currentColor" strokeOpacity="0.1" strokeWidth={Math.max(1, grid / 60)} />
         </pattern>
         <pattern id="fll-hatch" width="40" height="40" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
@@ -88,7 +102,14 @@ export function LaunchAreaShape({ area, label }: { area: LaunchArea; label: stri
     <g className="fll-area">
       <polygon points={svgPoints(zonePolygon(area))} />
       <circle className="fll-start" cx={area.start.x} cy={area.start.y} r={r * 0.5} />
-      <line className="fll-start" x1={area.start.x} y1={area.start.y} x2={area.start.x + Math.cos(rad) * r * 2} y2={area.start.y + Math.sin(rad) * r * 2} markerEnd="url(#fll-arrow)" />
+      <line
+        className="fll-start"
+        x1={area.start.x}
+        y1={area.start.y}
+        x2={area.start.x + Math.cos(rad) * r * 2}
+        y2={area.start.y + Math.sin(rad) * r * 2}
+        markerEnd="url(#fll-arrow)"
+      />
       {label && (
         <Label at={{ x: area.x, y: area.y + 60 }} className="fll-area-label">
           {label}

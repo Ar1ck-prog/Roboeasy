@@ -268,7 +268,7 @@ export const ru = {
     seasonStatus: { current: 'текущий', archived: 'архив' },
     editions: { founders: 'Founders Edition', future: 'Future Edition' },
     platforms: { spike: 'LEGO SPIKE Prime', csai: 'CSAI' },
-    seasonTodo: 'Данные этого сезона ещё не заполнены. Миссии, зоны старта и запретные зоны вносятся по официальному Robot Game Rulebook в редакторе поля — до этого маршруты условные.',
+    seasonTodo: 'Миссии и координаты этого сезона внесены предварительно — сверяйте с официальным Robot Game Rulebook и поправляйте в редакторе поля.',
     noMissions: 'В сезоне пока нет миссий. Расставьте их в редакторе поля, экспортируйте JSON и положите файл в data/seasons/.',
     openEditor: 'Редактор поля',
     emptyMapTitle: 'Карта сезона ещё не размечена',

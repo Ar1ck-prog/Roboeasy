@@ -259,7 +259,7 @@ export const en: Dictionary = {
     seasonStatus: { current: 'current', archived: 'archive' },
     editions: { founders: 'Founders Edition', future: 'Future Edition' },
     platforms: { spike: 'LEGO SPIKE Prime', csai: 'CSAI' },
-    seasonTodo: 'This season is not filled in yet. Missions, launch areas and forbidden zones are entered from the official Robot Game Rulebook in the field editor; until then routes are only illustrative.',
+    seasonTodo: 'This season’s missions and coordinates are preliminary: check them against the official Robot Game Rulebook and fix them in the field editor.',
     noMissions: 'This season has no missions yet. Place them in the field editor, export the JSON and put the file into data/seasons/.',
     openEditor: 'Field editor',
     emptyMapTitle: 'The season map is not laid out yet',
