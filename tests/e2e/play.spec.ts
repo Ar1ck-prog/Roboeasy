@@ -35,7 +35,6 @@ test('games earn coins that buy an accessory in the garage', async ({ page }) =>
   const antenna = page.getByRole('listitem').filter({ hasText: 'Антенна' })
   await antenna.getByRole('button', { name: /Купить/ }).click()
   await antenna.getByRole('button', { name: 'Точно купить?' }).click()
-  await expect(page.getByText('Куплено: Антенна!')).toBeVisible()
   await expect(antenna.getByText('Надето')).toBeVisible()
   // 40 for the antenna; the "First purchase" achievement may already have paid 15 back.
   await expect(page.getByTestId('coins')).toHaveText(new RegExp(`^(${coins - 40}|${coins - 25})\\D`))

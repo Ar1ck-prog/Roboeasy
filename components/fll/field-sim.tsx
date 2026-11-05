@@ -3,10 +3,11 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import dynamic from 'next/dynamic'
 import Link from 'next/link'
-import { ArrowRight, Check, Copy, Download, Hand, Home, ImageUp, Minus, Play, Plus, RotateCcw, Square, Timer, Trophy } from 'lucide-react'
+import { ArrowRight, Check, Copy, Download, Boxes, Hand, Home, ImageUp, Loader2, Minus, Play, Plus, RotateCcw, Square, Timer, Trophy } from 'lucide-react'
 
 import { ArrowMarker, FieldFrame, LaunchAreaShape, MatBase, MissionShape } from '@/components/fll/field-shapes'
 import { BackgroundControls, useFieldBackground } from '@/components/fll/background'
+import type { CameraKind, Field3D } from '@/components/fll/field-3d'
 import { Badge } from '@/components/ui/badge'
 import { buttonVariants } from '@/components/ui/button'
 import { Card, CardTitle } from '@/components/ui/card'
@@ -112,10 +113,16 @@ export function FieldSim({ lang, t, season, bgT, blocksT }: Props) {
   const [matchOver, setMatchOver] = useState(false)
   const [answers, setAnswers] = useState<Answers>(startAnswers)
   const [copied, setCopied] = useState(false)
+  const [view, setView] = useState<'3d' | 'map'>('3d')
+  const [camera, setCamera] = useState<CameraKind>('orbit')
+  const [ready3d, setReady3d] = useState(false)
+  const [failed3d, setFailed3d] = useState(false)
 
   const svg = useRef<SVGSVGElement>(null)
   const robotEl = useRef<SVGGElement>(null)
   const trailEl = useRef<SVGPolylineElement>(null)
+  const host3d = useRef<HTMLDivElement>(null)
+  const view3d = useRef<Field3D | null>(null)
   const pose = useRef<Pose>({ x: 0, y: 0, heading: 90 })
   const run = useRef<Run | null>(null)
   const keys = useRef(new Set<string>())
@@ -141,32 +148,33 @@ export function FieldSim({ lang, t, season, bgT, blocksT }: Props) {
   const python = useMemo(() => programToPython({ title: 'BIOGLOW', description: '', steps }, robot), [steps, robot])
 
   // ── Drawing ───────────────────────────────────────────────────────────
-  const draw = useCallback(() => {
+  const draw = useCallback((teleport = false) => {
     const p = pose.current
     robotEl.current?.setAttribute('transform', `translate(${p.x.toFixed(1)} ${p.y.toFixed(1)}) rotate(${p.heading.toFixed(2)})`)
+    view3d.current?.setRobot(p, teleport)
     const r = run.current
-    if (trailEl.current) {
-      if (!r) trailEl.current.setAttribute('stroke-dashoffset', '1e6')
-      else {
-        const total = r.cum[r.cum.length - 1] || 1
-        const tr = r.result.trace
-        let lo = 0
-        let hi = tr.length - 1
-        while (hi - lo > 1) {
-          const mid = (lo + hi) >> 1
-          if (tr[mid].t <= r.t) lo = mid
-          else hi = mid
-        }
-        trailEl.current.setAttribute('stroke-dasharray', `${total} ${total}`)
-        trailEl.current.setAttribute('stroke-dashoffset', String(total - r.cum[lo]))
-      }
+    if (!r) {
+      trailEl.current?.setAttribute('stroke-dashoffset', '1e6')
+      return
     }
+    const total = r.cum[r.cum.length - 1] || 1
+    const tr = r.result.trace
+    let lo = 0
+    let hi = tr.length - 1
+    while (hi - lo > 1) {
+      const mid = (lo + hi) >> 1
+      if (tr[mid].t <= r.t) lo = mid
+      else hi = mid
+    }
+    trailEl.current?.setAttribute('stroke-dasharray', `${total} ${total}`)
+    trailEl.current?.setAttribute('stroke-dashoffset', String(total - r.cum[lo]))
+    view3d.current?.setTrailProgress(lo)
   }, [])
 
   const place = useCallback(
-    (p: Pose) => {
+    (p: Pose, teleport = false) => {
       pose.current = p
-      draw()
+      draw(teleport)
     },
     [draw],
   )
@@ -243,6 +251,7 @@ export function FieldSim({ lang, t, season, bgT, blocksT }: Props) {
     const result = simulate(steps, field, { robot, maxTime: Math.max(1, left) })
     run.current = { result, t: 0, done: false, cum: travelled(result.trace) }
     if (trailEl.current) trailEl.current.setAttribute('points', svgPoints(result.trace))
+    view3d.current?.setTrail(result.trace)
     setRunning(true)
   }
   const stop = () => {
@@ -255,14 +264,16 @@ export function FieldSim({ lang, t, season, bgT, blocksT }: Props) {
   const interrupt = () => {
     if (!inBase()) setAnswers((a) => ({ ...a, tokens: Math.max(0, Number(a.tokens) - 1) }))
     run.current = null
+    view3d.current?.setTrail(null)
     setRunning(false)
     setHighlight(null)
-    place(start)
+    place(start, true)
   }
   const toStart = () => {
     run.current = null
+    view3d.current?.setTrail(null)
     setRunning(false)
-    place(start)
+    place(start, true)
   }
   const startMatch = () => {
     matchRef.current = { on: true, left: MATCH_SECONDS }
@@ -276,6 +287,7 @@ export function FieldSim({ lang, t, season, bgT, blocksT }: Props) {
     setMatchOver(false)
     setMatchLeft(MATCH_SECONDS)
     setAnswers(startAnswers())
+    view3d.current?.resetPieces()
     toStart()
   }
   const switchMode = (m: Mode) => {
@@ -301,6 +313,52 @@ export function FieldSim({ lang, t, season, bgT, blocksT }: Props) {
     a.click()
     setTimeout(() => URL.revokeObjectURL(url), 1000)
   }
+
+  // ── The 3D field (three.js + Rapier, loaded on demand) ─────────────────
+  const robotColorRef = useRef(robotColor)
+  robotColorRef.current = robotColor
+  const matRef = useRef(bg.url)
+  matRef.current = bg.url
+  useEffect(() => {
+    if (view !== '3d' || !host3d.current) return
+    let alive = true
+    let made: Field3D | null = null
+    setReady3d(false)
+    import('@/components/fll/field-3d')
+      .then(({ Field3D }) =>
+        Field3D.create(host3d.current!, {
+          season,
+          matUrl: matRef.current,
+          robotColor: robotColorRef.current,
+          onDragRobot: (q) => {
+            // Not while a program drives the robot.
+            if (run.current && !run.current.done) return
+            place({ ...pose.current, x: Math.min(W, Math.max(0, q.x)), y: Math.min(H, Math.max(0, q.y)) })
+          },
+          onPickMission: (id) => document.getElementById(`score-${id.toLowerCase()}`)?.scrollIntoView({ behavior: 'smooth', block: 'center' }),
+        }),
+      )
+      .then((v) => {
+        if (!alive) return v.dispose()
+        made = v
+        view3d.current = v
+        v.setCamera(camera)
+        if (run.current) v.setTrail(run.current.result.trace)
+        draw(true)
+        setReady3d(true)
+      })
+      .catch(() => alive && setFailed3d(true))
+    return () => {
+      alive = false
+      made?.dispose()
+      view3d.current = null
+    }
+    // Recreate only when the view or the season changes.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [view, season])
+  useEffect(() => view3d.current?.setMat(bg.url), [bg.url])
+  useEffect(() => view3d.current?.setRobotColor(robotColor), [robotColor])
+  useEffect(() => view3d.current?.setCamera(camera), [camera])
 
   // ── Input on the field ────────────────────────────────────────────────
   const toField = (e: { clientX: number; clientY: number }) => {
@@ -423,6 +481,19 @@ export function FieldSim({ lang, t, season, bgT, blocksT }: Props) {
                 <Home aria-hidden="true" />
                 {t.toStart}
               </button>
+              <div className="flex overflow-hidden rounded-(--radius-sm) border-(length:--stroke-thin) border-outline" role="group" aria-label={t.view}>
+                {(['3d', 'map'] as const).map((v) => (
+                  <button
+                    key={v}
+                    type="button"
+                    aria-pressed={view === v}
+                    onClick={() => setView(v)}
+                    className={cn('px-3 py-1.5 text-sm font-extrabold', view === v ? 'bg-primary text-primary-foreground' : 'bg-card')}
+                  >
+                    {v === '3d' ? '3D' : t.map}
+                  </button>
+                ))}
+              </div>
               {!bg.url && (
                 <label htmlFor="sim-mat-input" className={buttonVariants({ size: 'sm', variant: 'ghost', className: 'cursor-pointer' })}>
                   <ImageUp aria-hidden="true" />
@@ -448,6 +519,34 @@ export function FieldSim({ lang, t, season, bgT, blocksT }: Props) {
               </div>
             </div>
 
+            {view === '3d' && (
+              <div className="flex flex-wrap items-center gap-1.5" role="group" aria-label={t.camera}>
+                <span className="mr-1 text-sm font-bold text-muted-foreground">{t.camera}</span>
+                {(['orbit', 'top', 'base', 'follow'] as const).map((c) => (
+                  <button
+                    key={c}
+                    type="button"
+                    aria-pressed={camera === c}
+                    onClick={() => setCamera(c)}
+                    className={cn(
+                      'rounded-full border-(length:--stroke-thin) border-outline px-3 py-1 text-sm font-bold',
+                      camera === c ? 'bg-[#101626] text-white' : 'bg-card',
+                    )}
+                  >
+                    {t.cameras[c]}
+                  </button>
+                ))}
+                <button
+                  type="button"
+                  className={buttonVariants({ size: 'sm', variant: 'ghost', className: 'ml-auto' })}
+                  onClick={() => view3d.current?.resetPieces()}
+                >
+                  <Boxes aria-hidden="true" />
+                  {t.resetPieces}
+                </button>
+              </div>
+            )}
+
             <div
               className="relative overflow-hidden rounded-(--radius-sm) border-(length:--stroke-thin) border-outline focus-visible:ring-3 focus-visible:ring-(--focus) focus-visible:outline-none"
               tabIndex={0}
@@ -457,9 +556,31 @@ export function FieldSim({ lang, t, season, bgT, blocksT }: Props) {
               aria-label={`${t.field}. ${t.driveHint}`}
               data-testid="sim-field"
             >
+              {view === '3d' && (
+                <div
+                  ref={host3d}
+                  className="relative aspect-[16/9] max-h-[72dvh] w-full bg-[radial-gradient(var(--dots)_1.6px,transparent_2px)] bg-size-[20px_20px] bg-[#fdf6e8] dark:bg-[#151a2b]"
+                  data-testid="sim-3d"
+                >
+                  {!ready3d && (
+                    <div className="absolute inset-0 z-10 grid place-items-center text-center">
+                      <p className="m-0 flex items-center gap-2 font-display text-lg font-extrabold">
+                        {failed3d ? (
+                          t.failed3d
+                        ) : (
+                          <>
+                            <Loader2 className="size-5 animate-spin" aria-hidden="true" />
+                            {t.loading3d}
+                          </>
+                        )}
+                      </p>
+                    </div>
+                  )}
+                </div>
+              )}
               <svg
                 ref={svg}
-                className="fll-field touch-none"
+                className={cn('fll-field touch-none', view === '3d' && 'hidden')}
                 viewBox={`0 0 ${W} ${H}`}
                 role="img"
                 aria-label={t.field}
@@ -560,7 +681,7 @@ export function FieldSim({ lang, t, season, bgT, blocksT }: Props) {
                 <Hand aria-hidden="true" />
                 {t.interrupt}
               </button>
-              <span className="text-sm text-muted-foreground">{!canRun ? t.outOfTime : t.driveHint}</span>
+              <span className="text-sm text-muted-foreground">{!canRun ? t.outOfTime : view === '3d' ? `${t.orbitHint} ${t.driveHint}` : t.driveHint}</span>
             </div>
           </Card>
 
