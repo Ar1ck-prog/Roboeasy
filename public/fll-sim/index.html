@@ -1,0 +1,124 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>FLL BIOGLOW Симулятор</title>
+  <link rel="icon" href="./assets/logo-small.png" />
+  <script type="module" crossorigin src="./assets/index-PsCX3MsU.js"></script>
+  <link rel="stylesheet" crossorigin href="./assets/index-BriW84K_.css">
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand">
+      <img src="./assets/logo-small.png" alt="BIOGLOW" />
+      <div>
+        <div class="brand-title">FLL BIOGLOW</div>
+        <div class="brand-sub">Симулятор игры роботов</div>
+      </div>
+    </div>
+    <nav class="tabs">
+      <button class="tab active" data-tab="sim">🏁 Поле и код</button>
+      <button class="tab" data-tab="builder">🔧 Конструктор робота</button>
+      <button class="tab" data-tab="help">📘 Справка</button>
+    </nav>
+    <div class="match-box">
+      <div class="timer" id="timer" title="Время матча">2:30</div>
+      <div class="tokens" id="tokens" title="Жетоны точности"></div>
+      <div class="score-big" title="Очки (как на официальном протоколе)"><span id="scoreTotal">0</span><small>/530</small></div>
+    </div>
+  </header>
+
+  <main>
+    <!-- ================= SIMULATOR ================= -->
+    <section id="tab-sim" class="tab-page active">
+      <aside class="code-panel" id="codePanel">
+        <div class="panel-head">
+          <select id="programSelect" title="Программы (запуски)"></select>
+          <button class="icon-btn" id="btnNewProg" title="Новая программа">＋</button>
+          <button class="icon-btn" id="btnRenameProg" title="Переименовать">✎</button>
+          <button class="icon-btn" id="btnDelProg" title="Удалить">🗑</button>
+          <select id="exampleSelect" title="Примеры программ"><option value="">Примеры…</option></select>
+        </div>
+        <div class="editor" id="editor"></div>
+        <div class="run-bar" id="runBar">
+          <button class="btn run" id="btnRun" title="Запустить программу (Ctrl+Enter)">▶ Запуск</button>
+          <button class="btn stop" id="btnStop" title="Остановить программу на месте (без штрафа)">■ Стоп</button>
+          <button class="btn warn" id="btnInterrupt" title="Взять робота руками и вернуть на базу (вне базы: −1 жетон)">✋ Прервать</button>
+          <span class="py-state" id="pyState"></span>
+        </div>
+        <div class="console" id="console"></div>
+      </aside>
+
+      <div class="field-wrap">
+        <div class="field-toolbar">
+          <div class="group">
+            <button class="btn small toggle on" id="btnToggleCode" title="Показать / скрыть поле для кода">📝 Код</button>
+            <button class="btn small toggle on" id="btnToggleScore" title="Показать / скрыть протокол очков">📊 Протокол</button>
+            <button class="btn small toggle" id="btnAtt" title="Насадки: надеть на робота одним кликом">🧩 Насадки</button>
+          </div>
+          <div class="group" id="runSlot"></div>
+          <div class="group">
+            <div class="seg mode" id="modeSeg" title="Режим">
+              <button data-mode="free" class="on" title="Без таймера и штрафов">🏋 Тренировка</button><button data-mode="match" title="Настоящий матч: таймер 2:30, жетоны, итог">🏁 Матч 2:30</button>
+            </div>
+            <button class="btn small primary" id="btnTimer" title="Запустить таймер 2:30 (или он стартует сам с первым ▶ Запуск)">⏱ Старт 2:30</button>
+            <button class="btn small" id="btnMatch" title="Начать матч заново: поле, таймер и жетоны сбрасываются">↻ Новый матч</button>
+            <select id="matchSide" title="Зона запуска"><option value="left">Левая база</option><option value="right">Правая база</option></select>
+            <button class="btn small" id="btnReset" title="Вернуть все модели в исходное положение">⟲ Сброс поля</button>
+            <button class="btn small" id="btnToStart" title="Поставить робота в стартовую позицию базы (между запусками, пока робот на базе)">🏠 На старт</button>
+          </div>
+          <div class="group">
+            <span class="lbl">Скорость</span>
+            <div class="seg" id="speedSeg">
+              <button data-speed="0.25">¼×</button><button data-speed="0.5">½×</button><button data-speed="1" class="on">1×</button><button data-speed="2">2×</button><button data-speed="4">4×</button>
+            </div>
+            <button class="btn small" id="btnPause">⏸</button>
+          </div>
+          <div class="group">
+            <span class="lbl">Камера</span>
+            <div class="seg" id="viewSeg">
+              <button data-view="3d" class="on">3D</button><button data-view="top">Сверху</button><button data-view="home">База</button><button data-view="follow">За роботом</button>
+            </div>
+          </div>
+        </div>
+        <div class="field" id="field">
+          <div class="hud">
+            <div class="hud-card" id="hudMatch"></div>
+            <div class="hud-card" id="hudRobot"></div>
+          </div>
+          <div class="hub-display" id="hubDisplay" title="Экран хаба"></div>
+          <div class="results" id="results"></div>
+          <div class="att-panel" id="attPanel"></div>
+          <div class="hint" id="fieldHint">Перетащите робота мышью (колесо — поворот). Ручное управление: щёлкните по полю, затем <b>WASD/стрелки</b> — езда, <b>R/F</b> — рука C, <b>T/G</b> — мотор D, <b>Shift</b> — медленно.</div>
+          <div class="loading" id="loading"><div class="spinner"></div><div id="loadingText">Загрузка физики…</div></div>
+        </div>
+      </div>
+
+      <aside class="score-panel" id="scorePanel">
+        <div class="panel-head">
+          <b>Протокол очков</b>
+          <span class="muted" id="scoreMode">в реальном времени</span>
+        </div>
+        <div class="setup" id="setupBox"></div>
+        <div class="sheet" id="sheet"></div>
+      </aside>
+    </section>
+
+    <!-- ================= BUILDER ================= -->
+    <section id="tab-builder" class="tab-page">
+      <aside class="palette" id="palette"></aside>
+      <div class="builder-view" id="builderView">
+        <div class="builder-hint" id="builderHint"></div>
+      </div>
+      <aside class="props" id="props"></aside>
+    </section>
+
+    <!-- ================= HELP ================= -->
+    <section id="tab-help" class="tab-page">
+      <div class="help" id="help"></div>
+    </section>
+  </main>
+
+</body>
+</html>
