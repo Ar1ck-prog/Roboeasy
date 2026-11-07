@@ -1,6 +1,8 @@
 /**
- * Copy of the FLL field simulator (/[lang]/compete/simulator): our own
- * top-down simulator on the season field, with the mat picture the team
+ * Copy of the FLL field simulator page (/[lang]/compete/simulator). Two tabs:
+ * the BIOGLOW 3D simulator by fll-bioglow-sim (a copy of the built site in
+ * public/fll-sim, shown in a frame; hosted with the author's permission) and
+ * our own simulator on the season field, with the mat picture the team
  * uploads (shared with the FLL coach). Kazakh needs a review by a native
  * speaker before launch.
  */
@@ -68,6 +70,33 @@ const ru = {
   toPlanner: 'Спланировать заезды в FLL-тренере',
   credit:
     'Миссии, очки и раскладка поля внесены по 3D-симулятору fll-bioglow-sim и правилам сезона BIOGLOW; сверяйся с официальным Robot Game Rulebook. Картинка мата хранится только в твоём браузере.',
+  // Page tabs
+  tabs: { three: '3D-симулятор', own: 'Наш симулятор' },
+  // 3D simulator (a copy of fll-bioglow-sim in public/fll-sim, shown in a frame)
+  three: {
+    eyebrow: 'Соревнования · 3D',
+    title: '3D-симулятор поля FLL',
+    lead: 'Поле BIOGLOW (сезон 2026/27) в 3D с физикой: управляй роботом вручную, пиши код на Python, собирай насадки в конструкторе и проверяй заезды на время — как на настоящем матче.',
+    badges: ['3D и физика', 'Код на Python', 'Матч 2:30', 'Конструктор робота'],
+    newTab: 'В новой вкладке',
+    fullscreen: 'На весь экран',
+    reload: 'Перезагрузить',
+    loading: 'Симулятор загружается…',
+    loadingHint: 'Загружаем 3D-поле, физику и Python — первый раз это может занять до минуты.',
+    slow: 'Долго грузится? Попробуй перезагрузить или открой симулятор в новой вкладке.',
+    frame: '3D-симулятор поля FLL BIOGLOW',
+    phone: 'Симулятор рассчитан на компьютер: нужны клавиатура и мышь. На телефоне удобнее открыть его в новой вкладке.',
+    howTitle: 'Как пользоваться',
+    how: [
+      { title: 'Двигай робота', text: 'Перетащи робота мышью, колесо мыши или Q/E поворачивают. Кнопка «На старт» вернёт его в базу.' },
+      { title: 'Ручное управление', text: 'Щёлкни по полю: WASD или стрелки — езда, R/F — рука C, T/G — мотор D, Shift — медленно.' },
+      { title: 'Код и матч', text: 'Кнопка «Код» открывает программу на Python, есть примеры. Режим «Матч 2:30» — отсчёт времени и протокол очков.' },
+      { title: 'Камера и скорость', text: 'Смотри сверху, из базы или из-за робота; ускоряй и замедляй симуляцию от ¼× до 4×.' },
+    ],
+    tip: 'Сначала спланируй заезды в FLL-тренере, потом проверь их в симуляторе.',
+    credit:
+      'Автор 3D-симулятора — fll-bioglow-sim; копия размещена в RoboEasy с разрешения автора. Поле и миссии — по версии автора, сверяйся с официальными правилами сезона. Оригинал:',
+  },
 }
 
 export type SimulatorText = typeof ru
@@ -131,6 +160,31 @@ const kk: SimulatorText = {
   toPlanner: 'Заездерді FLL-жаттықтырушыда жоспарлау',
   credit:
     'Миссиялар, ұпайлар мен алаң орналасуы fll-bioglow-sim 3D-симуляторы мен BIOGLOW маусымының ережелері бойынша енгізілген; ресми Robot Game Rulebook-пен салыстыр. Мат суреті тек сенің браузеріңде сақталады.',
+  tabs: { three: '3D-симулятор', own: 'Біздің симулятор' },
+  three: {
+    eyebrow: 'Жарыстар · 3D',
+    title: 'FLL алаңының 3D-симуляторы',
+    lead: 'BIOGLOW алаңы (2026/27 маусымы) 3D және физикамен: роботты қолмен басқар, Python-да код жаз, конструкторда саптамалар құрастыр және заездерді уақытқа тексер — нағыз матчтағыдай.',
+    badges: ['3D және физика', 'Python-дағы код', 'Матч 2:30', 'Робот конструкторы'],
+    newTab: 'Жаңа қойындыда',
+    fullscreen: 'Толық экран',
+    reload: 'Қайта жүктеу',
+    loading: 'Симулятор жүктелуде…',
+    loadingHint: '3D-алаң, физика және Python жүктелуде — алғашқы рет бір минутқа дейін созылуы мүмкін.',
+    slow: 'Ұзақ жүктеліп жатыр ма? Қайта жүктеп көр немесе симуляторды жаңа қойындыда аш.',
+    frame: 'FLL BIOGLOW алаңының 3D-симуляторы',
+    phone: 'Симулятор компьютерге арналған: пернетақта мен тінтуір керек. Телефонда оны жаңа қойындыда ашқан ыңғайлы.',
+    howTitle: 'Қалай қолдану керек',
+    how: [
+      { title: 'Роботты жылжыт', text: 'Роботты тінтуірмен сүйре, тінтуір дөңгелегі не Q/E бұрады. «Стартқа» батырмасы оны базаға қайтарады.' },
+      { title: 'Қолмен басқару', text: 'Алаңды бас: WASD немесе бағыттауыштар — жүру, R/F — C қолы, T/G — D моторы, Shift — баяу.' },
+      { title: 'Код және матч', text: '«Код» батырмасы Python-дағы бағдарламаны ашады, мысалдар бар. «Матч 2:30» режимі — кері санақ және ұпай хаттамасы.' },
+      { title: 'Камера және жылдамдық', text: 'Жоғарыдан, базадан немесе роботтың артынан қара; симуляцияны ¼×-тен 4×-ке дейін жылдамдат не баяулат.' },
+    ],
+    tip: 'Алдымен заездерді FLL-жаттықтырушыда жоспарла, содан кейін симуляторда тексер.',
+    credit:
+      '3D-симулятордың авторы — fll-bioglow-sim; көшірме RoboEasy-де автордың рұқсатымен орналастырылған. Алаң мен миссиялар — автордың нұсқасы бойынша, маусымның ресми ережелерімен салыстыр. Түпнұсқа:',
+  },
 }
 
 const en: SimulatorText = {
@@ -192,6 +246,31 @@ const en: SimulatorText = {
   toPlanner: 'Plan runs in the FLL coach',
   credit:
     'Missions, points and the field layout follow the fll-bioglow-sim 3D simulator and the BIOGLOW season rules; check the official Robot Game Rulebook. The mat picture stays in your browser.',
+  tabs: { three: '3D simulator', own: 'Our simulator' },
+  three: {
+    eyebrow: 'Competitions · 3D',
+    title: '3D FLL field simulator',
+    lead: 'The BIOGLOW field (2026/27 season) in 3D with physics: drive the robot by hand, write Python code, build attachments and time your runs like in a real match.',
+    badges: ['3D and physics', 'Python code', '2:30 match', 'Robot builder'],
+    newTab: 'In a new tab',
+    fullscreen: 'Full screen',
+    reload: 'Reload',
+    loading: 'Loading the simulator…',
+    loadingHint: 'Loading the 3D field, physics and Python; the first time can take up to a minute.',
+    slow: 'Taking long? Try reloading, or open the simulator in a new tab.',
+    frame: '3D simulator of the FLL BIOGLOW field',
+    phone: 'The simulator is made for a computer with a keyboard and mouse. On a phone, open it in a new tab.',
+    howTitle: 'How to use it',
+    how: [
+      { title: 'Move the robot', text: 'Drag the robot with the mouse; the wheel or Q/E turns it. “To start” puts it back in base.' },
+      { title: 'Drive by hand', text: 'Click the field: WASD or arrows drive, R/F move arm C, T/G motor D, Shift is slow.' },
+      { title: 'Code and match', text: 'The Code button opens the Python program, with examples. “Match 2:30” runs the clock and the score sheet.' },
+      { title: 'Camera and speed', text: 'Watch from above, from base or behind the robot; run the simulation from ¼× to 4×.' },
+    ],
+    tip: 'Plan your runs in the FLL coach first, then try them in the simulator.',
+    credit:
+      'The 3D simulator is by fll-bioglow-sim; this copy is hosted on RoboEasy with the author’s permission. The field and missions follow the author’s version; check the official season rules. Original:',
+  },
 }
 
 const TEXTS: Record<Locale, SimulatorText> = { ru, kk, en }
@@ -199,3 +278,7 @@ const TEXTS: Record<Locale, SimulatorText> = { ru, kk, en }
 export function getSimulatorText(lang: Locale): SimulatorText {
   return TEXTS[lang]
 }
+
+/** The copied 3D simulator (public/fll-sim) and the original site it came from. */
+export const FLL_SIM_SRC = '/fll-sim/index.html'
+export const FLL_SIM_ORIGINAL = 'https://fll-bioglow-sim.onrender.com/'

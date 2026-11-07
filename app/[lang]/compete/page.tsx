@@ -31,7 +31,7 @@ export default async function FllPage({ params }: Params) {
   const sim = getSimulatorText(lang).promo
   return (
     <AppShell lang={lang}>
-      {/* The 3D field simulator (an external project, shown at /compete/simulator). */}
+      {/* The field simulators (the BIOGLOW 3D copy and ours) at /compete/simulator. */}
       <div className="container pt-6">
         <Link
           href={`/${lang}/compete/simulator`}

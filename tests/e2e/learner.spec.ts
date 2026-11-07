@@ -144,6 +144,9 @@ test('field simulator: a run from missions drives the robot and the score sheet 
   await page.goto('/ru/compete')
   await page.getByRole('link', { name: /Симулятор поля BIOGLOW/ }).click()
   await expect(page).toHaveURL(/\/ru\/compete\/simulator$/)
+  // The 3D simulator (a copy of fll-bioglow-sim) is the default tab; ours is the second.
+  await expect(page.getByRole('heading', { name: '3D-симулятор поля FLL' })).toBeVisible()
+  await page.getByRole('tab', { name: 'Наш симулятор' }).click()
   await expect(page.getByRole('heading', { name: 'Симулятор поля FLL' })).toBeVisible()
   const robot = page.locator('[data-robot]')
   const start = await robot.getAttribute('transform')
