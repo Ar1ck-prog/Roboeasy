@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+  <!-- RoboEasy mark: the smile on the SPIKE hub's 5x5 light matrix (as in the header logo) -->
+  <rect x="1" y="1" width="30" height="30" rx="8.5" fill="#FFD23F" stroke="#15171A" stroke-width="2"/>
+  <rect x="8.80" y="8.80" width="4.1" height="4.1" rx="1.1" fill="#15171A"/>
+  <rect x="19.10" y="8.80" width="4.1" height="4.1" rx="1.1" fill="#15171A"/>
+  <rect x="3.65" y="19.10" width="4.1" height="4.1" rx="1.1" fill="#15171A"/>
+  <rect x="24.25" y="19.10" width="4.1" height="4.1" rx="1.1" fill="#15171A"/>
+  <rect x="8.80" y="24.25" width="4.1" height="4.1" rx="1.1" fill="#15171A"/>
+  <rect x="13.95" y="24.25" width="4.1" height="4.1" rx="1.1" fill="#15171A"/>
+  <rect x="19.10" y="24.25" width="4.1" height="4.1" rx="1.1" fill="#15171A"/>
+</svg>

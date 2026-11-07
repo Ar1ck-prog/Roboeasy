@@ -42,7 +42,8 @@ export async function generateMetadata({ params }: Params): Promise<Metadata> {
       images: [{ url: '/og.png', width: 1200, height: 630, alt: 'RoboEasy AI' }],
     },
     twitter: { card: 'summary_large_image', title: t.meta.title, description: t.meta.description, images: ['/og.png'] },
-    icons: { icon: [{ url: '/favicon.ico', sizes: '48x48' }, { url: '/icon.svg', type: 'image/svg+xml' }], apple: '/apple-icon.png' },
+    // New file names so browsers drop the old cached icon.
+    icons: { icon: [{ url: '/favicon.ico', sizes: '48x48' }, { url: '/roboeasy-icon.svg', type: 'image/svg+xml' }], apple: '/roboeasy-apple.png' },
   }
 }
 
