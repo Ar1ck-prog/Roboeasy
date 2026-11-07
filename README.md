@@ -29,6 +29,10 @@ Sign-in emails land in the local Mailpit: http://127.0.0.1:56324.
 | `npm run build` | production build |
 | `npm run reference` | compares our blocks with SPIKE App exports in `reference/` (see `reference/README.md`) |
 
+## Deploy (Render)
+
+`render.yaml` is a Render Blueprint: in the Render dashboard choose **New → Blueprint**, pick this repository and enter `GEMINI_API_KEY` when asked (`CERT_SECRET` is generated). Render builds with `npm ci && npm run build` and runs `npm run start` on Node 22; every push to `main` redeploys. Without hosted Supabase variables the site runs local-only (progress in the browser). The free plan sleeps when idle, so the first visit after a pause takes up to a minute.
+
 ## Learning platform
 
 - Content is data: `content/learn/course.json` (8 tracks, 37 units, 123 lessons; `ready` ones have a file) and `content/learn/lessons/*.json`, validated by `lib/learn/schema.ts` (zod). Tests run every reference solution through the simulator and its checks. Weekly challenges: `content/learn/challenges.json`.

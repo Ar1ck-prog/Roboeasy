@@ -1,0 +1,25 @@
+# Render Blueprint: dashboard → New → Blueprint → this repository.
+# Secrets marked `sync: false` are asked for in the dashboard (never commit them).
+services:
+  - type: web
+    name: roboeasy
+    runtime: node
+    plan: free
+    branch: main
+    buildCommand: npm ci && npm run build
+    startCommand: npm run start
+    healthCheckPath: /ru
+    autoDeploy: true
+    envVars:
+      - key: NODE_VERSION
+        value: "22"
+      - key: NEXT_TELEMETRY_DISABLED
+        value: "1"
+      # AI generator and mentor (https://aistudio.google.com/apikey).
+      - key: GEMINI_API_KEY
+        sync: false
+      # Signs certificate codes; Render generates a random value once.
+      - key: CERT_SECRET
+        generateValue: true
+      # Accounts and cloud sync stay off until a hosted Supabase project exists:
+      # add NEXT_PUBLIC_SUPABASE_URL and NEXT_PUBLIC_SUPABASE_ANON_KEY here then.
