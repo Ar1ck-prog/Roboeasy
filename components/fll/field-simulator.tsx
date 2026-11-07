@@ -110,7 +110,7 @@ export function FieldSimulator({ lang, t, toPlanner }: { lang: Lang; t: Simulato
         </div>
       </header>
 
-      <p className="alert alert-warn m-0 md:hidden" role="note">
+      <p className="alert alert-ok m-0 md:hidden" role="note">
         {t.phone}
       </p>
 
@@ -118,7 +118,7 @@ export function FieldSimulator({ lang, t, toPlanner }: { lang: Lang; t: Simulato
         ref={box}
         className={cn(
           'relative overflow-hidden rounded-(--radius-lg) border-(length:--stroke) border-outline bg-[#141826] shadow-(--shadow-hard)',
-          full ? 'rounded-none border-0' : 'h-[72dvh] min-h-[480px] md:h-[min(80dvh,860px)]',
+          full ? 'rounded-none border-0' : 'h-[calc(100dvh-7.5rem)] min-h-[520px] md:h-[min(80dvh,860px)]',
         )}
       >
         {ready && (

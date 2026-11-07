@@ -15,6 +15,9 @@ RoboEasy changes only the look:
   fog) colours read the `--re-scene` / `--re-builder` CSS variables instead of
   fixed dark colours;
 - `roboeasy/`: the theme files and the Rubik font.
+- `roboeasy/mobile.css` and `roboeasy/mobile.js` (also linked in `index.html`):
+  below 900 px the panels stack (field, code, score sheet) and a touch pad on
+  the field sends the simulator's own W/A/S/D, R/F, T/G and Shift key events.
 
 The page `/[lang]/compete/simulator` shows it in a frame
 (`components/fll/field-simulator.tsx`). Cross-origin isolation headers for

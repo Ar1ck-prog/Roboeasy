@@ -64,7 +64,8 @@ export default async function RootLayout({ children, params }: Params & { childr
       </head>
       <body>
         <Providers>{children}</Providers>
-        {process.env.NODE_ENV === 'production' && <Analytics />}
+        {/* Vercel Analytics only exists on Vercel; elsewhere (Render) its script is a 404. */}
+        {process.env.NODE_ENV === 'production' && process.env.VERCEL && <Analytics />}
       </body>
     </html>
   )
