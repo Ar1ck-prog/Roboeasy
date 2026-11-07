@@ -49,12 +49,41 @@ export async function currentUser() {
   return data.session?.user ?? null
 }
 
-/** Magic link to the email; it brings the learner back to `returnTo`. */
-export async function signInWithEmail(email: string, returnTo: string): Promise<{ ok: boolean; error?: string }> {
+export type AuthError = 'exists' | 'wrong' | 'confirm' | 'weak' | 'limit' | 'failed'
+export type AuthResult = { ok: true } | { ok: false; error: AuthError }
+
+function authError(e: { code?: string; message?: string; status?: number }): AuthError {
+  const code = e.code ?? ''
+  const msg = (e.message ?? '').toLowerCase()
+  if (code === 'user_already_exists' || code === 'email_exists' || msg.includes('already registered')) return 'exists'
+  if (code === 'invalid_credentials' || msg.includes('invalid login')) return 'wrong'
+  if (code === 'email_not_confirmed' || msg.includes('not confirmed')) return 'confirm'
+  if (code === 'weak_password' || msg.includes('password should')) return 'weak'
+  if (e.status === 429 || code.includes('rate_limit')) return 'limit'
+  return 'failed'
+}
+
+/**
+ * A new account with email and password. No confirmation email: the project
+ * has "Confirm email" turned off, so the learner is signed in right away. If
+ * it is still on, Supabase returns no session and we say so.
+ */
+export async function signUp(email: string, password: string): Promise<AuthResult> {
   const sb = cloud()
-  if (!sb) return { ok: false, error: 'not configured' }
-  const { error } = await sb.auth.signInWithOtp({ email: email.trim(), options: { emailRedirectTo: returnTo, shouldCreateUser: true } })
-  return error ? { ok: false, error: error.message } : { ok: true }
+  if (!sb) return { ok: false, error: 'failed' }
+  const { data, error } = await sb.auth.signUp({ email: email.trim(), password })
+  if (error) return { ok: false, error: authError(error) }
+  // With confirmations on, an address that is already taken comes back as a user without identities.
+  if (data.user && data.user.identities?.length === 0) return { ok: false, error: 'exists' }
+  if (!data.session) return { ok: false, error: 'confirm' }
+  return { ok: true }
+}
+
+export async function signIn(email: string, password: string): Promise<AuthResult> {
+  const sb = cloud()
+  if (!sb) return { ok: false, error: 'failed' }
+  const { error } = await sb.auth.signInWithPassword({ email: email.trim(), password })
+  return error ? { ok: false, error: authError(error) } : { ok: true }
 }
 
 export async function signOut() {

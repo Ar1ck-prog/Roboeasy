@@ -33,7 +33,7 @@ Status: **draft for legal review.** Items marked `TODO(legal)` must be checked b
 
 - **Kazakhstan**: Law of the Republic of Kazakhstan No. 94-V "On personal data and their protection" (2013). Processing data of minors requires consent of a legal representative; data must be stored in Kazakhstan when it is collected there (localisation requirement, art. 12). Today no personal data leaves the browser except the mentor request — check whether a nickname-free program text sent to Gemini counts as personal data. For the database phase: choose a hosting region that satisfies localisation, or keep KZ learners' records in KZ.
 - **EU / GDPR (GDPR-K, art. 8)**: consent of the holder of parental responsibility below the national age (13–16, varies by member state). We use 16 as the single threshold, which covers every member state.
-- **USA / COPPA**: verifiable parental consent for children under 13 before collecting personal information. Our local-only design collects none today; with accounts (email for magic links) we must use a COPPA-compliant consent method (e.g. email-plus confirmation from the parent) — `TODO(legal)`.
+- **USA / COPPA**: verifiable parental consent for children under 13 before collecting personal information. Our local-only design collects none today; with accounts (email and password, no confirmation email) we must use a COPPA-compliant consent method (e.g. email-plus confirmation from the parent) — `TODO(legal)`.
 - **UK Age Appropriate Design Code**: high privacy by default, no nudge techniques, no profiling by default. Streak copy is written without guilt ("missing a day is fine"), there are no purchases or loot boxes, and cosmetics are earned only by learning.
 
 ## Learner rights (implemented)
