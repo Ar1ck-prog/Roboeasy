@@ -1,5 +1,6 @@
 'use client'
 
+import type { ReactNode } from 'react'
 import { Bluetooth, BluetoothOff, Loader2, Play, Square, Unplug } from 'lucide-react'
 
 import { buttonVariants } from '@/components/ui/button'
@@ -18,7 +19,7 @@ function deviceText(d: DeviceUpdate, t: RobotLinkText): string {
 }
 
 /** Connection to a real hub over Bluetooth: status, battery, slot, live sensors and the robot's console. */
-export function RobotPanel({ lang, className }: { lang: Locale; className?: string }) {
+export function RobotPanel({ lang, className, children }: { lang: Locale; className?: string; children?: ReactNode }) {
   const t = getRobotLinkText(lang)
   const available = useBluetoothAvailable()
   const hub = useHub()
@@ -92,6 +93,7 @@ export function RobotPanel({ lang, className }: { lang: Locale; className?: stri
           <span className="font-normal text-muted-foreground">{t.slotHint}</span>
         </label>
       )}
+      {available && children}
       {hub.status === 'running' && (
         <p className="m-0 text-sm font-bold text-link" role="status">
           ▶ {t.running}
@@ -137,7 +139,19 @@ export function RobotPanel({ lang, className }: { lang: Locale; className?: stri
  * Sends a program to the hub and starts it, connecting first if needed.
  * `code` is SPIKE App 3 Python; a function is called only on click.
  */
-export function SendToRobot({ lang, code, disabled, className }: { lang: Locale; code: string | (() => string); disabled?: boolean; className?: string }) {
+export function SendToRobot({
+  lang,
+  code,
+  disabled,
+  className,
+  size = 'sm',
+}: {
+  lang: Locale
+  code: string | (() => string)
+  disabled?: boolean
+  className?: string
+  size?: 'sm' | 'md'
+}) {
   const t = getRobotLinkText(lang)
   const available = useBluetoothAvailable()
   const hub = useHub()
@@ -148,7 +162,7 @@ export function SendToRobot({ lang, code, disabled, className }: { lang: Locale;
     <span className={cn('inline-flex flex-wrap items-center gap-2', className)}>
       <button
         type="button"
-        className={buttonVariants({ size: 'sm', variant: 'primary' })}
+        className={buttonVariants({ size, variant: 'primary' })}
         disabled={busy || disabled}
         onClick={() => void runOnHub(typeof code === 'function' ? code() : code)}
       >
@@ -156,7 +170,7 @@ export function SendToRobot({ lang, code, disabled, className }: { lang: Locale;
         {hub.status === 'uploading' ? fill(t.uploading, { n: Math.round(hub.progress * 100) }) : linked ? t.send : t.sendConnect}
       </button>
       {hub.status === 'running' && (
-        <button type="button" className={buttonVariants({ size: 'sm', variant: 'danger' })} onClick={() => void stopHub()}>
+        <button type="button" className={buttonVariants({ size, variant: 'danger' })} onClick={() => void stopHub()}>
           <Square aria-hidden="true" />
           {t.stop}
         </button>

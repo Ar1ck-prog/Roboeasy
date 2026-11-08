@@ -612,13 +612,16 @@ export function Studio({ lang, t, labels }: StudioProps) {
             error={error?.where === 'result' ? errorText : ''}
           />
         ) : (
-          <EmptyState className="result-empty-state" icon={<Sparkles aria-hidden="true" />} title={t.empty.title} description={t.empty.text}>
-            <ul className="tips">
-              {t.empty.tips.map((tip) => (
-                <li key={tip}>{tip}</li>
-              ))}
-            </ul>
-          </EmptyState>
+          <>
+            <EmptyState className="result-empty-state" icon={<Sparkles aria-hidden="true" />} title={t.empty.title} description={t.empty.text}>
+              <ul className="tips">
+                {t.empty.tips.map((tip) => (
+                  <li key={tip}>{tip}</li>
+                ))}
+              </ul>
+            </EmptyState>
+            <RobotPanel lang={lang} className="mt-4" />
+          </>
         )}
       </section>
     </div>
@@ -723,6 +726,10 @@ function ResultView(p: ResultViewProps) {
         </div>
       )}
 
+      <RobotPanel lang={p.lang} className="mt-4">
+        <SendToRobot lang={p.lang} code={code} size="md" />
+      </RobotPanel>
+
       <div className="toolbar">
         <label className="name-field">
           {t.result.projectName}
@@ -744,9 +751,7 @@ function ResultView(p: ResultViewProps) {
           <Link2 size={17} aria-hidden="true" />
           {t.result.share}
         </button>
-        <SendToRobot lang={p.lang} code={code} />
       </div>
-      <RobotPanel lang={p.lang} />
 
       <form
         className="refine"

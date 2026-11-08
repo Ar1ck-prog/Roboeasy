@@ -1,5 +1,7 @@
-import { expect, test } from '@playwright/test'
+import { type Page, expect, test } from '@playwright/test'
 
+import { programToPython } from '../../lib/dsl/compile-python'
+import { DEFAULT_ROBOT, type Program } from '../../lib/dsl/types'
 import { FrameReader, MSG, hubCrc, packFrame } from '../../lib/spike/ble-protocol'
 
 /**
@@ -65,9 +67,8 @@ declare global {
   }
 }
 
-test('uploads the program to the chosen slot, runs it, shows the console and stops it', async ({ page }) => {
-  const errors: string[] = []
-  page.on('pageerror', (e) => errors.push(e.message))
+/** Replaces Chrome's Bluetooth with a stand-in wired to the simulated hub. */
+async function fakeBluetooth(page: Page) {
   const hub = simulatedHub()
   await page.exposeFunction('__hubWrite', hub.write)
   await page.addInitScript(() => {
@@ -92,6 +93,13 @@ test('uploads the program to the chosen slot, runs it, shows the console and sto
     window.__dropHub = drop
     Object.defineProperty(navigator, 'bluetooth', { configurable: true, value: { requestDevice: async () => device } })
   })
+  return hub
+}
+
+test('uploads the program to the chosen slot, runs it, shows the console and stops it', async ({ page }) => {
+  const errors: string[] = []
+  page.on('pageerror', (e) => errors.push(e.message))
+  const hub = await fakeBluetooth(page)
 
   await page.goto('/ru/compete/simulator')
   await page.getByRole('tab', { name: 'Наш симулятор' }).click()
@@ -134,4 +142,53 @@ test('a browser without Bluetooth gets an explanation, not a dead button', async
   await expect(page.getByTestId('robot-panel')).toContainText('Chrome')
   await expect(page.getByRole('button', { name: 'Подключить и запустить' })).toHaveCount(0)
   await expect(page.getByRole('button', { name: 'Подключить робота' })).toHaveCount(0)
+})
+
+/** The sandbox without the AI service: answers are fixed, everything after them is real. */
+async function openSandbox(page: Page, answer: object) {
+  await page.route('**/api/generate', (route) =>
+    route.fulfill(
+      route.request().method() === 'GET' ? { json: { configured: true } } : { json: { ok: true, title: 'Проба', description: '', warnings: [], ...answer } },
+    ),
+  )
+  await page.goto('/ru/sandbox')
+}
+
+async function generate(page: Page) {
+  await page.getByLabel('Задача для робота').fill('Проедь вперёд и остановись')
+  await page.getByRole('button', { name: 'Создать программу' }).click()
+}
+
+test('sandbox: connect before generating, then run generated blocks on the robot', async ({ page }) => {
+  const errors: string[] = []
+  page.on('pageerror', (e) => errors.push(e.message))
+  const hub = await fakeBluetooth(page)
+  const program: Program = { title: 'Проба', description: '', steps: [{ op: 'move', direction: 'forward', value: 20, unit: 'cm' }] }
+  const python = programToPython(program, DEFAULT_ROBOT)
+  await openSandbox(page, { format: 'blocks', program, python })
+
+  // The robot can be connected as soon as the page opens.
+  const panel = page.getByTestId('robot-panel')
+  await panel.getByRole('button', { name: 'Подключить робота' }).click()
+  await expect(panel).toContainText('Hub Тест')
+
+  await generate(page)
+  await expect(page.getByRole('heading', { name: 'Проба' })).toBeVisible()
+  await page.getByRole('button', { name: 'Запустить на роботе' }).click()
+  await expect(page.getByTestId('robot-console')).toHaveText('Привет с хаба')
+  expect(new TextDecoder().decode(Uint8Array.from(hub.file.bytes))).toBe(python)
+  expect(hub.flow).toEqual([{ stop: false, slot: 0 }])
+  expect(errors).toEqual([])
+})
+
+test('sandbox: free Python goes to the robot unchanged, and one button also connects', async ({ page }) => {
+  const hub = await fakeBluetooth(page)
+  const code = 'import runloop\n\nasync def main():\n    print("Привет")\n\nrunloop.run(main())\n'
+  await openSandbox(page, { format: 'python', code })
+  await page.getByRole('button', { name: /^Python/ }).click()
+  await page.getByRole('checkbox', { name: /Свободный Python/ }).check()
+  await generate(page)
+  await page.getByRole('button', { name: 'Подключить и запустить' }).click()
+  await expect(page.getByTestId('robot-console')).toHaveText('Привет с хаба')
+  expect(new TextDecoder().decode(Uint8Array.from(hub.file.bytes))).toBe(code)
 })
