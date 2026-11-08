@@ -4,11 +4,13 @@
  * Kazakh needs a review by a native speaker before launch.
  */
 
+import type { IconName } from '@/components/ui/anim-icon'
+
 type L = { ru: string; kk: string; en: string }
 
 export interface Term {
   id: string
-  icon: string
+  icon: IconName
   term: L
   /** Up to ~40 characters: fits a memory card. */
   short: L
@@ -19,7 +21,7 @@ export interface Term {
 export const GLOSSARY: Term[] = [
   {
     id: 'robot',
-    icon: '🤖',
+    icon: 'robot',
     term: { ru: 'Робот', kk: 'Робот', en: 'Robot' },
     short: { ru: 'Чувствует, думает и действует', kk: 'Сезеді, ойлайды, әрекет етеді', en: 'Senses, thinks and acts' },
     text: {
@@ -30,7 +32,7 @@ export const GLOSSARY: Term[] = [
   },
   {
     id: 'hub',
-    icon: '🧠',
+    icon: 'brain',
     term: { ru: 'Хаб', kk: 'Хаб', en: 'Hub' },
     short: { ru: 'Мозг робота с портами', kk: 'Порттары бар робот миы', en: 'The robot’s brain with ports' },
     text: {
@@ -41,7 +43,7 @@ export const GLOSSARY: Term[] = [
   },
   {
     id: 'motor',
-    icon: '⚙️',
+    icon: 'gear',
     term: { ru: 'Мотор', kk: 'Мотор', en: 'Motor' },
     short: { ru: 'Крутит колёса и механизмы', kk: 'Дөңгелектер мен механизмдерді айналдырады', en: 'Turns wheels and mechanisms' },
     text: {
@@ -52,7 +54,7 @@ export const GLOSSARY: Term[] = [
   },
   {
     id: 'sensor',
-    icon: '👁️',
+    icon: 'eye',
     term: { ru: 'Датчик', kk: 'Датчик', en: 'Sensor' },
     short: { ru: 'Органы чувств робота', kk: 'Роботтың сезім мүшелері', en: 'The robot’s senses' },
     text: {
@@ -63,7 +65,7 @@ export const GLOSSARY: Term[] = [
   },
   {
     id: 'color-sensor',
-    icon: '🎨',
+    icon: 'palette',
     term: { ru: 'Датчик цвета', kk: 'Түс датчигі', en: 'Colour sensor' },
     short: { ru: 'Видит цвет и яркость под собой', kk: 'Астындағы түс пен жарықты көреді', en: 'Sees colour and brightness' },
     text: {
@@ -74,7 +76,7 @@ export const GLOSSARY: Term[] = [
   },
   {
     id: 'distance-sensor',
-    icon: '📏',
+    icon: 'ruler',
     term: { ru: 'Датчик расстояния', kk: 'Қашықтық датчигі', en: 'Distance sensor' },
     short: { ru: 'Меряет, далеко ли препятствие', kk: 'Кедергіге дейінгі қашықтықты өлшейді', en: 'Measures how far things are' },
     text: {
@@ -85,7 +87,7 @@ export const GLOSSARY: Term[] = [
   },
   {
     id: 'force-sensor',
-    icon: '👆',
+    icon: 'finger',
     term: { ru: 'Датчик силы', kk: 'Күш датчигі', en: 'Force sensor' },
     short: { ru: 'Чувствует нажатие', kk: 'Басуды сезеді', en: 'Feels a press' },
     text: {
@@ -96,7 +98,7 @@ export const GLOSSARY: Term[] = [
   },
   {
     id: 'gyro',
-    icon: '🧭',
+    icon: 'compass',
     term: { ru: 'Гироскоп', kk: 'Гироскоп', en: 'Gyro sensor' },
     short: { ru: 'Знает, на сколько робот повернул', kk: 'Роботтың қаншаға бұрылғанын біледі', en: 'Knows how far it has turned' },
     text: {
@@ -107,7 +109,7 @@ export const GLOSSARY: Term[] = [
   },
   {
     id: 'program',
-    icon: '📜',
+    icon: 'scroll',
     term: { ru: 'Программа', kk: 'Бағдарлама', en: 'Program' },
     short: { ru: 'Команды, которые выполняет робот', kk: 'Робот орындайтын командалар', en: 'Commands the robot follows' },
     text: {
@@ -118,7 +120,7 @@ export const GLOSSARY: Term[] = [
   },
   {
     id: 'algorithm',
-    icon: '🗺️',
+    icon: 'map',
     term: { ru: 'Алгоритм', kk: 'Алгоритм', en: 'Algorithm' },
     short: { ru: 'План решения по шагам', kk: 'Қадамдық шешім жоспары', en: 'A step-by-step plan' },
     text: {
@@ -129,7 +131,7 @@ export const GLOSSARY: Term[] = [
   },
   {
     id: 'sequence',
-    icon: '➡️',
+    icon: 'arrow',
     term: { ru: 'Последовательность', kk: 'Реттілік', en: 'Sequence' },
     short: { ru: 'Команды по очереди, сверху вниз', kk: 'Командалар кезекпен, жоғарыдан төмен', en: 'Commands in order, top to bottom' },
     text: {
@@ -140,7 +142,7 @@ export const GLOSSARY: Term[] = [
   },
   {
     id: 'loop',
-    icon: '🔁',
+    icon: 'loop',
     term: { ru: 'Цикл', kk: 'Цикл', en: 'Loop' },
     short: { ru: 'Повторяет команды', kk: 'Командаларды қайталайды', en: 'Repeats commands' },
     text: {
@@ -151,7 +153,7 @@ export const GLOSSARY: Term[] = [
   },
   {
     id: 'condition',
-    icon: '🔀',
+    icon: 'shuffle',
     term: { ru: 'Условие', kk: 'Шарт', en: 'Condition' },
     short: { ru: 'Если… то… иначе…', kk: 'Егер… онда… әйтпесе…', en: 'If… then… else…' },
     text: {
@@ -162,7 +164,7 @@ export const GLOSSARY: Term[] = [
   },
   {
     id: 'variable',
-    icon: '📦',
+    icon: 'box',
     term: { ru: 'Переменная', kk: 'Айнымалы', en: 'Variable' },
     short: { ru: 'Коробка для числа с именем', kk: 'Аты бар сан қорабы', en: 'A named box for a value' },
     text: {
@@ -173,7 +175,7 @@ export const GLOSSARY: Term[] = [
   },
   {
     id: 'event',
-    icon: '🚦',
+    icon: 'traffic',
     term: { ru: 'Событие', kk: 'Оқиға', en: 'Event' },
     short: { ru: 'То, что запускает программу', kk: 'Бағдарламаны іске қосатын нәрсе', en: 'What starts a script' },
     text: {
@@ -184,7 +186,7 @@ export const GLOSSARY: Term[] = [
   },
   {
     id: 'my-block',
-    icon: '🧱',
+    icon: 'brick',
     term: { ru: 'Свой блок', kk: 'Өз блогың', en: 'My Block' },
     short: { ru: 'Новый блок из нескольких', kk: 'Бірнеше блоктан жаңа блок', en: 'A new block made of others' },
     text: {
@@ -195,7 +197,7 @@ export const GLOSSARY: Term[] = [
   },
   {
     id: 'debug',
-    icon: '🐞',
+    icon: 'bug',
     term: { ru: 'Отладка', kk: 'Жөндеу', en: 'Debugging' },
     short: { ru: 'Поиск и исправление ошибок', kk: 'Қателерді іздеу және түзеу', en: 'Finding and fixing bugs' },
     text: {
@@ -206,7 +208,7 @@ export const GLOSSARY: Term[] = [
   },
   {
     id: 'calibration',
-    icon: '🎚️',
+    icon: 'slider',
     term: { ru: 'Калибровка', kk: 'Калибрлеу', en: 'Calibration' },
     short: { ru: 'Настройка по реальным замерам', kk: 'Нақты өлшемдер бойынша баптау', en: 'Tuning by real measurements' },
     text: {
@@ -217,7 +219,7 @@ export const GLOSSARY: Term[] = [
   },
   {
     id: 'gear',
-    icon: '🔩',
+    icon: 'nut',
     term: { ru: 'Шестерня', kk: 'Тісті доңғалақ', en: 'Gear' },
     short: { ru: 'Колесо с зубьями', kk: 'Тістері бар доңғалақ', en: 'A wheel with teeth' },
     text: {
@@ -228,7 +230,7 @@ export const GLOSSARY: Term[] = [
   },
   {
     id: 'axle',
-    icon: '📍',
+    icon: 'pin',
     term: { ru: 'Ось', kk: 'Ось', en: 'Axle' },
     short: { ru: 'Стержень, на котором крутится колесо', kk: 'Дөңгелек айналатын білік', en: 'A rod a wheel turns on' },
     text: {
@@ -239,7 +241,7 @@ export const GLOSSARY: Term[] = [
   },
   {
     id: 'port',
-    icon: '🔌',
+    icon: 'plug',
     term: { ru: 'Порт', kk: 'Порт', en: 'Port' },
     short: { ru: 'Разъём для мотора или датчика', kk: 'Мотор не датчик ұясы', en: 'A socket for a motor or sensor' },
     text: {
@@ -250,7 +252,7 @@ export const GLOSSARY: Term[] = [
   },
   {
     id: 'simulator',
-    icon: '🖥️',
+    icon: 'monitor',
     term: { ru: 'Симулятор', kk: 'Симулятор', en: 'Simulator' },
     short: { ru: 'Виртуальный робот на экране', kk: 'Экрандағы виртуалды робот', en: 'A virtual robot on screen' },
     text: {
@@ -261,7 +263,7 @@ export const GLOSSARY: Term[] = [
   },
   {
     id: 'python',
-    icon: '🐍',
+    icon: 'snake',
     term: { ru: 'Python', kk: 'Python', en: 'Python' },
     short: { ru: 'Язык программирования текстом', kk: 'Мәтінмен бағдарламалау тілі', en: 'A text programming language' },
     text: {
@@ -272,7 +274,7 @@ export const GLOSSARY: Term[] = [
   },
   {
     id: 'controller',
-    icon: '📈',
+    icon: 'chart',
     term: { ru: 'Регулятор', kk: 'Реттегіш', en: 'Controller' },
     short: { ru: 'Сам исправляет отклонение', kk: 'Ауытқуды өзі түзетеді', en: 'Corrects errors by itself' },
     text: {

@@ -1,5 +1,6 @@
 import type { UpgradeLine } from '@/lib/learn/shop'
-import { colorHex, stickerEmoji } from '@/lib/learn/shop'
+import { AnimIcon, type IconName } from '@/components/ui/anim-icon'
+import { colorHex, stickerIcon } from '@/lib/learn/shop'
 import { cn } from '@/lib/utils'
 
 /**
@@ -159,14 +160,10 @@ function Hat({ kind }: { kind: string }) {
   }
 }
 
-function Body({ model, fill, wheels, sticker }: { model: string; fill: string; wheels: string; sticker: string }) {
+function Body({ model, fill, wheels, sticker }: { model: string; fill: string; wheels: string; sticker: IconName | null }) {
   const stroke = { stroke: INK, strokeWidth: 5, strokeLinejoin: 'round' as const }
   const label = (x: number, y: number, size: number) =>
-    sticker ? (
-      <text x={x} y={y} fontSize={size} textAnchor="middle" dominantBaseline="central">
-        {sticker}
-      </text>
-    ) : null
+    sticker ? <AnimIcon name={sticker} x={x - size / 2} y={y - size / 2} width={size} height={size} style={{ color: INK }} /> : null
   switch (model) {
     case 'tank':
       return (
@@ -327,7 +324,7 @@ export function Buddy({
     >
       <g>
         <Upgrades tiers={tiers} />
-        <Body model={model} fill={fill} wheels={wheels} sticker={stickerEmoji(sticker)} />
+        <Body model={model} fill={fill} wheels={wheels} sticker={stickerIcon(sticker)} />
         {/* Head */}
         <circle cx="49" cy="80" r="7" fill={INK} />
         <circle cx="151" cy="80" r="7" fill={INK} />

@@ -9,6 +9,7 @@ import { CodeStep } from '@/components/learn/steps/code-step'
 import { PredictStep } from '@/components/learn/steps/predict-step'
 import { QuizStep } from '@/components/learn/steps/quiz-step'
 import { BuildStep, RealRobotStep, type StepDone, TheoryStep } from '@/components/learn/steps/simple-steps'
+import { AnimIcon } from '@/components/ui/anim-icon'
 import { Badge } from '@/components/ui/badge'
 import { buttonVariants } from '@/components/ui/button'
 import { fill } from '@/lib/i18n/config'
@@ -209,7 +210,9 @@ export function LessonPlayer({ lesson, lang, t, blocksT, trackTitle, unitTitle, 
                 <ArrowRight aria-hidden="true" />
               </Link>
             ) : (
-              <span className="font-display text-xl font-extrabold">{t.lesson.trackDone}</span>
+              <span className="font-display text-xl font-extrabold">
+                {t.lesson.trackDone} <AnimIcon name="party" />
+              </span>
             )}
             <Link className={buttonVariants({ size: 'lg' })} href={mapHref}>
               {t.lesson.toMap}

@@ -56,7 +56,7 @@ export const en: Dictionary = {
       },
       {
         title: 'Run it on the robot',
-        text: 'Download the .llsp3 file, open it in the SPIKE App 3, connect the hub and press ▶.',
+        text: 'Download the .llsp3 file, open it in the SPIKE App 3, connect the hub and press the play button.',
       },
     ],
   },
@@ -84,15 +84,13 @@ export const en: Dictionary = {
         image: 'sumo-bot',
         title: 'Sumo robot',
         text: 'Finds the opponent with the distance sensor, attacks and never leaves the white ring border.',
-        prompt:
-          'Sumo robot: spin in place until you see the opponent closer than 30 cm, then attack. If the color sensor sees the white border, back up',
+        prompt: 'Sumo robot: spin in place until you see the opponent closer than 30 cm, then attack. If the color sensor sees the white border, back up',
       },
       {
         image: 'color-sorter',
         title: 'Color sorter',
         text: 'The sensor recognizes the brick color and a motor gate sends it to the right bin.',
-        prompt:
-          'If the color sensor sees red, turn motor C 90 degrees clockwise; if blue, counterclockwise; then move the gate back. Repeat forever',
+        prompt: 'If the color sensor sees red, turn motor C 90 degrees clockwise; if blue, counterclockwise; then move the gate back. Repeat forever',
       },
     ],
     ideas: ['Drive a square with 30 cm sides', 'Show a heart and beep', 'Stop when the force sensor is pressed', 'Blink the button light 5 times'],
@@ -113,7 +111,12 @@ export const en: Dictionary = {
     eyebrow: 'For teachers and clubs',
     title: 'More time for ideas, less time hunting for blocks',
     text: 'RoboEasy helps you prepare a lesson example in minutes, show a solution in different ways and move students from blocks to Python.',
-    points: ['A ready lesson example in a minute', 'One program in blocks and in Python', 'Share a program with a link', 'Runs in the browser, nothing to install'],
+    points: [
+      'A ready lesson example in a minute',
+      'One program in blocks and in Python',
+      'Share a program with a link',
+      'Runs in the browser, nothing to install',
+    ],
     cta: 'Open the studio',
   },
   faq: {
@@ -130,7 +133,7 @@ export const en: Dictionary = {
       },
       {
         q: 'How do I open the file in the SPIKE App?',
-        a: 'In the SPIKE App 3 choose “Open” and pick the downloaded .llsp3 file — or simply double-click the file on a computer with the app installed. Then connect the hub and press ▶.',
+        a: 'In the SPIKE App 3 choose “Open” and pick the downloaded .llsp3 file — or simply double-click the file on a computer with the app installed. Then connect the hub and press the play button.',
       },
       {
         q: 'Blocks or Python — which should I pick?',
@@ -157,7 +160,8 @@ export const en: Dictionary = {
   },
   footer: {
     tagline: 'Robotics from scratch for LEGO SPIKE Prime: lessons, games and a robot buddy.',
-    legal: 'RoboEasy is an independent project. LEGO® and SPIKE™ are trademarks of the LEGO Group; FIRST® and FIRST® LEGO® League are trademarks of FIRST®. Neither the LEGO Group nor FIRST sponsors, authorizes or endorses this site.',
+    legal:
+      'RoboEasy is an independent project. LEGO® and SPIKE™ are trademarks of the LEGO Group; FIRST® and FIRST® LEGO® League are trademarks of FIRST®. Neither the LEGO Group nor FIRST sponsors, authorizes or endorses this site.',
   },
   studio: {
     heading: 'Studio',
@@ -229,7 +233,7 @@ export const en: Dictionary = {
         'Download the .llsp3 file',
         'Open the SPIKE App 3 and choose “Open” — or double-click the file',
         'Connect the SPIKE Prime hub over Bluetooth or USB',
-        'Press ▶ and watch the robot go',
+        'Press the play button and watch the robot go',
       ],
       safety: 'Clear some space around the robot before running it.',
     },
@@ -263,7 +267,8 @@ export const en: Dictionary = {
     noMissions: 'This season has no missions yet. Place them in the field editor, export the JSON and put the file into data/seasons/.',
     openEditor: 'Field editor',
     emptyMapTitle: 'The season map is not laid out yet',
-    emptyMapText: 'The official field image cannot be shipped with the app. Upload your own photo or PDF of the field (it stays in this browser) and place the missions in the editor.',
+    emptyMapText:
+      'The official field image cannot be shipped with the app. Upload your own photo or PDF of the field (it stays in this browser) and place the missions in the editor.',
     emptyMapEditor: 'Lay out in the editor',
     useDraft: 'Use the draft from the field editor',
     useDraftHint: 'Missions: {n} · saved {time}. The draft exists only in this browser; export the JSON to data/seasons/ to share the season.',
@@ -309,7 +314,8 @@ export const en: Dictionary = {
     showCommands: 'Commands',
     hideCommands: 'Hide commands',
     tipsTitle: 'Questions for the team',
-    coachNote: 'This is a suggestion, not a finished solution. Test every run on the table, discuss it with your team and change what works worse: you build the robot and the programs.',
+    coachNote:
+      'This is a suggestion, not a finished solution. Test every run on the table, discuss it with your team and change what works worse: you build the robot and the programs.',
     routeNote: 'Routes are straight segments between points. Check that the robot does not hit models and add waypoints in the field editor where needed.',
     source: { ai: 'Plan suggested by the AI', fallback: 'Simple distance-based plan' },
     notices: {

@@ -3,12 +3,14 @@
  * well-known, long-lived sites; none of them is affiliated with RoboEasy.
  */
 
+import type { IconName } from '@/components/ui/anim-icon'
+
 type L = { ru: string; kk: string; en: string }
 
 export interface Source {
   id: string
   url: string
-  icon: string
+  icon: IconName
   title: string
   text: L
   /** The site is in English only. */
@@ -19,7 +21,7 @@ export const SOURCES: Source[] = [
   {
     id: 'lego-education',
     url: 'https://education.lego.com/',
-    icon: '🧱',
+    icon: 'brick',
     title: 'LEGO® Education',
     text: {
       ru: 'Официальный сайт наборов SPIKE™ Prime: уроки, инструкции по сборке и приложение.',
@@ -31,7 +33,7 @@ export const SOURCES: Source[] = [
   {
     id: 'spike-app',
     url: 'https://spike.legoeducation.com/',
-    icon: '💻',
+    icon: 'laptop',
     title: 'SPIKE™ App',
     text: {
       ru: 'Приложение SPIKE в браузере: программы блоками и на Python для настоящего хаба.',
@@ -43,7 +45,7 @@ export const SOURCES: Source[] = [
   {
     id: 'prime-lessons',
     url: 'https://primelessons.org/',
-    icon: '📚',
+    icon: 'books',
     title: 'Prime Lessons',
     text: {
       ru: 'Бесплатные уроки по SPIKE Prime от начального уровня до соревнований.',
@@ -55,7 +57,7 @@ export const SOURCES: Source[] = [
   {
     id: 'fll',
     url: 'https://www.firstlegoleague.org/',
-    icon: '🏆',
+    icon: 'trophy',
     title: 'FIRST® LEGO® League',
     text: {
       ru: 'Международные соревнования по робототехнике для школьников: сезоны, правила, команды.',
@@ -67,7 +69,7 @@ export const SOURCES: Source[] = [
   {
     id: 'pybricks',
     url: 'https://pybricks.com/',
-    icon: '🐍',
+    icon: 'snake',
     title: 'Pybricks',
     text: {
       ru: 'Python для хабов LEGO для тех, кто готов к коду посложнее.',
@@ -79,7 +81,7 @@ export const SOURCES: Source[] = [
   {
     id: 'python-tutorial',
     url: 'https://docs.python.org/3/tutorial/',
-    icon: '📖',
+    icon: 'openbook',
     title: 'Python Tutorial',
     text: {
       ru: 'Официальный учебник Python: переменные, циклы, условия, функции.',
@@ -91,7 +93,7 @@ export const SOURCES: Source[] = [
   {
     id: 'scratch',
     url: 'https://scratch.mit.edu/',
-    icon: '🐱',
+    icon: 'cat',
     title: 'Scratch',
     text: {
       ru: 'Блочное программирование игр и анимаций — отличная тренировка логики.',
@@ -103,7 +105,7 @@ export const SOURCES: Source[] = [
   {
     id: 'code-org',
     url: 'https://code.org/',
-    icon: '🧩',
+    icon: 'puzzle',
     title: 'Code.org',
     text: {
       ru: 'Курсы и головоломки по программированию для любого возраста.',

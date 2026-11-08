@@ -3,6 +3,7 @@
 import type { ReactNode } from 'react'
 import { Bluetooth, BluetoothOff, Loader2, Play, Square, Unplug } from 'lucide-react'
 
+import { AnimIcon } from '@/components/ui/anim-icon'
 import { buttonVariants } from '@/components/ui/button'
 import { type Locale, fill } from '@/lib/i18n/config'
 import { type RobotLinkText, getRobotLinkText } from '@/lib/i18n/robot-link'
@@ -96,7 +97,7 @@ export function RobotPanel({ lang, className, children }: { lang: Locale; classN
       {available && children}
       {hub.status === 'running' && (
         <p className="m-0 text-sm font-bold text-link" role="status">
-          ▶ {t.running}
+          <AnimIcon name="play" /> {t.running}
         </p>
       )}
       {hub.problem && (

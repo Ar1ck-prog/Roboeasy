@@ -2,6 +2,7 @@
 
 import { motion, useReducedMotion } from 'motion/react'
 
+import { AnimIcon } from '@/components/ui/anim-icon'
 import { buttonVariants } from '@/components/ui/button'
 import { Dialog, DialogContent, DialogDescription, DialogTitle } from '@/components/ui/dialog'
 import type { LearnAppText } from '@/lib/i18n/learn-app'
@@ -35,7 +36,7 @@ export default function AchievementDialog({
             transition={reduce ? { duration: 0 } : { type: 'spring', stiffness: 260, damping: 14 }}
             aria-hidden="true"
           >
-            {current.icon}
+            <AnimIcon name={current.icon} />
             {!reduce &&
               Array.from({ length: 8 }, (_, i) => (
                 <motion.span

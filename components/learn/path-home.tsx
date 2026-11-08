@@ -11,6 +11,7 @@ import { QuestsCard } from '@/components/learn/quests-card'
 import { Onboarding } from '@/components/learn/onboarding'
 import { SkillRadar } from '@/components/learn/skill-radar'
 import { TrackIcon } from '@/components/learn/track-icon'
+import { AnimIcon } from '@/components/ui/anim-icon'
 import { buttonVariants } from '@/components/ui/button'
 import { Card, CardTitle } from '@/components/ui/card'
 import { Skeleton } from '@/components/ui/skeleton'
@@ -207,7 +208,15 @@ export function PathHome({ lang, app, play, challengeTitles }: { lang: Lang; app
             <Ring value={p.streak.today.progress} label={goalText}>
               {Math.round(p.streak.today.progress * 100)}%
             </Ring>
-            <p className="m-0 font-bold">{p.streak.today.met ? t.goalDone : goalText}</p>
+            <p className="m-0 font-bold">
+              {p.streak.today.met ? (
+                <>
+                  {t.goalDone} <AnimIcon name="party" />
+                </>
+              ) : (
+                goalText
+              )}
+            </p>
           </div>
         </Card>
 
@@ -292,7 +301,7 @@ export function PathHome({ lang, app, play, challengeTitles }: { lang: Lang; app
                     className="flex items-center gap-2 rounded-full border-(length:--stroke-thin) border-outline bg-surface-2 py-1 pr-3 pl-1 font-bold"
                   >
                     <span className="grid size-8 place-items-center rounded-full bg-card text-lg" aria-hidden="true">
-                      {a.icon}
+                      <AnimIcon name={a.icon} />
                     </span>
                     {a.title[lang]}
                   </li>

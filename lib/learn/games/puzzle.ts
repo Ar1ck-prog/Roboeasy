@@ -5,6 +5,8 @@
  * in Python-like pseudocode), not in a real robot API.
  */
 
+import type { IconName } from '@/components/ui/anim-icon'
+
 type L = { ru: string; kk: string; en: string }
 
 export interface PuzzleLine {
@@ -14,7 +16,7 @@ export interface PuzzleLine {
 
 export interface PuzzleLevel {
   id: number
-  icon: string
+  icon: IconName
   title: L
   goal: L
   /** In the right order. */
@@ -27,7 +29,7 @@ const START = ln(0, 'Когда программа запущена', 'Бағд�
 export const PUZZLES: PuzzleLevel[] = [
   {
     id: 1,
-    icon: '🏁',
+    icon: 'flag',
     title: { ru: 'До финиша', kk: 'Мәреге дейін', en: 'To the finish' },
     goal: {
       ru: 'Доехать до финиша в 40 см и посигналить, когда приехал.',
@@ -43,7 +45,7 @@ export const PUZZLES: PuzzleLevel[] = [
   },
   {
     id: 2,
-    icon: '🟦',
+    icon: 'square',
     title: { ru: 'Квадрат', kk: 'Шаршы', en: 'Square' },
     goal: {
       ru: 'Проехать квадрат со стороной 20 см, используя цикл.',
@@ -59,7 +61,7 @@ export const PUZZLES: PuzzleLevel[] = [
   },
   {
     id: 3,
-    icon: '🧱',
+    icon: 'brick',
     title: { ru: 'Стоп у стены', kk: 'Қабырға алдында тоқта', en: 'Stop at the wall' },
     goal: {
       ru: 'Ехать вперёд, пока стена не ближе 10 см, остановиться и улыбнуться.',
@@ -76,7 +78,7 @@ export const PUZZLES: PuzzleLevel[] = [
   },
   {
     id: 4,
-    icon: '🚦',
+    icon: 'traffic',
     title: { ru: 'Светофор', kk: 'Бағдаршам', en: 'Traffic light' },
     goal: {
       ru: 'Ждать зелёный, потом проехать 30 см и сыграть мелодию победы.',
@@ -93,7 +95,7 @@ export const PUZZLES: PuzzleLevel[] = [
   },
   {
     id: 5,
-    icon: '🦾',
+    icon: 'arm',
     title: { ru: 'Захват кубика', kk: 'Текшені ұстау', en: 'Grab a cube' },
     goal: {
       ru: 'Открыть захват, подъехать к кубику, схватить и отвезти назад.',
@@ -110,7 +112,7 @@ export const PUZZLES: PuzzleLevel[] = [
   },
   {
     id: 6,
-    icon: '〰️',
+    icon: 'shuffle',
     title: { ru: 'По линии', kk: 'Сызық бойымен', en: 'Follow the line' },
     goal: {
       ru: 'Всё время ехать по краю чёрной линии: на чёрном подворачивать влево, иначе — вправо.',
@@ -128,7 +130,7 @@ export const PUZZLES: PuzzleLevel[] = [
   },
   {
     id: 7,
-    icon: '🔢',
+    icon: 'numbers',
     title: { ru: 'Счётчик кругов', kk: 'Айналым санағышы', en: 'Lap counter' },
     goal: {
       ru: 'Проехать 3 круга и показать, сколько кругов проехал.',
@@ -146,7 +148,7 @@ export const PUZZLES: PuzzleLevel[] = [
   },
   {
     id: 8,
-    icon: '🐍',
+    icon: 'snake',
     title: { ru: 'Квадрат на Python', kk: 'Python-дағы шаршы', en: 'A square in Python' },
     goal: {
       ru: 'Тот же квадрат, но в псевдокоде Python: цикл for и отступы.',

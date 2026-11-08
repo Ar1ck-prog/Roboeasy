@@ -4,6 +4,7 @@ import { useId, useState } from 'react'
 import Link from 'next/link'
 import { Blocks, Box, ExternalLink, Search, Sparkles, Trophy } from 'lucide-react'
 
+import { AnimIcon } from '@/components/ui/anim-icon'
 import { Card, CardTitle } from '@/components/ui/card'
 import type { LearnText } from '@/lib/i18n/learn'
 import type { PlayText } from '@/lib/i18n/play'
@@ -52,7 +53,7 @@ export function LibraryView({ lang, t, nav }: { lang: Lang; t: PlayText; nav: Le
                     className="grid size-11 shrink-0 place-items-center rounded-full border-(length:--stroke-thin) border-outline bg-surface-2 text-xl"
                     aria-hidden="true"
                   >
-                    {g.icon}
+                    <AnimIcon name={g.icon} />
                   </span>
                   <div className="grid content-start gap-0.5">
                     <dt className="font-display text-lg font-extrabold">{g.term[lang]}</dt>
@@ -79,7 +80,7 @@ export function LibraryView({ lang, t, nav }: { lang: Lang; t: PlayText; nav: Le
                     rel="noopener noreferrer"
                     className="inline-flex items-center gap-1.5 font-bold text-link underline underline-offset-4"
                   >
-                    <span aria-hidden="true">{s.icon}</span>
+                    <AnimIcon name={s.icon} className="text-foreground" />
                     {s.title}
                     <ExternalLink className="size-3.5" aria-hidden="true" />
                   </a>

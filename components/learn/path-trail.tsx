@@ -18,7 +18,7 @@ const ROW = 104
 const WIDTH = 320
 
 /**
- * A winding trail of lesson nodes (done ✓, current, open, locked 🔒) with a
+ * A winding trail of lesson nodes (done ✓, current, open, locked) with a
  * station title. Pure markup, so it renders on the server; used as the
  * landing illustration now and as the track map later.
  */

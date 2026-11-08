@@ -10,7 +10,7 @@ import { cn } from '@/lib/utils'
  * The landing's virtual robot: a tiny program drives the robot around a
  * wall to the finish, highlighting each block as it runs. Frames are drawn
  * with requestAnimationFrame by writing SVG attributes directly (no React
- * render per frame); it plays once when scrolled into view and again on ▶.
+ * render per frame); it plays once when scrolled into view and again on the play button.
  */
 
 export interface SimDemoCopy {

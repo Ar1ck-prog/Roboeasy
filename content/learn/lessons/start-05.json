@@ -32,9 +32,9 @@
         "en": "From the screen to the robot"
       },
       "body": {
-        "ru": "Программу для настоящего робота запускают через бесплатное приложение **LEGO® Education SPIKE™ App 3** (для компьютера и планшета).\n\n1. Скачай программу из RoboEasy — это файл **.llsp3**.\n2. Открой его в приложении SPIKE.\n3. Подключи хаб по Bluetooth или кабелем.\n4. Нажми ▶ — робот поедет.",
-        "kk": "Нағыз роботқа арналған бағдарлама тегін **LEGO® Education SPIKE™ App 3** қолданбасы (компьютер мен планшетке арналған) арқылы іске қосылады.\n\n1. Бағдарламаны RoboEasy-ден жүкте — бұл **.llsp3** файлы.\n2. Оны SPIKE қолданбасында аш.\n3. Хабты Bluetooth немесе кабель арқылы жалға.\n4. ▶ бас — робот жүреді.",
-        "en": "You run a program on a real robot with the free **LEGO® Education SPIKE™ App 3** (for computers and tablets).\n\n1. Download the program from RoboEasy — it is an **.llsp3** file.\n2. Open it in the SPIKE App.\n3. Connect the hub by Bluetooth or cable.\n4. Press ▶ — the robot goes."
+        "ru": "Программу для настоящего робота запускают через бесплатное приложение **LEGO® Education SPIKE™ App 3** (для компьютера и планшета).\n\n1. Скачай программу из RoboEasy — это файл **.llsp3**.\n2. Открой его в приложении SPIKE.\n3. Подключи хаб по Bluetooth или кабелем.\n4. Нажми кнопку запуска — робот поедет.",
+        "kk": "Нағыз роботқа арналған бағдарлама тегін **LEGO® Education SPIKE™ App 3** қолданбасы (компьютер мен планшетке арналған) арқылы іске қосылады.\n\n1. Бағдарламаны RoboEasy-ден жүкте — бұл **.llsp3** файлы.\n2. Оны SPIKE қолданбасында аш.\n3. Хабты Bluetooth немесе кабель арқылы жалға.\n4. Іске қосу батырмасын бас — робот жүреді.",
+        "en": "You run a program on a real robot with the free **LEGO® Education SPIKE™ App 3** (for computers and tablets).\n\n1. Download the program from RoboEasy — it is an **.llsp3** file.\n2. Open it in the SPIKE App.\n3. Connect the hub by Bluetooth or cable.\n4. Press the play button — the robot goes."
       }
     },
     {
@@ -64,9 +64,9 @@
           "en": "Connect the hub"
         },
         {
-          "ru": "Нажать ▶",
-          "kk": "▶ басу",
-          "en": "Press ▶"
+          "ru": "Нажать кнопку запуска",
+          "kk": "Іске қосу батырмасын басу",
+          "en": "Press the play button"
         }
       ],
       "explanation": {
@@ -168,9 +168,9 @@
         "en": "No kit? No problem"
       },
       "body": {
-        "ru": "Всё обучение можно пройти на **виртуальном роботе** прямо здесь: он ездит по полю, видит стены и линии, а задания проверяются сами.\n\nЗадания с настоящим роботом отмечены значком 🤖. Они дают бонус, но не обязательны.",
-        "kk": "Барлық оқуды осы жерде **виртуалды роботпен** өтуге болады: ол алаңда жүреді, қабырғалар мен сызықтарды көреді, ал тапсырмалар өзі тексеріледі.\n\nНағыз роботқа арналған тапсырмалар 🤖 белгісімен белгіленген. Олар бонус береді, бірақ міндетті емес.",
-        "en": "You can do all of the learning here on the **virtual robot**: it drives on the field, sees walls and lines, and tasks are checked automatically.\n\nTasks for a real robot are marked 🤖. They give a bonus but are optional."
+        "ru": "Всё обучение можно пройти на **виртуальном роботе** прямо здесь: он ездит по полю, видит стены и линии, а задания проверяются сами.\n\nЗадания с настоящим роботом отмечены значком робота. Они дают бонус, но не обязательны.",
+        "kk": "Барлық оқуды осы жерде **виртуалды роботпен** өтуге болады: ол алаңда жүреді, қабырғалар мен сызықтарды көреді, ал тапсырмалар өзі тексеріледі.\n\nНағыз роботқа арналған тапсырмалар робот белгісімен белгіленген. Олар бонус береді, бірақ міндетті емес.",
+        "en": "You can do all of the learning here on the **virtual robot**: it drives on the field, sees walls and lines, and tasks are checked automatically.\n\nTasks for a real robot are marked with a robot icon. They give a bonus but are optional."
       }
     }
   ]

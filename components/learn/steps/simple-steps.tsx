@@ -1,12 +1,13 @@
 'use client'
 
 import { type ReactNode, useEffect, useState } from 'react'
-import { Bot, Check, FileDown, Hammer, SkipForward } from 'lucide-react'
+import { Check, FileDown, Hammer, SkipForward } from 'lucide-react'
 
 import { BlockStack } from '@/components/block-stack'
 import { Illustration } from '@/components/learn/illustrations'
 import { RichText } from '@/components/learn/rich-text'
 import { RobotPanel, SendToRobot } from '@/components/robot-link'
+import { AnimIcon } from '@/components/ui/anim-icon'
 import { buttonVariants } from '@/components/ui/button'
 import { compilerFor } from '@/lib/compilers'
 import { programToPython } from '@/lib/dsl/compile-python'
@@ -135,8 +136,8 @@ export function RealRobotStep({
     <div className="grid gap-4 md:grid-cols-[1.2fr_1fr] md:items-start">
       <div className="grid gap-3">
         <h2 className="m-0 flex items-center gap-2 text-2xl">
-          <Bot className="size-6" aria-hidden="true" />
-          {step.title[lang]} 🤖
+          <AnimIcon name="robot" />
+          {step.title[lang]}
         </h2>
         <RichText text={step.task[lang]} className="text-lg" />
         <p className="m-0 font-bold text-success">{fill(t.lesson.bonus, { xp: XP_RULES.realRobot })}</p>

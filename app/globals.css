@@ -261,6 +261,91 @@
 }
 
 /* Component and page styles: in a layer, so Tailwind utilities on the same elements win. */
+/* Animated pictures (components/ui/anim-icon.tsx): transform and opacity only, with rests between moves. */
+.anim-icon {
+  overflow: visible;
+}
+.anim-icon:not([width]) {
+  display: inline-block;
+  flex: none;
+  width: 1.25em;
+  height: 1.25em;
+  vertical-align: -0.25em;
+}
+.anim-icon [data-a] {
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: var(--ai-name) var(--ai-time, 3.6s) ease-in-out var(--ai-delay, 0s) infinite both;
+}
+.anim-icon [data-o='b'] { transform-origin: 50% 100%; }
+.anim-icon [data-o='t'] { transform-origin: 50% 0; }
+.anim-icon [data-o='l'] { transform-origin: 0 50%; }
+.anim-icon [data-a='spin'] { --ai-name: ai-spin; --ai-time: 7s; animation-timing-function: linear; }
+.anim-icon [data-a='pulse'] { --ai-name: ai-pulse; }
+.anim-icon [data-a='beat'] { --ai-name: ai-beat; --ai-time: 2.4s; }
+.anim-icon [data-a='bob'] { --ai-name: ai-bob; --ai-time: 2.8s; }
+.anim-icon [data-a='hop'] { --ai-name: ai-hop; }
+.anim-icon [data-a='jump'] { --ai-name: ai-jump; --ai-time: 1.8s; }
+.anim-icon [data-a='wig'] { --ai-name: ai-wig; --ai-time: 4s; }
+.anim-icon [data-a='sway'] { --ai-name: ai-sway; --ai-time: 3.2s; }
+.anim-icon [data-a='wave'] { --ai-name: ai-wave; --ai-time: 3.2s; }
+.anim-icon [data-a='flap'] { --ai-name: ai-flap; --ai-time: 1.6s; }
+.anim-icon [data-a='nudge'] { --ai-name: ai-nudge; --ai-time: 2.6s; }
+.anim-icon [data-a='drop'] { --ai-name: ai-drop; --ai-time: 2.4s; }
+.anim-icon [data-a='blink'] { --ai-name: ai-blink; --ai-time: 4.2s; }
+.anim-icon [data-a='fade'] { --ai-name: ai-fade; --ai-time: 2.2s; }
+.anim-icon [data-a='flick'] { --ai-name: ai-flick; --ai-time: 0.9s; }
+.anim-icon [data-a='flash'] { --ai-name: ai-flash; --ai-time: 3s; }
+.anim-icon [data-a='twinkle'] { --ai-name: ai-twinkle; --ai-time: 2.6s; }
+.anim-icon [data-a='grow'] { --ai-name: ai-grow; --ai-time: 3s; }
+.anim-icon [data-a='flip'] { --ai-name: ai-flip; --ai-time: 4s; }
+.anim-icon [data-a='tick'] { --ai-name: ai-spin; --ai-time: 6s; animation-timing-function: steps(12, end); }
+.anim-icon [data-a='slide'] { --ai-name: ai-slide; --ai-time: 3.4s; }
+.anim-icon [data-a='slideback'] { --ai-name: ai-slide-back; --ai-time: 3.4s; }
+.anim-icon [data-a='glow1'] { --ai-name: ai-glow-1; --ai-time: 3.6s; }
+.anim-icon [data-a='glow2'] { --ai-name: ai-glow-2; --ai-time: 3.6s; }
+.anim-icon [data-a='glow3'] { --ai-name: ai-glow-3; --ai-time: 3.6s; }
+.anim-icon [data-a='snip1'] { --ai-name: ai-snip-1; --ai-time: 2.2s; }
+.anim-icon [data-a='snip2'] { --ai-name: ai-snip-2; --ai-time: 2.2s; }
+.anim-icon [data-a='fan1'] { --ai-name: ai-fan-1; --ai-time: 3.2s; }
+.anim-icon [data-a='fan2'] { --ai-name: ai-fan-2; --ai-time: 3.2s; }
+.anim-icon [data-a='pop1'] { --ai-name: ai-pop-1; --ai-time: 2s; }
+.anim-icon [data-a='pop2'] { --ai-name: ai-pop-1; --ai-time: 2s; animation-delay: 0.3s; }
+.anim-icon [data-a='pop3'] { --ai-name: ai-pop-1; --ai-time: 2s; animation-delay: 0.6s; }
+.anim-icon-still [data-a] { animation: none; }
+@media (prefers-reduced-motion: reduce) {
+  .anim-icon [data-a] { animation: none; }
+}
+@keyframes ai-spin { to { transform: rotate(360deg); } }
+@keyframes ai-pulse { 0%, 60%, 100% { transform: scale(1); } 30% { transform: scale(1.14); } }
+@keyframes ai-beat { 0%, 45%, 100% { transform: scale(1); } 15% { transform: scale(1.16); } 30% { transform: scale(1.04); } 38% { transform: scale(1.12); } }
+@keyframes ai-bob { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-7%); } }
+@keyframes ai-hop { 0%, 55%, 100% { transform: translateY(0); } 25% { transform: translateY(-12%); } 42% { transform: translateY(0); } 48% { transform: translateY(-3%); } }
+@keyframes ai-jump { 0%, 100% { transform: translateY(0) scale(1.08, 0.92); } 12% { transform: translateY(0) scale(1); } 50% { transform: translateY(-20%) scale(1); } 88% { transform: translateY(0) scale(1); } }
+@keyframes ai-wig { 0%, 28%, 100% { transform: rotate(0); } 6% { transform: rotate(-8deg); } 14% { transform: rotate(7deg); } 21% { transform: rotate(-4deg); } }
+@keyframes ai-sway { 0%, 100% { transform: rotate(-9deg); } 50% { transform: rotate(9deg); } }
+@keyframes ai-wave { 0%, 45%, 100% { transform: rotate(0); } 9% { transform: rotate(16deg); } 18% { transform: rotate(-8deg); } 27% { transform: rotate(16deg); } 36% { transform: rotate(-6deg); } }
+@keyframes ai-flap { 0%, 100% { transform: skewY(0) scaleX(1); } 50% { transform: skewY(5deg) scaleX(0.96); } }
+@keyframes ai-nudge { 0%, 60%, 100% { transform: translateX(0); } 30% { transform: translateX(10%); } }
+@keyframes ai-drop { 0%, 100% { transform: translateY(-8%); } 50% { transform: translateY(8%); } }
+@keyframes ai-blink { 0%, 90%, 100% { transform: scaleY(1); } 95% { transform: scaleY(0.1); } }
+@keyframes ai-fade { 0%, 100% { opacity: 1; } 50% { opacity: 0.25; } }
+@keyframes ai-flick { 0%, 100% { transform: scale(1, 1); } 25% { transform: scale(0.94, 1.08); } 50% { transform: scale(1.05, 0.95); } 75% { transform: scale(0.97, 1.05); } }
+@keyframes ai-flash { 0%, 40%, 60%, 100% { opacity: 1; transform: scale(1); } 46% { opacity: 0.45; transform: scale(0.94); } 53% { opacity: 1; transform: scale(1.1); } }
+@keyframes ai-twinkle { 0%, 55%, 100% { opacity: 1; transform: scale(1) rotate(0); } 25% { opacity: 0.75; transform: scale(0.84) rotate(12deg); } }
+@keyframes ai-grow { 0%, 100% { transform: scaleY(1); } 50% { transform: scaleY(0.62); } }
+@keyframes ai-flip { 0%, 55%, 100% { transform: scaleX(1); } 75% { transform: scaleX(0.15); } }
+@keyframes ai-slide { 0%, 100% { transform: translateX(0); } 50% { transform: translateX(200%); } }
+@keyframes ai-slide-back { 0%, 100% { transform: translateX(0); } 50% { transform: translateX(-200%); } }
+@keyframes ai-glow-1 { 0%, 30%, 100% { opacity: 1; } 34%, 96% { opacity: 0.25; } }
+@keyframes ai-glow-2 { 0%, 30%, 66%, 100% { opacity: 0.25; } 34%, 62% { opacity: 1; } }
+@keyframes ai-glow-3 { 0%, 62%, 100% { opacity: 0.25; } 66%, 96% { opacity: 1; } }
+@keyframes ai-snip-1 { 0%, 40%, 100% { transform: rotate(0); } 20% { transform: rotate(18deg); } }
+@keyframes ai-snip-2 { 0%, 40%, 100% { transform: rotate(0); } 20% { transform: rotate(-18deg); } }
+@keyframes ai-fan-1 { 0%, 100% { transform: rotate(-3deg); } 50% { transform: rotate(-12deg); } }
+@keyframes ai-fan-2 { 0%, 100% { transform: rotate(3deg); } 50% { transform: rotate(12deg); } }
+@keyframes ai-pop-1 { 0%, 70%, 100% { opacity: 0; transform: translateY(35%) scale(0.4); } 25% { opacity: 1; transform: translateY(0) scale(1); } 55% { opacity: 1; transform: translateY(-20%) scale(1); } }
+
 @layer components {
 /* One focus style everywhere: a blue ring outside the outline. */
 :focus-visible {

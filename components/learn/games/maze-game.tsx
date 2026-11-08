@@ -246,7 +246,7 @@ export function MazeGame({ lang, t }: { lang: Lang; t: PlayText }) {
                     'grid h-14 w-12 place-items-center rounded-(--radius-sm) border-(length:--stroke-thin) border-outline bg-card text-sm font-extrabold disabled:opacity-40',
                     l.id === level.id && 'bg-primary text-primary-foreground',
                   )}
-                  aria-label={`${fill(t.game.level, { n: l.id })}${open ? '' : ' 🔒'}`}
+                  aria-label={`${fill(t.game.level, { n: l.id })}${open ? '' : `, ${t.game.locked}`}`}
                 >
                   {open ? l.id : <Lock className="size-4" aria-hidden="true" />}
                   <Stars n={best.get(l.id) ?? 0} className="text-[9px]" />

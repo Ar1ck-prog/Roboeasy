@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from 'react'
 
 import { GameHeader, type Reward, RewardLine, Stars, finishRound } from '@/components/learn/games/game-kit'
+import { AnimIcon } from '@/components/ui/anim-icon'
 import { buttonVariants } from '@/components/ui/button'
 import { Card } from '@/components/ui/card'
 import { fill } from '@/lib/i18n/config'
@@ -97,8 +98,8 @@ export function MemoryGame({ lang, t }: { lang: Lang; t: PlayText }) {
                     )}
                   >
                     {c.icon && (
-                      <span className="text-xl" aria-hidden="true">
-                        {c.icon}
+                      <span className="text-xl">
+                        <AnimIcon name={c.icon} />
                       </span>
                     )}
                     {c.text}

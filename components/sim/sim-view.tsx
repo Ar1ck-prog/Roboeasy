@@ -6,7 +6,8 @@ import { Pause, Play, RotateCcw, Volume2 } from 'lucide-react'
 import { FieldFrame, Label } from '@/components/fll/field-shapes'
 import { buttonVariants } from '@/components/ui/button'
 import { svgPoints } from '@/lib/fll/geometry'
-import { colorHex, stickerEmoji } from '@/lib/learn/shop'
+import { AnimIcon } from '@/components/ui/anim-icon'
+import { colorHex, stickerIcon } from '@/lib/learn/shop'
 import type { Point } from '@/lib/fll/season'
 import type { SimField } from '@/lib/sim/field'
 import { ROBOT_SHAPE } from '@/lib/sim/robot'
@@ -271,10 +272,10 @@ export function SimView({
                 strokeWidth="7"
               />
               <rect x={-30} y={-34} width={60} height={68} rx="10" fill="#fff7e8" stroke="#1b1f2a" strokeWidth="4" />
-              {stickerEmoji(sticker ?? 'none') && (
-                <text x={-4} y={4} fontSize="40" textAnchor="middle" dominantBaseline="central" transform="scale(1 -1)">
-                  {stickerEmoji(sticker ?? 'none')}
-                </text>
+              {stickerIcon(sticker ?? 'none') && (
+                <g transform="scale(1 -1)">
+                  <AnimIcon name={stickerIcon(sticker ?? 'none')!} x={-24} y={-16} width={40} height={40} style={{ color: '#1b1f2a' }} />
+                </g>
               )}
               <circle cx={ROBOT_SHAPE.colorSensorAhead} cy={0} r="10" fill="#2bb673" stroke="#1b1f2a" strokeWidth="4" />
               <path d={`M${ROBOT_SHAPE.length / 2 - 6} -22 L${ROBOT_SHAPE.length / 2 + 26} 0 L${ROBOT_SHAPE.length / 2 - 6} 22 Z`} fill="#1b1f2a" />

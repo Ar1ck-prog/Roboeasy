@@ -9,6 +9,7 @@ import { ArrowMarker, FieldFrame, LaunchAreaShape, MatBase, MissionShape } from 
 import { RobotPanel, SendToRobot } from '@/components/robot-link'
 import { BackgroundControls, useFieldBackground } from '@/components/fll/background'
 import type { CameraKind, Field3D } from '@/components/fll/field-3d'
+import { AnimIcon } from '@/components/ui/anim-icon'
 import { Badge } from '@/components/ui/badge'
 import { buttonVariants } from '@/components/ui/button'
 import { Card, CardTitle } from '@/components/ui/card'
@@ -664,7 +665,7 @@ export function FieldSim({ lang, t, season, bgT, blocksT }: Props) {
               </svg>
               {running && (
                 <span className="pointer-events-none absolute top-2 left-2 rounded-full border-(length:--stroke-thin) border-outline bg-card px-3 py-1 text-xs font-extrabold shadow-(--shadow-press)">
-                  ▶ {t.running}
+                  <AnimIcon name="play" /> {t.running}
                 </span>
               )}
             </div>
@@ -847,7 +848,7 @@ function ScoreCard({
         <h3 className="m-0 min-w-0 flex-1 text-base leading-tight">{L(group.title)}</h3>
         {group.noEquipment && (
           <span title={t.noEquipment} aria-label={t.noEquipment}>
-            🚫
+            <AnimIcon name="no" />
           </span>
         )}
         <strong className="font-display text-xl tabular-nums">{points}</strong>

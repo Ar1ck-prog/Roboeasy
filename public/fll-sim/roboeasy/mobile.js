@@ -7,7 +7,7 @@
 ;(function () {
   var BUTTONS = {
     drive: [
-      { cls: 're-slow', code: 'ShiftLeft', key: 'Shift', label: '🐢', title: 'Медленно', toggle: true },
+      { cls: 're-slow', code: 'ShiftLeft', key: 'Shift', label: 'Slow', title: 'Медленно', toggle: true },
       { cls: 're-up', code: 'KeyW', key: 'w', label: '▲', title: 'Вперёд' },
       { cls: 're-left', code: 'KeyA', key: 'a', label: '◀', title: 'Налево' },
       { cls: 're-down', code: 'KeyS', key: 's', label: '▼', title: 'Назад' },

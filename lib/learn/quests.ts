@@ -5,6 +5,7 @@
  * learner's time zone; rewards are added in lib/learn/economy.ts.
  */
 
+import type { IconName } from '@/components/ui/anim-icon'
 import type { LearnEvent } from './state'
 
 type L = { ru: string; kk: string; en: string }
@@ -13,7 +14,7 @@ export type QuestId = 'lesson' | 'first-try' | 'minutes' | 'maze' | 'puzzle' | '
 
 export interface QuestDef {
   id: QuestId
-  icon: string
+  icon: IconName
   target: number
   coins: number
   title: L
@@ -27,7 +28,7 @@ export const CHEST = { coins: 25, xp: 10 } as const
 export const QUESTS: Record<QuestId, QuestDef> = {
   lesson: {
     id: 'lesson',
-    icon: '📘',
+    icon: 'book',
     target: 1,
     coins: 20,
     href: '/path',
@@ -35,7 +36,7 @@ export const QUESTS: Record<QuestId, QuestDef> = {
   },
   'first-try': {
     id: 'first-try',
-    icon: '🎯',
+    icon: 'target',
     target: 3,
     coins: 15,
     href: '/path',
@@ -43,7 +44,7 @@ export const QUESTS: Record<QuestId, QuestDef> = {
   },
   minutes: {
     id: 'minutes',
-    icon: '⏱️',
+    icon: 'stopwatch',
     target: 10,
     coins: 15,
     href: '/play',
@@ -51,7 +52,7 @@ export const QUESTS: Record<QuestId, QuestDef> = {
   },
   maze: {
     id: 'maze',
-    icon: '🧭',
+    icon: 'compass',
     target: 1,
     coins: 15,
     href: '/play/maze',
@@ -59,7 +60,7 @@ export const QUESTS: Record<QuestId, QuestDef> = {
   },
   puzzle: {
     id: 'puzzle',
-    icon: '🧩',
+    icon: 'puzzle',
     target: 1,
     coins: 15,
     href: '/play/puzzle',
@@ -67,7 +68,7 @@ export const QUESTS: Record<QuestId, QuestDef> = {
   },
   memory: {
     id: 'memory',
-    icon: '🃏',
+    icon: 'cards',
     target: 1,
     coins: 10,
     href: '/play/memory',
@@ -75,13 +76,13 @@ export const QUESTS: Record<QuestId, QuestDef> = {
   },
   blitz: {
     id: 'blitz',
-    icon: '⚡',
+    icon: 'lightning',
     target: 8,
     coins: 20,
     href: '/play/blitz',
     title: { ru: 'Набери 8 очков в «Блице»', kk: '«Блицте» 8 ұпай жина', en: 'Score 8 in Blitz' },
   },
-  games: { id: 'games', icon: '🎮', target: 3, coins: 20, href: '/play', title: { ru: 'Сыграй 3 игры', kk: '3 ойын ойна', en: 'Play 3 games' } },
+  games: { id: 'games', icon: 'gamepad', target: 3, coins: 20, href: '/play', title: { ru: 'Сыграй 3 игры', kk: '3 ойын ойна', en: 'Play 3 games' } },
 }
 
 const LEARN: QuestId[] = ['lesson', 'first-try', 'lesson', 'minutes']

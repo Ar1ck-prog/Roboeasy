@@ -3,6 +3,7 @@
 import { useState } from 'react'
 import { Lightbulb, Loader2, MessageCircleQuestion, Send, X } from 'lucide-react'
 
+import { AnimIcon } from '@/components/ui/anim-icon'
 import { buttonVariants } from '@/components/ui/button'
 import type { Step } from '@/lib/dsl/types'
 import { fill } from '@/lib/i18n/config'
@@ -75,10 +76,19 @@ export function Mentor({ lessonId, stepId, lang, t, lessonHints, getContext }: M
           <X aria-hidden="true" />
         </button>
       </div>
-      <p className="m-0 text-sm text-muted-foreground">{t.mentor.intro}</p>
+      <p className="m-0 text-sm text-muted-foreground">
+        {t.mentor.intro} <AnimIcon name="smile" />
+      </p>
       <ol className="m-0 grid max-h-64 list-none gap-2 overflow-auto p-0" aria-live="polite">
         {messages.map((m, i) => (
-          <li key={i} className={m.from === 'me' ? 'max-w-[85%] justify-self-end rounded-(--radius-sm) bg-surface-2 px-3 py-2 font-bold' : 'max-w-[92%] rounded-(--radius-sm) border-(length:--stroke-thin) border-outline px-3 py-2'}>
+          <li
+            key={i}
+            className={
+              m.from === 'me'
+                ? 'max-w-[85%] justify-self-end rounded-(--radius-sm) bg-surface-2 px-3 py-2 font-bold'
+                : 'max-w-[92%] rounded-(--radius-sm) border-(length:--stroke-thin) border-outline px-3 py-2'
+            }
+          >
             {m.level && <span className="block text-xs font-extrabold text-muted-foreground">{fill(t.mentor.level, { n: m.level })}</span>}
             {m.text}
           </li>
@@ -103,7 +113,14 @@ export function Mentor({ lessonId, stepId, lang, t, lessonHints, getContext }: M
         <label className="sr-only" htmlFor={`mentor-${stepId}`}>
           {t.mentor.placeholder}
         </label>
-        <input id={`mentor-${stepId}`} className="input" value={question} maxLength={300} placeholder={t.mentor.placeholder} onChange={(e) => setQuestion(e.target.value)} />
+        <input
+          id={`mentor-${stepId}`}
+          className="input"
+          value={question}
+          maxLength={300}
+          placeholder={t.mentor.placeholder}
+          onChange={(e) => setQuestion(e.target.value)}
+        />
         <button type="submit" className={buttonVariants({ size: 'icon' })} aria-label={t.mentor.ask} disabled={busy || !question.trim()}>
           {busy ? <Loader2 className="spin" aria-hidden="true" /> : <Send aria-hidden="true" />}
         </button>

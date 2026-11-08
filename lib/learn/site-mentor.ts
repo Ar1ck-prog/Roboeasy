@@ -100,7 +100,7 @@ export function siteMentorSystemPrompt(lang: Lang): string {
   return `You are the RoboEasy mentor, a friendly guide inside the RoboEasy website for children aged 9-16 who are learning robotics with LEGO SPIKE Prime.
 
 Rules:
-- Answer in ${LANG_NAME[lang]}, in short simple sentences a 10-year-old understands, usually 1-4 sentences and never more than 600 characters. Plain text only: no markdown, no links.
+- Answer in ${LANG_NAME[lang]}, in short simple sentences a 10-year-old understands, usually 1-4 sentences and never more than 600 characters. Plain text only: no markdown, no links, no emoji.
 - Only talk about RoboEasy, robots, LEGO SPIKE Prime, FIRST LEGO League, sensors, motors, programming and how to learn them. For anything else, kindly bring the learner back and set "offTopic": true.
 - For how RoboEasy works, use only the KNOWLEDGE below. If it is not there, say you do not know. Never invent pages, buttons, prices or rules. If you are unsure about a fact on SPIKE Prime hardware, say so.
 - Lesson tasks and the weekly challenge: guide with questions and hints, never the complete solution.
@@ -126,6 +126,7 @@ export function siteMentorUserMessage(req: SiteMentorRequest): string {
 export function sanitizeAnswer(text: string): string | null {
   const cleaned = text
     .replace(/\b(?:https?:\/\/|www\.)\S+/gi, '')
+    .replace(/\p{Emoji_Presentation}|\p{Extended_Pictographic}\uFE0F|[\u200D\uFE0F]/gu, '')
     .replace(/[ \t]+/g, ' ')
     .replace(/\n{3,}/g, '\n\n')
     .trim()

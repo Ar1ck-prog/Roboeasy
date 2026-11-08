@@ -4,6 +4,7 @@ import { useMemo, useRef, useState } from 'react'
 import { Check, Lock, RotateCcw } from 'lucide-react'
 
 import { GameHeader, type Reward, RewardLine, Stars, finishRound } from '@/components/learn/games/game-kit'
+import { AnimIcon } from '@/components/ui/anim-icon'
 import { buttonVariants } from '@/components/ui/button'
 import { Card } from '@/components/ui/card'
 import { Skeleton } from '@/components/ui/skeleton'
@@ -102,7 +103,7 @@ export function PuzzleGame({ lang, t }: { lang: Lang; t: PlayText }) {
                   )}
                   aria-label={`${fill(t.game.level, { n: l.id })}: ${l.title[lang]}`}
                 >
-                  {open ? <span aria-hidden="true">{l.icon}</span> : <Lock className="size-4" aria-hidden="true" />}
+                  {open ? <AnimIcon name={l.icon} /> : <Lock className="size-4" aria-hidden="true" />}
                   <Stars n={best.get(l.id) ?? 0} className="text-[9px]" />
                 </button>
               </li>
@@ -113,7 +114,7 @@ export function PuzzleGame({ lang, t }: { lang: Lang; t: PlayText }) {
 
       <Card className="gap-1 bg-primary text-primary-foreground">
         <h2 className="m-0 text-2xl">
-          {level.icon} {level.title[lang]}
+          <AnimIcon name={level.icon} /> {level.title[lang]}
         </h2>
         <p className="m-0 text-lg font-bold">{level.goal[lang]}</p>
       </Card>

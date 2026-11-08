@@ -4,6 +4,7 @@
  * (components/learn/achievement-watcher.tsx), which keeps its date.
  */
 
+import type { IconName } from '@/components/ui/anim-icon'
 import type { Course } from './schema'
 import { type LearnState, completedLessons } from './state'
 import { trackComplete } from './progress'
@@ -16,7 +17,7 @@ type L = { ru: string; kk: string; en: string }
 
 export interface Achievement {
   id: string
-  icon: string
+  icon: IconName
   hidden: boolean
   title: L
   description: L
@@ -32,7 +33,7 @@ interface Ctx {
 const DEFS: (Achievement & { earned: (c: Ctx) => boolean })[] = [
   {
     id: 'first-lesson',
-    icon: '🚀',
+    icon: 'rocket',
     hidden: false,
     title: { ru: 'Первый шаг', kk: 'Алғашқы қадам', en: 'First step' },
     description: { ru: 'Пройди первый урок.', kk: 'Алғашқы сабақты өт.', en: 'Finish your first lesson.' },
@@ -40,7 +41,7 @@ const DEFS: (Achievement & { earned: (c: Ctx) => boolean })[] = [
   },
   {
     id: 'five-lessons',
-    icon: '🧩',
+    icon: 'puzzle',
     hidden: false,
     title: { ru: 'Разогнался', kk: 'Екпін алдым', en: 'Picking up speed' },
     description: { ru: 'Пройди 5 уроков.', kk: '5 сабақ өт.', en: 'Finish 5 lessons.' },
@@ -48,7 +49,7 @@ const DEFS: (Achievement & { earned: (c: Ctx) => boolean })[] = [
   },
   {
     id: 'first-try',
-    icon: '🎯',
+    icon: 'target',
     hidden: false,
     title: { ru: 'Снайпер', kk: 'Мерген', en: 'Sharpshooter' },
     description: {
@@ -61,7 +62,7 @@ const DEFS: (Achievement & { earned: (c: Ctx) => boolean })[] = [
   },
   {
     id: 'first-project',
-    icon: '🏗️',
+    icon: 'crane',
     hidden: false,
     title: { ru: 'Проектировщик', kk: 'Жобалаушы', en: 'Project maker' },
     description: { ru: 'Сделай первый проект.', kk: 'Алғашқы жобаны жаса.', en: 'Finish your first project.' },
@@ -69,7 +70,7 @@ const DEFS: (Achievement & { earned: (c: Ctx) => boolean })[] = [
   },
   {
     id: 'track-start',
-    icon: '🏁',
+    icon: 'flag',
     hidden: false,
     title: { ru: 'Старт взят', kk: 'Старт алынды', en: 'Off the line' },
     description: { ru: 'Пройди весь трек «Старт».', kk: '«Старт» трегін толық өт.', en: 'Finish the whole Start track.' },
@@ -80,7 +81,7 @@ const DEFS: (Achievement & { earned: (c: Ctx) => boolean })[] = [
   },
   {
     id: 'real-robot',
-    icon: '🤖',
+    icon: 'robot',
     hidden: false,
     title: { ru: 'Из экрана в жизнь', kk: 'Экраннан өмірге', en: 'Off the screen' },
     description: { ru: 'Запусти программу на настоящем роботе.', kk: 'Бағдарламаны нағыз роботта іске қос.', en: 'Run a program on a real robot.' },
@@ -88,7 +89,7 @@ const DEFS: (Achievement & { earned: (c: Ctx) => boolean })[] = [
   },
   {
     id: 'streak-3',
-    icon: '🔥',
+    icon: 'fire',
     hidden: false,
     title: { ru: 'Три дня подряд', kk: 'Қатарынан үш күн', en: 'Three in a row' },
     description: { ru: 'Выполни цель дня 3 дня подряд.', kk: 'Күн мақсатын 3 күн қатарынан орында.', en: 'Meet your daily goal 3 days in a row.' },
@@ -96,7 +97,7 @@ const DEFS: (Achievement & { earned: (c: Ctx) => boolean })[] = [
   },
   {
     id: 'streak-7',
-    icon: '📅',
+    icon: 'calendar',
     hidden: false,
     title: { ru: 'Неделя', kk: 'Апта', en: 'A whole week' },
     description: { ru: 'Серия 7 дней.', kk: '7 күндік серия.', en: 'A 7-day streak.' },
@@ -104,7 +105,7 @@ const DEFS: (Achievement & { earned: (c: Ctx) => boolean })[] = [
   },
   {
     id: 'streak-30',
-    icon: '🏆',
+    icon: 'trophy',
     hidden: false,
     title: { ru: 'Месяц с роботом', kk: 'Роботпен бір ай', en: 'A month of robots' },
     description: { ru: 'Серия 30 дней.', kk: '30 күндік серия.', en: 'A 30-day streak.' },
@@ -112,7 +113,7 @@ const DEFS: (Achievement & { earned: (c: Ctx) => boolean })[] = [
   },
   {
     id: 'reviewer',
-    icon: '🔁',
+    icon: 'loop',
     hidden: false,
     title: { ru: 'Повторюшка', kk: 'Қайталаушы', en: 'Reviewer' },
     description: { ru: 'Пройди 3 повторения.', kk: '3 қайталау өт.', en: 'Do 3 reviews.' },
@@ -120,7 +121,7 @@ const DEFS: (Achievement & { earned: (c: Ctx) => boolean })[] = [
   },
   {
     id: 'challenge',
-    icon: '⭐',
+    icon: 'star',
     hidden: false,
     title: { ru: 'Вызов принят', kk: 'Шақыру қабылданды', en: 'Challenge accepted' },
     description: { ru: 'Реши задание недели.', kk: 'Апта тапсырмасын шеш.', en: 'Solve a weekly challenge.' },
@@ -128,7 +129,7 @@ const DEFS: (Achievement & { earned: (c: Ctx) => boolean })[] = [
   },
   {
     id: 'level-2',
-    icon: '🔧',
+    icon: 'wrench',
     hidden: false,
     title: { ru: 'Конструктор', kk: 'Құрастырушы', en: 'Builder' },
     description: { ru: 'Дойди до второго уровня.', kk: 'Екінші деңгейге жет.', en: 'Reach level 2.' },
@@ -136,7 +137,7 @@ const DEFS: (Achievement & { earned: (c: Ctx) => boolean })[] = [
   },
   {
     id: 'first-buy',
-    icon: '🛒',
+    icon: 'cart',
     hidden: false,
     title: { ru: 'Первая покупка', kk: 'Алғашқы сатып алу', en: 'First purchase' },
     description: {
@@ -148,7 +149,7 @@ const DEFS: (Achievement & { earned: (c: Ctx) => boolean })[] = [
   },
   {
     id: 'upgraded',
-    icon: '⚙️',
+    icon: 'gear',
     hidden: false,
     title: { ru: 'Прокачка', kk: 'Жетілдіру', en: 'Upgraded' },
     description: { ru: 'Поставь роботу первое улучшение.', kk: 'Роботқа алғашқы жақсартуды орнат.', en: 'Give your robot its first upgrade.' },
@@ -156,7 +157,7 @@ const DEFS: (Achievement & { earned: (c: Ctx) => boolean })[] = [
   },
   {
     id: 'gamer',
-    icon: '🎮',
+    icon: 'gamepad',
     hidden: false,
     title: { ru: 'Игроман', kk: 'Ойыншы', en: 'Gamer' },
     description: { ru: 'Сыграй 10 раундов в играх.', kk: 'Ойындарда 10 раунд ойна.', en: 'Play 10 game rounds.' },
@@ -164,7 +165,7 @@ const DEFS: (Achievement & { earned: (c: Ctx) => boolean })[] = [
   },
   {
     id: 'chest',
-    icon: '🎁',
+    icon: 'gift',
     hidden: false,
     title: { ru: 'Сундук дня', kk: 'Күн сандығы', en: 'Daily chest' },
     description: { ru: 'Выполни все три задания дня.', kk: 'Күннің үш тапсырмасын да орында.', en: 'Complete all three daily quests.' },
@@ -172,7 +173,7 @@ const DEFS: (Achievement & { earned: (c: Ctx) => boolean })[] = [
   },
   {
     id: 'maze-master',
-    icon: '🧭',
+    icon: 'compass',
     hidden: false,
     title: { ru: 'Мастер лабиринтов', kk: 'Лабиринт шебері', en: 'Maze master' },
     description: {
@@ -188,7 +189,7 @@ const DEFS: (Achievement & { earned: (c: Ctx) => boolean })[] = [
   // Hidden
   {
     id: 'shorter',
-    icon: '✂️',
+    icon: 'scissors',
     hidden: true,
     title: { ru: 'Короче нашего', kk: 'Біздікінен қысқа', en: 'Shorter than ours' },
     description: {
@@ -201,7 +202,7 @@ const DEFS: (Achievement & { earned: (c: Ctx) => boolean })[] = [
   },
   {
     id: 'clean-project',
-    icon: '💎',
+    icon: 'gem',
     hidden: true,
     title: { ru: 'Чистая работа', kk: 'Таза жұмыс', en: 'Clean job' },
     description: {
@@ -213,7 +214,7 @@ const DEFS: (Achievement & { earned: (c: Ctx) => boolean })[] = [
   },
   {
     id: 'comeback',
-    icon: '👋',
+    icon: 'wave',
     hidden: true,
     title: { ru: 'С возвращением', kk: 'Қайта оралуың құтты болсын', en: 'Welcome back' },
     description: {
@@ -228,7 +229,7 @@ const DEFS: (Achievement & { earned: (c: Ctx) => boolean })[] = [
   },
   {
     id: 'skipper',
-    icon: '🦘',
+    icon: 'jump',
     hidden: true,
     title: { ru: 'Я это знаю!', kk: 'Мен мұны білемін!', en: 'I know this!' },
     description: {

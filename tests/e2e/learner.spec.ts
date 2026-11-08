@@ -89,7 +89,7 @@ test('new learner: placement, first lesson, XP, achievement, streak next day', a
   await page.goto('/ru/path')
   await closeAchievements(page)
   await expect(page.getByText('1 дн.').first()).toBeVisible()
-  await expect(page.getByText('Цель выполнена! 🎉')).toBeVisible()
+  await expect(page.getByText('Цель выполнена!')).toBeVisible()
 
   // Next day: the streak is kept and today's goal starts over
   await page.clock.setFixedTime(DAY2)

@@ -9,6 +9,8 @@
  * Coins are virtual and only earned by learning; nothing is sold for money.
  */
 
+import type { IconName } from '@/components/ui/anim-icon'
+
 type L = { ru: string; kk: string; en: string }
 
 export type ItemKind = 'model' | 'color' | 'hat' | 'eyes' | 'sticker' | 'wheels' | 'upgrade'
@@ -17,7 +19,7 @@ export type Unlock = { level: number } | { achievement: string } | { price: numb
 export interface ShopItem {
   kind: ItemKind
   id: string
-  /** Colour hex (colours), emoji (stickers). */
+  /** Colour hex (colours), picture name (stickers). */
   value: string
   title: L
   /** For robots and upgrades. */
@@ -130,15 +132,15 @@ export const LOOKS: ShopItem[] = [
   { kind: 'eyes', id: 'star', value: '', title: t('Звёзды', 'Жұлдыздар', 'Stars'), unlock: { price: 160 } },
   // Stickers
   { kind: 'sticker', id: 'none', value: '', title: t('Без наклейки', 'Жапсырмасыз', 'No sticker'), unlock: null },
-  { kind: 'sticker', id: 'star', value: '⭐', title: t('Звезда', 'Жұлдыз', 'Star'), unlock: null },
-  { kind: 'sticker', id: 'bolt', value: '⚡', title: t('Молния', 'Найзағай', 'Bolt'), unlock: { achievement: 'first-try' } },
-  { kind: 'sticker', id: 'rocket', value: '🚀', title: t('Ракета', 'Зымыран', 'Rocket'), unlock: { achievement: 'first-project' } },
-  { kind: 'sticker', id: 'flag', value: '🏁', title: t('Флаг', 'Жалау', 'Flag'), unlock: { achievement: 'track-start' } },
-  { kind: 'sticker', id: 'gem', value: '💎', title: t('Кристалл', 'Кристалл', 'Gem'), unlock: { achievement: 'clean-project' } },
-  { kind: 'sticker', id: 'heart', value: '❤️', title: t('Сердце', 'Жүрек', 'Heart'), unlock: { price: 30 } },
-  { kind: 'sticker', id: 'cat', value: '🐱', title: t('Котик', 'Мысық', 'Cat'), unlock: { price: 40 } },
-  { kind: 'sticker', id: 'fire', value: '🔥', title: t('Огонь', 'От', 'Fire'), unlock: { price: 50 } },
-  { kind: 'sticker', id: 'planet', value: '🪐', title: t('Планета', 'Ғаламшар', 'Planet'), unlock: { price: 70 } },
+  { kind: 'sticker', id: 'star', value: 'star', title: t('Звезда', 'Жұлдыз', 'Star'), unlock: null },
+  { kind: 'sticker', id: 'bolt', value: 'lightning', title: t('Молния', 'Найзағай', 'Bolt'), unlock: { achievement: 'first-try' } },
+  { kind: 'sticker', id: 'rocket', value: 'rocket', title: t('Ракета', 'Зымыран', 'Rocket'), unlock: { achievement: 'first-project' } },
+  { kind: 'sticker', id: 'flag', value: 'flag', title: t('Флаг', 'Жалау', 'Flag'), unlock: { achievement: 'track-start' } },
+  { kind: 'sticker', id: 'gem', value: 'gem', title: t('Кристалл', 'Кристалл', 'Gem'), unlock: { achievement: 'clean-project' } },
+  { kind: 'sticker', id: 'heart', value: 'heart', title: t('Сердце', 'Жүрек', 'Heart'), unlock: { price: 30 } },
+  { kind: 'sticker', id: 'cat', value: 'cat', title: t('Котик', 'Мысық', 'Cat'), unlock: { price: 40 } },
+  { kind: 'sticker', id: 'fire', value: 'fire', title: t('Огонь', 'От', 'Fire'), unlock: { price: 50 } },
+  { kind: 'sticker', id: 'planet', value: 'planet', title: t('Планета', 'Ғаламшар', 'Planet'), unlock: { price: 70 } },
   // Wheels
   { kind: 'wheels', id: 'classic', value: '', title: t('Обычные', 'Қарапайым', 'Classic'), unlock: null },
   { kind: 'wheels', id: 'racing', value: '', title: t('Гоночные', 'Жарыс', 'Racing'), unlock: { level: 1 } },
@@ -276,6 +278,6 @@ export function colorHex(id: string): string {
   return LOOKS.find((c) => c.kind === 'color' && c.id === id)?.value ?? '#ffc531'
 }
 
-export function stickerEmoji(id: string): string {
-  return LOOKS.find((c) => c.kind === 'sticker' && c.id === id)?.value ?? ''
+export function stickerIcon(id: string): IconName | null {
+  return (LOOKS.find((c) => c.kind === 'sticker' && c.id === id)?.value as IconName | undefined) || null
 }

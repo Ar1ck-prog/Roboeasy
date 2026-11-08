@@ -24,7 +24,9 @@ export const mentorRequestSchema = z.object({
 })
 export type MentorRequest = z.infer<typeof mentorRequestSchema>
 
-export type MentorResponse = { ok: true; hint: string; source: 'ai' | 'lesson'; remaining?: number } | { ok: false; error: 'bad_request' | 'rate_limited' | 'daily_limit'; retryAfter?: number }
+export type MentorResponse =
+  | { ok: true; hint: string; source: 'ai' | 'lesson'; remaining?: number }
+  | { ok: false; error: 'bad_request' | 'rate_limited' | 'daily_limit'; retryAfter?: number }
 
 export const MENTOR_JSON_SCHEMA = {
   type: 'object',
@@ -37,7 +39,7 @@ export function mentorSystemPrompt(lang: Lang): string {
 
 Hard rules:
 - NEVER give the full solution or a complete program. At most one block or one value, and only at hint level 3.
-- Answer in ${LANG_NAME[lang]}, in 1-3 short sentences (max 300 characters), simple words a 10-year-old understands, no jargon.
+- Answer in ${LANG_NAME[lang]}, in 1-3 short sentences (max 300 characters), simple words a 10-year-old understands, no jargon, no emoji.
 - Only talk about this lesson, robots, sensors, motors and programming. If the question is about anything else, kindly bring the learner back to the lesson and set "offTopic": true.
 - Be warm and encouraging; never shame. No personal questions, no links, no contact details.
 - If the learner shares personal information (a real name, address, phone, school, photos), do not repeat it; gently say it is better not to share that here, then return to the lesson.
@@ -61,7 +63,14 @@ export function mentorUserMessage(lesson: Lesson, req: MentorRequest, program: S
     ctx.availableBlocks = step.toolbox
     ctx.lessonHints = step.hints.map((h) => h[req.lang])
     ctx.solutionForMentorOnly = step.reference ?? null
-    ctx.field = { widthMm: step.field.width, heightMm: step.field.height, start: step.field.start, zones: step.field.zones.map((z) => ({ id: z.id, x: z.x, y: z.y, w: z.w, h: z.h })), points: step.field.points, walls: step.field.walls }
+    ctx.field = {
+      widthMm: step.field.width,
+      heightMm: step.field.height,
+      start: step.field.start,
+      zones: step.field.zones.map((z) => ({ id: z.id, x: z.x, y: z.y, w: z.w, h: z.h })),
+      points: step.field.points,
+      walls: step.field.walls,
+    }
   } else if (step) {
     ctx.step = step.type
   }

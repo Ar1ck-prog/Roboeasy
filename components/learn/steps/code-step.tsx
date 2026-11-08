@@ -8,6 +8,7 @@ import { CodeView } from '@/components/code-view'
 import { Mentor } from '@/components/learn/mentor'
 import { RichText } from '@/components/learn/rich-text'
 import { SimView } from '@/components/sim/sim-view'
+import { AnimIcon } from '@/components/ui/anim-icon'
 import { Badge } from '@/components/ui/badge'
 import { buttonVariants } from '@/components/ui/button'
 import { Skeleton } from '@/components/ui/skeleton'
@@ -123,7 +124,7 @@ export function CodeStep({ lessonId, step, lang, t, blocksT, robotColor, sticker
       )}
       {shorter && (
         <p className="m-0 flex items-center gap-2 font-extrabold">
-          <Sparkles className="size-4" aria-hidden="true" />
+          <AnimIcon name="party" />
           {t.lesson.shorter}
         </p>
       )}

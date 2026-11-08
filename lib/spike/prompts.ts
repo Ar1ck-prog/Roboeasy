@@ -37,7 +37,7 @@ ROBOT
 ${robotDescription(robot)}
 
 OUTPUT: one JSON object, nothing else:
-{"title": string (max 40 chars, ${LANG_NAME[lang]}), "description": string (1-2 friendly sentences in ${LANG_NAME[lang]} explaining what the robot will do), "steps": Step[]}
+{"title": string (max 40 chars, ${LANG_NAME[lang]}), "description": string (1-2 friendly sentences in ${LANG_NAME[lang]} explaining what the robot will do, no emoji), "steps": Step[]}
 
 The program starts automatically ("when program starts"); never add a start step.
 

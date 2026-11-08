@@ -4,6 +4,7 @@
  * about robots. Pure functions with a seeded random, so tests can replay.
  */
 
+import type { IconName } from '@/components/ui/anim-icon'
 import { GLOSSARY } from '../glossary'
 
 type Lang = 'ru' | 'kk' | 'en'
@@ -146,7 +147,7 @@ export interface MemoryCard {
   pair: string
   face: 'term' | 'short'
   text: string
-  icon: string
+  icon: IconName | null
 }
 
 /** Six glossary terms: a card with the term and one with its short meaning. */
@@ -155,7 +156,7 @@ export function memoryDeck(lang: Lang, seed: number, pairs = 6): MemoryCard[] {
   const terms = shuffle(GLOSSARY, rnd).slice(0, pairs)
   const cards = terms.flatMap((t): MemoryCard[] => [
     { key: `${t.id}-t`, pair: t.id, face: 'term', text: t.term[lang], icon: t.icon },
-    { key: `${t.id}-s`, pair: t.id, face: 'short', text: t.short[lang], icon: '' },
+    { key: `${t.id}-s`, pair: t.id, face: 'short', text: t.short[lang], icon: null },
   ])
   return shuffle(cards, rnd)
 }

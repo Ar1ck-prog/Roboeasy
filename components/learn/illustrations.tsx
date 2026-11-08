@@ -3,6 +3,8 @@
  * style. Our own artwork — no LEGO/FIRST imagery.
  */
 
+import { AnimIcon } from '@/components/ui/anim-icon'
+
 type Lang = 'ru' | 'kk' | 'en'
 
 const T = {
@@ -63,7 +65,9 @@ export function Illustration({ name, lang }: { name: string; lang: Lang }) {
               <text x={p.x} y="152" textAnchor="middle" style={TEXT} fontSize="16">
                 {p.sub}
               </text>
-              {i < 2 && <path d={`M${p.x + 52} 80 h 16 m -8 -8 l 8 8 l -8 8`} fill="none" stroke={INK} strokeWidth="4" strokeLinecap="round" strokeLinejoin="round" />}
+              {i < 2 && (
+                <path d={`M${p.x + 52} 80 h 16 m -8 -8 l 8 8 l -8 8`} fill="none" stroke={INK} strokeWidth="4" strokeLinecap="round" strokeLinejoin="round" />
+              )}
             </g>
           ))}
         </svg>
@@ -74,7 +78,15 @@ export function Illustration({ name, lang }: { name: string; lang: Lang }) {
           <rect x="90" y="20" width="180" height="180" rx="22" fill="#fff7e8" stroke={INK} strokeWidth="5" />
           <g transform="translate(130 50)">
             {Array.from({ length: 25 }, (_, i) => (
-              <rect key={i} x={(i % 5) * 20} y={Math.floor(i / 5) * 20} width="15" height="15" rx="3" fill={[6, 8, 16, 17, 18].includes(i) ? '#ffc531' : '#2a3042'} />
+              <rect
+                key={i}
+                x={(i % 5) * 20}
+                y={Math.floor(i / 5) * 20}
+                width="15"
+                height="15"
+                rx="3"
+                fill={[6, 8, 16, 17, 18].includes(i) ? '#ffc531' : '#2a3042'}
+              />
             ))}
           </g>
           <circle cx="180" cy="168" r="14" fill="#2bb673" stroke={INK} strokeWidth="4" />
@@ -119,7 +131,17 @@ export function Illustration({ name, lang }: { name: string; lang: Lang }) {
         <svg viewBox="0 0 360 190" className="w-full" aria-hidden="true">
           {[
             { x: 60, label: s('color'), color: '#2bb673', icon: <circle cx="0" cy="0" r="16" fill="#1b1f2a" stroke="#fff7e8" strokeWidth="5" /> },
-            { x: 180, label: s('distance'), color: '#3fc6e8', icon: <g><circle cx="-14" cy="0" r="12" fill="#1b1f2a" /><circle cx="14" cy="0" r="12" fill="#1b1f2a" /></g> },
+            {
+              x: 180,
+              label: s('distance'),
+              color: '#3fc6e8',
+              icon: (
+                <g>
+                  <circle cx="-14" cy="0" r="12" fill="#1b1f2a" />
+                  <circle cx="14" cy="0" r="12" fill="#1b1f2a" />
+                </g>
+              ),
+            },
             { x: 300, label: s('force'), color: '#ff9f1c', icon: <rect x="-16" y="-16" width="32" height="32" rx="6" fill="#1b1f2a" /> },
           ].map((p) => (
             <g key={p.label}>
@@ -138,9 +160,7 @@ export function Illustration({ name, lang }: { name: string; lang: Lang }) {
           {[s('download'), s('open'), s('connect'), s('run')].map((label, i) => (
             <g key={label} transform={`translate(${20 + i * 86} 30)`}>
               <rect width="70" height="70" rx="14" fill={i === 3 ? '#ffc531' : 'var(--surface)'} stroke={INK} strokeWidth="4" />
-              <text x="35" y="46" textAnchor="middle" style={TEXT} fontSize="26">
-                {['⬇', '📂', 'ᛒ', '▶'][i]}
-              </text>
+              <AnimIcon name={(['download', 'folder', 'bluetooth', 'play'] as const)[i]} x="17" y="17" width="36" height="36" />
               <text x="35" y="100" textAnchor="middle" style={TEXT} fontSize="13">
                 {label}
               </text>
@@ -209,9 +229,7 @@ export function Illustration({ name, lang }: { name: string; lang: Lang }) {
         <svg viewBox="0 0 360 170" className="w-full" aria-hidden="true">
           <g transform="translate(90 30)">
             <rect width="80" height="110" rx="14" fill="#fde8e4" stroke={INK} strokeWidth="4" />
-            <text x="40" y="66" textAnchor="middle" fontSize="44">
-              🐞
-            </text>
+            <AnimIcon name="bug" x="16" y="24" width="48" height="48" style={{ color: INK }} />
             <text x="40" y="132" textAnchor="middle" style={TEXT} fontSize="14">
               {s('bug')}
             </text>
@@ -219,9 +237,7 @@ export function Illustration({ name, lang }: { name: string; lang: Lang }) {
           <path d="M185 85 h 30 m -10 -10 l 10 10 l -10 10" fill="none" stroke={INK} strokeWidth="5" strokeLinecap="round" strokeLinejoin="round" />
           <g transform="translate(230 30)">
             <rect width="80" height="110" rx="14" fill="#e3f6ea" stroke={INK} strokeWidth="4" />
-            <text x="40" y="66" textAnchor="middle" fontSize="44">
-              ✅
-            </text>
+            <AnimIcon name="check" x="16" y="24" width="48" height="48" style={{ color: INK }} />
             <text x="40" y="132" textAnchor="middle" style={TEXT} fontSize="14">
               {s('fix')}
             </text>

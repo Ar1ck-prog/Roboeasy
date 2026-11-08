@@ -5,6 +5,7 @@ import { Check, Gift } from 'lucide-react'
 
 import { CoinAmount } from '@/components/learn/coin'
 import { ProgressBar } from '@/components/learn/learn-map'
+import { AnimIcon } from '@/components/ui/anim-icon'
 import { buttonVariants } from '@/components/ui/button'
 import { Card, CardTitle } from '@/components/ui/card'
 import { fill } from '@/lib/i18n/config'
@@ -32,7 +33,7 @@ export function QuestsCard({ lang, t, quests, magnet, className }: { lang: Lang;
               className="grid size-10 shrink-0 place-items-center rounded-full border-(length:--stroke-thin) border-outline bg-surface-2 text-xl"
               aria-hidden="true"
             >
-              {done ? <Check className="size-5 text-success" /> : quest.icon}
+              {done ? <Check className="size-5 text-success" /> : <AnimIcon name={quest.icon} />}
             </span>
             <span className="grid min-w-0 flex-1 gap-1">
               <span className="font-bold leading-tight">{quest.title[lang]}</span>

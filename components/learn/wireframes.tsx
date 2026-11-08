@@ -127,7 +127,18 @@ export function PathScreen() {
           <Card className="flex-row items-center gap-4">
             <svg viewBox="0 0 48 48" className="size-16 shrink-0" aria-hidden="true">
               <circle cx="24" cy="24" r="19" fill="none" stroke="var(--surface-2)" strokeWidth="6" />
-              <circle cx="24" cy="24" r="19" fill="none" stroke="var(--success)" strokeWidth="6" strokeDasharray="119.4" strokeDashoffset="59.7" transform="rotate(-90 24 24)" strokeLinecap="round" />
+              <circle
+                cx="24"
+                cy="24"
+                r="19"
+                fill="none"
+                stroke="var(--success)"
+                strokeWidth="6"
+                strokeDasharray="119.4"
+                strokeDashoffset="59.7"
+                transform="rotate(-90 24 24)"
+                strokeLinecap="round"
+              />
             </svg>
             <div>
               <p className="m-0 font-display font-bold">Цель дня: 2 урока</p>
@@ -181,11 +192,18 @@ export function LearnScreen() {
           {TRACK_TILES.map((tr) => (
             <Card key={tr.title} className={cn('gap-2 p-4', tr.state === 'locked' && 'opacity-60')} flat={tr.state !== 'current'}>
               <div className="flex items-center gap-3">
-                <span className="grid size-10 place-items-center rounded-(--radius-sm) border-(length:--stroke-thin) border-outline text-(--blk-text)" style={{ background: tr.color }}>
+                <span
+                  className="grid size-10 place-items-center rounded-(--radius-sm) border-(length:--stroke-thin) border-outline text-(--blk-text)"
+                  style={{ background: tr.color }}
+                >
                   <tr.icon className="size-5" aria-hidden="true" />
                 </span>
                 <span className="font-display font-bold">{tr.title}</span>
-                {tr.state === 'locked' ? <Lock className="ml-auto size-4" aria-hidden="true" /> : <ChevronRight className="ml-auto size-5" aria-hidden="true" />}
+                {tr.state === 'locked' ? (
+                  <Lock className="ml-auto size-4" aria-hidden="true" />
+                ) : (
+                  <ChevronRight className="ml-auto size-5" aria-hidden="true" />
+                )}
               </div>
               <div className="h-2.5 overflow-hidden rounded-full bg-surface-2">
                 <div className="h-full bg-success" style={{ width: `${tr.done * 100}%` }} />
@@ -202,7 +220,7 @@ export function LearnScreen() {
               { label: 'Хаб — мозг робота', state: 'done' },
               { label: 'Моторы', state: 'current' },
               { label: 'Датчики', state: 'open' },
-              { label: 'Приложение SPIKE 🤖', state: 'locked' },
+              { label: 'Приложение SPIKE', state: 'locked' },
             ]}
           />
           <span className={buttonVariants({ size: 'sm' })}>Я уже это знаю — тест</span>
@@ -248,8 +266,12 @@ export function LessonScreen() {
           <Card className="gap-2 p-4" flat>
             <Badge>Блоки · Python</Badge>
             <div className="grid gap-1">
-              <span className="w-fit rounded-(--radius-xs) bg-(--blk-events) px-3 py-1.5 text-sm font-extrabold text-(--blk-text)">когда программа запускается</span>
-              <span className="w-fit rounded-(--radius-xs) bg-(--blk-motor) px-3 py-1.5 text-sm font-extrabold text-(--blk-text)">A мотор по часовой на 180 град.</span>
+              <span className="w-fit rounded-(--radius-xs) bg-(--blk-events) px-3 py-1.5 text-sm font-extrabold text-(--blk-text)">
+                когда программа запускается
+              </span>
+              <span className="w-fit rounded-(--radius-xs) bg-(--blk-motor) px-3 py-1.5 text-sm font-extrabold text-(--blk-text)">
+                A мотор по часовой на 180 град.
+              </span>
             </div>
           </Card>
           <Card className="gap-2 p-4" flat>
@@ -258,7 +280,9 @@ export function LessonScreen() {
               <circle cx="160" cy="60" r="42" fill="var(--surface)" stroke="var(--outline)" strokeWidth="4" />
               <path d="M160 60 L160 18" stroke="var(--blk-move)" strokeWidth="6" strokeLinecap="round" />
               <path d="M160 60 L160 102" stroke="var(--border-strong)" strokeWidth="4" strokeDasharray="4 6" />
-              <text x="215" y="66" fontSize="16" fontWeight="800" fill="var(--text)">180°</text>
+              <text x="215" y="66" fontSize="16" fontWeight="800" fill="var(--text)">
+                180°
+              </text>
             </svg>
           </Card>
           <div className="flex flex-wrap gap-2">

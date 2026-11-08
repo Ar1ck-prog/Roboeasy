@@ -10,6 +10,7 @@ import { AccountCard } from '@/components/learn/account-card'
 import { Buddy } from '@/components/learn/buddy'
 import { CoinAmount } from '@/components/learn/coin'
 import { Onboarding } from '@/components/learn/onboarding'
+import { AnimIcon } from '@/components/ui/anim-icon'
 import { buttonVariants } from '@/components/ui/button'
 import { Card, CardTitle } from '@/components/ui/card'
 import { Skeleton } from '@/components/ui/skeleton'
@@ -201,7 +202,7 @@ export function ProfileView({ lang, app, play }: { lang: Lang; app: LearnAppText
                   )}
                   aria-hidden="true"
                 >
-                  {secret ? '?' : a.icon}
+                  {secret ? '?' : <AnimIcon name={a.icon} still={!at} />}
                 </span>
                 <span className="grid content-start gap-0.5">
                   <span className="font-bold text-foreground">{secret ? t.hidden : a.title[lang]}</span>
