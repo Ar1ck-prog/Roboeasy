@@ -151,7 +151,7 @@ test('field simulator: a run from missions drives the robot and the score sheet 
   const robot = page.locator('[data-robot]')
   const start = await robot.getAttribute('transform')
   await page.getByTestId('sim-missions').getByText('Взрывающиеся семена').click()
-  await page.getByRole('button', { name: 'Запустить' }).click()
+  await page.getByRole('button', { name: 'Запустить', exact: true }).click()
   await expect.poll(() => robot.getAttribute('transform'), { timeout: 10_000 }).not.toBe(start)
   // Start of a match: habitats in place (20) and six precision tokens (50).
   await expect(page.getByTestId('score-total')).toContainText('70')

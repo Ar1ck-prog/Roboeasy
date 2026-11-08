@@ -47,6 +47,7 @@ import {
   saveHistory,
   saveRobot,
 } from '@/lib/studio-state'
+import { RobotPanel, SendToRobot } from '@/components/robot-link'
 import { buttonVariants } from '@/components/ui/button'
 
 type Status = 'idle' | 'loading' | 'error' | 'done'
@@ -59,7 +60,13 @@ interface StudioProps {
 }
 
 function fileSafe(name: string) {
-  return name.replace(/[^\p{L}\p{N}_\- ]+/gu, '').trim().replace(/\s+/g, '_').slice(0, 40) || 'RoboEasy'
+  return (
+    name
+      .replace(/[^\p{L}\p{N}_\- ]+/gu, '')
+      .trim()
+      .replace(/\s+/g, '_')
+      .slice(0, 40) || 'RoboEasy'
+  )
 }
 
 function saveFile(blob: Blob, filename: string) {
@@ -174,9 +181,9 @@ export function Studio({ lang, t, labels }: StudioProps) {
     abortRef.current?.abort()
     const controller = new AbortController()
     abortRef.current = controller
-    const requestFormat: Format =
-      mode === 'refine' && result ? (result.format === 'blocks' ? 'blocks' : result.program ? 'python' : 'python-free') : format
-    const previous = mode === 'refine' && result ? (result.format === 'blocks' || result.program ? { program: result.program } : { code: result.code }) : undefined
+    const requestFormat: Format = mode === 'refine' && result ? (result.format === 'blocks' ? 'blocks' : result.program ? 'python' : 'python-free') : format
+    const previous =
+      mode === 'refine' && result ? (result.format === 'blocks' || result.program ? { program: result.program } : { code: result.code }) : undefined
 
     setStatus('loading')
     setPendingFormat(requestFormat)
@@ -201,7 +208,15 @@ export function Studio({ lang, t, labels }: StudioProps) {
       const next: StudioResult =
         data.format === 'blocks'
           ? { format: 'blocks', title: data.title, description: data.description, program: data.program, python: data.python, robot, warnings: data.warnings }
-          : { format: 'python', title: data.title, description: data.description, code: data.code, program: data.program, robot: data.program ? robot : undefined, warnings: data.warnings }
+          : {
+              format: 'python',
+              title: data.title,
+              description: data.description,
+              code: data.code,
+              program: data.program,
+              robot: data.program ? robot : undefined,
+              warnings: data.warnings,
+            }
       openResult(next)
       setAnnounce(next.title)
       const fullPrompt = mode === 'refine' ? `${lastPrompt} → ${text}` : text
@@ -279,9 +294,7 @@ export function Studio({ lang, t, labels }: StudioProps) {
     textareaRef.current?.focus()
   }
 
-  const errorText = error
-    ? fill(t.errors[error.code], { max: PROMPT_MAX, s: error.retryAfter ?? 30 })
-    : ''
+  const errorText = error ? fill(t.errors[error.code], { max: PROMPT_MAX, s: error.retryAfter ?? 30 }) : ''
   const loadingSteps = pendingFormat === 'blocks' ? t.loadingBlocks : t.loadingPython
   const promptOver = prompt.length > PROMPT_MAX
   const examples = format === 'python-free' ? t.examplesPython : t.examplesBlocks
@@ -341,11 +354,7 @@ export function Studio({ lang, t, labels }: StudioProps) {
           </div>
           {format !== 'blocks' && (
             <label className="check-row">
-              <input
-                type="checkbox"
-                checked={format === 'python-free'}
-                onChange={(e) => chooseFormat(e.target.checked ? 'python-free' : 'python')}
-              />
+              <input type="checkbox" checked={format === 'python-free'} onChange={(e) => chooseFormat(e.target.checked ? 'python-free' : 'python')} />
               <span>
                 <strong>{t.freePython}</strong>
                 <small>{t.freePythonHint}</small>
@@ -475,7 +484,12 @@ export function Studio({ lang, t, labels }: StudioProps) {
           </details>
 
           <div className="generate-row">
-            <button type="button" className={buttonVariants({ variant: 'primary', size: 'lg', block: true })} onClick={() => void generate('new')} disabled={status === 'loading'}>
+            <button
+              type="button"
+              className={buttonVariants({ variant: 'primary', size: 'lg', block: true })}
+              onClick={() => void generate('new')}
+              disabled={status === 'loading'}
+            >
               {status === 'loading' ? <Loader2 size={18} className="spin" aria-hidden="true" /> : <Sparkles size={18} aria-hidden="true" />}
               {status === 'loading' ? t.generating : t.generate}
             </button>
@@ -564,7 +578,13 @@ export function Studio({ lang, t, labels }: StudioProps) {
               <ol className="loading-steps">
                 {loadingSteps.map((s, i) => (
                   <li key={s} data-state={i < loadingStep ? 'done' : i === loadingStep ? 'active' : 'todo'}>
-                    {i < loadingStep ? <Check size={16} aria-hidden="true" /> : i === loadingStep ? <Loader2 size={16} className="spin" aria-hidden="true" /> : <CircleDot size={16} aria-hidden="true" />}
+                    {i < loadingStep ? (
+                      <Check size={16} aria-hidden="true" />
+                    ) : i === loadingStep ? (
+                      <Loader2 size={16} className="spin" aria-hidden="true" />
+                    ) : (
+                      <CircleDot size={16} aria-hidden="true" />
+                    )}
                     {s}
                   </li>
                 ))}
@@ -601,7 +621,6 @@ export function Studio({ lang, t, labels }: StudioProps) {
           </EmptyState>
         )}
       </section>
-
     </div>
   )
 }
@@ -725,7 +744,9 @@ function ResultView(p: ResultViewProps) {
           <Link2 size={17} aria-hidden="true" />
           {t.result.share}
         </button>
+        <SendToRobot lang={p.lang} code={code} />
       </div>
+      <RobotPanel lang={p.lang} />
 
       <form
         className="refine"
@@ -737,13 +758,7 @@ function ResultView(p: ResultViewProps) {
         <label className="field-label" htmlFor="refine">
           {t.result.refineLabel}
         </label>
-        <input
-          id="refine"
-          className="input"
-          value={p.refineText}
-          placeholder={t.result.refinePlaceholder}
-          onChange={(e) => p.setRefineText(e.target.value)}
-        />
+        <input id="refine" className="input" value={p.refineText} placeholder={t.result.refinePlaceholder} onChange={(e) => p.setRefineText(e.target.value)} />
         <button type="submit" className={buttonVariants()}>
           <Wand2 size={17} aria-hidden="true" />
           {t.result.refine}

@@ -53,6 +53,7 @@ The AI only writes commands of a small DSL. Valid word blocks and Python are pro
 - `lib/dsl/compile-blocks.ts` — DSL → Scratch `project.json` with SPIKE App 3 opcodes. `turn` uses the hub gyro (reset yaw → spin → wait until |yaw| > angle → stop, in steps of ≤ 90°).
 - `lib/dsl/compile-python.ts` — DSL → SPIKE 3 MicroPython; checks for free Python (`runloop.run(main())`, allowed imports, no SPIKE 2 API).
 - `lib/spike/llsp3.ts` — packs `.llsp3` exactly like the SPIKE App; `lib/spike/prompts.ts` — system prompts.
+- `lib/spike/ble-protocol.ts`, `lib/spike/ble.ts`, `components/robot-link.tsx` — direct link to a SPIKE Prime hub over Web Bluetooth (LEGO's published SPIKE App 3 protocol): upload to a slot, start, stop, console, sensors. Chrome/Edge on desktop and Android, HTTPS only; needs the hub on SPIKE App 3 firmware (not Pybricks). Tests run against a simulated hub.
 - `lib/gemini.ts` — Gemini client: JSON schema, model fallbacks, timeouts.
 - `app/api/generate` — modes `blocks`, `python` (both DSL) and `python-free` (the AI writes Python).
 - `lib/fll/*`, `data/seasons/*.json`, `app/api/fll/plan`, `app/[lang]/compete` — FLL helper: season schema (`season.ts`), shape geometry (`geometry.ts`), route geometry (`path.ts`), runs (`run.ts`), calibration, AI planning with a deterministic fallback.

@@ -13,8 +13,10 @@ import { tabTriggerClass } from '@/components/ui/tabs'
 import { Hint } from '@/components/ui/tooltip'
 import { BackgroundControls, useFieldBackground } from '@/components/fll/background'
 import { Field, RUN_COLORS } from '@/components/fll/field'
+import { RobotPanel, SendToRobot } from '@/components/robot-link'
 import { SeasonSelect, useSeasonChoice } from '@/components/fll/season-select'
 import { type CodeFormat, compilerFor } from '@/lib/compilers'
+import { programToPython } from '@/lib/dsl/compile-python'
 import { ATTACHMENT_KINDS, type AttachmentKind, DEFAULT_ROBOT, PORTS, type Port, type Program, type RobotProfile } from '@/lib/dsl/types'
 import { CALIBRATION, applyCalibration, distanceTestProgram, turnTestProgram } from '@/lib/fll/calibration'
 import { loadDraft } from '@/lib/fll/drafts'
@@ -39,7 +41,13 @@ interface PlannerProps {
 }
 
 function fileName(name: string) {
-  return name.replace(/[^\p{L}\p{N}_\- ]+/gu, '').trim().replace(/\s+/g, '_').slice(0, 40) || 'RoboEasy'
+  return (
+    name
+      .replace(/[^\p{L}\p{N}_\- ]+/gu, '')
+      .trim()
+      .replace(/\s+/g, '_')
+      .slice(0, 40) || 'RoboEasy'
+  )
 }
 
 function saveFile(blob: Blob, filename: string) {
@@ -192,7 +200,14 @@ export function FllPlanner({ lang, seasons, defaultSeasonId, t, robotT, labels, 
     update({ ...robot, attachments: robot.attachments.map((a, j) => (j === i ? { ...a, ...patch } : a)) })
 
   const addAttachment = () => {
-    const used = new Set<Port>([robot.leftMotor, robot.rightMotor, robot.distanceSensor, robot.colorSensor, robot.forceSensor, ...robot.attachments.map((a) => a.port)])
+    const used = new Set<Port>([
+      robot.leftMotor,
+      robot.rightMotor,
+      robot.distanceSensor,
+      robot.colorSensor,
+      robot.forceSensor,
+      ...robot.attachments.map((a) => a.port),
+    ])
     const port = PORTS.find((p) => !used.has(p)) ?? 'C'
     update({ ...robot, attachments: [...robot.attachments, { port, kind: 'arm', name: '' }] })
   }
@@ -217,7 +232,15 @@ export function FllPlanner({ lang, seasons, defaultSeasonId, t, robotT, labels, 
             <input type="checkbox" checked={useDraft} onChange={(e) => setUseDraft(e.target.checked)} />
             <span>
               <strong>{t.useDraft}</strong>
-              <small>{fill(t.useDraftHint, { n: draft.season.missions.length, time: new Date(draft.savedAt).toLocaleString(lang === 'en' ? 'en-GB' : lang === 'kk' ? 'kk-KZ' : 'ru-RU', { dateStyle: 'short', timeStyle: 'short' }) })}</small>
+              <small>
+                {fill(t.useDraftHint, {
+                  n: draft.season.missions.length,
+                  time: new Date(draft.savedAt).toLocaleString(lang === 'en' ? 'en-GB' : lang === 'kk' ? 'kk-KZ' : 'ru-RU', {
+                    dateStyle: 'short',
+                    timeStyle: 'short',
+                  }),
+                })}
+              </small>
             </span>
           </label>
         )}
@@ -401,7 +424,12 @@ export function FllPlanner({ lang, seasons, defaultSeasonId, t, robotT, labels, 
                   description: fill(t.calibDistance, { d: CALIBRATION.distanceCm }),
                   content: (
                     <div className="fll-calib-row">
-                      <button type="button" className={buttonVariants({ size: 'sm' })} disabled={!compiler} onClick={() => void download(distanceTestProgram(`Test ${CALIBRATION.distanceCm} cm`))}>
+                      <button
+                        type="button"
+                        className={buttonVariants({ size: 'sm' })}
+                        disabled={!compiler}
+                        onClick={() => void download(distanceTestProgram(`Test ${CALIBRATION.distanceCm} cm`))}
+                      >
                         <FileDown aria-hidden="true" />
                         {t.downloadTest}
                       </button>
@@ -423,7 +451,12 @@ export function FllPlanner({ lang, seasons, defaultSeasonId, t, robotT, labels, 
                   description: fill(t.calibTurn, { t: CALIBRATION.turnDeg }),
                   content: (
                     <div className="fll-calib-row">
-                      <button type="button" className={buttonVariants({ size: 'sm' })} disabled={!compiler} onClick={() => void download(turnTestProgram(`Test ${CALIBRATION.turnDeg}`))}>
+                      <button
+                        type="button"
+                        className={buttonVariants({ size: 'sm' })}
+                        disabled={!compiler}
+                        onClick={() => void download(turnTestProgram(`Test ${CALIBRATION.turnDeg}`))}
+                      >
                         <FileDown aria-hidden="true" />
                         {t.downloadTest}
                       </button>
@@ -444,13 +477,22 @@ export function FllPlanner({ lang, seasons, defaultSeasonId, t, robotT, labels, 
                   title: t.calibStepSave,
                   content: (
                     <div className="fll-calib-foot">
-                      <button type="button" className={buttonVariants({ variant: 'primary', size: 'sm' })} onClick={applyMeasured} disabled={!measured.distance && !measured.turn}>
+                      <button
+                        type="button"
+                        className={buttonVariants({ variant: 'primary', size: 'sm' })}
+                        onClick={applyMeasured}
+                        disabled={!measured.distance && !measured.turn}
+                      >
                         <Check aria-hidden="true" />
                         {t.apply}
                       </button>
                       <span>{fill(t.factors, { d: robot.distanceFactor, t: robot.turnFactor })}</span>
                       {(robot.distanceFactor !== 1 || robot.turnFactor !== 1) && (
-                        <button type="button" className={buttonVariants({ variant: 'ghost', size: 'sm' })} onClick={() => update({ ...robot, distanceFactor: 1, turnFactor: 1 })}>
+                        <button
+                          type="button"
+                          className={buttonVariants({ variant: 'ghost', size: 'sm' })}
+                          onClick={() => update({ ...robot, distanceFactor: 1, turnFactor: 1 })}
+                        >
                           {t.resetFactors}
                         </button>
                       )}
@@ -479,7 +521,12 @@ export function FllPlanner({ lang, seasons, defaultSeasonId, t, robotT, labels, 
           )}
         </div>
 
-        <button type="button" className={buttonVariants({ variant: 'primary', size: 'lg' })} onClick={() => void plan()} disabled={status === 'loading' || season.missions.length === 0 || season.launchAreas.length === 0}>
+        <button
+          type="button"
+          className={buttonVariants({ variant: 'primary', size: 'lg' })}
+          onClick={() => void plan()}
+          disabled={status === 'loading' || season.missions.length === 0 || season.launchAreas.length === 0}
+        >
           {status === 'loading' ? <Loader2 size={18} className="spin" aria-hidden="true" /> : <Lightbulb size={18} aria-hidden="true" />}
           {status === 'loading' ? t.planning : t.planButton}
         </button>
@@ -504,6 +551,7 @@ export function FllPlanner({ lang, seasons, defaultSeasonId, t, robotT, labels, 
               </p>
             )}
             {response.plan.summary && <p className="result-desc">{response.plan.summary}</p>}
+            {season.platform === 'spike' && <RobotPanel lang={lang} />}
 
             <ol className="fll-runs">
               {response.plan.runs.map((run, i) => {
@@ -527,16 +575,25 @@ export function FllPlanner({ lang, seasons, defaultSeasonId, t, robotT, labels, 
                     {built?.warnings.map((w, j) => (
                       <p key={j} className="alert alert-warn" role="note">
                         <AlertTriangle size={16} aria-hidden="true" />
-                        <span>{fill(t.warnings[w.kind], { id: w.kind === 'unknown_launch_area' ? w.launchAreaId : w.kind === 'forbidden_zone' ? w.zoneId : w.missionId })}</span>
+                        <span>
+                          {fill(t.warnings[w.kind], {
+                            id: w.kind === 'unknown_launch_area' ? w.launchAreaId : w.kind === 'forbidden_zone' ? w.zoneId : w.missionId,
+                          })}
+                        </span>
                       </p>
                     ))}
                     <div className="toolbar">
                       {compiler && (
-                        <button type="button" className={buttonVariants({ variant: 'primary', size: 'sm' })} onClick={() => built && void download(built.program)}>
+                        <button
+                          type="button"
+                          className={buttonVariants({ variant: 'primary', size: 'sm' })}
+                          onClick={() => built && void download(built.program)}
+                        >
                           <FileDown size={16} aria-hidden="true" />
                           {fill(t.download, { ext: compiler.fileExtension })}
                         </button>
                       )}
+                      {season.platform === 'spike' && built && <SendToRobot lang={lang} code={() => programToPython(built.program, robot)} />}
                       <button
                         type="button"
                         className={buttonVariants({ size: 'sm' })}
@@ -582,7 +639,6 @@ export function FllPlanner({ lang, seasons, defaultSeasonId, t, robotT, labels, 
           </div>
         )}
       </section>
-
     </div>
   )
 }

@@ -6,8 +6,10 @@ import { Bot, Check, FileDown, Hammer, SkipForward } from 'lucide-react'
 import { BlockStack } from '@/components/block-stack'
 import { Illustration } from '@/components/learn/illustrations'
 import { RichText } from '@/components/learn/rich-text'
+import { RobotPanel, SendToRobot } from '@/components/robot-link'
 import { buttonVariants } from '@/components/ui/button'
 import { compilerFor } from '@/lib/compilers'
+import { programToPython } from '@/lib/dsl/compile-python'
 import { DEFAULT_ROBOT, type Step } from '@/lib/dsl/types'
 import type { Dictionary } from '@/lib/i18n/ru'
 import { fill } from '@/lib/i18n/config'
@@ -149,6 +151,16 @@ export function RealRobotStep({
             <FileDown aria-hidden="true" />
             {t.lesson.download}
           </button>
+        )}
+        {step.program && (
+          <>
+            <RobotPanel lang={lang} />
+            <SendToRobot
+              lang={lang}
+              code={() => programToPython({ title: step.title[lang], description: '', steps: step.program! }, DEFAULT_ROBOT)}
+              className="justify-self-start"
+            />
+          </>
         )}
         <ul className="m-0 grid list-none gap-2 p-0">
           {step.checklist.map((c, i) => (

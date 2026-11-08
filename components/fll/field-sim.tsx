@@ -6,6 +6,7 @@ import Link from 'next/link'
 import { ArrowRight, Check, Copy, Download, Boxes, Hand, Home, ImageUp, Loader2, Minus, Play, Plus, RotateCcw, Square, Timer, Trophy } from 'lucide-react'
 
 import { ArrowMarker, FieldFrame, LaunchAreaShape, MatBase, MissionShape } from '@/components/fll/field-shapes'
+import { RobotPanel, SendToRobot } from '@/components/robot-link'
 import { BackgroundControls, useFieldBackground } from '@/components/fll/background'
 import type { CameraKind, Field3D } from '@/components/fll/field-3d'
 import { Badge } from '@/components/ui/badge'
@@ -777,10 +778,13 @@ export function FieldSim({ lang, t, season, bgT, blocksT }: Props) {
                 <Download aria-hidden="true" />
                 {t.download}
               </button>
+              <SendToRobot lang={lang} code={python} disabled={!steps.length} />
             </div>
           </Card>
 
           {/* Mat picture (shared with the FLL coach) */}
+          <RobotPanel lang={lang} />
+
           <Card className="gap-2" flat>
             <CardTitle>{t.matTitle}</CardTitle>
             <p className="m-0 text-sm text-muted-foreground">{bg.url ? t.matHas : t.matNone}</p>
