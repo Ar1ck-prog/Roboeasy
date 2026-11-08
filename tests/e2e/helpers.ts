@@ -24,7 +24,7 @@ export async function next(page: Page) {
 export async function onboard(page: Page, nickname: string, age: '13–15' | '16+') {
   await page.goto('/ru/path')
   await expect(page.getByRole('heading', { name: 'Давай знакомиться' })).toBeVisible()
-  await page.getByLabel('Ник').fill(nickname)
+  await page.getByLabel('Ник', { exact: true }).fill(nickname)
   await page.getByText(age, { exact: true }).click()
   if (age !== '16+') await page.getByRole('checkbox', { name: /Я взрослый/ }).check()
   await page.getByRole('button', { name: 'Поехали!' }).click()

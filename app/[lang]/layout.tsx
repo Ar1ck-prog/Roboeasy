@@ -5,8 +5,10 @@ import { Analytics } from '@vercel/analytics/next'
 
 import { InlineScript } from '@/components/inline-script'
 import { Providers } from '@/components/providers'
+import { SiteMentor } from '@/components/site-mentor'
 import { fontVariables } from '@/lib/fonts'
 import { getDictionary, isLocale, locales } from '@/lib/i18n'
+import { getSiteMentorText } from '@/lib/i18n/site-mentor'
 import { THEME_SCRIPT } from '@/lib/theme-script'
 import '../globals.css'
 
@@ -43,7 +45,13 @@ export async function generateMetadata({ params }: Params): Promise<Metadata> {
     },
     twitter: { card: 'summary_large_image', title: t.meta.title, description: t.meta.description, images: ['/og.png'] },
     // New file names so browsers drop the old cached icon.
-    icons: { icon: [{ url: '/favicon.ico', sizes: '48x48' }, { url: '/roboeasy-icon.svg', type: 'image/svg+xml' }], apple: '/roboeasy-apple.png' },
+    icons: {
+      icon: [
+        { url: '/favicon.ico', sizes: '48x48' },
+        { url: '/roboeasy-icon.svg', type: 'image/svg+xml' },
+      ],
+      apple: '/roboeasy-apple.png',
+    },
   }
 }
 
@@ -64,7 +72,10 @@ export default async function RootLayout({ children, params }: Params & { childr
         <InlineScript html={THEME_SCRIPT} />
       </head>
       <body>
-        <Providers>{children}</Providers>
+        <Providers>
+          {children}
+          <SiteMentor lang={lang} t={getSiteMentorText(lang)} />
+        </Providers>
         {/* Vercel Analytics only exists on Vercel; elsewhere (Render) its script is a 404. */}
         {process.env.NODE_ENV === 'production' && process.env.VERCEL && <Analytics />}
       </body>

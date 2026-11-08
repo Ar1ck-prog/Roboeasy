@@ -9,6 +9,8 @@ import { ApiError, GoogleGenAI } from '@google/genai'
 /** GEMINI_MODEL is tried first; the others are fallbacks for overload (503) or quota (429). */
 const MODELS = [...new Set([process.env.GEMINI_MODEL?.trim() || 'gemini-3.5-flash', 'gemini-3.8-flash', 'gemini-flash-latest'])]
 const ATTEMPT_TIMEOUT_MS = 40_000
+/** Short answers: one stuck model must not use up the time of the fallbacks. */
+export const CHAT_ATTEMPT_MS = 8_000
 
 /** `busy`: overload, quota or timeout (try later). `failed`: the model could not produce valid output. */
 export class GeminiError extends Error {
@@ -17,13 +19,21 @@ export class GeminiError extends Error {
   }
 }
 
+const usable = (key: string | undefined): key is string => Boolean(key && key !== 'YOUR_API_KEY_HERE')
+
 export function geminiConfigured(): boolean {
-  const key = process.env.GEMINI_API_KEY
-  return Boolean(key && key !== 'YOUR_API_KEY_HERE')
+  return usable(process.env.GEMINI_API_KEY)
 }
 
 export function createGemini(): GoogleGenAI | null {
-  return geminiConfigured() ? new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY }) : null
+  const key = process.env.GEMINI_API_KEY
+  return usable(key) ? new GoogleGenAI({ apiKey: key }) : null
+}
+
+/** The mentor can have its own key, so that its chats do not use up the generator's quota. */
+export function createMentorGemini(): GoogleGenAI | null {
+  const key = process.env.GEMINI_MENTOR_API_KEY
+  return usable(key) ? new GoogleGenAI({ apiKey: key }) : createGemini()
 }
 
 function parseJsonObject(text: string): Record<string, unknown> | null {
@@ -42,6 +52,7 @@ export async function askGemini(
   contents: string,
   schema: Record<string, unknown>,
   signal: AbortSignal,
+  attemptMs = ATTEMPT_TIMEOUT_MS,
 ): Promise<Record<string, unknown>> {
   let busy = false
   for (const model of MODELS) {
@@ -54,7 +65,7 @@ export async function askGemini(
           temperature: 0.2,
           responseMimeType: 'application/json',
           responseJsonSchema: schema,
-          abortSignal: AbortSignal.any([signal, AbortSignal.timeout(ATTEMPT_TIMEOUT_MS)]),
+          abortSignal: AbortSignal.any([signal, AbortSignal.timeout(attemptMs)]),
         },
       })
       const parsed = parseJsonObject(res.text ?? '')

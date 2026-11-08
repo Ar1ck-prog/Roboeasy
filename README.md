@@ -55,6 +55,7 @@ The AI only writes commands of a small DSL. Valid word blocks and Python are pro
 - `lib/spike/llsp3.ts` — packs `.llsp3` exactly like the SPIKE App; `lib/spike/prompts.ts` — system prompts.
 - `lib/spike/ble-protocol.ts`, `lib/spike/ble.ts`, `components/robot-link.tsx` — direct link to a SPIKE Prime hub over Web Bluetooth (LEGO's published SPIKE App 3 protocol): upload to a slot, start, stop, console, sensors. Chrome/Edge on desktop and Android, HTTPS only; needs the hub on SPIKE App 3 firmware (not Pybricks). Tests run against a simulated hub.
 - `lib/gemini.ts` — Gemini client: JSON schema, model fallbacks, timeouts.
+- `lib/learn/site-mentor.ts`, `app/api/mentor`, `components/site-mentor.tsx` — the mentor chat on every page. Its knowledge is built from the course, glossary, shop and coin rules, never from lesson solutions; messages are not stored.
 - `app/api/generate` — modes `blocks`, `python` (both DSL) and `python-free` (the AI writes Python).
 - `lib/fll/*`, `data/seasons/*.json`, `app/api/fll/plan`, `app/[lang]/compete` — FLL helper: season schema (`season.ts`), shape geometry (`geometry.ts`), route geometry (`path.ts`), runs (`run.ts`), calibration, AI planning with a deterministic fallback.
 - `app/[lang]/compete/editor` — field editor (missions, launch areas, forbidden zones; undo/redo, JSON import/export, draft autosave in IndexedDB).

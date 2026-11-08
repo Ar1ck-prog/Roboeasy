@@ -1,9 +1,17 @@
 import type { NextRequest } from 'next/server'
 
 import { parseProgram } from '@/lib/dsl/schema'
-import { askGemini, createGemini } from '@/lib/gemini'
+import { CHAT_ATTEMPT_MS, askGemini, createMentorGemini } from '@/lib/gemini'
 import { readLesson } from '@/lib/learn/content'
-import { MENTOR_JSON_SCHEMA, MENTOR_LIMITS, type MentorResponse, mentorRequestSchema, mentorSystemPrompt, mentorUserMessage, sanitizeHint } from '@/lib/learn/mentor'
+import {
+  MENTOR_JSON_SCHEMA,
+  MENTOR_LIMITS,
+  type MentorResponse,
+  mentorRequestSchema,
+  mentorSystemPrompt,
+  mentorUserMessage,
+  sanitizeHint,
+} from '@/lib/learn/mentor'
 import { clientKey, rateLimit } from '@/lib/rate-limit'
 
 export const maxDuration = 30
@@ -43,18 +51,22 @@ export async function POST(req: NextRequest) {
   const day = rateLimit(`mentor:d:${who}`, MENTOR_LIMITS.perDay, DAY_MS)
   if (!day.ok) return reply(lessonHint() ?? { ok: false, error: 'daily_limit' }, lessonHint() ? 200 : 429)
 
-  const ai = createGemini()
+  const ai = createMentorGemini()
   if (!ai) return reply(lessonHint() ?? { ok: false, error: 'bad_request' })
 
-  const program = body.program.length ? parseProgram({ title: 'p', description: '', steps: body.program }) : { ok: true as const, value: { title: 'p', description: '', steps: [] } }
+  const program = body.program.length
+    ? parseProgram({ title: 'p', description: '', steps: body.program })
+    : { ok: true as const, value: { title: 'p', description: '', steps: [] } }
   const steps = program.ok ? program.value.steps : []
   const reference = 'reference' in step ? step.reference : undefined
   try {
     const signal = AbortSignal.any([req.signal, AbortSignal.timeout(25_000)])
-    const answer = await askGemini(ai, mentorSystemPrompt(body.lang), mentorUserMessage(lesson, body, steps), MENTOR_JSON_SCHEMA, signal)
+    const answer = await askGemini(ai, mentorSystemPrompt(body.lang), mentorUserMessage(lesson, body, steps), MENTOR_JSON_SCHEMA, signal, CHAT_ATTEMPT_MS)
     const hint = typeof answer.hint === 'string' ? sanitizeHint(answer.hint, reference) : null
     // Moderation log without personal data: lesson, step, level and length only.
-    console.info(`[mentor] ${lesson.id}/${step.id} level=${body.level} q=${body.question ? body.question.length : 0} offTopic=${answer.offTopic === true} ok=${hint !== null}`)
+    console.info(
+      `[mentor] ${lesson.id}/${step.id} level=${body.level} q=${body.question ? body.question.length : 0} offTopic=${answer.offTopic === true} ok=${hint !== null}`,
+    )
     if (!hint) return reply(lessonHint() ?? { ok: false, error: 'bad_request' })
     return reply({ ok: true, hint, source: 'ai', remaining: day.remaining })
   } catch (error) {

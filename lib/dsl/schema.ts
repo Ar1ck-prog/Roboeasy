@@ -65,7 +65,13 @@ const MOTOR_RANGE = { rotations: [0.05, 50], degrees: [1, 18000], seconds: [0.1,
 const clampTo = (v: number, [min, max]: readonly [number, number]) => Math.min(max, Math.max(min, Math.round(v * 100) / 100))
 
 const cleanText = (max: number) =>
-  z.string().transform((s) => s.replace(/[\u0000-\u001f\u007f]+/g, ' ').replace(/\s+/g, ' ').trim().slice(0, max))
+  z.string().transform((s) =>
+    s
+      .replace(/[\u0000-\u001f\u007f]+/g, ' ')
+      .replace(/\s+/g, ' ')
+      .trim()
+      .slice(0, max),
+  )
 
 function conditionSchema(robot: RobotProfile): z.ZodType<Condition> {
   return z.discriminatedUnion('sensor', [
@@ -80,20 +86,23 @@ function conditionSchema(robot: RobotProfile): z.ZodType<Condition> {
 /** Steps allowed at nesting level `depth` (1 = top level); containers stop at LIMITS.maxDepth. */
 function stepSchema(depth: number, condition: z.ZodType<Condition>): z.ZodType<Step> {
   const leaf = [
-    z.object({ op: z.literal('move'), direction: moveDirection, value: z.number(), unit: moveUnit })
+    z
+      .object({ op: z.literal('move'), direction: moveDirection, value: z.number(), unit: moveUnit })
       .transform((s) => ({ ...s, value: clampTo(s.value, MOVE_RANGE[s.unit]) })),
     z.object({ op: z.literal('turn'), direction: turnDirection, degrees: num(1, 3600, 0) }),
     z.object({ op: z.literal('reset_yaw') }),
     z.object({ op: z.literal('set_movement_motors'), left: port, right: port }).refine((s) => s.left !== s.right, {
       message: 'left and right drive motors must be on different ports',
     }),
-    z.object({ op: z.literal('steer'), steering: num(-100, 100, 0), value: z.number(), unit: moveUnit })
+    z
+      .object({ op: z.literal('steer'), steering: num(-100, 100, 0), value: z.number(), unit: moveUnit })
       .transform((s) => ({ ...s, value: clampTo(s.value, MOVE_RANGE[s.unit]) })),
     z.object({ op: z.literal('start_move'), direction: startDirection }),
     z.object({ op: z.literal('start_steer'), steering: num(-100, 100, 0) }),
     z.object({ op: z.literal('stop_move') }),
     z.object({ op: z.literal('set_speed'), speed: num(5, 100, 0) }),
-    z.object({ op: z.literal('motor_run'), port, direction: motorDirection, value: z.number(), unit: motorUnit })
+    z
+      .object({ op: z.literal('motor_run'), port, direction: motorDirection, value: z.number(), unit: motorUnit })
       .transform((s) => ({ ...s, value: clampTo(s.value, MOTOR_RANGE[s.unit]) })),
     z.object({ op: z.literal('motor_start'), port, direction: motorDirection }),
     z.object({ op: z.literal('motor_stop'), port }),
@@ -112,7 +121,8 @@ function stepSchema(depth: number, condition: z.ZodType<Condition>): z.ZodType<S
         .pipe(z.string().min(1, 'text must contain Latin letters or digits')),
     }),
     z.object({ op: z.literal('clear_display') }),
-    z.object({ op: z.literal('beep'), note: num(36, 96, 0), seconds: num(0.05, 10) }),
+    // The AI often leaves these out when the request is just "beep".
+    z.object({ op: z.literal('beep'), note: num(36, 96, 0).default(72), seconds: num(0.05, 10).default(0.2) }),
     z.object({ op: z.literal('button_light'), color: lightColor }),
     z.object({ op: z.literal('wait'), seconds: num(0.05, 300) }),
     z.object({ op: z.literal('wait_until'), condition }),
@@ -126,9 +136,9 @@ function stepSchema(depth: number, condition: z.ZodType<Condition>): z.ZodType<S
     z.object({ op: z.literal('repeat'), times: num(1, 100, 0), steps: child }),
     z.object({ op: z.literal('forever'), steps: child }),
     z.object({ op: z.literal('repeat_until'), condition, steps: child }),
-    z.object({ op: z.literal('if'), condition, then: child, else: child.optional() }).transform(({ else: otherwise, ...s }) =>
-      otherwise?.length ? { ...s, else: otherwise } : s,
-    ),
+    z
+      .object({ op: z.literal('if'), condition, then: child, else: child.optional() })
+      .transform(({ else: otherwise, ...s }) => (otherwise?.length ? { ...s, else: otherwise } : s)),
   ])
 }
 
@@ -170,6 +180,23 @@ function toResult<T>(parsed: z.ZodSafeParseResult<T>): ParseResult<T> {
   return parsed.success ? { ok: true, value: parsed.data } : { ok: false, error: z.prettifyError(parsed.error).slice(0, 1500) }
 }
 
+/**
+ * Loops and "if" with nothing inside, as a message for the model. Learners may
+ * legitimately have these half-built, so only generated programs are checked.
+ */
+export function findEmptyBlocks(steps: Step[], path = 'steps'): string[] {
+  return steps.flatMap((s, i) => {
+    const at = `${path}[${i}]`
+    if (s.op === 'repeat' || s.op === 'forever' || s.op === 'repeat_until')
+      return s.steps.length ? findEmptyBlocks(s.steps, `${at}.steps`) : [`${at} ("${s.op}") has no steps inside`]
+    if (s.op === 'if')
+      return s.then.length
+        ? [...findEmptyBlocks(s.then, `${at}.then`), ...findEmptyBlocks(s.else ?? [], `${at}.else`)]
+        : [`${at} ("if") has no steps in "then"`]
+    return []
+  })
+}
+
 /** Validates a block program (from the AI or the client). Sensor ports default to the robot config. */
 export function parseProgram(raw: unknown, robot: RobotProfile = DEFAULT_ROBOT): ParseResult<Program> {
   return toResult(programSchema(robot).safeParse(raw))
@@ -199,8 +226,7 @@ export function parsePythonAnswer(raw: unknown): ParseResult<PythonAnswer> {
 // Robot settings (user input: forgiving, every field falls back to a default)
 // ---------------------------------------------------------------------------
 
-const portOr = (fallback: (typeof PORTS)[number]) =>
-  z.preprocess((v) => (typeof v === 'string' ? v.trim().toUpperCase() : v), port).catch(fallback)
+const portOr = (fallback: (typeof PORTS)[number]) => z.preprocess((v) => (typeof v === 'string' ? v.trim().toUpperCase() : v), port).catch(fallback)
 const numOr = (fallback: number, min: number, max: number, decimals = 1) => {
   const f = 10 ** decimals
   return z
@@ -242,10 +268,12 @@ const robotSchema: z.ZodType<RobotProfile> = z
       turnFactor: numOr(1, 0.5, 2, 3),
       attachments: z
         .array(z.unknown())
-        .transform((list) => list.slice(0, 6).flatMap((a) => {
-          const parsed = attachmentSchema.safeParse(a)
-          return parsed.success ? [parsed.data] : []
-        }))
+        .transform((list) =>
+          list.slice(0, 6).flatMap((a) => {
+            const parsed = attachmentSchema.safeParse(a)
+            return parsed.success ? [parsed.data] : []
+          }),
+        )
         .catch([]),
     }),
   )
@@ -267,11 +295,35 @@ const enumOf = (...schemas: { options: readonly string[] }[]): JsonSchema => ({
 })
 const range = (minimum: number, maximum: number): JsonSchema => ({ type: 'number', minimum, maximum })
 export const STEP_OPS = [
-  'move', 'turn', 'reset_yaw', 'set_movement_motors', 'steer', 'start_move', 'start_steer', 'stop_move', 'set_speed',
-  'motor_run', 'motor_start', 'motor_stop', 'motor_speed', 'motor_to_position', 'show_image', 'write', 'clear_display',
-  'beep', 'button_light', 'wait', 'wait_until', 'repeat', 'forever', 'repeat_until', 'if',
+  'move',
+  'turn',
+  'reset_yaw',
+  'set_movement_motors',
+  'steer',
+  'start_move',
+  'start_steer',
+  'stop_move',
+  'set_speed',
+  'motor_run',
+  'motor_start',
+  'motor_stop',
+  'motor_speed',
+  'motor_to_position',
+  'show_image',
+  'write',
+  'clear_display',
+  'beep',
+  'button_light',
+  'wait',
+  'wait_until',
+  'repeat',
+  'forever',
+  'repeat_until',
+  'if',
 ] as const satisfies readonly Step['op'][]
 const stepList: JsonSchema = { type: 'array', items: { $ref: '#/$defs/Step' } }
+/** Loops and "if": without minItems the model often closes them empty. */
+const bodyList: JsonSchema = { ...stepList, minItems: 1 }
 
 /**
  * Compact schema: one Step object with `op` plus every field any op may use.
@@ -322,8 +374,8 @@ export const PROGRAM_JSON_SCHEMA: JsonSchema = {
         color: enumOf(lightColor),
         times: range(1, 100),
         condition: { $ref: '#/$defs/Condition' },
-        steps: stepList,
-        then: stepList,
+        steps: bodyList,
+        then: bodyList,
         else: stepList,
       },
       required: ['op'],

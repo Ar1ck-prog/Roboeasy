@@ -22,7 +22,7 @@ test('new learner: placement, first lesson, XP, achievement, streak next day', a
   // Onboarding
   await page.goto('/ru/path')
   await expect(page.getByRole('heading', { name: 'Давай знакомиться' })).toBeVisible()
-  await page.getByLabel('Ник').fill('TestBot')
+  await page.getByLabel('Ник', { exact: true }).fill('TestBot')
   await page.getByText('13–15', { exact: true }).click()
   await expect(page.getByRole('button', { name: 'Поехали!' })).toBeDisabled() // grown-up consent first
   await page.getByRole('checkbox', { name: /Я взрослый/ }).check()

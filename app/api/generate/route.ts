@@ -3,7 +3,7 @@ import type { NextRequest } from 'next/server'
 
 import { type Format, type GenerateErrorCode, type GenerateResponse, PROMPT_MAX } from '@/lib/api-types'
 import { checkPython, cleanPython, programToPython } from '@/lib/dsl/compile-python'
-import { PROGRAM_JSON_SCHEMA, PYTHON_JSON_SCHEMA, parseProgram, parsePythonAnswer, parseRobot } from '@/lib/dsl/schema'
+import { PROGRAM_JSON_SCHEMA, PYTHON_JSON_SCHEMA, findEmptyBlocks, parseProgram, parsePythonAnswer, parseRobot } from '@/lib/dsl/schema'
 import type { RobotProfile } from '@/lib/dsl/types'
 import { GeminiError, askGemini, createGemini, geminiConfigured, retryMessage } from '@/lib/gemini'
 import { clientKey, rateLimit } from '@/lib/rate-limit'
@@ -64,10 +64,16 @@ function parseRequest(body: unknown): ParsedRequest | { error: GenerateErrorCode
 async function generateProgram(ai: GoogleGenAI, req: ParsedRequest, signal: AbortSignal): Promise<GenerateResponse> {
   const system = dslSystemPrompt(req.robot, req.lang)
   const message = userMessage(req.prompt, req.previous)
-  let parsed = parseProgram(await askGemini(ai, system, message, PROGRAM_JSON_SCHEMA, signal), req.robot)
+  const ask = async (text: string) => {
+    const result = parseProgram(await askGemini(ai, system, text, PROGRAM_JSON_SCHEMA, signal), req.robot)
+    if (!result.ok) return result
+    const empty = findEmptyBlocks(result.value.steps)
+    return empty.length ? { ok: false as const, error: `${empty.join('; ')}. Put the commands inside.` } : result
+  }
+  let parsed = await ask(message)
   if (!parsed.ok) {
     console.warn('[generate] invalid program, retrying:', parsed.error)
-    parsed = parseProgram(await askGemini(ai, system, retryMessage(message, parsed.error), PROGRAM_JSON_SCHEMA, signal), req.robot)
+    parsed = await ask(retryMessage(message, parsed.error))
   }
   if (!parsed.ok) {
     console.error('[generate] invalid program after retry:', parsed.error)

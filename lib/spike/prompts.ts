@@ -68,11 +68,15 @@ STEP TYPES (use only these, exactly as written):
 {"op":"repeat_until","condition":CONDITION,"steps":Step[]}
 {"op":"if","condition":CONDITION,"then":Step[],"else":Step[] (optional)}
 
-IMAGE: one of ${Object.keys(IMAGES).map((k) => `"${k}"`).join(', ')}, or 25 digits 0-9 (5 rows × 5 pixels, 9 = brightest).
+IMAGE: one of ${Object.keys(IMAGES)
+    .map((k) => `"${k}"`)
+    .join(', ')}, or 25 digits 0-9 (5 rows × 5 pixels, 9 = brightest).
 
 CONDITION (the sensor port defaults to the robot config above; add "port" only if the user names another one):
 {"sensor":"distance","comparator":"<"|">"|"=","value":number,"unit":"cm"}  "<" = closer than
-{"sensor":"color","color":${Object.keys(SENSOR_COLORS).map((c) => `"${c}"`).join('|')}}
+{"sensor":"color","color":${Object.keys(SENSOR_COLORS)
+    .map((c) => `"${c}"`)
+    .join('|')}}
 {"sensor":"reflection","comparator":"<"|">","value":0..100}  reflected light in %, black line ≈ 15, white ≈ 90
 {"sensor":"force","state":"pressed"|"released"|"hardpressed"}
 {"sensor":"button","button":"left"|"right","state":"pressed"|"released"}  buttons on the hub
@@ -88,6 +92,7 @@ GOOD PRACTICE
 - Add a small celebration when a task finishes (beep, image) only if it fits the request.
 - If the request is impossible for this robot or unsafe, return a harmless program that shows "no" and explain why in the description.
 - Never invent step types or fields. Numbers are plain JSON numbers.
+- A "repeat", "forever", "repeat_until" or "if" must contain the commands it repeats or runs: "steps" (or "then") is never empty.
 
 EXAMPLES
 Request: "Drive forward 20 cm, turn right and show a smile"

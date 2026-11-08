@@ -48,6 +48,7 @@ import {
   saveRobot,
 } from '@/lib/studio-state'
 import { RobotPanel, SendToRobot } from '@/components/robot-link'
+import { setMentorProgram } from '@/lib/learn/mentor-context'
 import { buttonVariants } from '@/components/ui/button'
 
 type Status = 'idle' | 'loading' | 'error' | 'done'
@@ -256,6 +257,11 @@ export function Studio({ lang, t, labels }: StudioProps) {
   }
 
   const code = result ? (result.format === 'blocks' ? result.python : result.code) : ''
+
+  useEffect(() => {
+    setMentorProgram(code || null)
+    return () => setMentorProgram(null)
+  }, [code])
 
   async function copyCode() {
     try {

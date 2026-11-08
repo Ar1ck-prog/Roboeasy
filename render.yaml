@@ -18,6 +18,9 @@ services:
       # AI generator and mentor (https://aistudio.google.com/apikey).
       - key: GEMINI_API_KEY
         sync: false
+      # Optional: a separate key for the mentor, so its chats do not use the generator's quota.
+      - key: GEMINI_MENTOR_API_KEY
+        sync: false
       # Signs certificate codes; Render generates a random value once.
       - key: CERT_SECRET
         generateValue: true
