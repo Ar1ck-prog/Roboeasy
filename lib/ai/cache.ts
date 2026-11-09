@@ -16,6 +16,7 @@ const TTL_DAYS = 30
 export type CachedResult =
   | { kind: 'program'; title: string; description: string; program: Program }
   | { kind: 'python'; title: string; description: string; code: string; warnings: string[] }
+  | { kind: 'unsupported'; reason: string; suggestion: string }
 
 export const normalizePrompt = (prompt: string) => prompt.toLowerCase().replace(/\s+/g, ' ').trim()
 

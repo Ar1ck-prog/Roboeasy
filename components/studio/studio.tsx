@@ -55,7 +55,7 @@ import { setMentorProgram } from '@/lib/learn/mentor-context'
 import { buttonVariants } from '@/components/ui/button'
 
 type Status = 'idle' | 'loading' | 'error' | 'done'
-type ErrorState = { code: GenerateErrorCode | 'network' | 'file'; retryAfter?: number; where: 'composer' | 'result' }
+type ErrorState = { code: GenerateErrorCode | 'network' | 'file'; retryAfter?: number; where: 'composer' | 'result'; reason?: string; suggestion?: string }
 
 interface StudioProps {
   lang: Locale
@@ -205,7 +205,7 @@ export function Studio({ lang, t, labels }: StudioProps) {
       })
       const data = (await res.json().catch(() => ({ ok: false, error: 'ai_failed' }))) as GenerateResponse
       if (!data.ok) {
-        setError({ code: data.error, retryAfter: data.retryAfter, where })
+        setError({ code: data.error, retryAfter: data.retryAfter, reason: data.reason, suggestion: data.suggestion, where })
         setStatus(result ? 'done' : 'error')
         return
       }
@@ -312,7 +312,14 @@ export function Studio({ lang, t, labels }: StudioProps) {
     textareaRef.current?.focus()
   }
 
-  const errorText = error ? fill(t.errors[error.code], { max: PROMPT_MAX, s: error.retryAfter ?? 30, m: Math.max(1, Math.ceil((error.retryAfter ?? 60) / 60)) }) : ''
+  const errorText = error
+    ? fill(t.errors[error.code], {
+        max: PROMPT_MAX,
+        s: error.retryAfter ?? 30,
+        m: Math.max(1, Math.ceil((error.retryAfter ?? 60) / 60)),
+        reason: error.reason ?? '',
+      })
+    : ''
   const aiCannotAnswer = error?.code === 'ai_busy' || error?.code === 'not_configured' || error?.code === 'ai_failed'
   const loadingSteps = pendingFormat === 'blocks' ? t.loadingBlocks : t.loadingPython
   const promptOver = prompt.length > PROMPT_MAX
@@ -520,12 +527,45 @@ export function Studio({ lang, t, labels }: StudioProps) {
               <span>{errorText}</span>
             </p>
           )}
+          {error?.code === 'unsupported' && status !== 'loading' && (
+            <div className="idea-list" data-testid="unsupported-actions">
+              {error.suggestion && (
+                <button
+                  type="button"
+                  className="chip"
+                  onClick={() => {
+                    setPrompt(error.suggestion ?? '')
+                    setError(null)
+                    textareaRef.current?.focus()
+                  }}
+                >
+                  {fill(t.unsupported.tryInstead, { text: error.suggestion })}
+                </button>
+              )}
+              <button
+                type="button"
+                className="chip"
+                onClick={() => {
+                  chooseFormat('python-free')
+                  setError(null)
+                }}
+              >
+                {t.unsupported.freePython}
+              </button>
+            </div>
+          )}
           {aiCannotAnswer && status !== 'loading' && (
             <div className="grid gap-2" data-testid="offline-examples">
               <p className="field-label m-0">{t.offline.title}</p>
               <div className="idea-list">
                 {LOCAL_EXAMPLES.map((ex) => (
-                  <button key={ex.id} type="button" className="chip" aria-label={fill(t.offline.open, { name: ex.title[lang] })} onClick={() => openExample(ex)}>
+                  <button
+                    key={ex.id}
+                    type="button"
+                    className="chip"
+                    aria-label={fill(t.offline.open, { name: ex.title[lang] })}
+                    onClick={() => openExample(ex)}
+                  >
                     {ex.title[lang]}
                   </button>
                 ))}

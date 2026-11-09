@@ -1,0 +1,2791 @@
+{
+ "_note": "Kazakh prompts need a review by a native speaker (TODO: проверить перевод).",
+ "tasks": [
+  {
+   "id": "forward-ru",
+   "lang": "ru",
+   "category": "motion",
+   "prompt": "Проедь вперёд 20 см",
+   "feasible": true,
+   "expectOps": [
+    "move"
+   ],
+   "reference": {
+    "title": "forward",
+    "description": "",
+    "steps": [
+     {
+      "op": "move",
+      "direction": "forward",
+      "value": 20,
+      "unit": "cm"
+     }
+    ]
+   }
+  },
+  {
+   "id": "forward-kk",
+   "lang": "kk",
+   "category": "motion",
+   "prompt": "Алға 20 см жүр",
+   "feasible": true,
+   "expectOps": [
+    "move"
+   ],
+   "reference": {
+    "title": "forward",
+    "description": "",
+    "steps": [
+     {
+      "op": "move",
+      "direction": "forward",
+      "value": 20,
+      "unit": "cm"
+     }
+    ]
+   }
+  },
+  {
+   "id": "forward-en",
+   "lang": "en",
+   "category": "motion",
+   "prompt": "Drive forward 20 cm",
+   "feasible": true,
+   "expectOps": [
+    "move"
+   ],
+   "reference": {
+    "title": "forward",
+    "description": "",
+    "steps": [
+     {
+      "op": "move",
+      "direction": "forward",
+      "value": 20,
+      "unit": "cm"
+     }
+    ]
+   }
+  },
+  {
+   "id": "back-ru",
+   "lang": "ru",
+   "category": "motion",
+   "prompt": "Отъедь назад на 15 см",
+   "feasible": true,
+   "expectOps": [
+    "move"
+   ],
+   "reference": {
+    "title": "back",
+    "description": "",
+    "steps": [
+     {
+      "op": "move",
+      "direction": "back",
+      "value": 15,
+      "unit": "cm"
+     }
+    ]
+   }
+  },
+  {
+   "id": "back-kk",
+   "lang": "kk",
+   "category": "motion",
+   "prompt": "Артқа 15 см жүр",
+   "feasible": true,
+   "expectOps": [
+    "move"
+   ],
+   "reference": {
+    "title": "back",
+    "description": "",
+    "steps": [
+     {
+      "op": "move",
+      "direction": "back",
+      "value": 15,
+      "unit": "cm"
+     }
+    ]
+   }
+  },
+  {
+   "id": "back-en",
+   "lang": "en",
+   "category": "motion",
+   "prompt": "Go back 15 cm",
+   "feasible": true,
+   "expectOps": [
+    "move"
+   ],
+   "reference": {
+    "title": "back",
+    "description": "",
+    "steps": [
+     {
+      "op": "move",
+      "direction": "back",
+      "value": 15,
+      "unit": "cm"
+     }
+    ]
+   }
+  },
+  {
+   "id": "turn-ru",
+   "lang": "ru",
+   "category": "motion",
+   "prompt": "Повернись направо на 90 градусов",
+   "feasible": true,
+   "expectOps": [
+    "turn"
+   ],
+   "reference": {
+    "title": "turn",
+    "description": "",
+    "steps": [
+     {
+      "op": "turn",
+      "direction": "right",
+      "degrees": 90
+     }
+    ]
+   }
+  },
+  {
+   "id": "turn-kk",
+   "lang": "kk",
+   "category": "motion",
+   "prompt": "Оңға 90 градусқа бұрыл",
+   "feasible": true,
+   "expectOps": [
+    "turn"
+   ],
+   "reference": {
+    "title": "turn",
+    "description": "",
+    "steps": [
+     {
+      "op": "turn",
+      "direction": "right",
+      "degrees": 90
+     }
+    ]
+   }
+  },
+  {
+   "id": "turn-en",
+   "lang": "en",
+   "category": "motion",
+   "prompt": "Turn right 90 degrees",
+   "feasible": true,
+   "expectOps": [
+    "turn"
+   ],
+   "reference": {
+    "title": "turn",
+    "description": "",
+    "steps": [
+     {
+      "op": "turn",
+      "direction": "right",
+      "degrees": 90
+     }
+    ]
+   }
+  },
+  {
+   "id": "l_shape-ru",
+   "lang": "ru",
+   "category": "motion",
+   "prompt": "Проедь 30 см, поверни налево и проедь ещё 10",
+   "feasible": true,
+   "expectOps": [
+    "move",
+    "turn"
+   ],
+   "reference": {
+    "title": "l_shape",
+    "description": "",
+    "steps": [
+     {
+      "op": "move",
+      "direction": "forward",
+      "value": 30,
+      "unit": "cm"
+     },
+     {
+      "op": "turn",
+      "direction": "left",
+      "degrees": 90
+     },
+     {
+      "op": "move",
+      "direction": "forward",
+      "value": 10,
+      "unit": "cm"
+     }
+    ]
+   }
+  },
+  {
+   "id": "l_shape-kk",
+   "lang": "kk",
+   "category": "motion",
+   "prompt": "30 см жүріп, солға бұрылып, тағы 10 см жүр",
+   "feasible": true,
+   "expectOps": [
+    "move",
+    "turn"
+   ],
+   "reference": {
+    "title": "l_shape",
+    "description": "",
+    "steps": [
+     {
+      "op": "move",
+      "direction": "forward",
+      "value": 30,
+      "unit": "cm"
+     },
+     {
+      "op": "turn",
+      "direction": "left",
+      "degrees": 90
+     },
+     {
+      "op": "move",
+      "direction": "forward",
+      "value": 10,
+      "unit": "cm"
+     }
+    ]
+   }
+  },
+  {
+   "id": "l_shape-en",
+   "lang": "en",
+   "category": "motion",
+   "prompt": "Drive 30 cm, turn left and drive 10 more",
+   "feasible": true,
+   "expectOps": [
+    "move",
+    "turn"
+   ],
+   "reference": {
+    "title": "l_shape",
+    "description": "",
+    "steps": [
+     {
+      "op": "move",
+      "direction": "forward",
+      "value": 30,
+      "unit": "cm"
+     },
+     {
+      "op": "turn",
+      "direction": "left",
+      "degrees": 90
+     },
+     {
+      "op": "move",
+      "direction": "forward",
+      "value": 10,
+      "unit": "cm"
+     }
+    ]
+   }
+  },
+  {
+   "id": "seconds-ru",
+   "lang": "ru",
+   "category": "motion",
+   "prompt": "Езжай вперёд три секунды",
+   "feasible": true,
+   "expectOps": [
+    "move"
+   ],
+   "reference": {
+    "title": "seconds",
+    "description": "",
+    "steps": [
+     {
+      "op": "move",
+      "direction": "forward",
+      "value": 3,
+      "unit": "seconds"
+     }
+    ]
+   }
+  },
+  {
+   "id": "seconds-kk",
+   "lang": "kk",
+   "category": "motion",
+   "prompt": "Үш секунд алға жүр",
+   "feasible": true,
+   "expectOps": [
+    "move"
+   ],
+   "reference": {
+    "title": "seconds",
+    "description": "",
+    "steps": [
+     {
+      "op": "move",
+      "direction": "forward",
+      "value": 3,
+      "unit": "seconds"
+     }
+    ]
+   }
+  },
+  {
+   "id": "seconds-en",
+   "lang": "en",
+   "category": "motion",
+   "prompt": "Drive forward for three seconds",
+   "feasible": true,
+   "expectOps": [
+    "move"
+   ],
+   "reference": {
+    "title": "seconds",
+    "description": "",
+    "steps": [
+     {
+      "op": "move",
+      "direction": "forward",
+      "value": 3,
+      "unit": "seconds"
+     }
+    ]
+   }
+  },
+  {
+   "id": "circle-ru",
+   "lang": "ru",
+   "category": "arcs",
+   "prompt": "Езжай по кругу",
+   "feasible": true,
+   "expectOps": [
+    "circle",
+    "arc",
+    "steer"
+   ],
+   "reference": {
+    "title": "circle",
+    "description": "",
+    "steps": [
+     {
+      "op": "circle",
+      "direction": "right",
+      "radius": 20,
+      "turns": 1
+     }
+    ]
+   }
+  },
+  {
+   "id": "circle-kk",
+   "lang": "kk",
+   "category": "arcs",
+   "prompt": "Шеңбер бойымен жүр",
+   "feasible": true,
+   "expectOps": [
+    "circle",
+    "arc",
+    "steer"
+   ],
+   "reference": {
+    "title": "circle",
+    "description": "",
+    "steps": [
+     {
+      "op": "circle",
+      "direction": "right",
+      "radius": 20,
+      "turns": 1
+     }
+    ]
+   }
+  },
+  {
+   "id": "circle-en",
+   "lang": "en",
+   "category": "arcs",
+   "prompt": "Drive in a circle",
+   "feasible": true,
+   "expectOps": [
+    "circle",
+    "arc",
+    "steer"
+   ],
+   "reference": {
+    "title": "circle",
+    "description": "",
+    "steps": [
+     {
+      "op": "circle",
+      "direction": "right",
+      "radius": 20,
+      "turns": 1
+     }
+    ]
+   }
+  },
+  {
+   "id": "circle_30-ru",
+   "lang": "ru",
+   "category": "arcs",
+   "prompt": "Проедь круг радиусом 30 см",
+   "feasible": true,
+   "expectOps": [
+    "circle",
+    "arc"
+   ],
+   "reference": {
+    "title": "circle_30",
+    "description": "",
+    "steps": [
+     {
+      "op": "circle",
+      "direction": "right",
+      "radius": 30,
+      "turns": 1
+     }
+    ]
+   }
+  },
+  {
+   "id": "circle_30-kk",
+   "lang": "kk",
+   "category": "arcs",
+   "prompt": "Радиусы 30 см шеңбер жаса",
+   "feasible": true,
+   "expectOps": [
+    "circle",
+    "arc"
+   ],
+   "reference": {
+    "title": "circle_30",
+    "description": "",
+    "steps": [
+     {
+      "op": "circle",
+      "direction": "right",
+      "radius": 30,
+      "turns": 1
+     }
+    ]
+   }
+  },
+  {
+   "id": "circle_30-en",
+   "lang": "en",
+   "category": "arcs",
+   "prompt": "Drive a circle with a radius of 30 cm",
+   "feasible": true,
+   "expectOps": [
+    "circle",
+    "arc"
+   ],
+   "reference": {
+    "title": "circle_30",
+    "description": "",
+    "steps": [
+     {
+      "op": "circle",
+      "direction": "right",
+      "radius": 30,
+      "turns": 1
+     }
+    ]
+   }
+  },
+  {
+   "id": "arc_90-ru",
+   "lang": "ru",
+   "category": "arcs",
+   "prompt": "Проедь дугу вправо на 90 градусов радиусом 25 см",
+   "feasible": true,
+   "expectOps": [
+    "arc",
+    "circle"
+   ],
+   "reference": {
+    "title": "arc_90",
+    "description": "",
+    "steps": [
+     {
+      "op": "arc",
+      "direction": "right",
+      "radius": 25,
+      "degrees": 90
+     }
+    ]
+   }
+  },
+  {
+   "id": "arc_90-kk",
+   "lang": "kk",
+   "category": "arcs",
+   "prompt": "Радиусы 25 см доғамен оңға 90 градус жүр",
+   "feasible": true,
+   "expectOps": [
+    "arc",
+    "circle"
+   ],
+   "reference": {
+    "title": "arc_90",
+    "description": "",
+    "steps": [
+     {
+      "op": "arc",
+      "direction": "right",
+      "radius": 25,
+      "degrees": 90
+     }
+    ]
+   }
+  },
+  {
+   "id": "arc_90-en",
+   "lang": "en",
+   "category": "arcs",
+   "prompt": "Drive a 90 degree arc to the right with radius 25 cm",
+   "feasible": true,
+   "expectOps": [
+    "arc",
+    "circle"
+   ],
+   "reference": {
+    "title": "arc_90",
+    "description": "",
+    "steps": [
+     {
+      "op": "arc",
+      "direction": "right",
+      "radius": 25,
+      "degrees": 90
+     }
+    ]
+   }
+  },
+  {
+   "id": "eight-ru",
+   "lang": "ru",
+   "category": "arcs",
+   "prompt": "Проедь восьмёрку",
+   "feasible": true,
+   "expectOps": [
+    "circle",
+    "arc"
+   ],
+   "reference": {
+    "title": "eight",
+    "description": "",
+    "steps": [
+     {
+      "op": "circle",
+      "direction": "right",
+      "radius": 20,
+      "turns": 1
+     },
+     {
+      "op": "circle",
+      "direction": "left",
+      "radius": 20,
+      "turns": 1
+     }
+    ]
+   }
+  },
+  {
+   "id": "eight-kk",
+   "lang": "kk",
+   "category": "arcs",
+   "prompt": "Сегіздік сыз",
+   "feasible": true,
+   "expectOps": [
+    "circle",
+    "arc"
+   ],
+   "reference": {
+    "title": "eight",
+    "description": "",
+    "steps": [
+     {
+      "op": "circle",
+      "direction": "right",
+      "radius": 20,
+      "turns": 1
+     },
+     {
+      "op": "circle",
+      "direction": "left",
+      "radius": 20,
+      "turns": 1
+     }
+    ]
+   }
+  },
+  {
+   "id": "eight-en",
+   "lang": "en",
+   "category": "arcs",
+   "prompt": "Drive a figure eight",
+   "feasible": true,
+   "expectOps": [
+    "circle",
+    "arc"
+   ],
+   "reference": {
+    "title": "eight",
+    "description": "",
+    "steps": [
+     {
+      "op": "circle",
+      "direction": "right",
+      "radius": 20,
+      "turns": 1
+     },
+     {
+      "op": "circle",
+      "direction": "left",
+      "radius": 20,
+      "turns": 1
+     }
+    ]
+   }
+  },
+  {
+   "id": "half-ru",
+   "lang": "ru",
+   "category": "arcs",
+   "prompt": "Проедь полкруга налево радиусом 15 см",
+   "feasible": true,
+   "expectOps": [
+    "arc",
+    "circle"
+   ],
+   "reference": {
+    "title": "half",
+    "description": "",
+    "steps": [
+     {
+      "op": "arc",
+      "direction": "left",
+      "radius": 15,
+      "degrees": 180
+     }
+    ]
+   }
+  },
+  {
+   "id": "half-kk",
+   "lang": "kk",
+   "category": "arcs",
+   "prompt": "Радиусы 15 см жарты шеңбермен солға жүр",
+   "feasible": true,
+   "expectOps": [
+    "arc",
+    "circle"
+   ],
+   "reference": {
+    "title": "half",
+    "description": "",
+    "steps": [
+     {
+      "op": "arc",
+      "direction": "left",
+      "radius": 15,
+      "degrees": 180
+     }
+    ]
+   }
+  },
+  {
+   "id": "half-en",
+   "lang": "en",
+   "category": "arcs",
+   "prompt": "Drive half a circle to the left, radius 15 cm",
+   "feasible": true,
+   "expectOps": [
+    "arc",
+    "circle"
+   ],
+   "reference": {
+    "title": "half",
+    "description": "",
+    "steps": [
+     {
+      "op": "arc",
+      "direction": "left",
+      "radius": 15,
+      "degrees": 180
+     }
+    ]
+   }
+  },
+  {
+   "id": "tank-ru",
+   "lang": "ru",
+   "category": "arcs",
+   "prompt": "Левый мотор 30 процентов, правый 60, три секунды",
+   "feasible": true,
+   "expectOps": [
+    "tank"
+   ],
+   "reference": {
+    "title": "tank",
+    "description": "",
+    "steps": [
+     {
+      "op": "tank",
+      "leftSpeed": 30,
+      "rightSpeed": 60,
+      "value": 3,
+      "unit": "seconds"
+     }
+    ]
+   }
+  },
+  {
+   "id": "tank-kk",
+   "lang": "kk",
+   "category": "arcs",
+   "prompt": "Сол мотор 30 пайыз, оң мотор 60, үш секунд",
+   "feasible": true,
+   "expectOps": [
+    "tank"
+   ],
+   "reference": {
+    "title": "tank",
+    "description": "",
+    "steps": [
+     {
+      "op": "tank",
+      "leftSpeed": 30,
+      "rightSpeed": 60,
+      "value": 3,
+      "unit": "seconds"
+     }
+    ]
+   }
+  },
+  {
+   "id": "tank-en",
+   "lang": "en",
+   "category": "arcs",
+   "prompt": "Left motor 30 percent, right 60, for three seconds",
+   "feasible": true,
+   "expectOps": [
+    "tank"
+   ],
+   "reference": {
+    "title": "tank",
+    "description": "",
+    "steps": [
+     {
+      "op": "tank",
+      "leftSpeed": 30,
+      "rightSpeed": 60,
+      "value": 3,
+      "unit": "seconds"
+     }
+    ]
+   }
+  },
+  {
+   "id": "square-ru",
+   "lang": "ru",
+   "category": "loops",
+   "prompt": "Проедь квадрат со стороной 30 см",
+   "feasible": true,
+   "expectOps": [
+    "repeat"
+   ],
+   "reference": {
+    "title": "square",
+    "description": "",
+    "steps": [
+     {
+      "op": "repeat",
+      "times": 4,
+      "steps": [
+       {
+        "op": "move",
+        "direction": "forward",
+        "value": 30,
+        "unit": "cm"
+       },
+       {
+        "op": "turn",
+        "direction": "right",
+        "degrees": 90
+       }
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "id": "square-kk",
+   "lang": "kk",
+   "category": "loops",
+   "prompt": "Қабырғасы 30 см шаршы жаса",
+   "feasible": true,
+   "expectOps": [
+    "repeat"
+   ],
+   "reference": {
+    "title": "square",
+    "description": "",
+    "steps": [
+     {
+      "op": "repeat",
+      "times": 4,
+      "steps": [
+       {
+        "op": "move",
+        "direction": "forward",
+        "value": 30,
+        "unit": "cm"
+       },
+       {
+        "op": "turn",
+        "direction": "right",
+        "degrees": 90
+       }
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "id": "square-en",
+   "lang": "en",
+   "category": "loops",
+   "prompt": "Drive a square with 30 cm sides",
+   "feasible": true,
+   "expectOps": [
+    "repeat"
+   ],
+   "reference": {
+    "title": "square",
+    "description": "",
+    "steps": [
+     {
+      "op": "repeat",
+      "times": 4,
+      "steps": [
+       {
+        "op": "move",
+        "direction": "forward",
+        "value": 30,
+        "unit": "cm"
+       },
+       {
+        "op": "turn",
+        "direction": "right",
+        "degrees": 90
+       }
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "id": "triangle-ru",
+   "lang": "ru",
+   "category": "loops",
+   "prompt": "Проедь треугольник",
+   "feasible": true,
+   "expectOps": [
+    "repeat"
+   ],
+   "reference": {
+    "title": "triangle",
+    "description": "",
+    "steps": [
+     {
+      "op": "repeat",
+      "times": 3,
+      "steps": [
+       {
+        "op": "move",
+        "direction": "forward",
+        "value": 30,
+        "unit": "cm"
+       },
+       {
+        "op": "turn",
+        "direction": "right",
+        "degrees": 120
+       }
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "id": "triangle-kk",
+   "lang": "kk",
+   "category": "loops",
+   "prompt": "Үшбұрыш жаса",
+   "feasible": true,
+   "expectOps": [
+    "repeat"
+   ],
+   "reference": {
+    "title": "triangle",
+    "description": "",
+    "steps": [
+     {
+      "op": "repeat",
+      "times": 3,
+      "steps": [
+       {
+        "op": "move",
+        "direction": "forward",
+        "value": 30,
+        "unit": "cm"
+       },
+       {
+        "op": "turn",
+        "direction": "right",
+        "degrees": 120
+       }
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "id": "triangle-en",
+   "lang": "en",
+   "category": "loops",
+   "prompt": "Drive a triangle",
+   "feasible": true,
+   "expectOps": [
+    "repeat"
+   ],
+   "reference": {
+    "title": "triangle",
+    "description": "",
+    "steps": [
+     {
+      "op": "repeat",
+      "times": 3,
+      "steps": [
+       {
+        "op": "move",
+        "direction": "forward",
+        "value": 30,
+        "unit": "cm"
+       },
+       {
+        "op": "turn",
+        "direction": "right",
+        "degrees": 120
+       }
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "id": "zigzag-ru",
+   "lang": "ru",
+   "category": "loops",
+   "prompt": "Едь зигзагом четыре раза",
+   "feasible": true,
+   "expectOps": [
+    "repeat"
+   ],
+   "reference": {
+    "title": "zigzag",
+    "description": "",
+    "steps": [
+     {
+      "op": "repeat",
+      "times": 4,
+      "steps": [
+       {
+        "op": "move",
+        "direction": "forward",
+        "value": 15,
+        "unit": "cm"
+       },
+       {
+        "op": "turn",
+        "direction": "right",
+        "degrees": 45
+       },
+       {
+        "op": "move",
+        "direction": "forward",
+        "value": 15,
+        "unit": "cm"
+       },
+       {
+        "op": "turn",
+        "direction": "left",
+        "degrees": 45
+       }
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "id": "zigzag-kk",
+   "lang": "kk",
+   "category": "loops",
+   "prompt": "Төрт рет зигзагпен жүр",
+   "feasible": true,
+   "expectOps": [
+    "repeat"
+   ],
+   "reference": {
+    "title": "zigzag",
+    "description": "",
+    "steps": [
+     {
+      "op": "repeat",
+      "times": 4,
+      "steps": [
+       {
+        "op": "move",
+        "direction": "forward",
+        "value": 15,
+        "unit": "cm"
+       },
+       {
+        "op": "turn",
+        "direction": "right",
+        "degrees": 45
+       },
+       {
+        "op": "move",
+        "direction": "forward",
+        "value": 15,
+        "unit": "cm"
+       },
+       {
+        "op": "turn",
+        "direction": "left",
+        "degrees": 45
+       }
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "id": "zigzag-en",
+   "lang": "en",
+   "category": "loops",
+   "prompt": "Drive in a zigzag four times",
+   "feasible": true,
+   "expectOps": [
+    "repeat"
+   ],
+   "reference": {
+    "title": "zigzag",
+    "description": "",
+    "steps": [
+     {
+      "op": "repeat",
+      "times": 4,
+      "steps": [
+       {
+        "op": "move",
+        "direction": "forward",
+        "value": 15,
+        "unit": "cm"
+       },
+       {
+        "op": "turn",
+        "direction": "right",
+        "degrees": 45
+       },
+       {
+        "op": "move",
+        "direction": "forward",
+        "value": 15,
+        "unit": "cm"
+       },
+       {
+        "op": "turn",
+        "direction": "left",
+        "degrees": 45
+       }
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "id": "spiral-ru",
+   "lang": "ru",
+   "category": "loops",
+   "prompt": "Сделай спираль из отрезков, каждый длиннее предыдущего",
+   "feasible": true,
+   "expectOps": [
+    "move_expr",
+    "arc",
+    "circle",
+    "move"
+   ],
+   "reference": {
+    "title": "spiral",
+    "description": "",
+    "steps": [
+     {
+      "op": "set_var",
+      "name": "side",
+      "expr": {
+       "num": 10
+      }
+     },
+     {
+      "op": "repeat",
+      "times": 8,
+      "steps": [
+       {
+        "op": "move_expr",
+        "direction": "forward",
+        "expr": {
+         "var": "side"
+        },
+        "unit": "cm"
+       },
+       {
+        "op": "turn",
+        "direction": "right",
+        "degrees": 90
+       },
+       {
+        "op": "change_var",
+        "name": "side",
+        "expr": {
+         "num": 5
+        }
+       }
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "id": "spiral-kk",
+   "lang": "kk",
+   "category": "loops",
+   "prompt": "Әр бөлігі ұзарып отыратын спираль жаса",
+   "feasible": true,
+   "expectOps": [
+    "move_expr",
+    "arc",
+    "circle",
+    "move"
+   ],
+   "reference": {
+    "title": "spiral",
+    "description": "",
+    "steps": [
+     {
+      "op": "set_var",
+      "name": "side",
+      "expr": {
+       "num": 10
+      }
+     },
+     {
+      "op": "repeat",
+      "times": 8,
+      "steps": [
+       {
+        "op": "move_expr",
+        "direction": "forward",
+        "expr": {
+         "var": "side"
+        },
+        "unit": "cm"
+       },
+       {
+        "op": "turn",
+        "direction": "right",
+        "degrees": 90
+       },
+       {
+        "op": "change_var",
+        "name": "side",
+        "expr": {
+         "num": 5
+        }
+       }
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "id": "spiral-en",
+   "lang": "en",
+   "category": "loops",
+   "prompt": "Make a spiral where every side is longer than the last",
+   "feasible": true,
+   "expectOps": [
+    "move_expr",
+    "arc",
+    "circle",
+    "move"
+   ],
+   "reference": {
+    "title": "spiral",
+    "description": "",
+    "steps": [
+     {
+      "op": "set_var",
+      "name": "side",
+      "expr": {
+       "num": 10
+      }
+     },
+     {
+      "op": "repeat",
+      "times": 8,
+      "steps": [
+       {
+        "op": "move_expr",
+        "direction": "forward",
+        "expr": {
+         "var": "side"
+        },
+        "unit": "cm"
+       },
+       {
+        "op": "turn",
+        "direction": "right",
+        "degrees": 90
+       },
+       {
+        "op": "change_var",
+        "name": "side",
+        "expr": {
+         "num": 5
+        }
+       }
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "id": "shuttle-ru",
+   "lang": "ru",
+   "category": "loops",
+   "prompt": "Съезди вперёд и назад три раза",
+   "feasible": true,
+   "expectOps": [
+    "repeat"
+   ],
+   "reference": {
+    "title": "shuttle",
+    "description": "",
+    "steps": [
+     {
+      "op": "repeat",
+      "times": 3,
+      "steps": [
+       {
+        "op": "move",
+        "direction": "forward",
+        "value": 20,
+        "unit": "cm"
+       },
+       {
+        "op": "move",
+        "direction": "back",
+        "value": 20,
+        "unit": "cm"
+       }
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "id": "shuttle-kk",
+   "lang": "kk",
+   "category": "loops",
+   "prompt": "Үш рет алға-артқа жүр",
+   "feasible": true,
+   "expectOps": [
+    "repeat"
+   ],
+   "reference": {
+    "title": "shuttle",
+    "description": "",
+    "steps": [
+     {
+      "op": "repeat",
+      "times": 3,
+      "steps": [
+       {
+        "op": "move",
+        "direction": "forward",
+        "value": 20,
+        "unit": "cm"
+       },
+       {
+        "op": "move",
+        "direction": "back",
+        "value": 20,
+        "unit": "cm"
+       }
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "id": "shuttle-en",
+   "lang": "en",
+   "category": "loops",
+   "prompt": "Go forward and back three times",
+   "feasible": true,
+   "expectOps": [
+    "repeat"
+   ],
+   "reference": {
+    "title": "shuttle",
+    "description": "",
+    "steps": [
+     {
+      "op": "repeat",
+      "times": 3,
+      "steps": [
+       {
+        "op": "move",
+        "direction": "forward",
+        "value": 20,
+        "unit": "cm"
+       },
+       {
+        "op": "move",
+        "direction": "back",
+        "value": 20,
+        "unit": "cm"
+       }
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "id": "wall-ru",
+   "lang": "ru",
+   "category": "sensors",
+   "prompt": "Остановись в 10 см от стены",
+   "feasible": true,
+   "expectOps": [
+    "wait_until",
+    "repeat_until",
+    "while"
+   ],
+   "reference": {
+    "title": "wall",
+    "description": "",
+    "steps": [
+     {
+      "op": "start_move",
+      "direction": "forward"
+     },
+     {
+      "op": "wait_until",
+      "condition": {
+       "sensor": "distance",
+       "comparator": "<",
+       "value": 10,
+       "unit": "cm"
+      }
+     },
+     {
+      "op": "stop_move"
+     }
+    ]
+   }
+  },
+  {
+   "id": "wall-kk",
+   "lang": "kk",
+   "category": "sensors",
+   "prompt": "Қабырғаға 10 см қалғанда тоқта",
+   "feasible": true,
+   "expectOps": [
+    "wait_until",
+    "repeat_until",
+    "while"
+   ],
+   "reference": {
+    "title": "wall",
+    "description": "",
+    "steps": [
+     {
+      "op": "start_move",
+      "direction": "forward"
+     },
+     {
+      "op": "wait_until",
+      "condition": {
+       "sensor": "distance",
+       "comparator": "<",
+       "value": 10,
+       "unit": "cm"
+      }
+     },
+     {
+      "op": "stop_move"
+     }
+    ]
+   }
+  },
+  {
+   "id": "wall-en",
+   "lang": "en",
+   "category": "sensors",
+   "prompt": "Stop 10 cm from the wall",
+   "feasible": true,
+   "expectOps": [
+    "wait_until",
+    "repeat_until",
+    "while"
+   ],
+   "reference": {
+    "title": "wall",
+    "description": "",
+    "steps": [
+     {
+      "op": "start_move",
+      "direction": "forward"
+     },
+     {
+      "op": "wait_until",
+      "condition": {
+       "sensor": "distance",
+       "comparator": "<",
+       "value": 10,
+       "unit": "cm"
+      }
+     },
+     {
+      "op": "stop_move"
+     }
+    ]
+   }
+  },
+  {
+   "id": "line-ru",
+   "lang": "ru",
+   "category": "sensors",
+   "prompt": "Езжай по чёрной линии",
+   "feasible": true,
+   "expectOps": [
+    "forever",
+    "repeat_until",
+    "while"
+   ],
+   "reference": {
+    "title": "line",
+    "description": "",
+    "steps": [
+     {
+      "op": "set_speed",
+      "speed": 30
+     },
+     {
+      "op": "forever",
+      "steps": [
+       {
+        "op": "if",
+        "condition": {
+         "sensor": "reflection",
+         "comparator": "<",
+         "value": 50
+        },
+        "then": [
+         {
+          "op": "start_steer",
+          "steering": -30
+         }
+        ],
+        "else": [
+         {
+          "op": "start_steer",
+          "steering": 30
+         }
+        ]
+       }
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "id": "line-kk",
+   "lang": "kk",
+   "category": "sensors",
+   "prompt": "Қара сызықпен жүр",
+   "feasible": true,
+   "expectOps": [
+    "forever",
+    "repeat_until",
+    "while"
+   ],
+   "reference": {
+    "title": "line",
+    "description": "",
+    "steps": [
+     {
+      "op": "set_speed",
+      "speed": 30
+     },
+     {
+      "op": "forever",
+      "steps": [
+       {
+        "op": "if",
+        "condition": {
+         "sensor": "reflection",
+         "comparator": "<",
+         "value": 50
+        },
+        "then": [
+         {
+          "op": "start_steer",
+          "steering": -30
+         }
+        ],
+        "else": [
+         {
+          "op": "start_steer",
+          "steering": 30
+         }
+        ]
+       }
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "id": "line-en",
+   "lang": "en",
+   "category": "sensors",
+   "prompt": "Follow the black line",
+   "feasible": true,
+   "expectOps": [
+    "forever",
+    "repeat_until",
+    "while"
+   ],
+   "reference": {
+    "title": "line",
+    "description": "",
+    "steps": [
+     {
+      "op": "set_speed",
+      "speed": 30
+     },
+     {
+      "op": "forever",
+      "steps": [
+       {
+        "op": "if",
+        "condition": {
+         "sensor": "reflection",
+         "comparator": "<",
+         "value": 50
+        },
+        "then": [
+         {
+          "op": "start_steer",
+          "steering": -30
+         }
+        ],
+        "else": [
+         {
+          "op": "start_steer",
+          "steering": 30
+         }
+        ]
+       }
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "id": "red_stop-ru",
+   "lang": "ru",
+   "category": "sensors",
+   "prompt": "Езжай, пока не увидишь красный цвет",
+   "feasible": true,
+   "expectOps": [
+    "wait_until",
+    "repeat_until",
+    "while"
+   ],
+   "reference": {
+    "title": "red_stop",
+    "description": "",
+    "steps": [
+     {
+      "op": "start_move",
+      "direction": "forward"
+     },
+     {
+      "op": "wait_until",
+      "condition": {
+       "sensor": "color",
+       "color": "red"
+      }
+     },
+     {
+      "op": "stop_move"
+     }
+    ]
+   }
+  },
+  {
+   "id": "red_stop-kk",
+   "lang": "kk",
+   "category": "sensors",
+   "prompt": "Қызыл түсті көргенше жүр",
+   "feasible": true,
+   "expectOps": [
+    "wait_until",
+    "repeat_until",
+    "while"
+   ],
+   "reference": {
+    "title": "red_stop",
+    "description": "",
+    "steps": [
+     {
+      "op": "start_move",
+      "direction": "forward"
+     },
+     {
+      "op": "wait_until",
+      "condition": {
+       "sensor": "color",
+       "color": "red"
+      }
+     },
+     {
+      "op": "stop_move"
+     }
+    ]
+   }
+  },
+  {
+   "id": "red_stop-en",
+   "lang": "en",
+   "category": "sensors",
+   "prompt": "Drive until you see red",
+   "feasible": true,
+   "expectOps": [
+    "wait_until",
+    "repeat_until",
+    "while"
+   ],
+   "reference": {
+    "title": "red_stop",
+    "description": "",
+    "steps": [
+     {
+      "op": "start_move",
+      "direction": "forward"
+     },
+     {
+      "op": "wait_until",
+      "condition": {
+       "sensor": "color",
+       "color": "red"
+      }
+     },
+     {
+      "op": "stop_move"
+     }
+    ]
+   }
+  },
+  {
+   "id": "press_go-ru",
+   "lang": "ru",
+   "category": "sensors",
+   "prompt": "Жди нажатия датчика силы, потом езжай вперёд 20 см",
+   "feasible": true,
+   "expectOps": [
+    "wait_until"
+   ],
+   "reference": {
+    "title": "press_go",
+    "description": "",
+    "steps": [
+     {
+      "op": "wait_until",
+      "condition": {
+       "sensor": "force",
+       "state": "pressed"
+      }
+     },
+     {
+      "op": "move",
+      "direction": "forward",
+      "value": 20,
+      "unit": "cm"
+     }
+    ]
+   }
+  },
+  {
+   "id": "press_go-kk",
+   "lang": "kk",
+   "category": "sensors",
+   "prompt": "Күш датчигі басылғанша күт, содан кейін алға 20 см жүр",
+   "feasible": true,
+   "expectOps": [
+    "wait_until"
+   ],
+   "reference": {
+    "title": "press_go",
+    "description": "",
+    "steps": [
+     {
+      "op": "wait_until",
+      "condition": {
+       "sensor": "force",
+       "state": "pressed"
+      }
+     },
+     {
+      "op": "move",
+      "direction": "forward",
+      "value": 20,
+      "unit": "cm"
+     }
+    ]
+   }
+  },
+  {
+   "id": "press_go-en",
+   "lang": "en",
+   "category": "sensors",
+   "prompt": "Wait for the force sensor to be pressed, then drive 20 cm",
+   "feasible": true,
+   "expectOps": [
+    "wait_until"
+   ],
+   "reference": {
+    "title": "press_go",
+    "description": "",
+    "steps": [
+     {
+      "op": "wait_until",
+      "condition": {
+       "sensor": "force",
+       "state": "pressed"
+      }
+     },
+     {
+      "op": "move",
+      "direction": "forward",
+      "value": 20,
+      "unit": "cm"
+     }
+    ]
+   }
+  },
+  {
+   "id": "gyro-ru",
+   "lang": "ru",
+   "category": "sensors",
+   "prompt": "Плавно поворачивай, пока гироскоп не покажет 90 градусов",
+   "feasible": true,
+   "expectOps": [
+    "while",
+    "repeat_until",
+    "wait_until",
+    "turn"
+   ],
+   "reference": {
+    "title": "gyro",
+    "description": "",
+    "steps": [
+     {
+      "op": "reset_yaw"
+     },
+     {
+      "op": "start_steer",
+      "steering": 40
+     },
+     {
+      "op": "wait_until",
+      "condition": {
+       "sensor": "gyro",
+       "axis": "yaw",
+       "comparator": ">",
+       "value": 90
+      }
+     },
+     {
+      "op": "stop_move"
+     }
+    ]
+   }
+  },
+  {
+   "id": "gyro-kk",
+   "lang": "kk",
+   "category": "sensors",
+   "prompt": "Гироскоп 90 градус көрсеткенше бірқалыпты бұрыл",
+   "feasible": true,
+   "expectOps": [
+    "while",
+    "repeat_until",
+    "wait_until",
+    "turn"
+   ],
+   "reference": {
+    "title": "gyro",
+    "description": "",
+    "steps": [
+     {
+      "op": "reset_yaw"
+     },
+     {
+      "op": "start_steer",
+      "steering": 40
+     },
+     {
+      "op": "wait_until",
+      "condition": {
+       "sensor": "gyro",
+       "axis": "yaw",
+       "comparator": ">",
+       "value": 90
+      }
+     },
+     {
+      "op": "stop_move"
+     }
+    ]
+   }
+  },
+  {
+   "id": "gyro-en",
+   "lang": "en",
+   "category": "sensors",
+   "prompt": "Turn smoothly until the gyro reads 90 degrees",
+   "feasible": true,
+   "expectOps": [
+    "while",
+    "repeat_until",
+    "wait_until",
+    "turn"
+   ],
+   "reference": {
+    "title": "gyro",
+    "description": "",
+    "steps": [
+     {
+      "op": "reset_yaw"
+     },
+     {
+      "op": "start_steer",
+      "steering": 40
+     },
+     {
+      "op": "wait_until",
+      "condition": {
+       "sensor": "gyro",
+       "axis": "yaw",
+       "comparator": ">",
+       "value": 90
+      }
+     },
+     {
+      "op": "stop_move"
+     }
+    ]
+   }
+  },
+  {
+   "id": "arm_up-ru",
+   "lang": "ru",
+   "category": "attachments",
+   "prompt": "Подними руку на порту F на 90 градусов",
+   "feasible": true,
+   "expectOps": [
+    "motor_run",
+    "motor_to_position"
+   ],
+   "reference": {
+    "title": "arm_up",
+    "description": "",
+    "steps": [
+     {
+      "op": "motor_run",
+      "port": "F",
+      "direction": "clockwise",
+      "value": 90,
+      "unit": "degrees"
+     }
+    ]
+   }
+  },
+  {
+   "id": "arm_up-kk",
+   "lang": "kk",
+   "category": "attachments",
+   "prompt": "F портындағы қолды 90 градусқа көтер",
+   "feasible": true,
+   "expectOps": [
+    "motor_run",
+    "motor_to_position"
+   ],
+   "reference": {
+    "title": "arm_up",
+    "description": "",
+    "steps": [
+     {
+      "op": "motor_run",
+      "port": "F",
+      "direction": "clockwise",
+      "value": 90,
+      "unit": "degrees"
+     }
+    ]
+   }
+  },
+  {
+   "id": "arm_up-en",
+   "lang": "en",
+   "category": "attachments",
+   "prompt": "Raise the arm on port F by 90 degrees",
+   "feasible": true,
+   "expectOps": [
+    "motor_run",
+    "motor_to_position"
+   ],
+   "reference": {
+    "title": "arm_up",
+    "description": "",
+    "steps": [
+     {
+      "op": "motor_run",
+      "port": "F",
+      "direction": "clockwise",
+      "value": 90,
+      "unit": "degrees"
+     }
+    ]
+   }
+  },
+  {
+   "id": "arm_pos-ru",
+   "lang": "ru",
+   "category": "attachments",
+   "prompt": "Поставь мотор F в положение 0",
+   "feasible": true,
+   "expectOps": [
+    "motor_to_position"
+   ],
+   "reference": {
+    "title": "arm_pos",
+    "description": "",
+    "steps": [
+     {
+      "op": "motor_to_position",
+      "port": "F",
+      "position": 0,
+      "direction": "shortest"
+     }
+    ]
+   }
+  },
+  {
+   "id": "arm_pos-kk",
+   "lang": "kk",
+   "category": "attachments",
+   "prompt": "F моторын 0 күйіне қой",
+   "feasible": true,
+   "expectOps": [
+    "motor_to_position"
+   ],
+   "reference": {
+    "title": "arm_pos",
+    "description": "",
+    "steps": [
+     {
+      "op": "motor_to_position",
+      "port": "F",
+      "position": 0,
+      "direction": "shortest"
+     }
+    ]
+   }
+  },
+  {
+   "id": "arm_pos-en",
+   "lang": "en",
+   "category": "attachments",
+   "prompt": "Move motor F to position 0",
+   "feasible": true,
+   "expectOps": [
+    "motor_to_position"
+   ],
+   "reference": {
+    "title": "arm_pos",
+    "description": "",
+    "steps": [
+     {
+      "op": "motor_to_position",
+      "port": "F",
+      "position": 0,
+      "direction": "shortest"
+     }
+    ]
+   }
+  },
+  {
+   "id": "arm_time-ru",
+   "lang": "ru",
+   "category": "attachments",
+   "prompt": "Крути мотор F две секунды",
+   "feasible": true,
+   "expectOps": [
+    "motor_run"
+   ],
+   "reference": {
+    "title": "arm_time",
+    "description": "",
+    "steps": [
+     {
+      "op": "motor_run",
+      "port": "F",
+      "direction": "clockwise",
+      "value": 2,
+      "unit": "seconds"
+     }
+    ]
+   }
+  },
+  {
+   "id": "arm_time-kk",
+   "lang": "kk",
+   "category": "attachments",
+   "prompt": "F моторын екі секунд айналдыр",
+   "feasible": true,
+   "expectOps": [
+    "motor_run"
+   ],
+   "reference": {
+    "title": "arm_time",
+    "description": "",
+    "steps": [
+     {
+      "op": "motor_run",
+      "port": "F",
+      "direction": "clockwise",
+      "value": 2,
+      "unit": "seconds"
+     }
+    ]
+   }
+  },
+  {
+   "id": "arm_time-en",
+   "lang": "en",
+   "category": "attachments",
+   "prompt": "Run motor F for two seconds",
+   "feasible": true,
+   "expectOps": [
+    "motor_run"
+   ],
+   "reference": {
+    "title": "arm_time",
+    "description": "",
+    "steps": [
+     {
+      "op": "motor_run",
+      "port": "F",
+      "direction": "clockwise",
+      "value": 2,
+      "unit": "seconds"
+     }
+    ]
+   }
+  },
+  {
+   "id": "square_party-ru",
+   "lang": "ru",
+   "category": "combined",
+   "prompt": "Проедь квадрат, потом пискни и улыбнись",
+   "feasible": true,
+   "expectOps": [
+    "repeat"
+   ],
+   "reference": {
+    "title": "square_party",
+    "description": "",
+    "steps": [
+     {
+      "op": "repeat",
+      "times": 4,
+      "steps": [
+       {
+        "op": "move",
+        "direction": "forward",
+        "value": 30,
+        "unit": "cm"
+       },
+       {
+        "op": "turn",
+        "direction": "right",
+        "degrees": 90
+       }
+      ]
+     },
+     {
+      "op": "beep",
+      "note": 72,
+      "seconds": 0.3
+     },
+     {
+      "op": "show_image",
+      "image": "smile",
+      "seconds": 2
+     }
+    ]
+   }
+  },
+  {
+   "id": "square_party-kk",
+   "lang": "kk",
+   "category": "combined",
+   "prompt": "Шаршы жасап, дыбыс шығарып, күл",
+   "feasible": true,
+   "expectOps": [
+    "repeat"
+   ],
+   "reference": {
+    "title": "square_party",
+    "description": "",
+    "steps": [
+     {
+      "op": "repeat",
+      "times": 4,
+      "steps": [
+       {
+        "op": "move",
+        "direction": "forward",
+        "value": 30,
+        "unit": "cm"
+       },
+       {
+        "op": "turn",
+        "direction": "right",
+        "degrees": 90
+       }
+      ]
+     },
+     {
+      "op": "beep",
+      "note": 72,
+      "seconds": 0.3
+     },
+     {
+      "op": "show_image",
+      "image": "smile",
+      "seconds": 2
+     }
+    ]
+   }
+  },
+  {
+   "id": "square_party-en",
+   "lang": "en",
+   "category": "combined",
+   "prompt": "Drive a square, then beep and smile",
+   "feasible": true,
+   "expectOps": [
+    "repeat"
+   ],
+   "reference": {
+    "title": "square_party",
+    "description": "",
+    "steps": [
+     {
+      "op": "repeat",
+      "times": 4,
+      "steps": [
+       {
+        "op": "move",
+        "direction": "forward",
+        "value": 30,
+        "unit": "cm"
+       },
+       {
+        "op": "turn",
+        "direction": "right",
+        "degrees": 90
+       }
+      ]
+     },
+     {
+      "op": "beep",
+      "note": 72,
+      "seconds": 0.3
+     },
+     {
+      "op": "show_image",
+      "image": "smile",
+      "seconds": 2
+     }
+    ]
+   }
+  },
+  {
+   "id": "my_block-ru",
+   "lang": "ru",
+   "category": "combined",
+   "prompt": "Сделай свой блок zigzag и выполни его три раза",
+   "feasible": true,
+   "expectOps": [
+    "call"
+   ],
+   "reference": {
+    "title": "my_block",
+    "description": "",
+    "steps": [
+     {
+      "op": "repeat",
+      "times": 3,
+      "steps": [
+       {
+        "op": "call",
+        "name": "zigzag"
+       }
+      ]
+     }
+    ],
+    "functions": [
+     {
+      "name": "zigzag",
+      "steps": [
+       {
+        "op": "arc",
+        "direction": "left",
+        "radius": 20,
+        "degrees": 60
+       },
+       {
+        "op": "arc",
+        "direction": "right",
+        "radius": 20,
+        "degrees": 60
+       }
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "id": "my_block-kk",
+   "lang": "kk",
+   "category": "combined",
+   "prompt": "zigzag атты блок жасап, оны үш рет орында",
+   "feasible": true,
+   "expectOps": [
+    "call"
+   ],
+   "reference": {
+    "title": "my_block",
+    "description": "",
+    "steps": [
+     {
+      "op": "repeat",
+      "times": 3,
+      "steps": [
+       {
+        "op": "call",
+        "name": "zigzag"
+       }
+      ]
+     }
+    ],
+    "functions": [
+     {
+      "name": "zigzag",
+      "steps": [
+       {
+        "op": "arc",
+        "direction": "left",
+        "radius": 20,
+        "degrees": 60
+       },
+       {
+        "op": "arc",
+        "direction": "right",
+        "radius": 20,
+        "degrees": 60
+       }
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "id": "my_block-en",
+   "lang": "en",
+   "category": "combined",
+   "prompt": "Make a block called zigzag and run it three times",
+   "feasible": true,
+   "expectOps": [
+    "call"
+   ],
+   "reference": {
+    "title": "my_block",
+    "description": "",
+    "steps": [
+     {
+      "op": "repeat",
+      "times": 3,
+      "steps": [
+       {
+        "op": "call",
+        "name": "zigzag"
+       }
+      ]
+     }
+    ],
+    "functions": [
+     {
+      "name": "zigzag",
+      "steps": [
+       {
+        "op": "arc",
+        "direction": "left",
+        "radius": 20,
+        "degrees": 60
+       },
+       {
+        "op": "arc",
+        "direction": "right",
+        "radius": 20,
+        "degrees": 60
+       }
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "id": "counter-ru",
+   "lang": "ru",
+   "category": "combined",
+   "prompt": "Считай нажатия датчика силы и показывай число",
+   "feasible": true,
+   "expectOps": [
+    "change_var"
+   ],
+   "reference": {
+    "title": "counter",
+    "description": "",
+    "steps": [
+     {
+      "op": "set_var",
+      "name": "count",
+      "expr": {
+       "num": 0
+      }
+     },
+     {
+      "op": "forever",
+      "steps": [
+       {
+        "op": "wait_until",
+        "condition": {
+         "sensor": "force",
+         "state": "pressed"
+        }
+       },
+       {
+        "op": "change_var",
+        "name": "count",
+        "expr": {
+         "num": 1
+        }
+       },
+       {
+        "op": "write_var",
+        "name": "count"
+       },
+       {
+        "op": "wait_until",
+        "condition": {
+         "sensor": "force",
+         "state": "released"
+        }
+       }
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "id": "counter-kk",
+   "lang": "kk",
+   "category": "combined",
+   "prompt": "Күш датчигінің басылуын санап, санды көрсет",
+   "feasible": true,
+   "expectOps": [
+    "change_var"
+   ],
+   "reference": {
+    "title": "counter",
+    "description": "",
+    "steps": [
+     {
+      "op": "set_var",
+      "name": "count",
+      "expr": {
+       "num": 0
+      }
+     },
+     {
+      "op": "forever",
+      "steps": [
+       {
+        "op": "wait_until",
+        "condition": {
+         "sensor": "force",
+         "state": "pressed"
+        }
+       },
+       {
+        "op": "change_var",
+        "name": "count",
+        "expr": {
+         "num": 1
+        }
+       },
+       {
+        "op": "write_var",
+        "name": "count"
+       },
+       {
+        "op": "wait_until",
+        "condition": {
+         "sensor": "force",
+         "state": "released"
+        }
+       }
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "id": "counter-en",
+   "lang": "en",
+   "category": "combined",
+   "prompt": "Count presses of the force sensor and show the number",
+   "feasible": true,
+   "expectOps": [
+    "change_var"
+   ],
+   "reference": {
+    "title": "counter",
+    "description": "",
+    "steps": [
+     {
+      "op": "set_var",
+      "name": "count",
+      "expr": {
+       "num": 0
+      }
+     },
+     {
+      "op": "forever",
+      "steps": [
+       {
+        "op": "wait_until",
+        "condition": {
+         "sensor": "force",
+         "state": "pressed"
+        }
+       },
+       {
+        "op": "change_var",
+        "name": "count",
+        "expr": {
+         "num": 1
+        }
+       },
+       {
+        "op": "write_var",
+        "name": "count"
+       },
+       {
+        "op": "wait_until",
+        "condition": {
+         "sensor": "force",
+         "state": "released"
+        }
+       }
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "id": "sort-ru",
+   "lang": "ru",
+   "category": "combined",
+   "prompt": "Сортируй по цвету: красное толкай вправо, синее влево мотором F",
+   "feasible": true,
+   "expectOps": [
+    "if"
+   ],
+   "reference": {
+    "title": "sort",
+    "description": "",
+    "steps": [
+     {
+      "op": "forever",
+      "steps": [
+       {
+        "op": "if",
+        "condition": {
+         "sensor": "color",
+         "color": "red"
+        },
+        "then": [
+         {
+          "op": "motor_run",
+          "port": "F",
+          "direction": "clockwise",
+          "value": 90,
+          "unit": "degrees"
+         },
+         {
+          "op": "motor_to_position",
+          "port": "F",
+          "position": 0,
+          "direction": "shortest"
+         }
+        ]
+       },
+       {
+        "op": "if",
+        "condition": {
+         "sensor": "color",
+         "color": "blue"
+        },
+        "then": [
+         {
+          "op": "motor_run",
+          "port": "F",
+          "direction": "counterclockwise",
+          "value": 90,
+          "unit": "degrees"
+         },
+         {
+          "op": "motor_to_position",
+          "port": "F",
+          "position": 0,
+          "direction": "shortest"
+         }
+        ]
+       }
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "id": "sort-kk",
+   "lang": "kk",
+   "category": "combined",
+   "prompt": "Түс бойынша сұрыпта: қызылды оңға, көкті солға F моторымен ит",
+   "feasible": true,
+   "expectOps": [
+    "if"
+   ],
+   "reference": {
+    "title": "sort",
+    "description": "",
+    "steps": [
+     {
+      "op": "forever",
+      "steps": [
+       {
+        "op": "if",
+        "condition": {
+         "sensor": "color",
+         "color": "red"
+        },
+        "then": [
+         {
+          "op": "motor_run",
+          "port": "F",
+          "direction": "clockwise",
+          "value": 90,
+          "unit": "degrees"
+         },
+         {
+          "op": "motor_to_position",
+          "port": "F",
+          "position": 0,
+          "direction": "shortest"
+         }
+        ]
+       },
+       {
+        "op": "if",
+        "condition": {
+         "sensor": "color",
+         "color": "blue"
+        },
+        "then": [
+         {
+          "op": "motor_run",
+          "port": "F",
+          "direction": "counterclockwise",
+          "value": 90,
+          "unit": "degrees"
+         },
+         {
+          "op": "motor_to_position",
+          "port": "F",
+          "position": 0,
+          "direction": "shortest"
+         }
+        ]
+       }
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "id": "sort-en",
+   "lang": "en",
+   "category": "combined",
+   "prompt": "Sort by colour: push red right and blue left with motor F",
+   "feasible": true,
+   "expectOps": [
+    "if"
+   ],
+   "reference": {
+    "title": "sort",
+    "description": "",
+    "steps": [
+     {
+      "op": "forever",
+      "steps": [
+       {
+        "op": "if",
+        "condition": {
+         "sensor": "color",
+         "color": "red"
+        },
+        "then": [
+         {
+          "op": "motor_run",
+          "port": "F",
+          "direction": "clockwise",
+          "value": 90,
+          "unit": "degrees"
+         },
+         {
+          "op": "motor_to_position",
+          "port": "F",
+          "position": 0,
+          "direction": "shortest"
+         }
+        ]
+       },
+       {
+        "op": "if",
+        "condition": {
+         "sensor": "color",
+         "color": "blue"
+        },
+        "then": [
+         {
+          "op": "motor_run",
+          "port": "F",
+          "direction": "counterclockwise",
+          "value": 90,
+          "unit": "degrees"
+         },
+         {
+          "op": "motor_to_position",
+          "port": "F",
+          "position": 0,
+          "direction": "shortest"
+         }
+        ]
+       }
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "id": "impossible-1",
+   "lang": "ru",
+   "category": "impossible",
+   "prompt": "Полети над столом",
+   "feasible": false
+  },
+  {
+   "id": "impossible-2",
+   "lang": "en",
+   "category": "impossible",
+   "prompt": "Take a photo of me",
+   "feasible": false
+  },
+  {
+   "id": "impossible-3",
+   "lang": "kk",
+   "category": "impossible",
+   "prompt": "Интернеттен ауа райын тауып айт",
+   "feasible": false
+  },
+  {
+   "id": "impossible-4",
+   "lang": "ru",
+   "category": "impossible",
+   "prompt": "Сфотографируй комнату и отправь маме",
+   "feasible": false
+  },
+  {
+   "id": "impossible-5",
+   "lang": "en",
+   "category": "impossible",
+   "prompt": "Recognise my voice and answer in words",
+   "feasible": false
+  }
+ ]
+}

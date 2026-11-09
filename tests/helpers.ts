@@ -3,7 +3,7 @@ import { expect } from 'vitest'
 
 import type { ScratchBlock, ScratchProject } from '../lib/dsl/compile-blocks'
 import { parseProgram } from '../lib/dsl/schema'
-import { DEFAULT_ROBOT, type Program, type RobotProfile, type Step } from '../lib/dsl/types'
+import { DEFAULT_ROBOT, type Program, type RobotProfile, type Step, type ProgramFunction } from '../lib/dsl/types'
 
 const require = createRequire(import.meta.url)
 // The same validator the SPIKE App runs on scratch.sb3 when a project is opened.
@@ -34,10 +34,11 @@ export function expectLinked(blocks: Record<string, ScratchBlock>) {
         expect(blocks[ref].parent, `${blocks[ref].opcode} is a child of ${b.opcode}`).toBe(id)
       }
     }
-    if (b.shadow) expect(Object.keys(b.fields)).toEqual([`field_${b.opcode}`])
+    // The prototype of a custom block is a standard Scratch shadow without fields.
+    if (b.shadow && b.opcode !== 'procedures_prototype') expect(Object.keys(b.fields)).toEqual([`field_${b.opcode}`])
   }
   const tops = Object.values(blocks).filter((b) => b.topLevel)
-  expect(tops.map((b) => b.opcode)).toEqual(['flipperevents_whenProgramStarts'])
+  expect(tops.filter((b) => b.opcode !== 'procedures_definition').map((b) => b.opcode)).toEqual(['flipperevents_whenProgramStarts'])
 }
 
 /** Parses a program that must be valid. */
@@ -81,7 +82,23 @@ export const EVERY_STEP: Step[] = [
   },
   { op: 'if', condition: { sensor: 'distance', port: 'C', comparator: '=', value: 50, unit: '%' }, then: [] },
   { op: 'repeat', times: 2, steps: [{ op: 'wait_until', condition: { sensor: 'color', port: 'D', color: 'none' } }] },
+  { op: 'arc', direction: 'left', radius: 25, degrees: 90 },
+  { op: 'circle', direction: 'right', radius: 20, turns: 1 },
+  { op: 'tank', leftSpeed: 30, rightSpeed: 60, value: 2, unit: 'seconds' },
+  { op: 'set_var', name: 'side', expr: { num: 5 } },
+  { op: 'change_var', name: 'side', expr: { op: '+', a: { var: 'side' }, b: { num: 1 } } },
+  { op: 'move_expr', direction: 'back', expr: { var: 'side' }, unit: 'cm' },
+  { op: 'write_var', name: 'side' },
+  { op: 'while', condition: { sensor: 'gyro', axis: 'yaw', comparator: '<', value: 10 }, steps: [{ op: 'wait', seconds: 0.1 }] },
+  { op: 'if', condition: { sensor: 'var', name: 'side', comparator: '>', value: 3 }, then: [{ op: 'stop_move' }] },
+  { op: 'call', name: 'helper' },
   { op: 'forever', steps: [{ op: 'wait_until', condition: { sensor: 'force', port: 'E', state: 'released' } }] },
 ]
+
+export const EVERY_FUNCTIONS: ProgramFunction[] = [{ name: 'helper', steps: [{ op: 'stop_move' }] }]
+
+/** Commands only generated programs use: the lesson editor has no blocks for them. */
+const GENERATED_ONLY: ReadonlySet<Step['op']> = new Set(['arc', 'circle', 'tank', 'set_var', 'change_var', 'move_expr', 'write_var', 'while', 'call'])
+export const LESSON_STEPS: Step[] = EVERY_STEP.filter((s) => !GENERATED_ONLY.has(s.op) && !(s.op === 'if' && s.condition.sensor === 'var'))
 
 export const EVERY_OP: Step['op'][] = [...new Set(EVERY_STEP.map((s) => s.op))]

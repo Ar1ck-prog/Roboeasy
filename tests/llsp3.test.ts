@@ -2,7 +2,7 @@ import JSZip from 'jszip'
 import { describe, expect, it } from 'vitest'
 
 import { SPIKE_PROJECT_VERSION, createLlsp3 } from '../lib/spike/llsp3'
-import { EVERY_STEP, expectLinked, validateSb3, valid } from './helpers'
+import { EVERY_FUNCTIONS, EVERY_STEP, expectLinked, validateSb3, valid } from './helpers'
 
 async function unzip(blob: Blob) {
   return JSZip.loadAsync(await blob.arrayBuffer())
@@ -10,7 +10,7 @@ async function unzip(blob: Blob) {
 
 describe('createLlsp3', () => {
   it('packs word blocks like the SPIKE App: manifest + scratch.sb3 + icon', async () => {
-    const program = valid({ title: 'All', description: '', steps: EVERY_STEP })
+    const program = valid({ title: 'All', description: '', steps: EVERY_STEP, functions: EVERY_FUNCTIONS })
     const zip = await unzip(await createLlsp3('Моя программа', { format: 'blocks', program }))
     expect(Object.keys(zip.files).sort()).toEqual(['icon.svg', 'manifest.json', 'scratch.sb3'])
 

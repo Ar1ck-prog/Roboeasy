@@ -22,7 +22,9 @@ export async function recordUsage(row: UsageRow): Promise<void> {
   const sb = supabaseAdmin()
   if (!sb) return
   try {
-    const { error } = await sb.from('ai_usage').insert({ kind: row.kind, model: row.model ?? null, cached: row.cached ?? false, ok: row.ok, error: row.error ?? null })
+    const { error } = await sb
+      .from('ai_usage')
+      .insert({ kind: row.kind, model: row.model ?? null, cached: row.cached ?? false, ok: row.ok, error: row.error ?? null })
     if (error) console.warn('[ai-usage] not recorded:', error.message)
   } catch (error) {
     console.warn('[ai-usage] not recorded:', error instanceof Error ? error.message : error)

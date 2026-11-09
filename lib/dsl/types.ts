@@ -13,7 +13,7 @@ export const PORTS = ['A', 'B', 'C', 'D', 'E', 'F'] as const
 export type Port = (typeof PORTS)[number]
 
 /** Bump when programs change meaning: cached answers from older versions stop being used. */
-export const DSL_VERSION = 1
+export const DSL_VERSION = 2
 
 export type MoveUnit = 'cm' | 'inches' | 'rotations' | 'degrees' | 'seconds'
 export type MotorUnit = 'rotations' | 'degrees' | 'seconds'
@@ -73,6 +73,12 @@ export type Condition =
   | { sensor: 'reflection'; port: Port; comparator: Comparator; value: number }
   | { sensor: 'force'; port: Port; state: 'pressed' | 'released' | 'hardpressed' }
   | { sensor: 'button'; button: 'left' | 'right'; state: 'pressed' | 'released' }
+  /** Hub tilt in degrees; yaw grows when the robot turns right. */
+  | { sensor: 'gyro'; axis: 'yaw' | 'pitch' | 'roll'; comparator: Comparator; value: number }
+  | { sensor: 'var'; name: string; comparator: Comparator; value: number }
+
+/** A number computed while the program runs. */
+export type Expr = { num: number } | { var: string } | { op: '+' | '-' | '*' | '/'; a: Expr; b: Expr }
 
 export type Step =
   | { op: 'move'; direction: 'forward' | 'back'; value: number; unit: MoveUnit }
@@ -102,13 +108,33 @@ export type Step =
   | { op: 'forever'; steps: Step[] }
   | { op: 'repeat_until'; condition: Condition; steps: Step[] }
   | { op: 'if'; condition: Condition; then: Step[]; else?: Step[] }
+  /** Drive along part of a circle; the wheel speeds are computed from the track width. */
+  | { op: 'arc'; direction: 'left' | 'right'; radius: number; degrees: number }
+  | { op: 'circle'; direction: 'left' | 'right'; radius: number; turns: number }
+  /** Separate speeds (%) for the left and right drive motors. */
+  | { op: 'tank'; leftSpeed: number; rightSpeed: number; value: number; unit: MoveUnit }
+  /** "move" with a distance computed while the program runs. */
+  | { op: 'move_expr'; direction: 'forward' | 'back'; expr: Expr; unit: MoveUnit }
+  | { op: 'while'; condition: Condition; steps: Step[] }
+  | { op: 'set_var'; name: string; expr: Expr }
+  | { op: 'change_var'; name: string; expr: Expr }
+  | { op: 'write_var'; name: string }
+  /** Runs one of the program's own blocks ("My Blocks"). */
+  | { op: 'call'; name: string }
 
 export type StepOp = Step['op']
+
+/** A named block of commands, like "My Blocks" in the SPIKE App. */
+export interface ProgramFunction {
+  name: string
+  steps: Step[]
+}
 
 export interface Program {
   title: string
   description: string
   steps: Step[]
+  functions?: ProgramFunction[]
 }
 
 export const ATTACHMENT_KINDS = ['arm', 'lift', 'gripper', 'pusher', 'other'] as const
@@ -161,8 +187,78 @@ export const LIMITS = {
   maxTitle: 60,
   maxDescription: 400,
   maxText: 40,
+  maxVariables: 8,
+  maxFunctions: 6,
 }
 
+/** Names that would clash with the compiled Python: its keywords, modules and our own helpers. */
+export const RESERVED_NAMES: ReadonlySet<string> = new Set([
+  'False',
+  'None',
+  'True',
+  'and',
+  'as',
+  'assert',
+  'async',
+  'await',
+  'break',
+  'class',
+  'continue',
+  'def',
+  'del',
+  'elif',
+  'else',
+  'except',
+  'finally',
+  'for',
+  'from',
+  'global',
+  'if',
+  'import',
+  'in',
+  'is',
+  'lambda',
+  'nonlocal',
+  'not',
+  'or',
+  'pass',
+  'raise',
+  'return',
+  'try',
+  'while',
+  'with',
+  'yield',
+  'abs',
+  'int',
+  'str',
+  'min',
+  'max',
+  'range',
+  'print',
+  'main',
+  'turn',
+  'speed',
+  'motor_speed',
+  'port',
+  'hub',
+  'runloop',
+  'motor',
+  'motor_pair',
+  'distance_sensor',
+  'color_sensor',
+  'color',
+  'force_sensor',
+  'light_matrix',
+  'light',
+  'sound',
+  'button',
+  'motion_sensor',
+  'distance_mm',
+  'distance_cm',
+  'distance_inches',
+  'distance_percent',
+  'TURN_FACTOR',
+])
 
 /** Ops that run the drive base; used to decide whether to emit the motor-pair setup. */
 export const MOVEMENT_OPS: ReadonlySet<StepOp> = new Set([
@@ -174,6 +270,10 @@ export const MOVEMENT_OPS: ReadonlySet<StepOp> = new Set([
   'stop_move',
   'set_speed',
   'set_movement_motors',
+  'arc',
+  'circle',
+  'tank',
+  'move_expr',
 ])
 
 /** Largest angle turned in one gyro step: the yaw reading wraps at ±180°. */
@@ -214,6 +314,11 @@ export function imagePixels(image: string): string {
   return image in IMAGES ? IMAGES[image as ImageName] : image
 }
 
+/** Every top-level list of a program: the main one and those of its own blocks. */
+export function programSteps(program: Pick<Program, 'steps' | 'functions'>): Step[] {
+  return [...program.steps, ...(program.functions ?? []).flatMap((f) => f.steps)]
+}
+
 export function countSteps(steps: Step[]): number {
   let n = 0
   for (const step of steps) {
@@ -228,6 +333,7 @@ export function childLists(step: Step): Step[][] {
     case 'repeat':
     case 'forever':
     case 'repeat_until':
+    case 'while':
       return [step.steps]
     case 'if':
       return step.else ? [step.then, step.else] : [step.then]
@@ -244,7 +350,7 @@ export function conditionsOf(steps: Step[]): Condition[] {
   const out: Condition[] = []
   const walk = (list: Step[]) => {
     for (const s of list) {
-      if (s.op === 'wait_until' || s.op === 'repeat_until' || s.op === 'if') out.push(s.condition)
+      if (s.op === 'wait_until' || s.op === 'repeat_until' || s.op === 'if' || s.op === 'while') out.push(s.condition)
       childLists(s).forEach(walk)
     }
   }
@@ -252,15 +358,74 @@ export function conditionsOf(steps: Step[]): Condition[] {
   return out
 }
 
+/** Variable names an expression reads. */
+export function exprVars(e: Expr): string[] {
+  if ('var' in e) return [e.var]
+  return 'op' in e ? [...exprVars(e.a), ...exprVars(e.b)] : []
+}
+
+/** Every variable a list of steps reads or writes. */
+export function variablesOf(steps: Step[]): string[] {
+  const names = new Set<string>()
+  const walk = (list: Step[]) => {
+    for (const s of list) {
+      if (s.op === 'set_var' || s.op === 'change_var' || s.op === 'write_var') names.add(s.name)
+      if (s.op === 'set_var' || s.op === 'change_var' || s.op === 'move_expr') exprVars(s.expr).forEach((n) => names.add(n))
+      childLists(s).forEach(walk)
+    }
+  }
+  walk(steps)
+  for (const c of conditionsOf(steps)) if (c.sensor === 'var') names.add(c.name)
+  return [...names]
+}
+
 // ---------------------------------------------------------------------------
 // Display text
 // ---------------------------------------------------------------------------
 
 const CYRILLIC_TO_LATIN: Record<string, string> = {
-  а: 'a', б: 'b', в: 'v', г: 'g', д: 'd', е: 'e', ё: 'e', ж: 'zh', з: 'z', и: 'i', й: 'i', к: 'k', л: 'l', м: 'm',
-  н: 'n', о: 'o', п: 'p', р: 'r', с: 's', т: 't', у: 'u', ф: 'f', х: 'h', ц: 'ts', ч: 'ch', ш: 'sh', щ: 'sch',
-  ъ: '', ы: 'y', ь: '', э: 'e', ю: 'yu', я: 'ya',
-  ә: 'a', ғ: 'g', қ: 'q', ң: 'n', ө: 'o', ұ: 'u', ү: 'u', һ: 'h', і: 'i',
+  а: 'a',
+  б: 'b',
+  в: 'v',
+  г: 'g',
+  д: 'd',
+  е: 'e',
+  ё: 'e',
+  ж: 'zh',
+  з: 'z',
+  и: 'i',
+  й: 'i',
+  к: 'k',
+  л: 'l',
+  м: 'm',
+  н: 'n',
+  о: 'o',
+  п: 'p',
+  р: 'r',
+  с: 's',
+  т: 't',
+  у: 'u',
+  ф: 'f',
+  х: 'h',
+  ц: 'ts',
+  ч: 'ch',
+  ш: 'sh',
+  щ: 'sch',
+  ъ: '',
+  ы: 'y',
+  ь: '',
+  э: 'e',
+  ю: 'yu',
+  я: 'ya',
+  ә: 'a',
+  ғ: 'g',
+  қ: 'q',
+  ң: 'n',
+  ө: 'o',
+  ұ: 'u',
+  ү: 'u',
+  һ: 'h',
+  і: 'i',
 }
 
 /** The hub's 5x5 display only has Latin glyphs, so Cyrillic text is transliterated. */
@@ -273,5 +438,8 @@ export function toMatrixText(s: string): string {
     else out += ch === lower ? mapped : mapped.charAt(0).toUpperCase() + mapped.slice(1)
   }
   // Keep printable ASCII only.
-  return out.replace(/[^\x20-\x7e]/g, '').replace(/\s+/g, ' ').trim()
+  return out
+    .replace(/[^\x20-\x7e]/g, '')
+    .replace(/\s+/g, ' ')
+    .trim()
 }

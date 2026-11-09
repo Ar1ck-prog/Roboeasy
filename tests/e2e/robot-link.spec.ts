@@ -192,3 +192,46 @@ test('sandbox: free Python goes to the robot unchanged, and one button also conn
   await expect(page.getByTestId('robot-console')).toHaveText('Привет с хаба')
   expect(new TextDecoder().decode(Uint8Array.from(hub.file.bytes))).toBe(code)
 })
+
+test('sandbox: "езжай по кругу" gives blocks and Python, a file to download and a run on the robot', async ({ page }) => {
+  const errors: string[] = []
+  page.on('pageerror', (e) => errors.push(e.message))
+  const hub = await fakeBluetooth(page)
+  const program: Program = { title: 'Круг', description: 'Робот проезжает круг.', steps: [{ op: 'circle', direction: 'right', radius: 20, turns: 1 }] }
+  const python = programToPython(program, DEFAULT_ROBOT)
+  await openSandbox(page, { format: 'blocks', title: 'Круг', program, python })
+
+  await page.getByLabel('Задача для робота').fill('езжай по кругу')
+  await page.getByRole('button', { name: 'Создать программу' }).click()
+  await expect(page.getByRole('heading', { name: 'Круг' })).toBeVisible()
+  await expect(page.getByText(/ехать по кругу/)).toBeVisible()
+
+  await page.getByRole('tab', { name: 'Python' }).click()
+  await expect(page.getByText(/move_tank_for_degrees/).first()).toBeVisible()
+
+  await expect(page.getByRole('button', { name: /Скачать/ }).first()).toBeEnabled()
+  const download = page.waitForEvent('download')
+  await page.getByRole('button', { name: /Скачать/ }).first().click()
+  expect((await download).suggestedFilename()).toMatch(/\.llsp3$/)
+
+  await page.getByRole('button', { name: 'Подключить и запустить' }).click()
+  await expect(page.getByTestId('robot-console')).toHaveText('Привет с хаба')
+  expect(new TextDecoder().decode(Uint8Array.from(hub.file.bytes))).toBe(python)
+  expect(errors).toEqual([])
+})
+
+test('sandbox: a task the robot cannot do gets a reason and a way forward', async ({ page }) => {
+  await page.route('**/api/generate', (route) =>
+    route.fulfill(
+      route.request().method() === 'GET'
+        ? { json: { configured: true } }
+        : { json: { ok: false, error: 'unsupported', reason: 'У робота нет крыльев.', suggestion: 'Проедь вперёд и покажи стрелку' } },
+    ),
+  )
+  await page.goto('/ru/sandbox')
+  await page.getByLabel('Задача для робота').fill('Полети')
+  await page.getByRole('button', { name: 'Создать программу' }).click()
+  await expect(page.locator('p[role=alert]')).toContainText('У робота нет крыльев.')
+  await page.getByRole('button', { name: /Попробовать: Проедь вперёд/ }).click()
+  await expect(page.getByLabel('Задача для робота')).toHaveValue('Проедь вперёд и покажи стрелку')
+})

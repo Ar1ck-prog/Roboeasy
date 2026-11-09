@@ -38,17 +38,33 @@ export function summarizeUsage(rows: UsageRecord[]): UsageSummary {
     if (r.cached) cached++
     else requests++
     if (!r.ok) failed++
-    bump(kinds, r.kind, () => ({ name: r.kind, requests: 0, cached: 0, failed: 0 }), (k) => {
-      if (r.cached) k.cached++
-      else k.requests++
-      if (!r.ok) k.failed++
-    })
+    bump(
+      kinds,
+      r.kind,
+      () => ({ name: r.kind, requests: 0, cached: 0, failed: 0 }),
+      (k) => {
+        if (r.cached) k.cached++
+        else k.requests++
+        if (!r.ok) k.failed++
+      },
+    )
     if (r.model && !r.cached)
-      bump(models, r.model, () => ({ name: r.model as string, requests: 0, failed: 0 }), (m) => {
-        m.requests++
-        if (!r.ok) m.failed++
-      })
-    if (r.error) bump(errors, r.error, () => ({ name: r.error as string, count: 0 }), (e) => e.count++)
+      bump(
+        models,
+        r.model,
+        () => ({ name: r.model as string, requests: 0, failed: 0 }),
+        (m) => {
+          m.requests++
+          if (!r.ok) m.failed++
+        },
+      )
+    if (r.error)
+      bump(
+        errors,
+        r.error,
+        () => ({ name: r.error as string, count: 0 }),
+        (e) => e.count++,
+      )
   }
   return {
     requests,

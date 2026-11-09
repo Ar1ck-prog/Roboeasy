@@ -66,7 +66,8 @@ vi.mock('@/lib/supabase-admin', () => ({
 
 const ai = () => ({ models: { generateContent: sdk.generate } }) as never
 const signal = () => new AbortController().signal
-const ask = (tier: 'main' | 'light' = 'main', extra = {}) => askGemini(ai(), { task: 'generate', tier, system: 's', contents: 'c', schema: {}, signal: signal(), ...extra })
+const ask = (tier: 'main' | 'light' = 'main', extra = {}) =>
+  askGemini(ai(), { task: 'generate', tier, system: 's', contents: 'c', schema: {}, signal: signal(), ...extra })
 const json = (value: unknown) => ({ text: JSON.stringify(value) })
 const SQUARE = { title: 'Квадрат', description: 'Едет', steps: [{ op: 'move', direction: 'forward', value: 10, unit: 'cm' }] }
 
@@ -221,7 +222,9 @@ describe('cache', () => {
   it('depends on the mode, the robot and the DSL version', () => {
     expect(key('круг')).not.toBe(key('круг', { format: 'python' }))
     expect(key('круг')).not.toBe(key('круг', { robot: { ...DEFAULT_ROBOT, trackWidthMm: 150 } }))
-    expect(cacheKey({ prompt: 'круг', format: 'blocks', lang: 'ru', robot: DEFAULT_ROBOT }, 1)).not.toBe(cacheKey({ prompt: 'круг', format: 'blocks', lang: 'ru', robot: DEFAULT_ROBOT }, 2))
+    expect(cacheKey({ prompt: 'круг', format: 'blocks', lang: 'ru', robot: DEFAULT_ROBOT }, 1)).not.toBe(
+      cacheKey({ prompt: 'круг', format: 'blocks', lang: 'ru', robot: DEFAULT_ROBOT }, 2),
+    )
   })
 
   it('answers the second identical request without Gemini', async () => {

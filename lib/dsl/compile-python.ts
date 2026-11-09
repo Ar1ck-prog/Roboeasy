@@ -10,17 +10,22 @@
 
 import {
   type Condition,
+  type Expr,
   type Program,
   type RobotProfile,
   type Step,
   DEFAULT_ROBOT,
   GYRO_CHUNK,
   MOVEMENT_OPS,
+  childLists,
   effectiveCmPerRotation,
   conditionsOf,
   imagePixels,
+  programSteps,
   usesOp,
+  variablesOf,
 } from './types'
+import { arcPlan } from './arcs'
 
 const COLOR_CONST: Record<string, string> = {
   black: 'BLACK',
@@ -84,6 +89,19 @@ interface Ctx {
   lines: string[]
 }
 
+function exprPy(e: Expr): string {
+  if ('num' in e) return fmt(e.num)
+  if ('var' in e) return e.var
+  return `(${exprPy(e.a)} ${e.op} ${exprPy(e.b)})`
+}
+
+const AXIS_INDEX = { yaw: 0, pitch: 1, roll: 2 } as const
+
+/** Tilt in degrees. TODO: проверить знак на настоящем хабе: yaw здесь растёт при повороте вправо, как в словесных блоках. */
+function axisExpr(axis: keyof typeof AXIS_INDEX): string {
+  return `${axis === 'yaw' ? '-' : ''}motion_sensor.tilt_angles()[${AXIS_INDEX[axis]}] / 10`
+}
+
 function conditionExpr(c: Condition): string {
   switch (c.sensor) {
     case 'distance': {
@@ -105,6 +123,10 @@ function conditionExpr(c: Condition): string {
       const b = `button.pressed(button.${c.button.toUpperCase()})`
       return c.state === 'released' ? `${b} == 0` : `${b} > 0`
     }
+    case 'gyro':
+      return `${axisExpr(c.axis)} ${c.comparator === '=' ? '==' : c.comparator} ${fmt(c.value)}`
+    case 'var':
+      return `${c.name} ${c.comparator === '=' ? '==' : c.comparator} ${fmt(c.value)}`
   }
 }
 
@@ -231,6 +253,44 @@ function emit(steps: Step[], depth: number, ctx: Ctx) {
         line(`while not (${conditionExpr(s.condition)}):`)
         block(s.steps, true)
         break
+      case 'while':
+        line(`while ${conditionExpr(s.condition)}:`)
+        block(s.steps, true)
+        break
+      case 'arc':
+      case 'circle': {
+        const degrees = (s.op === 'circle' ? 360 * s.turns : s.degrees) * ctx.robot.turnFactor
+        const plan = arcPlan(s.direction, s.radius, degrees, ctx.robot)
+        const inner = `int(speed * ${Math.round(plan.ratio * 1000) / 1000})`
+        const [left, right] = s.direction === 'right' ? ['speed', inner] : [inner, 'speed']
+        line(`await motor_pair.move_tank_for_degrees(motor_pair.PAIR_1, ${moveDegrees(plan.outerCm, 'cm', ctx)}, ${left}, ${right})`)
+        break
+      }
+      case 'tank': {
+        const [left, right] = [velocity(s.leftSpeed), velocity(s.rightSpeed)]
+        if (s.unit === 'seconds') line(`await motor_pair.move_tank_for_time(motor_pair.PAIR_1, ${left}, ${right}, ${Math.round(s.value * 1000)})`)
+        else line(`await motor_pair.move_tank_for_degrees(motor_pair.PAIR_1, ${moveDegrees(s.value, s.unit, ctx)}, ${left}, ${right})`)
+        break
+      }
+      case 'move_expr': {
+        const v = s.direction === 'back' ? '-speed' : 'speed'
+        const value = exprPy(s.expr)
+        if (s.unit === 'seconds') line(`await motor_pair.move_for_time(motor_pair.PAIR_1, int(abs(${value}) * 1000), 0, velocity=${v})`)
+        else line(`await motor_pair.move_for_degrees(motor_pair.PAIR_1, int(abs(${value}) * ${fmt(moveDegrees(1000, s.unit, ctx) / 1000)}), 0, velocity=${v})`)
+        break
+      }
+      case 'set_var':
+        line(`${s.name} = ${exprPy(s.expr)}`)
+        break
+      case 'change_var':
+        line(`${s.name} += ${exprPy(s.expr)}`)
+        break
+      case 'write_var':
+        line(`await light_matrix.write(str(${s.name}))`)
+        break
+      case 'call':
+        line(`await ${s.name}()`)
+        break
       case 'if':
         line(`if ${conditionExpr(s.condition)}:`)
         block(s.then, false)
@@ -246,30 +306,27 @@ function emit(steps: Step[], depth: number, ctx: Ctx) {
 /** Translates a block program to SPIKE App 3 MicroPython. */
 export function programToPython(program: Program, robot: RobotProfile = DEFAULT_ROBOT): string {
   const ctx: Ctx = { robot, cm: effectiveCmPerRotation(robot), lines: [] }
-  const drive = usesOp(program.steps, (s) => MOVEMENT_OPS.has(s.op))
-  const has = (op: Step['op'] | Step['op'][]) => usesOp(program.steps, (s) => (Array.isArray(op) ? op.includes(s.op) : s.op === op))
-  const sensors = new Set(conditionsOf(program.steps).map((c) => c.sensor))
+  const allSteps = programSteps(program)
+  const drive = usesOp(allSteps, (s) => MOVEMENT_OPS.has(s.op))
+  const has = (op: Step['op'] | Step['op'][]) => usesOp(allSteps, (s) => (Array.isArray(op) ? op.includes(s.op) : s.op === op))
+  const sensors = new Set(conditionsOf(allSteps).map((c) => c.sensor))
   const motorPorts = new Set<string>()
   const collect = (steps: Step[]) => {
     for (const s of steps) {
       if (s.op === 'motor_run' || s.op === 'motor_start' || s.op === 'motor_stop' || s.op === 'motor_speed' || s.op === 'motor_to_position') {
         motorPorts.add(s.port)
       }
-      if (s.op === 'repeat' || s.op === 'forever' || s.op === 'repeat_until') collect(s.steps)
-      if (s.op === 'if') {
-        collect(s.then)
-        if (s.else) collect(s.else)
-      }
+      childLists(s).forEach(collect)
     }
   }
-  collect(program.steps)
+  collect(allSteps)
 
   const hubImports = ['port']
-  if (has(['show_image', 'write', 'clear_display'])) hubImports.push('light_matrix')
+  if (has(['show_image', 'write', 'clear_display', 'write_var'])) hubImports.push('light_matrix')
   if (has('beep')) hubImports.push('sound')
   if (has('button_light')) hubImports.push('light')
   if (sensors.has('button')) hubImports.push('button')
-  const gyro = has(['turn', 'reset_yaw'])
+  const gyro = has(['turn', 'reset_yaw']) || sensors.has('gyro')
   if (gyro) hubImports.push('motion_sensor')
 
   const modules = ['runloop']
@@ -322,6 +379,24 @@ export function programToPython(program: Program, robot: RobotProfile = DEFAULT_
     out.push(`    speed = ${velocity(percent)}  # ${fmt(percent)}%, degrees per second`)
   }
   if (motorPorts.size) out.push(`    motor_speed = {${[...motorPorts].map((p) => `'${p}': 750`).join(', ')}}  # 75%`)
+  for (const name of variablesOf(allSteps)) out.push(`    ${name} = 0`)
+
+  // The program's own blocks live inside main(), so they share its speed and variables.
+  for (const fn of program.functions ?? []) {
+    const assigned = new Set<string>()
+    const walk = (list: Step[]) => {
+      for (const s of list) {
+        if (s.op === 'set_var' || s.op === 'change_var') assigned.add(s.name)
+        if (s.op === 'set_speed') assigned.add('speed')
+        childLists(s).forEach(walk)
+      }
+    }
+    walk(fn.steps)
+    ctx.lines.push('', `    async def ${fn.name}():`)
+    if (assigned.size) ctx.lines.push(`        nonlocal ${[...assigned].join(', ')}`)
+    emit(fn.steps, 2, ctx)
+    ctx.lines.push('')
+  }
 
   emit(steps, 1, ctx)
   out.push(...ctx.lines)
@@ -349,8 +424,20 @@ export function cleanPython(code: string): string {
 
 /** Modules a SPIKE App 3 program may import (hub firmware + MicroPython built-ins). */
 export const ALLOWED_PYTHON_MODULES = [
-  'hub', 'runloop', 'motor', 'motor_pair', 'distance_sensor', 'color_sensor', 'color', 'force_sensor', 'color_matrix',
-  'device', 'orientation', 'math', 'random', 'time',
+  'hub',
+  'runloop',
+  'motor',
+  'motor_pair',
+  'distance_sensor',
+  'color_sensor',
+  'color',
+  'force_sensor',
+  'color_matrix',
+  'device',
+  'orientation',
+  'math',
+  'random',
+  'time',
 ] as const
 
 /** Root module names imported by the code (`import a.b as c`, `from x.y import z`). */

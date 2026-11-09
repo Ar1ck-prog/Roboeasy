@@ -80,7 +80,13 @@ function parseJsonObject(text: string): Record<string, unknown> | null {
 
 /** The free quota for a day ends at midnight Pacific time. */
 export function secondsToPacificMidnight(now = new Date()): number {
-  const parts = new Intl.DateTimeFormat('en-US', { timeZone: 'America/Los_Angeles', hour12: false, hour: 'numeric', minute: 'numeric', second: 'numeric' }).formatToParts(now)
+  const parts = new Intl.DateTimeFormat('en-US', {
+    timeZone: 'America/Los_Angeles',
+    hour12: false,
+    hour: 'numeric',
+    minute: 'numeric',
+    second: 'numeric',
+  }).formatToParts(now)
   const part = (type: string) => Number(parts.find((p) => p.type === type)?.value ?? 0)
   return 86_400 - ((part('hour') % 24) * 3600 + part('minute') * 60 + part('second'))
 }

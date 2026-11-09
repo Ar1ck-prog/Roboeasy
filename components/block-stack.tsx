@@ -7,10 +7,12 @@ import {
   type Program,
   type RobotProfile,
   type Step,
+  type Expr,
   DEFAULT_ROBOT,
   MOVEMENT_OPS,
   effectiveCmPerRotation,
   imagePixels,
+  programSteps,
   SPIKE_DEFAULT_CM_PER_ROTATION,
   usesOp,
 } from '@/lib/dsl/types'
@@ -46,6 +48,8 @@ const DIR_GLYPH: Record<string, string> = {
 }
 
 const fmt = (n: number) => String(Math.round(n * 100) / 100)
+
+const exprText = (e: Expr): string => ('num' in e ? fmt(e.num) : 'var' in e ? e.var : `(${exprText(e.a)} ${e.op} ${exprText(e.b)})`)
 
 /** Replaces `{TOKEN}` placeholders in a label with rendered pieces. */
 function tpl(template: string, parts: Record<string, ReactNode>): ReactNode[] {
@@ -137,6 +141,14 @@ function Cond({ c, t }: { c: Condition; t: Labels }) {
       template = t.cond.button
       Object.assign(parts, { BUTTON: <Pill menu>{t.button[c.button]}</Pill>, STATE: <Pill menu>{t.state[c.state]}</Pill> })
       break
+    case 'gyro':
+      template = t.cond.gyro
+      Object.assign(parts, { AXIS: <Pill menu>{t.axis[c.axis]}</Pill>, CMP: <Pill menu>{c.comparator}</Pill>, VALUE: <Pill>{fmt(c.value)}</Pill> })
+      break
+    case 'var':
+      template = t.cond.var
+      Object.assign(parts, { NAME: <Pill menu>{c.name}</Pill>, CMP: <Pill menu>{c.comparator}</Pill>, VALUE: <Pill>{fmt(c.value)}</Pill> })
+      break
   }
   return <span className="bs-bool">{tpl(template, parts)}</span>
 }
@@ -214,26 +226,76 @@ function StepView({ s, t }: { s: Step; t: Labels }) {
       return <Block cat="control">{tpl(t.wait_until, { COND: <Cond c={s.condition} t={t} /> })}</Block>
     case 'repeat':
       return (
-        <CBlock head={<Block cat="control" icon={<Repeat size={14} strokeWidth={2.5} />}>{tpl(t.repeat, { VALUE: V(s.times) })}</Block>}>
+        <CBlock
+          head={
+            <Block cat="control" icon={<Repeat size={14} strokeWidth={2.5} />}>
+              {tpl(t.repeat, { VALUE: V(s.times) })}
+            </Block>
+          }
+        >
           <Stack steps={s.steps} t={t} />
         </CBlock>
       )
     case 'forever':
       return (
-        <CBlock head={<Block cat="control" icon={<Repeat size={14} strokeWidth={2.5} />}>{tpl(t.forever, {})}</Block>}>
+        <CBlock
+          head={
+            <Block cat="control" icon={<Repeat size={14} strokeWidth={2.5} />}>
+              {tpl(t.forever, {})}
+            </Block>
+          }
+        >
           <Stack steps={s.steps} t={t} />
         </CBlock>
       )
     case 'repeat_until':
       return (
-        <CBlock head={<Block cat="control" icon={<Repeat size={14} strokeWidth={2.5} />}>{tpl(t.repeat_until, { COND: <Cond c={s.condition} t={t} /> })}</Block>}>
+        <CBlock
+          head={
+            <Block cat="control" icon={<Repeat size={14} strokeWidth={2.5} />}>
+              {tpl(t.repeat_until, { COND: <Cond c={s.condition} t={t} /> })}
+            </Block>
+          }
+        >
           <Stack steps={s.steps} t={t} />
         </CBlock>
       )
+    case 'while':
+      return (
+        <CBlock
+          head={
+            <Block cat="control" icon={<Repeat size={14} strokeWidth={2.5} />}>
+              {tpl(t.while, { COND: <Cond c={s.condition} t={t} /> })}
+            </Block>
+          }
+        >
+          <Stack steps={s.steps} t={t} />
+        </CBlock>
+      )
+    case 'arc':
+      return <Block cat="move">{tpl(t.arc, { DIR: <Dir d={s.direction} t={t} />, RADIUS: V(s.radius), VALUE: V(s.degrees) })}</Block>
+    case 'circle':
+      return <Block cat="move">{tpl(t.circle, { DIR: <Dir d={s.direction} t={t} />, RADIUS: V(s.radius), VALUE: V(s.turns) })}</Block>
+    case 'tank':
+      return <Block cat="move">{tpl(t.tank, { LEFT: V(s.leftSpeed), RIGHT: V(s.rightSpeed), VALUE: V(s.value), UNIT: t.unit[s.unit] })}</Block>
+    case 'move_expr':
+      return <Block cat="move">{tpl(t.move, { DIR: <Dir d={s.direction} t={t} />, VALUE: <Pill>{exprText(s.expr)}</Pill>, UNIT: t.unit[s.unit] })}</Block>
+    case 'set_var':
+      return <Block cat="control">{tpl(t.set_var, { NAME: <Pill menu>{s.name}</Pill>, VALUE: <Pill>{exprText(s.expr)}</Pill> })}</Block>
+    case 'change_var':
+      return <Block cat="control">{tpl(t.change_var, { NAME: <Pill menu>{s.name}</Pill>, VALUE: <Pill>{exprText(s.expr)}</Pill> })}</Block>
+    case 'write_var':
+      return <Block cat="light">{tpl(t.write, { TEXT: <Pill menu>{s.name}</Pill> })}</Block>
+    case 'call':
+      return <Block cat="control">{tpl(t.call, { NAME: <Pill menu>{s.name}</Pill> })}</Block>
     case 'if':
       return (
         <CBlock
-          head={<Block cat="control" icon={<GitFork size={14} strokeWidth={2.5} />}>{tpl(t.if, { COND: <Cond c={s.condition} t={t} /> })}</Block>}
+          head={
+            <Block cat="control" icon={<GitFork size={14} strokeWidth={2.5} />}>
+              {tpl(t.if, { COND: <Cond c={s.condition} t={t} /> })}
+            </Block>
+          }
           extra={s.else?.length ? { label: tpl(t.else, {}), body: <Stack steps={s.else} t={t} /> } : undefined}
         >
           <Stack steps={s.then} t={t} />
@@ -254,7 +316,7 @@ function Stack({ steps, t }: { steps: Step[]; t: Labels }) {
 }
 
 interface BlockStackProps {
-  program: Pick<Program, 'steps'>
+  program: Pick<Program, 'steps' | 'functions'>
   labels: Labels
   robot?: RobotProfile
   /** Show only the first N top-level steps (used by the animated demo). */
@@ -264,7 +326,7 @@ interface BlockStackProps {
 
 /** Renders a program the way the SPIKE App shows word blocks. */
 export function BlockStack({ program, labels: t, robot = DEFAULT_ROBOT, limit, animate = false }: BlockStackProps) {
-  const drive = usesOp(program.steps, (s) => MOVEMENT_OPS.has(s.op))
+  const drive = usesOp(programSteps(program), (s) => MOVEMENT_OPS.has(s.op))
   const cm = effectiveCmPerRotation(robot)
   const steps = limit === undefined ? program.steps : program.steps.slice(0, limit)
   return (
@@ -273,17 +335,23 @@ export function BlockStack({ program, labels: t, robot = DEFAULT_ROBOT, limit, a
         <Block cat="events" hat>
           {tpl(t.start, {})}
         </Block>
-        {drive && (
-          <Block cat="move">
-            {tpl(t.setup, { PAIR: <Pill menu>{`${robot.leftMotor}+${robot.rightMotor}`}</Pill> })}
-          </Block>
-        )}
+        {drive && <Block cat="move">{tpl(t.setup, { PAIR: <Pill menu>{`${robot.leftMotor}+${robot.rightMotor}`}</Pill> })}</Block>}
         {drive && cm !== SPIKE_DEFAULT_CM_PER_ROTATION && <Block cat="move">{tpl(t.wheel, { VALUE: <Pill>{fmt(cm)}</Pill> })}</Block>}
         {steps.map((s, i) => (
           <StepView key={i} s={s} t={t} />
         ))}
       </div>
+      {limit === undefined &&
+        (program.functions ?? []).map((fn) => (
+          <div key={fn.name} className="bs-stack mt-4">
+            <Block cat="control" hat>
+              {tpl(t.define, { NAME: <Pill menu>{fn.name}</Pill> })}
+            </Block>
+            {fn.steps.map((s, i) => (
+              <StepView key={i} s={s} t={t} />
+            ))}
+          </div>
+        ))}
     </div>
   )
 }
-

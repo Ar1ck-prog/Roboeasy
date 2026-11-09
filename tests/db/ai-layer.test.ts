@@ -88,3 +88,17 @@ describe('shared rate limit', () => {
     expect(denied?.data?.[0]?.remaining).toBe(0)
   })
 })
+
+describe('generation_failures', () => {
+  const row = (prompt: string) => ({ prompt, lang: 'ru', mode: 'blocks', answer: '{}', error: 'bad', attempt: 1 })
+
+  it('only the server writes and only an admin reads', async () => {
+    const marker = `failure-${randomUUID()}`
+    expect((await service.from('generation_failures').insert(row(marker))).error).toBeNull()
+    expect((await anon.from('generation_failures').select('id').eq('prompt', marker)).data).toEqual([])
+    expect((await user.sb.from('generation_failures').select('id').eq('prompt', marker)).data).toEqual([])
+    expect((await admin.sb.from('generation_failures').select('id').eq('prompt', marker)).data).toHaveLength(1)
+    expect((await user.sb.from('generation_failures').insert(row('x'))).error).not.toBeNull()
+    expect((await admin.sb.from('generation_failures').insert(row('x'))).error).not.toBeNull()
+  })
+})
