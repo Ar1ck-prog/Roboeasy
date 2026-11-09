@@ -21,7 +21,9 @@ export function AccountCard({ lang, app }: { lang: Lang; app: LearnAppText }) {
   const t = app.account
   const id = useId()
   const mod = useCloudModule()
-  const user = useCloudUser(mod)
+  const session = useCloudUser(mod)
+  // A learner who joined a class by code has no account to show here.
+  const user = session?.is_anonymous ? null : session
   const [mode, setMode] = useState<'signIn' | 'signUp'>('signIn')
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')

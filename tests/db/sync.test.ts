@@ -101,10 +101,6 @@ describe('progress on the server', () => {
     expect(error?.message).toMatch(/consent_under_16/)
   })
 
-  it('has no class tables any more', async () => {
-    expect((await kid.sb.from('classes').select('id')).error).not.toBeNull()
-  })
-
   it('deleting an account removes its data', async () => {
     expect((await kid.sb.rpc('delete_my_account')).error).toBeNull()
     const { count } = await admin.from('learn_events').select('*', { count: 'exact', head: true }).eq('user_id', kid.id)

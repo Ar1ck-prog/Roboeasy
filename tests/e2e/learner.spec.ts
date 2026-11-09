@@ -136,8 +136,6 @@ test('legal pages and redirects', async ({ page }) => {
   await expect(page).toHaveURL(/\/ru\/sandbox$/)
   await page.goto('/ru/fll')
   await expect(page).toHaveURL(/\/ru\/compete$/)
-  await page.goto('/ru/class')
-  await expect(page).toHaveURL(/\/ru\/path$/)
 })
 
 test('field simulator: a run from missions drives the robot and the score sheet counts', async ({ page }) => {

@@ -17,7 +17,7 @@ const MAX_QUESTION = 300
 const MAX_HISTORY = 8
 const MAX_PROGRAM = 6000
 /** Lessons have their own mentor and a footer in this corner; the others are not for learners. */
-const HIDDEN = /^\/[a-z]{2}\/(learn\/[^/]+\/[^/]+|preview|design|admin|cert)(\/|$)/
+const HIDDEN = /^\/[a-z]{2}\/(learn\/[^/]+\/[^/]+|preview|design|admin|cert|class)(\/|$)/
 
 interface Message {
   from: 'me' | 'mentor'

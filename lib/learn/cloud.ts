@@ -173,7 +173,8 @@ export async function startSync(): Promise<{ ok: boolean }> {
   const sb = cloud()
   if (!sb) return { ok: false }
   const user = await currentUser()
-  if (!user) return { ok: false }
+  // Class learners are anonymous: their results live in the class tables only.
+  if (!user || user.is_anonymous) return { ok: false }
   stopSync()
 
   // Profile: the server copy wins when this browser has none; otherwise the browser's is saved.
