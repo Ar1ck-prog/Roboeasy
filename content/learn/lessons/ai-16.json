@@ -1,0 +1,86 @@
+{
+  "id": "ai-16",
+  "track": "ai-basics",
+  "unit": "ai-robots",
+  "minutes": 5,
+  "skills": [
+    "ai-literacy"
+  ],
+  "title": {
+    "ru": "Робот слушается жестов",
+    "kk": "Робот ымды тыңдайды",
+    "en": "A robot that obeys gestures"
+  },
+  "goal": {
+    "ru": "Сегодня ты обучишь модель узнавать жесты.",
+    "kk": "Бүгін модельді ымды тануға үйретесің.",
+    "en": "Today you will train a model to recognise gestures."
+  },
+  "summary": {
+    "ru": "Теперь ты сам обучил модель, и робот слушается руки.",
+    "kk": "Енді моделді өзің үйреттің, робот қолыңды тыңдайды.",
+    "en": "Now you have trained a model yourself, and the robot obeys your hand."
+  },
+  "steps": [
+    {
+      "id": "intro",
+      "type": "theory",
+      "title": {
+        "ru": "Обучение прямо здесь",
+        "kk": "Дәл осында үйрету",
+        "en": "Training right here"
+      },
+      "body": {
+        "ru": "Ты покажешь камере ладонь и кулак примерно по 20 раз. Модель запомнит примеры и будет сравнивать с ними то, что видит сейчас.\n\nВсё обучение идёт **на твоём устройстве**: кадры с камеры никуда не отправляются и не сохраняются.",
+        "kk": "Камераға алақан мен жұдырықты шамамен 20 реттен көрсетесің. Модель мысалдарды есте сақтап, қазір көріп тұрғанын солармен салыстырады.\n\nБарлық үйрету **сенің құрылғыңда** жүреді: камера кадрлары ешқайда жіберілмейді және сақталмайды.",
+        "en": "You will show the camera your palm and your fist about 20 times each. The model remembers the examples and compares what it sees now with them.\n\nAll the training happens **on your device**: camera frames are not sent or saved anywhere."
+      }
+    },
+    {
+      "id": "quiz-1",
+      "type": "quiz",
+      "kind": "choice",
+      "skill": "ai-literacy",
+      "question": {
+        "ru": "Куда уходят кадры с камеры?",
+        "kk": "Камера кадрлары қайда кетеді?",
+        "en": "Where do the camera frames go?"
+      },
+      "options": [
+        {
+          "ru": "Никуда, остаются на устройстве",
+          "kk": "Ешқайда, құрылғыда қалады",
+          "en": "Nowhere, they stay on the device"
+        },
+        {
+          "ru": "В интернет",
+          "kk": "Интернетке",
+          "en": "To the internet"
+        }
+      ],
+      "correct": [
+        0
+      ],
+      "explanation": {
+        "ru": "Модель обучается прямо в браузере.",
+        "kk": "Модель браузерде үйренеді.",
+        "en": "The model trains right in the browser."
+      }
+    },
+    {
+      "id": "train-gestures",
+      "type": "widget",
+      "widget": "gesture",
+      "title": {
+        "ru": "Обучи модель",
+        "kk": "Модельді үйрет",
+        "en": "Train the model"
+      },
+      "task": {
+        "ru": "Покажи ладонь и кулак по 20 раз, затем проверь модель.",
+        "kk": "Алақан мен жұдырықты 20 реттен көрсетіп, модельді тексер.",
+        "en": "Show your palm and fist 20 times each, then test the model."
+      }
+    }
+  ]
+}

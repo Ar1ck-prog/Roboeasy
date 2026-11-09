@@ -12,6 +12,7 @@ import { buttonVariants } from '@/components/ui/button'
 import { type Locale, LOCALE_COOKIE, localeLabels, locales } from '@/lib/i18n/config'
 import type { LearnText } from '@/lib/i18n/learn'
 import type { Dictionary } from '@/lib/i18n/ru'
+import { getAiSchoolText } from '@/lib/i18n/ai-school'
 import { useHydrated, useLearn } from '@/lib/learn/store'
 
 interface SiteHeaderProps {
@@ -31,6 +32,8 @@ export type AppSection = (typeof APP_SECTIONS)[number]
 /** All header sections; the last ones are in the header and the menu only. */
 const HEADER_SECTIONS = ['path', 'learn', 'play', 'garage', 'library', 'sandbox', 'compete'] as const
 type HeaderSection = (typeof HEADER_SECTIONS)[number]
+
+const AI_SCHOOL_PATH = '/learn/ai-basics'
 
 export function currentSection(rest: string): AppSection | null {
   return (
@@ -89,7 +92,11 @@ export function SiteHeader({ lang, t, sections: names, coinsLabel = '', variant 
   // App sections, marked current by path. Profile sits with the actions.
   const current = currentSection(rest)
   const currentHeader = currentHeaderSection(rest)
-  const pages = HEADER_SECTIONS.map((p) => ({ href: `${home}/${p}`, label: names[p], current: currentHeader === p, extra: p === 'sandbox' || p === 'compete' }))
+  const inAiSchool = rest === AI_SCHOOL_PATH || rest.startsWith(`${AI_SCHOOL_PATH}/`)
+  const pages = HEADER_SECTIONS.flatMap((p) => {
+    const page = { href: `${home}/${p}`, label: names[p], current: currentHeader === p && !(p === 'learn' && inAiSchool), extra: p === 'sandbox' || p === 'compete' }
+    return p === 'learn' ? [page, { href: `${home}${AI_SCHOOL_PATH}`, label: getAiSchoolText(lang).nav, current: inAiSchool, extra: false }] : [page]
+  })
 
   return (
     <>

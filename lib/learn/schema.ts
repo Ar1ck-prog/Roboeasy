@@ -143,7 +143,16 @@ const build = z.object({
   instructions: z.array(z.object({ text: localized, illustration: z.enum(ILLUSTRATIONS).optional() })).min(1),
 })
 
-export const stepSchema = z.union([theory, quiz, code, debug, project, predict, realRobot, build])
+/** An interactive task with its own automatic check (components/learn/steps/widget-step.tsx). */
+const widget = z.object({
+  ...base,
+  type: z.literal('widget'),
+  widget: z.enum(['vibe', 'gesture', 'color', 'few-examples']),
+  title: localized,
+  task: localized,
+})
+
+export const stepSchema = z.union([theory, quiz, code, debug, project, predict, realRobot, build, widget])
 export type LessonStep = z.infer<typeof stepSchema>
 export type StepType = LessonStep['type']
 export type CodeStep = Extract<LessonStep, { type: 'code' | 'debug' | 'project' }>

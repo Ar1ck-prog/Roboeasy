@@ -1,0 +1,102 @@
+{
+  "id": "ai-10",
+  "track": "ai-basics",
+  "unit": "ai-vibe",
+  "minutes": 5,
+  "skills": [
+    "ai-literacy"
+  ],
+  "title": {
+    "ru": "Что такое вайбкодинг",
+    "kk": "Вайбкодинг деген не",
+    "en": "What vibe coding is"
+  },
+  "goal": {
+    "ru": "Сегодня ты узнаешь, как создавать программы словами.",
+    "kk": "Бүгін бағдарламаны сөзбен жасауды білесің.",
+    "en": "Today you will learn how to make programs with words."
+  },
+  "summary": {
+    "ru": "Теперь ты знаешь, как устроен вайбкодинг и где его границы.",
+    "kk": "Енді вайбкодингтің қалай жұмыс істейтінін және шегін білесің.",
+    "en": "Now you know how vibe coding works and where its limits are."
+  },
+  "steps": [
+    {
+      "id": "intro",
+      "type": "theory",
+      "title": {
+        "ru": "Код словами",
+        "kk": "Сөзбен код",
+        "en": "Code with words"
+      },
+      "body": {
+        "ru": "**Вайбкодинг** — когда ты описываешь идею словами, а код пишет ИИ. Ты проверяешь результат и просишь исправить.\n\nТак можно быстро собрать прототип. Но отвечаешь за него ты: код надо запускать и проверять.",
+        "kk": "**Вайбкодинг** — идеяны сөзбен сипаттайсың, ал кодты ЖИ жазады. Сен нәтижені тексеріп, түзетуді сұрайсың.\n\nОсылай прототипті тез жасауға болады. Бірақ оған сен жауаптысың: кодты іске қосып, тексеру керек.",
+        "en": "**Vibe coding** means you describe an idea in words and AI writes the code. You check the result and ask for fixes.\n\nThis lets you build a prototype quickly. But you are responsible for it: the code has to be run and checked."
+      }
+    },
+    {
+      "id": "quiz-1",
+      "type": "quiz",
+      "kind": "choice",
+      "skill": "ai-literacy",
+      "question": {
+        "ru": "Кто отвечает за результат вайбкодинга?",
+        "kk": "Вайбкодинг нәтижесіне кім жауапты?",
+        "en": "Who is responsible for a vibe-coded result?"
+      },
+      "options": [
+        {
+          "ru": "Тот, кто его сделал",
+          "kk": "Оны жасаған адам",
+          "en": "The person who made it"
+        },
+        {
+          "ru": "Только ИИ",
+          "kk": "Тек ЖИ",
+          "en": "Only the AI"
+        }
+      ],
+      "correct": [
+        0
+      ],
+      "explanation": {
+        "ru": "ИИ — инструмент, решения принимаешь ты.",
+        "kk": "ЖИ — құрал, шешімді сен қабылдайсың.",
+        "en": "AI is a tool; you make the decisions."
+      }
+    },
+    {
+      "id": "quiz-2",
+      "type": "quiz",
+      "kind": "choice",
+      "skill": "ai-literacy",
+      "question": {
+        "ru": "Что делать, если код не работает?",
+        "kk": "Код жұмыс істемесе не істеу керек?",
+        "en": "What do you do if the code does not work?"
+      },
+      "options": [
+        {
+          "ru": "Описать ошибку и попросить исправить",
+          "kk": "Қатені сипаттап, түзетуді сұрау",
+          "en": "Describe the error and ask for a fix"
+        },
+        {
+          "ru": "Сдаться",
+          "kk": "Беріліп қалу",
+          "en": "Give up"
+        }
+      ],
+      "correct": [
+        0
+      ],
+      "explanation": {
+        "ru": "Работа идёт короткими шагами.",
+        "kk": "Жұмыс қысқа қадамдармен жүреді.",
+        "en": "The work goes in short steps."
+      }
+    }
+  ]
+}

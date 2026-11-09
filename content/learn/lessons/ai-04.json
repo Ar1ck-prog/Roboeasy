@@ -1,0 +1,112 @@
+{
+  "id": "ai-04",
+  "track": "ai-basics",
+  "unit": "ai-around",
+  "minutes": 5,
+  "skills": [
+    "ai-literacy"
+  ],
+  "title": {
+    "ru": "ИИ для текста",
+    "kk": "Мәтінге арналған ЖИ",
+    "en": "AI for text"
+  },
+  "goal": {
+    "ru": "Сегодня ты узнаешь, что умеют языковые модели.",
+    "kk": "Бүгін тілдік модельдердің не істей алатынын білесің.",
+    "en": "Today you will learn what language models can do."
+  },
+  "summary": {
+    "ru": "Теперь ты знаешь, для чего подходит текстовый ИИ.",
+    "kk": "Енді мәтіндік ЖИ не үшін керек екенін білесің.",
+    "en": "Now you know what text AI is good for."
+  },
+  "steps": [
+    {
+      "id": "intro",
+      "type": "theory",
+      "title": {
+        "ru": "Языковые модели",
+        "kk": "Тілдік модельдер",
+        "en": "Language models"
+      },
+      "body": {
+        "ru": "Языковая модель читает огромное количество текстов и учится продолжать фразы. Поэтому она умеет отвечать на вопросы, объяснять, переводить и писать черновики.\n\nНо она не «думает» как человек: иногда складная фраза оказывается неверной.",
+        "kk": "Тілдік модель орасан көп мәтін оқып, сөйлемді жалғастыруды үйренеді. Сондықтан ол сұраққа жауап береді, түсіндіреді, аударады, жоба жазады.\n\nБірақ ол адамша «ойламайды»: кейде әдемі сөйлем дұрыс болмай шығады.",
+        "en": "A language model reads a huge amount of text and learns to continue phrases. So it can answer questions, explain, translate and write drafts.\n\nBut it does not “think” like a person: sometimes a smooth sentence turns out to be wrong."
+      }
+    },
+    {
+      "id": "quiz-1",
+      "type": "quiz",
+      "kind": "choice",
+      "skill": "ai-literacy",
+      "question": {
+        "ru": "Какая задача подходит языковой модели?",
+        "kk": "Қай тапсырма тілдік модельге сай?",
+        "en": "Which task suits a language model?"
+      },
+      "options": [
+        {
+          "ru": "Перевести абзац",
+          "kk": "Абзацты аудару",
+          "en": "Translate a paragraph"
+        },
+        {
+          "ru": "Взвесить яблоко",
+          "kk": "Алманы өлшеу",
+          "en": "Weigh an apple"
+        },
+        {
+          "ru": "Зарядить телефон",
+          "kk": "Телефонды зарядтау",
+          "en": "Charge a phone"
+        }
+      ],
+      "correct": [
+        0
+      ],
+      "explanation": {
+        "ru": "Работа с текстом — её сильная сторона.",
+        "kk": "Мәтінмен жұмыс — оның күшті жағы.",
+        "en": "Working with text is its strength."
+      }
+    },
+    {
+      "id": "quiz-2",
+      "type": "quiz",
+      "kind": "choice",
+      "skill": "ai-literacy",
+      "question": {
+        "ru": "Как языковая модель создаёт ответ?",
+        "kk": "Тілдік модель жауапты қалай жасайды?",
+        "en": "How does a language model make an answer?"
+      },
+      "options": [
+        {
+          "ru": "Копирует из одной книги",
+          "kk": "Бір кітаптан көшіреді",
+          "en": "Copies from one book"
+        },
+        {
+          "ru": "Подбирает следующее слово по вероятности",
+          "kk": "Келесі сөзді ықтималдықпен таңдайды",
+          "en": "Picks the next word by probability"
+        },
+        {
+          "ru": "Спрашивает у человека",
+          "kk": "Адамнан сұрайды",
+          "en": "Asks a person"
+        }
+      ],
+      "correct": [
+        1
+      ],
+      "explanation": {
+        "ru": "Модель шаг за шагом выбирает вероятное продолжение.",
+        "kk": "Модель қадам сайын ықтимал жалғасын таңдайды.",
+        "en": "The model picks a likely continuation step by step."
+      }
+    }
+  ]
+}

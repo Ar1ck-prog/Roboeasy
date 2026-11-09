@@ -1,5 +1,7 @@
 'use client'
 
+import { Skeleton } from '@/components/ui/skeleton'
+import dynamic from 'next/dynamic'
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import Link from 'next/link'
 import { ArrowLeft, ArrowRight, Bot, Clock, Lock, PartyPopper, RotateCcw, Target, X } from 'lucide-react'
@@ -24,6 +26,9 @@ import { record, useHydrated, useLearn } from '@/lib/learn/store'
 import { ledger } from '@/lib/learn/economy'
 import { CoinIcon } from '@/components/learn/coin'
 import { cn } from '@/lib/utils'
+
+// Camera and model code load only for the lessons that use them.
+const WidgetStep = dynamic(() => import('@/components/learn/steps/widget-step'), { ssr: false, loading: () => <Skeleton className="h-80" /> })
 
 type Lang = 'ru' | 'kk' | 'en'
 
@@ -264,6 +269,7 @@ export function LessonPlayer({ lesson, lang, t, blocksT, trackTitle, unitTitle, 
         <div key={step!.id} className="animate-in duration-200 fade-in-0 slide-in-from-right-4 motion-reduce:animate-none">
           {step!.type === 'theory' && <TheoryStep step={step!} lang={lang} blocksT={blocksT} onDone={onDone} />}
           {step!.type === 'build' && <BuildStep step={step!} lang={lang} t={t} onDone={onDone} />}
+          {step!.type === 'widget' && <WidgetStep key={step!.id} step={step!} lang={lang} done={stepDone} onDone={onDone} />}
           {step!.type === 'quiz' && <QuizStep key={step!.id} step={step!} lang={lang} t={t} done={stepDone} onDone={onDone} onMistake={onMistake} />}
           {step!.type === 'predict' && (
             <PredictStep

@@ -1,0 +1,102 @@
+{
+  "id": "ai-08",
+  "track": "ai-basics",
+  "unit": "ai-prompts",
+  "minutes": 5,
+  "skills": [
+    "ai-literacy"
+  ],
+  "title": {
+    "ru": "Проверяй ответы",
+    "kk": "Жауаптарды тексер",
+    "en": "Check the answers"
+  },
+  "goal": {
+    "ru": "Сегодня ты узнаешь, как проверять то, что сказал ИИ.",
+    "kk": "Бүгін ЖИ айтқанын қалай тексеру керектігін білесің.",
+    "en": "Today you will learn how to check what AI says."
+  },
+  "summary": {
+    "ru": "Теперь ты умеешь проверять ответы ИИ.",
+    "kk": "Енді ЖИ жауаптарын тексере аласың.",
+    "en": "Now you can check AI’s answers."
+  },
+  "steps": [
+    {
+      "id": "intro",
+      "type": "theory",
+      "title": {
+        "ru": "Три вопроса к ответу",
+        "kk": "Жауапқа үш сұрақ",
+        "en": "Three questions for an answer"
+      },
+      "body": {
+        "ru": "Спроси себя: **откуда** это известно? **Сходится** ли с учебником или другим источником? **Можно ли проверить** самому?\n\nКод от ИИ проверяют запуском: программа либо работает, либо нет.",
+        "kk": "Өзіңнен сұра: бұл **қайдан** белгілі? Оқулықпен не басқа дереккөзбен **сәйкес** пе? Өзің **тексере** аласың ба?\n\nЖИ жазған кодты іске қосып тексереді: бағдарлама жұмыс істейді немесе істемейді.",
+        "en": "Ask yourself: **where** is this known from? Does it **match** a textbook or another source? **Can you check** it yourself?\n\nCode from AI is checked by running it: the program either works or it does not."
+      }
+    },
+    {
+      "id": "quiz-1",
+      "type": "quiz",
+      "kind": "choice",
+      "skill": "ai-literacy",
+      "question": {
+        "ru": "Как проверить программу от ИИ для робота?",
+        "kk": "ЖИ жазған робот бағдарламасын қалай тексереді?",
+        "en": "How do you check a robot program from AI?"
+      },
+      "options": [
+        {
+          "ru": "Запустить в симуляторе",
+          "kk": "Симуляторда іске қосу",
+          "en": "Run it in the simulator"
+        },
+        {
+          "ru": "Поверить на слово",
+          "kk": "Сөзге сену",
+          "en": "Take its word for it"
+        }
+      ],
+      "correct": [
+        0
+      ],
+      "explanation": {
+        "ru": "Запуск сразу покажет, что робот делает.",
+        "kk": "Іске қосу робот не істейтінін бірден көрсетеді.",
+        "en": "Running it shows at once what the robot does."
+      }
+    },
+    {
+      "id": "quiz-2",
+      "type": "quiz",
+      "kind": "choice",
+      "skill": "ai-literacy",
+      "question": {
+        "ru": "ИИ сослался на книгу. Что важно сделать?",
+        "kk": "ЖИ кітапқа сілтеді. Не істеу маңызды?",
+        "en": "AI cited a book. What is important to do?"
+      },
+      "options": [
+        {
+          "ru": "Убедиться, что книга существует",
+          "kk": "Кітаптың бар екеніне көз жеткізу",
+          "en": "Make sure the book exists"
+        },
+        {
+          "ru": "Ничего",
+          "kk": "Ештеңе",
+          "en": "Nothing"
+        }
+      ],
+      "correct": [
+        0
+      ],
+      "explanation": {
+        "ru": "ИИ может выдумать источник.",
+        "kk": "ЖИ дереккөзді ойдан шығаруы мүмкін.",
+        "en": "AI can invent a source."
+      }
+    }
+  ]
+}

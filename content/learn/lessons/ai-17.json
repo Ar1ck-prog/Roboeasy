@@ -1,0 +1,86 @@
+{
+  "id": "ai-17",
+  "track": "ai-basics",
+  "unit": "ai-robots",
+  "minutes": 5,
+  "skills": [
+    "ai-literacy"
+  ],
+  "title": {
+    "ru": "Сортировка по цвету",
+    "kk": "Түс бойынша сұрыптау",
+    "en": "Sorting by colour"
+  },
+  "goal": {
+    "ru": "Сегодня модель научится различать цвета по датчику.",
+    "kk": "Бүгін модель датчик арқылы түсті ажыратуды үйренеді.",
+    "en": "Today a model will learn to tell colours from the sensor."
+  },
+  "summary": {
+    "ru": "Теперь ты знаешь, как обучают на данных с датчика.",
+    "kk": "Енді датчик деректерінде қалай үйрететінін білесің.",
+    "en": "Now you know how training on sensor data works."
+  },
+  "steps": [
+    {
+      "id": "intro",
+      "type": "theory",
+      "title": {
+        "ru": "Данные с датчика",
+        "kk": "Датчик деректері",
+        "en": "Sensor data"
+      },
+      "body": {
+        "ru": "Датчик цвета видит три числа: красный, зелёный и синий. Покажи предметы и скажи, какой цвет какой. Модель найдёт ближайший пример для нового предмета.\n\nНет робота? Можно потренироваться на цветных кнопках.",
+        "kk": "Түс датчигі үш санды көреді: қызыл, жасыл және көк. Заттарды көрсетіп, қай түс екенін айт. Модель жаңа зат үшін ең жақын мысалды табады.\n\nРобот жоқ па? Түрлі түсті батырмаларда жаттығуға болады.",
+        "en": "The color sensor sees three numbers: red, green and blue. Show objects and say which colour each one is. The model finds the closest example for a new object.\n\nNo robot? You can practise on coloured buttons."
+      }
+    },
+    {
+      "id": "quiz-1",
+      "type": "quiz",
+      "kind": "choice",
+      "skill": "ai-literacy",
+      "question": {
+        "ru": "Какие данные даёт датчик цвета?",
+        "kk": "Түс датчигі қандай деректер береді?",
+        "en": "What data does the color sensor give?"
+      },
+      "options": [
+        {
+          "ru": "Три числа: красный, зелёный, синий",
+          "kk": "Үш сан: қызыл, жасыл, көк",
+          "en": "Three numbers: red, green, blue"
+        },
+        {
+          "ru": "Фотографию",
+          "kk": "Фотосурет",
+          "en": "A photograph"
+        }
+      ],
+      "correct": [
+        0
+      ],
+      "explanation": {
+        "ru": "Из этих чисел и строится пример.",
+        "kk": "Мысал осы сандардан құралады.",
+        "en": "Each example is built from these numbers."
+      }
+    },
+    {
+      "id": "train-colors",
+      "type": "widget",
+      "widget": "color",
+      "title": {
+        "ru": "Обучи сортировку",
+        "kk": "Сұрыптауды үйрет",
+        "en": "Train the sorter"
+      },
+      "task": {
+        "ru": "Добавь примеры двух цветов, затем проверь модель на новых предметах.",
+        "kk": "Екі түстің мысалдарын қосып, модельді жаңа заттарда тексер.",
+        "en": "Add examples of two colours, then test the model on new objects."
+      }
+    }
+  ]
+}

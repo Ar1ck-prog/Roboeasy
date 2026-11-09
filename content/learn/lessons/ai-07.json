@@ -1,0 +1,102 @@
+{
+  "id": "ai-07",
+  "track": "ai-basics",
+  "unit": "ai-prompts",
+  "minutes": 5,
+  "skills": [
+    "ai-literacy"
+  ],
+  "title": {
+    "ru": "Хороший запрос",
+    "kk": "Жақсы сұрау",
+    "en": "A good prompt"
+  },
+  "goal": {
+    "ru": "Сегодня ты научишься писать понятные запросы к ИИ.",
+    "kk": "Бүгін ЖИ-ге түсінікті сұрау жазуды үйренесің.",
+    "en": "Today you will learn to write clear prompts."
+  },
+  "summary": {
+    "ru": "Теперь ты знаешь: чем точнее запрос, тем лучше ответ.",
+    "kk": "Енді білесің: сұрау неғұрлым нақты болса, жауап соғұрлым жақсы.",
+    "en": "Now you know: the more exact the prompt, the better the answer."
+  },
+  "steps": [
+    {
+      "id": "intro",
+      "type": "theory",
+      "title": {
+        "ru": "Роль, задача, формат",
+        "kk": "Рөл, тапсырма, пішім",
+        "en": "Role, task, format"
+      },
+      "body": {
+        "ru": "Хороший запрос говорит: **кто** отвечает, **что** нужно сделать и **в каком виде**.\n\nНе «расскажи про Марс», а «ты учитель; объясни шестикласснику, почему Марс красный, в трёх предложениях».",
+        "kk": "Жақсы сұрау айтады: **кім** жауап береді, **не** істеу керек және **қандай түрде**.\n\n«Марс туралы айт» емес, «сен мұғалімсің; алтыншы сынып оқушысына Марстың неге қызыл екенін үш сөйлеммен түсіндір».",
+        "en": "A good prompt says **who** answers, **what** to do and **in what form**.\n\nNot “tell me about Mars” but “you are a teacher; explain to a sixth-grader why Mars is red in three sentences”."
+      }
+    },
+    {
+      "id": "quiz-1",
+      "type": "quiz",
+      "kind": "choice",
+      "skill": "ai-literacy",
+      "question": {
+        "ru": "Какой запрос лучше?",
+        "kk": "Қай сұрау жақсы?",
+        "en": "Which prompt is better?"
+      },
+      "options": [
+        {
+          "ru": "Напиши что-нибудь про роботов",
+          "kk": "Роботтар туралы бірдеңе жаз",
+          "en": "Write something about robots"
+        },
+        {
+          "ru": "Объясни шестикласснику в 3 предложениях, как робот видит стену",
+          "kk": "Алтыншы сынып оқушысына роботтың қабырғаны қалай көретінін 3 сөйлеммен түсіндір",
+          "en": "Explain to a sixth-grader in 3 sentences how a robot sees a wall"
+        }
+      ],
+      "correct": [
+        1
+      ],
+      "explanation": {
+        "ru": "В нём есть задача, адресат и формат.",
+        "kk": "Онда тапсырма, адресат және пішім бар.",
+        "en": "It has a task, an audience and a format."
+      }
+    },
+    {
+      "id": "quiz-2",
+      "type": "quiz",
+      "kind": "choice",
+      "skill": "ai-literacy",
+      "question": {
+        "ru": "Ответ оказался слишком длинным. Что сделать?",
+        "kk": "Жауап тым ұзын болды. Не істеу керек?",
+        "en": "The answer came out too long. What should you do?"
+      },
+      "options": [
+        {
+          "ru": "Уточнить запрос: «короче, в двух предложениях»",
+          "kk": "Сұрауды нақтылау: «қысқарақ, екі сөйлеммен»",
+          "en": "Refine the prompt: “shorter, in two sentences”"
+        },
+        {
+          "ru": "Закрыть и не пользоваться",
+          "kk": "Жауып, қолданбау",
+          "en": "Close it and give up"
+        }
+      ],
+      "correct": [
+        0
+      ],
+      "explanation": {
+        "ru": "С ИИ можно говорить несколько шагов.",
+        "kk": "ЖИ-мен бірнеше қадам сөйлесуге болады.",
+        "en": "You can talk to AI over several turns."
+      }
+    }
+  ]
+}

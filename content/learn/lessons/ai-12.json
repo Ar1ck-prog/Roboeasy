@@ -1,0 +1,102 @@
+{
+  "id": "ai-12",
+  "track": "ai-basics",
+  "unit": "ai-vibe",
+  "minutes": 5,
+  "skills": [
+    "ai-literacy"
+  ],
+  "title": {
+    "ru": "Улучшай по шагам",
+    "kk": "Қадам-қадаммен жақсарт",
+    "en": "Improve step by step"
+  },
+  "goal": {
+    "ru": "Сегодня ты научишься улучшать результат короткими просьбами.",
+    "kk": "Бүгін нәтижені қысқа өтініштермен жақсартуды үйренесің.",
+    "en": "Today you will learn to improve a result with short requests."
+  },
+  "summary": {
+    "ru": "Теперь ты умеешь доводить результат шаг за шагом.",
+    "kk": "Енді нәтижені қадам-қадаммен жетілдіре аласың.",
+    "en": "Now you can polish a result step by step."
+  },
+  "steps": [
+    {
+      "id": "intro",
+      "type": "theory",
+      "title": {
+        "ru": "Одна правка за раз",
+        "kk": "Бір рет бір түзету",
+        "en": "One change at a time"
+      },
+      "body": {
+        "ru": "Не проси всё сразу. Сначала рабочий вариант, потом одна правка за раз: «сделай фон тёмным», потом «добавь счётчик».\n\nПосле каждой правки проверяй, что ничего не сломалось.",
+        "kk": "Бәрін бірден сұрама. Алдымен жұмыс істейтін нұсқа, содан кейін бір рет бір түзету: «фонды қара қыл», содан кейін «санағыш қос».\n\nӘр түзетуден кейін ештеңе бұзылмағанын тексер.",
+        "en": "Do not ask for everything at once. First a working version, then one change at a time: “make the background dark”, then “add a counter”.\n\nAfter each change, check that nothing broke."
+      }
+    },
+    {
+      "id": "quiz-1",
+      "type": "quiz",
+      "kind": "choice",
+      "skill": "ai-literacy",
+      "question": {
+        "ru": "Как лучше просить изменения?",
+        "kk": "Өзгерісті қалай сұраған дұрыс?",
+        "en": "How is it best to ask for changes?"
+      },
+      "options": [
+        {
+          "ru": "По одной правке за раз",
+          "kk": "Бір рет бір түзетумен",
+          "en": "One change at a time"
+        },
+        {
+          "ru": "Двадцать правок в одном сообщении",
+          "kk": "Бір хабарламада жиырма түзету",
+          "en": "Twenty changes in one message"
+        }
+      ],
+      "correct": [
+        0
+      ],
+      "explanation": {
+        "ru": "Так легче понять, что сломалось.",
+        "kk": "Сонда не бұзылғанын түсіну оңай.",
+        "en": "That makes it easy to see what broke."
+      }
+    },
+    {
+      "id": "quiz-2",
+      "type": "quiz",
+      "kind": "choice",
+      "skill": "ai-literacy",
+      "question": {
+        "ru": "Что делать после каждой правки?",
+        "kk": "Әр түзетуден кейін не істеу керек?",
+        "en": "What do you do after each change?"
+      },
+      "options": [
+        {
+          "ru": "Проверить результат",
+          "kk": "Нәтижені тексеру",
+          "en": "Check the result"
+        },
+        {
+          "ru": "Сразу просить следующую",
+          "kk": "Бірден келесісін сұрау",
+          "en": "Immediately ask for the next"
+        }
+      ],
+      "correct": [
+        0
+      ],
+      "explanation": {
+        "ru": "Проверка экономит время.",
+        "kk": "Тексеру уақытты үнемдейді.",
+        "en": "Checking saves time."
+      }
+    }
+  ]
+}

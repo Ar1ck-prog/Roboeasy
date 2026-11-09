@@ -38,6 +38,7 @@ const ru = {
       predict: 'Угадай',
       debug: 'Найди ошибку',
       real_robot: 'Настоящий робот',
+      widget: 'Практика',
       project: 'Проект',
     },
     // quiz
@@ -134,6 +135,7 @@ const kk: LearnText = {
       predict: 'Болжа',
       debug: 'Қатені тап',
       real_robot: 'Нағыз робот',
+      widget: 'Практика',
       project: 'Жоба',
     },
     check: 'Тексеру',
@@ -223,6 +225,7 @@ const en: LearnText = {
       predict: 'Predict',
       debug: 'Find the bug',
       real_robot: 'Real robot',
+      widget: 'Practice',
       project: 'Project',
     },
     check: 'Check',

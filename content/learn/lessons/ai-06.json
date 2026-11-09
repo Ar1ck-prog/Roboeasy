@@ -1,0 +1,107 @@
+{
+  "id": "ai-06",
+  "track": "ai-basics",
+  "unit": "ai-around",
+  "minutes": 5,
+  "skills": [
+    "ai-literacy"
+  ],
+  "title": {
+    "ru": "Какой ИИ выбрать",
+    "kk": "Қай ЖИ-ді таңдау керек",
+    "en": "Choosing an AI"
+  },
+  "goal": {
+    "ru": "Сегодня ты научишься подбирать ИИ под задачу.",
+    "kk": "Бүгін ЖИ-ді тапсырмаға қарай таңдауды үйренесің.",
+    "en": "Today you will learn to match an AI to a task."
+  },
+  "summary": {
+    "ru": "Теперь ты умеешь выбирать нейросеть под задачу.",
+    "kk": "Енді нейрожеліні тапсырмаға қарай таңдай аласың.",
+    "en": "Now you can match a network to a task."
+  },
+  "steps": [
+    {
+      "id": "intro",
+      "type": "theory",
+      "title": {
+        "ru": "Сначала задача",
+        "kk": "Алдымен тапсырма",
+        "en": "The task comes first"
+      },
+      "body": {
+        "ru": "Спроси себя: что на входе и что на выходе? Текст в текст — языковая модель. Текст в картинку — генератор изображений. Голос в текст — распознавание.\n\nА если достаточно точного правила, ИИ не нужен вообще.",
+        "kk": "Өзіңнен сұра: кірісінде не, шығысында не? Мәтіннен мәтін — тілдік модель. Мәтіннен сурет — сурет генераторы. Дауыстан мәтін — тану.\n\nАл нақты ереже жетсе, ЖИ мүлде керек емес.",
+        "en": "Ask yourself: what goes in and what comes out? Text to text is a language model. Text to picture is an image generator. Voice to text is speech recognition.\n\nAnd if an exact rule is enough, you do not need AI at all."
+      }
+    },
+    {
+      "id": "quiz-1",
+      "type": "quiz",
+      "kind": "choice",
+      "skill": "ai-literacy",
+      "question": {
+        "ru": "Посчитать сумму покупок. Нужен ли ИИ?",
+        "kk": "Сатып алу сомасын есептеу. ЖИ керек пе?",
+        "en": "Add up a shopping bill. Do you need AI?"
+      },
+      "options": [
+        {
+          "ru": "Нет, хватит обычной формулы",
+          "kk": "Жоқ, кәдімгі формула жетеді",
+          "en": "No, a normal formula is enough"
+        },
+        {
+          "ru": "Да, только нейросеть",
+          "kk": "Иә, тек нейрожелі",
+          "en": "Yes, only a neural network"
+        }
+      ],
+      "correct": [
+        0
+      ],
+      "explanation": {
+        "ru": "Точная задача решается точным правилом.",
+        "kk": "Нақты тапсырма нақты ережемен шешіледі.",
+        "en": "An exact task is solved by an exact rule."
+      }
+    },
+    {
+      "id": "quiz-2",
+      "type": "quiz",
+      "kind": "choice",
+      "skill": "ai-literacy",
+      "question": {
+        "ru": "Что на выходе у генератора изображений?",
+        "kk": "Сурет генераторының шығысында не бар?",
+        "en": "What comes out of an image generator?"
+      },
+      "options": [
+        {
+          "ru": "Текст",
+          "kk": "Мәтін",
+          "en": "Text"
+        },
+        {
+          "ru": "Картинка",
+          "kk": "Сурет",
+          "en": "A picture"
+        },
+        {
+          "ru": "Звук",
+          "kk": "Дыбыс",
+          "en": "Sound"
+        }
+      ],
+      "correct": [
+        1
+      ],
+      "explanation": {
+        "ru": "Он создаёт изображения.",
+        "kk": "Ол сурет жасайды.",
+        "en": "It creates images."
+      }
+    }
+  ]
+}
