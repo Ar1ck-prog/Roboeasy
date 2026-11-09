@@ -5,8 +5,11 @@ import { type Format, type GenerateErrorCode, type GenerateResponse, PROMPT_MAX 
 import { checkPython, cleanPython, programToPython } from '@/lib/dsl/compile-python'
 import { PROGRAM_JSON_SCHEMA, PYTHON_JSON_SCHEMA, findEmptyBlocks, parseProgram, parsePythonAnswer, parseRobot } from '@/lib/dsl/schema'
 import type { RobotProfile } from '@/lib/dsl/types'
-import { GeminiError, askGemini, createGemini, geminiConfigured, retryMessage } from '@/lib/gemini'
-import { clientKey, rateLimit } from '@/lib/rate-limit'
+import { type CachedResult, cacheKey, readCache, writeCache } from '@/lib/ai/cache'
+import { tierForPrompt } from '@/lib/ai/route-task'
+import { recordUsage } from '@/lib/ai/usage'
+import { GeminiError, type ModelTier, askGemini, createGemini, geminiConfigured, retryMessage } from '@/lib/gemini'
+import { limitRequester } from '@/lib/rate-limit'
 import { type Lang, dslSystemPrompt, freePythonSystemPrompt, userMessage } from '@/lib/spike/prompts'
 
 export const maxDuration = 60
@@ -63,37 +66,44 @@ function parseRequest(body: unknown): ParsedRequest | { error: GenerateErrorCode
 }
 
 /** DSL modes: the AI writes commands, our compilers produce blocks and Python. */
-async function generateProgram(ai: GoogleGenAI, req: ParsedRequest, signal: AbortSignal): Promise<GenerateResponse> {
+async function generateProgram(ai: GoogleGenAI, req: ParsedRequest, signal: AbortSignal): Promise<CachedResult> {
   const system = dslSystemPrompt(req.robot, req.lang)
   const message = userMessage(req.prompt, req.previous)
-  const ask = async (text: string) => {
-    const result = parseProgram(await askGemini(ai, system, text, PROGRAM_JSON_SCHEMA, signal, GENERATE_ATTEMPT_MS), req.robot)
+  const tier = tierForPrompt(req.prompt, Boolean(req.previous))
+  const ask = async (text: string, modelTier: ModelTier) => {
+    const answer = await askGemini(ai, { task: 'generate', tier: modelTier, system, contents: text, schema: PROGRAM_JSON_SCHEMA, signal, attemptMs: GENERATE_ATTEMPT_MS })
+    const result = parseProgram(answer, req.robot)
     if (!result.ok) return result
     const empty = findEmptyBlocks(result.value.steps)
     return empty.length ? { ok: false as const, error: `${empty.join('; ')}. Put the commands inside.` } : result
   }
-  let parsed = await ask(message)
+  let parsed = await ask(message, tier)
   if (!parsed.ok) {
     console.warn('[generate] invalid program, retrying:', parsed.error)
-    parsed = await ask(retryMessage(message, parsed.error))
+    parsed = await ask(retryMessage(message, parsed.error), 'main')
   }
   if (!parsed.ok) {
     console.error('[generate] invalid program after retry:', parsed.error)
     throw new GenerationError('empty_program')
   }
-  const program = parsed.value
-  const python = programToPython(program, req.robot)
-  const common = { ok: true as const, title: program.title, description: program.description, program, warnings: [] }
+  return { kind: 'program', title: parsed.value.title, description: parsed.value.description, program: parsed.value }
+}
+
+/** Blocks and Python are compiled here, for new and for cached programs alike. */
+function toResponse(result: CachedResult, req: ParsedRequest): GenerateResponse {
+  if (result.kind === 'python') return { ok: true, format: 'python', title: result.title, description: result.description, code: result.code, warnings: result.warnings }
+  const python = programToPython(result.program, req.robot)
+  const common = { ok: true as const, title: result.title, description: result.description, program: result.program, warnings: [] }
   return req.format === 'python' ? { ...common, format: 'python', code: python } : { ...common, format: 'blocks', python }
 }
 
 /** Free Python mode: the AI writes the code, we validate it. */
-async function generateFreePython(ai: GoogleGenAI, req: ParsedRequest, signal: AbortSignal): Promise<GenerateResponse> {
+async function generateFreePython(ai: GoogleGenAI, req: ParsedRequest, signal: AbortSignal): Promise<CachedResult> {
   const system = freePythonSystemPrompt(req.robot, req.lang)
   const message = userMessage(req.prompt, req.previous)
 
   const attempt = async (text: string) => {
-    const parsed = parsePythonAnswer(await askGemini(ai, system, text, PYTHON_JSON_SCHEMA, signal, GENERATE_ATTEMPT_MS))
+    const parsed = parsePythonAnswer(await askGemini(ai, { task: 'generate', system, contents: text, schema: PYTHON_JSON_SCHEMA, signal, attemptMs: GENERATE_ATTEMPT_MS }))
     if (!parsed.ok) return { answer: null, problems: parsed.error, issues: [] as string[] }
     const answer = { ...parsed.value, code: cleanPython(parsed.value.code) }
     const issues = checkPython(answer.code)
@@ -109,7 +119,7 @@ async function generateFreePython(ai: GoogleGenAI, req: ParsedRequest, signal: A
     console.error('[generate] invalid Python answer after retry:', best.problems)
     throw new GenerationError('empty_program')
   }
-  return { ok: true, format: 'python', ...best.answer, warnings: best.issues }
+  return { kind: 'python', ...best.answer, warnings: best.issues }
 }
 
 /** Lets the UI show whether the AI is configured without exposing anything else. */
@@ -128,8 +138,18 @@ export async function POST(req: NextRequest) {
   const parsed = parseRequest(body)
   if ('error' in parsed) return fail(parsed.error, 400)
 
-  const limit = rateLimit(clientKey(req.headers), RATE_LIMIT.requests, RATE_LIMIT.windowMs)
+  const limit = await limitRequester(req.headers, 'generate', RATE_LIMIT.requests, RATE_LIMIT.windowMs)
   if (!limit.ok) return fail('rate_limited', 429, limit.retryAfterSeconds)
+
+  // A change to an existing program depends on that program, so it is never cached.
+  const key = parsed.previous ? null : cacheKey(parsed)
+  if (key) {
+    const hit = await readCache(key)
+    if (hit) {
+      void recordUsage({ kind: 'generate', cached: true, ok: true })
+      return reply(toResponse(hit, parsed))
+    }
+  }
 
   const ai = createGemini()
   if (!ai) return fail('not_configured', 503)
@@ -138,10 +158,11 @@ export async function POST(req: NextRequest) {
   const signal = AbortSignal.any([req.signal, deadline])
   try {
     const result = parsed.format === 'python-free' ? await generateFreePython(ai, parsed, signal) : await generateProgram(ai, parsed, signal)
-    return reply(result)
+    if (key) await writeCache(key, parsed.format, result)
+    return reply(toResponse(result, parsed))
   } catch (error) {
     if (error instanceof GenerationError) return fail(error.code, 502)
-    if (error instanceof GeminiError) return fail(error.kind === 'busy' ? 'ai_busy' : 'ai_failed', error.kind === 'busy' ? 503 : 502)
+    if (error instanceof GeminiError) return error.kind === 'busy' ? fail('ai_busy', 503, error.retryAfter) : fail('ai_failed', 502)
     if (deadline.aborted) return fail('ai_busy', 504)
     if (req.signal.aborted) return fail('ai_failed', 499)
     console.error('[generate] unexpected error:', error)

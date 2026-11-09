@@ -177,6 +177,7 @@ export const en: Dictionary = {
     placeholder: 'For example: drive forward 50 cm, turn right and show a smile',
     shortcut: 'Ctrl + Enter to create',
     ideas: 'Ideas to start with',
+    offline: { title: 'Ready examples without AI', open: 'Open example: {name}' },
     examplesBlocks: ['Drive a square with 30 cm sides', 'Stop 10 cm from the wall and beep', 'Follow the black line', 'Show a heart and play three notes'],
     examplesPython: [
       'Drive around obstacles',
@@ -242,8 +243,8 @@ export const en: Dictionary = {
       bad_request: 'Describe the task in at least a couple of words.',
       prompt_too_long: 'The description is too long — keep it under {max} characters.',
       rate_limited: 'Too many requests. Wait {s} s and try again.',
-      not_configured: 'The AI is not configured: add GEMINI_API_KEY to .env.local.',
-      ai_busy: 'The AI is busy right now. Try again in a minute.',
+      not_configured: 'The AI is not connected yet. The ready examples below work without it.',
+      ai_busy: 'The AI is resting, try again in {m} min. Meanwhile you can open a ready example.',
       ai_failed: 'Could not build the program. Try rephrasing the task.',
       empty_program: 'Could not build a program from the available blocks. Describe the task more simply or choose Python.',
       network: 'Cannot reach the server. Check your internet connection.',

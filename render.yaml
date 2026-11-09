@@ -21,6 +21,16 @@ services:
       # Optional: a separate key for the mentor, so its chats do not use the generator's quota.
       - key: GEMINI_MENTOR_API_KEY
         sync: false
+      # Which Gemini models to use (the code contains no model names).
+      - key: GEMINI_MODEL_MAIN
+        value: gemini-3.5-flash
+      - key: GEMINI_MODEL_LIGHT
+        value: gemini-flash-lite-latest
+      - key: GEMINI_MODEL_FALLBACKS
+        value: gemini-flash-latest
+      # AI cache, shared rate limits and usage counters (Supabase → Project Settings → API).
+      - key: SUPABASE_SERVICE_ROLE_KEY
+        sync: false
       # Signs certificate codes; Render generates a random value once.
       - key: CERT_SECRET
         generateValue: true

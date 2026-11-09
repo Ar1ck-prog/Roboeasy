@@ -33,7 +33,10 @@ import { type Format, type GenerateErrorCode, type GenerateResponse, PROMPT_MAX 
 import { type Locale, fill } from '@/lib/i18n/config'
 import type { Dictionary } from '@/lib/i18n/ru'
 import { DEFAULT_ROBOT, PORTS, type Port, type RobotProfile, countSteps } from '@/lib/dsl/types'
+import { programToPython } from '@/lib/dsl/compile-python'
+import { LOCAL_EXAMPLES, type LocalExample, exampleProgram } from '@/lib/dsl/examples'
 import { parseRobot } from '@/lib/dsl/schema'
+import { deviceHeaders } from '@/lib/device-id'
 import {
   type HistoryItem,
   type StudioResult,
@@ -196,7 +199,7 @@ export function Studio({ lang, t, labels }: StudioProps) {
     try {
       const res = await fetch('/api/generate', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 'Content-Type': 'application/json', ...deviceHeaders() },
         body: JSON.stringify({ prompt: text, format: requestFormat, lang, robot, previous }),
         signal: controller.signal,
       })
@@ -234,6 +237,15 @@ export function Studio({ lang, t, labels }: StudioProps) {
       setError({ code: 'network', where })
       setStatus(result ? 'done' : 'error')
     }
+  }
+
+  /** A ready program from the local set: no request, so it works when the AI cannot answer. */
+  function openExample(example: LocalExample) {
+    const program = exampleProgram(example, lang)
+    const python = programToPython(program, robot)
+    const common = { title: program.title, description: program.description, program, robot, warnings: [] }
+    openResult(format === 'blocks' ? { format: 'blocks', python, ...common } : { format: 'python', code: python, ...common })
+    setAnnounce(program.title)
   }
 
   function clearShareHash() {
@@ -300,7 +312,8 @@ export function Studio({ lang, t, labels }: StudioProps) {
     textareaRef.current?.focus()
   }
 
-  const errorText = error ? fill(t.errors[error.code], { max: PROMPT_MAX, s: error.retryAfter ?? 30 }) : ''
+  const errorText = error ? fill(t.errors[error.code], { max: PROMPT_MAX, s: error.retryAfter ?? 30, m: Math.max(1, Math.ceil((error.retryAfter ?? 60) / 60)) }) : ''
+  const aiCannotAnswer = error?.code === 'ai_busy' || error?.code === 'not_configured' || error?.code === 'ai_failed'
   const loadingSteps = pendingFormat === 'blocks' ? t.loadingBlocks : t.loadingPython
   const promptOver = prompt.length > PROMPT_MAX
   const examples = format === 'python-free' ? t.examplesPython : t.examplesBlocks
@@ -506,6 +519,18 @@ export function Studio({ lang, t, labels }: StudioProps) {
               <AlertTriangle size={18} aria-hidden="true" />
               <span>{errorText}</span>
             </p>
+          )}
+          {aiCannotAnswer && status !== 'loading' && (
+            <div className="grid gap-2" data-testid="offline-examples">
+              <p className="field-label m-0">{t.offline.title}</p>
+              <div className="idea-list">
+                {LOCAL_EXAMPLES.map((ex) => (
+                  <button key={ex.id} type="button" className="chip" aria-label={fill(t.offline.open, { name: ex.title[lang] })} onClick={() => openExample(ex)}>
+                    {ex.title[lang]}
+                  </button>
+                ))}
+              </div>
+            </div>
           )}
         </section>
 

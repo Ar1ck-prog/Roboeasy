@@ -1,5 +1,7 @@
 'use client'
 
+import { deviceHeaders } from '@/lib/device-id'
+import { fill } from '@/lib/i18n/config'
 import { type FormEvent, useEffect, useRef, useState } from 'react'
 import { usePathname } from 'next/navigation'
 import { Bot, Loader2, Send, X } from 'lucide-react'
@@ -74,11 +76,13 @@ export function SiteMentor({ lang, t }: { lang: Locale; t: SiteMentorText }) {
     try {
       const res = await fetch('/api/mentor', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 'Content-Type': 'application/json', ...deviceHeaders() },
         body: JSON.stringify({ lang, page: pathname, messages: history, program: getMentorProgram()?.slice(0, MAX_PROGRAM) }),
       })
       const data = (await res.json()) as SiteMentorResponse
-      reply = data.ok ? { from: 'mentor', text: data.answer } : { from: 'mentor', text: t.errors[data.error], failed: true }
+      reply = data.ok
+        ? { from: 'mentor', text: data.answer }
+        : { from: 'mentor', text: fill(t.errors[data.error], { m: Math.max(1, Math.ceil((data.retryAfter ?? 60) / 60)) }), failed: true }
     } catch {
       reply = { from: 'mentor', text: t.errors.offline, failed: true }
     }

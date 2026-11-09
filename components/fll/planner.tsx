@@ -1,5 +1,6 @@
 'use client'
 
+import { deviceHeaders } from '@/lib/device-id'
 import { useEffect, useMemo, useState } from 'react'
 import { AlertTriangle, Check, Compass, FileDown, ImageUp, Info, Lightbulb, Loader2, PencilRuler, Plus, Ruler, Trash2 } from 'lucide-react'
 
@@ -144,7 +145,7 @@ export function FllPlanner({ lang, seasons, defaultSeasonId, t, robotT, labels, 
     try {
       const res = await fetch('/api/fll/plan', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 'Content-Type': 'application/json', ...deviceHeaders() },
         body: JSON.stringify({ ...(fromDraft ? { season } : { seasonId: season.id }), missionIds: [...selected], robot, lang }),
       })
       const data = (await res.json()) as PlanResponse

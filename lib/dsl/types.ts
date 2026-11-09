@@ -12,6 +12,9 @@
 export const PORTS = ['A', 'B', 'C', 'D', 'E', 'F'] as const
 export type Port = (typeof PORTS)[number]
 
+/** Bump when programs change meaning: cached answers from older versions stop being used. */
+export const DSL_VERSION = 1
+
 export type MoveUnit = 'cm' | 'inches' | 'rotations' | 'degrees' | 'seconds'
 export type MotorUnit = 'rotations' | 'degrees' | 'seconds'
 export type Comparator = '<' | '>' | '='

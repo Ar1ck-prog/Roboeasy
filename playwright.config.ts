@@ -30,5 +30,7 @@ export default defineConfig({
     url: `http://localhost:${PORT}/ru`,
     reuseExistingServer: true,
     timeout: 180_000,
+    // Tests answer for Gemini themselves: without keys the server could not reach it even by mistake.
+    env: { GEMINI_API_KEY: '', GEMINI_API_KEY_DEV: '', GEMINI_MENTOR_API_KEY: '', SUPABASE_SERVICE_ROLE_KEY: '' },
   },
 })

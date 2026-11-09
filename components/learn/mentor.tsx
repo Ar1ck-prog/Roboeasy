@@ -1,5 +1,6 @@
 'use client'
 
+import { deviceHeaders } from '@/lib/device-id'
 import { useState } from 'react'
 import { Lightbulb, Loader2, MessageCircleQuestion, Send, X } from 'lucide-react'
 
@@ -41,7 +42,7 @@ export function Mentor({ lessonId, stepId, lang, t, lessonHints, getContext }: M
     try {
       const res = await fetch('/api/learn/mentor', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 'Content-Type': 'application/json', ...deviceHeaders() },
         body: JSON.stringify({ lessonId, stepId, lang, level: nextLevel, question: q, program: steps, failed }),
       })
       const data = (await res.json()) as MentorResponse

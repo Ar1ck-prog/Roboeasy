@@ -38,7 +38,7 @@ export const siteMentorRequestSchema = z.object({
 export type SiteMentorRequest = z.infer<typeof siteMentorRequestSchema>
 
 export type SiteMentorResponse =
-  { ok: true; answer: string; remaining: number } | { ok: false; error: 'bad_request' | 'rate_limited' | 'daily_limit' | 'unavailable'; retryAfter?: number }
+  { ok: true; answer: string; remaining: number } | { ok: false; error: 'bad_request' | 'rate_limited' | 'daily_limit' | 'unavailable' | 'resting'; retryAfter?: number }
 
 export const SITE_MENTOR_JSON_SCHEMA = {
   type: 'object',

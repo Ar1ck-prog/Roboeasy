@@ -1,7 +1,7 @@
 import type { NextRequest } from 'next/server'
 
 import { parseProgram } from '@/lib/dsl/schema'
-import { CHAT_ATTEMPT_MS, askGemini, createMentorGemini } from '@/lib/gemini'
+import { CHAT_ATTEMPT_MS, askGemini, createGemini } from '@/lib/gemini'
 import { readLesson } from '@/lib/learn/content'
 import {
   MENTOR_JSON_SCHEMA,
@@ -12,7 +12,7 @@ import {
   mentorUserMessage,
   sanitizeHint,
 } from '@/lib/learn/mentor'
-import { clientKey, rateLimit } from '@/lib/rate-limit'
+import { limitRequester } from '@/lib/rate-limit'
 
 export const maxDuration = 30
 
@@ -45,13 +45,12 @@ export async function POST(req: NextRequest) {
     return h ? { ok: true, hint: h[body.lang], source: 'lesson' } : null
   }
 
-  const who = clientKey(req.headers)
-  const minute = rateLimit(`mentor:m:${who}`, MENTOR_LIMITS.perMinute, 60_000)
+  const minute = await limitRequester(req.headers, 'mentor:m', MENTOR_LIMITS.perMinute, 60_000)
   if (!minute.ok) return reply({ ok: false, error: 'rate_limited', retryAfter: minute.retryAfterSeconds }, 429)
-  const day = rateLimit(`mentor:d:${who}`, MENTOR_LIMITS.perDay, DAY_MS)
+  const day = await limitRequester(req.headers, 'mentor:d', MENTOR_LIMITS.perDay, DAY_MS)
   if (!day.ok) return reply(lessonHint() ?? { ok: false, error: 'daily_limit' }, lessonHint() ? 200 : 429)
 
-  const ai = createMentorGemini()
+  const ai = createGemini('mentor')
   if (!ai) return reply(lessonHint() ?? { ok: false, error: 'bad_request' })
 
   const program = body.program.length
@@ -61,7 +60,16 @@ export async function POST(req: NextRequest) {
   const reference = 'reference' in step ? step.reference : undefined
   try {
     const signal = AbortSignal.any([req.signal, AbortSignal.timeout(25_000)])
-    const answer = await askGemini(ai, mentorSystemPrompt(body.lang), mentorUserMessage(lesson, body, steps), MENTOR_JSON_SCHEMA, signal, CHAT_ATTEMPT_MS)
+    const answer = await askGemini(ai, {
+      task: 'mentor',
+      // The first hint is a leading question; later ones need a closer look at the program.
+      tier: body.level === 1 && !body.question ? 'light' : 'main',
+      system: mentorSystemPrompt(body.lang),
+      contents: mentorUserMessage(lesson, body, steps),
+      schema: MENTOR_JSON_SCHEMA,
+      signal,
+      attemptMs: CHAT_ATTEMPT_MS,
+    })
     const hint = typeof answer.hint === 'string' ? sanitizeHint(answer.hint, reference) : null
     // Moderation log without personal data: lesson, step, level and length only.
     console.info(

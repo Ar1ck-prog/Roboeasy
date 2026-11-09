@@ -12,6 +12,8 @@
 
 import { type SupabaseClient, createClient } from '@supabase/supabase-js'
 
+import type { UsageRecord } from '@/lib/ai/usage-summary'
+
 import { type LearnEvent, type Profile, appendEvents, eventSchema, profileSchema } from './state'
 import { getLearnState, onRecord, replaceState, setProfile, subscribeLearn } from './store'
 
@@ -255,6 +257,14 @@ export async function isAdmin(): Promise<boolean> {
   if (!sb) return false
   const { data } = await sb.rpc('is_admin')
   return data === true
+}
+
+/** Today's AI requests (RLS: admins only). */
+export async function aiUsageToday(): Promise<UsageRecord[]> {
+  const day = new Date().toISOString().slice(0, 10)
+  const { data, error } = await need().from('ai_usage').select('kind, model, cached, ok, error').eq('day', day).limit(20000)
+  if (error) throw error
+  return data ?? []
 }
 
 /** Funnel events of every learner (RLS: admins only), one list per learner. */
