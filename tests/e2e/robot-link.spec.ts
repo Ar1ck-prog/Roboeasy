@@ -235,3 +235,39 @@ test('sandbox: a task the robot cannot do gets a reason and a way forward', asyn
   await page.getByRole('button', { name: /Попробовать: Проедь вперёд/ }).click()
   await expect(page.getByLabel('Задача для робота')).toHaveValue('Проедь вперёд и покажи стрелку')
 })
+
+test('draw a route: the commands appear, the simulator goes first, then the robot', async ({ page }) => {
+  const errors: string[] = []
+  page.on('pageerror', (e) => errors.push(e.message))
+  const hub = await fakeBluetooth(page)
+  await page.goto('/ru/sandbox')
+  await page.getByRole('link', { name: 'Нарисуй маршрут' }).click()
+  await expect(page.getByRole('heading', { name: 'Нарисуй маршрут' })).toBeVisible()
+
+  const field = page.getByTestId('draw-field')
+  const box = (await field.boundingBox())!
+  const at = (x: number, y: number) => [box.x + (x / 1200) * box.width, box.y + ((800 - y) / 800) * box.height] as const
+  await page.mouse.move(...at(150, 150))
+  await page.mouse.down()
+  // Right, then up: one corner.
+  for (let x = 150; x <= 800; x += 25) await page.mouse.move(...at(x, 150))
+  for (let y = 150; y <= 600; y += 25) await page.mouse.move(...at(800, y))
+  await page.mouse.up()
+
+  await expect(page.getByTestId('route-piece')).toHaveCount(2)
+  await expect(page.getByText('Команд в программе:')).toBeVisible()
+  await expect(page.getByText('Сначала проедь маршрут в симуляторе.')).toBeVisible()
+  await expect(page.getByRole('button', { name: 'Подключить и запустить' })).toBeDisabled()
+
+  await page.getByRole('button', { name: 'Проехать в симуляторе' }).click()
+  await expect(page.getByText('Сначала проедь маршрут в симуляторе.')).toHaveCount(0)
+
+  await page.getByRole('button', { name: 'Подключить и запустить' }).click()
+  await expect(page.getByTestId('robot-console')).toHaveText('Привет с хаба')
+  expect(new TextDecoder().decode(Uint8Array.from(hub.file.bytes))).toContain('motor_pair')
+
+  // A new line means it has to be driven again.
+  await page.getByRole('button', { name: 'Стереть' }).click()
+  await expect(page.getByTestId('route-piece')).toHaveCount(0)
+  expect(errors).toEqual([])
+})

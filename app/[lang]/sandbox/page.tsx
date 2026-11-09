@@ -2,6 +2,7 @@ import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 
 import { AppShell } from '@/components/app-shell'
+import { SandboxTabs } from '@/components/studio/sandbox-tabs'
 import { Studio } from '@/components/studio/studio'
 import { getDictionary, isLocale } from '@/lib/i18n'
 
@@ -23,6 +24,7 @@ export default async function WorkspacePage({ params }: Params) {
   const t = getDictionary(lang)
   return (
     <AppShell lang={lang}>
+      <SandboxTabs lang={lang} current="ai" />
       <Studio lang={lang} t={t.studio} labels={t.blocks} />
     </AppShell>
   )
