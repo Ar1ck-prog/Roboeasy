@@ -50,7 +50,8 @@ function simulatedHub() {
         flow.push({ stop, slot: m[2] })
         if (stop) return [frame(MSG.flowResponse, 0), frame(MSG.flowNotification, 1)]
         const hello = new TextEncoder().encode('Привет с хаба\n')
-        return [frame(MSG.flowResponse, 0), frame(MSG.flowNotification, 0), frame(MSG.console, ...hello, 0), frame(MSG.devices, 2, 0, 0x00, 87)]
+        const telemetry = new TextEncoder().encode('T|t=0|dist=40|color=9|yaw=0|ml=100|mr=120\nT|t=150|dist=35|color=9|yaw=5|ml=110|mr=130\nT|t=300|dist=-|color=3|yaw=9|ml=90|mr=125\n')
+        return [frame(MSG.flowResponse, 0), frame(MSG.flowNotification, 0), frame(MSG.console, ...hello, 0), frame(MSG.console, ...telemetry, 0), frame(MSG.devices, 2, 0, 0x00, 87)]
       }
       default:
         return []
@@ -269,5 +270,38 @@ test('draw a route: the commands appear, the simulator goes first, then the robo
   // A new line means it has to be driven again.
   await page.getByRole('button', { name: 'Стереть' }).click()
   await expect(page.getByTestId('route-piece')).toHaveCount(0)
+  expect(errors).toEqual([])
+})
+
+test('telemetry: off by default, adds readings when on, shows charts and keeps recordings locally', async ({ page }) => {
+  const errors: string[] = []
+  page.on('pageerror', (e) => errors.push(e.message))
+  const hub = await fakeBluetooth(page)
+  const program: Program = { title: 'Проба', description: '', steps: [{ op: 'move', direction: 'forward', value: 20, unit: 'cm' }] }
+  const python = programToPython(program, DEFAULT_ROBOT)
+  await openSandbox(page, { format: 'blocks', program, python })
+  await generate(page)
+
+  // Off: exactly the program that was generated.
+  const toggle = page.getByRole('checkbox', { name: /Телеметрия/ }).first()
+  await expect(toggle).not.toBeChecked()
+  await page.getByRole('button', { name: 'Подключить и запустить' }).click()
+  await expect(page.getByTestId('robot-console')).toHaveText('Привет с хаба')
+  expect(new TextDecoder().decode(Uint8Array.from(hub.file.bytes))).toBe(python)
+
+  // On: the same program with the background task; its lines go to the charts, not the console.
+  await toggle.check()
+  await page.getByRole('button', { name: 'Запустить на роботе' }).click()
+  await expect(page.getByRole('img', { name: 'Расстояние' })).toBeVisible()
+  await expect(page.getByTestId('robot-console')).toHaveText('Привет с хаба')
+  const sent = new TextDecoder().decode(Uint8Array.from(hub.file.bytes))
+  expect(sent).toContain('runloop.run(_rb_main(), _rb_telemetry())')
+  await expect(page.getByTestId('telemetry-colors')).toBeVisible()
+
+  await page.getByRole('button', { name: 'Сохранить запись' }).click()
+  await expect(page.getByText('Хранятся только в этом браузере.')).toBeVisible()
+  const csv = page.waitForEvent('download')
+  await page.getByTestId('telemetry').getByRole('button', { name: 'CSV' }).click()
+  expect((await csv).suggestedFilename()).toMatch(/\.csv$/)
   expect(errors).toEqual([])
 })

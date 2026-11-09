@@ -29,11 +29,15 @@ import {
   startUploadRequest,
 } from './ble-protocol'
 
+import { type TelemetrySample, isTelemetryLine, parseTelemetryLine } from './telemetry'
+
 const REQUEST_TIMEOUT_MS = 10_000
 const DEVICE_INTERVAL_MS = 500
 /** Web Bluetooth does not write more than this in one operation. */
 const MAX_WRITE = 512
 const MAX_CONSOLE_LINES = 200
+/** About ten minutes of readings. */
+const MAX_TELEMETRY = 4000
 const SLOT_KEY = 'roboeasy.hub.slot'
 
 /** The link to the hub; tests pass a simulated one. */
@@ -219,12 +223,14 @@ export interface HubState {
   /** Latest reading per sensor or motor, e.g. "motor:A". */
   devices: Record<string, DeviceUpdate>
   console: string[]
+  /** Readings of the current run, when it was sent with telemetry. */
+  telemetry: TelemetrySample[]
   progress: number
   slot: number
   problem: HubProblem | null
 }
 
-const INITIAL: HubState = { status: 'idle', name: '', firmware: '', battery: null, devices: {}, console: [], progress: 0, slot: 0, problem: null }
+const INITIAL: HubState = { status: 'idle', name: '', firmware: '', battery: null, devices: {}, console: [], telemetry: [], progress: 0, slot: 0, problem: null }
 
 let state = INITIAL
 let client: HubClient | null = null
@@ -285,7 +291,11 @@ export function setHubSlot(slot: number) {
 function addConsole(text: string) {
   const parts = (partialLine + text).replace(/\r/g, '').split('\n')
   partialLine = parts.pop() ?? ''
-  if (parts.length) set({ console: [...state.console, ...parts].slice(-MAX_CONSOLE_LINES) })
+  // Telemetry travels over the console, but it is data for the charts and not a message to read.
+  const shown = parts.filter((line) => !isTelemetryLine(line))
+  const samples = parts.flatMap((line) => parseTelemetryLine(line) ?? [])
+  if (shown.length) set({ console: [...state.console, ...shown].slice(-MAX_CONSOLE_LINES) })
+  if (samples.length) set({ telemetry: [...state.telemetry, ...samples].slice(-MAX_TELEMETRY) })
 }
 
 function applyDevices(updates: DeviceUpdate[]) {
@@ -353,7 +363,7 @@ export async function runOnHub(code: string) {
   const slot = state.slot
   partialLine = ''
   const wasRunning = state.status === 'running'
-  set({ status: 'uploading', progress: 0, problem: null, console: [] })
+  set({ status: 'uploading', progress: 0, problem: null, console: [], telemetry: [] })
   try {
     if (wasRunning) await c.stop(slot).catch(() => false)
     await c.upload(code, slot, (progress) => set({ progress }))

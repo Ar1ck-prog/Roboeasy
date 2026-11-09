@@ -3,12 +3,14 @@
 import type { ReactNode } from 'react'
 import { Bluetooth, BluetoothOff, Loader2, Play, Square, Unplug } from 'lucide-react'
 
+import { TelemetryPanel } from '@/components/telemetry-panel'
 import { AnimIcon } from '@/components/ui/anim-icon'
 import { buttonVariants } from '@/components/ui/button'
 import { type Locale, fill } from '@/lib/i18n/config'
 import { type RobotLinkText, getRobotLinkText } from '@/lib/i18n/robot-link'
 import { connectHub, disconnectHub, runOnHub, setHubSlot, stopHub, useBluetoothAvailable, useHub } from '@/lib/spike/ble'
 import { type DeviceUpdate, SLOT_COUNT } from '@/lib/spike/ble-protocol'
+import { programForHub } from '@/lib/spike/telemetry'
 import { cn } from '@/lib/utils'
 
 function deviceText(d: DeviceUpdate, t: RobotLinkText): string {
@@ -95,6 +97,7 @@ export function RobotPanel({ lang, className, children }: { lang: Locale; classN
         </label>
       )}
       {available && children}
+      {available && <TelemetryPanel lang={lang} />}
       {hub.status === 'running' && (
         <p className="m-0 text-sm font-bold text-link" role="status">
           <AnimIcon name="play" /> {t.running}
@@ -165,7 +168,7 @@ export function SendToRobot({
         type="button"
         className={buttonVariants({ size, variant: 'primary' })}
         disabled={busy || disabled}
-        onClick={() => void runOnHub(typeof code === 'function' ? code() : code)}
+        onClick={() => void runOnHub(programForHub(typeof code === 'function' ? code() : code))}
       >
         {busy ? <Loader2 className="animate-spin" aria-hidden="true" /> : linked ? <Play aria-hidden="true" /> : <Bluetooth aria-hidden="true" />}
         {hub.status === 'uploading' ? fill(t.uploading, { n: Math.round(hub.progress * 100) }) : linked ? t.send : t.sendConnect}
