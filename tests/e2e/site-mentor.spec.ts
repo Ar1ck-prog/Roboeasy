@@ -71,3 +71,47 @@ test('failures are told in plain words and do not go back to the AI', async ({ p
   await expect(chat.getByText('Теперь отвечаю')).toBeVisible()
   expect(second?.messages.map((m) => m.text)).toEqual(['С чего мне начать?', 'Снова'])
 })
+
+test('voice: a spoken question is sent, and the answer is read aloud when asked for', async ({ page }) => {
+  await page.route('**/api/mentor', (route) => route.fulfill({ json: { ok: true, answer: 'Начни с урока про моторы.', remaining: 5 } }))
+  await page.addInitScript(() => {
+    class FakeRecognition {
+      lang = ''
+      interimResults = false
+      maxAlternatives = 1
+      onresult: ((e: unknown) => void) | null = null
+      onerror: (() => void) | null = null
+      onend: (() => void) | null = null
+      start() {
+        ;(window as unknown as { __speechLang: string }).__speechLang = this.lang
+        setTimeout(() => {
+          this.onresult?.({ results: [[{ transcript: 'С чего начать?' }]] })
+          this.onend?.()
+        }, 50)
+      }
+      stop() {
+        this.onend?.()
+      }
+    }
+    for (const name of ['SpeechRecognition', 'webkitSpeechRecognition']) Object.defineProperty(window, name, { value: FakeRecognition, configurable: true })
+    const spoken: string[] = []
+    ;(window as unknown as { __spoken: string[] }).__spoken = spoken
+    window.speechSynthesis.speak = (u: SpeechSynthesisUtterance) => void spoken.push(u.text)
+  })
+  await page.goto('/ru/library')
+  await page.getByRole('button', { name: 'Открыть чат с наставником' }).click()
+  await page.getByRole('checkbox', { name: 'Озвучивать ответы' }).check()
+  await page.getByRole('button', { name: 'Спросить голосом' }).click()
+  await expect(page.getByText('Начни с урока про моторы.')).toBeVisible()
+  await expect(page.getByText('С чего начать?', { exact: true }).first()).toBeVisible()
+  expect(await page.evaluate(() => (window as unknown as { __speechLang: string }).__speechLang)).toBe('ru-RU')
+  await expect.poll(() => page.evaluate(() => (window as unknown as { __spoken: string[] }).__spoken)).toEqual(['Начни с урока про моторы.'])
+})
+
+test('the site can work offline-ready: its worker and offline page are served', async ({ request }) => {
+  const worker = await request.get('/sw.js')
+  expect(worker.ok()).toBe(true)
+  expect(await worker.text()).toContain('/offline.html')
+  const offline = await request.get('/offline.html')
+  expect(await offline.text()).toContain('Нет интернета')
+})
