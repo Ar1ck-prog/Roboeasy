@@ -28,6 +28,17 @@ function robotDescription(r: RobotProfile): string {
   ].join('\n')
 }
 
+/**
+ * One "steer" that drives a full circle. With steering S the inner wheel runs at
+ * (1 - S/50) of the outer one, and the distance is measured on the outer wheel.
+ */
+export function circleStep(diameterCm: number, robot: RobotProfile): { op: 'steer'; steering: number; value: number; unit: 'cm' } {
+  const track = robot.trackWidthMm / 10
+  const steering = Math.max(1, Math.round((100 * track) / (diameterCm + track)))
+  // From the rounded steering, so that the circle closes exactly.
+  return { op: 'steer', steering, value: Math.round(((100 * Math.PI * track) / steering) * 10) / 10, unit: 'cm' }
+}
+
 /** Prompt for the RoboEasy DSL; the same commands compile to word blocks and to Python. */
 export function dslSystemPrompt(robot: RobotProfile, lang: Lang): string {
   return `You turn a request from a child, a teacher or a robotics team into a program for a LEGO SPIKE Prime robot (SPIKE App 3).
@@ -92,6 +103,8 @@ GOOD PRACTICE
 - Add a small celebration when a task finishes (beep, image) only if it fits the request.
 - If the request is impossible for this robot or unsafe, return a harmless program that shows "no" and explain why in the description.
 - Never invent step types or fields. Numbers are plain JSON numbers.
+- Every "steer" needs both "value" and "unit"; "degrees" is not a field of "steer".
+- A circle is one "steer". For diameter D cm and wheel track T = ${robot.trackWidthMm / 10} cm: S = round(100*T/(D+T)), steering = S to the right or -S to the left, value = 314*T/S, unit "cm". If no size is given, use D = 40.
 - A "repeat", "forever", "repeat_until" or "if" must contain the commands it repeats or runs: "steps" (or "then") is never empty.
 
 EXAMPLES
@@ -100,6 +113,9 @@ Request: "Drive forward 20 cm, turn right and show a smile"
 
 Request: "Stop 10 cm before a wall and beep"
 {"title":"Stop at the wall","description":"The robot drives forward until the wall is closer than 10 cm, then stops and beeps.","steps":[{"op":"set_speed","speed":40},{"op":"start_move","direction":"forward"},{"op":"wait_until","condition":{"sensor":"distance","comparator":"<","value":10,"unit":"cm"}},{"op":"stop_move"},{"op":"beep","note":72,"seconds":0.3}]}
+
+Request: "Drive in a circle"
+{"title":"Circle","description":"The robot drives one full circle 40 cm across.","steps":[${JSON.stringify(circleStep(40, robot))}]}
 
 Request: "Drive in a square"
 {"title":"Square","description":"The robot drives along a square with 30 cm sides.","steps":[{"op":"repeat","times":4,"steps":[{"op":"move","direction":"forward","value":30,"unit":"cm"},{"op":"turn","direction":"right","degrees":90}]}]}`

@@ -327,6 +327,8 @@ const bodyList: JsonSchema = { ...stepList, minItems: 1 }
 
 /**
  * Compact schema: one Step object with `op` plus every field any op may use.
+ * The model writes fields strictly in this order and cannot go back, so the
+ * order must fit the examples in the system prompt (checked in tests).
  * Which fields belong to which op is described in the system prompt and
  * checked by `parseProgram`.
  */
@@ -348,8 +350,8 @@ export const PROGRAM_JSON_SCHEMA: JsonSchema = {
         value: { type: 'number' },
         unit: enumOf(distanceUnit),
         color: enumOf(sensorColor),
-        state: enumOf(forceState, buttonState),
         button: enumOf(hubButton),
+        state: enumOf(forceState, buttonState),
       },
       required: ['sensor'],
     },
@@ -357,20 +359,20 @@ export const PROGRAM_JSON_SCHEMA: JsonSchema = {
       type: 'object',
       properties: {
         op: { type: 'string', enum: [...STEP_OPS] },
-        direction: enumOf(startDirection, positionDirection),
-        value: { type: 'number' },
-        unit: enumOf(moveUnit),
-        degrees: range(1, 3600),
-        steering: range(-100, 100),
-        speed: range(5, 100),
         port: enumOf(port),
         left: enumOf(port),
         right: enumOf(port),
         position: range(0, 359),
-        text: { type: 'string' },
+        direction: enumOf(startDirection, positionDirection),
+        degrees: range(1, 3600),
+        steering: range(-100, 100),
+        value: { type: 'number' },
+        unit: enumOf(moveUnit),
+        speed: range(5, 100),
         image: { type: 'string' },
-        seconds: { type: 'number' },
+        text: { type: 'string' },
         note: range(36, 96),
+        seconds: { type: 'number' },
         color: enumOf(lightColor),
         times: range(1, 100),
         condition: { $ref: '#/$defs/Condition' },

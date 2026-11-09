@@ -13,6 +13,8 @@ export const maxDuration = 60
 
 /** Stay under maxDuration so the client gets a proper error instead of a platform timeout. */
 const TOTAL_TIMEOUT_MS = 55_000
+/** One stuck model must leave time for the fallbacks and for a corrected answer. */
+const GENERATE_ATTEMPT_MS = 20_000
 const MAX_BODY_BYTES = 64_000
 const RATE_LIMIT = { requests: 10, windowMs: 60_000 }
 const LANGS: readonly Lang[] = ['ru', 'kk', 'en']
@@ -65,7 +67,7 @@ async function generateProgram(ai: GoogleGenAI, req: ParsedRequest, signal: Abor
   const system = dslSystemPrompt(req.robot, req.lang)
   const message = userMessage(req.prompt, req.previous)
   const ask = async (text: string) => {
-    const result = parseProgram(await askGemini(ai, system, text, PROGRAM_JSON_SCHEMA, signal), req.robot)
+    const result = parseProgram(await askGemini(ai, system, text, PROGRAM_JSON_SCHEMA, signal, GENERATE_ATTEMPT_MS), req.robot)
     if (!result.ok) return result
     const empty = findEmptyBlocks(result.value.steps)
     return empty.length ? { ok: false as const, error: `${empty.join('; ')}. Put the commands inside.` } : result
@@ -91,7 +93,7 @@ async function generateFreePython(ai: GoogleGenAI, req: ParsedRequest, signal: A
   const message = userMessage(req.prompt, req.previous)
 
   const attempt = async (text: string) => {
-    const parsed = parsePythonAnswer(await askGemini(ai, system, text, PYTHON_JSON_SCHEMA, signal))
+    const parsed = parsePythonAnswer(await askGemini(ai, system, text, PYTHON_JSON_SCHEMA, signal, GENERATE_ATTEMPT_MS))
     if (!parsed.ok) return { answer: null, problems: parsed.error, issues: [] as string[] }
     const answer = { ...parsed.value, code: cleanPython(parsed.value.code) }
     const issues = checkPython(answer.code)
