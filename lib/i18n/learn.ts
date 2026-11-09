@@ -12,6 +12,7 @@ const ru = {
     sandbox: 'Песочница',
     compete: 'Соревнования',
     profile: 'Профиль',
+    signIn: 'Войти',
   },
   sim: { play: 'Запустить', pause: 'Пауза', restart: 'Сначала', speed: 'Скорость воспроизведения', time: 'Симулятор' },
   lesson: {
@@ -107,6 +108,7 @@ const kk: LearnText = {
     sandbox: 'Құмсалғыш',
     compete: 'Жарыстар',
     profile: 'Профиль',
+    signIn: 'Кіру',
   },
   sim: { play: 'Іске қосу', pause: 'Үзіліс', restart: 'Басынан', speed: 'Ойнату жылдамдығы', time: 'Симулятор' },
   lesson: {
@@ -195,6 +197,7 @@ const en: LearnText = {
     sandbox: 'Sandbox',
     compete: 'Competitions',
     profile: 'Profile',
+    signIn: 'Sign in',
   },
   sim: { play: 'Play', pause: 'Pause', restart: 'From the start', speed: 'Playback speed', time: 'Simulator' },
   lesson: {

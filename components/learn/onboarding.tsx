@@ -1,10 +1,12 @@
 'use client'
 
-import { useId, useState } from 'react'
+import { useEffect, useId, useState } from 'react'
 import Link from 'next/link'
-import { ArrowRight, Gauge, Rocket, ShieldCheck } from 'lucide-react'
+import { ArrowLeft, ArrowRight, Gauge, LogIn, Rocket, ShieldCheck } from 'lucide-react'
 
 import { Buddy } from '@/components/learn/buddy'
+import { AccountCard } from '@/components/learn/account-card'
+import { CLOUD_CONFIGURED } from '@/components/learn/use-cloud'
 import { buttonVariants } from '@/components/ui/button'
 import { Card } from '@/components/ui/card'
 import type { LearnAppText } from '@/lib/i18n/learn-app'
@@ -91,6 +93,12 @@ export function Onboarding({ lang, app, play, onSaved, onDone }: { lang: Lang; a
   const [goal, setGoal] = useState<keyof typeof GOALS>('l1')
   const [consent, setConsent] = useState(false)
   const [saved, setSaved] = useState(false)
+  const [signingIn, setSigningIn] = useState(false)
+
+  // The "Sign in" links in the header and tab bar point here.
+  useEffect(() => {
+    if (window.location.hash === '#account') setSigningIn(true)
+  }, [])
 
   const valid = nickname.trim().length >= 1 && age !== null && (!needsConsent(age) || consent)
 
@@ -145,12 +153,36 @@ export function Onboarding({ lang, app, play, onSaved, onDone }: { lang: Lang; a
       </div>
     )
 
+  if (signingIn)
+    return (
+      <div className="container grid max-w-2xl gap-6 py-10">
+        <h1 className="m-0 text-4xl">{t.haveAccount}</h1>
+        <AccountCard lang={lang} app={app} />
+        <button type="button" className={buttonVariants({ variant: 'ghost', className: 'justify-self-start' })} onClick={() => setSigningIn(false)}>
+          <ArrowLeft aria-hidden="true" />
+          {t.backToNew}
+        </button>
+      </div>
+    )
+
   return (
     <div className="container grid max-w-2xl gap-6 py-10">
       <header className="grid gap-2">
         <h1 className="m-0 text-4xl">{t.title}</h1>
         <p className="m-0 text-lg text-muted-foreground">{t.lead}</p>
       </header>
+      {CLOUD_CONFIGURED && (
+        <Card flat className="flex-row flex-wrap items-center justify-between gap-3" data-testid="have-account">
+          <div className="grid gap-0.5">
+            <p className="m-0 font-display text-lg font-bold">{t.haveAccount}</p>
+            <p className="m-0 text-sm text-muted-foreground">{t.haveAccountText}</p>
+          </div>
+          <button type="button" className={buttonVariants({ variant: 'secondary' })} onClick={() => setSigningIn(true)}>
+            <LogIn aria-hidden="true" />
+            {app.account.signIn}
+          </button>
+        </Card>
+      )}
       <Card>
         <form className="grid gap-6" onSubmit={save}>
           <div className="grid gap-2">

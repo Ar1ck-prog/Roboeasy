@@ -118,6 +118,9 @@ const ru = {
   },
   onboarding: {
     title: 'Давай знакомиться',
+    haveAccount: 'Уже есть аккаунт?',
+    haveAccountText: 'Войди, и прогресс с другого устройства вернётся.',
+    backToNew: 'Назад к знакомству',
     lead: 'Так мы подберём путь. Имя и фамилия не нужны — только ник. Всё хранится в этом браузере.',
     nickname: 'Ник',
     nicknameHint: 'Придумай ник. Не пиши настоящее имя и фамилию.',
@@ -396,6 +399,9 @@ const kk: LearnAppText = {
   },
   onboarding: {
     title: 'Танысайық',
+    haveAccount: 'Аккаунтың бар ма?',
+    haveAccountText: 'Кір, сонда басқа құрылғыдағы прогресің қайтады.',
+    backToNew: 'Танысуға оралу',
     lead: 'Осылай жолды таңдаймыз. Аты-жөнің керек емес — тек лақап ат. Бәрі осы браузерде сақталады.',
     nickname: 'Лақап ат',
     nicknameHint: 'Лақап ат ойлап тап. Нағыз аты-жөніңді жазба.',
@@ -669,6 +675,9 @@ const en: LearnAppText = {
   },
   onboarding: {
     title: 'Let’s get to know each other',
+    haveAccount: 'Already have an account?',
+    haveAccountText: 'Sign in and your progress from another device comes back.',
+    backToNew: 'Back to getting started',
     lead: 'This helps us pick your path. No real name needed — just a nickname. Everything stays in this browser.',
     nickname: 'Nickname',
     nicknameHint: 'Make up a nickname. Don’t use your real first and last name.',

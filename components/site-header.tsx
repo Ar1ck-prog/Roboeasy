@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import { House, Menu, UserRound, X } from 'lucide-react'
+import { House, LogIn, Menu, UserRound, X } from 'lucide-react'
 
 import { CoinChip } from '@/components/learn/coin-chip'
 import { LogoMark } from '@/components/logo'
@@ -12,6 +12,7 @@ import { buttonVariants } from '@/components/ui/button'
 import { type Locale, LOCALE_COOKIE, localeLabels, locales } from '@/lib/i18n/config'
 import type { LearnText } from '@/lib/i18n/learn'
 import type { Dictionary } from '@/lib/i18n/ru'
+import { useHydrated, useLearn } from '@/lib/learn/store'
 
 interface SiteHeaderProps {
   lang: Locale
@@ -71,6 +72,12 @@ export function SiteHeader({ lang, t, sections: names, coinsLabel = '', variant 
 
   const rest = pathname.replace(/^\/(ru|kk|en)(?=\/|$)/, '')
   const home = `/${lang}`
+  // On a new device there is no profile yet: this is the way in to an existing account.
+  const hydrated = useHydrated()
+  const learn = useLearn()
+  const newHere = hydrated && !learn.profile
+  const profileHref = `${home}/profile${newHere ? '#account' : ''}`
+  const profileName = newHere ? names.signIn : names.profile
   const sections =
     variant === 'landing'
       ? [
@@ -175,15 +182,15 @@ export function SiteHeader({ lang, t, sections: names, coinsLabel = '', variant 
                 <Link
                   prefetch={false}
                   className={buttonVariants({
-                    variant: current === 'profile' ? 'secondary' : 'ghost',
+                    variant: current === 'profile' || newHere ? 'secondary' : 'ghost',
                     size: 'sm',
                     className: 'header-wide',
                   })}
-                  href={`${home}/profile`}
+                  href={profileHref}
                   aria-current={current === 'profile' ? 'page' : undefined}
                 >
-                  <UserRound aria-hidden="true" />
-                  {names.profile}
+                  {newHere ? <LogIn aria-hidden="true" /> : <UserRound aria-hidden="true" />}
+                  {profileName}
                 </Link>
               </>
             )}
@@ -217,8 +224,8 @@ export function SiteHeader({ lang, t, sections: names, coinsLabel = '', variant 
           {[
             ...pages,
             {
-              href: `${home}/profile`,
-              label: names.profile,
+              href: profileHref,
+              label: profileName,
               current: current === 'profile',
             },
           ].map((p) => (
