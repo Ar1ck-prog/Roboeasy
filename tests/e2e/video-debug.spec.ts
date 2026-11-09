@@ -53,5 +53,5 @@ test('a short video becomes stills, and the mentor answers with a question befor
   const body = sent as unknown as { frames: { t: number; data: string }[]; program: string }
   expect(body.frames.length).toBeGreaterThan(0)
   expect(body.frames[0].data.startsWith('/9j/')).toBe(true)
-  expect(body.program).toContain('turn(90')
+  expect(body.program).toContain('runloop.sleep_ms(1000)')
 })
