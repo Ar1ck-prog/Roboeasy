@@ -138,7 +138,7 @@ export function PathTrail({
               )}
               <span
                 className={cn(
-                  'absolute top-1/2 w-max max-w-36 -translate-y-1/2 rounded-(--radius-xs) bg-card px-2 py-1 text-[0.8125rem] leading-tight font-bold shadow-(--shadow-press) border-(length:--stroke-thin) border-outline',
+                  'absolute top-1/2 w-max max-w-32 min-[400px]:max-w-36 -translate-y-1/2 rounded-(--radius-xs) bg-card px-2 py-1 text-[0.8125rem] leading-tight font-bold shadow-(--shadow-press) border-(length:--stroke-thin) border-outline',
                   left ? 'left-[calc(100%+10px)]' : 'right-[calc(100%+10px)] text-right',
                   (n.state === 'locked' || n.state === 'soon') && 'text-muted-foreground',
                 )}

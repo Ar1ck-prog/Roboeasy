@@ -53,7 +53,8 @@ export function LearnMap({ lang, app }: { lang: Lang; app: LearnAppText }) {
       {!hydrated || (done.size === 0 && !tookPlacement) ? (
         <Card className="flex-row flex-wrap items-center gap-4 bg-(--ok-bg)">
           <Gauge className="size-8 shrink-0" aria-hidden="true" />
-          <div className="min-w-0 flex-1">
+          {/* At least this wide: on a phone the button moves below instead of squeezing the text. */}
+          <div className="min-w-[min(100%,14rem)] flex-1">
             <h2 className="m-0 text-xl">{app.map.placementTitle}</h2>
             <p className="m-0 text-muted-foreground">{app.map.placementText}</p>
           </div>

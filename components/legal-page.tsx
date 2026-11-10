@@ -8,7 +8,7 @@ export function LegalView({ page }: { page: LegalPage }) {
     <div className="container grid max-w-3xl gap-6 py-10">
       <header className="grid gap-3">
         <h1 className="m-0 flex items-center gap-3 text-4xl md:text-5xl">
-          <ShieldCheck className="size-10" aria-hidden="true" />
+          <ShieldCheck className="size-10 shrink-0 max-sm:hidden" aria-hidden="true" />
           {page.title}
         </h1>
         <p className="m-0 text-lg text-muted-foreground">{page.lead}</p>

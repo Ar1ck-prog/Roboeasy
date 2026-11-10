@@ -479,6 +479,28 @@
   }
 }
 
+/* Phones: long words in headings ("Конфиденциальность", "Программирование") wrap
+   instead of pushing the page sideways, and big titles step down a size. */
+main h1,
+main h2,
+main h3 {
+  overflow-wrap: anywhere;
+  hyphens: auto;
+}
+@media (max-width: 480px) {
+  /* Scales with the screen, so even "Конфиденциальность" fits on one line. */
+  main h1.text-4xl,
+  main h1.text-5xl {
+    /* !important: this sits in the components layer, and Tailwind's text-4xl in utilities would win. */
+    font-size: clamp(1.5rem, 7.2vw, 1.875rem) !important;
+    line-height: 1.15 !important;
+  }
+  /* Room at the end of a page for the floating mentor button. */
+  main {
+    padding-bottom: 72px;
+  }
+}
+
 /* Lesson drawings move only for learners who have not asked for less motion. */
 @media (prefers-reduced-motion: reduce) {
   .ill-anim,

@@ -810,7 +810,7 @@ export function FieldSim({ lang, t, season, bgT, blocksT }: Props) {
       </div>
 
       <div className="flex flex-wrap items-center gap-3">
-        <Link className={buttonVariants()} href={`/${lang}/compete`}>
+        <Link className={buttonVariants({ className: 'max-w-full max-sm:h-auto max-sm:py-2 max-sm:whitespace-normal max-sm:text-center' })} href={`/${lang}/compete`}>
           {t.toPlanner}
           <ArrowRight aria-hidden="true" />
         </Link>

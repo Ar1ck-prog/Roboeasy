@@ -189,7 +189,7 @@ export function FieldSimulator({ lang, t, toPlanner }: { lang: Lang; t: Simulato
 
       <Card className="flex-col items-start gap-3 sm:flex-row sm:items-center sm:justify-between" flat>
         <p className="m-0 font-bold">{t.tip}</p>
-        <Link className={buttonVariants({ size: 'sm' })} href={`/${lang}/compete`}>
+        <Link className={buttonVariants({ size: 'sm', className: 'max-w-full max-sm:h-auto max-sm:py-2 max-sm:whitespace-normal max-sm:text-center' })} href={`/${lang}/compete`}>
           {toPlanner}
           <ArrowRight aria-hidden="true" />
         </Link>
