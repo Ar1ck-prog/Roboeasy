@@ -2275,6 +2275,336 @@
           ]
         }
       ]
+    },
+    {
+      "id": "ai-basics",
+      "title": {
+        "ru": "ИИ с нуля",
+        "kk": "ЖИ нөлден",
+        "en": "AI from zero"
+      },
+      "description": {
+        "ru": "Как учится ИИ, как с ним говорить, вайбкодинг, безопасность и обучение робота прямо в браузере.",
+        "kk": "ЖИ қалай үйренеді, онымен қалай сөйлесу керек, вайбкодинг, қауіпсіздік және роботты браузерде үйрету.",
+        "en": "How AI learns, how to talk to it, vibe coding, safety and training a robot right in the browser."
+      },
+      "icon": "Brain",
+      "color": "var(--blk-sensors)",
+      "prerequisites": [],
+      "units": [
+        {
+          "id": "ai-what",
+          "title": {
+            "ru": "Что такое ИИ",
+            "kk": "ЖИ деген не",
+            "en": "What AI is"
+          },
+          "lessons": [
+            {
+              "id": "ai-01",
+              "title": {
+                "ru": "Что умеет ИИ",
+                "kk": "ЖИ не істей алады",
+                "en": "What AI can do"
+              },
+              "skills": [
+                "ai-literacy"
+              ],
+              "status": "ready",
+              "project": false,
+              "kit": false
+            },
+            {
+              "id": "ai-02",
+              "title": {
+                "ru": "Данные решают всё",
+                "kk": "Бәрін деректер шешеді",
+                "en": "Data decides everything"
+              },
+              "skills": [
+                "ai-literacy"
+              ],
+              "status": "ready",
+              "project": false,
+              "kit": false
+            },
+            {
+              "id": "ai-03",
+              "title": {
+                "ru": "Почему нейросеть ошибается",
+                "kk": "Нейрожелі неге қателеседі",
+                "en": "Why a neural network makes mistakes"
+              },
+              "skills": [
+                "ai-literacy"
+              ],
+              "status": "ready",
+              "project": false,
+              "kit": false
+            }
+          ]
+        },
+        {
+          "id": "ai-around",
+          "title": {
+            "ru": "Нейросети вокруг нас",
+            "kk": "Айналамыздағы нейрожелілер",
+            "en": "Neural networks around us"
+          },
+          "lessons": [
+            {
+              "id": "ai-04",
+              "title": {
+                "ru": "ИИ для текста",
+                "kk": "Мәтінге арналған ЖИ",
+                "en": "AI for text"
+              },
+              "skills": [
+                "ai-literacy"
+              ],
+              "status": "ready",
+              "project": false,
+              "kit": false
+            },
+            {
+              "id": "ai-05",
+              "title": {
+                "ru": "Картинки и голос",
+                "kk": "Сурет пен дауыс",
+                "en": "Pictures and voice"
+              },
+              "skills": [
+                "ai-literacy"
+              ],
+              "status": "ready",
+              "project": false,
+              "kit": false
+            },
+            {
+              "id": "ai-06",
+              "title": {
+                "ru": "Какой ИИ выбрать",
+                "kk": "Қай ЖИ-ді таңдау керек",
+                "en": "Choosing an AI"
+              },
+              "skills": [
+                "ai-literacy"
+              ],
+              "status": "ready",
+              "project": false,
+              "kit": false
+            }
+          ]
+        },
+        {
+          "id": "ai-prompts",
+          "title": {
+            "ru": "Как говорить с ИИ",
+            "kk": "ЖИ-мен қалай сөйлесу керек",
+            "en": "How to talk to AI"
+          },
+          "lessons": [
+            {
+              "id": "ai-07",
+              "title": {
+                "ru": "Хороший запрос",
+                "kk": "Жақсы сұрау",
+                "en": "A good prompt"
+              },
+              "skills": [
+                "ai-literacy"
+              ],
+              "status": "ready",
+              "project": false,
+              "kit": false
+            },
+            {
+              "id": "ai-08",
+              "title": {
+                "ru": "Проверяй ответы",
+                "kk": "Жауаптарды тексер",
+                "en": "Check the answers"
+              },
+              "skills": [
+                "ai-literacy"
+              ],
+              "status": "ready",
+              "project": false,
+              "kit": false
+            },
+            {
+              "id": "ai-09",
+              "title": {
+                "ru": "Честно в учёбе",
+                "kk": "Оқуда адал",
+                "en": "Honest in school"
+              },
+              "skills": [
+                "ai-literacy"
+              ],
+              "status": "ready",
+              "project": false,
+              "kit": false
+            }
+          ]
+        },
+        {
+          "id": "ai-vibe",
+          "title": {
+            "ru": "Вайбкодинг",
+            "kk": "Вайбкодинг",
+            "en": "Vibe coding"
+          },
+          "lessons": [
+            {
+              "id": "ai-10",
+              "title": {
+                "ru": "Что такое вайбкодинг",
+                "kk": "Вайбкодинг деген не",
+                "en": "What vibe coding is"
+              },
+              "skills": [
+                "ai-literacy"
+              ],
+              "status": "ready",
+              "project": false,
+              "kit": false
+            },
+            {
+              "id": "ai-11",
+              "title": {
+                "ru": "Собери мини-игру",
+                "kk": "Шағын ойын жаса",
+                "en": "Build a mini game"
+              },
+              "skills": [
+                "ai-literacy"
+              ],
+              "status": "ready",
+              "project": false,
+              "kit": false
+            },
+            {
+              "id": "ai-12",
+              "title": {
+                "ru": "Улучшай по шагам",
+                "kk": "Қадам-қадаммен жақсарт",
+                "en": "Improve step by step"
+              },
+              "skills": [
+                "ai-literacy"
+              ],
+              "status": "ready",
+              "project": false,
+              "kit": false
+            }
+          ]
+        },
+        {
+          "id": "ai-life",
+          "title": {
+            "ru": "ИИ в жизни",
+            "kk": "Өмірдегі ЖИ",
+            "en": "AI in life"
+          },
+          "lessons": [
+            {
+              "id": "ai-13",
+              "title": {
+                "ru": "ИИ в учёбе и переводах",
+                "kk": "Оқудағы және аудармадағы ЖИ",
+                "en": "AI for study and translation"
+              },
+              "skills": [
+                "ai-literacy"
+              ],
+              "status": "ready",
+              "project": false,
+              "kit": false
+            },
+            {
+              "id": "ai-14",
+              "title": {
+                "ru": "Своё дело с ИИ",
+                "kk": "ЖИ-мен өз ісің",
+                "en": "Your own project with AI"
+              },
+              "skills": [
+                "ai-literacy"
+              ],
+              "status": "ready",
+              "project": false,
+              "kit": false
+            },
+            {
+              "id": "ai-15",
+              "title": {
+                "ru": "Безопасность и дипфейки",
+                "kk": "Қауіпсіздік және дипфейктер",
+                "en": "Safety and deepfakes"
+              },
+              "skills": [
+                "ai-literacy"
+              ],
+              "status": "ready",
+              "project": false,
+              "kit": false
+            }
+          ]
+        },
+        {
+          "id": "ai-robots",
+          "title": {
+            "ru": "ИИ для роботов",
+            "kk": "Роботтарға арналған ЖИ",
+            "en": "AI for robots"
+          },
+          "lessons": [
+            {
+              "id": "ai-16",
+              "title": {
+                "ru": "Робот слушается жестов",
+                "kk": "Робот ымды тыңдайды",
+                "en": "A robot that obeys gestures"
+              },
+              "skills": [
+                "ai-literacy"
+              ],
+              "status": "ready",
+              "project": false,
+              "kit": false
+            },
+            {
+              "id": "ai-17",
+              "title": {
+                "ru": "Сортировка по цвету",
+                "kk": "Түс бойынша сұрыптау",
+                "en": "Sorting by colour"
+              },
+              "skills": [
+                "ai-literacy"
+              ],
+              "status": "ready",
+              "project": false,
+              "kit": false
+            },
+            {
+              "id": "ai-18",
+              "title": {
+                "ru": "Когда примеров мало",
+                "kk": "Мысал аз болғанда",
+                "en": "When there are too few examples"
+              },
+              "skills": [
+                "ai-literacy"
+              ],
+              "status": "ready",
+              "project": false,
+              "kit": false
+            }
+          ]
+        }
+      ]
     }
   ]
 }

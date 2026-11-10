@@ -2,13 +2,13 @@ import { describe, expect, it } from 'vitest'
 
 import { checkPython, cleanPython, importedModules, programToPython } from '../lib/dsl/compile-python'
 import { DEFAULT_ROBOT, type Step } from '../lib/dsl/types'
-import { EVERY_STEP, valid } from './helpers'
+import { EVERY_FUNCTIONS, EVERY_STEP, valid } from './helpers'
 
 const python = (steps: Step[], robot = DEFAULT_ROBOT) => programToPython(valid({ title: 'Test', description: 'Snapshot', steps }, robot), robot)
 
 describe('compile-python', () => {
   it('compiles every command into Python without hub issues', () => {
-    const code = python(EVERY_STEP)
+    const code = programToPython(valid({ title: 'Test', description: 'Snapshot', steps: EVERY_STEP, functions: EVERY_FUNCTIONS }))
     expect(checkPython(code)).toEqual([])
     for (const snippet of [
       'motor_pair.unpair(motor_pair.PAIR_1)',

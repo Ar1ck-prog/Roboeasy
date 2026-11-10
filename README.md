@@ -42,6 +42,46 @@ Sign-in emails land in the local Mailpit: http://127.0.0.1:56324.
 - Routes: `/path` (home, onboarding), `/learn`, `/learn/[track]`, `/learn/[track]/[lesson]`, `/learn/placement`, `/review`, `/path/challenge`, `/play` (games: `/play/maze`, `/play/puzzle`, `/play/memory`, `/play/blitz`), `/garage`, `/library`, `/profile`, `/cert/[code]`, `/privacy`, `/parents`, `/sandbox` (AI studio), `/compete` (FLL), `/compete/simulator` (FLL field simulator: BIOGLOW field with the team's mat picture shared with the FLL coach, runs from missions or blocks, a 2:30 match and the season score sheet), `/ai` (the generator's landing), `/admin` (hidden in production).
 - Privacy and child safety: `docs/privacy.md` (draft for legal review).
 
+## RoboEasy 2.0
+
+What was added (full list in `CHANGELOG.md`):
+
+| Where | What |
+| --- | --- |
+| `/[lang]/sandbox` | Generator with arcs, circles, variables and the program's own blocks |
+| `/[lang]/sandbox/draw` | Draw a route; the code turns it into commands |
+| `/[lang]/sandbox/video` | Video debugging with the mentor |
+| `/[lang]/learn/ai-basics` | "AI from zero" section |
+| `/[lang]/teacher` | Teacher's room: classes, before-and-after report, Excel and CSV |
+| `/[lang]/class` | Learners join a class with a code, a nickname and a PIN |
+| `/[lang]/admin/ai` | Today's AI usage (admins only) |
+
+### Environment variables
+
+Server secrets are never committed. Set them in `.env.local` or in the Render dashboard.
+
+| Variable | Needed | Purpose |
+| --- | --- | --- |
+| `GEMINI_API_KEY` | yes | Key of the site |
+| `GEMINI_MODEL_MAIN` | yes | Model for complex requests and video |
+| `GEMINI_MODEL_LIGHT` | no | Model for simple requests (falls back to the main one) |
+| `GEMINI_MODEL_FALLBACKS` | no | Comma-separated models to try when others are out of quota |
+| `GEMINI_MENTOR_API_KEY` | no | Separate key for the mentor in production |
+| `GEMINI_API_KEY_DEV` | for eval | Demo key; used instead of the others outside production |
+| `SUPABASE_SERVICE_ROLE_KEY` | for the AI layer | Cache, shared limits, counters, failure log |
+| `NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_ANON_KEY` | for accounts | Accounts, sync, classes |
+| `CERT_SECRET` | in production | Signs certificates and hashes rate-limit keys |
+
+Classes also need **Authentication → Providers → Allow anonymous sign-ins** turned on in Supabase, and the migrations in `supabase/migrations` applied.
+
+### Generator eval
+
+```bash
+npm run eval:generator -- --limit 10
+```
+
+It uses only `GEMINI_API_KEY_DEV`, refuses to run without it or without `--limit`, stops at the first quota error and never spends more than 15 requests. It prints the success rate per category. Unit and browser tests never reach Gemini.
+
 ## Key principle
 
 The AI only writes commands of a small DSL. Valid word blocks and Python are produced by our deterministic compilers; the AI never writes Scratch JSON. In the FLL helper the AI decides the strategy, while distances and angles are computed from the field coordinates by our code.

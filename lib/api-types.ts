@@ -25,11 +25,13 @@ export type GenerateErrorCode =
   | 'ai_busy'
   | 'ai_failed'
   | 'empty_program'
+  | 'unsupported'
 
 export type GenerateResponse =
   | { ok: true; format: 'blocks'; title: string; description: string; program: Program; python: string; warnings: string[] }
   /** `program` is present when the Python was compiled from DSL commands. */
   | { ok: true; format: 'python'; title: string; description: string; code: string; program?: Program; warnings: string[] }
-  | { ok: false; error: GenerateErrorCode; retryAfter?: number }
+  /** `reason` and `suggestion` come with `unsupported`: why the robot cannot do it and what it could do instead. */
+  | { ok: false; error: GenerateErrorCode; retryAfter?: number; reason?: string; suggestion?: string }
 
 export const PROMPT_MAX = 800

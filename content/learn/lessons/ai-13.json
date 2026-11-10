@@ -1,0 +1,102 @@
+{
+  "id": "ai-13",
+  "track": "ai-basics",
+  "unit": "ai-life",
+  "minutes": 5,
+  "skills": [
+    "ai-literacy"
+  ],
+  "title": {
+    "ru": "ИИ в учёбе и переводах",
+    "kk": "Оқудағы және аудармадағы ЖИ",
+    "en": "AI for study and translation"
+  },
+  "goal": {
+    "ru": "Сегодня ты узнаешь, как ИИ помогает учиться.",
+    "kk": "Бүгін ЖИ оқуға қалай көмектесетінін білесің.",
+    "en": "Today you will learn how AI helps you study."
+  },
+  "summary": {
+    "ru": "Теперь ты знаешь полезные приёмы с ИИ.",
+    "kk": "Енді ЖИ-мен пайдалы тәсілдерді білесің.",
+    "en": "Now you know useful ways to use AI."
+  },
+  "steps": [
+    {
+      "id": "intro",
+      "type": "theory",
+      "title": {
+        "ru": "Полезные приёмы",
+        "kk": "Пайдалы тәсілдер",
+        "en": "Useful habits"
+      },
+      "body": {
+        "ru": "Попроси ИИ объяснить тему проще, придумать вопросы для самопроверки, перевести и объяснить слово.\n\nПереводчики ошибаются в именах и редких словах, особенно в казахском. Важный перевод покажи человеку.",
+        "kk": "ЖИ-ден тақырыпты қарапайым түсіндіруді, өзін-өзі тексеру сұрақтарын құрастыруды, сөзді аударып түсіндіруді сұра.\n\nАудармашылар есімдер мен сирек сөздерде, әсіресе қазақ тілінде, қателеседі. Маңызды аударманы адамға көрсет.",
+        "en": "Ask AI to explain a topic more simply, make up self-check questions, or translate and explain a word.\n\nTranslators make mistakes with names and rare words, especially in Kazakh. Show an important translation to a person."
+      }
+    },
+    {
+      "id": "quiz-1",
+      "type": "quiz",
+      "kind": "choice",
+      "skill": "ai-literacy",
+      "question": {
+        "ru": "Какой приём помогает готовиться к контрольной?",
+        "kk": "Бақылау жұмысына дайындалуға қай тәсіл көмектеседі?",
+        "en": "Which habit helps you prepare for a test?"
+      },
+      "options": [
+        {
+          "ru": "Попросить вопросы для самопроверки",
+          "kk": "Өзін-өзі тексеру сұрақтарын сұрау",
+          "en": "Asking for self-check questions"
+        },
+        {
+          "ru": "Попросить решить всё за тебя",
+          "kk": "Бәрін сенің орныңа шешуді сұрау",
+          "en": "Asking it to solve everything for you"
+        }
+      ],
+      "correct": [
+        0
+      ],
+      "explanation": {
+        "ru": "Вопросы заставляют вспоминать.",
+        "kk": "Сұрақтар есте сақтауға мәжбүрлейді.",
+        "en": "Questions make you recall things."
+      }
+    },
+    {
+      "id": "quiz-2",
+      "type": "quiz",
+      "kind": "choice",
+      "skill": "ai-literacy",
+      "question": {
+        "ru": "Где машинный перевод чаще ошибается?",
+        "kk": "Машиналық аударма қай жерде жиі қателеседі?",
+        "en": "Where does machine translation go wrong more often?"
+      },
+      "options": [
+        {
+          "ru": "В именах и редких словах",
+          "kk": "Есімдер мен сирек сөздерде",
+          "en": "With names and rare words"
+        },
+        {
+          "ru": "Никогда не ошибается",
+          "kk": "Ешқашан қателеспейді",
+          "en": "It never goes wrong"
+        }
+      ],
+      "correct": [
+        0
+      ],
+      "explanation": {
+        "ru": "Редких примеров в данных меньше.",
+        "kk": "Деректерде сирек мысалдар аз.",
+        "en": "There are fewer rare examples in the data."
+      }
+    }
+  ]
+}

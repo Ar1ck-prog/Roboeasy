@@ -1,0 +1,112 @@
+{
+  "id": "ai-03",
+  "track": "ai-basics",
+  "unit": "ai-what",
+  "minutes": 5,
+  "skills": [
+    "ai-literacy"
+  ],
+  "title": {
+    "ru": "Почему нейросеть ошибается",
+    "kk": "Нейрожелі неге қателеседі",
+    "en": "Why a neural network makes mistakes"
+  },
+  "goal": {
+    "ru": "Сегодня ты узнаешь, почему нельзя верить ИИ на слово.",
+    "kk": "Бүгін ЖИ-ге неге соқыр сенуге болмайтынын білесің.",
+    "en": "Today you will learn why AI should not be taken at its word."
+  },
+  "summary": {
+    "ru": "Теперь ты знаешь: ИИ угадывает самое вероятное и может уверенно ошибаться.",
+    "kk": "Енді білесің: ЖИ ең ықтимал жауапты болжайды және сенімді түрде қателесе алады.",
+    "en": "Now you know: AI guesses what is most likely and can be confidently wrong."
+  },
+  "steps": [
+    {
+      "id": "intro",
+      "type": "theory",
+      "title": {
+        "ru": "ИИ угадывает",
+        "kk": "ЖИ болжайды",
+        "en": "AI guesses"
+      },
+      "body": {
+        "ru": "Нейросеть не знает правды. Она выбирает **самый вероятный** ответ по примерам, которые видела.\n\nИногда она придумывает то, чего нет, и говорит очень уверенно. Это называют **галлюцинацией**. Поэтому важные ответы ИИ всегда проверяй.",
+        "kk": "Нейрожелі шындықты білмейді. Ол көрген мысалдары бойынша **ең ықтимал** жауапты таңдайды.\n\nКейде ол жоқ нәрсені ойлап тауып, өте сенімді айтады. Мұны **галлюцинация** дейді. Сондықтан ЖИ-дің маңызды жауаптарын әрқашан тексер.",
+        "en": "A neural network does not know the truth. It picks the **most likely** answer based on the examples it has seen.\n\nSometimes it makes up things that do not exist and says them very confidently. This is called a **hallucination**. So always check AI’s important answers."
+      }
+    },
+    {
+      "id": "quiz-1",
+      "type": "quiz",
+      "kind": "choice",
+      "skill": "ai-literacy",
+      "question": {
+        "ru": "Что такое галлюцинация ИИ?",
+        "kk": "ЖИ галлюцинациясы деген не?",
+        "en": "What is an AI hallucination?"
+      },
+      "options": [
+        {
+          "ru": "Уверенный, но выдуманный ответ",
+          "kk": "Сенімді, бірақ ойдан шығарылған жауап",
+          "en": "A confident but made-up answer"
+        },
+        {
+          "ru": "Красивая картинка",
+          "kk": "Әдемі сурет",
+          "en": "A pretty picture"
+        },
+        {
+          "ru": "Сбой интернета",
+          "kk": "Интернет ақауы",
+          "en": "An internet failure"
+        }
+      ],
+      "correct": [
+        0
+      ],
+      "explanation": {
+        "ru": "ИИ может звучать уверенно и ошибаться.",
+        "kk": "ЖИ сенімді естіліп, қателесе алады.",
+        "en": "AI can sound sure and be wrong."
+      }
+    },
+    {
+      "id": "quiz-2",
+      "type": "quiz",
+      "kind": "choice",
+      "skill": "ai-literacy",
+      "question": {
+        "ru": "ИИ назвал дату события. Что сделать?",
+        "kk": "ЖИ оқиға күнін айтты. Не істеу керек?",
+        "en": "AI gave the date of an event. What should you do?"
+      },
+      "options": [
+        {
+          "ru": "Сразу записать в реферат",
+          "kk": "Бірден рефератқа жазу",
+          "en": "Put it straight in your essay"
+        },
+        {
+          "ru": "Проверить в надёжном источнике",
+          "kk": "Сенімді дереккөзден тексеру",
+          "en": "Check a reliable source"
+        },
+        {
+          "ru": "Спросить ещё раз и поверить",
+          "kk": "Тағы сұрап, сену",
+          "en": "Ask again and believe it"
+        }
+      ],
+      "correct": [
+        1
+      ],
+      "explanation": {
+        "ru": "Факты от ИИ нужно проверять.",
+        "kk": "ЖИ берген деректерді тексеру керек.",
+        "en": "Facts from AI need checking."
+      }
+    }
+  ]
+}

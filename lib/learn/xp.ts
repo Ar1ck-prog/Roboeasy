@@ -21,7 +21,7 @@ export function xpForEvent(e: LearnEvent): number {
     case 'lesson_done':
       return XP_RULES.lesson + (e.project ? XP_RULES.project : 0)
     case 'step_done':
-      return e.firstTry && e.hints === 0 && ['code', 'debug', 'predict', 'quiz', 'project'].includes(e.stepType) ? XP_RULES.firstTry : 0
+      return e.firstTry && e.hints === 0 && ['code', 'debug', 'predict', 'quiz', 'project', 'widget'].includes(e.stepType) ? XP_RULES.firstTry : 0
     case 'review_done':
       return XP_RULES.review
     case 'real_robot':

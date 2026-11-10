@@ -28,16 +28,282 @@ function robotDescription(r: RobotProfile): string {
   ].join('\n')
 }
 
-/**
- * One "steer" that drives a full circle. With steering S the inner wheel runs at
- * (1 - S/50) of the outer one, and the distance is measured on the outer wheel.
- */
-export function circleStep(diameterCm: number, robot: RobotProfile): { op: 'steer'; steering: number; value: number; unit: 'cm' } {
-  const track = robot.trackWidthMm / 10
-  const steering = Math.max(1, Math.round((100 * track) / (diameterCm + track)))
-  // From the rounded steering, so that the circle closes exactly.
-  return { op: 'steer', steering, value: Math.round(((100 * Math.PI * track) / steering) * 10) / 10, unit: 'cm' }
-}
+/** Worked tasks for the model, in all three languages. Every answer is checked by a test. */
+export const PROMPT_EXAMPLES: { request: string; answer: Record<string, unknown> }[] = [
+  {
+    request: 'Drive forward 20 cm, turn right and show a smile',
+    answer: {
+      unsupported: false,
+      title: 'Forward and smile',
+      description: 'The robot drives 20 cm, turns right and smiles.',
+      steps: [
+        { op: 'move', direction: 'forward', value: 20, unit: 'cm' },
+        { op: 'turn', direction: 'right', degrees: 90 },
+        { op: 'show_image', image: 'smile', seconds: 2 },
+      ],
+    },
+  },
+  {
+    request: 'Езжай по кругу',
+    answer: {
+      unsupported: false,
+      title: 'Круг',
+      description: 'Робот проезжает полный круг радиусом 20 см.',
+      steps: [{ op: 'circle', direction: 'right', radius: 20, turns: 1 }],
+    },
+  },
+  {
+    request: 'Проедь круг радиусом 30 см',
+    answer: {
+      unsupported: false,
+      title: 'Круг 30 см',
+      description: 'Робот проезжает круг радиусом 30 см.',
+      steps: [{ op: 'circle', direction: 'right', radius: 30, turns: 1 }],
+    },
+  },
+  {
+    request: 'Drive in a circle to the left, twice',
+    answer: {
+      unsupported: false,
+      title: 'Two circles',
+      description: 'The robot drives two circles to the left.',
+      steps: [{ op: 'circle', direction: 'left', radius: 20, turns: 2 }],
+    },
+  },
+  {
+    request: 'Шеңбер бойымен жүр',
+    answer: {
+      unsupported: false,
+      title: 'Шеңбер',
+      description: 'Робот радиусы 20 см толық шеңбер жасайды.',
+      steps: [{ op: 'circle', direction: 'right', radius: 20, turns: 1 }],
+    },
+  },
+  {
+    request: 'Проедь дугу вправо на 90 градусов радиусом 25 см',
+    answer: {
+      unsupported: false,
+      title: 'Дуга',
+      description: 'Робот едет по дуге вправо.',
+      steps: [{ op: 'arc', direction: 'right', radius: 25, degrees: 90 }],
+    },
+  },
+  {
+    request: 'Проедь восьмёрку',
+    answer: {
+      unsupported: false,
+      title: 'Восьмёрка',
+      description: 'Робот проезжает круг вправо и круг влево.',
+      steps: [
+        { op: 'circle', direction: 'right', radius: 20, turns: 1 },
+        { op: 'circle', direction: 'left', radius: 20, turns: 1 },
+      ],
+    },
+  },
+  {
+    request: 'Drive in a square',
+    answer: {
+      unsupported: false,
+      title: 'Square',
+      description: 'The robot drives along a square with 30 cm sides.',
+      steps: [
+        {
+          op: 'repeat',
+          times: 4,
+          steps: [
+            { op: 'move', direction: 'forward', value: 30, unit: 'cm' },
+            { op: 'turn', direction: 'right', degrees: 90 },
+          ],
+        },
+      ],
+    },
+  },
+  {
+    request: 'Сделай спираль',
+    answer: {
+      unsupported: false,
+      title: 'Спираль',
+      description: 'С каждым разом робот едет дальше и поворачивает.',
+      steps: [
+        { op: 'set_var', name: 'side', expr: '10' },
+        {
+          op: 'repeat',
+          times: 8,
+          steps: [
+            { op: 'move_expr', direction: 'forward', expr: 'side', unit: 'cm' },
+            { op: 'turn', direction: 'right', degrees: 90 },
+            { op: 'change_var', name: 'side', expr: '5' },
+          ],
+        },
+      ],
+    },
+  },
+  {
+    request: 'Левый мотор 30 процентов, правый 60, три секунды',
+    answer: {
+      unsupported: false,
+      title: 'Разные скорости',
+      description: 'Моторы крутятся с разной скоростью три секунды.',
+      steps: [{ op: 'tank', leftSpeed: 30, rightSpeed: 60, value: 3, unit: 'seconds' }],
+    },
+  },
+  {
+    request: 'Stop 10 cm before a wall and beep',
+    answer: {
+      unsupported: false,
+      title: 'Stop at the wall',
+      description: 'The robot drives until the wall is closer than 10 cm, then beeps.',
+      steps: [
+        { op: 'set_speed', speed: 40 },
+        { op: 'start_move', direction: 'forward' },
+        { op: 'wait_until', condition: { sensor: 'distance', comparator: '<', value: 10, unit: 'cm' } },
+        { op: 'stop_move' },
+        { op: 'beep', note: 72, seconds: 0.3 },
+      ],
+    },
+  },
+  {
+    request: 'Қабырғаға жақындағанда тоқта',
+    answer: {
+      unsupported: false,
+      title: 'Қабырға',
+      description: 'Робот қабырғаға 15 см қалғанда тоқтайды.',
+      steps: [
+        { op: 'start_move', direction: 'forward' },
+        { op: 'wait_until', condition: { sensor: 'distance', comparator: '<', value: 15, unit: 'cm' } },
+        { op: 'stop_move' },
+      ],
+    },
+  },
+  {
+    request: 'Езжай по чёрной линии',
+    answer: {
+      unsupported: false,
+      title: 'По линии',
+      description: 'Робот держится края чёрной линии.',
+      steps: [
+        { op: 'set_speed', speed: 30 },
+        {
+          op: 'forever',
+          steps: [
+            {
+              op: 'if',
+              condition: { sensor: 'reflection', comparator: '<', value: 50 },
+              then: [{ op: 'start_steer', steering: -30 }],
+              else: [{ op: 'start_steer', steering: 30 }],
+            },
+          ],
+        },
+      ],
+    },
+  },
+  {
+    request: 'Сортируй по цвету: красное толкай вправо, синее влево',
+    answer: {
+      unsupported: false,
+      title: 'Сортировка',
+      description: 'Мотор на порту F толкает предмет в сторону по его цвету.',
+      steps: [
+        {
+          op: 'forever',
+          steps: [
+            {
+              op: 'if',
+              condition: { sensor: 'color', color: 'red' },
+              then: [
+                { op: 'motor_run', port: 'F', direction: 'clockwise', value: 90, unit: 'degrees' },
+                { op: 'motor_to_position', port: 'F', position: 0, direction: 'shortest' },
+              ],
+            },
+            {
+              op: 'if',
+              condition: { sensor: 'color', color: 'blue' },
+              then: [
+                { op: 'motor_run', port: 'F', direction: 'counterclockwise', value: 90, unit: 'degrees' },
+                { op: 'motor_to_position', port: 'F', position: 0, direction: 'shortest' },
+              ],
+            },
+          ],
+        },
+      ],
+    },
+  },
+  {
+    request: 'Подними руку на порту F на 90 градусов',
+    answer: {
+      unsupported: false,
+      title: 'Рука вверх',
+      description: 'Мотор на порту F поднимает руку.',
+      steps: [{ op: 'motor_run', port: 'F', direction: 'clockwise', value: 90, unit: 'degrees' }],
+    },
+  },
+  {
+    request: 'Считай нажатия датчика силы и показывай число',
+    answer: {
+      unsupported: false,
+      title: 'Счётчик',
+      description: 'Каждое нажатие прибавляет единицу, и робот показывает число.',
+      steps: [
+        { op: 'set_var', name: 'count', expr: '0' },
+        {
+          op: 'forever',
+          steps: [
+            { op: 'wait_until', condition: { sensor: 'force', state: 'pressed' } },
+            { op: 'change_var', name: 'count', expr: '1' },
+            { op: 'write_var', name: 'count' },
+            { op: 'wait_until', condition: { sensor: 'force', state: 'released' } },
+          ],
+        },
+      ],
+    },
+  },
+  {
+    request: 'Make a block called zigzag and run it three times',
+    answer: {
+      unsupported: false,
+      title: 'Zigzag',
+      description: 'The zigzag block runs three times.',
+      steps: [
+        {
+          op: 'define',
+          name: 'zigzag',
+          steps: [
+            { op: 'arc', direction: 'left', radius: 20, degrees: 60 },
+            { op: 'arc', direction: 'right', radius: 20, degrees: 60 },
+          ],
+        },
+        { op: 'repeat', times: 3, steps: [{ op: 'call', name: 'zigzag' }] },
+      ],
+    },
+  },
+  {
+    request: 'Плавно поворачивай, пока гироскоп не покажет 90 градусов',
+    answer: {
+      unsupported: false,
+      title: 'Поворот по гироскопу',
+      description: 'Робот едет по дуге, пока не повернётся на 90 градусов.',
+      steps: [
+        { op: 'reset_yaw' },
+        { op: 'start_steer', steering: 40 },
+        { op: 'while', condition: { sensor: 'gyro', axis: 'yaw', comparator: '<', value: 90 }, steps: [{ op: 'wait', seconds: 0.05 }] },
+        { op: 'stop_move' },
+      ],
+    },
+  },
+  {
+    request: 'Полети',
+    answer: {
+      unsupported: true,
+      reason: 'У робота только колёса и моторы, крыльев и пропеллеров нет.',
+      suggestion: 'Быстро проедь вперёд и покажи стрелку вверх',
+    },
+  },
+  { request: 'Take a photo of me', answer: { unsupported: true, reason: 'The robot has no camera.', suggestion: 'Show a smile on the light matrix' } },
+  {
+    request: 'Сурет сал да интернетке жібер',
+    answer: { unsupported: true, reason: 'Роботта камера да, интернет та жоқ.', suggestion: 'Шаршы бойымен жүріп, жүрек көрсет' },
+  },
+]
 
 /** Prompt for the RoboEasy DSL; the same commands compile to word blocks and to Python. */
 export function dslSystemPrompt(robot: RobotProfile, lang: Lang): string {
@@ -47,8 +313,11 @@ You write RoboEasy commands; RoboEasy compiles them into SPIKE word blocks or Py
 ROBOT
 ${robotDescription(robot)}
 
-OUTPUT: one JSON object, nothing else:
-{"title": string (max 40 chars, ${LANG_NAME[lang]}), "description": string (1-2 friendly sentences in ${LANG_NAME[lang]} explaining what the robot will do, no emoji), "steps": Step[]}
+OUTPUT: one JSON object, nothing else. If the robot can do the task:
+{"unsupported": false, "title": string (max 40 chars, ${LANG_NAME[lang]}), "description": string (1-2 friendly sentences in ${LANG_NAME[lang]} explaining what the robot will do, no emoji), "steps": Step[]}
+If it cannot:
+{"unsupported": true, "reason": string (one short sentence in ${LANG_NAME[lang]}: why this robot cannot do it), "suggestion": string (a similar task it can do, written as a request in ${LANG_NAME[lang]})}
+The robot has only: two drive wheels, extra single motors, a distance sensor, a color sensor, a force sensor, a gyro, a 5x5 light matrix, a speaker and hub buttons. It has no camera, no microphone for words, no internet, no wings, no arms that are not motors. Never write a fake program for a task it cannot do.
 
 The program starts automatically ("when program starts"); never add a start step.
 
@@ -57,7 +326,11 @@ STEP TYPES (use only these, exactly as written):
 {"op":"turn","direction":"left"|"right","degrees":number}  spin in place by an exact angle using the gyro (90 = quarter turn)
 {"op":"reset_yaw"}  set the gyro angle to 0
 {"op":"set_movement_motors","left":"A".."F","right":"A".."F"}  only if the drive motors differ from the robot config
-{"op":"steer","steering":-100..100,"value":number,"unit":"cm"|"rotations"|"degrees"|"seconds"}  drive along a curve (negative = left)
+{"op":"steer","steering":-100..100,"value":number,"unit":"cm"|"rotations"|"degrees"|"seconds"}  like the SPIKE steering block (negative = left)
+{"op":"arc","direction":"left"|"right","radius":cm,"degrees":number}  drive along part of a circle; RoboEasy computes the wheel speeds
+{"op":"circle","direction":"left"|"right","radius":cm,"turns":number}  drive a full circle (turns 1 = one circle); RoboEasy computes the wheel speeds
+{"op":"tank","leftSpeed":-100..100,"rightSpeed":-100..100,"value":number,"unit":"cm"|"rotations"|"degrees"|"seconds"}  a different speed for each drive motor
+{"op":"move_expr","direction":"forward"|"back","expr":EXPR,"unit":"cm"|"rotations"|"degrees"|"seconds"}  drive a distance computed from variables
 {"op":"start_move","direction":"forward"|"back"|"left"|"right"}  start driving and keep going (left/right = spin)
 {"op":"start_steer","steering":-100..100}  start driving along a curve and keep going (negative = left)
 {"op":"stop_move"}
@@ -77,11 +350,20 @@ STEP TYPES (use only these, exactly as written):
 {"op":"repeat","times":1..100,"steps":Step[]}
 {"op":"forever","steps":Step[]}  must be the LAST step of its list
 {"op":"repeat_until","condition":CONDITION,"steps":Step[]}
+{"op":"while","condition":CONDITION,"steps":Step[]}  repeat as long as the condition holds
+{"op":"set_var","name":NAME,"expr":EXPR}  a variable must get a value before it is used
+{"op":"change_var","name":NAME,"expr":EXPR}  add to a variable
+{"op":"write_var","name":NAME}  show a variable on the light matrix
+{"op":"define","name":NAME,"steps":Step[]}  a block of your own; put every "define" first in "steps", at the top level
+{"op":"call","name":NAME}  run a block made with "define"
 {"op":"if","condition":CONDITION,"then":Step[],"else":Step[] (optional)}
 
 IMAGE: one of ${Object.keys(IMAGES)
     .map((k) => `"${k}"`)
     .join(', ')}, or 25 digits 0-9 (5 rows × 5 pixels, 9 = brightest).
+
+EXPR: text with a number, a variable or simple arithmetic, for example "10", "side", "side + 5", "count * 2".
+NAME: a short Latin name: letters, digits and _ (for example side, count, zigzag). Do not use Python words or: speed, turn, main, port, color, motor, light, sound, button.
 
 CONDITION (the sensor port defaults to the robot config above; add "port" only if the user names another one):
 {"sensor":"distance","comparator":"<"|">"|"=","value":number,"unit":"cm"}  "<" = closer than
@@ -91,6 +373,8 @@ CONDITION (the sensor port defaults to the robot config above; add "port" only i
 {"sensor":"reflection","comparator":"<"|">","value":0..100}  reflected light in %, black line ≈ 15, white ≈ 90
 {"sensor":"force","state":"pressed"|"released"|"hardpressed"}
 {"sensor":"button","button":"left"|"right","state":"pressed"|"released"}  buttons on the hub
+{"sensor":"gyro","axis":"yaw"|"pitch"|"roll","comparator":"<"|">"|"=","value":-180..180}  yaw grows when the robot turns right
+{"sensor":"var","name":NAME,"comparator":"<"|">"|"=","value":number}
 
 GOOD PRACTICE
 - Keep it simple and readable for a beginner: prefer the fewest steps that do the job (usually 2-15, never more than 40).
@@ -101,24 +385,15 @@ GOOD PRACTICE
 - To stop in front of an obstacle: start_move → wait_until distance "<" N cm → stop_move.
 - Line following with one color sensor: set_speed 25-35, then forever { if reflection "<" 50 then start_steer -30 else start_steer 30 }.
 - Add a small celebration when a task finishes (beep, image) only if it fits the request.
-- If the request is impossible for this robot or unsafe, return a harmless program that shows "no" and explain why in the description.
 - Never invent step types or fields. Numbers are plain JSON numbers.
 - Every "steer" needs both "value" and "unit"; "degrees" is not a field of "steer".
-- A circle is one "steer". For diameter D cm and wheel track T = ${robot.trackWidthMm / 10} cm: S = round(100*T/(D+T)), steering = S to the right or -S to the left, value = 314*T/S, unit "cm". If no size is given, use D = 40.
+- Curves, circles and figure eights use "arc" and "circle": give the radius and the angle, never calculate wheel speeds or steering yourself. If no size is given, use radius 20.
+- Use "while", "repeat_until" and variables only when the task needs them; a program without them is easier for a beginner.
+- Use "define" only when the user asks for a block of their own or the same part repeats in different places.
 - A "repeat", "forever", "repeat_until" or "if" must contain the commands it repeats or runs: "steps" (or "then") is never empty.
 
 EXAMPLES
-Request: "Drive forward 20 cm, turn right and show a smile"
-{"title":"Forward and smile","description":"The robot drives 20 cm forward, turns right and smiles.","steps":[{"op":"move","direction":"forward","value":20,"unit":"cm"},{"op":"turn","direction":"right","degrees":90},{"op":"show_image","image":"smile","seconds":2}]}
-
-Request: "Stop 10 cm before a wall and beep"
-{"title":"Stop at the wall","description":"The robot drives forward until the wall is closer than 10 cm, then stops and beeps.","steps":[{"op":"set_speed","speed":40},{"op":"start_move","direction":"forward"},{"op":"wait_until","condition":{"sensor":"distance","comparator":"<","value":10,"unit":"cm"}},{"op":"stop_move"},{"op":"beep","note":72,"seconds":0.3}]}
-
-Request: "Drive in a circle"
-{"title":"Circle","description":"The robot drives one full circle 40 cm across.","steps":[${JSON.stringify(circleStep(40, robot))}]}
-
-Request: "Drive in a square"
-{"title":"Square","description":"The robot drives along a square with 30 cm sides.","steps":[{"op":"repeat","times":4,"steps":[{"op":"move","direction":"forward","value":30,"unit":"cm"},{"op":"turn","direction":"right","degrees":90}]}]}`
+${PROMPT_EXAMPLES.map((e) => `Request: "${e.request}"\n${JSON.stringify(e.answer)}`).join('\n\n')}`
 }
 
 /** Prompt for free Python: the model writes SPIKE 3 MicroPython directly. */
@@ -131,8 +406,10 @@ Import only these modules: ${ALLOWED_PYTHON_MODULES.join(', ')}.
 ROBOT
 ${robotDescription(robot)}
 
-OUTPUT: one JSON object, nothing else:
-{"title": string (max 40 chars, ${LANG_NAME[lang]}), "description": string (1-2 friendly sentences in ${LANG_NAME[lang]}), "code": string (the full program)}
+OUTPUT: one JSON object, nothing else. If the robot can do the task:
+{"unsupported": false, "title": string (max 40 chars, ${LANG_NAME[lang]}), "description": string (1-2 friendly sentences in ${LANG_NAME[lang]}), "code": string (the full program)}
+If it cannot (no camera, no internet, no wings, unsafe):
+{"unsupported": true, "reason": string (one short sentence in ${LANG_NAME[lang]}), "suggestion": string (a similar task it can do, written as a request in ${LANG_NAME[lang]})}
 
 PROGRAM SHAPE
 from hub import port, light_matrix, sound, button, light, motion_sensor   # import only what you use
@@ -152,6 +429,8 @@ SPIKE 3 API (exact signatures)
 - await motor_pair.move_for_time(motor_pair.PAIR_1, milliseconds, steering, velocity=500)
 - motor_pair.move(motor_pair.PAIR_1, steering, velocity=500)   # starts driving, returns immediately
 - motor_pair.move_tank(motor_pair.PAIR_1, left_velocity, right_velocity)
+- await motor_pair.move_tank_for_degrees(motor_pair.PAIR_1, degrees, left_velocity, right_velocity)
+- await motor_pair.move_tank_for_time(motor_pair.PAIR_1, left_velocity, right_velocity, milliseconds)
 - motor_pair.stop(motor_pair.PAIR_1)
 - await motor.run_for_degrees(port.X, degrees, velocity); await motor.run_for_time(port.X, ms, velocity)
 - motor.run(port.X, velocity); motor.stop(port.X); motor.relative_position(port.X); motor.reset_relative_position(port.X, 0)
@@ -177,7 +456,7 @@ STYLE
 - Beginner-friendly: short, clear names, a comment in ${LANG_NAME[lang]} above each logical part, no classes, no clever tricks.
 - Loops that poll sensors must yield: put \`await runloop.sleep_ms(10)\` inside \`while\` loops.
 - Keep the whole program under 80 lines.
-- If the request is impossible for this robot or unsafe, write a harmless program and explain why in the description.`
+- Never write a fake program for a task the robot cannot do: answer with "unsupported".`
 }
 
 export function userMessage(prompt: string, previous?: { kind: 'program' | 'code'; value: string }): string {

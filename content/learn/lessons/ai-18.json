@@ -1,0 +1,86 @@
+{
+  "id": "ai-18",
+  "track": "ai-basics",
+  "unit": "ai-robots",
+  "minutes": 5,
+  "skills": [
+    "ai-literacy"
+  ],
+  "title": {
+    "ru": "Когда примеров мало",
+    "kk": "Мысал аз болғанда",
+    "en": "When there are too few examples"
+  },
+  "goal": {
+    "ru": "Сегодня ты нарочно собьёшь модель с толку.",
+    "kk": "Бүгін модельді әдейі шатастырасың.",
+    "en": "Today you will confuse a model on purpose."
+  },
+  "summary": {
+    "ru": "Теперь ты видел своими глазами: мало примеров — много ошибок.",
+    "kk": "Енді өз көзіңмен көрдің: мысал аз — қате көп.",
+    "en": "Now you have seen for yourself: few examples mean many mistakes."
+  },
+  "steps": [
+    {
+      "id": "intro",
+      "type": "theory",
+      "title": {
+        "ru": "Плохое обучение",
+        "kk": "Нашар үйрету",
+        "en": "Bad training"
+      },
+      "body": {
+        "ru": "Сейчас ты дашь модели всего по одному-два примера. Посмотри, как она путается: уверенность низкая, ответы прыгают.\n\nТак же путается и настоящий робот, если его обучили кое-как.",
+        "kk": "Қазір модельге бір-екі мысал ғана бересің. Оның қалай шатасатынын қара: сенімділік төмен, жауаптар секіреді.\n\nНашар үйретілген шын робот та осылай шатасады.",
+        "en": "Now you will give the model only one or two examples each. Watch it get confused: low confidence, jumping answers.\n\nA real robot gets confused the same way if it was trained badly."
+      }
+    },
+    {
+      "id": "quiz-1",
+      "type": "quiz",
+      "kind": "choice",
+      "skill": "ai-literacy",
+      "question": {
+        "ru": "Что будет, если примеров очень мало?",
+        "kk": "Мысал өте аз болса не болады?",
+        "en": "What happens with very few examples?"
+      },
+      "options": [
+        {
+          "ru": "Модель будет часто ошибаться",
+          "kk": "Модель жиі қателеседі",
+          "en": "The model will often be wrong"
+        },
+        {
+          "ru": "Модель станет идеальной",
+          "kk": "Модель мінсіз болады",
+          "en": "The model becomes perfect"
+        }
+      ],
+      "correct": [
+        0
+      ],
+      "explanation": {
+        "ru": "Модели не с чем сравнивать.",
+        "kk": "Модельге салыстыратын ештеңе жоқ.",
+        "en": "The model has little to compare with."
+      }
+    },
+    {
+      "id": "few-examples",
+      "type": "widget",
+      "widget": "few-examples",
+      "title": {
+        "ru": "Сбей модель с толку",
+        "kk": "Модельді шатастыр",
+        "en": "Confuse the model"
+      },
+      "task": {
+        "ru": "Дай всего 1–3 примера каждого жеста и посмотри, как модель ошибается.",
+        "kk": "Әр ымға 1–3 мысал ғана беріп, модельдің қалай қателесетінін қара.",
+        "en": "Give just 1–3 examples of each gesture and watch the model make mistakes."
+      }
+    }
+  ]
+}

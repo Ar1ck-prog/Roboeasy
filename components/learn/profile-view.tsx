@@ -7,6 +7,7 @@ import { toast } from 'sonner'
 
 import { ProgressBar } from '@/components/learn/learn-map'
 import { AccountCard } from '@/components/learn/account-card'
+import { getPilotText } from '@/lib/i18n/pilot'
 import { Buddy } from '@/components/learn/buddy'
 import { CoinAmount } from '@/components/learn/coin'
 import { Onboarding } from '@/components/learn/onboarding'
@@ -351,6 +352,14 @@ export function ProfileView({ lang, app, play }: { lang: Lang; app: LearnAppText
       </div>
 
       <AccountCard lang={lang} app={app} />
+      <nav className="flex flex-wrap gap-3" aria-label="RoboEasy">
+        <Link className="underline underline-offset-4" href={`/${lang}/class`}>
+          {getPilotText(lang).join.title}
+        </Link>
+        <Link className="underline underline-offset-4" href={`/${lang}/teacher`}>
+          {getPilotText(lang).teacher.title}
+        </Link>
+      </nav>
 
       <Card className="gap-3" flat>
         <CardTitle>

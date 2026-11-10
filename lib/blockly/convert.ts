@@ -38,6 +38,10 @@ function conditionBlock(c: Condition): BlockState {
       return { type: T.cond_force, fields: { PORT: c.port, STATE: c.state } }
     case 'button':
       return { type: T.cond_button, fields: { BUTTON: c.button, STATE: c.state } }
+    // The lesson editor has no blocks for these: only generated programs use them.
+    case 'gyro':
+    case 'var':
+      return { type: T.cond_button, fields: { BUTTON: 'left', STATE: 'pressed' } }
   }
 }
 
@@ -46,6 +50,7 @@ function chain(steps: Step[]): BlockState | undefined {
   let tail: BlockState | undefined
   for (const s of steps) {
     const b = stepBlock(s)
+    if (!b) continue
     if (!head) head = b
     if (tail) tail.next = { block: b }
     tail = b
@@ -58,7 +63,7 @@ const body = (steps: Step[]) => {
   return block ? { block } : {}
 }
 
-function stepBlock(s: Step): BlockState {
+function stepBlock(s: Step): BlockState | null {
   switch (s.op) {
     case 'move':
       return { type: T.move, fields: { DIR: s.direction, VALUE: s.value, UNIT: s.unit } }
@@ -112,6 +117,9 @@ function stepBlock(s: Step): BlockState {
       return s.else
         ? { type: T.if_else, inputs: { COND: { block: conditionBlock(s.condition) }, THEN: body(s.then), ELSE: body(s.else) } }
         : { type: T.if, inputs: { COND: { block: conditionBlock(s.condition) }, THEN: body(s.then) } }
+    // Generated programs only; lessons do not offer these blocks.
+    default:
+      return null
   }
 }
 

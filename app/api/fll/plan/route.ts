@@ -5,7 +5,7 @@ import { askGemini, createGemini, retryMessage } from '@/lib/gemini'
 import { type Lang, MAX_SELECTED, type PlanNotice, type PlanResponse, fallbackPlan, parsePlan, planJsonSchema, planSystemPrompt, planUserMessage } from '@/lib/fll/plan'
 import { safeParseSeason } from '@/lib/fll/season'
 import { getSeason } from '@/lib/fll/seasons'
-import { clientKey, rateLimit } from '@/lib/rate-limit'
+import { limitRequester } from '@/lib/rate-limit'
 
 export const maxDuration = 60
 
@@ -45,7 +45,7 @@ export async function POST(req: NextRequest) {
   if (!season.launchAreas.length) return reply({ ok: false, error: 'season_incomplete' }, 422)
   const robot = parseRobot(body.robot)
 
-  const limit = rateLimit(`fll:${clientKey(req.headers)}`, RATE_LIMIT.requests, RATE_LIMIT.windowMs)
+  const limit = await limitRequester(req.headers, 'fll', RATE_LIMIT.requests, RATE_LIMIT.windowMs)
   if (!limit.ok) return reply({ ok: false, error: 'rate_limited', retryAfter: limit.retryAfterSeconds }, 429)
 
   const fallback = (notice: PlanNotice) => reply({ ok: true, plan: fallbackPlan(season, missionIds, robot, lang), source: 'fallback', notice })
@@ -58,10 +58,11 @@ export async function POST(req: NextRequest) {
   const message = planUserMessage(season, missionIds, robot, lang)
   const schema = planJsonSchema(season, missionIds)
   try {
-    let parsed = parsePlan(await askGemini(ai, system, message, schema, signal), season, missionIds)
+    const ask = (contents: string) => askGemini(ai, { task: 'fll_plan', system, contents, schema, signal })
+    let parsed = parsePlan(await ask(message), season, missionIds)
     if (!parsed.ok) {
       console.warn('[fll] invalid plan, retrying:', parsed.error)
-      parsed = parsePlan(await askGemini(ai, system, retryMessage(message, parsed.error), schema, signal), season, missionIds)
+      parsed = parsePlan(await ask(retryMessage(message, parsed.error)), season, missionIds)
     }
     if (!parsed.ok) {
       console.error('[fll] invalid plan after retry:', parsed.error)

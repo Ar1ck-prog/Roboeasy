@@ -57,6 +57,16 @@ Status: **draft for legal review.** Items marked `TODO(legal)` must be checked b
 - Daily quests and streaks have no pressure mechanics: missing a day costs nothing but the streak, and freezes cover missed days.
 - The robot buddy (model, colour, accessories, name) is stored in the profile like the other settings. Its name is free text up to 16 characters and is never shown to other users. `TODO(legal)`: check whether a free-text robot name needs moderation once anything becomes visible to others.
 
+## RoboEasy 2.0 additions
+
+- **Classes.** A learner joins with a class code, a made-up nickname and a PIN, as an anonymous account with no email or phone. The PIN is stored only as a hash. Only the class's teacher sees results, under nicknames. A learner can leave and delete their results; a teacher can remove a learner. The consent text at `/[lang]/parents/consent` is a draft. `TODO(legal)`
+- **Camera in lessons.** Gesture training runs on the device. Frames are not sent or stored.
+- **Video debugging.** The video stays on the device. A few small stills go to the server, are held in memory for that request and are sent to Google Gemini; they are not stored by RoboEasy. The page asks learners to film only the robot. `TODO(legal)`: on Gemini's free tier Google may use submitted content to improve its products, so a paid tier is needed before children's stills are sent in real use.
+- **Voice questions.** Chrome sends the recording to a Google service for recognition. It starts only on a click.
+- **Telemetry.** Recordings stay in the browser.
+- **AI usage counters** hold no request text. **The failure log** keeps a trimmed request with contact details removed, is readable only by admins and is deleted after 90 days.
+- **Rate limits** use a random id for the browser and hashed addresses.
+
 ## Contact
 
 `TODO(legal)`: data controller name, address and contact email for privacy requests.

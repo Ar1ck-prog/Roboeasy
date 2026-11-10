@@ -8,8 +8,6 @@ const nextConfig = {
     return [
       { source: '/:lang(ru|kk|en)/workspace', destination: '/:lang/sandbox', permanent: true },
       { source: '/:lang(ru|kk|en)/fll/:rest*', destination: '/:lang/compete/:rest*', permanent: true },
-      // Classes were removed (self-paced learning only): old links land on the learner's path.
-      { source: '/:lang(ru|kk|en)/class/:rest*', destination: '/:lang/path', permanent: false },
       { source: '/workspace', destination: '/sandbox', permanent: true },
       { source: '/fll/:rest*', destination: '/compete/:rest*', permanent: true },
     ]

@@ -280,6 +280,7 @@ const ru = {
     python: 'Python',
     strategy: 'Стратегия',
     teamwork: 'Командная работа',
+    'ai-literacy': 'ИИ-грамотность',
   } satisfies Record<Skill, string>,
 }
 
@@ -558,6 +559,7 @@ const kk: LearnAppText = {
     python: 'Python',
     strategy: 'Стратегия',
     teamwork: 'Командалық жұмыс',
+    'ai-literacy': 'ЖИ сауаттылығы',
   },
 }
 
@@ -834,6 +836,7 @@ const en: LearnAppText = {
     python: 'Python',
     strategy: 'Strategy',
     teamwork: 'Teamwork',
+    'ai-literacy': 'AI literacy',
   },
 }
 

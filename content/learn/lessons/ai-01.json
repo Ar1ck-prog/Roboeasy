@@ -1,0 +1,112 @@
+{
+  "id": "ai-01",
+  "track": "ai-basics",
+  "unit": "ai-what",
+  "minutes": 5,
+  "skills": [
+    "ai-literacy"
+  ],
+  "title": {
+    "ru": "Что умеет ИИ",
+    "kk": "ЖИ не істей алады",
+    "en": "What AI can do"
+  },
+  "goal": {
+    "ru": "Сегодня ты узнаешь, чем ИИ отличается от обычной программы.",
+    "kk": "Бүгін ЖИ-дің кәдімгі бағдарламадан айырмашылығын білесің.",
+    "en": "Today you will find out how AI differs from an ordinary program."
+  },
+  "summary": {
+    "ru": "Теперь ты знаешь: обычную программу пишут правилами, а ИИ учится на примерах.",
+    "kk": "Енді білесің: кәдімгі бағдарлама ережемен жазылады, ал ЖИ мысалдардан үйренеді.",
+    "en": "Now you know: ordinary programs are written as rules, while AI learns from examples."
+  },
+  "steps": [
+    {
+      "id": "intro",
+      "type": "theory",
+      "title": {
+        "ru": "Правила или примеры",
+        "kk": "Ережелер немесе мысалдар",
+        "en": "Rules or examples"
+      },
+      "body": {
+        "ru": "Обычную программу человек пишет **правилами**: если стена ближе 10 см, остановись.\n\nИИ учится иначе. Ему показывают тысячи **примеров**: вот кошка, вот собака. Он сам находит, чем они отличаются.\n\nПоэтому ИИ справляется с тем, что трудно описать правилами: узнать лицо, понять речь, перевести текст.",
+        "kk": "Кәдімгі бағдарламаны адам **ережемен** жазады: қабырға 10 см-ден жақын болса, тоқта.\n\nЖИ басқаша үйренеді. Оған мыңдаған **мысал** көрсетеді: міне мысық, міне ит. Ол айырмашылығын өзі табады.\n\nСондықтан ЖИ ережемен сипаттау қиын істерді орындайды: бетті тану, сөзді түсіну, мәтінді аудару.",
+        "en": "A person writes an ordinary program as **rules**: if the wall is closer than 10 cm, stop.\n\nAI learns differently. It is shown thousands of **examples**: this is a cat, this is a dog. It finds the differences by itself.\n\nThat is why AI copes with things that are hard to describe as rules: recognising a face, understanding speech, translating text."
+      }
+    },
+    {
+      "id": "quiz-1",
+      "type": "quiz",
+      "kind": "choice",
+      "skill": "ai-literacy",
+      "question": {
+        "ru": "Как учится ИИ?",
+        "kk": "ЖИ қалай үйренеді?",
+        "en": "How does AI learn?"
+      },
+      "options": [
+        {
+          "ru": "На примерах",
+          "kk": "Мысалдардан",
+          "en": "From examples"
+        },
+        {
+          "ru": "Читает мысли",
+          "kk": "Ойды оқиды",
+          "en": "By reading minds"
+        },
+        {
+          "ru": "Никак, он сразу всё знает",
+          "kk": "Ешқалай, бәрін бірден біледі",
+          "en": "It does not, it knows everything at once"
+        }
+      ],
+      "correct": [
+        0
+      ],
+      "explanation": {
+        "ru": "ИИ находит закономерности в примерах.",
+        "kk": "ЖИ мысалдардағы заңдылықтарды табады.",
+        "en": "AI finds patterns in examples."
+      }
+    },
+    {
+      "id": "quiz-2",
+      "type": "quiz",
+      "kind": "choice",
+      "skill": "ai-literacy",
+      "question": {
+        "ru": "Что проще сделать обычной программой, а не ИИ?",
+        "kk": "ЖИ емес, кәдімгі бағдарламамен не істеу оңай?",
+        "en": "What is easier with an ordinary program than with AI?"
+      },
+      "options": [
+        {
+          "ru": "Узнать лицо на фото",
+          "kk": "Фотодағы бетті тану",
+          "en": "Recognise a face in a photo"
+        },
+        {
+          "ru": "Сложить два числа",
+          "kk": "Екі санды қосу",
+          "en": "Add two numbers"
+        },
+        {
+          "ru": "Понять речь",
+          "kk": "Сөзді түсіну",
+          "en": "Understand speech"
+        }
+      ],
+      "correct": [
+        1
+      ],
+      "explanation": {
+        "ru": "Сложение легко описать точным правилом.",
+        "kk": "Қосуды нақты ережемен сипаттау оңай.",
+        "en": "Adding is easy to describe with an exact rule."
+      }
+    }
+  ]
+}

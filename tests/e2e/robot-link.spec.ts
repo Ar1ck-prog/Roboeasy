@@ -50,7 +50,8 @@ function simulatedHub() {
         flow.push({ stop, slot: m[2] })
         if (stop) return [frame(MSG.flowResponse, 0), frame(MSG.flowNotification, 1)]
         const hello = new TextEncoder().encode('Привет с хаба\n')
-        return [frame(MSG.flowResponse, 0), frame(MSG.flowNotification, 0), frame(MSG.console, ...hello, 0), frame(MSG.devices, 2, 0, 0x00, 87)]
+        const telemetry = new TextEncoder().encode('T|t=0|dist=40|color=9|yaw=0|ml=100|mr=120\nT|t=150|dist=35|color=9|yaw=5|ml=110|mr=130\nT|t=300|dist=-|color=3|yaw=9|ml=90|mr=125\n')
+        return [frame(MSG.flowResponse, 0), frame(MSG.flowNotification, 0), frame(MSG.console, ...hello, 0), frame(MSG.console, ...telemetry, 0), frame(MSG.devices, 2, 0, 0x00, 87)]
       }
       default:
         return []
@@ -191,4 +192,116 @@ test('sandbox: free Python goes to the robot unchanged, and one button also conn
   await page.getByRole('button', { name: 'Подключить и запустить' }).click()
   await expect(page.getByTestId('robot-console')).toHaveText('Привет с хаба')
   expect(new TextDecoder().decode(Uint8Array.from(hub.file.bytes))).toBe(code)
+})
+
+test('sandbox: "езжай по кругу" gives blocks and Python, a file to download and a run on the robot', async ({ page }) => {
+  const errors: string[] = []
+  page.on('pageerror', (e) => errors.push(e.message))
+  const hub = await fakeBluetooth(page)
+  const program: Program = { title: 'Круг', description: 'Робот проезжает круг.', steps: [{ op: 'circle', direction: 'right', radius: 20, turns: 1 }] }
+  const python = programToPython(program, DEFAULT_ROBOT)
+  await openSandbox(page, { format: 'blocks', title: 'Круг', program, python })
+
+  await page.getByLabel('Задача для робота').fill('езжай по кругу')
+  await page.getByRole('button', { name: 'Создать программу' }).click()
+  await expect(page.getByRole('heading', { name: 'Круг' })).toBeVisible()
+  await expect(page.getByText(/ехать по кругу/)).toBeVisible()
+
+  await page.getByRole('tab', { name: 'Python' }).click()
+  await expect(page.getByText(/move_tank_for_degrees/).first()).toBeVisible()
+
+  await expect(page.getByRole('button', { name: /Скачать/ }).first()).toBeEnabled()
+  const download = page.waitForEvent('download')
+  await page.getByRole('button', { name: /Скачать/ }).first().click()
+  expect((await download).suggestedFilename()).toMatch(/\.llsp3$/)
+
+  await page.getByRole('button', { name: 'Подключить и запустить' }).click()
+  await expect(page.getByTestId('robot-console')).toHaveText('Привет с хаба')
+  expect(new TextDecoder().decode(Uint8Array.from(hub.file.bytes))).toBe(python)
+  expect(errors).toEqual([])
+})
+
+test('sandbox: a task the robot cannot do gets a reason and a way forward', async ({ page }) => {
+  await page.route('**/api/generate', (route) =>
+    route.fulfill(
+      route.request().method() === 'GET'
+        ? { json: { configured: true } }
+        : { json: { ok: false, error: 'unsupported', reason: 'У робота нет крыльев.', suggestion: 'Проедь вперёд и покажи стрелку' } },
+    ),
+  )
+  await page.goto('/ru/sandbox')
+  await page.getByLabel('Задача для робота').fill('Полети')
+  await page.getByRole('button', { name: 'Создать программу' }).click()
+  await expect(page.locator('p[role=alert]')).toContainText('У робота нет крыльев.')
+  await page.getByRole('button', { name: /Попробовать: Проедь вперёд/ }).click()
+  await expect(page.getByLabel('Задача для робота')).toHaveValue('Проедь вперёд и покажи стрелку')
+})
+
+test('draw a route: the commands appear, the simulator goes first, then the robot', async ({ page }) => {
+  const errors: string[] = []
+  page.on('pageerror', (e) => errors.push(e.message))
+  const hub = await fakeBluetooth(page)
+  await page.goto('/ru/sandbox')
+  await page.getByRole('link', { name: 'Нарисуй маршрут' }).click()
+  await expect(page.getByRole('heading', { name: 'Нарисуй маршрут' })).toBeVisible()
+
+  const field = page.getByTestId('draw-field')
+  const box = (await field.boundingBox())!
+  const at = (x: number, y: number) => [box.x + (x / 1200) * box.width, box.y + ((800 - y) / 800) * box.height] as const
+  await page.mouse.move(...at(150, 150))
+  await page.mouse.down()
+  // Right, then up: one corner.
+  for (let x = 150; x <= 800; x += 25) await page.mouse.move(...at(x, 150))
+  for (let y = 150; y <= 600; y += 25) await page.mouse.move(...at(800, y))
+  await page.mouse.up()
+
+  await expect(page.getByTestId('route-piece')).toHaveCount(2)
+  await expect(page.getByText('Команд в программе:')).toBeVisible()
+  await expect(page.getByText('Сначала проедь маршрут в симуляторе.')).toBeVisible()
+  await expect(page.getByRole('button', { name: 'Подключить и запустить' })).toBeDisabled()
+
+  await page.getByRole('button', { name: 'Проехать в симуляторе' }).click()
+  await expect(page.getByText('Сначала проедь маршрут в симуляторе.')).toHaveCount(0)
+
+  await page.getByRole('button', { name: 'Подключить и запустить' }).click()
+  await expect(page.getByTestId('robot-console')).toHaveText('Привет с хаба')
+  expect(new TextDecoder().decode(Uint8Array.from(hub.file.bytes))).toContain('motor_pair')
+
+  // A new line means it has to be driven again.
+  await page.getByRole('button', { name: 'Стереть' }).click()
+  await expect(page.getByTestId('route-piece')).toHaveCount(0)
+  expect(errors).toEqual([])
+})
+
+test('telemetry: off by default, adds readings when on, shows charts and keeps recordings locally', async ({ page }) => {
+  const errors: string[] = []
+  page.on('pageerror', (e) => errors.push(e.message))
+  const hub = await fakeBluetooth(page)
+  const program: Program = { title: 'Проба', description: '', steps: [{ op: 'move', direction: 'forward', value: 20, unit: 'cm' }] }
+  const python = programToPython(program, DEFAULT_ROBOT)
+  await openSandbox(page, { format: 'blocks', program, python })
+  await generate(page)
+
+  // Off: exactly the program that was generated.
+  const toggle = page.getByRole('checkbox', { name: /Телеметрия/ }).first()
+  await expect(toggle).not.toBeChecked()
+  await page.getByRole('button', { name: 'Подключить и запустить' }).click()
+  await expect(page.getByTestId('robot-console')).toHaveText('Привет с хаба')
+  expect(new TextDecoder().decode(Uint8Array.from(hub.file.bytes))).toBe(python)
+
+  // On: the same program with the background task; its lines go to the charts, not the console.
+  await toggle.check()
+  await page.getByRole('button', { name: 'Запустить на роботе' }).click()
+  await expect(page.getByRole('img', { name: 'Расстояние' })).toBeVisible()
+  await expect(page.getByTestId('robot-console')).toHaveText('Привет с хаба')
+  const sent = new TextDecoder().decode(Uint8Array.from(hub.file.bytes))
+  expect(sent).toContain('runloop.run(_rb_main(), _rb_telemetry())')
+  await expect(page.getByTestId('telemetry-colors')).toBeVisible()
+
+  await page.getByRole('button', { name: 'Сохранить запись' }).click()
+  await expect(page.getByText('Хранятся только в этом браузере.')).toBeVisible()
+  const csv = page.waitForEvent('download')
+  await page.getByTestId('telemetry').getByRole('button', { name: 'CSV' }).click()
+  expect((await csv).suggestedFilename()).toMatch(/\.csv$/)
+  expect(errors).toEqual([])
 })

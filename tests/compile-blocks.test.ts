@@ -2,7 +2,7 @@ import { describe, expect, it } from 'vitest'
 
 import { type ScratchBlock, buildProject } from '../lib/dsl/compile-blocks'
 import { DEFAULT_ROBOT, type Step } from '../lib/dsl/types'
-import { EVERY_STEP, expectLinked, spriteBlocks, validateSb3, valid } from './helpers'
+import { EVERY_FUNCTIONS, EVERY_STEP, expectLinked, spriteBlocks, validateSb3, valid } from './helpers'
 
 const build = (steps: Step[], robot = DEFAULT_ROBOT) => spriteBlocks(buildProject(valid({ title: 't', description: '', steps }, robot), robot))
 
@@ -23,7 +23,7 @@ const field = (blocks: Record<string, ScratchBlock>, shadowId: string | null) =>
 
 describe('compile-blocks', () => {
   it('compiles every command into a schema-valid, correctly linked project', async () => {
-    const project = buildProject(valid({ title: 'All', description: '', steps: EVERY_STEP }))
+    const project = buildProject(valid({ title: 'All', description: '', steps: EVERY_STEP, functions: EVERY_FUNCTIONS }))
     await validateSb3(project)
     expectLinked(spriteBlocks(project))
     expect(project.extensions).toEqual(['flipperevents', 'flipperlight', 'flippermotor', 'flippermove', 'flippersensors', 'flippersound'])

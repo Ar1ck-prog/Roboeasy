@@ -1,0 +1,112 @@
+{
+  "id": "ai-02",
+  "track": "ai-basics",
+  "unit": "ai-what",
+  "minutes": 5,
+  "skills": [
+    "ai-literacy"
+  ],
+  "title": {
+    "ru": "Данные решают всё",
+    "kk": "Бәрін деректер шешеді",
+    "en": "Data decides everything"
+  },
+  "goal": {
+    "ru": "Сегодня ты поймёшь, почему для ИИ так важны данные.",
+    "kk": "Бүгін ЖИ үшін деректердің неге маңызды екенін түсінесің.",
+    "en": "Today you will see why data matters so much for AI."
+  },
+  "summary": {
+    "ru": "Теперь ты знаешь: плохие данные дают плохой ИИ.",
+    "kk": "Енді білесің: нашар деректер нашар ЖИ береді.",
+    "en": "Now you know: bad data makes bad AI."
+  },
+  "steps": [
+    {
+      "id": "intro",
+      "type": "theory",
+      "title": {
+        "ru": "Чему научишь, то и получишь",
+        "kk": "Нені үйретсең, соны аласың",
+        "en": "You get what you teach"
+      },
+      "body": {
+        "ru": "Данные — это примеры, на которых учится ИИ. Если показывать ему только белых кошек, чёрную он может не узнать.\n\nТакие перекосы называют **смещением**. Чтобы его было меньше, примеров нужно много, и они должны быть разными.",
+        "kk": "Деректер — ЖИ үйренетін мысалдар. Оған тек ақ мысықтарды көрсетсе, қара мысықты танымауы мүмкін.\n\nМұндай қисаюды **ауытқу** дейді. Оны азайту үшін мысал көп және әртүрлі болуы керек.",
+        "en": "Data are the examples AI learns from. Show it only white cats and it may not recognise a black one.\n\nThis kind of skew is called **bias**. To reduce it you need many examples, and they must be varied."
+      }
+    },
+    {
+      "id": "quiz-1",
+      "type": "quiz",
+      "kind": "choice",
+      "skill": "ai-literacy",
+      "question": {
+        "ru": "ИИ учили только на белых кошках. Что будет?",
+        "kk": "ЖИ тек ақ мысықтарда үйретілді. Не болады?",
+        "en": "An AI was trained only on white cats. What happens?"
+      },
+      "options": [
+        {
+          "ru": "Он может не узнать чёрную кошку",
+          "kk": "Қара мысықты танымауы мүмкін",
+          "en": "It may not recognise a black cat"
+        },
+        {
+          "ru": "Он станет умнее",
+          "kk": "Ақылдырақ болады",
+          "en": "It becomes smarter"
+        },
+        {
+          "ru": "Ничего не изменится",
+          "kk": "Ештеңе өзгермейді",
+          "en": "Nothing changes"
+        }
+      ],
+      "correct": [
+        0
+      ],
+      "explanation": {
+        "ru": "ИИ знает только то, что видел в примерах.",
+        "kk": "ЖИ тек мысалдарда көргенін біледі.",
+        "en": "AI only knows what it has seen in examples."
+      }
+    },
+    {
+      "id": "quiz-2",
+      "type": "quiz",
+      "kind": "choice",
+      "skill": "ai-literacy",
+      "question": {
+        "ru": "Какие примеры лучше для обучения?",
+        "kk": "Үйрету үшін қандай мысалдар жақсы?",
+        "en": "Which examples are better for training?"
+      },
+      "options": [
+        {
+          "ru": "Мало и одинаковых",
+          "kk": "Аз және бірдей",
+          "en": "Few and identical"
+        },
+        {
+          "ru": "Много и разных",
+          "kk": "Көп және әртүрлі",
+          "en": "Many and varied"
+        },
+        {
+          "ru": "Случайные без подписей",
+          "kk": "Белгісіз кездейсоқ",
+          "en": "Random without labels"
+        }
+      ],
+      "correct": [
+        1
+      ],
+      "explanation": {
+        "ru": "Разнообразие помогает ИИ не ошибаться на новом.",
+        "kk": "Әртүрлілік ЖИ-ге жаңа нәрседе қателеспеуге көмектеседі.",
+        "en": "Variety helps AI avoid mistakes on new things."
+      }
+    }
+  ]
+}

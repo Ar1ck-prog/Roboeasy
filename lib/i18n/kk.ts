@@ -181,6 +181,10 @@ export const kk: Dictionary = {
     placeholder: 'Мысалы: 50 см алға жүр, оңға бұрыл да, күлімде',
     shortcut: 'Ctrl + Enter — жасау',
     ideas: 'Бастауға идеялар',
+    // TODO: проверить перевод
+    offline: { title: 'ЖИ-сыз дайын мысалдар', open: 'Мысалды ашу: {name}' },
+    // TODO: проверить перевод
+    unsupported: { tryInstead: 'Байқап көру: {text}', freePython: 'Еркін Python режимін ашу' },
     examplesBlocks: [
       'Қабырғасы 30 см шаршы бойымен жүр',
       'Қабырғаға 10 см қалғанда тоқтап, дыбыс бер',
@@ -251,10 +255,14 @@ export const kk: Dictionary = {
       bad_request: 'Тапсырманы кемінде бірнеше сөзбен сипаттаңыз.',
       prompt_too_long: 'Сипаттама тым ұзын — {max} таңбаға дейін қысқартыңыз.',
       rate_limited: 'Сұраулар тым көп. {s} секунд күтіп, қайталап көріңіз.',
-      not_configured: 'ЖИ бапталмаған: .env.local файлына GEMINI_API_KEY қосыңыз.',
-      ai_busy: 'ЖИ қазір бос емес. Бір минуттан кейін қайталап көріңіз.',
+      // TODO: проверить перевод
+      not_configured: 'ЖИ әзірге қосылмаған. Төмендегі дайын мысалдар онсыз да жұмыс істейді.',
+      // TODO: проверить перевод
+      ai_busy: 'ЖИ демалып жатыр, {m} минуттан кейін қайталап көр. Әзірге дайын мысалды ашуға болады.',
       ai_failed: 'Бағдарламаны құрастыру мүмкін болмады. Тапсырманы басқаша жазып көріңіз.',
       empty_program: 'Қолжетімді блоктардан бағдарлама құрастыру мүмкін болмады. Тапсырманы қарапайымырақ сипаттаңыз немесе Python таңдаңыз.',
+      // TODO: проверить перевод
+      unsupported: 'Робот мұны істей алмайды. {reason}',
       network: 'Сервермен байланыс жоқ. Интернетті тексеріңіз.',
       file: 'Файлды жасау мүмкін болмады.',
     },
@@ -527,6 +535,16 @@ export const kk: Dictionary = {
     repeat: '{VALUE} рет қайталау',
     forever: 'үнемі қайталау',
     repeat_until: '{COND} болғанша қайталау',
+    // TODO: проверить перевод
+    while: 'қайталау, әзірге {COND}',
+    arc: 'доғамен жүру {DIR} радиус {RADIUS} см, {VALUE}°',
+    circle: 'шеңбермен жүру {DIR} радиус {RADIUS} см, шеңбер саны: {VALUE}',
+    tank: 'жүру: сол {LEFT} %, оң {RIGHT} %, {VALUE} {UNIT}',
+    set_var: '{NAME} = {VALUE} орнату',
+    change_var: '{NAME} мәнін {VALUE} өзгерту',
+    call: '{NAME} блогын орындау',
+    define: '{NAME} блогын анықтау',
+    axis: { yaw: 'бұрылу', pitch: 'алға еңкею', roll: 'бүйірге еңкею' },
     if: 'егер {COND} болса',
     else: 'әйтпесе',
     cond: {
@@ -535,6 +553,8 @@ export const kk: Dictionary = {
       reflection: '{PORT} шағылысу {CMP} {VALUE} %',
       force: '{PORT} {STATE}',
       button: '{BUTTON} түйме {STATE}',
+      gyro: 'гироскоп {AXIS} {CMP} {VALUE}°',
+      var: '{NAME} {CMP} {VALUE}',
     },
     dir: {
       forward: 'алға',

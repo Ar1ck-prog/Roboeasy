@@ -1,0 +1,102 @@
+{
+  "id": "ai-14",
+  "track": "ai-basics",
+  "unit": "ai-life",
+  "minutes": 5,
+  "skills": [
+    "ai-literacy"
+  ],
+  "title": {
+    "ru": "Своё дело с ИИ",
+    "kk": "ЖИ-мен өз ісің",
+    "en": "Your own project with AI"
+  },
+  "goal": {
+    "ru": "Сегодня ты узнаешь, как ИИ помогает начать своё дело.",
+    "kk": "Бүгін ЖИ өз ісіңді бастауға қалай көмектесетінін білесің.",
+    "en": "Today you will learn how AI helps start a project."
+  },
+  "summary": {
+    "ru": "Теперь ты знаешь: идею проверяют люди, а не только нейросеть.",
+    "kk": "Енді білесің: идеяны тек нейрожелі емес, адамдар тексереді.",
+    "en": "Now you know: ideas are tested by people, not just AI."
+  },
+  "steps": [
+    {
+      "id": "intro",
+      "type": "theory",
+      "title": {
+        "ru": "Идея и проверка",
+        "kk": "Идея және тексеру",
+        "en": "Idea and testing"
+      },
+      "body": {
+        "ru": "ИИ поможет придумать название, написать текст и составить план. Но нужна ли твоя идея людям, скажут только сами люди.\n\nСпроси хотя бы пятерых, а потом сделай самую простую версию.",
+        "kk": "ЖИ атау ойлап табуға, мәтін жазуға, жоспар құруға көмектеседі. Бірақ идеяң адамдарға керек пе, оны тек адамдар айтады.\n\nКемінде бес адамнан сұра, содан кейін ең қарапайым нұсқасын жаса.",
+        "en": "AI can help invent a name, write text and draft a plan. But only people can tell you whether they need your idea.\n\nAsk at least five people, then build the simplest version."
+      }
+    },
+    {
+      "id": "quiz-1",
+      "type": "quiz",
+      "kind": "choice",
+      "skill": "ai-literacy",
+      "question": {
+        "ru": "Как проверить, нужна ли идея?",
+        "kk": "Идеяның керек екенін қалай тексеруге болады?",
+        "en": "How do you check an idea is needed?"
+      },
+      "options": [
+        {
+          "ru": "Спросить людей",
+          "kk": "Адамдардан сұрау",
+          "en": "Ask people"
+        },
+        {
+          "ru": "Спросить только нейросеть",
+          "kk": "Тек нейрожеліден сұрау",
+          "en": "Ask only an AI"
+        }
+      ],
+      "correct": [
+        0
+      ],
+      "explanation": {
+        "ru": "Покупают и пользуются люди.",
+        "kk": "Адамдар сатып алады және қолданады.",
+        "en": "People are the ones who buy and use it."
+      }
+    },
+    {
+      "id": "quiz-2",
+      "type": "quiz",
+      "kind": "choice",
+      "skill": "ai-literacy",
+      "question": {
+        "ru": "С чего лучше начать?",
+        "kk": "Неден бастаған дұрыс?",
+        "en": "Where is it best to start?"
+      },
+      "options": [
+        {
+          "ru": "С самой простой версии",
+          "kk": "Ең қарапайым нұсқадан",
+          "en": "With the simplest version"
+        },
+        {
+          "ru": "С огромного проекта на год",
+          "kk": "Бір жылдық үлкен жобадан",
+          "en": "With a huge year-long project"
+        }
+      ],
+      "correct": [
+        0
+      ],
+      "explanation": {
+        "ru": "Так быстрее узнаешь, работает ли идея.",
+        "kk": "Сонда идеяның жұмыс істейтінін тезірек білесің.",
+        "en": "That shows faster whether the idea works."
+      }
+    }
+  ]
+}

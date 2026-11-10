@@ -12,10 +12,18 @@ const ru = {
   send: 'Отправить',
   thinking: 'Наставник думает…',
   note: 'Отвечает ИИ, он может ошибаться. Не пиши имя, адрес и телефон.',
+  voice: {
+    listen: 'Спросить голосом',
+    stop: 'Остановить запись',
+    speak: 'Озвучивать ответы',
+    note: 'Голос распознаёт браузер через сервис Google. Не называй имя и адрес.',
+    failed: 'Не получилось расслышать. Попробуй ещё раз или напиши вопрос.',
+  },
   errors: {
     rate_limited: 'Слишком много вопросов подряд. Подожди минутку и спроси снова.',
     daily_limit: 'На сегодня вопросы закончились. Возвращайся завтра!',
     unavailable: 'Наставник сейчас занят. Попробуй ещё раз через минуту.',
+    resting: 'ИИ отдыхает, попробуй через {m} мин.',
     bad_request: 'Не получилось отправить вопрос. Попробуй написать его короче.',
     offline: 'Нет связи с сервером. Проверь интернет и попробуй снова.',
   },
@@ -33,10 +41,20 @@ const kk: SiteMentorText = {
   send: 'Жіберу',
   thinking: 'Тәлімгер ойланып жатыр…',
   note: 'Жасанды интеллект жауап береді, ол қателесуі мүмкін. Атыңды, мекенжайыңды және телефоныңды жазба.',
+  // TODO: проверить перевод
+  voice: {
+    listen: 'Дауыспен сұрау',
+    stop: 'Жазуды тоқтату',
+    speak: 'Жауаптарды дауыстау',
+    note: 'Дауысты браузер Google қызметі арқылы таниды. Атыңды және мекенжайыңды айтпа.',
+    failed: 'Анық естілмеді. Қайталап көр немесе сұрағыңды жаз.',
+  },
   errors: {
     rate_limited: 'Сұрақтар тым көп. Бір минут күтіп, қайта сұра.',
     daily_limit: 'Бүгінгі сұрақтар бітті. Ертең қайта кел!',
     unavailable: 'Тәлімгер қазір бос емес. Бір минуттан кейін қайталап көр.',
+    // TODO: проверить перевод
+    resting: 'ЖИ демалып жатыр, {m} минуттан кейін қайталап көр.',
     bad_request: 'Сұрақты жіберу мүмкін болмады. Қысқарақ жазып көр.',
     offline: 'Сервермен байланыс жоқ. Интернетті тексеріп, қайталап көр.',
   },
@@ -52,10 +70,18 @@ const en: SiteMentorText = {
   send: 'Send',
   thinking: 'The mentor is thinking…',
   note: 'Answers come from an AI and can be wrong. Do not write your name, address or phone number.',
+  voice: {
+    listen: 'Ask by voice',
+    stop: 'Stop recording',
+    speak: 'Read answers aloud',
+    note: 'Your browser recognises speech through a Google service. Do not say your name or address.',
+    failed: 'Could not hear that. Try again or type your question.',
+  },
   errors: {
     rate_limited: 'Too many questions in a row. Wait a minute and ask again.',
     daily_limit: 'That is all the questions for today. Come back tomorrow!',
     unavailable: 'The mentor is busy right now. Try again in a minute.',
+    resting: 'The AI is resting, try again in {m} min.',
     bad_request: 'Could not send that question. Try writing it shorter.',
     offline: 'No connection to the server. Check the internet and try again.',
   },

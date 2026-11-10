@@ -29,7 +29,7 @@ export function useCloudModule(enabled = true): CloudModule | null {
 
 /** The signed-in user (or null), following sign-in and sign-out. `undefined` while unknown. */
 export function useCloudUser(mod: CloudModule | null) {
-  const [user, setUser] = useState<{ id: string; email?: string } | null | undefined>(undefined)
+  const [user, setUser] = useState<{ id: string; email?: string; is_anonymous?: boolean } | null | undefined>(undefined)
   useEffect(() => {
     if (!mod) return
     const sb = mod.cloud()

@@ -45,10 +45,19 @@ const ALL_COMMANDS: Step[] = [
   { op: 'repeat_until', condition: { sensor: 'reflection', port: 'D', comparator: '<', value: 50 }, steps: [{ op: 'stop_move' }] },
   { op: 'if', condition: { sensor: 'color', port: 'D', color: 'red' }, then: [{ op: 'stop_move' }] },
   { op: 'if', condition: { sensor: 'color', port: 'D', color: 'red' }, then: [{ op: 'stop_move' }], else: [{ op: 'stop_move' }] },
+  { op: 'arc', direction: 'right', radius: 25, degrees: 90 },
+  { op: 'circle', direction: 'left', radius: 20, turns: 1 },
+  { op: 'tank', leftSpeed: 30, rightSpeed: 60, value: 2, unit: 'seconds' },
+  { op: 'set_var', name: 'side', expr: { op: '+', a: { num: 1 }, b: { num: 2 } } },
+  { op: 'change_var', name: 'side', expr: { op: '*', a: { var: 'side' }, b: { num: 2 } } },
+  { op: 'move_expr', direction: 'forward', expr: { op: '-', a: { var: 'side' }, b: { num: 1 } }, unit: 'cm' },
+  { op: 'write_var', name: 'side' },
+  { op: 'while', condition: { sensor: 'gyro', axis: 'yaw', comparator: '<', value: 90 }, steps: [{ op: 'stop_move' }] },
+  { op: 'if', condition: { sensor: 'var', name: 'side', comparator: '=', value: 3 }, then: [{ op: 'call', name: 'helper' }] },
   { op: 'forever', steps: [{ op: 'stop_move' }] },
 ]
 
-export const ALL_COMMANDS_PROGRAM: Program = { title: 'All', description: '', steps: ALL_COMMANDS }
+export const ALL_COMMANDS_PROGRAM: Program = { title: 'All', description: '', steps: ALL_COMMANDS, functions: [{ name: 'helper', steps: [{ op: 'stop_move' }] }] }
 
 async function main() {
   const files = referenceFiles()

@@ -11,7 +11,18 @@
  * ranges and reflection values below.
  */
 
-import { type Condition, DEFAULT_ROBOT, type Port, type RobotProfile, type Step, imagePixels, toMatrixText } from '../dsl/types'
+import { arcPlan } from '../dsl/arcs'
+import {
+  type Condition,
+  DEFAULT_ROBOT,
+  type Expr,
+  type Port,
+  type ProgramFunction,
+  type RobotProfile,
+  type Step,
+  imagePixels,
+  toMatrixText,
+} from '../dsl/types'
 import { pointInPolygon, polygonsIntersect } from '../fll/geometry'
 import type { Point } from '../fll/season'
 import type { Rect, SimField } from './field'
@@ -69,13 +80,11 @@ export interface SimOptions {
   noise?: number
   seed?: number
   maxTime?: number
+  /** The program's own blocks, for "call" steps. */
+  functions?: ProgramFunction[]
 }
 
-type Drive =
-  | { kind: 'distance'; remaining: number }
-  | { kind: 'turn'; remaining: number }
-  | { kind: 'time'; remaining: number }
-  | { kind: 'continuous' }
+type Drive = { kind: 'distance'; remaining: number } | { kind: 'turn'; remaining: number } | { kind: 'time'; remaining: number } | { kind: 'continuous' }
 
 const REFLECTION: Record<string, number> = { white: 95, yellow: 80, azure: 70, red: 55, green: 45, violet: 40, blue: 35, black: 8, none: 0 }
 
@@ -140,6 +149,8 @@ class Engine {
   trace: TracePoint[] = []
   travelled = 0
   sensors = new Set<Condition['sensor']>()
+  variables = new Map<string, number>()
+  functions = new Map<string, Step[]>()
   private tick = 0
   private wasMoving = false
   private readonly walls: Point[][]
@@ -246,7 +257,25 @@ class Engine {
         return c.state === 'released' ? !this.bumped : this.bumped
       case 'button':
         return c.state === 'released'
+      case 'gyro': {
+        if (c.axis !== 'yaw') return cmp(0, c.comparator, c.value, 2)
+        const yaw = ((((this.yawRef - this.pose.heading) % 360) + 540) % 360) - 180
+        return cmp(yaw, c.comparator, c.value, 2)
+      }
+      case 'var':
+        return cmp(this.variables.get(c.name) ?? 0, c.comparator, c.value, 0.001)
     }
+  }
+
+  evaluate(e: Expr): number {
+    if ('num' in e) return e.num
+    if ('var' in e) return this.variables.get(e.var) ?? 0
+    const a = this.evaluate(e.a)
+    const b = this.evaluate(e.b)
+    if (e.op === '+') return a + b
+    if (e.op === '-') return a - b
+    if (e.op === '*') return a * b
+    return b === 0 ? 0 : a / b
   }
 
   // ── Physics ─────────────────────────────────────────────────────────
@@ -255,7 +284,7 @@ class Engine {
     let frac = 1
     const d = this.drive
     const vMax = Math.max(Math.abs(this.vl), Math.abs(this.vr))
-    const omega = ((this.vr - this.vl) / this.robot.trackWidthMm) / RAD // deg/s
+    const omega = (this.vr - this.vl) / this.robot.trackWidthMm / RAD // deg/s
     if (d?.kind === 'distance' && vMax > 0) frac = Math.min(1, d.remaining / (vMax * DT))
     if (d?.kind === 'turn' && omega !== 0) frac = Math.min(1, d.remaining / (Math.abs(omega) * DT))
     if (d?.kind === 'time') frac = Math.min(1, d.remaining / DT)
@@ -273,7 +302,10 @@ class Engine {
       if (!this.contact) {
         this.events.push({ t: this.t, kind: 'collision', x: this.pose.x, y: this.pose.y })
         const front = this.ahead(ROBOT_SHAPE.bumperAhead + 4, next)
-        if (this.walls.some((w) => pointInPolygon(front, w)) || (this.field.border && (front.x < 0 || front.y < 0 || front.x > this.field.width || front.y > this.field.height))) {
+        if (
+          this.walls.some((w) => pointInPolygon(front, w)) ||
+          (this.field.border && (front.x < 0 || front.y < 0 || front.x > this.field.width || front.y > this.field.height))
+        ) {
           this.bumped = true
           this.events.push({ t: this.t, kind: 'bump', x: this.pose.x, y: this.pose.y })
         }
@@ -430,7 +462,7 @@ class Engine {
         if (this.isDrive(s.port)) {
           // A single drive wheel: the robot pivots around the other one.
           const forward = s.port === this.robot.rightMotor ? vel > 0 : vel < 0
-          const mm = ((Math.abs(vel) / 360) * this.circumference) * (forward ? 1 : -1)
+          const mm = (Math.abs(vel) / 360) * this.circumference * (forward ? 1 : -1)
           if (s.port === this.robot.leftMotor) this.vl = mm
           else this.vr = mm
         }
@@ -463,7 +495,7 @@ class Engine {
         const pos = ((now % 360) + 360) % 360
         let delta = s.position - pos
         if (s.direction === 'clockwise') delta = ((delta % 360) + 360) % 360
-        else if (s.direction === 'counterclockwise') delta = -((((-delta) % 360) + 360) % 360)
+        else if (s.direction === 'counterclockwise') delta = -(((-delta % 360) + 360) % 360)
         else if (delta > 180) delta -= 360
         else if (delta < -180) delta += 360
         if (Math.abs(delta) < 0.5) return
@@ -510,6 +542,49 @@ class Engine {
         while (!this.check(s.condition)) yield* this.loopBody(s.steps, path)
         this.sensorEvent(s.condition, path)
         return
+      case 'while':
+        while (this.check(s.condition)) yield* this.loopBody(s.steps, path)
+        this.sensorEvent(s.condition, path)
+        return
+      case 'arc':
+      case 'circle': {
+        const plan = arcPlan(s.direction, s.radius, s.op === 'circle' ? 360 * s.turns : s.degrees, this.robot)
+        const outer = (this.speed * MAX_SPEED_MM_S) / 100
+        const inner = outer * (1 - Math.abs(plan.steering) / 50)
+        ;[this.vl, this.vr] = s.direction === 'right' ? [outer, inner] : [inner, outer]
+        this.drive = { kind: 'distance', remaining: plan.steeringOuterCm * 10 * this.slip(0.03) }
+        yield* this.waitDrive()
+        return
+      }
+      case 'tank': {
+        this.vl = (s.leftSpeed * MAX_SPEED_MM_S) / 100
+        this.vr = (s.rightSpeed * MAX_SPEED_MM_S) / 100
+        if (s.unit === 'seconds') this.drive = { kind: 'time', remaining: s.value }
+        else this.drive = { kind: 'distance', remaining: this.distanceMm(s.value, s.unit) * this.slip(0.03) }
+        yield* this.waitDrive()
+        return
+      }
+      case 'move_expr': {
+        const v = this.wheel(s.direction)
+        this.vl = this.vr = v
+        const value = Math.abs(this.evaluate(s.expr))
+        if (s.unit === 'seconds') this.drive = { kind: 'time', remaining: value }
+        else this.drive = { kind: 'distance', remaining: this.distanceMm(value, s.unit) * this.slip(0.03) }
+        yield* this.waitDrive()
+        return
+      }
+      case 'set_var':
+        this.variables.set(s.name, this.evaluate(s.expr))
+        return
+      case 'change_var':
+        this.variables.set(s.name, (this.variables.get(s.name) ?? 0) + this.evaluate(s.expr))
+        return
+      case 'write_var':
+        this.events.push({ t: this.t, kind: 'display', pixels: null, text: String(this.variables.get(s.name) ?? 0) })
+        return
+      case 'call':
+        yield* this.exec(this.functions.get(s.name) ?? [], `${path}.call`)
+        return
       case 'if':
         if (this.check(s.condition)) {
           this.sensorEvent(s.condition, path)
@@ -537,6 +612,7 @@ class Engine {
 export function simulate(steps: Step[], field: SimField, options: SimOptions = {}): SimResult {
   const robot = options.robot ?? DEFAULT_ROBOT
   const engine = new Engine(field, robot, options.noise ?? 0, options.seed ?? 1)
+  for (const fn of options.functions ?? []) engine.functions.set(fn.name, fn.steps)
   const maxTime = options.maxTime ?? MAX_TIME
   const program = engine.exec(steps, '')
   let done = false
@@ -602,4 +678,3 @@ export function stepAt(events: SimEvent[], t: number): string | null {
   }
   return current
 }
-

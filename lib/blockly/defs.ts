@@ -194,7 +194,7 @@ export function toolboxBlocks(ops: readonly StepOp[]): string[] {
     } else if (op === 'if') {
       add(BLOCK_TYPES.if)
       add(BLOCK_TYPES.if_else)
-    } else add(BLOCK_TYPES[op])
+    } else if (op in BLOCK_TYPES) add(BLOCK_TYPES[op as keyof typeof BLOCK_TYPES])
   }
   if (ops.some((o) => o === 'wait_until' || o === 'repeat_until' || o === 'if')) {
     add(BLOCK_TYPES.cond_distance)

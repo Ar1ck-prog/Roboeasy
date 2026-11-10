@@ -1,8 +1,11 @@
 'use client'
 
+import { canListen, canSpeak, listen, speak, stopSpeaking } from '@/lib/speech'
+import { deviceHeaders } from '@/lib/device-id'
+import { fill } from '@/lib/i18n/config'
 import { type FormEvent, useEffect, useRef, useState } from 'react'
 import { usePathname } from 'next/navigation'
-import { Bot, Loader2, Send, X } from 'lucide-react'
+import { Bot, Loader2, Send, X, Mic } from 'lucide-react'
 
 import { buttonVariants } from '@/components/ui/button'
 import type { Locale } from '@/lib/i18n/config'
@@ -15,7 +18,7 @@ const MAX_QUESTION = 300
 const MAX_HISTORY = 8
 const MAX_PROGRAM = 6000
 /** Lessons have their own mentor and a footer in this corner; the others are not for learners. */
-const HIDDEN = /^\/[a-z]{2}\/(learn\/[^/]+\/[^/]+|preview|design|admin|cert)(\/|$)/
+const HIDDEN = /^\/[a-z]{2}\/(learn\/[^/]+\/[^/]+|preview|design|admin|cert|class)(\/|$)/
 
 interface Message {
   from: 'me' | 'mentor'
@@ -30,6 +33,13 @@ export function SiteMentor({ lang, t }: { lang: Locale; t: SiteMentorText }) {
   const [open, setOpen] = useState(false)
   const [input, setInput] = useState('')
   const [busy, setBusy] = useState(false)
+  const [listening, setListening] = useState(false)
+  const [voiceFailed, setVoiceFailed] = useState(false)
+  const [speakAnswers, setSpeakAnswers] = useState(false)
+  const [voice, setVoice] = useState({ listen: false, speak: false })
+  const stopListening = useRef<(() => void) | null>(null)
+
+  useEffect(() => setVoice({ listen: canListen(), speak: canSpeak() }), [])
   const [messages, setMessages] = useState<Message[]>([])
   const listRef = useRef<HTMLOListElement>(null)
   const inputRef = useRef<HTMLInputElement>(null)
@@ -55,6 +65,23 @@ export function SiteMentor({ lang, t }: { lang: Locale; t: SiteMentorText }) {
     return () => document.removeEventListener('keydown', onKey)
   }, [open])
 
+  const toggleListening = () => {
+    if (listening) {
+      stopListening.current?.()
+      return
+    }
+    setVoiceFailed(false)
+    setListening(true)
+    stopListening.current = listen(
+      lang,
+      (text) => void ask(text.slice(0, MAX_QUESTION)),
+      (failed) => {
+        setListening(false)
+        setVoiceFailed(failed)
+      },
+    )
+  }
+
   if (HIDDEN.test(pathname)) return null
 
   const close = () => {
@@ -74,16 +101,19 @@ export function SiteMentor({ lang, t }: { lang: Locale; t: SiteMentorText }) {
     try {
       const res = await fetch('/api/mentor', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 'Content-Type': 'application/json', ...deviceHeaders() },
         body: JSON.stringify({ lang, page: pathname, messages: history, program: getMentorProgram()?.slice(0, MAX_PROGRAM) }),
       })
       const data = (await res.json()) as SiteMentorResponse
-      reply = data.ok ? { from: 'mentor', text: data.answer } : { from: 'mentor', text: t.errors[data.error], failed: true }
+      reply = data.ok
+        ? { from: 'mentor', text: data.answer }
+        : { from: 'mentor', text: fill(t.errors[data.error], { m: Math.max(1, Math.ceil((data.retryAfter ?? 60) / 60)) }), failed: true }
     } catch {
       reply = { from: 'mentor', text: t.errors.offline, failed: true }
     }
     setMessages((m) => [...m, reply])
     setBusy(false)
+    if (speakAnswers && !reply.failed) speak(reply.text, lang)
   }
 
   const submit = (e: FormEvent) => {
@@ -181,10 +211,36 @@ export function SiteMentor({ lang, t }: { lang: Locale; t: SiteMentorText }) {
             autoComplete="off"
             onChange={(e) => setInput(e.target.value)}
           />
+          {voice.listen && (
+            <button
+              type="button"
+              className={buttonVariants({ size: 'icon', variant: listening ? 'primary' : 'secondary' })}
+              aria-label={listening ? t.voice.stop : t.voice.listen}
+              aria-pressed={listening}
+              disabled={busy}
+              onClick={toggleListening}
+            >
+              <Mic aria-hidden="true" />
+            </button>
+          )}
           <button type="submit" className={buttonVariants({ size: 'icon' })} aria-label={t.send} disabled={busy || !input.trim()}>
             <Send aria-hidden="true" />
           </button>
         </form>
+        {voice.speak && (
+          <label className="flex items-center gap-2 text-xs font-bold">
+            <input
+              type="checkbox"
+              checked={speakAnswers}
+              onChange={(e) => {
+                setSpeakAnswers(e.target.checked)
+                if (!e.target.checked) stopSpeaking()
+              }}
+            />
+            {t.voice.speak}
+          </label>
+        )}
+        {voice.listen && <p className="m-0 text-xs text-muted-foreground">{voiceFailed ? t.voice.failed : t.voice.note}</p>}
         <p className="m-0 text-xs text-muted-foreground">{t.note}</p>
       </div>
     </section>

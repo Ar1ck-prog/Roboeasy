@@ -2,7 +2,7 @@ import { describe, expect, it } from 'vitest'
 
 import { PROGRAM_JSON_SCHEMA, PYTHON_JSON_SCHEMA, STEP_OPS, parseProgram, parseRobot } from '../lib/dsl/schema'
 import { DEFAULT_ROBOT, toMatrixText } from '../lib/dsl/types'
-import { EVERY_OP, EVERY_STEP, valid } from './helpers'
+import { EVERY_FUNCTIONS, EVERY_OP, EVERY_STEP, valid } from './helpers'
 
 const program = (steps: unknown[]) => ({ title: 't', description: '', steps })
 const error = (raw: unknown) => {
@@ -13,7 +13,7 @@ const error = (raw: unknown) => {
 
 describe('parseProgram', () => {
   it('accepts every command unchanged', () => {
-    expect(valid({ title: 'All', description: 'Every command', steps: EVERY_STEP }).steps).toEqual(EVERY_STEP)
+    expect(valid({ title: 'All', description: 'Every command', steps: EVERY_STEP, functions: EVERY_FUNCTIONS }).steps).toEqual(EVERY_STEP)
     expect([...EVERY_OP].sort()).toEqual([...STEP_OPS].sort())
   })
 
@@ -109,8 +109,9 @@ describe('parseRobot', () => {
 describe('Gemini response schemas', () => {
   it('list every command and stay compact', () => {
     const step = (PROGRAM_JSON_SCHEMA.$defs as Record<string, { properties: { op: { enum: string[] } } }>).Step
-    expect([...step.properties.op.enum].sort()).toEqual([...STEP_OPS].sort())
+    expect([...step.properties.op.enum].sort()).toEqual([...STEP_OPS, 'define'].sort())
     expect(JSON.stringify(PROGRAM_JSON_SCHEMA).length).toBeLessThan(4000)
-    expect(PYTHON_JSON_SCHEMA.required).toEqual(['title', 'description', 'code'])
+    expect(PYTHON_JSON_SCHEMA.required).toEqual(['unsupported'])
+    expect(Object.keys(PYTHON_JSON_SCHEMA.properties as object)).toEqual(['unsupported', 'reason', 'suggestion', 'title', 'description', 'code'])
   })
 })

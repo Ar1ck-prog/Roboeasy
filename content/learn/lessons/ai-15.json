@@ -1,0 +1,102 @@
+{
+  "id": "ai-15",
+  "track": "ai-basics",
+  "unit": "ai-life",
+  "minutes": 5,
+  "skills": [
+    "ai-literacy"
+  ],
+  "title": {
+    "ru": "Безопасность и дипфейки",
+    "kk": "Қауіпсіздік және дипфейктер",
+    "en": "Safety and deepfakes"
+  },
+  "goal": {
+    "ru": "Сегодня ты научишься не попадаться на подделки.",
+    "kk": "Бүгін жалғанға алданбауды үйренесің.",
+    "en": "Today you will learn not to fall for fakes."
+  },
+  "summary": {
+    "ru": "Теперь ты знаешь, как защитить себя от подделок.",
+    "kk": "Енді өзіңді жалғаннан қалай қорғауды білесің.",
+    "en": "Now you know how to protect yourself from fakes."
+  },
+  "steps": [
+    {
+      "id": "intro",
+      "type": "theory",
+      "title": {
+        "ru": "Дипфейк",
+        "kk": "Дипфейк",
+        "en": "Deepfakes"
+      },
+      "body": {
+        "ru": "**Дипфейк** — поддельное видео или голос, созданные ИИ. Мошенник может подделать голос знакомого.\n\nПравило: если просят деньги, пароли или код из сообщения, положи трубку и свяжись с человеком сам. Договоритесь в семье о секретном слове.",
+        "kk": "**Дипфейк** — ЖИ жасаған жалған бейне не дауыс. Алаяқ таныстың дауысын жасай алады.\n\nЕреже: ақша, құпиясөз немесе хабарламадағы кодты сұраса, телефонды қойып, адамның өзімен хабарлас. Отбасында құпия сөз келісіп алыңдар.",
+        "en": "A **deepfake** is a fake video or voice made by AI. A scammer can fake the voice of someone you know.\n\nThe rule: if someone asks for money, passwords or a code from a message, hang up and contact the person yourself. Agree on a secret word with your family."
+      }
+    },
+    {
+      "id": "quiz-1",
+      "type": "quiz",
+      "kind": "choice",
+      "skill": "ai-literacy",
+      "question": {
+        "ru": "Голос мамы просит код из СМС. Что делать?",
+        "kk": "Анаңның дауысы SMS кодын сұрайды. Не істеу керек?",
+        "en": "Your mum’s voice asks for a code from a text. What do you do?"
+      },
+      "options": [
+        {
+          "ru": "Положить трубку и позвонить маме самому",
+          "kk": "Телефонды қойып, анаңа өзің қоңырау шалу",
+          "en": "Hang up and call your mum yourself"
+        },
+        {
+          "ru": "Сразу продиктовать код",
+          "kk": "Кодты бірден айту",
+          "en": "Read out the code straight away"
+        }
+      ],
+      "correct": [
+        0
+      ],
+      "explanation": {
+        "ru": "Голос можно подделать.",
+        "kk": "Дауысты жасауға болады.",
+        "en": "A voice can be faked."
+      }
+    },
+    {
+      "id": "quiz-2",
+      "type": "quiz",
+      "kind": "choice",
+      "skill": "ai-literacy",
+      "question": {
+        "ru": "Что такое дипфейк?",
+        "kk": "Дипфейк деген не?",
+        "en": "What is a deepfake?"
+      },
+      "options": [
+        {
+          "ru": "Подделка, созданная ИИ",
+          "kk": "ЖИ жасаған жалған нәрсе",
+          "en": "A fake made by AI"
+        },
+        {
+          "ru": "Вид робота",
+          "kk": "Робот түрі",
+          "en": "A type of robot"
+        }
+      ],
+      "correct": [
+        0
+      ],
+      "explanation": {
+        "ru": "Это поддельное видео, фото или голос.",
+        "kk": "Бұл жалған бейне, фото немесе дауыс.",
+        "en": "It is a fake video, photo or voice."
+      }
+    }
+  ]
+}

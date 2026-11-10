@@ -1,6 +1,6 @@
 {
   "name": "roboeasy",
-  "version": "0.1.0",
+  "version": "2.0.0",
   "private": true,
   "scripts": {
     "dev": "next dev",
@@ -14,6 +14,7 @@
     "db:stop": "supabase stop",
     "db:reset": "supabase db reset",
     "db:test": "vitest run --config vitest.db.config.ts",
+    "eval:generator": "tsx scripts/eval-generator.ts",
     "reference": "tsx scripts/extract-reference.ts",
     "audit:capture": "tsx scripts/audit/capture.ts",
     "audit:directions": "tsx scripts/audit/directions-shots.mts"

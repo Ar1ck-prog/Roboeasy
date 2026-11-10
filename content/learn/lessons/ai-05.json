@@ -1,0 +1,112 @@
+{
+  "id": "ai-05",
+  "track": "ai-basics",
+  "unit": "ai-around",
+  "minutes": 5,
+  "skills": [
+    "ai-literacy"
+  ],
+  "title": {
+    "ru": "Картинки и голос",
+    "kk": "Сурет пен дауыс",
+    "en": "Pictures and voice"
+  },
+  "goal": {
+    "ru": "Сегодня ты узнаешь, как ИИ работает с картинками и голосом.",
+    "kk": "Бүгін ЖИ сурет пен дауыспен қалай жұмыс істейтінін білесің.",
+    "en": "Today you will learn how AI works with pictures and voice."
+  },
+  "summary": {
+    "ru": "Теперь ты знаешь: разные задачи решают разные нейросети.",
+    "kk": "Енді білесің: әртүрлі тапсырманы әртүрлі нейрожелі шешеді.",
+    "en": "Now you know: different tasks need different networks."
+  },
+  "steps": [
+    {
+      "id": "intro",
+      "type": "theory",
+      "title": {
+        "ru": "Разные нейросети",
+        "kk": "Әртүрлі нейрожелілер",
+        "en": "Different networks"
+      },
+      "body": {
+        "ru": "Одни нейросети **рисуют** по описанию. Другие **распознают** речь и превращают её в текст, третьи **озвучивают** текст.\n\nЕсть и те, что пишут программный **код**. Выбирай инструмент под задачу.",
+        "kk": "Кейбір нейрожелілер сипаттама бойынша **сурет салады**. Басқалары сөзді **танып**, мәтінге айналдырады, үшіншілері мәтінді **дауыстайды**.\n\nБағдарлама **кодын** жазатындары да бар. Құралды тапсырмаға қарай таңда.",
+        "en": "Some networks **draw** from a description. Others **recognise** speech and turn it into text, and others **read** text aloud.\n\nThere are also ones that write program **code**. Pick the tool for the task."
+      }
+    },
+    {
+      "id": "quiz-1",
+      "type": "quiz",
+      "kind": "choice",
+      "skill": "ai-literacy",
+      "question": {
+        "ru": "Нужна обложка для доклада. Какой ИИ подойдёт?",
+        "kk": "Баяндамаға мұқаба керек. Қай ЖИ сай?",
+        "en": "You need a cover for a report. Which AI fits?"
+      },
+      "options": [
+        {
+          "ru": "Генератор картинок",
+          "kk": "Сурет генераторы",
+          "en": "An image generator"
+        },
+        {
+          "ru": "Распознавание речи",
+          "kk": "Сөзді тану",
+          "en": "Speech recognition"
+        },
+        {
+          "ru": "Калькулятор",
+          "kk": "Калькулятор",
+          "en": "A calculator"
+        }
+      ],
+      "correct": [
+        0
+      ],
+      "explanation": {
+        "ru": "Обложка — это картинка.",
+        "kk": "Мұқаба — сурет.",
+        "en": "A cover is a picture."
+      }
+    },
+    {
+      "id": "quiz-2",
+      "type": "quiz",
+      "kind": "choice",
+      "skill": "ai-literacy",
+      "question": {
+        "ru": "Хочешь диктовать вместо набора. Что нужно?",
+        "kk": "Теру орнына айтқың келеді. Не керек?",
+        "en": "You want to dictate instead of typing. What do you need?"
+      },
+      "options": [
+        {
+          "ru": "Генератор музыки",
+          "kk": "Музыка генераторы",
+          "en": "A music generator"
+        },
+        {
+          "ru": "Распознавание речи",
+          "kk": "Сөзді тану",
+          "en": "Speech recognition"
+        },
+        {
+          "ru": "Рисовалка",
+          "kk": "Сурет салғыш",
+          "en": "A drawing tool"
+        }
+      ],
+      "correct": [
+        1
+      ],
+      "explanation": {
+        "ru": "Речь превращается в текст.",
+        "kk": "Сөз мәтінге айналады.",
+        "en": "Speech is turned into text."
+      }
+    }
+  ]
+}

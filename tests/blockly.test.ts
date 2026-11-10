@@ -6,7 +6,7 @@ import type { Step } from '../lib/dsl/types'
 import { en } from '../lib/i18n/en'
 import { kk } from '../lib/i18n/kk'
 import { ru } from '../lib/i18n/ru'
-import { EVERY_STEP } from './helpers'
+import { LESSON_STEPS } from './helpers'
 
 describe('blockly definitions', () => {
   it('has a block for every type, with %n matching the args in all languages', () => {
@@ -31,7 +31,7 @@ describe('blockly definitions', () => {
 
 describe('DSL ⇄ blocks', () => {
   it('round-trips every command', () => {
-    const steps = EVERY_STEP as Step[]
+    const steps = LESSON_STEPS as Step[]
     const back = stateToSteps(stepsToState(steps))
     expect(back.steps).toEqual(steps)
     expect(back.detached).toBe(0)

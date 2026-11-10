@@ -1,0 +1,102 @@
+{
+  "id": "ai-09",
+  "track": "ai-basics",
+  "unit": "ai-prompts",
+  "minutes": 5,
+  "skills": [
+    "ai-literacy"
+  ],
+  "title": {
+    "ru": "Честно в учёбе",
+    "kk": "Оқуда адал",
+    "en": "Honest in school"
+  },
+  "goal": {
+    "ru": "Сегодня ты поймёшь, как пользоваться ИИ честно.",
+    "kk": "Бүгін ЖИ-ді адал қолдануды түсінесің.",
+    "en": "Today you will see how to use AI honestly."
+  },
+  "summary": {
+    "ru": "Теперь ты знаешь: ИИ помогает учиться, но не учится вместо тебя.",
+    "kk": "Енді білесің: ЖИ оқуға көмектеседі, бірақ сенің орныңа оқымайды.",
+    "en": "Now you know: AI helps you learn, but it does not learn for you."
+  },
+  "steps": [
+    {
+      "id": "intro",
+      "type": "theory",
+      "title": {
+        "ru": "Помощник, а не замена",
+        "kk": "Көмекші, алмастырушы емес",
+        "en": "A helper, not a replacement"
+      },
+      "body": {
+        "ru": "ИИ можно попросить объяснить тему, проверить твой текст или придумать примеры. Сдавать чужой ответ как свой нечестно, и ты ничему не научишься.\n\nЕсли использовал ИИ, скажи об этом учителю. И не пиши нейросети своё имя, адрес и телефон.",
+        "kk": "ЖИ-ден тақырыпты түсіндіруді, мәтініңді тексеруді немесе мысал ойлап табуды сұрауға болады. Бөтен жауапты өзіңдікі деп тапсыру адал емес, әрі ештеңе үйренбейсің.\n\nЖИ қолдансаң, мұғалімге айт. Нейрожеліге атыңды, мекенжайыңды, телефоныңды жазба.",
+        "en": "You can ask AI to explain a topic, check your text or come up with examples. Handing in someone else’s answer as yours is dishonest, and you learn nothing.\n\nIf you used AI, tell your teacher. And never give a chatbot your name, address or phone number."
+      }
+    },
+    {
+      "id": "quiz-1",
+      "type": "quiz",
+      "kind": "choice",
+      "skill": "ai-literacy",
+      "question": {
+        "ru": "Как честно использовать ИИ в учёбе?",
+        "kk": "Оқуда ЖИ-ді қалай адал қолдануға болады?",
+        "en": "What is an honest way to use AI in school?"
+      },
+      "options": [
+        {
+          "ru": "Попросить объяснить тему и написать самому",
+          "kk": "Тақырыпты түсіндіртіп, өзің жазу",
+          "en": "Ask it to explain a topic and write it yourself"
+        },
+        {
+          "ru": "Сдать ответ ИИ как свой",
+          "kk": "ЖИ жауабын өзіңдікі деп тапсыру",
+          "en": "Hand in AI’s answer as your own"
+        }
+      ],
+      "correct": [
+        0
+      ],
+      "explanation": {
+        "ru": "Цель учёбы — чтобы понял ты.",
+        "kk": "Оқудың мақсаты — өзің түсіну.",
+        "en": "The point of school is that you understand."
+      }
+    },
+    {
+      "id": "quiz-2",
+      "type": "quiz",
+      "kind": "choice",
+      "skill": "ai-literacy",
+      "question": {
+        "ru": "Что нельзя писать в чат с ИИ?",
+        "kk": "ЖИ чатына не жазуға болмайды?",
+        "en": "What must you not type into an AI chat?"
+      },
+      "options": [
+        {
+          "ru": "Вопрос о космосе",
+          "kk": "Ғарыш туралы сұрақ",
+          "en": "A question about space"
+        },
+        {
+          "ru": "Домашний адрес и телефон",
+          "kk": "Үй мекенжайы мен телефон",
+          "en": "Your home address and phone number"
+        }
+      ],
+      "correct": [
+        1
+      ],
+      "explanation": {
+        "ru": "Личные данные нужно беречь.",
+        "kk": "Жеке деректерді қорғау керек.",
+        "en": "Personal data must be protected."
+      }
+    }
+  ]
+}

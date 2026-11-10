@@ -25,8 +25,8 @@ const DIR = path.join(__dirname, '..', 'content', 'learn', 'lessons')
 const files = fs.readdirSync(DIR).filter((f) => f.endsWith('.json'))
 
 describe('course map', () => {
-  it('has 8 tracks with unique ids and known prerequisites', () => {
-    expect(COURSE.tracks).toHaveLength(8)
+  it('has 9 tracks with unique ids and known prerequisites', () => {
+    expect(COURSE.tracks).toHaveLength(9)
     const ids = COURSE.tracks.flatMap((t) => [t.id, ...t.units.map((u) => u.id), ...t.units.flatMap((u) => u.lessons.map((l) => l.id))])
     expect(new Set(ids).size).toBe(ids.length)
     const tracks = new Set(COURSE.tracks.map((t) => t.id))
