@@ -33,6 +33,81 @@ describe('order of fields for the model', () => {
   })
 })
 
+describe('expressions written as text', () => {
+  const steps = (expr: unknown) => [
+    { op: 'set_var', name: 'side', expr: 1 === 1 ? { num: 1 } : 0 },
+    { op: 'set_var', name: 'x', expr },
+  ]
+  const read = (expr: unknown) => {
+    const r = parseProgram({ title: 't', description: '', steps: steps(expr) })
+    return r.ok && r.value.steps[1].op === 'set_var' ? r.value.steps[1].expr : null
+  }
+
+  it.each([
+    ['10', { num: 10 }],
+    ['-3', { num: -3 }],
+    ['side', { var: 'side' }],
+    ['side + 5', { op: '+', a: { var: 'side' }, b: { num: 5 } }],
+    ['side*2', { op: '*', a: { var: 'side' }, b: { num: 2 } }],
+    ['1 + side * 2', { op: '+', a: { num: 1 }, b: { op: '*', a: { var: 'side' }, b: { num: 2 } } }],
+    ['(1 + side) * 2', { op: '*', a: { op: '+', a: { num: 1 }, b: { var: 'side' } }, b: { num: 2 } }],
+  ])('reads "%s"', (text, expected) => {
+    expect(read(text)).toEqual(expected)
+  })
+
+  it.each(['', '1 +', 'side side', '(1', '5 $ 2', '4 / 0', 'speed + 1'])('rejects "%s"', (text) => {
+    expect(read(text)).toBeNull()
+  })
+
+  it('still reads the structured form', () => {
+    expect(read({ op: '-', a: { var: 'side' }, b: { num: 1 } })).toEqual({ op: '-', a: { var: 'side' }, b: { num: 1 } })
+  })
+})
+
+describe('blocks of your own', () => {
+  it('a "define" step becomes a block, and calls to it work', () => {
+    const r = parseProgram({
+      title: 't',
+      description: '',
+      steps: [
+        { op: 'define', name: 'hop', steps: [{ op: 'move', direction: 'forward', value: 5, unit: 'cm' }] },
+        { op: 'call', name: 'hop' },
+      ],
+    })
+    expect(r.ok && r.value).toEqual({
+      title: 't',
+      description: '',
+      steps: [{ op: 'call', name: 'hop' }],
+      functions: [{ name: 'hop', steps: [{ op: 'move', direction: 'forward', value: 5, unit: 'cm' }] }],
+    })
+  })
+
+  it('a "define" inside a loop is an error for the model', () => {
+    expect(
+      parseProgram({ title: 't', description: '', steps: [{ op: 'repeat', times: 2, steps: [{ op: 'define', name: 'x', steps: [{ op: 'stop_move' }] }] }] }).ok,
+    ).toBe(false)
+  })
+})
+
+describe('schema complexity', () => {
+  // Gemini answers 400 INVALID_ARGUMENT to a schema it finds too complex; mocks cannot show that.
+  const text = JSON.stringify(PROGRAM_JSON_SCHEMA)
+
+  it('has no separate list of blocks: Gemini rejected it', () => {
+    expect(Object.keys(PROGRAM_JSON_SCHEMA.properties as object)).toEqual(['unsupported', 'reason', 'suggestion', 'title', 'description', 'steps'])
+  })
+
+  it('has no numeric ranges, which were what pushed it over the limit', () => {
+    expect(text).not.toMatch(/"minimum"|"maximum"/)
+  })
+
+  it('keeps expressions as text: a nested object made Gemini reject the schema', () => {
+    const defs = PROGRAM_JSON_SCHEMA.$defs as Record<string, { properties: Record<string, unknown> }>
+    expect(defs.Expr).toBeUndefined()
+    expect(defs.Step.properties.expr).toEqual({ type: 'string' })
+  })
+})
+
 describe('circles', () => {
   const open = parseField({ width: 4000, height: 4000, start: { x: 2000, y: 2000, heading: 0 } })
 

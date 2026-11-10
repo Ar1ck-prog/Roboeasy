@@ -125,14 +125,14 @@ export const PROMPT_EXAMPLES: { request: string; answer: Record<string, unknown>
       title: 'Спираль',
       description: 'С каждым разом робот едет дальше и поворачивает.',
       steps: [
-        { op: 'set_var', name: 'side', expr: { num: 10 } },
+        { op: 'set_var', name: 'side', expr: '10' },
         {
           op: 'repeat',
           times: 8,
           steps: [
-            { op: 'move_expr', direction: 'forward', expr: { var: 'side' }, unit: 'cm' },
+            { op: 'move_expr', direction: 'forward', expr: 'side', unit: 'cm' },
             { op: 'turn', direction: 'right', degrees: 90 },
-            { op: 'change_var', name: 'side', expr: { num: 5 } },
+            { op: 'change_var', name: 'side', expr: '5' },
           ],
         },
       ],
@@ -244,12 +244,12 @@ export const PROMPT_EXAMPLES: { request: string; answer: Record<string, unknown>
       title: 'Счётчик',
       description: 'Каждое нажатие прибавляет единицу, и робот показывает число.',
       steps: [
-        { op: 'set_var', name: 'count', expr: { num: 0 } },
+        { op: 'set_var', name: 'count', expr: '0' },
         {
           op: 'forever',
           steps: [
             { op: 'wait_until', condition: { sensor: 'force', state: 'pressed' } },
-            { op: 'change_var', name: 'count', expr: { num: 1 } },
+            { op: 'change_var', name: 'count', expr: '1' },
             { op: 'write_var', name: 'count' },
             { op: 'wait_until', condition: { sensor: 'force', state: 'released' } },
           ],
@@ -263,16 +263,17 @@ export const PROMPT_EXAMPLES: { request: string; answer: Record<string, unknown>
       unsupported: false,
       title: 'Zigzag',
       description: 'The zigzag block runs three times.',
-      functions: [
+      steps: [
         {
+          op: 'define',
           name: 'zigzag',
           steps: [
             { op: 'arc', direction: 'left', radius: 20, degrees: 60 },
             { op: 'arc', direction: 'right', radius: 20, degrees: 60 },
           ],
         },
+        { op: 'repeat', times: 3, steps: [{ op: 'call', name: 'zigzag' }] },
       ],
-      steps: [{ op: 'repeat', times: 3, steps: [{ op: 'call', name: 'zigzag' }] }],
     },
   },
   {
@@ -313,7 +314,7 @@ ROBOT
 ${robotDescription(robot)}
 
 OUTPUT: one JSON object, nothing else. If the robot can do the task:
-{"unsupported": false, "title": string (max 40 chars, ${LANG_NAME[lang]}), "description": string (1-2 friendly sentences in ${LANG_NAME[lang]} explaining what the robot will do, no emoji), "functions": [{"name": string, "steps": Step[]}] (optional, only for blocks the user wants to reuse), "steps": Step[]}
+{"unsupported": false, "title": string (max 40 chars, ${LANG_NAME[lang]}), "description": string (1-2 friendly sentences in ${LANG_NAME[lang]} explaining what the robot will do, no emoji), "steps": Step[]}
 If it cannot:
 {"unsupported": true, "reason": string (one short sentence in ${LANG_NAME[lang]}: why this robot cannot do it), "suggestion": string (a similar task it can do, written as a request in ${LANG_NAME[lang]})}
 The robot has only: two drive wheels, extra single motors, a distance sensor, a color sensor, a force sensor, a gyro, a 5x5 light matrix, a speaker and hub buttons. It has no camera, no microphone for words, no internet, no wings, no arms that are not motors. Never write a fake program for a task it cannot do.
@@ -353,14 +354,15 @@ STEP TYPES (use only these, exactly as written):
 {"op":"set_var","name":NAME,"expr":EXPR}  a variable must get a value before it is used
 {"op":"change_var","name":NAME,"expr":EXPR}  add to a variable
 {"op":"write_var","name":NAME}  show a variable on the light matrix
-{"op":"call","name":NAME}  run a block from "functions"
+{"op":"define","name":NAME,"steps":Step[]}  a block of your own; put every "define" first in "steps", at the top level
+{"op":"call","name":NAME}  run a block made with "define"
 {"op":"if","condition":CONDITION,"then":Step[],"else":Step[] (optional)}
 
 IMAGE: one of ${Object.keys(IMAGES)
     .map((k) => `"${k}"`)
     .join(', ')}, or 25 digits 0-9 (5 rows × 5 pixels, 9 = brightest).
 
-EXPR: {"num":number} or {"var":NAME} or {"op":"+"|"-"|"*"|"/","a":EXPR,"b":EXPR}, at most 3 levels deep.
+EXPR: text with a number, a variable or simple arithmetic, for example "10", "side", "side + 5", "count * 2".
 NAME: a short Latin name: letters, digits and _ (for example side, count, zigzag). Do not use Python words or: speed, turn, main, port, color, motor, light, sound, button.
 
 CONDITION (the sensor port defaults to the robot config above; add "port" only if the user names another one):
@@ -387,7 +389,7 @@ GOOD PRACTICE
 - Every "steer" needs both "value" and "unit"; "degrees" is not a field of "steer".
 - Curves, circles and figure eights use "arc" and "circle": give the radius and the angle, never calculate wheel speeds or steering yourself. If no size is given, use radius 20.
 - Use "while", "repeat_until" and variables only when the task needs them; a program without them is easier for a beginner.
-- Use "functions" only when the user asks for a block of their own or the same part repeats in different places.
+- Use "define" only when the user asks for a block of their own or the same part repeats in different places.
 - A "repeat", "forever", "repeat_until" or "if" must contain the commands it repeats or runs: "steps" (or "then") is never empty.
 
 EXAMPLES

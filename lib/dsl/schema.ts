@@ -87,7 +87,41 @@ const identifier = z
 
 const MAX_EXPR_DEPTH = 3
 
-function exprSchema(depth = 1): z.ZodType<Expr> {
+/** Reads arithmetic written as text, like "side + 5" or "(a + 1) * 2". Null when it is not valid. */
+export function parseExprText(text: string): Expr | null {
+  const tokens = text.match(/\d+(?:\.\d+)?|[A-Za-z_]\w*|[-+*/()]|\S/g) ?? []
+  let at = 0
+  const primary = (): Expr | null => {
+    const token = tokens[at]
+    if (token === undefined) return null
+    at += 1
+    if (token === '(') {
+      const inner = sum()
+      if (!inner || tokens[at] !== ')') return null
+      at += 1
+      return inner
+    }
+    if (token === '-' && /^\d/.test(tokens[at] ?? '')) return { num: -Number(tokens[at++]) }
+    if (/^\d/.test(token)) return { num: Number(token) }
+    return /^[A-Za-z_]/.test(token) ? { var: token } : null
+  }
+  const chain = (next: () => Expr | null, ops: string): Expr | null => {
+    let left = next()
+    while (left && at < tokens.length && ops.includes(tokens[at])) {
+      const op = tokens[at++] as '+' | '-' | '*' | '/'
+      const right = next()
+      if (!right) return null
+      left = { op, a: left, b: right }
+    }
+    return left
+  }
+  const product = () => chain(primary, '*/')
+  const sum = (): Expr | null => chain(product, '+-')
+  const result = sum()
+  return result && at === tokens.length ? result : null
+}
+
+function exprObject(depth: number): z.ZodType<Expr> {
   const value = z.object({ num: num(-100_000, 100_000) })
   const variable = z.object({ var: identifier })
   if (depth >= MAX_EXPR_DEPTH) return z.union([value, variable])
@@ -95,9 +129,14 @@ function exprSchema(depth = 1): z.ZodType<Expr> {
     value,
     variable,
     z
-      .object({ op: z.enum(['+', '-', '*', '/']), a: exprSchema(depth + 1), b: exprSchema(depth + 1) })
+      .object({ op: z.enum(['+', '-', '*', '/']), a: exprObject(depth + 1), b: exprObject(depth + 1) })
       .refine((e) => !(e.op === '/' && 'num' in e.b && e.b.num === 0), { message: 'cannot divide by zero' }),
   ])
+}
+
+/** The model writes text; programs saved earlier and our own data hold the structure. */
+function exprSchema(): z.ZodType<Expr> {
+  return z.preprocess((v) => (typeof v === 'string' ? (parseExprText(v) ?? v) : v), exprObject(1)) as z.ZodType<Expr>
 }
 
 function conditionSchema(robot: RobotProfile): z.ZodType<Condition> {
@@ -302,8 +341,22 @@ export function findEmptyBlocks(steps: Step[], path = 'steps'): string[] {
 }
 
 /** Validates a block program (from the AI or the client). Sensor ports default to the robot config. */
+/**
+ * The model writes its own blocks as {"op":"define","name":…,"steps":[…]} at the top
+ * of the program: a separate list of blocks in the schema makes Gemini reject it.
+ */
+function liftDefines(raw: unknown): unknown {
+  if (typeof raw !== 'object' || raw === null || !Array.isArray((raw as { steps?: unknown }).steps)) return raw
+  const program = raw as { steps: unknown[]; functions?: unknown }
+  const isDefine = (s: unknown): s is { name?: unknown; steps?: unknown } => typeof s === 'object' && s !== null && (s as { op?: unknown }).op === 'define'
+  const defines = program.steps.filter(isDefine)
+  if (!defines.length) return raw
+  const functions = [...(Array.isArray(program.functions) ? program.functions : []), ...defines.map((d) => ({ name: d.name, steps: d.steps }))]
+  return { ...program, steps: program.steps.filter((s) => !isDefine(s)), functions }
+}
+
 export function parseProgram(raw: unknown, robot: RobotProfile = DEFAULT_ROBOT): ParseResult<Program> {
-  return toResult(programSchema(robot).safeParse(raw))
+  return toResult(programSchema(robot).safeParse(liftDefines(raw)))
 }
 
 // ---------------------------------------------------------------------------
@@ -397,7 +450,8 @@ const enumOf = (...schemas: { options: readonly string[] }[]): JsonSchema => ({
   type: 'string',
   enum: [...new Set(schemas.flatMap((s) => s.options))],
 })
-const range = (minimum: number, maximum: number): JsonSchema => ({ type: 'number', minimum, maximum })
+/** No minimum or maximum for the model: they make the schema too complex for Gemini (400), and zod clamps numbers anyway. */
+const NUMBER: JsonSchema = { type: 'number' }
 export const STEP_OPS = [
   'move',
   'turn',
@@ -454,24 +508,10 @@ export const PROGRAM_JSON_SCHEMA: JsonSchema = {
     suggestion: { type: 'string' },
     title: { type: 'string' },
     description: { type: 'string' },
-    functions: {
-      type: 'array',
-      items: { type: 'object', properties: { name: { type: 'string' }, steps: bodyList }, required: ['name', 'steps'] },
-    },
     steps: stepList,
   },
   required: ['unsupported'],
   $defs: {
-    Expr: {
-      type: 'object',
-      properties: {
-        var: { type: 'string' },
-        num: { type: 'number' },
-        op: { type: 'string', enum: ['+', '-', '*', '/'] },
-        a: { $ref: '#/$defs/Expr' },
-        b: { $ref: '#/$defs/Expr' },
-      },
-    },
     Condition: {
       type: 'object',
       properties: {
@@ -491,29 +531,31 @@ export const PROGRAM_JSON_SCHEMA: JsonSchema = {
     Step: {
       type: 'object',
       properties: {
-        op: { type: 'string', enum: [...STEP_OPS] },
+        // "define" is how the model writes a block of its own; parseProgram moves it to `functions`.
+        op: { type: 'string', enum: [...STEP_OPS, 'define'] },
         name: { type: 'string' },
         port: enumOf(port),
         left: enumOf(port),
         right: enumOf(port),
-        leftSpeed: range(-100, 100),
-        rightSpeed: range(-100, 100),
-        position: range(0, 359),
+        leftSpeed: NUMBER,
+        rightSpeed: NUMBER,
+        position: NUMBER,
         direction: enumOf(startDirection, positionDirection),
-        radius: range(0, 300),
-        degrees: range(1, 3600),
-        turns: range(0.25, 20),
-        steering: range(-100, 100),
+        radius: NUMBER,
+        degrees: NUMBER,
+        turns: NUMBER,
+        steering: NUMBER,
         value: { type: 'number' },
-        expr: { $ref: '#/$defs/Expr' },
+        // Text: a nested object here makes Gemini reject the whole schema (400). parseExprText reads it.
+        expr: { type: 'string' },
         unit: enumOf(moveUnit),
-        speed: range(5, 100),
+        speed: NUMBER,
         image: { type: 'string' },
         text: { type: 'string' },
-        note: range(36, 96),
+        note: NUMBER,
         seconds: { type: 'number' },
         color: enumOf(lightColor),
-        times: range(1, 100),
+        times: NUMBER,
         condition: { $ref: '#/$defs/Condition' },
         steps: bodyList,
         then: bodyList,

@@ -109,7 +109,7 @@ describe('parseRobot', () => {
 describe('Gemini response schemas', () => {
   it('list every command and stay compact', () => {
     const step = (PROGRAM_JSON_SCHEMA.$defs as Record<string, { properties: { op: { enum: string[] } } }>).Step
-    expect([...step.properties.op.enum].sort()).toEqual([...STEP_OPS].sort())
+    expect([...step.properties.op.enum].sort()).toEqual([...STEP_OPS, 'define'].sort())
     expect(JSON.stringify(PROGRAM_JSON_SCHEMA).length).toBeLessThan(4000)
     expect(PYTHON_JSON_SCHEMA.required).toEqual(['unsupported'])
     expect(Object.keys(PYTHON_JSON_SCHEMA.properties as object)).toEqual(['unsupported', 'reason', 'suggestion', 'title', 'description', 'code'])

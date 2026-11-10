@@ -15,7 +15,7 @@ import path from 'node:path'
 import { GoogleGenAI } from '@google/genai'
 import { loadEnvConfig } from '@next/env'
 
-import { GenerationError, runGeneration } from '../lib/ai/generator'
+import { GenerationError, MAX_ATTEMPTS, runGeneration } from '../lib/ai/generator'
 import { parseRobot } from '../lib/dsl/schema'
 import { usesOp, programSteps } from '../lib/dsl/types'
 import { GeminiError, modelsFor } from '../lib/gemini'
@@ -36,6 +36,9 @@ export interface EvalTask {
 export function readTasks(file = path.resolve('eval/generator-tasks.json')): EvalTask[] {
   return (JSON.parse(fs.readFileSync(file, 'utf8')) as { tasks: EvalTask[] }).tasks
 }
+
+/** Free keys allow 5 requests a minute per model. */
+const PAUSE_BETWEEN_TASKS_MS = 13_000
 
 export function parseLimit(args: string[]): number | null {
   const i = args.indexOf('--limit')
@@ -84,11 +87,16 @@ async function main() {
   let requests = 0
   let stopped = ''
 
-  for (const task of pickTasks(readTasks(), limit)) {
-    if (requests >= MAX_REQUESTS) {
+  // --offset N skips tasks already run, so a run cut short can go on with the others.
+  const offsetAt = process.argv.indexOf('--offset')
+  const offset = offsetAt === -1 ? 0 : Math.max(0, Number(process.argv[offsetAt + 1]) || 0)
+  for (const task of pickTasks(readTasks(), limit + offset).slice(offset)) {
+    // One task can take every attempt, and the limit must hold even then.
+    if (requests + MAX_ATTEMPTS > MAX_REQUESTS) {
       stopped = `дошли до предела ${MAX_REQUESTS} запросов`
       break
     }
+    if (requests > 0) await new Promise((resolve) => setTimeout(resolve, PAUSE_BETWEEN_TASKS_MS))
     const signal = AbortSignal.timeout(60_000)
     let passed = false
     let note = ''
