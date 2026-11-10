@@ -8,7 +8,7 @@ import type { SimDemoCopy } from '@/components/landing/sim-demo'
 
 import type { Locale } from './config'
 
-export type TrackKey = 'start' | 'build' | 'blocks' | 'sensors' | 'navigation' | 'python' | 'mechanisms' | 'fll'
+export type TrackKey = 'start' | 'build' | 'blocks' | 'sensors' | 'navigation' | 'python' | 'mechanisms' | 'fll' | 'ai'
 
 export interface LearnLandingCopy {
   hero: {
@@ -107,7 +107,7 @@ const ru: LearnLandingCopy = {
   },
   tracks: {
     eyebrow: 'Обучение',
-    title: '8 треков от первой программы до соревнований',
+    title: '9 треков от первой программы до соревнований и ИИ',
     lead: 'Идёшь по шагам: каждый трек открывает следующий. Если уже что-то умеешь — пройди тест и начни с нужного места.',
     noKit: 'без набора',
     partKit: 'часть с набором',
@@ -120,6 +120,7 @@ const ru: LearnLandingCopy = {
       python: { title: 'Python', text: 'Те же задачи в коде: блоки и Python рядом.', time: '2 ч' },
       mechanisms: { title: 'Механизмы и насадки', text: 'Захват, подъёмник, толкатель. Насадка под задачу.', time: '1,5 ч' },
       fll: { title: 'Соревнования FLL', text: 'Стратегия заездов, работа в команде, защита робота.', time: '2 ч' },
+      ai: { title: 'ИИ с нуля', text: 'Как учится ИИ, промпты, вайбкодинг. Обучи модель жестам и цветам для робота.', time: '2 ч' },
     },
   },
   virtual: {
@@ -138,7 +139,7 @@ const ru: LearnLandingCopy = {
     },
   },
   stats: [
-    { value: '8', label: 'треков от нуля до соревнований' },
+    { value: '9', label: 'треков: от нуля до соревнований и ИИ' },
     { value: '4', label: 'обучающие игры и задания дня' },
     { value: '6', label: 'роботов-напарников' },
     { value: '3', label: 'языка: қазақша, русский, English' },
@@ -255,7 +256,7 @@ const en: LearnLandingCopy = {
   },
   tracks: {
     eyebrow: 'Learning',
-    title: '8 tracks from the first program to competitions',
+    title: '9 tracks from the first program to competitions and AI',
     lead: 'Go step by step: each track opens the next one. Already know some? Take the test and start in the right place.',
     noKit: 'no kit needed',
     partKit: 'partly with a kit',
@@ -268,6 +269,7 @@ const en: LearnLandingCopy = {
       python: { title: 'Python', text: 'The same tasks in code: blocks and Python side by side.', time: '2 h' },
       mechanisms: { title: 'Mechanisms and attachments', text: 'Grabber, lift, pusher. An attachment for the task.', time: '1.5 h' },
       fll: { title: 'FLL competitions', text: 'Run strategy, teamwork, presenting your robot.', time: '2 h' },
+      ai: { title: 'AI from zero', text: 'How AI learns, prompts, vibe coding. Teach a model gestures and colours for the robot.', time: '2 h' },
     },
   },
   virtual: {
@@ -286,7 +288,7 @@ const en: LearnLandingCopy = {
     },
   },
   stats: [
-    { value: '8', label: 'tracks from zero to competitions' },
+    { value: '9', label: 'tracks: from zero to competitions and AI' },
     { value: '4', label: 'learning games and daily quests' },
     { value: '6', label: 'robot buddies' },
     { value: '3', label: 'languages: қазақша, русский, English' },
@@ -400,7 +402,7 @@ const kk: LearnLandingCopy = {
   },
   tracks: {
     eyebrow: 'Оқу',
-    title: 'Алғашқы бағдарламадан жарыстарға дейін 8 трек',
+    title: 'Алғашқы бағдарламадан жарыстар мен ЖИ-ге дейін 9 трек',
     lead: 'Қадам бойынша жүресің: әр трек келесісін ашады. Бірдеңе білсең — тест тапсырып, керекті жерден баста.',
     noKit: 'жиынтықсыз',
     partKit: 'бір бөлігі жиынтықпен',
@@ -413,6 +415,8 @@ const kk: LearnLandingCopy = {
       python: { title: 'Python', text: 'Сол тапсырмалар кодта: блоктар мен Python қатар.', time: '2 сағ' },
       mechanisms: { title: 'Механизмдер мен саптамалар', text: 'Қармағыш, көтергіш, итергіш. Тапсырмаға саптама.', time: '1,5 сағ' },
       fll: { title: 'FLL жарыстары', text: 'Заездер стратегиясы, командалық жұмыс, роботты қорғау.', time: '2 сағ' },
+      // TODO: проверить перевод
+      ai: { title: 'ЖИ нөлден', text: 'ЖИ қалай үйренеді, промпттар, вайбкодинг. Модельді роботқа арналған ым мен түске үйрет.', time: '2 сағ' },
     },
   },
   virtual: {
@@ -431,7 +435,7 @@ const kk: LearnLandingCopy = {
     },
   },
   stats: [
-    { value: '8', label: 'нөлден жарыстарға дейінгі трек' },
+    { value: '9', label: 'трек: нөлден жарыстар мен ЖИ-ге дейін' },
     { value: '4', label: 'оқу ойындары және күн тапсырмалары' },
     { value: '6', label: 'робот-серік' },
     { value: '3', label: 'тіл: қазақша, русский, English' },

@@ -36,6 +36,7 @@ import {
 } from 'lucide-react'
 
 import { HeroScene } from '@/components/landing/hero-scene'
+import { WhatsNew } from '@/components/landing/whats-new'
 import { SimDemo } from '@/components/landing/sim-demo'
 import { Buddy } from '@/components/learn/buddy'
 import { CoinIcon } from '@/components/learn/coin'
@@ -43,6 +44,7 @@ import { Badge } from '@/components/ui/badge'
 import { buttonVariants } from '@/components/ui/button'
 import { Card } from '@/components/ui/card'
 import type { Locale } from '@/lib/i18n/config'
+import { getLandingNews } from '@/lib/i18n/landing-news'
 import type { LearnLandingCopy, TrackKey } from '@/lib/i18n/learn-landing'
 
 const TRACKS: { key: TrackKey; icon: typeof Rocket; color: string; kit: 'none' | 'part' }[] = [
@@ -54,6 +56,7 @@ const TRACKS: { key: TrackKey; icon: typeof Rocket; color: string; kit: 'none' |
   { key: 'python', icon: Code2, color: 'var(--blk-light)', kit: 'none' },
   { key: 'mechanisms', icon: Cog, color: 'var(--blk-sound)', kit: 'part' },
   { key: 'fll', icon: Trophy, color: 'var(--blk-events)', kit: 'part' },
+  { key: 'ai', icon: Brain, color: 'var(--blk-sensors)', kit: 'none' },
 ]
 
 const GAMES = [
@@ -148,6 +151,8 @@ export function LearnLanding({ lang, t }: { lang: Locale; t: LearnLandingCopy })
           })}
         </ul>
       </section>
+
+      <WhatsNew lang={lang} t={getLandingNews(lang)} />
 
       {/* How */}
       <section className="section reveal" id="how">
@@ -305,7 +310,7 @@ export function LearnLanding({ lang, t }: { lang: Locale; t: LearnLandingCopy })
       <section className="section reveal" id="tracks">
         <div className="container">
           <Head eyebrow={t.tracks.eyebrow} title={t.tracks.title} lead={t.tracks.lead} />
-          <ol className="m-0 grid list-none gap-4 p-0 sm:grid-cols-2 lg:grid-cols-4">
+          <ol className="m-0 grid list-none gap-4 p-0 sm:grid-cols-2 lg:grid-cols-3">
             {TRACKS.map(({ key, icon: Icon, color, kit }, i) => {
               const tr = t.tracks.items[key]
               return (

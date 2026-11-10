@@ -3170,3 +3170,168 @@ main h3 {
     animation: sim-loading 1.3s ease-in-out infinite;
   }
 }
+
+/* ── "What's new" scenes on the home page (components/landing/whats-new.tsx).
+   Each element shows its finished state by default; motion is added on top. */
+.wn-trace {
+  stroke-dasharray: 100;
+  stroke-dashoffset: 0;
+}
+@media (prefers-reduced-motion: no-preference) {
+  .wn-orbit {
+    transform-box: view-box;
+    animation: wn-orbit 5s linear infinite;
+  }
+  .wn-trace {
+    animation: wn-trace 5s linear infinite;
+  }
+  .wn-pop {
+    transform-box: fill-box;
+    transform-origin: center;
+    animation: wn-pop 4s ease-in-out infinite both;
+  }
+  .wn-draw {
+    stroke-dasharray: 100;
+    animation: wn-draw 5s ease-in-out infinite;
+  }
+  .wn-draw-late {
+    stroke-dasharray: 100;
+    animation: wn-draw-late 5s ease-in-out infinite;
+  }
+  .wn-dot {
+    transform-box: fill-box;
+    transform-origin: center;
+    animation: wn-dot 5s ease-in-out infinite;
+  }
+  .wn-scroll {
+    animation: wn-scroll 6s linear infinite;
+  }
+  .wn-blink {
+    animation: wn-blink 1.2s ease-in-out infinite;
+  }
+  .wn-frame {
+    animation: wn-frame 1.5s ease-in-out infinite;
+  }
+  .wn-swap-a {
+    animation: wn-swap 4s steps(1) infinite;
+  }
+  .wn-swap-b {
+    animation: wn-swap 4s steps(1) -2s infinite;
+  }
+  .wn-think {
+    transform-box: fill-box;
+    transform-origin: center;
+    animation: wn-think 2s ease-in-out infinite;
+  }
+  .wn-drive {
+    animation: wn-drive 4s ease-in-out infinite;
+  }
+  .wn-bar {
+    transform-box: fill-box;
+    transform-origin: left;
+    animation: wn-bar 4s cubic-bezier(0.2, 0.8, 0.2, 1) infinite;
+  }
+}
+/* Without motion only one of the two hands is shown. */
+@media (prefers-reduced-motion: reduce) {
+  .wn-swap-b {
+    display: none;
+  }
+}
+@keyframes wn-orbit {
+  to {
+    transform: rotate(-360deg);
+  }
+}
+@keyframes wn-trace {
+  from {
+    stroke-dashoffset: 100;
+  }
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+@keyframes wn-pop {
+  0%, 8% {
+    opacity: 0;
+    transform: scale(0.85);
+  }
+  18%, 100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+@keyframes wn-draw {
+  0% {
+    stroke-dashoffset: 100;
+  }
+  40%, 100% {
+    stroke-dashoffset: 0;
+  }
+}
+@keyframes wn-draw-late {
+  0%, 40% {
+    stroke-dashoffset: 100;
+  }
+  70%, 100% {
+    stroke-dashoffset: 0;
+  }
+}
+@keyframes wn-dot {
+  0%, 45% {
+    transform: scale(0);
+  }
+  60%, 100% {
+    transform: scale(1);
+  }
+}
+@keyframes wn-scroll {
+  to {
+    transform: translateX(-300px);
+  }
+}
+@keyframes wn-blink {
+  50% {
+    opacity: 0.2;
+  }
+}
+@keyframes wn-frame {
+  0%, 100% {
+    fill: var(--surface);
+  }
+  50% {
+    fill: var(--accent);
+  }
+}
+@keyframes wn-swap {
+  0% {
+    opacity: 1;
+  }
+  50%, 100% {
+    opacity: 0;
+  }
+}
+@keyframes wn-think {
+  50% {
+    transform: scale(1.12);
+  }
+}
+@keyframes wn-drive {
+  0%, 45% {
+    transform: translateX(52px);
+  }
+  50%, 95% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(52px);
+  }
+}
+@keyframes wn-bar {
+  0% {
+    transform: scaleX(0);
+  }
+  45%, 100% {
+    transform: scaleX(1);
+  }
+}
