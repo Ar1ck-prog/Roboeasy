@@ -1,0 +1,342 @@
+/*
+ * RoboEasy look for the copied BIOGLOW 3D simulator (public/fll-sim).
+ * Loaded after the simulator's own CSS. Colours follow the RoboEasy theme
+ * (<html data-theme>, set by theme.js): cream panels with ink outlines in the
+ * light theme, our ink palette in the dark one, the sun yellow as the accent,
+ * and Rubik. Only colours, borders and the font change; layout and scripts
+ * are the simulator's own. The code editor and console stay dark, like code
+ * blocks on RoboEasy.
+ */
+
+@font-face {
+  font-family: 'Rubik';
+  font-style: normal;
+  font-weight: 400 800;
+  font-display: swap;
+  src: url(./fonts/rubik-cyrillic.woff2) format('woff2');
+  unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
+}
+@font-face {
+  font-family: 'Rubik';
+  font-style: normal;
+  font-weight: 400 800;
+  font-display: swap;
+  src: url(./fonts/rubik-latin.woff2) format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F,
+    U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+/* ---------- Tokens (app/globals.css palette) ---------- */
+
+/* Dark theme, also the fallback */
+:root {
+  --re-accent: #ffc531;
+  --re-accent-hover: #ffd56a;
+  --re-on-accent: #1b1f2a;
+  --re-code-bg: #10131d;
+  --re-code-text: #fff7e8;
+  --re-run: #2bb673;
+  --re-on-run: #10131d;
+  --re-shadow: #000;
+
+  --bg: #141826;
+  --panel: #1e2436;
+  --panel2: #272f46;
+  --line: #343d58;
+  --text: #fff7e8;
+  --muted: #9aa2ba;
+  --lime: #ffc531; /* the simulator's heading/accent colour */
+  --green: #5ddb9a;
+  --blue: #8fb3ff;
+  --orange: #ffd98a;
+  --re-outline: #4a5576;
+  --re-overlay: rgba(20, 24, 38, 0.88);
+  --re-accent-soft: #3a2f12;
+  --re-ok-bg: #173327;
+  --re-ok-border: #2bb673;
+  --re-chip: #313a55;
+  --re-danger-bg: #3a1f24;
+  --re-danger-text: #ff9b8c;
+  --re-warn-bg: #3a2f12;
+  --re-warn-text: #ffd98a;
+  --re-scene: #141826;
+  --re-builder: #1b1f2a;
+  color-scheme: dark;
+  font-family: 'Rubik', Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+
+:root[data-theme='light'] {
+  --re-shadow: #1b1f2a;
+  --bg: #fff9ee;
+  --panel: #ffffff;
+  --panel2: #fff1d6;
+  --line: #ecdcbc;
+  --text: #1b1f2a;
+  --muted: #62677a;
+  --lime: #8a5a00; /* yellow text is unreadable on cream: headings use the dark sun */
+  --green: #157a47;
+  --blue: #2560d8;
+  --orange: #7a4b00;
+  --red: #c8321c;
+  --re-outline: #1b1f2a;
+  --re-overlay: rgba(255, 255, 255, 0.92);
+  --re-accent-soft: #fff1d6;
+  --re-ok-bg: #e3f6ea;
+  --re-ok-border: #157a47;
+  --re-chip: #fff1d6;
+  --re-danger-bg: #fde8e4;
+  --re-danger-text: #b42318;
+  --re-warn-bg: #fff4cc;
+  --re-warn-text: #7a4b00;
+  --re-scene: #fff4e0;
+  --re-builder: #fff4e0;
+  color-scheme: light;
+}
+
+/* ---------- Top bar ---------- */
+
+.topbar {
+  background: var(--panel);
+  border-bottom: 2.5px solid var(--re-outline);
+}
+.brand-title {
+  color: var(--text);
+}
+.tab {
+  border-radius: 12px;
+  font-weight: 700;
+}
+.tab.active {
+  background: var(--re-accent);
+  color: var(--re-on-accent);
+  border: 2px solid var(--re-outline);
+  box-shadow: 2px 2px 0 var(--re-shadow);
+}
+.tab:hover:not(.active) {
+  background: var(--panel2);
+}
+.timer {
+  color: var(--text);
+}
+.timer.running {
+  color: var(--text);
+}
+.tokens span.lost {
+  background: var(--line);
+}
+.score-big {
+  background: var(--re-accent);
+  color: var(--re-on-accent);
+  border: 2px solid var(--re-outline);
+  border-radius: 12px;
+  box-shadow: 2px 2px 0 var(--re-shadow);
+}
+.score-big small {
+  color: var(--re-on-accent);
+  opacity: 0.7;
+}
+
+/* ---------- Buttons and inputs ("constructor" style: outline + hard shadow) ---------- */
+
+.btn {
+  background: var(--panel);
+  border: 2px solid var(--re-outline);
+  border-radius: 10px;
+  box-shadow: 2px 2px 0 var(--re-shadow);
+  font-weight: 700;
+}
+.btn:hover {
+  background: var(--panel2);
+  border-color: var(--re-outline);
+}
+.btn:active {
+  transform: translate(1px, 1px);
+  box-shadow: 1px 1px 0 var(--re-shadow);
+}
+.btn.primary,
+.btn.primary:hover {
+  background: var(--re-accent);
+  border-color: var(--re-outline);
+  color: var(--re-on-accent);
+}
+.btn.primary:hover {
+  background: var(--re-accent-hover);
+}
+.btn.run,
+.btn.run:hover {
+  background: var(--re-run);
+  border-color: var(--re-outline);
+  color: var(--re-on-run);
+}
+.btn.stop,
+.btn.stop:hover {
+  background: var(--re-danger-bg);
+  border-color: var(--re-outline);
+  color: var(--re-danger-text);
+}
+.btn.warn,
+.btn.warn:hover {
+  background: var(--re-warn-bg);
+  border-color: var(--re-outline);
+  color: var(--re-warn-text);
+}
+.btn.toggle {
+  color: var(--muted);
+}
+.btn.toggle.on {
+  background: var(--re-accent-soft);
+  border-color: var(--re-outline);
+  color: var(--text);
+}
+.icon-btn {
+  border: 2px solid var(--re-outline);
+  border-radius: 8px;
+  background: var(--panel);
+}
+.icon-btn:hover {
+  background: var(--panel2);
+}
+select,
+.palette input[type='search'],
+.props .att-in,
+.xyz input {
+  background: var(--panel);
+  border: 2px solid var(--re-outline);
+  border-radius: 8px;
+  color: var(--text);
+}
+.seg {
+  border: 2px solid var(--re-outline);
+  border-radius: 10px;
+  background: var(--panel);
+}
+.seg button.on,
+.part-btn.active {
+  background: var(--re-accent);
+  border-color: var(--re-outline);
+  color: var(--re-on-accent);
+  font-weight: 700;
+}
+.swatches button.on {
+  border-color: var(--re-outline);
+}
+
+/* ---------- Panels ---------- */
+
+.code-panel,
+.score-panel,
+.palette,
+.props {
+  border-color: var(--re-outline);
+  border-width: 2.5px;
+}
+.field-toolbar {
+  border-bottom: 2px solid var(--line);
+}
+.console {
+  background: var(--re-code-bg);
+  color: var(--re-code-text);
+}
+.console .info {
+  color: #ffc531;
+}
+.console .sys {
+  color: #9aa2ba;
+}
+.console .err {
+  color: #ff9b8c;
+}
+
+/* Cards floating over the 3D field */
+.hud-card,
+.hint,
+.builder-hint,
+.att-panel,
+.results {
+  background: var(--re-overlay);
+  border: 2px solid var(--re-outline);
+  color: var(--text);
+  box-shadow: 3px 3px 0 var(--re-shadow);
+}
+.hint,
+.builder-hint {
+  color: var(--muted);
+}
+.loading {
+  background: var(--re-overlay);
+  color: var(--text);
+}
+.spinner {
+  border-color: var(--line);
+  border-top-color: var(--re-accent);
+}
+
+/* Attachments and results */
+.ap-list li.on,
+.res-total {
+  background: var(--re-ok-bg);
+  border-color: var(--re-ok-border);
+}
+.res-list.fouls li {
+  background: var(--re-danger-bg);
+}
+.res-list.fouls li b {
+  color: var(--re-danger-text);
+}
+.res-num,
+.m-num,
+.m-item .v.yes {
+  background: #157a47;
+  color: #fff;
+}
+.res-total b {
+  color: var(--text);
+}
+
+/* Score sheet */
+.m-card {
+  border: 2px solid var(--re-outline);
+  border-radius: 12px;
+  background: var(--panel);
+}
+.m-card.scored {
+  border-color: var(--re-ok-border);
+}
+.m-head {
+  background: var(--re-ok-bg);
+}
+.m-card:not(.scored) .m-head {
+  background: var(--panel2);
+}
+.m-item .v {
+  background: var(--re-chip);
+}
+.m-item .v.no {
+  background: var(--re-danger-bg);
+  color: var(--re-danger-text);
+}
+.m-item .t {
+  color: var(--text);
+}
+
+/* Help */
+.help h2 {
+  color: var(--text);
+}
+.help code,
+.help pre {
+  background: var(--re-code-bg);
+  color: var(--re-code-text);
+}
+.help th {
+  background: var(--panel2);
+}
+
+/* Studio model viewer follows the same RoboEasy tokens. */
+.studio-overlay { background: rgba(16, 19, 29, .84); }
+.studio-window { background: var(--panel); color: var(--text); border: 2.5px solid var(--re-outline); box-shadow: 4px 4px 0 var(--re-shadow); }
+.studio-head { background: var(--panel2); border-bottom: 2px solid var(--re-outline); }
+.studio-info { background: var(--panel); color: var(--text); border-left: 2px solid var(--line); }
+.studio-info p { color: var(--muted); }
+.studio-view { background: var(--bg); }
+@media (max-width: 700px) { .studio-info { border-left: 0; border-top: 2px solid var(--line); } }

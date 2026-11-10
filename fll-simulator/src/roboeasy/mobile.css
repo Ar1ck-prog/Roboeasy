@@ -1,0 +1,231 @@
+/*
+ * RoboEasy: phone and tablet layout for the BIOGLOW simulator (not part of
+ * the original). Below 900 px the three columns stack: the 3D field first,
+ * then the code and the score sheet; the page scrolls instead of squeezing.
+ * The touch pad (mobile.js) drives the robot without a keyboard.
+ */
+
+@media (max-width: 900px) {
+  html,
+  body {
+    height: auto;
+    min-height: 100%;
+    overflow-x: hidden;
+    overflow-y: auto;
+  }
+
+  /* Top bar: brand, tabs and match box wrap into two rows. */
+  .topbar {
+    height: auto;
+    flex-wrap: wrap;
+    gap: 8px 12px;
+    padding: 8px 10px;
+  }
+  .brand-sub {
+    display: none;
+  }
+  .brand img {
+    height: 30px;
+  }
+  .tabs {
+    order: 3;
+    width: 100%;
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+  .tabs::-webkit-scrollbar {
+    display: none;
+  }
+  .tab {
+    flex: 0 0 auto;
+    padding: 7px 11px;
+    white-space: nowrap;
+  }
+  .match-box {
+    gap: 10px;
+  }
+
+  main {
+    height: auto;
+  }
+  .tab-page.active {
+    flex-direction: column;
+    height: auto;
+  }
+
+  /* Simulator: field on top, then code, then the score sheet. */
+  #tab-sim .field-wrap {
+    order: 1;
+    min-height: 0;
+  }
+  #tab-sim .code-panel {
+    order: 2;
+    width: auto;
+    min-width: 0;
+    resize: none;
+    border-right: 0;
+    border-top: 1px solid var(--line);
+  }
+  #tab-sim .score-panel {
+    order: 3;
+    width: auto;
+    min-width: 0;
+    border-left: 0;
+    border-top: 1px solid var(--line);
+  }
+  .score-panel .sheet {
+    max-height: none;
+    overflow: visible;
+  }
+  .editor {
+    height: 46vh;
+    min-height: 260px;
+    flex: none;
+  }
+  .console {
+    height: 120px;
+  }
+  .run-bar {
+    flex-wrap: wrap;
+  }
+  .run-bar .btn {
+    flex: 1 1 auto;
+    min-height: 42px;
+  }
+
+  /* Field toolbar: one swipeable row instead of four wrapped ones. */
+  .field-toolbar {
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    gap: 10px;
+    padding: 6px 8px;
+    scrollbar-width: none;
+  }
+  .field-toolbar::-webkit-scrollbar {
+    display: none;
+  }
+  .field-toolbar .group {
+    flex: 0 0 auto;
+  }
+  .field-toolbar .btn,
+  .field-toolbar .seg button,
+  .field-toolbar select {
+    min-height: 38px;
+  }
+  .field {
+    height: 62vh;
+    min-height: 320px;
+    flex: none;
+  }
+  .hud {
+    top: 6px;
+    left: 6px;
+    gap: 4px;
+  }
+  .hud-card {
+    min-width: 0;
+    max-width: 58vw;
+    padding: 5px 8px;
+    font-size: 11px;
+  }
+  .hint {
+    display: none;
+  }
+
+  /* Robot builder: palette, view and properties stacked. */
+  #tab-builder .palette,
+  #tab-builder .props {
+    width: auto;
+    max-height: 40vh;
+    border: 0;
+    border-top: 1px solid var(--line);
+  }
+  #tab-builder .builder-view {
+    order: -1;
+    height: 55vh;
+    min-height: 300px;
+    flex: none;
+  }
+
+  .help {
+    padding: 14px;
+  }
+}
+
+/* ── Touch pad ─────────────────────────────────────────────────────────── */
+.re-pad {
+  display: none;
+}
+@media (pointer: coarse), (max-width: 900px) {
+  .re-pad {
+    position: absolute;
+    right: 8px;
+    bottom: 8px;
+    left: 8px;
+    z-index: 5;
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 8px;
+    pointer-events: none;
+  }
+  .re-pad .re-cluster {
+    display: grid;
+    gap: 6px;
+    pointer-events: auto;
+  }
+  .re-pad .re-drive {
+    grid-template-columns: repeat(3, 48px);
+    grid-template-rows: repeat(2, 48px);
+  }
+  .re-pad .re-motors {
+    grid-template-columns: repeat(2, 48px);
+  }
+  .re-pad button {
+    display: grid;
+    place-items: center;
+    width: 48px;
+    height: 48px;
+    padding: 0;
+    border: 2.5px solid var(--re-outline, #1b1f2a);
+    border-radius: 12px;
+    background: var(--panel, #fffdf8);
+    color: var(--text, #1b1f2a);
+    font: 800 18px/1 'Rubik', system-ui, sans-serif;
+    box-shadow: 0 3px 0 var(--re-outline, #1b1f2a);
+    touch-action: none;
+    user-select: none;
+    -webkit-user-select: none;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .re-pad button small {
+    font-size: 10px;
+    font-weight: 800;
+  }
+  .re-pad button.on,
+  .re-pad button:active {
+    transform: translateY(2px);
+    background: var(--re-accent, #ffc531);
+    box-shadow: 0 1px 0 var(--re-outline, #1b1f2a);
+  }
+  .re-pad .re-up {
+    grid-column: 2;
+    grid-row: 1;
+  }
+  .re-pad .re-left {
+    grid-column: 1;
+    grid-row: 2;
+  }
+  .re-pad .re-down {
+    grid-column: 2;
+    grid-row: 2;
+  }
+  .re-pad .re-right {
+    grid-column: 3;
+    grid-row: 2;
+  }
+  .re-pad .re-slow {
+    grid-column: 1;
+    grid-row: 1;
+  }
+}

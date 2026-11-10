@@ -1,0 +1,135 @@
+0 FILE u9471.dat
+0 ~Electric Powered Up Medium Angular Motor Cable Lock
+0 Name: u9471.dat
+0 Author: Philippe Hurbain [Philo]
+0 !LDRAW_ORG Part UPDATE 2020-03
+0 !LICENSE Licensed under CC BY 4.0 : see CAreadme.txt
+
+0 BFC CERTIFY CCW
+
+0 !KEYWORDS Mindstorms, Robot Inventor, Spike Prime
+
+0 !HISTORY 2020-06-28 [PTadmin] Official Update 2020-01
+0 !HISTORY 2020-12-27 [PTadmin] Update description
+0 !HISTORY 2020-12-29 [PTadmin] Official Update 2020-03
+
+
+1 16 0 -12.75 5 -10 0 0 0 0 -7.25 0 -1 0 rect3.dat
+1 16 10 -5.5 2 0 -20 0 0 0 3 3 0 0 1-4cylo.dat
+1 16 10 -5.5 2 0 -20 0 0 0 3 3 0 0 1-4chrd.dat
+1 16 -10 -5.5 2 0 20 0 0 0 3 3 0 0 1-4chrd.dat
+4 16 10 -5.5 5 10 -20 5 10 -20 2 10 -2.5 2
+1 16 0 -20 3.5 -10 0 0 0 1 0 0 0 -1.5 rect3.dat
+1 16 0 -11.25 2 -10 0 0 0 0 8.75 0 1 0 rect3.dat
+4 16 -10 -5.5 5 -10 -2.5 2 -10 -20 2 -10 -20 5
+
+0 NOFILE
+0 FILE rect3.dat
+0 Rectangle with 3 Edges
+0 Name: rect3.dat
+0 Author: Mark Kennedy [mkennedy]
+0 !LDRAW_ORG Primitive UPDATE 2010-01
+0 !LICENSE Licensed under CC BY 4.0 : see CAreadme.txt
+
+0 BFC CERTIFY CCW
+
+0 !HISTORY 2003-08-01 [PTadmin] Official Update 2003-02
+0 !HISTORY 2007-06-24 [PTadmin] Header formatted for Contributor Agreement
+0 !HISTORY 2008-07-01 [PTadmin] Official Update 2008-01
+0 !HISTORY 2010-01-17 [mikeheide] Change winding to CCW
+0 !HISTORY 2010-04-05 [PTadmin] Official Update 2010-01
+
+
+2 24 1 0 1 -1 0 1
+2 24 1 0 1 1 0 -1
+2 24 -1 0 1 -1 0 -1
+4 16 -1 0 1 -1 0 -1 1 0 -1 1 0 1
+0 //
+
+0 NOFILE
+0 FILE 1-4cylo.dat
+0 Cylinder Open 0.25
+0 Name: 1-4cylo.dat
+0 Author: Max Martin Richter [MMR1988]
+0 !LDRAW_ORG Primitive UPDATE 2010-03
+0 !LICENSE Licensed under CC BY 4.0 : see CAreadme.txt
+
+0 BFC CERTIFY CCW
+
+0 !HISTORY 2010-12-31 [PTadmin] Official Update 2010-03
+
+
+1 16 0 0 0 1 0 0 0 1 0 0 0 1 1-4edge.dat
+1 16 0 1 0 1 0 0 0 1 0 0 0 1 1-4edge.dat
+1 16 0 0 0 1 0 0 0 1 0 0 0 1 1-4cyli.dat
+
+0 NOFILE
+0 FILE 1-4edge.dat
+0 Circle 0.25
+0 Name: 1-4edge.dat
+0 Author: James Jessiman
+0 !LDRAW_ORG Primitive UPDATE 2017-01
+0 !LICENSE Licensed under CC BY 4.0 : see CAreadme.txt
+
+0 BFC CERTIFY CCW
+
+0 !HISTORY 2007-06-22 [PTadmin] Header formatted for Contributor Agreement
+0 !HISTORY 2008-07-01 [PTadmin] Official Update 2008-01
+0 !HISTORY 2017-01-15 [Steffen] BFCed
+0 !HISTORY 2017-12-30 [PTadmin] Official Update 2017-01
+
+
+2 24 1 0 0 0.9239 0 0.3827
+2 24 0.9239 0 0.3827 0.7071 0 0.7071
+2 24 0.7071 0 0.7071 0.3827 0 0.9239
+2 24 0.3827 0 0.9239 0 0 1
+
+0 NOFILE
+0 FILE 1-4cyli.dat
+0 Cylinder 0.25
+0 Name: 1-4cyli.dat
+0 Author: James Jessiman
+0 !LDRAW_ORG Primitive UPDATE 2012-01
+0 !LICENSE Licensed under CC BY 4.0 : see CAreadme.txt
+
+0 BFC CERTIFY CCW
+
+0 !HISTORY 2002-03-23 [sbliss] Added BFC statement.
+0 !HISTORY 2002-04-25 [PTadmin] Official Update 2002-02
+0 !HISTORY 2007-06-22 [PTadmin] Header formatted for Contributor Agreement
+0 !HISTORY 2008-07-01 [PTadmin] Official Update 2008-01
+0 !HISTORY 2012-02-16 [Philo] Changed to CCW
+0 !HISTORY 2012-03-30 [PTadmin] Official Update 2012-01
+
+
+4 16 1 1 0 0.9239 1 0.3827 0.9239 0 0.3827 1 0 0
+5 24 1 0 0 1 1 0 0.9239 0 0.3827 1 0 -1
+4 16 0.9239 1 0.3827 0.7071 1 0.7071 0.7071 0 0.7071 0.9239 0 0.3827
+5 24 0.9239 0 0.3827 0.9239 1 0.3827 0.7071 0 0.7071 1 0 0
+4 16 0.7071 1 0.7071 0.3827 1 0.9239 0.3827 0 0.9239 0.7071 0 0.7071
+5 24 0.7071 0 0.7071 0.7071 1 0.7071 0.3827 0 0.9239 0.9239 0 0.3827
+4 16 0.3827 1 0.9239 0 1 1 0 0 1 0.3827 0 0.9239
+5 24 0.3827 0 0.9239 0.3827 1 0.9239 0 0 1 0.7071 0 0.7071
+5 24 0 0 1 0 1 1 0.3827 0 0.9239 -1 0 1
+
+0 NOFILE
+0 FILE 1-4chrd.dat
+0 Chord 0.25
+0 Name: 1-4chrd.dat
+0 Author: Max Martin Richter [MMR1988]
+0 !LDRAW_ORG Primitive UPDATE 2023-05
+0 !LICENSE Licensed under CC BY 4.0 : see CAreadme.txt
+
+0 BFC CERTIFY CCW
+
+0 !HISTORY 2004-04-22 [PTadmin] Official Update 2004-02
+0 !HISTORY 2007-10-09 [PTadmin] Header formatted for Contributor Agreement
+0 !HISTORY 2008-07-01 [PTadmin] Official Update 2008-01
+0 !HISTORY 2012-08-02 [MMR1988] Re-creation with PrimGen2 and Rectifier
+0 !HISTORY 2012-08-09 [PTadmin] Official Update 2012-02
+0 !HISTORY 2023-10-27 [OrionP] Change author to MMR1988 from hafhead
+0 !HISTORY 2023-10-31 [OrionP] Official Update 2023-05
+
+4 16 0.9239 0 0.3827 0.3827 0 0.9239 0 0 1 1 0 0
+3 16 0.7071 0 0.7071 0.3827 0 0.9239 0.9239 0 0.3827
+0 NOFILE
