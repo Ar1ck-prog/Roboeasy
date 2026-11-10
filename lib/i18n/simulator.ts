@@ -94,8 +94,6 @@ const ru = {
       { title: 'Камера и скорость', text: 'Смотри сверху, из базы или из-за робота; ускоряй и замедляй симуляцию от ¼× до 4×.' },
     ],
     tip: 'Сначала спланируй заезды в FLL-тренере, потом проверь их в симуляторе.',
-    credit:
-      'Автор 3D-симулятора — fll-bioglow-sim; копия размещена в RoboEasy с разрешения автора. Поле и миссии — по версии автора, сверяйся с официальными правилами сезона. Оригинал:',
   },
 }
 
@@ -182,8 +180,6 @@ const kk: SimulatorText = {
       { title: 'Камера және жылдамдық', text: 'Жоғарыдан, базадан немесе роботтың артынан қара; симуляцияны ¼×-тен 4×-ке дейін жылдамдат не баяулат.' },
     ],
     tip: 'Алдымен заездерді FLL-жаттықтырушыда жоспарла, содан кейін симуляторда тексер.',
-    credit:
-      '3D-симулятордың авторы — fll-bioglow-sim; көшірме RoboEasy-де автордың рұқсатымен орналастырылған. Алаң мен миссиялар — автордың нұсқасы бойынша, маусымның ресми ережелерімен салыстыр. Түпнұсқа:',
   },
 }
 
@@ -268,8 +264,6 @@ const en: SimulatorText = {
       { title: 'Camera and speed', text: 'Watch from above, from base or behind the robot; run the simulation from ¼× to 4×.' },
     ],
     tip: 'Plan your runs in the FLL coach first, then try them in the simulator.',
-    credit:
-      'The 3D simulator is by fll-bioglow-sim; this copy is hosted on RoboEasy with the author’s permission. The field and missions follow the author’s version; check the official season rules. Original:',
   },
 }
 
@@ -281,4 +275,3 @@ export function getSimulatorText(lang: Locale): SimulatorText {
 
 /** The copied 3D simulator (public/fll-sim) and the original site it came from. */
 export const FLL_SIM_SRC = '/fll-sim/index.html'
-export const FLL_SIM_ORIGINAL = 'https://fll-bioglow-sim.onrender.com/'

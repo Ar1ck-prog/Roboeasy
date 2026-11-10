@@ -16,7 +16,9 @@
     "db:test": "vitest run --config vitest.db.config.ts",
     "reference": "tsx scripts/extract-reference.ts",
     "audit:capture": "tsx scripts/audit/capture.ts",
-    "audit:directions": "tsx scripts/audit/directions-shots.mts"
+    "audit:directions": "tsx scripts/audit/directions-shots.mts",
+    "fll:build": "npm install --prefix fll-simulator --no-audit --no-fund && npm run build --prefix fll-simulator && node scripts/sync-fll.mjs",
+    "prebuild": "npm run fll:build"
   },
   "dependencies": {
     "@dimforge/rapier3d-compat": "^0.21.0",

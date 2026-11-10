@@ -331,3 +331,12 @@ select,
 .help th {
   background: var(--panel2);
 }
+
+/* Studio model viewer follows the same RoboEasy tokens. */
+.studio-overlay { background: rgba(16, 19, 29, .84); }
+.studio-window { background: var(--panel); color: var(--text); border: 2.5px solid var(--re-outline); box-shadow: 4px 4px 0 var(--re-shadow); }
+.studio-head { background: var(--panel2); border-bottom: 2px solid var(--re-outline); }
+.studio-info { background: var(--panel); color: var(--text); border-left: 2px solid var(--line); }
+.studio-info p { color: var(--muted); }
+.studio-view { background: var(--bg); }
+@media (max-width: 700px) { .studio-info { border-left: 0; border-top: 2px solid var(--line); } }
