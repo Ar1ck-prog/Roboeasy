@@ -413,7 +413,7 @@
   height: 100%;
   display: flex;
   align-items: center;
-  gap: var(--space-6);
+  gap: var(--space-4);
 }
 
 .brand {
@@ -439,7 +439,9 @@
 
 .main-nav {
   display: flex;
-  gap: 4px;
+  align-items: center;
+  gap: 2px;
+  min-width: 0;
   margin-left: var(--space-2);
 }
 .main-nav a {
@@ -463,6 +465,90 @@
   background: var(--surface);
   color: var(--text);
   box-shadow: var(--shadow-press);
+}
+
+/* Laptops: tighter header so that every item fits on one line. */
+@media (max-width: 1365px) {
+  .main-nav a,
+  .more-menu > button {
+    padding-inline: 8px;
+  }
+  .lang-switch a {
+    min-width: 30px;
+    padding: 0 5px;
+  }
+}
+
+/* "More" in the header */
+.more-menu {
+  position: relative;
+}
+.more-menu > button {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 8px 10px 8px 12px;
+  white-space: nowrap;
+  border: var(--stroke-thin) solid transparent;
+  border-radius: var(--radius-sm);
+  color: var(--text-2);
+  font-weight: 700;
+  font-size: 0.9375rem;
+  cursor: pointer;
+  transition:
+    color var(--duration) ease,
+    background-color var(--duration) ease;
+}
+.more-menu > button:hover,
+.more-menu > button[aria-expanded='true'] {
+  color: var(--text);
+  background: var(--surface-2);
+}
+.more-menu > button[data-active='true'] {
+  border-color: var(--outline);
+  background: var(--surface);
+  color: var(--text);
+  box-shadow: var(--shadow-press);
+}
+.more-menu > button svg {
+  transition: transform var(--duration) ease;
+}
+.more-menu > button svg[data-open='true'] {
+  transform: rotate(180deg);
+}
+.more-menu-list {
+  position: absolute;
+  top: calc(100% + 8px);
+  left: 0;
+  z-index: 60;
+  display: grid;
+  gap: 2px;
+  min-width: 200px;
+  margin: 0;
+  padding: 6px;
+  list-style: none;
+  border: var(--stroke-thin) solid var(--outline);
+  border-radius: var(--radius-md);
+  background: var(--surface);
+  box-shadow: var(--shadow-hard);
+}
+.more-menu-list a {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 12px;
+  border-radius: var(--radius-sm);
+  color: var(--text-2);
+  font-weight: 700;
+  white-space: nowrap;
+}
+.more-menu-list a:hover {
+  color: var(--text);
+  background: var(--surface-2);
+}
+.more-menu-list a[aria-current='page'] {
+  color: var(--text);
+  background: var(--surface-2);
 }
 
 .header-actions {

@@ -1,9 +1,9 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import { House, LogIn, Menu, UserRound, X } from 'lucide-react'
+import { BookOpen, ChevronDown, House, LogIn, Menu, Trophy, UserRound, Wand2, X } from 'lucide-react'
 
 import { CoinChip } from '@/components/learn/coin-chip'
 import { LogoMark } from '@/components/logo'
@@ -32,6 +32,9 @@ export type AppSection = (typeof APP_SECTIONS)[number]
 /** All header sections; the last ones are in the header and the menu only. */
 const HEADER_SECTIONS = ['path', 'learn', 'play', 'garage', 'library', 'sandbox', 'compete'] as const
 type HeaderSection = (typeof HEADER_SECTIONS)[number]
+/** Sections behind "More" on wide screens, so that the header fits on a laptop. */
+const MORE_SECTIONS: readonly HeaderSection[] = ['library', 'sandbox', 'compete']
+const MORE_ICONS = { library: BookOpen, sandbox: Wand2, compete: Trophy } as const
 
 const AI_SCHOOL_PATH = '/learn/ai-basics'
 
@@ -94,8 +97,16 @@ export function SiteHeader({ lang, t, sections: names, coinsLabel = '', variant 
   const currentHeader = currentHeaderSection(rest)
   const inAiSchool = rest === AI_SCHOOL_PATH || rest.startsWith(`${AI_SCHOOL_PATH}/`)
   const pages = HEADER_SECTIONS.flatMap((p) => {
-    const page = { href: `${home}/${p}`, label: names[p], current: currentHeader === p && !(p === 'learn' && inAiSchool), extra: p === 'sandbox' || p === 'compete' }
-    return p === 'learn' ? [page, { href: `${home}${AI_SCHOOL_PATH}`, label: getAiSchoolText(lang).nav, current: inAiSchool, extra: false }] : [page]
+    const page = {
+      key: p as string,
+      href: `${home}/${p}`,
+      label: names[p],
+      current: currentHeader === p && !(p === 'learn' && inAiSchool),
+      more: MORE_SECTIONS.includes(p),
+    }
+    return p === 'learn'
+      ? [page, { key: 'ai-basics', href: `${home}${AI_SCHOOL_PATH}`, label: getAiSchoolText(lang).nav, current: inAiSchool, more: false }]
+      : [page]
   })
 
   return (
@@ -119,18 +130,14 @@ export function SiteHeader({ lang, t, sections: names, coinsLabel = '', variant 
               </a>
             ))}
             {variant === 'app' &&
-              pages.map((p) => (
-                // Sandbox and competitions fit the header only on wide screens; the menu always has them.
-                <Link
-                  prefetch={false}
-                  key={p.href}
-                  href={p.href}
-                  aria-current={p.current ? 'page' : undefined}
-                  className={p.extra ? 'max-[1439px]:hidden' : undefined}
-                >
-                  {p.label}
-                </Link>
-              ))}
+              pages
+                .filter((p) => !p.more)
+                .map((p) => (
+                  <Link prefetch={false} key={p.href} href={p.href} aria-current={p.current ? 'page' : undefined}>
+                    {p.label}
+                  </Link>
+                ))}
+            {variant === 'app' && <MoreMenu label={names.more} pages={pages.filter((p) => p.more)} />}
           </nav>
 
           <div className="header-actions">
@@ -197,7 +204,8 @@ export function SiteHeader({ lang, t, sections: names, coinsLabel = '', variant 
                   aria-current={current === 'profile' ? 'page' : undefined}
                 >
                   {newHere ? <LogIn aria-hidden="true" /> : <UserRound aria-hidden="true" />}
-                  {profileName}
+                  {/* Only the icon on mid-size screens; the name stays for screen readers. */}
+                  <span className="max-[1439px]:sr-only">{profileName}</span>
                 </Link>
               </>
             )}
@@ -255,5 +263,55 @@ export function SiteHeader({ lang, t, sections: names, coinsLabel = '', variant 
         </div>
       </header>
     </>
+  )
+}
+
+interface MorePage {
+  key: string
+  href: string
+  label: string
+  current: boolean
+}
+
+/** "More": the rarer sections in a small menu, so the header stays on one line. */
+function MoreMenu({ label, pages }: { label: string; pages: MorePage[] }) {
+  const [open, setOpen] = useState(false)
+  const box = useRef<HTMLDivElement>(null)
+  const active = pages.find((p) => p.current)
+
+  useEffect(() => {
+    if (!open) return
+    const onPointer = (e: PointerEvent) => !box.current?.contains(e.target as Node) && setOpen(false)
+    const onKey = (e: KeyboardEvent) => e.key === 'Escape' && setOpen(false)
+    document.addEventListener('pointerdown', onPointer)
+    document.addEventListener('keydown', onKey)
+    return () => {
+      document.removeEventListener('pointerdown', onPointer)
+      document.removeEventListener('keydown', onKey)
+    }
+  }, [open])
+
+  return (
+    <div className="more-menu" ref={box}>
+      <button type="button" aria-expanded={open} aria-haspopup="true" data-active={active ? 'true' : undefined} onClick={() => setOpen((v) => !v)}>
+        {active?.label ?? label}
+        <ChevronDown aria-hidden="true" className="size-4" data-open={open} />
+      </button>
+      {open && (
+        <ul className="more-menu-list">
+          {pages.map((p) => {
+            const Icon = MORE_ICONS[p.key as keyof typeof MORE_ICONS]
+            return (
+              <li key={p.href}>
+                <Link prefetch={false} href={p.href} aria-current={p.current ? 'page' : undefined} onClick={() => setOpen(false)}>
+                  {Icon && <Icon aria-hidden="true" className="size-4" />}
+                  {p.label}
+                </Link>
+              </li>
+            )
+          })}
+        </ul>
+      )}
+    </div>
   )
 }

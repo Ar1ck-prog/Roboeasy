@@ -13,6 +13,7 @@ const ru = {
     compete: 'Соревнования',
     profile: 'Профиль',
     signIn: 'Войти',
+    more: 'Ещё',
   },
   sim: { play: 'Запустить', pause: 'Пауза', restart: 'Сначала', speed: 'Скорость воспроизведения', time: 'Симулятор' },
   lesson: {
@@ -110,6 +111,8 @@ const kk: LearnText = {
     compete: 'Жарыстар',
     profile: 'Профиль',
     signIn: 'Кіру',
+    // TODO: проверить перевод
+    more: 'Тағы',
   },
   sim: { play: 'Іске қосу', pause: 'Үзіліс', restart: 'Басынан', speed: 'Ойнату жылдамдығы', time: 'Симулятор' },
   lesson: {
@@ -200,6 +203,7 @@ const en: LearnText = {
     compete: 'Competitions',
     profile: 'Profile',
     signIn: 'Sign in',
+    more: 'More',
   },
   sim: { play: 'Play', pause: 'Pause', restart: 'From the start', speed: 'Playback speed', time: 'Simulator' },
   lesson: {
