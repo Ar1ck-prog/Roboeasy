@@ -2,7 +2,7 @@
   "id": "ai-09",
   "track": "ai-basics",
   "unit": "ai-prompts",
-  "minutes": 5,
+  "minutes": 6,
   "skills": [
     "ai-literacy"
   ],
@@ -34,6 +34,49 @@
         "ru": "ИИ можно попросить объяснить тему, проверить твой текст или придумать примеры. Сдавать чужой ответ как свой нечестно, и ты ничему не научишься.\n\nЕсли использовал ИИ, скажи об этом учителю. И не пиши нейросети своё имя, адрес и телефон.",
         "kk": "ЖИ-ден тақырыпты түсіндіруді, мәтініңді тексеруді немесе мысал ойлап табуды сұрауға болады. Бөтен жауапты өзіңдікі деп тапсыру адал емес, әрі ештеңе үйренбейсің.\n\nЖИ қолдансаң, мұғалімге айт. Нейрожеліге атыңды, мекенжайыңды, телефоныңды жазба.",
         "en": "You can ask AI to explain a topic, check your text or come up with examples. Handing in someone else’s answer as yours is dishonest, and you learn nothing.\n\nIf you used AI, tell your teacher. And never give a chatbot your name, address or phone number."
+      },
+      "illustration": "ai-honest"
+    },
+    {
+      "id": "practice",
+      "type": "quiz",
+      "kind": "match",
+      "skill": "ai-literacy",
+      "question": {
+        "ru": "Честно или нет?",
+        "kk": "Адал ма, жоқ па?",
+        "en": "Honest or not?"
+      },
+      "pairs": [
+        {
+          "left": {
+            "ru": "Попросить объяснить тему",
+            "kk": "Тақырыпты түсіндіруді сұрау",
+            "en": "Ask it to explain a topic"
+          },
+          "right": {
+            "ru": "Честно",
+            "kk": "Адал",
+            "en": "Honest"
+          }
+        },
+        {
+          "left": {
+            "ru": "Сдать ответ ИИ как свой",
+            "kk": "ЖИ жауабын өзіңдікі деп тапсыру",
+            "en": "Hand in AI’s answer as yours"
+          },
+          "right": {
+            "ru": "Нечестно",
+            "kk": "Адал емес",
+            "en": "Not honest"
+          }
+        }
+      ],
+      "explanation": {
+        "ru": "ИИ помогает понять, а не делает за тебя.",
+        "kk": "ЖИ түсінуге көмектеседі, сенің орныңа істемейді.",
+        "en": "AI helps you understand; it does not do it for you."
       }
     },
     {

@@ -2,7 +2,7 @@
   "id": "ai-16",
   "track": "ai-basics",
   "unit": "ai-robots",
-  "minutes": 5,
+  "minutes": 6,
   "skills": [
     "ai-literacy"
   ],
@@ -34,6 +34,45 @@
         "ru": "Ты покажешь камере ладонь и кулак примерно по 20 раз. Модель запомнит примеры и будет сравнивать с ними то, что видит сейчас.\n\nВсё обучение идёт **на твоём устройстве**: кадры с камеры никуда не отправляются и не сохраняются.",
         "kk": "Камераға алақан мен жұдырықты шамамен 20 реттен көрсетесің. Модель мысалдарды есте сақтап, қазір көріп тұрғанын солармен салыстырады.\n\nБарлық үйрету **сенің құрылғыңда** жүреді: камера кадрлары ешқайда жіберілмейді және сақталмайды.",
         "en": "You will show the camera your palm and your fist about 20 times each. The model remembers the examples and compares what it sees now with them.\n\nAll the training happens **on your device**: camera frames are not sent or saved anywhere."
+      },
+      "illustration": "ai-gesture"
+    },
+    {
+      "id": "practice",
+      "type": "quiz",
+      "kind": "order",
+      "skill": "ai-literacy",
+      "question": {
+        "ru": "Как обучить модель жестам? Расставь шаги",
+        "kk": "Модельді ымға қалай үйретеді? Қадамдарды қой",
+        "en": "How do you train a gesture model? Order the steps"
+      },
+      "items": [
+        {
+          "ru": "Включить камеру",
+          "kk": "Камераны қосу",
+          "en": "Turn on the camera"
+        },
+        {
+          "ru": "Показать ладонь 20 раз",
+          "kk": "Алақанды 20 рет көрсету",
+          "en": "Show your palm 20 times"
+        },
+        {
+          "ru": "Показать кулак 20 раз",
+          "kk": "Жұдырықты 20 рет көрсету",
+          "en": "Show your fist 20 times"
+        },
+        {
+          "ru": "Проверить на новых жестах",
+          "kk": "Жаңа ымдарда тексеру",
+          "en": "Test on new gestures"
+        }
+      ],
+      "explanation": {
+        "ru": "Сначала примеры, потом проверка.",
+        "kk": "Алдымен мысалдар, содан кейін тексеру.",
+        "en": "Examples first, then testing."
       }
     },
     {

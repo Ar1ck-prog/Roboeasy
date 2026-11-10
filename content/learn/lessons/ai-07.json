@@ -2,7 +2,7 @@
   "id": "ai-07",
   "track": "ai-basics",
   "unit": "ai-prompts",
-  "minutes": 5,
+  "minutes": 6,
   "skills": [
     "ai-literacy"
   ],
@@ -34,6 +34,40 @@
         "ru": "Хороший запрос говорит: **кто** отвечает, **что** нужно сделать и **в каком виде**.\n\nНе «расскажи про Марс», а «ты учитель; объясни шестикласснику, почему Марс красный, в трёх предложениях».",
         "kk": "Жақсы сұрау айтады: **кім** жауап береді, **не** істеу керек және **қандай түрде**.\n\n«Марс туралы айт» емес, «сен мұғалімсің; алтыншы сынып оқушысына Марстың неге қызыл екенін үш сөйлеммен түсіндір».",
         "en": "A good prompt says **who** answers, **what** to do and **in what form**.\n\nNot “tell me about Mars” but “you are a teacher; explain to a sixth-grader why Mars is red in three sentences”."
+      },
+      "illustration": "ai-prompt"
+    },
+    {
+      "id": "practice",
+      "type": "quiz",
+      "kind": "order",
+      "skill": "ai-literacy",
+      "question": {
+        "ru": "Собери хороший запрос по порядку",
+        "kk": "Жақсы сұрауды ретімен құра",
+        "en": "Build a good prompt in order"
+      },
+      "items": [
+        {
+          "ru": "Ты учитель информатики",
+          "kk": "Сен информатика мұғалімісің",
+          "en": "You are a computer science teacher"
+        },
+        {
+          "ru": "Объясни, что такое цикл",
+          "kk": "Цикл деген не екенін түсіндір",
+          "en": "Explain what a loop is"
+        },
+        {
+          "ru": "Для шестиклассника, в трёх предложениях",
+          "kk": "Алтыншы сынып оқушысына, үш сөйлеммен",
+          "en": "For a sixth-grader, in three sentences"
+        }
+      ],
+      "explanation": {
+        "ru": "Роль, задача, формат.",
+        "kk": "Рөл, тапсырма, пішім.",
+        "en": "Role, task, format."
       }
     },
     {

@@ -2,7 +2,7 @@
   "id": "ai-11",
   "track": "ai-basics",
   "unit": "ai-vibe",
-  "minutes": 5,
+  "minutes": 6,
   "skills": [
     "ai-literacy"
   ],
@@ -34,6 +34,61 @@
         "ru": "Напиши: что видит игрок, что он нажимает и когда победа. Например: «круг убегает от курсора, за каждый клик по нему +1 очко, 20 секунд».\n\nЧем точнее описание, тем лучше игра.",
         "kk": "Жаз: ойыншы нені көреді, нені басады және қашан жеңеді. Мысалы: «шеңбер курсордан қашады, оны басқан сайын +1 ұпай, 20 секунд».\n\nСипаттама неғұрлым нақты болса, ойын соғұрлым жақсы.",
         "en": "Write what the player sees, what they press and when they win. For example: “a circle runs from the cursor, +1 point for each click on it, 20 seconds”.\n\nThe more exact the description, the better the game."
+      },
+      "illustration": "ai-game"
+    },
+    {
+      "id": "practice",
+      "type": "quiz",
+      "kind": "match",
+      "skill": "ai-literacy",
+      "question": {
+        "ru": "Соедини часть описания игры с примером",
+        "kk": "Ойын сипаттамасының бөлігін мысалмен сәйкестендір",
+        "en": "Match each part of a game description to an example"
+      },
+      "pairs": [
+        {
+          "left": {
+            "ru": "Что видит игрок",
+            "kk": "Ойыншы нені көреді",
+            "en": "What the player sees"
+          },
+          "right": {
+            "ru": "Круг на поле",
+            "kk": "Алаңдағы шеңбер",
+            "en": "A circle on the field"
+          }
+        },
+        {
+          "left": {
+            "ru": "Что он делает",
+            "kk": "Ол не істейді",
+            "en": "What they do"
+          },
+          "right": {
+            "ru": "Кликает по кругу",
+            "kk": "Шеңберді басады",
+            "en": "Clicks the circle"
+          }
+        },
+        {
+          "left": {
+            "ru": "Когда победа",
+            "kk": "Қашан жеңіс",
+            "en": "When they win"
+          },
+          "right": {
+            "ru": "10 очков за 20 секунд",
+            "kk": "20 секундта 10 ұпай",
+            "en": "10 points in 20 seconds"
+          }
+        }
+      ],
+      "explanation": {
+        "ru": "Три части — и ИИ понимает, что строить.",
+        "kk": "Үш бөлік — ЖИ нені құру керегін түсінеді.",
+        "en": "Three parts, and AI knows what to build."
       }
     },
     {

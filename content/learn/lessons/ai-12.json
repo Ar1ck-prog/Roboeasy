@@ -2,7 +2,7 @@
   "id": "ai-12",
   "track": "ai-basics",
   "unit": "ai-vibe",
-  "minutes": 5,
+  "minutes": 6,
   "skills": [
     "ai-literacy"
   ],
@@ -34,6 +34,45 @@
         "ru": "Не проси всё сразу. Сначала рабочий вариант, потом одна правка за раз: «сделай фон тёмным», потом «добавь счётчик».\n\nПосле каждой правки проверяй, что ничего не сломалось.",
         "kk": "Бәрін бірден сұрама. Алдымен жұмыс істейтін нұсқа, содан кейін бір рет бір түзету: «фонды қара қыл», содан кейін «санағыш қос».\n\nӘр түзетуден кейін ештеңе бұзылмағанын тексер.",
         "en": "Do not ask for everything at once. First a working version, then one change at a time: “make the background dark”, then “add a counter”.\n\nAfter each change, check that nothing broke."
+      },
+      "illustration": "ai-steps"
+    },
+    {
+      "id": "practice",
+      "type": "quiz",
+      "kind": "order",
+      "skill": "ai-literacy",
+      "question": {
+        "ru": "Расставь правки по порядку",
+        "kk": "Түзетулерді ретімен қой",
+        "en": "Put the changes in order"
+      },
+      "items": [
+        {
+          "ru": "Сделать рабочую версию",
+          "kk": "Жұмыс істейтін нұсқа жасау",
+          "en": "Make a working version"
+        },
+        {
+          "ru": "Попросить одну правку",
+          "kk": "Бір түзету сұрау",
+          "en": "Ask for one change"
+        },
+        {
+          "ru": "Проверить, что всё работает",
+          "kk": "Бәрі жұмыс істейтінін тексеру",
+          "en": "Check everything still works"
+        },
+        {
+          "ru": "Попросить следующую правку",
+          "kk": "Келесі түзетуді сұрау",
+          "en": "Ask for the next change"
+        }
+      ],
+      "explanation": {
+        "ru": "Маленькие шаги легче проверять.",
+        "kk": "Кішкентай қадамдарды тексеру оңай.",
+        "en": "Small steps are easier to check."
       }
     },
     {

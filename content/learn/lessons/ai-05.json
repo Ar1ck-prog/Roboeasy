@@ -2,7 +2,7 @@
   "id": "ai-05",
   "track": "ai-basics",
   "unit": "ai-around",
-  "minutes": 5,
+  "minutes": 6,
   "skills": [
     "ai-literacy"
   ],
@@ -34,6 +34,61 @@
         "ru": "Одни нейросети **рисуют** по описанию. Другие **распознают** речь и превращают её в текст, третьи **озвучивают** текст.\n\nЕсть и те, что пишут программный **код**. Выбирай инструмент под задачу.",
         "kk": "Кейбір нейрожелілер сипаттама бойынша **сурет салады**. Басқалары сөзді **танып**, мәтінге айналдырады, үшіншілері мәтінді **дауыстайды**.\n\nБағдарлама **кодын** жазатындары да бар. Құралды тапсырмаға қарай таңда.",
         "en": "Some networks **draw** from a description. Others **recognise** speech and turn it into text, and others **read** text aloud.\n\nThere are also ones that write program **code**. Pick the tool for the task."
+      },
+      "illustration": "ai-media"
+    },
+    {
+      "id": "practice",
+      "type": "quiz",
+      "kind": "match",
+      "skill": "ai-literacy",
+      "question": {
+        "ru": "Соедини задачу и нейросеть",
+        "kk": "Тапсырма мен нейрожеліні сәйкестендір",
+        "en": "Match the task and the network"
+      },
+      "pairs": [
+        {
+          "left": {
+            "ru": "Нарисовать обложку",
+            "kk": "Мұқаба салу",
+            "en": "Draw a cover"
+          },
+          "right": {
+            "ru": "Генератор картинок",
+            "kk": "Сурет генераторы",
+            "en": "Image generator"
+          }
+        },
+        {
+          "left": {
+            "ru": "Надиктовать сообщение",
+            "kk": "Хабарламаны айтып жазу",
+            "en": "Dictate a message"
+          },
+          "right": {
+            "ru": "Распознавание речи",
+            "kk": "Сөзді тану",
+            "en": "Speech recognition"
+          }
+        },
+        {
+          "left": {
+            "ru": "Написать функцию",
+            "kk": "Функция жазу",
+            "en": "Write a function"
+          },
+          "right": {
+            "ru": "ИИ для кода",
+            "kk": "Кодқа арналған ЖИ",
+            "en": "Code AI"
+          }
+        }
+      ],
+      "explanation": {
+        "ru": "Под каждую задачу — свой инструмент.",
+        "kk": "Әр тапсырмаға — өз құралы.",
+        "en": "Each task has its own tool."
       }
     },
     {

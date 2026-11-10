@@ -2,7 +2,7 @@
   "id": "ai-06",
   "track": "ai-basics",
   "unit": "ai-around",
-  "minutes": 5,
+  "minutes": 6,
   "skills": [
     "ai-literacy"
   ],
@@ -34,6 +34,61 @@
         "ru": "Спроси себя: что на входе и что на выходе? Текст в текст — языковая модель. Текст в картинку — генератор изображений. Голос в текст — распознавание.\n\nА если достаточно точного правила, ИИ не нужен вообще.",
         "kk": "Өзіңнен сұра: кірісінде не, шығысында не? Мәтіннен мәтін — тілдік модель. Мәтіннен сурет — сурет генераторы. Дауыстан мәтін — тану.\n\nАл нақты ереже жетсе, ЖИ мүлде керек емес.",
         "en": "Ask yourself: what goes in and what comes out? Text to text is a language model. Text to picture is an image generator. Voice to text is speech recognition.\n\nAnd if an exact rule is enough, you do not need AI at all."
+      },
+      "illustration": "ai-choose"
+    },
+    {
+      "id": "practice",
+      "type": "quiz",
+      "kind": "match",
+      "skill": "ai-literacy",
+      "question": {
+        "ru": "Что на входе, что на выходе?",
+        "kk": "Кірісте не, шығыста не?",
+        "en": "What goes in, what comes out?"
+      },
+      "pairs": [
+        {
+          "left": {
+            "ru": "Текст → картинка",
+            "kk": "Мәтін → сурет",
+            "en": "Text → picture"
+          },
+          "right": {
+            "ru": "Генератор изображений",
+            "kk": "Сурет генераторы",
+            "en": "Image generator"
+          }
+        },
+        {
+          "left": {
+            "ru": "Голос → текст",
+            "kk": "Дауыс → мәтін",
+            "en": "Voice → text"
+          },
+          "right": {
+            "ru": "Распознавание речи",
+            "kk": "Сөзді тану",
+            "en": "Speech recognition"
+          }
+        },
+        {
+          "left": {
+            "ru": "Текст → текст",
+            "kk": "Мәтін → мәтін",
+            "en": "Text → text"
+          },
+          "right": {
+            "ru": "Языковая модель",
+            "kk": "Тілдік модель",
+            "en": "Language model"
+          }
+        }
+      ],
+      "explanation": {
+        "ru": "Вход и выход подсказывают, какой ИИ нужен.",
+        "kk": "Кіріс пен шығыс қай ЖИ керегін көрсетеді.",
+        "en": "Input and output tell you which AI you need."
       }
     },
     {

@@ -18,7 +18,38 @@ export type Localized = z.infer<typeof localized>
 export { SKILLS, type Skill } from './skills'
 
 /** Built-in illustrations (components/learn/illustrations.tsx) — our own drawings, no LEGO artwork. */
-export const ILLUSTRATIONS = ['robot-parts', 'hub', 'motor', 'sensors', 'app-steps', 'units', 'turn', 'sequence', 'speed', 'debug', 'square'] as const
+export const ILLUSTRATIONS = [
+  'robot-parts',
+  'hub',
+  'motor',
+  'sensors',
+  'app-steps',
+  'units',
+  'turn',
+  'sequence',
+  'speed',
+  'debug',
+  'square',
+  // "AI from zero" (components/learn/ai-illustrations.tsx)
+  'ai-rules',
+  'ai-data',
+  'ai-guess',
+  'ai-text',
+  'ai-media',
+  'ai-choose',
+  'ai-prompt',
+  'ai-check',
+  'ai-honest',
+  'ai-vibe',
+  'ai-game',
+  'ai-steps',
+  'ai-study',
+  'ai-idea',
+  'ai-deepfake',
+  'ai-gesture',
+  'ai-color',
+  'ai-few',
+] as const
 
 /** DSL steps validated exactly like programs from the AI. */
 export const dslSteps = z.array(z.unknown()).transform((raw, ctx): Step[] => {
@@ -80,7 +111,14 @@ const quiz = z.discriminatedUnion('kind', [
   z.object({ ...quizBase, kind: z.literal('choice'), options: z.array(localized).min(2).max(6), correct: z.array(z.number().int().nonnegative()).min(1) }),
   /** Put in order: `items` are listed in the correct order and shuffled on screen. */
   z.object({ ...quizBase, kind: z.literal('order'), items: z.array(localized).min(3).max(6) }),
-  z.object({ ...quizBase, kind: z.literal('match'), pairs: z.array(z.object({ left: localized, right: localized })).min(2).max(5) }),
+  z.object({
+    ...quizBase,
+    kind: z.literal('match'),
+    pairs: z
+      .array(z.object({ left: localized, right: localized }))
+      .min(2)
+      .max(5),
+  }),
   z.object({ ...quizBase, kind: z.literal('number'), answer: z.number(), tolerance: z.number().nonnegative().default(0), unit: localized.optional() }),
 ])
 
@@ -117,7 +155,10 @@ const predict = z.object({
   /** The program the learner reads. */
   program: dslSteps,
   /** Candidate programs whose simulated paths are drawn as answers; one equals `program`. */
-  options: z.array(z.object({ label: localized, steps: dslSteps })).min(2).max(4),
+  options: z
+    .array(z.object({ label: localized, steps: dslSteps }))
+    .min(2)
+    .max(4),
   correct: z.number().int().nonnegative(),
   explanation: localized,
   skill: z.enum(SKILLS).optional(),
@@ -180,14 +221,18 @@ export const lessonSchema = z
     const dupe = ids.find((id, i) => ids.indexOf(id) !== i)
     if (dupe) ctx.addIssue({ code: 'custom', message: `duplicate step id ${dupe}` })
     lesson.steps.forEach((s, i) => {
-      if (s.type === 'predict' && s.correct >= s.options.length) ctx.addIssue({ code: 'custom', path: ['steps', i, 'correct'], message: 'correct option out of range' })
-      if (s.type === 'quiz' && s.kind === 'choice' && s.correct.some((c) => c >= s.options.length)) ctx.addIssue({ code: 'custom', path: ['steps', i, 'correct'], message: 'correct option out of range' })
+      if (s.type === 'predict' && s.correct >= s.options.length)
+        ctx.addIssue({ code: 'custom', path: ['steps', i, 'correct'], message: 'correct option out of range' })
+      if (s.type === 'quiz' && s.kind === 'choice' && s.correct.some((c) => c >= s.options.length))
+        ctx.addIssue({ code: 'custom', path: ['steps', i, 'correct'], message: 'correct option out of range' })
       if (s.type === 'code' || s.type === 'debug' || s.type === 'project') {
         const zoneIds = new Set(s.field.zones.map((z) => z.id))
         const pointIds = new Set(s.field.points.map((p) => p.id))
         for (const c of s.checks) {
-          if ((c.type === 'finishInZone' || c.type === 'waitInZone') && !zoneIds.has(c.zone)) ctx.addIssue({ code: 'custom', path: ['steps', i], message: `unknown zone ${c.zone}` })
-          if (c.type === 'passPoints') for (const p of c.points) if (!pointIds.has(p)) ctx.addIssue({ code: 'custom', path: ['steps', i], message: `unknown point ${p}` })
+          if ((c.type === 'finishInZone' || c.type === 'waitInZone') && !zoneIds.has(c.zone))
+            ctx.addIssue({ code: 'custom', path: ['steps', i], message: `unknown zone ${c.zone}` })
+          if (c.type === 'passPoints')
+            for (const p of c.points) if (!pointIds.has(p)) ctx.addIssue({ code: 'custom', path: ['steps', i], message: `unknown point ${p}` })
         }
       }
     })

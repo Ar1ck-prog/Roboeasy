@@ -4,12 +4,33 @@ import { next, onboard } from './helpers'
 
 test.use({ launchOptions: { args: ['--use-fake-ui-for-media-stream', '--use-fake-device-for-media-stream'] } })
 
-/** Opens a lesson that is still locked, reads the theory and answers its one question. */
+/** The pairs or order task: try, and after two misses take the shown answer, as a learner may. */
+async function passPractice(page: Page) {
+  const selects = page.locator('main select')
+  for (let i = 0; i < (await selects.count()); i++) await selects.nth(i).selectOption({ index: 1 })
+  const check = page.getByRole('button', { name: 'Проверить' })
+  const reveal = page.getByRole('button', { name: 'Показать ответ' })
+  for (let tries = 0; tries < 3; tries++) {
+    if (await reveal.isVisible()) {
+      await reveal.click()
+      break
+    }
+    if (!(await check.isVisible())) break
+    await check.click()
+    await page.waitForTimeout(200)
+  }
+  await next(page)
+}
+
+/** Opens a lesson that is still locked, reads the theory, does the practice and answers its one question. */
 async function openTask(page: Page, lesson: string, answer: string) {
   await page.goto(`/ru/learn/ai-basics/${lesson}`)
   await page.getByRole('button', { name: 'Всё равно открыть' }).click()
   await page.getByRole('button', { name: /Начать урок|Продолжить урок/ }).click()
+  // The drawing is there, and it is the lesson's own.
+  await expect(page.locator('main svg.ill-anim')).toBeVisible()
   await next(page)
+  await passPractice(page)
   await page.getByRole('radio', { name: answer }).click()
   await page.getByRole('button', { name: 'Проверить' }).click()
   await next(page)

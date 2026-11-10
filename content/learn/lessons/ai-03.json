@@ -2,7 +2,7 @@
   "id": "ai-03",
   "track": "ai-basics",
   "unit": "ai-what",
-  "minutes": 5,
+  "minutes": 6,
   "skills": [
     "ai-literacy"
   ],
@@ -34,6 +34,61 @@
         "ru": "Нейросеть не знает правды. Она выбирает **самый вероятный** ответ по примерам, которые видела.\n\nИногда она придумывает то, чего нет, и говорит очень уверенно. Это называют **галлюцинацией**. Поэтому важные ответы ИИ всегда проверяй.",
         "kk": "Нейрожелі шындықты білмейді. Ол көрген мысалдары бойынша **ең ықтимал** жауапты таңдайды.\n\nКейде ол жоқ нәрсені ойлап тауып, өте сенімді айтады. Мұны **галлюцинация** дейді. Сондықтан ЖИ-дің маңызды жауаптарын әрқашан тексер.",
         "en": "A neural network does not know the truth. It picks the **most likely** answer based on the examples it has seen.\n\nSometimes it makes up things that do not exist and says them very confidently. This is called a **hallucination**. So always check AI’s important answers."
+      },
+      "illustration": "ai-guess"
+    },
+    {
+      "id": "practice",
+      "type": "quiz",
+      "kind": "match",
+      "skill": "ai-literacy",
+      "question": {
+        "ru": "Соедини ответ ИИ и что с ним делать",
+        "kk": "ЖИ жауабы мен онымен не істеу керегін сәйкестендір",
+        "en": "Match the AI answer to what to do"
+      },
+      "pairs": [
+        {
+          "left": {
+            "ru": "Дата из истории",
+            "kk": "Тарихтағы күн",
+            "en": "A date from history"
+          },
+          "right": {
+            "ru": "Проверить в учебнике",
+            "kk": "Оқулықтан тексеру",
+            "en": "Check a textbook"
+          }
+        },
+        {
+          "left": {
+            "ru": "Программа для робота",
+            "kk": "Робот бағдарламасы",
+            "en": "A robot program"
+          },
+          "right": {
+            "ru": "Запустить в симуляторе",
+            "kk": "Симуляторда іске қосу",
+            "en": "Run it in the simulator"
+          }
+        },
+        {
+          "left": {
+            "ru": "Ссылка на книгу",
+            "kk": "Кітапқа сілтеме",
+            "en": "A book reference"
+          },
+          "right": {
+            "ru": "Найти эту книгу",
+            "kk": "Сол кітапты табу",
+            "en": "Find that book"
+          }
+        }
+      ],
+      "explanation": {
+        "ru": "Каждый вид ответа проверяется по-своему.",
+        "kk": "Әр жауап түрі өзінше тексеріледі.",
+        "en": "Each kind of answer is checked its own way."
       }
     },
     {

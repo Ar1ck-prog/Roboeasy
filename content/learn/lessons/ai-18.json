@@ -2,7 +2,7 @@
   "id": "ai-18",
   "track": "ai-basics",
   "unit": "ai-robots",
-  "minutes": 5,
+  "minutes": 6,
   "skills": [
     "ai-literacy"
   ],
@@ -34,6 +34,49 @@
         "ru": "Сейчас ты дашь модели всего по одному-два примера. Посмотри, как она путается: уверенность низкая, ответы прыгают.\n\nТак же путается и настоящий робот, если его обучили кое-как.",
         "kk": "Қазір модельге бір-екі мысал ғана бересің. Оның қалай шатасатынын қара: сенімділік төмен, жауаптар секіреді.\n\nНашар үйретілген шын робот та осылай шатасады.",
         "en": "Now you will give the model only one or two examples each. Watch it get confused: low confidence, jumping answers.\n\nA real robot gets confused the same way if it was trained badly."
+      },
+      "illustration": "ai-few"
+    },
+    {
+      "id": "practice",
+      "type": "quiz",
+      "kind": "match",
+      "skill": "ai-literacy",
+      "question": {
+        "ru": "Мало или много примеров?",
+        "kk": "Мысал аз ба, көп пе?",
+        "en": "Few or many examples?"
+      },
+      "pairs": [
+        {
+          "left": {
+            "ru": "1–2 примера",
+            "kk": "1–2 мысал",
+            "en": "1–2 examples"
+          },
+          "right": {
+            "ru": "Модель путается",
+            "kk": "Модель шатасады",
+            "en": "The model gets confused"
+          }
+        },
+        {
+          "left": {
+            "ru": "20 разных примеров",
+            "kk": "20 әртүрлі мысал",
+            "en": "20 varied examples"
+          },
+          "right": {
+            "ru": "Модель уверена",
+            "kk": "Модель сенімді",
+            "en": "The model is confident"
+          }
+        }
+      ],
+      "explanation": {
+        "ru": "Примеры — это опыт модели.",
+        "kk": "Мысалдар — модельдің тәжірибесі.",
+        "en": "Examples are the model’s experience."
       }
     },
     {

@@ -2,7 +2,7 @@
   "id": "ai-08",
   "track": "ai-basics",
   "unit": "ai-prompts",
-  "minutes": 5,
+  "minutes": 6,
   "skills": [
     "ai-literacy"
   ],
@@ -34,6 +34,40 @@
         "ru": "Спроси себя: **откуда** это известно? **Сходится** ли с учебником или другим источником? **Можно ли проверить** самому?\n\nКод от ИИ проверяют запуском: программа либо работает, либо нет.",
         "kk": "Өзіңнен сұра: бұл **қайдан** белгілі? Оқулықпен не басқа дереккөзбен **сәйкес** пе? Өзің **тексере** аласың ба?\n\nЖИ жазған кодты іске қосып тексереді: бағдарлама жұмыс істейді немесе істемейді.",
         "en": "Ask yourself: **where** is this known from? Does it **match** a textbook or another source? **Can you check** it yourself?\n\nCode from AI is checked by running it: the program either works or it does not."
+      },
+      "illustration": "ai-check"
+    },
+    {
+      "id": "practice",
+      "type": "quiz",
+      "kind": "order",
+      "skill": "ai-literacy",
+      "question": {
+        "ru": "Как проверить ответ ИИ? Расставь по порядку",
+        "kk": "ЖИ жауабын қалай тексеруге болады? Ретімен қой",
+        "en": "How to check an AI answer? Put in order"
+      },
+      "items": [
+        {
+          "ru": "Спросить, откуда это известно",
+          "kk": "Бұл қайдан белгілі екенін сұрау",
+          "en": "Ask where it is known from"
+        },
+        {
+          "ru": "Сверить с другим источником",
+          "kk": "Басқа дереккөзбен салыстыру",
+          "en": "Compare with another source"
+        },
+        {
+          "ru": "Проверить самому, если можно",
+          "kk": "Мүмкін болса, өзің тексеру",
+          "en": "Check it yourself if you can"
+        }
+      ],
+      "explanation": {
+        "ru": "Так ошибка не пройдёт незамеченной.",
+        "kk": "Сонда қате байқалмай қалмайды.",
+        "en": "That way a mistake will not slip through."
       }
     },
     {

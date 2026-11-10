@@ -479,6 +479,14 @@
   }
 }
 
+/* Lesson drawings move only for learners who have not asked for less motion. */
+@media (prefers-reduced-motion: reduce) {
+  .ill-anim,
+  .ill-anim * {
+    animation: none !important;
+  }
+}
+
 /* "More" in the header */
 .more-menu {
   position: relative;

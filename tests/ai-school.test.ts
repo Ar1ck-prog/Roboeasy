@@ -65,6 +65,18 @@ describe('the section', () => {
       }
   })
 
+  it('every lesson has its own drawing and something to do with the hands, not only reading', () => {
+    const drawings = new Set<string>()
+    for (const ref of track.units.flatMap((u) => u.lessons)) {
+      const lesson = readLesson(ref.id)!
+      const theory = lesson.steps.find((s) => s.type === 'theory')
+      expect(theory && 'illustration' in theory && theory.illustration, ref.id).toMatch(/^ai-/)
+      drawings.add((theory as { illustration: string }).illustration)
+      expect(lesson.steps.some((s) => s.type === 'quiz' && (s.kind === 'match' || s.kind === 'order')), ref.id).toBe(true)
+    }
+    expect(drawings.size).toBe(18)
+  })
+
   it('the practical module has the gesture, colour and few-examples tasks, and vibe coding exists', () => {
     const widgets = track.units.flatMap((u) => u.lessons).flatMap((ref) => readLesson(ref.id)!.steps.flatMap((s) => (s.type === 'widget' ? [s.widget] : [])))
     expect(widgets.sort()).toEqual(['color', 'few-examples', 'gesture', 'vibe'])

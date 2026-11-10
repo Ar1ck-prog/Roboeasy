@@ -2,7 +2,7 @@
   "id": "ai-13",
   "track": "ai-basics",
   "unit": "ai-life",
-  "minutes": 5,
+  "minutes": 6,
   "skills": [
     "ai-literacy"
   ],
@@ -34,6 +34,61 @@
         "ru": "Попроси ИИ объяснить тему проще, придумать вопросы для самопроверки, перевести и объяснить слово.\n\nПереводчики ошибаются в именах и редких словах, особенно в казахском. Важный перевод покажи человеку.",
         "kk": "ЖИ-ден тақырыпты қарапайым түсіндіруді, өзін-өзі тексеру сұрақтарын құрастыруды, сөзді аударып түсіндіруді сұра.\n\nАудармашылар есімдер мен сирек сөздерде, әсіресе қазақ тілінде, қателеседі. Маңызды аударманы адамға көрсет.",
         "en": "Ask AI to explain a topic more simply, make up self-check questions, or translate and explain a word.\n\nTranslators make mistakes with names and rare words, especially in Kazakh. Show an important translation to a person."
+      },
+      "illustration": "ai-study"
+    },
+    {
+      "id": "practice",
+      "type": "quiz",
+      "kind": "match",
+      "skill": "ai-literacy",
+      "question": {
+        "ru": "Соедини приём и пользу",
+        "kk": "Тәсіл мен пайданы сәйкестендір",
+        "en": "Match the habit and the benefit"
+      },
+      "pairs": [
+        {
+          "left": {
+            "ru": "Вопросы для самопроверки",
+            "kk": "Өзін-өзі тексеру сұрақтары",
+            "en": "Self-check questions"
+          },
+          "right": {
+            "ru": "Готовиться к контрольной",
+            "kk": "Бақылау жұмысына дайындалу",
+            "en": "Prepare for a test"
+          }
+        },
+        {
+          "left": {
+            "ru": "Объяснить проще",
+            "kk": "Қарапайым түсіндіру",
+            "en": "Explain it more simply"
+          },
+          "right": {
+            "ru": "Понять трудную тему",
+            "kk": "Қиын тақырыпты түсіну",
+            "en": "Understand a hard topic"
+          }
+        },
+        {
+          "left": {
+            "ru": "Перевести слово",
+            "kk": "Сөзді аудару",
+            "en": "Translate a word"
+          },
+          "right": {
+            "ru": "Читать на другом языке",
+            "kk": "Басқа тілде оқу",
+            "en": "Read in another language"
+          }
+        }
+      ],
+      "explanation": {
+        "ru": "ИИ — тренер, а не шпаргалка.",
+        "kk": "ЖИ — жаттықтырушы, шпаргалка емес.",
+        "en": "AI is a coach, not a cheat sheet."
       }
     },
     {

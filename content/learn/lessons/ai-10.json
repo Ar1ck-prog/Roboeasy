@@ -2,7 +2,7 @@
   "id": "ai-10",
   "track": "ai-basics",
   "unit": "ai-vibe",
-  "minutes": 5,
+  "minutes": 6,
   "skills": [
     "ai-literacy"
   ],
@@ -34,6 +34,45 @@
         "ru": "**Вайбкодинг** — когда ты описываешь идею словами, а код пишет ИИ. Ты проверяешь результат и просишь исправить.\n\nТак можно быстро собрать прототип. Но отвечаешь за него ты: код надо запускать и проверять.",
         "kk": "**Вайбкодинг** — идеяны сөзбен сипаттайсың, ал кодты ЖИ жазады. Сен нәтижені тексеріп, түзетуді сұрайсың.\n\nОсылай прототипті тез жасауға болады. Бірақ оған сен жауаптысың: кодты іске қосып, тексеру керек.",
         "en": "**Vibe coding** means you describe an idea in words and AI writes the code. You check the result and ask for fixes.\n\nThis lets you build a prototype quickly. But you are responsible for it: the code has to be run and checked."
+      },
+      "illustration": "ai-vibe"
+    },
+    {
+      "id": "practice",
+      "type": "quiz",
+      "kind": "order",
+      "skill": "ai-literacy",
+      "question": {
+        "ru": "Как идёт вайбкодинг? Расставь шаги",
+        "kk": "Вайбкодинг қалай жүреді? Қадамдарды қой",
+        "en": "How does vibe coding go? Order the steps"
+      },
+      "items": [
+        {
+          "ru": "Описать идею словами",
+          "kk": "Идеяны сөзбен сипаттау",
+          "en": "Describe the idea in words"
+        },
+        {
+          "ru": "ИИ пишет код",
+          "kk": "ЖИ код жазады",
+          "en": "AI writes the code"
+        },
+        {
+          "ru": "Запустить и проверить",
+          "kk": "Іске қосып, тексеру",
+          "en": "Run and check it"
+        },
+        {
+          "ru": "Попросить исправить",
+          "kk": "Түзетуді сұрау",
+          "en": "Ask for a fix"
+        }
+      ],
+      "explanation": {
+        "ru": "Цикл повторяется, пока не получится.",
+        "kk": "Цикл нәтиже шыққанша қайталанады.",
+        "en": "The cycle repeats until it works."
       }
     },
     {

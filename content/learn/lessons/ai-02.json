@@ -2,7 +2,7 @@
   "id": "ai-02",
   "track": "ai-basics",
   "unit": "ai-what",
-  "minutes": 5,
+  "minutes": 6,
   "skills": [
     "ai-literacy"
   ],
@@ -34,6 +34,45 @@
         "ru": "Данные — это примеры, на которых учится ИИ. Если показывать ему только белых кошек, чёрную он может не узнать.\n\nТакие перекосы называют **смещением**. Чтобы его было меньше, примеров нужно много, и они должны быть разными.",
         "kk": "Деректер — ЖИ үйренетін мысалдар. Оған тек ақ мысықтарды көрсетсе, қара мысықты танымауы мүмкін.\n\nМұндай қисаюды **ауытқу** дейді. Оны азайту үшін мысал көп және әртүрлі болуы керек.",
         "en": "Data are the examples AI learns from. Show it only white cats and it may not recognise a black one.\n\nThis kind of skew is called **bias**. To reduce it you need many examples, and they must be varied."
+      },
+      "illustration": "ai-data"
+    },
+    {
+      "id": "practice",
+      "type": "quiz",
+      "kind": "order",
+      "skill": "ai-literacy",
+      "question": {
+        "ru": "Расставь шаги обучения по порядку",
+        "kk": "Үйрету қадамдарын ретімен қой",
+        "en": "Put the training steps in order"
+      },
+      "items": [
+        {
+          "ru": "Собрать много разных примеров",
+          "kk": "Көп әртүрлі мысал жинау",
+          "en": "Collect many varied examples"
+        },
+        {
+          "ru": "Подписать, что на каждом",
+          "kk": "Әрқайсысында не бар екенін белгілеу",
+          "en": "Label what each one shows"
+        },
+        {
+          "ru": "Обучить модель",
+          "kk": "Модельді үйрету",
+          "en": "Train the model"
+        },
+        {
+          "ru": "Проверить на новых примерах",
+          "kk": "Жаңа мысалдарда тексеру",
+          "en": "Test on new examples"
+        }
+      ],
+      "explanation": {
+        "ru": "Без проверки не узнаешь, чему модель научилась.",
+        "kk": "Тексерусіз модельдің неге үйренгенін білмейсің.",
+        "en": "Without testing you cannot know what it learned."
       }
     },
     {

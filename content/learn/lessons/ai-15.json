@@ -2,7 +2,7 @@
   "id": "ai-15",
   "track": "ai-basics",
   "unit": "ai-life",
-  "minutes": 5,
+  "minutes": 6,
   "skills": [
     "ai-literacy"
   ],
@@ -34,6 +34,45 @@
         "ru": "**Дипфейк** — поддельное видео или голос, созданные ИИ. Мошенник может подделать голос знакомого.\n\nПравило: если просят деньги, пароли или код из сообщения, положи трубку и свяжись с человеком сам. Договоритесь в семье о секретном слове.",
         "kk": "**Дипфейк** — ЖИ жасаған жалған бейне не дауыс. Алаяқ таныстың дауысын жасай алады.\n\nЕреже: ақша, құпиясөз немесе хабарламадағы кодты сұраса, телефонды қойып, адамның өзімен хабарлас. Отбасында құпия сөз келісіп алыңдар.",
         "en": "A **deepfake** is a fake video or voice made by AI. A scammer can fake the voice of someone you know.\n\nThe rule: if someone asks for money, passwords or a code from a message, hang up and contact the person yourself. Agree on a secret word with your family."
+      },
+      "illustration": "ai-deepfake"
+    },
+    {
+      "id": "practice",
+      "type": "quiz",
+      "kind": "order",
+      "skill": "ai-literacy",
+      "question": {
+        "ru": "Позвонили голосом мамы и просят код. Твои шаги?",
+        "kk": "Анаңның дауысымен қоңырау шалып, код сұрайды. Не істейсің?",
+        "en": "A call in your mum’s voice asks for a code. Your steps?"
+      },
+      "items": [
+        {
+          "ru": "Не называть код",
+          "kk": "Кодты айтпау",
+          "en": "Do not give the code"
+        },
+        {
+          "ru": "Положить трубку",
+          "kk": "Телефонды қою",
+          "en": "Hang up"
+        },
+        {
+          "ru": "Позвонить маме самому",
+          "kk": "Анаңа өзің қоңырау шалу",
+          "en": "Call your mum yourself"
+        },
+        {
+          "ru": "Спросить секретное слово",
+          "kk": "Құпия сөзді сұрау",
+          "en": "Ask for the secret word"
+        }
+      ],
+      "explanation": {
+        "ru": "Голос можно подделать, номер — проверить.",
+        "kk": "Дауысты жасауға болады, нөмірді тексеруге болады.",
+        "en": "A voice can be faked; a number can be checked."
       }
     },
     {

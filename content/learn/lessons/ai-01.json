@@ -2,7 +2,7 @@
   "id": "ai-01",
   "track": "ai-basics",
   "unit": "ai-what",
-  "minutes": 5,
+  "minutes": 6,
   "skills": [
     "ai-literacy"
   ],
@@ -34,6 +34,49 @@
         "ru": "Обычную программу человек пишет **правилами**: если стена ближе 10 см, остановись.\n\nИИ учится иначе. Ему показывают тысячи **примеров**: вот кошка, вот собака. Он сам находит, чем они отличаются.\n\nПоэтому ИИ справляется с тем, что трудно описать правилами: узнать лицо, понять речь, перевести текст.",
         "kk": "Кәдімгі бағдарламаны адам **ережемен** жазады: қабырға 10 см-ден жақын болса, тоқта.\n\nЖИ басқаша үйренеді. Оған мыңдаған **мысал** көрсетеді: міне мысық, міне ит. Ол айырмашылығын өзі табады.\n\nСондықтан ЖИ ережемен сипаттау қиын істерді орындайды: бетті тану, сөзді түсіну, мәтінді аудару.",
         "en": "A person writes an ordinary program as **rules**: if the wall is closer than 10 cm, stop.\n\nAI learns differently. It is shown thousands of **examples**: this is a cat, this is a dog. It finds the differences by itself.\n\nThat is why AI copes with things that are hard to describe as rules: recognising a face, understanding speech, translating text."
+      },
+      "illustration": "ai-rules"
+    },
+    {
+      "id": "practice",
+      "type": "quiz",
+      "kind": "match",
+      "skill": "ai-literacy",
+      "question": {
+        "ru": "Что решает правило, а что — ИИ?",
+        "kk": "Нені ереже шешеді, нені — ЖИ?",
+        "en": "What does a rule handle, and what does AI?"
+      },
+      "pairs": [
+        {
+          "left": {
+            "ru": "Сложить две цены",
+            "kk": "Екі бағаны қосу",
+            "en": "Add two prices"
+          },
+          "right": {
+            "ru": "Правило",
+            "kk": "Ереже",
+            "en": "A rule"
+          }
+        },
+        {
+          "left": {
+            "ru": "Узнать кошку на фото",
+            "kk": "Фотодағы мысықты тану",
+            "en": "Spot a cat in a photo"
+          },
+          "right": {
+            "ru": "ИИ",
+            "kk": "ЖИ",
+            "en": "AI"
+          }
+        }
+      ],
+      "explanation": {
+        "ru": "Точное — правилом, размытое — примерами.",
+        "kk": "Нақтысы — ережемен, бұлыңғыры — мысалмен.",
+        "en": "Exact things by rules, fuzzy ones by examples."
       }
     },
     {

@@ -2,7 +2,7 @@
   "id": "ai-14",
   "track": "ai-basics",
   "unit": "ai-life",
-  "minutes": 5,
+  "minutes": 6,
   "skills": [
     "ai-literacy"
   ],
@@ -34,6 +34,45 @@
         "ru": "ИИ поможет придумать название, написать текст и составить план. Но нужна ли твоя идея людям, скажут только сами люди.\n\nСпроси хотя бы пятерых, а потом сделай самую простую версию.",
         "kk": "ЖИ атау ойлап табуға, мәтін жазуға, жоспар құруға көмектеседі. Бірақ идеяң адамдарға керек пе, оны тек адамдар айтады.\n\nКемінде бес адамнан сұра, содан кейін ең қарапайым нұсқасын жаса.",
         "en": "AI can help invent a name, write text and draft a plan. But only people can tell you whether they need your idea.\n\nAsk at least five people, then build the simplest version."
+      },
+      "illustration": "ai-idea"
+    },
+    {
+      "id": "practice",
+      "type": "quiz",
+      "kind": "order",
+      "skill": "ai-literacy",
+      "question": {
+        "ru": "Как запустить своё дело? Расставь шаги",
+        "kk": "Өз ісіңді қалай бастау керек? Қадамдарды қой",
+        "en": "How to start a project? Order the steps"
+      },
+      "items": [
+        {
+          "ru": "Придумать идею",
+          "kk": "Идея ойлап табу",
+          "en": "Come up with an idea"
+        },
+        {
+          "ru": "Спросить хотя бы пятерых людей",
+          "kk": "Кемінде бес адамнан сұрау",
+          "en": "Ask at least five people"
+        },
+        {
+          "ru": "Сделать самую простую версию",
+          "kk": "Ең қарапайым нұсқасын жасау",
+          "en": "Build the simplest version"
+        },
+        {
+          "ru": "Улучшать по отзывам",
+          "kk": "Пікірлер бойынша жақсарту",
+          "en": "Improve from feedback"
+        }
+      ],
+      "explanation": {
+        "ru": "Люди скажут, нужна ли идея.",
+        "kk": "Идея керек пе, адамдар айтады.",
+        "en": "People will tell you if the idea is needed."
       }
     },
     {

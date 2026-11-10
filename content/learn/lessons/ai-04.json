@@ -2,7 +2,7 @@
   "id": "ai-04",
   "track": "ai-basics",
   "unit": "ai-around",
-  "minutes": 5,
+  "minutes": 6,
   "skills": [
     "ai-literacy"
   ],
@@ -34,6 +34,61 @@
         "ru": "Языковая модель читает огромное количество текстов и учится продолжать фразы. Поэтому она умеет отвечать на вопросы, объяснять, переводить и писать черновики.\n\nНо она не «думает» как человек: иногда складная фраза оказывается неверной.",
         "kk": "Тілдік модель орасан көп мәтін оқып, сөйлемді жалғастыруды үйренеді. Сондықтан ол сұраққа жауап береді, түсіндіреді, аударады, жоба жазады.\n\nБірақ ол адамша «ойламайды»: кейде әдемі сөйлем дұрыс болмай шығады.",
         "en": "A language model reads a huge amount of text and learns to continue phrases. So it can answer questions, explain, translate and write drafts.\n\nBut it does not “think” like a person: sometimes a smooth sentence turns out to be wrong."
+      },
+      "illustration": "ai-text"
+    },
+    {
+      "id": "practice",
+      "type": "quiz",
+      "kind": "match",
+      "skill": "ai-literacy",
+      "question": {
+        "ru": "Что умеет языковая модель?",
+        "kk": "Тілдік модель не істей алады?",
+        "en": "What can a language model do?"
+      },
+      "pairs": [
+        {
+          "left": {
+            "ru": "Абзац на английском",
+            "kk": "Ағылшынша абзац",
+            "en": "A paragraph in English"
+          },
+          "right": {
+            "ru": "Перевести",
+            "kk": "Аудару",
+            "en": "Translate it"
+          }
+        },
+        {
+          "left": {
+            "ru": "Сложная тема",
+            "kk": "Күрделі тақырып",
+            "en": "A hard topic"
+          },
+          "right": {
+            "ru": "Объяснить проще",
+            "kk": "Қарапайым түсіндіру",
+            "en": "Explain it simply"
+          }
+        },
+        {
+          "left": {
+            "ru": "Идея рассказа",
+            "kk": "Әңгіме идеясы",
+            "en": "A story idea"
+          },
+          "right": {
+            "ru": "Написать черновик",
+            "kk": "Жоба жазу",
+            "en": "Write a draft"
+          }
+        }
+      ],
+      "explanation": {
+        "ru": "Всё это — работа с текстом.",
+        "kk": "Мұның бәрі — мәтінмен жұмыс.",
+        "en": "All of this is working with text."
       }
     },
     {

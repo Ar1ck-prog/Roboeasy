@@ -2,7 +2,7 @@
   "id": "ai-17",
   "track": "ai-basics",
   "unit": "ai-robots",
-  "minutes": 5,
+  "minutes": 6,
   "skills": [
     "ai-literacy"
   ],
@@ -34,6 +34,49 @@
         "ru": "Датчик цвета видит три числа: красный, зелёный и синий. Покажи предметы и скажи, какой цвет какой. Модель найдёт ближайший пример для нового предмета.\n\nНет робота? Можно потренироваться на цветных кнопках.",
         "kk": "Түс датчигі үш санды көреді: қызыл, жасыл және көк. Заттарды көрсетіп, қай түс екенін айт. Модель жаңа зат үшін ең жақын мысалды табады.\n\nРобот жоқ па? Түрлі түсті батырмаларда жаттығуға болады.",
         "en": "The color sensor sees three numbers: red, green and blue. Show objects and say which colour each one is. The model finds the closest example for a new object.\n\nNo robot? You can practise on coloured buttons."
+      },
+      "illustration": "ai-color"
+    },
+    {
+      "id": "practice",
+      "type": "quiz",
+      "kind": "match",
+      "skill": "ai-literacy",
+      "question": {
+        "ru": "Что видит датчик цвета?",
+        "kk": "Түс датчигі нені көреді?",
+        "en": "What does the color sensor see?"
+      },
+      "pairs": [
+        {
+          "left": {
+            "ru": "Красный предмет",
+            "kk": "Қызыл зат",
+            "en": "A red object"
+          },
+          "right": {
+            "ru": "Много R, мало G и B",
+            "kk": "R көп, G мен B аз",
+            "en": "Lots of R, little G and B"
+          }
+        },
+        {
+          "left": {
+            "ru": "Синий предмет",
+            "kk": "Көк зат",
+            "en": "A blue object"
+          },
+          "right": {
+            "ru": "Много B, мало R и G",
+            "kk": "B көп, R мен G аз",
+            "en": "Lots of B, little R and G"
+          }
+        }
+      ],
+      "explanation": {
+        "ru": "Модель сравнивает эти три числа с примерами.",
+        "kk": "Модель осы үш санды мысалдармен салыстырады.",
+        "en": "The model compares these three numbers with examples."
       }
     },
     {
