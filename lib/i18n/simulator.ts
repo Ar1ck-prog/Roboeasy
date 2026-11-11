@@ -1,81 +1,18 @@
 /**
- * Copy of the FLL field simulator page (/[lang]/compete/simulator). Two tabs:
- * the BIOGLOW 3D simulator by fll-bioglow-sim (a copy of the built site in
- * public/fll-sim, shown in a frame; hosted with the author's permission) and
- * our own simulator on the season field, with the mat picture the team
- * uploads (shared with the FLL coach). Kazakh needs a review by a native
+ * Copy of the FLL field simulator page (/[lang]/compete/simulator): the BIOGLOW
+ * 3D simulator (fll-simulator/, built into public/fll-sim and shown in a frame),
+ * and its card on the competitions page. Kazakh needs a review by a native
  * speaker before launch.
  */
 
 import type { Locale } from './config'
 
 const ru = {
-  eyebrow: 'Соревнования · симулятор',
-  title: 'Симулятор поля FLL',
-  lead: 'Поле BIOGLOW (сезон 2026/27) в 3D с физикой: крути и приближай поле, собери заезд из миссий или блоков, запусти робота, засекай матч 2:30 и считай очки.',
   promo: { title: 'Симулятор поля BIOGLOW', text: 'Запусти заезды на поле, засеки матч 2:30 и посчитай очки по правилам сезона.', cta: 'Открыть симулятор' },
-  // Mat picture
-  matTitle: 'Картинка поля',
-  matUpload: 'Загрузить мат',
-  view: 'Вид',
-  map: 'Схема',
-  camera: 'Камера',
-  cameras: { orbit: '3D', top: 'Сверху', base: 'База', follow: 'За роботом' },
-  resetPieces: 'Расставить модели',
-  loading3d: 'Загружаем 3D-поле…',
-  failed3d: '3D не запустилось на этом устройстве — открой «Схему».',
-  orbitHint: 'Мышью вращай поле, колесом приближай, правой кнопкой сдвигай.',
-  matNone: 'Сейчас поле нарисовано схемой. Загрузи картинку мата — она появится и здесь, и в FLL-тренере.',
-  matHas: 'Картинка мата загружена — она общая с FLL-тренером.',
-  // Toolbar
-  training: 'Тренировка',
-  match: 'Матч',
-  startMatch: 'Старт 2:30',
-  newMatch: 'Новый матч',
-  timeUp: 'Время вышло! Матч окончен.',
-  speed: 'Скорость',
-  base: 'База',
-  toStart: 'На старт',
-  // Program
-  program: 'Программа',
-  fromMissions: 'Из миссий',
-  blocks: 'Блоки',
-  python: 'Python',
-  missionsHint: 'Отметь миссии по порядку — заезд построится сам: подъезд, действие и возврат в базу.',
-  noMissions: 'Выбери хотя бы одну миссию.',
-  steps: 'Команд: {n}',
-  run: 'Запустить',
-  stop: 'Стоп',
-  interrupt: 'Прервать',
-  interruptHint: 'Прерывание вне базы стоит один жетон точности.',
-  download: 'Скачать .llsp3',
-  copy: 'Скопировать',
-  copied: 'Скопировано',
-  // Field
-  field: 'Поле FLL BIOGLOW',
-  driveHint: 'Нажми на поле и рули: WASD или стрелки — езда, Shift — медленно. Робота можно перетащить мышью, колесо мыши поворачивает.',
-  robot: 'Робот',
-  running: 'Робот выполняет программу',
-  outOfTime: 'Матч не идёт: нажми «Старт 2:30» или переключись на тренировку.',
-  // Score
-  score: 'Протокол очков',
-  scoreHint: 'Отмечай, что получилось на поле, — очки считаются по правилам сезона.',
-  resetField: 'Сбросить поле',
-  yes: 'Да',
-  no: 'Нет',
-  noEquipment: 'Модель не должна касаться робота в конце матча',
-  total: 'Итого',
-  final: 'Итог матча',
-  // Footer
   toPlanner: 'Спланировать заезды в FLL-тренере',
-  credit:
-    'Миссии, очки и раскладка поля внесены по 3D-симулятору fll-bioglow-sim и правилам сезона BIOGLOW; сверяйся с официальным Robot Game Rulebook. Картинка мата хранится только в твоём браузере.',
-  // Page tabs
-  tabs: { three: '3D-симулятор', own: 'Наш симулятор' },
-  // 3D simulator (a copy of fll-bioglow-sim in public/fll-sim, shown in a frame)
   three: {
-    eyebrow: 'Соревнования · 3D',
-    title: '3D-симулятор поля FLL',
+    eyebrow: 'Соревнования · симулятор',
+    title: 'Симулятор поля FLL',
     lead: 'Поле BIOGLOW (сезон 2026/27) в 3D с физикой: управляй роботом вручную, пиши код на Python, собирай насадки в конструкторе и проверяй заезды на время — как на настоящем матче.',
     badges: ['3D и физика', 'Код на Python', 'Матч 2:30', 'Конструктор робота'],
     newTab: 'В новой вкладке',
@@ -94,76 +31,21 @@ const ru = {
       { title: 'Камера и скорость', text: 'Смотри сверху, из базы или из-за робота; ускоряй и замедляй симуляцию от ¼× до 4×.' },
     ],
     tip: 'Сначала спланируй заезды в FLL-тренере, потом проверь их в симуляторе.',
-    credit:
-      'Автор 3D-симулятора — fll-bioglow-sim; копия размещена в RoboEasy с разрешения автора. Поле и миссии — по версии автора, сверяйся с официальными правилами сезона. Оригинал:',
   },
 }
 
 export type SimulatorText = typeof ru
 
 const kk: SimulatorText = {
-  eyebrow: 'Жарыстар · симулятор',
-  title: 'FLL алаңының симуляторы',
-  lead: 'BIOGLOW алаңы (2026/27 маусымы) 3D және физикамен: алаңды айналдыр және жақындат, миссиялардан не блоктардан заезд құрастыр, роботты іске қос, 2:30 матчты өлше және ұпай сана.',
   promo: {
     title: 'BIOGLOW алаңының симуляторы',
     text: 'Заездерді алаңда іске қос, 2:30 матчты өлше және маусым ережесі бойынша ұпай сана.',
     cta: 'Симуляторды ашу',
   },
-  matTitle: 'Алаң суреті',
-  matUpload: 'Матты жүктеу',
-  view: 'Көрініс',
-  map: 'Сызба',
-  camera: 'Камера',
-  cameras: { orbit: '3D', top: 'Жоғарыдан', base: 'База', follow: 'Роботтың артынан' },
-  resetPieces: 'Модельдерді орнына қою',
-  loading3d: '3D-алаң жүктелуде…',
-  failed3d: '3D бұл құрылғыда іске қосылмады — «Сызбаны» аш.',
-  orbitHint: 'Тінтуірмен алаңды айналдыр, дөңгелекпен жақындат, оң батырмамен жылжыт.',
-  matNone: 'Қазір алаң сызба түрінде. Мат суретін жүкте — ол осында да, FLL-жаттықтырушыда да пайда болады.',
-  matHas: 'Мат суреті жүктелді — ол FLL-жаттықтырушымен ортақ.',
-  training: 'Жаттығу',
-  match: 'Матч',
-  startMatch: 'Старт 2:30',
-  newMatch: 'Жаңа матч',
-  timeUp: 'Уақыт бітті! Матч аяқталды.',
-  speed: 'Жылдамдық',
-  base: 'База',
-  toStart: 'Стартқа',
-  program: 'Бағдарлама',
-  fromMissions: 'Миссиялардан',
-  blocks: 'Блоктар',
-  python: 'Python',
-  missionsHint: 'Миссияларды ретімен белгіле — заезд өзі құрылады: жақындау, әрекет және базаға оралу.',
-  noMissions: 'Кемінде бір миссияны таңда.',
-  steps: 'Командалар: {n}',
-  run: 'Іске қосу',
-  stop: 'Тоқтату',
-  interrupt: 'Үзу',
-  interruptHint: 'Базадан тыс үзу бір дәлдік жетонын алады.',
-  download: '.llsp3 жүктеу',
-  copy: 'Көшіру',
-  copied: 'Көшірілді',
-  field: 'FLL BIOGLOW алаңы',
-  driveHint: 'Алаңды басып, басқар: WASD не бағыттауыштар — жүру, Shift — баяу. Роботты тінтуірмен сүйреуге болады, тінтуір дөңгелегі бұрады.',
-  robot: 'Робот',
-  running: 'Робот бағдарламаны орындап жатыр',
-  outOfTime: 'Матч жүріп жатқан жоқ: «Старт 2:30» бас немесе жаттығуға ауыс.',
-  score: 'Ұпай хаттамасы',
-  scoreHint: 'Алаңда не шыққанын белгіле — ұпай маусым ережесі бойынша есептеледі.',
-  resetField: 'Алаңды қалпына келтіру',
-  yes: 'Иә',
-  no: 'Жоқ',
-  noEquipment: 'Матч соңында модель роботқа тимеуі керек',
-  total: 'Барлығы',
-  final: 'Матч қорытындысы',
   toPlanner: 'Заездерді FLL-жаттықтырушыда жоспарлау',
-  credit:
-    'Миссиялар, ұпайлар мен алаң орналасуы fll-bioglow-sim 3D-симуляторы мен BIOGLOW маусымының ережелері бойынша енгізілген; ресми Robot Game Rulebook-пен салыстыр. Мат суреті тек сенің браузеріңде сақталады.',
-  tabs: { three: '3D-симулятор', own: 'Біздің симулятор' },
   three: {
-    eyebrow: 'Жарыстар · 3D',
-    title: 'FLL алаңының 3D-симуляторы',
+    eyebrow: 'Жарыстар · симулятор',
+    title: 'FLL алаңының симуляторы',
     lead: 'BIOGLOW алаңы (2026/27 маусымы) 3D және физикамен: роботты қолмен басқар, Python-да код жаз, конструкторда саптамалар құрастыр және заездерді уақытқа тексер — нағыз матчтағыдай.',
     badges: ['3D және физика', 'Python-дағы код', 'Матч 2:30', 'Робот конструкторы'],
     newTab: 'Жаңа қойындыда',
@@ -182,74 +64,19 @@ const kk: SimulatorText = {
       { title: 'Камера және жылдамдық', text: 'Жоғарыдан, базадан немесе роботтың артынан қара; симуляцияны ¼×-тен 4×-ке дейін жылдамдат не баяулат.' },
     ],
     tip: 'Алдымен заездерді FLL-жаттықтырушыда жоспарла, содан кейін симуляторда тексер.',
-    credit:
-      '3D-симулятордың авторы — fll-bioglow-sim; көшірме RoboEasy-де автордың рұқсатымен орналастырылған. Алаң мен миссиялар — автордың нұсқасы бойынша, маусымның ресми ережелерімен салыстыр. Түпнұсқа:',
   },
 }
 
 const en: SimulatorText = {
-  eyebrow: 'Competitions · simulator',
-  title: 'FLL field simulator',
-  lead: 'The BIOGLOW field (2026/27 season) in 3D with physics: turn and zoom the field, build a run from missions or blocks, run the robot, time a 2:30 match and score it.',
   promo: {
     title: 'BIOGLOW field simulator',
     text: 'Run your missions on the field, time a 2:30 match and score it by the season rules.',
     cta: 'Open the simulator',
   },
-  matTitle: 'Field picture',
-  matUpload: 'Upload the mat',
-  view: 'View',
-  map: 'Map',
-  camera: 'Camera',
-  cameras: { orbit: '3D', top: 'Top', base: 'Base', follow: 'Behind robot' },
-  resetPieces: 'Reset the models',
-  loading3d: 'Loading the 3D field…',
-  failed3d: '3D could not start on this device; switch to Map.',
-  orbitHint: 'Drag to turn the field, wheel to zoom, right button to pan.',
-  matNone: 'The field is drawn as a diagram. Upload a picture of the mat: it shows up here and in the FLL coach.',
-  matHas: 'Mat picture loaded; it is shared with the FLL coach.',
-  training: 'Training',
-  match: 'Match',
-  startMatch: 'Start 2:30',
-  newMatch: 'New match',
-  timeUp: 'Time’s up! The match is over.',
-  speed: 'Speed',
-  base: 'Base',
-  toStart: 'To start',
-  program: 'Program',
-  fromMissions: 'From missions',
-  blocks: 'Blocks',
-  python: 'Python',
-  missionsHint: 'Tick missions in order and the run builds itself: approach, action and back to base.',
-  noMissions: 'Pick at least one mission.',
-  steps: 'Commands: {n}',
-  run: 'Run',
-  stop: 'Stop',
-  interrupt: 'Interrupt',
-  interruptHint: 'Interrupting outside the base costs one precision token.',
-  download: 'Download .llsp3',
-  copy: 'Copy',
-  copied: 'Copied',
-  field: 'FLL BIOGLOW field',
-  driveHint: 'Click the field and drive: WASD or arrows, Shift is slow. Drag the robot with the mouse; the wheel turns it.',
-  robot: 'Robot',
-  running: 'The robot is running the program',
-  outOfTime: 'No match running: press “Start 2:30” or switch to training.',
-  score: 'Score sheet',
-  scoreHint: 'Mark what happened on the field; points follow the season rules.',
-  resetField: 'Reset field',
-  yes: 'Yes',
-  no: 'No',
-  noEquipment: 'The model must not touch the robot at the end of the match',
-  total: 'Total',
-  final: 'Match result',
   toPlanner: 'Plan runs in the FLL coach',
-  credit:
-    'Missions, points and the field layout follow the fll-bioglow-sim 3D simulator and the BIOGLOW season rules; check the official Robot Game Rulebook. The mat picture stays in your browser.',
-  tabs: { three: '3D simulator', own: 'Our simulator' },
   three: {
-    eyebrow: 'Competitions · 3D',
-    title: '3D FLL field simulator',
+    eyebrow: 'Competitions · simulator',
+    title: 'FLL field simulator',
     lead: 'The BIOGLOW field (2026/27 season) in 3D with physics: drive the robot by hand, write Python code, build attachments and time your runs like in a real match.',
     badges: ['3D and physics', 'Python code', '2:30 match', 'Robot builder'],
     newTab: 'In a new tab',
@@ -268,8 +95,6 @@ const en: SimulatorText = {
       { title: 'Camera and speed', text: 'Watch from above, from base or behind the robot; run the simulation from ¼× to 4×.' },
     ],
     tip: 'Plan your runs in the FLL coach first, then try them in the simulator.',
-    credit:
-      'The 3D simulator is by fll-bioglow-sim; this copy is hosted on RoboEasy with the author’s permission. The field and missions follow the author’s version; check the official season rules. Original:',
   },
 }
 
@@ -279,6 +104,5 @@ export function getSimulatorText(lang: Locale): SimulatorText {
   return TEXTS[lang]
 }
 
-/** The copied 3D simulator (public/fll-sim) and the original site it came from. */
+/** The built 3D simulator (fll-simulator -> public/fll-sim). */
 export const FLL_SIM_SRC = '/fll-sim/index.html'
-export const FLL_SIM_ORIGINAL = 'https://fll-bioglow-sim.onrender.com/'

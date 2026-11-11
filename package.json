@@ -17,10 +17,10 @@
     "eval:generator": "tsx scripts/eval-generator.ts",
     "reference": "tsx scripts/extract-reference.ts",
     "audit:capture": "tsx scripts/audit/capture.ts",
-    "audit:directions": "tsx scripts/audit/directions-shots.mts"
+    "audit:directions": "tsx scripts/audit/directions-shots.mts",
+    "fll:build": "npm install --prefix fll-simulator --no-audit --no-fund && npm run build --prefix fll-simulator && node scripts/sync-fll.mjs"
   },
   "dependencies": {
-    "@dimforge/rapier3d-compat": "^0.21.0",
     "@google/genai": "^2.20.0",
     "@pdf-lib/fontkit": "^1.1.1",
     "@supabase/supabase-js": "^2.118.0",
@@ -39,7 +39,6 @@
     "react-dom": "^19",
     "sonner": "^2.0.8",
     "tailwind-merge": "^3.7.0",
-    "three": "^0.187.0",
     "zod": "^4.6.5"
   },
   "devDependencies": {
@@ -49,7 +48,6 @@
     "@types/node": "^24",
     "@types/react": "^19",
     "@types/react-dom": "^19",
-    "@types/three": "^0.187.0",
     "postcss": "^8.5",
     "scratch-parser": "^6.0.1",
     "supabase": "^2.122.0",

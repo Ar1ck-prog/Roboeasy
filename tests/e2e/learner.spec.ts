@@ -138,21 +138,21 @@ test('legal pages and redirects', async ({ page }) => {
   await expect(page).toHaveURL(/\/ru\/compete$/)
 })
 
-test('field simulator: a run from missions drives the robot and the score sheet counts', async ({ page }) => {
+test('field simulator: the 3D simulator opens in its frame, in our font and without emoji', async ({ page }) => {
   await page.goto('/ru/compete')
   await page.getByRole('link', { name: /Симулятор поля BIOGLOW/ }).click()
   await expect(page).toHaveURL(/\/ru\/compete\/simulator$/)
-  // The 3D simulator (a copy of fll-bioglow-sim) is the default tab; ours is the second.
-  await expect(page.getByRole('heading', { name: '3D-симулятор поля FLL' })).toBeVisible()
-  await page.getByRole('tab', { name: 'Наш симулятор' }).click()
-  await expect(page.getByRole('heading', { name: 'Симулятор поля FLL' })).toBeVisible()
-  const robot = page.locator('[data-robot]')
-  const start = await robot.getAttribute('transform')
-  await page.getByTestId('sim-missions').getByText('Взрывающиеся семена').click()
-  await page.getByRole('button', { name: 'Запустить', exact: true }).click()
-  await expect.poll(() => robot.getAttribute('transform'), { timeout: 10_000 }).not.toBe(start)
-  // Start of a match: habitats in place (20) and six precision tokens (50).
-  await expect(page.getByTestId('score-total')).toContainText('70')
-  await page.getByRole('button', { name: 'Дрон больше не касается мата' }).click()
-  await expect(page.getByTestId('score-total')).toContainText('90')
+  await expect(page.getByRole('heading', { name: 'Симулятор поля FLL', level: 1 })).toBeVisible()
+  // One simulator now: no tabs.
+  await expect(page.getByRole('tab')).toHaveCount(0)
+
+  const frame = page.frameLocator('iframe[title="3D-симулятор поля FLL BIOGLOW"]')
+  const fieldTab = frame.getByRole('button', { name: 'Поле и код' }).or(frame.getByRole('tab', { name: 'Поле и код' }))
+  await expect(fieldTab.first()).toBeVisible({ timeout: 60_000 })
+  // Icons are drawn, not emoji.
+  await expect(fieldTab.first().locator('svg.re-ico')).toHaveCount(1)
+  const text = await frame.locator('body').innerText()
+  expect(text).not.toMatch(/[\u{1F300}-\u{1FAFF}]/u)
+  const font = await frame.locator('body').evaluate((b) => getComputedStyle(b).fontFamily)
+  expect(font).toContain('Rubik')
 })

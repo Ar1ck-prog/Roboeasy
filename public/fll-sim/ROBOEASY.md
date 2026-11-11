@@ -1,25 +1,7 @@
-# FLL BIOGLOW 3D simulator (copy)
+# 3D FLL simulator in RoboEasy
 
-The built site of the BIOGLOW 3D field simulator by **fll-bioglow-sim**
-(original: https://fll-bioglow-sim.onrender.com/), hosted on RoboEasy with the
-author's permission. The files are the site as its server delivers them
-(Vite build: three.js, Rapier physics in a worker, Pyodide for the robot's
-Python code, LDraw parts); there are no sources and no backend.
+The editable source is in `../../fll-simulator/`. The original simulator is by fll-bioglow-sim and is hosted with the author's permission, as documented in RoboEasy. The local source includes subsequent Studio model viewing and GLB export work. These features have limitations described in `fll-simulator/README.md`.
 
-RoboEasy changes only the look:
+Run `npm run fll:build` from the RoboEasy root to install locked simulator dependencies, compile it and copy the result here. `npm run build` does that automatically. The 3D simulator remains on `/fll-sim/index.html` and is embedded by the existing localized `/compete/simulator` page; the original RoboEasy 2D tab is unchanged. `/fll-sim/*` and the containing route require the isolation headers in `next.config.mjs` for Python pause/stop.
 
-- `index.html`: `roboeasy/theme.js` (picks the site's light or dark theme) and
-  `roboeasy/theme.css` (Rubik, our palette, outlined buttons), loaded before
-  the simulator's bundle;
-- `assets/index-*.js` and `assets/builder-*.js`: the 3D scene background (and
-  fog) colours read the `--re-scene` / `--re-builder` CSS variables instead of
-  fixed dark colours;
-- `roboeasy/`: the theme files and the Rubik font.
-- `roboeasy/mobile.css` and `roboeasy/mobile.js` (also linked in `index.html`):
-  below 900 px the panels stack (field, code, score sheet) and a touch pad on
-  the field sends the simulator's own W/A/S/D, R/F, T/G and Shift key events.
-
-The page `/[lang]/compete/simulator` shows it in a frame
-(`components/fll/field-simulator.tsx`). Cross-origin isolation headers for
-`/fll-sim/*` are in `next.config.mjs`. To update the copy, download the new
-build over these files and redo the changes above.
+The RoboEasy theme and mobile touch controls are maintained in `fll-simulator/public/roboeasy/` and `fll-simulator/src/roboeasy/`; scene colours follow the parent theme. The LDraw assets and their attribution files are distributed with the build.

@@ -8,7 +8,7 @@ import { Buddy } from '@/components/learn/buddy'
 import { Badge } from '@/components/ui/badge'
 import { buttonVariants } from '@/components/ui/button'
 import { Card } from '@/components/ui/card'
-import { FLL_SIM_ORIGINAL, FLL_SIM_SRC, type SimulatorText } from '@/lib/i18n/simulator'
+import { FLL_SIM_SRC, type SimulatorText } from '@/lib/i18n/simulator'
 import { cn } from '@/lib/utils'
 
 type Lang = 'ru' | 'kk' | 'en'
@@ -195,12 +195,6 @@ export function FieldSimulator({ lang, t, toPlanner }: { lang: Lang; t: Simulato
         </Link>
       </Card>
 
-      <p className="m-0 text-sm text-muted-foreground">
-        {t.credit}{' '}
-        <a className="font-bold text-link underline underline-offset-4" href={FLL_SIM_ORIGINAL} target="_blank" rel="noopener noreferrer">
-          {new URL(FLL_SIM_ORIGINAL).host}
-        </a>
-      </p>
     </div>
   )
 }

@@ -116,3 +116,11 @@ The official field artwork belongs to FIRST/LEGO and is not in this repository. 
 - Robot profile and history are stored in the browser's localStorage (profile schema is versioned; v1 is migrated).
 - Production needs `CERT_SECRET` (certificate signatures); see `.env.example`.
 - LEGO® and SPIKE™ are trademarks of the LEGO Group, which does not sponsor or endorse this project.
+
+## 3D-симулятор FLL в RoboEasy
+
+Исходный код симулятора находится в `fll-simulator/`; в нём сохранены движок, редактор, конструктор, просмотр `.io` и экспорт. Маршрут `/{ru|kk|en}/compete/simulator` показывает 3D-приложение по `/fll-sim/index.html` (прежний 2D-симулятор RoboEasy убран). Тема, шрифт Rubik и иконки вместо эмодзи — в `fll-simulator/src/roboeasy/` (`theme.css`, `mobile.css`, `icons.js`); тема по сайту и сенсорное управление — в `fll-simulator/public/roboeasy/`.
+
+Установите зависимости RoboEasy командой `npm ci`. Выполните `npm run fll:build`, затем `npm run dev`. Откройте http://localhost:3000/ru/compete/simulator. Собранный симулятор хранится в репозитории (`public/fll-sim`), поэтому `npm run build` и деплой его не пересобирают. После правок в `fll-simulator/` выполните `npm run fll:build` и закоммитьте изменения в `public/fll-sim`: команда устанавливает зафиксированные зависимости, собирает симулятор и заменяет старые файлы в `public/fll-sim/assets`. Python и физика запускаются в браузере; для паузы Python важны заголовки из `next.config.mjs`.
+
+Просмотр `.io` пока не превращает импортированную модель в редактируемого или движущегося робота. Геометрия деталей ограничена включённой выборкой LDraw; неизвестные детали обозначены рамками. Подробности и лицензии — в `fll-simulator/README.md`. Интерфейс 3D-симулятора остаётся русскоязычным и внутри страниц на казахском и английском языках.

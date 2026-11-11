@@ -101,10 +101,10 @@ test('uploads the program to the chosen slot, runs it, shows the console and sto
   const errors: string[] = []
   page.on('pageerror', (e) => errors.push(e.message))
   const hub = await fakeBluetooth(page)
-
-  await page.goto('/ru/compete/simulator')
-  await page.getByRole('tab', { name: 'Наш симулятор' }).click()
-  await page.getByTestId('sim-missions').getByText('Взрывающиеся семена').click()
+  const program: Program = { title: 'Проба', description: '', steps: [{ op: 'move', direction: 'forward', value: 20, unit: 'cm' }] }
+  await openSandbox(page, { format: 'blocks', program, python: programToPython(program, DEFAULT_ROBOT) })
+  await generate(page)
+  await expect(page.getByRole('heading', { name: 'Проба' })).toBeVisible()
 
   const panel = page.getByTestId('robot-panel')
   await panel.getByRole('combobox').selectOption('5')
@@ -137,9 +137,10 @@ test('uploads the program to the chosen slot, runs it, shows the console and sto
 
 test('a browser without Bluetooth gets an explanation, not a dead button', async ({ page }) => {
   await page.addInitScript(() => Object.defineProperty(navigator, 'bluetooth', { configurable: true, value: undefined }))
-  await page.goto('/ru/compete/simulator')
-  await page.getByRole('tab', { name: 'Наш симулятор' }).click()
-  await page.getByTestId('sim-missions').getByText('Взрывающиеся семена').click()
+  const program: Program = { title: 'Проба', description: '', steps: [{ op: 'move', direction: 'forward', value: 20, unit: 'cm' }] }
+  await openSandbox(page, { format: 'blocks', program, python: programToPython(program, DEFAULT_ROBOT) })
+  await generate(page)
+  await expect(page.getByRole('heading', { name: 'Проба' })).toBeVisible()
   await expect(page.getByTestId('robot-panel')).toContainText('Chrome')
   await expect(page.getByRole('button', { name: 'Подключить и запустить' })).toHaveCount(0)
   await expect(page.getByRole('button', { name: 'Подключить робота' })).toHaveCount(0)

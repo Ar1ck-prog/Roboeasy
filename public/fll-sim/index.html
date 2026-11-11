@@ -3,31 +3,27 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>FLL BIOGLOW Симулятор</title>
-  <link rel="icon" href="./assets/logo-small.png" />
-  <!-- RoboEasy: light/dark theme of the site (runs before the simulator) -->
+  <title>3D-симулятор FLL — RoboEasy</title>
+  <link rel="icon" href="./roboeasy/roboeasy-icon.svg" />
   <script src="./roboeasy/theme.js"></script>
-  <link rel="stylesheet" crossorigin href="./assets/index-BriW84K_.css">
-  <!-- RoboEasy: our font and colours for the panels (not part of the original simulator) -->
-  <link rel="stylesheet" href="./roboeasy/theme.css">
-  <!-- RoboEasy: phone layout and touch pad -->
-  <link rel="stylesheet" href="./roboeasy/mobile.css">
   <script src="./roboeasy/mobile.js" defer></script>
-  <script type="module" crossorigin src="./assets/index-PsCX3MsU.js"></script>
+  
+  <script type="module" crossorigin src="./assets/index-DGBdJkJy.js"></script>
+  <link rel="stylesheet" crossorigin href="./assets/index-DG-PpVAr.css">
 </head>
 <body>
   <header class="topbar">
     <div class="brand">
-      <img src="./assets/logo-small.png" alt="BIOGLOW" />
+      <img src="./roboeasy/roboeasy-icon.svg" alt="RoboEasy" />
       <div>
-        <div class="brand-title">FLL BIOGLOW</div>
+        <div class="brand-title">RoboEasy · FLL</div>
         <div class="brand-sub">Симулятор игры роботов</div>
       </div>
     </div>
     <nav class="tabs">
-      <button class="tab active" data-tab="sim">🏁 Поле и код</button>
-      <button class="tab" data-tab="builder">🔧 Конструктор робота</button>
-      <button class="tab" data-tab="help">📘 Справка</button>
+      <button class="tab active" data-tab="sim"><svg class="re-ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"/><path d="M4 22v-7"/></svg> Поле и код</button>
+      <button class="tab" data-tab="builder"><svg class="re-ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94z"/></svg> Конструктор робота</button>
+      <button class="tab" data-tab="help"><svg class="re-ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg> Справка</button>
     </nav>
     <div class="match-box">
       <div class="timer" id="timer" title="Время матча">2:30</div>
@@ -43,15 +39,15 @@
         <div class="panel-head">
           <select id="programSelect" title="Программы (запуски)"></select>
           <button class="icon-btn" id="btnNewProg" title="Новая программа">＋</button>
-          <button class="icon-btn" id="btnRenameProg" title="Переименовать">✎</button>
-          <button class="icon-btn" id="btnDelProg" title="Удалить">🗑</button>
+          <button class="icon-btn" id="btnRenameProg" title="Переименовать"><svg class="re-ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"/></svg></button>
+          <button class="icon-btn" id="btnDelProg" title="Удалить"><svg class="re-ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 6h18"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6"/><path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg></button>
           <select id="exampleSelect" title="Примеры программ"><option value="">Примеры…</option></select>
         </div>
         <div class="editor" id="editor"></div>
         <div class="run-bar" id="runBar">
-          <button class="btn run" id="btnRun" title="Запустить программу (Ctrl+Enter)">▶ Запуск</button>
-          <button class="btn stop" id="btnStop" title="Остановить программу на месте (без штрафа)">■ Стоп</button>
-          <button class="btn warn" id="btnInterrupt" title="Взять робота руками и вернуть на базу (вне базы: −1 жетон)">✋ Прервать</button>
+          <button class="btn run" id="btnRun" title="Запустить программу (Ctrl+Enter)"><svg class="re-ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 3l14 9-14 9z"/></svg> Запуск</button>
+          <button class="btn stop" id="btnStop" title="Остановить программу на месте (без штрафа)"><svg class="re-ico" viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="5" width="14" height="14" rx="2"/></svg> Стоп</button>
+          <button class="btn warn" id="btnInterrupt" title="Взять робота руками и вернуть на базу (вне базы: −1 жетон)"><svg class="re-ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M18 11V6a2 2 0 0 0-4 0v5"/><path d="M14 10V4a2 2 0 0 0-4 0v6"/><path d="M10 10.5V6a2 2 0 0 0-4 0v8"/><path d="M18 8a2 2 0 1 1 4 0v6a8 8 0 0 1-8 8h-2c-2.8 0-4.5-.86-6-2.34l-3.6-3.6a2 2 0 0 1 2.83-2.82L7 15"/></svg> Прервать</button>
           <span class="py-state" id="pyState"></span>
         </div>
         <div class="console" id="console"></div>
@@ -60,27 +56,27 @@
       <div class="field-wrap">
         <div class="field-toolbar">
           <div class="group">
-            <button class="btn small toggle on" id="btnToggleCode" title="Показать / скрыть поле для кода">📝 Код</button>
-            <button class="btn small toggle on" id="btnToggleScore" title="Показать / скрыть протокол очков">📊 Протокол</button>
-            <button class="btn small toggle" id="btnAtt" title="Насадки: надеть на робота одним кликом">🧩 Насадки</button>
+            <button class="btn small toggle on" id="btnToggleCode" title="Показать / скрыть поле для кода"><svg class="re-ico" viewBox="0 0 24 24" aria-hidden="true"><path d="m16 18 6-6-6-6"/><path d="m8 6-6 6 6 6"/></svg> Код</button>
+            <button class="btn small toggle on" id="btnToggleScore" title="Показать / скрыть протокол очков"><svg class="re-ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 3v18h18"/><path d="M18 17V9"/><path d="M13 17V5"/><path d="M8 17v-3"/></svg> Протокол</button>
+            <button class="btn small toggle" id="btnAtt" title="Насадки: надеть на робота одним кликом"><svg class="re-ico" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/></svg> Насадки</button>
           </div>
           <div class="group" id="runSlot"></div>
           <div class="group">
             <div class="seg mode" id="modeSeg" title="Режим">
-              <button data-mode="free" class="on" title="Без таймера и штрафов">🏋 Тренировка</button><button data-mode="match" title="Настоящий матч: таймер 2:30, жетоны, итог">🏁 Матч 2:30</button>
+              <button data-mode="free" class="on" title="Без таймера и штрафов"><svg class="re-ico" viewBox="0 0 24 24" aria-hidden="true"><path d="m6.5 6.5 11 11"/><path d="m21 21-1-1"/><path d="m3 3 1 1"/><path d="m18 22 4-4"/><path d="m2 6 4-4"/><path d="m3 10 7-7"/><path d="m14 21 7-7"/></svg> Тренировка</button><button data-mode="match" title="Настоящий матч: таймер 2:30, жетоны, итог"><svg class="re-ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"/><path d="M4 22v-7"/></svg> Матч 2:30</button>
             </div>
-            <button class="btn small primary" id="btnTimer" title="Запустить таймер 2:30 (или он стартует сам с первым ▶ Запуск)">⏱ Старт 2:30</button>
-            <button class="btn small" id="btnMatch" title="Начать матч заново: поле, таймер и жетоны сбрасываются">↻ Новый матч</button>
+            <button class="btn small primary" id="btnTimer" title="Запустить таймер 2:30 (или он стартует сам с первым запуском)"><svg class="re-ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M10 2h4"/><path d="m12 14 3-3"/><circle cx="12" cy="14" r="8"/></svg> Старт 2:30</button>
+            <button class="btn small" id="btnMatch" title="Начать матч заново: поле, таймер и жетоны сбрасываются"><svg class="re-ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M21 12a9 9 0 1 1-9-9c2.52 0 4.93 1 6.74 2.74L21 8"/><path d="M21 3v5h-5"/></svg> Новый матч</button>
             <select id="matchSide" title="Зона запуска"><option value="left">Левая база</option><option value="right">Правая база</option></select>
-            <button class="btn small" id="btnReset" title="Вернуть все модели в исходное положение">⟲ Сброс поля</button>
-            <button class="btn small" id="btnToStart" title="Поставить робота в стартовую позицию базы (между запусками, пока робот на базе)">🏠 На старт</button>
+            <button class="btn small" id="btnReset" title="Вернуть все модели в исходное положение"><svg class="re-ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg> Сброс поля</button>
+            <button class="btn small" id="btnToStart" title="Поставить робота в стартовую позицию базы (между запусками, пока робот на базе)"><svg class="re-ico" viewBox="0 0 24 24" aria-hidden="true"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><path d="M9 22V12h6v10"/></svg> На старт</button>
           </div>
           <div class="group">
             <span class="lbl">Скорость</span>
             <div class="seg" id="speedSeg">
               <button data-speed="0.25">¼×</button><button data-speed="0.5">½×</button><button data-speed="1" class="on">1×</button><button data-speed="2">2×</button><button data-speed="4">4×</button>
             </div>
-            <button class="btn small" id="btnPause">⏸</button>
+            <button class="btn small" id="btnPause" title="Пауза"><svg class="re-ico" viewBox="0 0 24 24" aria-hidden="true"><rect x="6" y="4" width="4" height="16" rx="1"/><rect x="14" y="4" width="4" height="16" rx="1"/></svg></button>
           </div>
           <div class="group">
             <span class="lbl">Камера</span>
@@ -126,6 +122,6 @@
       <div class="help" id="help"></div>
     </section>
   </main>
-
+
 </body>
 </html>
