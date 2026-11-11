@@ -142,7 +142,11 @@ test('field simulator: the 3D simulator opens in its frame, in our font and with
   await page.goto('/ru/compete')
   await page.getByRole('link', { name: /Симулятор поля BIOGLOW/ }).click()
   await expect(page).toHaveURL(/\/ru\/compete\/simulator$/)
-  await expect(page.getByRole('heading', { name: 'Симулятор поля FLL', level: 1 })).toBeVisible()
+  const title = page.getByRole('heading', { name: 'Симулятор поля FLL', level: 1 })
+  await expect(title).toBeVisible()
+  // The page sits in the usual container, not against the screen edge.
+  expect((await title.boundingBox())!.x).toBeGreaterThanOrEqual(12)
+  expect((await page.locator('iframe').boundingBox())!.x).toBeGreaterThanOrEqual(12)
   // One simulator now: no tabs.
   await expect(page.getByRole('tab')).toHaveCount(0)
 

@@ -21,7 +21,9 @@ export default async function SimulatorPage({ params }: Params) {
   const t = getSimulatorText(lang)
   return (
     <AppShell lang={lang}>
-      <FieldSimulator lang={lang} t={t.three} toPlanner={t.toPlanner} />
+      <div className="container py-6 md:py-8">
+        <FieldSimulator lang={lang} t={t.three} toPlanner={t.toPlanner} />
+      </div>
     </AppShell>
   )
 }

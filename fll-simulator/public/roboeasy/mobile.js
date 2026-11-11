@@ -7,17 +7,17 @@
 ;(function () {
   var BUTTONS = {
     drive: [
-      { cls: 're-slow', code: 'ShiftLeft', key: 'Shift', label: 'Slow', title: 'Медленно', toggle: true },
-      { cls: 're-up', code: 'KeyW', key: 'w', label: '▲', title: 'Вперёд' },
-      { cls: 're-left', code: 'KeyA', key: 'a', label: '◀', title: 'Налево' },
-      { cls: 're-down', code: 'KeyS', key: 's', label: '▼', title: 'Назад' },
-      { cls: 're-right', code: 'KeyD', key: 'd', label: '▶', title: 'Направо' },
+      { cls: 're-slow', code: 'ShiftLeft', key: 'Shift', label: '<svg class="re-ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M2 13a6 6 0 1 0 12 0 4 4 0 1 0-8 0 2 2 0 0 0 4 0"/><circle cx="10" cy="13" r="8"/><path d="M2 21h12c4.4 0 8-3.6 8-8V7a2 2 0 1 0-4 0v6"/><path d="M18 3 19.1 5.2"/><path d="M22 3 20.9 5.2"/></svg>', title: 'Медленно', toggle: true },
+      { cls: 're-up', code: 'KeyW', key: 'w', label: '<svg class="re-ico" viewBox="0 0 24 24" aria-hidden="true"><path d="m5 15 7-7 7 7"/></svg>', title: 'Вперёд' },
+      { cls: 're-left', code: 'KeyA', key: 'a', label: '<svg class="re-ico" viewBox="0 0 24 24" aria-hidden="true"><path d="m15 5-7 7 7 7"/></svg>', title: 'Налево' },
+      { cls: 're-down', code: 'KeyS', key: 's', label: '<svg class="re-ico" viewBox="0 0 24 24" aria-hidden="true"><path d="m5 9 7 7 7-7"/></svg>', title: 'Назад' },
+      { cls: 're-right', code: 'KeyD', key: 'd', label: '<svg class="re-ico" viewBox="0 0 24 24" aria-hidden="true"><path d="m9 5 7 7-7 7"/></svg>', title: 'Направо' },
     ],
     motors: [
-      { code: 'KeyR', key: 'r', label: 'C<small>▲</small>', title: 'Рука C вверх' },
-      { code: 'KeyT', key: 't', label: 'D<small>▲</small>', title: 'Мотор D вперёд' },
-      { code: 'KeyF', key: 'f', label: 'C<small>▼</small>', title: 'Рука C вниз' },
-      { code: 'KeyG', key: 'g', label: 'D<small>▼</small>', title: 'Мотор D назад' },
+      { code: 'KeyR', key: 'r', label: 'C<svg class="re-ico re-mini" viewBox="0 0 24 24" aria-hidden="true"><path d="m6 15 6-6 6 6"/></svg>', title: 'Рука C вверх' },
+      { code: 'KeyT', key: 't', label: 'D<svg class="re-ico re-mini" viewBox="0 0 24 24" aria-hidden="true"><path d="m6 15 6-6 6 6"/></svg>', title: 'Мотор D вперёд' },
+      { code: 'KeyF', key: 'f', label: 'C<svg class="re-ico re-mini" viewBox="0 0 24 24" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg>', title: 'Рука C вниз' },
+      { code: 'KeyG', key: 'g', label: 'D<svg class="re-ico re-mini" viewBox="0 0 24 24" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg>', title: 'Мотор D назад' },
     ],
   }
 
@@ -88,6 +88,21 @@
     field.appendChild(pad)
   }
 
-  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', mount)
-  else mount()
+  // Rows that scroll sideways on a phone fade at the edge while there is more to see.
+  function watchScroll(el) {
+    var update = function () {
+      el.classList.toggle('re-more', el.scrollLeft + el.clientWidth < el.scrollWidth - 4)
+    }
+    el.addEventListener('scroll', update, { passive: true })
+    window.addEventListener('resize', update)
+    update()
+  }
+
+  function start() {
+    mount()
+    document.querySelectorAll('.field-toolbar').forEach(watchScroll)
+  }
+
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', start)
+  else start()
 })()

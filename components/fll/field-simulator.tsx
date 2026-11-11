@@ -85,9 +85,9 @@ export function FieldSimulator({ lang, t, toPlanner }: { lang: Lang; t: Simulato
       <header className="flex flex-wrap items-end justify-between gap-4">
         <div className="grid max-w-3xl gap-3">
           <p className="eyebrow m-0">{t.eyebrow}</p>
-          <h1 className="m-0 text-4xl md:text-5xl">{t.title}</h1>
-          <p className="lead m-0">{t.lead}</p>
-          <ul className="m-0 flex list-none flex-wrap gap-2 p-0">
+          <h1 className="m-0 text-3xl sm:text-4xl md:text-5xl">{t.title}</h1>
+          <p className="lead m-0 max-sm:text-base">{t.lead}</p>
+          <ul className="m-0 flex list-none flex-wrap gap-2 p-0 max-sm:hidden">
             {t.badges.map((b) => (
               <li key={b}>
                 <Badge variant="outline">{b}</Badge>
@@ -118,7 +118,7 @@ export function FieldSimulator({ lang, t, toPlanner }: { lang: Lang; t: Simulato
         ref={box}
         className={cn(
           'relative overflow-hidden rounded-(--radius-lg) border-(length:--stroke) border-outline bg-[#141826] shadow-(--shadow-hard)',
-          full ? 'rounded-none border-0' : 'h-[calc(100dvh-7.5rem)] min-h-[520px] md:h-[min(80dvh,860px)]',
+          full ? 'rounded-none border-0' : 'h-[calc(100dvh-9.5rem-env(safe-area-inset-bottom))] min-h-[520px] md:h-[min(80dvh,860px)]',
         )}
       >
         {ready && (

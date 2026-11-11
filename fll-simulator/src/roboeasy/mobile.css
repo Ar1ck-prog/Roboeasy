@@ -29,17 +29,22 @@
   }
   .tabs {
     order: 3;
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 6px;
     width: 100%;
-    overflow-x: auto;
-    scrollbar-width: none;
-  }
-  .tabs::-webkit-scrollbar {
-    display: none;
   }
   .tab {
-    flex: 0 0 auto;
-    padding: 7px 11px;
-    white-space: nowrap;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+    min-height: 40px;
+    padding: 6px 8px;
+    font-size: 12.5px;
+    line-height: 1.15;
+    text-align: center;
+    white-space: normal;
   }
   .match-box {
     gap: 10px;
@@ -103,6 +108,10 @@
   }
   .field-toolbar::-webkit-scrollbar {
     display: none;
+  }
+  .field-toolbar.re-more {
+    -webkit-mask-image: linear-gradient(to right, #000 calc(100% - 36px), transparent);
+    mask-image: linear-gradient(to right, #000 calc(100% - 36px), transparent);
   }
   .field-toolbar .group {
     flex: 0 0 auto;
@@ -198,9 +207,19 @@
     -webkit-user-select: none;
     -webkit-tap-highlight-color: transparent;
   }
-  .re-pad button small {
-    font-size: 10px;
-    font-weight: 800;
+  .re-pad button {
+    gap: 0;
+    align-content: center;
+  }
+  .re-pad button .re-ico {
+    width: 24px;
+    height: 24px;
+    stroke-width: 2.6;
+  }
+  .re-pad button .re-ico.re-mini {
+    width: 14px;
+    height: 14px;
+    stroke-width: 3;
   }
   .re-pad button.on,
   .re-pad button:active {
