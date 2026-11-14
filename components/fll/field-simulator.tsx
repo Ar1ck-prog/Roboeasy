@@ -53,6 +53,8 @@ export function FieldSimulator({ lang, t, toPlanner }: { lang: Lang; t: Simulato
   const box = useRef<HTMLDivElement>(null)
   const ready = useIsolation()
   const [loaded, setLoaded] = useState(false)
+  /** The loading screen leaves the page once it has faded out, so its endless animations stop. */
+  const [coverGone, setCoverGone] = useState(false)
   const [slow, setSlow] = useState(false)
   const [full, setFull] = useState(false)
   const [attempt, setAttempt] = useState(0)
@@ -62,6 +64,12 @@ export function FieldSimulator({ lang, t, toPlanner }: { lang: Lang; t: Simulato
     const timer = setTimeout(() => setSlow(true), SLOW_MS)
     return () => clearTimeout(timer)
   }, [loaded, attempt])
+
+  useEffect(() => {
+    if (!loaded) return
+    const timer = setTimeout(() => setCoverGone(true), 600)
+    return () => clearTimeout(timer)
+  }, [loaded])
 
   useEffect(() => {
     const onChange = () => setFull(document.fullscreenElement === box.current)
@@ -75,6 +83,7 @@ export function FieldSimulator({ lang, t, toPlanner }: { lang: Lang; t: Simulato
   }
   const reload = () => {
     setLoaded(false)
+    setCoverGone(false)
     setSlow(false)
     setAttempt((n) => n + 1)
   }
@@ -86,7 +95,6 @@ export function FieldSimulator({ lang, t, toPlanner }: { lang: Lang; t: Simulato
           <p className="eyebrow m-0">{t.eyebrow}</p>
           <h1 className="m-0 text-2xl sm:text-3xl">{t.title}</h1>
           <p className="m-0 max-w-3xl text-sm text-muted-foreground">{t.lead}</p>
-
         </div>
         <div className="flex flex-wrap gap-2">
           <button type="button" className={buttonVariants({ size: 'sm', className: 'max-md:hidden' })} onClick={toggleFull}>
@@ -125,36 +133,38 @@ export function FieldSimulator({ lang, t, toPlanner }: { lang: Lang; t: Simulato
             onLoad={() => setLoaded(true)}
           />
         )}
-        {/* Loading screen: fades out once the simulator's page has loaded. */}
-        <div
-          className={cn(
-            'absolute inset-0 grid place-items-center bg-[radial-gradient(rgba(255,255,255,.08)_1.6px,transparent_2px)] bg-[#141826] bg-size-[22px_22px] p-6 text-center text-white transition-opacity duration-500 motion-reduce:transition-none',
-            loaded ? 'pointer-events-none opacity-0' : 'opacity-100',
-          )}
-          aria-hidden={loaded}
-        >
-          <div className="grid max-w-md justify-items-center gap-4">
-            <div className="w-36">
-              <Buddy model="rover" color="sun" hat="antenna" eyes="happy" animate />
-            </div>
-            <p className="m-0 font-display text-2xl font-extrabold" role="status">
-              {t.loading}
-            </p>
-            <div className="h-2 w-56 overflow-hidden rounded-full bg-white/15" aria-hidden="true">
-              <div className="sim-loading-bar h-full w-1/3 rounded-full bg-primary" />
-            </div>
-            <p className="m-0 text-sm text-white/75">{t.loadingHint}</p>
-            {slow && (
-              <div className="grid justify-items-center gap-3">
-                <p className="m-0 text-sm font-bold">{t.slow}</p>
-                <a className={buttonVariants({ variant: 'primary', size: 'sm' })} href={FLL_SIM_SRC} target="_blank" rel="noopener">
-                  <ExternalLink aria-hidden="true" />
-                  {t.newTab}
-                </a>
-              </div>
+        {/* Loading screen: fades out once the simulator's page has loaded, then is removed. */}
+        {!coverGone && (
+          <div
+            className={cn(
+              'absolute inset-0 grid place-items-center bg-[radial-gradient(rgba(255,255,255,.08)_1.6px,transparent_2px)] bg-[#141826] bg-size-[22px_22px] p-6 text-center text-white transition-opacity duration-500 motion-reduce:transition-none',
+              loaded ? 'pointer-events-none opacity-0' : 'opacity-100',
             )}
+            aria-hidden={loaded}
+          >
+            <div className="grid max-w-md justify-items-center gap-4">
+              <div className="w-36">
+                <Buddy model="rover" color="sun" hat="antenna" eyes="happy" animate />
+              </div>
+              <p className="m-0 font-display text-2xl font-extrabold" role="status">
+                {t.loading}
+              </p>
+              <div className="h-2 w-56 overflow-hidden rounded-full bg-white/15" aria-hidden="true">
+                <div className="sim-loading-bar h-full w-1/3 rounded-full bg-primary" />
+              </div>
+              <p className="m-0 text-sm text-white/75">{t.loadingHint}</p>
+              {slow && (
+                <div className="grid justify-items-center gap-3">
+                  <p className="m-0 text-sm font-bold">{t.slow}</p>
+                  <a className={buttonVariants({ variant: 'primary', size: 'sm' })} href={FLL_SIM_SRC} target="_blank" rel="noopener">
+                    <ExternalLink aria-hidden="true" />
+                    {t.newTab}
+                  </a>
+                </div>
+              )}
+            </div>
           </div>
-        </div>
+        )}
       </div>
 
       <section className="grid gap-4" aria-labelledby="sim-how">
@@ -182,12 +192,14 @@ export function FieldSimulator({ lang, t, toPlanner }: { lang: Lang; t: Simulato
 
       <Card className="flex-col items-start gap-3 sm:flex-row sm:items-center sm:justify-between" flat>
         <p className="m-0 font-bold">{t.tip}</p>
-        <Link className={buttonVariants({ size: 'sm', className: 'max-w-full max-sm:h-auto max-sm:py-2 max-sm:whitespace-normal max-sm:text-center' })} href={`/${lang}/compete`}>
+        <Link
+          className={buttonVariants({ size: 'sm', className: 'max-w-full max-sm:h-auto max-sm:py-2 max-sm:whitespace-normal max-sm:text-center' })}
+          href={`/${lang}/compete`}
+        >
           {toPlanner}
           <ArrowRight aria-hidden="true" />
         </Link>
       </Card>
-
     </div>
   )
 }

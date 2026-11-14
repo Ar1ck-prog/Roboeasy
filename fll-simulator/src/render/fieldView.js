@@ -140,10 +140,13 @@ export class FieldView {
     let slowFrames = 0;
     const loop = (now = performance.now()) => {
       requestAnimationFrame(loop);
-      if (document.hidden || !this.container.clientWidth || !this.container.clientHeight) {
+      // `shown` comes from the ResizeObserver: reading clientWidth here every frame forced a
+      // layout in the middle of page scrolling.
+      if (document.hidden || !this.shown) {
         previousFrame = 0;
         return;
       }
+      if (this.posesPending) this.applyPoses(this.lastPoses, true);
       const elapsed = previousFrame ? now - previousFrame : 0;
       previousFrame = now;
       // Reduce expensive contact shadows on sustained slow frames.
@@ -160,6 +163,7 @@ export class FieldView {
   }
 
   resize() {
+    this.shown = this.container.clientWidth > 0 && this.container.clientHeight > 0;
     const w = this.container.clientWidth || 1;
     const h = this.container.clientHeight || 1;
     this.renderer.setSize(w, h, false);
@@ -187,7 +191,14 @@ export class FieldView {
     });
   }
 
-  applyPoses(arr) {
+  applyPoses(arr, force = false) {
+    // Hidden field (another tab open): remember the poses, the render loop applies the latest one.
+    if (!force && !this.shown) {
+      this.lastPoses = arr;
+      this.posesPending = true;
+      return;
+    }
+    this.posesPending = false;
     const n = Math.min(this.bodyGroups.length, arr.length / 7);
     for (let i = 0; i < n; i++) {
       const g = this.bodyGroups[i];

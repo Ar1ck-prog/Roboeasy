@@ -142,7 +142,22 @@ function fmtTime(s) {
   s = Math.max(0, Math.ceil(s));
   return `${Math.floor(s / 60)}:${String(s % 60).padStart(2, '0')}`;
 }
+// Frames arrive about 60 times a second: write to the page only what actually changed
+// (rewriting identical HTML still makes the browser restyle and repaint, which made scrolling stutter).
+const shown = {};
+function setText(sel, text) {
+  if (shown[sel] === text) return;
+  shown[sel] = text;
+  $(sel).textContent = text;
+}
+function setHtml(sel, html) {
+  if (shown[sel] === html) return;
+  shown[sel] = html;
+  $(sel).innerHTML = html;
+}
 function renderTokens(n) {
+  if (shown.tokens === n) return;
+  shown.tokens = n;
   $('#tokens').innerHTML = Array.from({ length: 6 }, (_, i) => `<span class="${i < n ? '' : 'lost'}"></span>`).join('');
 }
 renderTokens(6);
@@ -151,23 +166,25 @@ function updateHud(frame) {
   const m = frame.match;
   state.match = m;
   const timer = $('#timer');
-  timer.textContent = fmtTime(m.time);
+  setText('#timer', fmtTime(m.time));
   timer.classList.toggle('running', m.phase === 'running');
   timer.classList.toggle('low', m.phase === 'running' && m.time < 15);
   timer.classList.toggle('free', m.phase === 'free');
   showMode(m.phase);
   renderTokens(m.tokens);
   results.track(m);
+  // The two status cards sit under the field; while another tab is open nobody sees them.
+  if (!$('#tab-sim').classList.contains('active')) return;
   const phaseText = { free: `${icon('dumbbell')} Тренировка (без таймера)`, ready: 'Матч: ждёт старта таймера', running: 'Матч идёт', ended: 'Матч окончен' }[m.phase];
-  $('#hudMatch').innerHTML = `<div class="ttl">${phaseText}</div>
+  setHtml('#hudMatch', `<div class="ttl">${phaseText}</div>
     <div class="row"><span class="k">Время</span><span>${m.phase === 'free' ? '—' : fmtTime(m.time)}</span></div>
     <div class="row"><span class="k">Запусков</span><span>${m.launches}</span></div>
-    ${m.phase !== 'free' ? `<div class="row"><span class="k">Осмотр</span><span>${m.insp ? icon('check') + ' 20' : icon('x') + ' 0'}</span></div>` : ''}`;
+    ${m.phase !== 'free' ? `<div class="row"><span class="k">Осмотр</span><span>${m.insp ? icon('check') + ' 20' : icon('x') + ' 0'}</span></div>` : ''}`);
   const r = frame.robot;
   if (r) {
     const motors = Object.entries(r.motors).map(([p, v]) => `<div class="row"><span class="k">Мотор ${p}</span><span>${v.angle}° · ${v.speed}°/с${v.stalled ? ' ' + icon('alert') : ''}</span></div>`).join('');
-    $('#hudRobot').innerHTML = `<div class="ttl">Робот ${frame.running ? '· программа работает' : ''}</div>
-      <div class="row"><span class="k">Гироскоп (курс)</span><span>${r.heading}°</span></div>${motors}`;
+    setHtml('#hudRobot', `<div class="ttl">Робот ${frame.running ? '· программа работает' : ''}</div>
+      <div class="row"><span class="k">Гироскоп (курс)</span><span>${r.heading}°</span></div>${motors}`);
   }
 }
 

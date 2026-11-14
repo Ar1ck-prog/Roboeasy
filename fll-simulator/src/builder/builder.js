@@ -223,11 +223,17 @@ export class RobotBuilder {
     });
     el.addEventListener('contextmenu', (e) => { e.preventDefault(); this.setTool(null); });
     window.addEventListener('keydown', (e) => this.onKey(e));
-    new ResizeObserver(() => this.resize()).observe(this.viewEl);
+    // Visible or not is tracked by the ResizeObserver (size 0 while the tab is hidden), so the
+    // loop does not have to ask for layout (offsetParent) on every frame.
+    this.shown = false;
+    new ResizeObserver(([entry]) => {
+      this.shown = entry.contentRect.width > 0 && entry.contentRect.height > 0;
+      this.resize();
+    }).observe(this.viewEl);
     this.resize();
     const loop = () => {
       requestAnimationFrame(loop);
-      if (!this.viewEl.offsetParent) return;
+      if (!this.shown) return;
       this.controls.update();
       this.renderer.render(this.scene, this.camera);
     };
