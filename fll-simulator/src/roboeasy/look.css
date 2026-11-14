@@ -1,0 +1,496 @@
+/*
+ * RoboEasy look, last layer: the site's three fonts, and our own layout for the
+ * robot builder and the help (the content and the controls stay the same; only
+ * how they are arranged and drawn changes). Loaded after theme.css, mobile.css
+ * and workspace.css.
+ */
+
+/* ---------- Fonts: the same three as roboeasy (lib/fonts.ts) ---------- */
+
+@import '@fontsource-variable/rubik/wght.css';
+@import '@fontsource-variable/nunito/wght.css';
+@import '@fontsource/ibm-plex-mono/500.css';
+@import '@fontsource/ibm-plex-mono/600.css';
+
+:root {
+  --re-font-heading: 'Rubik Variable', 'Nunito Variable', system-ui, sans-serif;
+  --re-font-body: 'Nunito Variable', system-ui, sans-serif;
+  --re-font-code: 'IBM Plex Mono', ui-monospace, monospace;
+  --re-radius: 16px;
+  --re-card-shadow: 3px 3px 0 var(--re-shadow);
+  --re-dots: radial-gradient(var(--line) 1.4px, transparent 1.6px) 0 0 / 20px 20px;
+  /* Builder grid (src/builder/builder.js reads these) */
+  --re-grid: #3a4360;
+  --re-grid-major: #56618a;
+}
+:root[data-theme='light'] {
+  --re-grid: #ecdcbd;
+  --re-grid-major: #d9c49c;
+}
+
+html,
+body,
+button,
+select,
+input,
+textarea {
+  font-family: var(--re-font-body);
+}
+h1,
+h2,
+h3,
+h4,
+.brand-title,
+.scene-title,
+.score-big,
+.panel-head b,
+.props h3,
+.palette h4 {
+  font-family: var(--re-font-heading);
+}
+code,
+pre,
+kbd,
+.console,
+.timer,
+.editor .cm-scroller,
+.hub-display {
+  font-family: var(--re-font-code);
+}
+
+/* ---------- Workspace (field + code / score sheet) ---------- */
+
+/* Mode switch on its own row, start zone and «На старт» side by side under it. */
+.workspace .match-controls {
+  display: flex;
+  flex-wrap: wrap;
+}
+.workspace .match-controls #modeSeg {
+  display: flex;
+  flex: 1 1 100%;
+}
+.workspace .match-controls #modeSeg button {
+  flex: 1 1 0;
+  justify-content: center;
+}
+.workspace .match-controls #matchSide {
+  flex: 1 1 140px;
+  min-width: 0;
+}
+.workspace .match-controls .btn {
+  flex: 0 0 auto;
+}
+/* «Примеры…» used to run past the panel's right edge. */
+.workspace .panel-head #exampleSelect {
+  flex: 1 1 auto;
+  width: 100%;
+  min-width: 0;
+  max-width: 100%;
+}
+.workspace .panel-head #programSelect {
+  flex: 1 1 130px;
+  min-width: 0;
+}
+
+/* ---------- Robot builder: three cards on the dotted board ---------- */
+
+#tab-builder.active {
+  display: grid;
+  grid-template-columns: clamp(220px, 19vw, 270px) minmax(0, 1fr) clamp(260px, 22vw, 320px);
+  gap: 16px;
+  padding: 16px;
+  background: var(--re-dots), var(--bg);
+}
+#tab-builder .palette,
+#tab-builder .props,
+#tab-builder .builder-view {
+  min-height: 0;
+  border: 2.5px solid var(--re-outline);
+  border-radius: var(--re-radius);
+  box-shadow: var(--re-card-shadow);
+  overflow: hidden;
+}
+#tab-builder .builder-view {
+  background: var(--re-builder);
+}
+#tab-builder .palette,
+#tab-builder .props {
+  width: auto;
+  overflow: auto;
+  background: var(--panel);
+}
+
+/* Parts list */
+#tab-builder .palette {
+  padding: 12px;
+  scrollbar-width: thin;
+}
+.palette input[type='search'] {
+  position: sticky;
+  top: -12px;
+  z-index: 1;
+  margin: -12px -12px 4px;
+  width: calc(100% + 24px);
+  padding: 12px 14px 12px 38px;
+  border: 0;
+  border-bottom: 2px solid var(--line);
+  border-radius: 0;
+  background: var(--panel)
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%239aa2ba' stroke-width='2.4' stroke-linecap='round'%3E%3Ccircle cx='11' cy='11' r='7'/%3E%3Cpath d='m20 20-3.5-3.5'/%3E%3C/svg%3E")
+    no-repeat 12px 50% / 18px 18px;
+  font-weight: 600;
+}
+.palette input[type='search']:focus {
+  outline: none;
+  border-bottom-color: var(--re-accent);
+}
+.palette h4 {
+  display: inline-flex;
+  margin: 14px 0 8px;
+  padding: 3px 10px;
+  border: 2px solid var(--re-outline);
+  border-radius: 999px;
+  background: var(--re-accent-soft);
+  color: var(--text);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+}
+.part-btn {
+  gap: 10px;
+  margin-bottom: 4px;
+  padding: 6px;
+  border: 2px solid transparent;
+  border-radius: 12px;
+  transition: background-color 120ms ease, border-color 120ms ease, transform 120ms ease;
+}
+.part-btn:hover {
+  border-color: var(--line);
+  background: var(--panel2);
+}
+.part-btn:active {
+  transform: translateY(1px);
+}
+.part-btn img,
+.part-btn canvas {
+  flex: none;
+  padding: 2px;
+  border: 2px solid var(--line);
+  border-radius: 10px !important;
+  background: var(--panel2) !important;
+}
+.part-btn.active {
+  border-color: var(--re-outline);
+  background: var(--re-accent);
+  color: var(--re-on-accent);
+  box-shadow: 2px 2px 0 var(--re-shadow);
+}
+.part-btn.active .ds {
+  color: inherit;
+  opacity: 0.75;
+}
+.part-btn .nm {
+  font-size: 13px;
+  font-weight: 800;
+}
+
+/* Properties: a column of small cards */
+#tab-builder .props {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 12px;
+  background: var(--re-dots), var(--panel2);
+}
+.props .box {
+  padding: 12px 14px;
+  border: 2px solid var(--re-outline);
+  border-radius: 14px;
+  background: var(--panel);
+  box-shadow: 2px 2px 0 var(--re-shadow);
+}
+.props h3 {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin: 0 0 10px;
+  color: var(--text);
+  font-size: 15px;
+  font-weight: 700;
+}
+.props h3 .re-ico {
+  width: 18px;
+  height: 18px;
+  padding: 3px;
+  border-radius: 7px;
+  background: var(--re-accent);
+  color: var(--re-on-accent);
+  box-sizing: content-box;
+}
+.props .row {
+  padding: 4px 0;
+  border-bottom: 1px dashed var(--line);
+}
+.props .row:last-child {
+  border-bottom: 0;
+}
+.props select,
+.props input:not([type='checkbox']) {
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
+}
+.props .ok {
+  color: var(--green);
+  font-weight: 700;
+}
+
+/* Hint over the 3D view: a pill at the bottom */
+#tab-builder .builder-hint {
+  left: 12px;
+  right: 12px;
+  bottom: 12px;
+  padding: 10px 14px;
+  border-radius: 12px;
+  line-height: 1.45;
+}
+
+/* ---------- Help: contents on the left, every section a card ---------- */
+
+#tab-help.active {
+  background: var(--re-dots), var(--bg);
+}
+.help.help-arranged {
+  display: grid;
+  grid-template-columns: 230px minmax(0, 1fr);
+  align-items: start;
+  gap: 24px;
+  max-width: 1180px;
+  padding: 24px;
+  font-size: 15px;
+  line-height: 1.6;
+}
+.help-toc {
+  position: sticky;
+  top: 0;
+  padding: 16px;
+  border: 2.5px solid var(--re-outline);
+  border-radius: var(--re-radius);
+  background: var(--panel);
+  box-shadow: var(--re-card-shadow);
+}
+.help-toc > b {
+  display: block;
+  margin-bottom: 10px;
+  font: 700 12px/1 var(--re-font-heading);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+.help-toc ol {
+  display: grid;
+  gap: 4px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.help-toc a {
+  display: flex;
+  gap: 10px;
+  padding: 7px 8px;
+  border: 2px solid transparent;
+  border-radius: 10px;
+  color: var(--text);
+  font-size: 13.5px;
+  font-weight: 700;
+  line-height: 1.3;
+  text-decoration: none;
+}
+.help-toc a span {
+  flex: none;
+  color: var(--muted);
+  font: 600 12px/1.5 var(--re-font-code);
+}
+.help-toc a:hover {
+  background: var(--panel2);
+}
+.help-toc a.on {
+  border-color: var(--re-outline);
+  background: var(--re-accent);
+  color: var(--re-on-accent);
+}
+.help-toc a.on span {
+  color: inherit;
+}
+.help-body {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 20px;
+  min-width: 0;
+}
+.help-intro,
+.help-card {
+  min-width: 0;
+  scroll-margin-top: 12px;
+  padding: 24px 28px;
+  border: 2.5px solid var(--re-outline);
+  border-radius: 20px;
+  background: var(--panel);
+  box-shadow: 4px 4px 0 var(--re-shadow);
+}
+.help-intro {
+  background: linear-gradient(135deg, var(--re-accent-soft), var(--panel) 70%);
+}
+.help-intro h1 {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 0 0 12px;
+  font-size: clamp(26px, 3vw, 34px);
+  font-weight: 800;
+  line-height: 1.1;
+}
+.help-intro h1 .re-ico {
+  width: 30px;
+  height: 30px;
+  padding: 7px;
+  border: 2.5px solid var(--re-outline);
+  border-radius: 12px;
+  background: var(--re-accent);
+  color: var(--re-on-accent);
+  box-sizing: content-box;
+}
+.help-intro p:last-child,
+.help-card > :last-child {
+  margin-bottom: 0;
+}
+.help-card h2 {
+  margin: 0 0 14px;
+  color: var(--text);
+  font-size: 22px;
+  font-weight: 800;
+  line-height: 1.2;
+}
+.help-card h3 {
+  margin: 20px 0 8px;
+  color: var(--text);
+  font-size: 17px;
+  font-weight: 700;
+}
+.help-card ol,
+.help-card ul {
+  padding-left: 22px;
+}
+.help-card li {
+  margin-bottom: 6px;
+}
+.help-card li::marker {
+  color: var(--muted);
+  font-weight: 700;
+}
+.help code {
+  padding: 1px 6px;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  background: var(--panel2);
+  color: var(--text);
+  font-size: 0.86em;
+}
+.help pre {
+  max-width: 100%;
+  overflow-x: auto;
+  padding: 14px 16px;
+  border: 2px solid var(--re-outline);
+  border-radius: 12px;
+  background: var(--re-code-bg);
+  color: var(--re-code-text);
+  font-size: 13px;
+  line-height: 1.55;
+}
+.help pre code {
+  padding: 0;
+  border: 0;
+  background: none;
+  color: inherit;
+}
+.help table {
+  width: 100%;
+  overflow: hidden;
+  border: 2px solid var(--re-outline);
+  border-radius: 12px;
+  border-collapse: separate;
+  border-spacing: 0;
+  font-size: 13.5px;
+}
+.help th,
+.help td {
+  padding: 8px 12px;
+  border: 0;
+  border-bottom: 1px solid var(--line);
+}
+.help tr:last-child td {
+  border-bottom: 0;
+}
+.help th {
+  background: var(--re-accent-soft);
+  color: var(--text);
+  font: 700 13px/1.3 var(--re-font-heading);
+}
+.help tbody tr:nth-child(even) td,
+.help tr:nth-child(even) td {
+  background: color-mix(in srgb, var(--panel2) 55%, transparent);
+}
+.help td:last-child {
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+/* ---------- Phones and narrow windows ---------- */
+
+@media (max-width: 900px) {
+  #tab-builder.active {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    padding: 8px;
+  }
+  #tab-builder .builder-view {
+    order: -1;
+    height: 55svh;
+    min-height: 300px;
+    flex: none;
+  }
+  #tab-builder .palette,
+  #tab-builder .props {
+    max-height: none;
+    border: 2.5px solid var(--re-outline);
+  }
+  #tab-builder .palette {
+    max-height: 60svh;
+  }
+  /* The hint is about mouse and keyboard; on a touch screen it only hid the robot. */
+  #tab-builder .builder-hint {
+    display: none;
+  }
+  .help.help-arranged {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 14px;
+    padding: 10px;
+  }
+  .help-toc {
+    position: static;
+  }
+  .help-toc ol {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .help-intro,
+  .help-card {
+    padding: 18px 16px;
+    border-radius: 16px;
+  }
+  .help table {
+    display: block;
+    overflow-x: auto;
+  }
+}

@@ -5,7 +5,6 @@ import Link from 'next/link'
 import { ArrowRight, ExternalLink, Gamepad2, Keyboard, Maximize, Minimize, MousePointer2, RotateCw, Timer, Video } from 'lucide-react'
 
 import { Buddy } from '@/components/learn/buddy'
-import { Badge } from '@/components/ui/badge'
 import { buttonVariants } from '@/components/ui/button'
 import { Card } from '@/components/ui/card'
 import { FLL_SIM_SRC, type SimulatorText } from '@/lib/i18n/simulator'
@@ -85,15 +84,9 @@ export function FieldSimulator({ lang, t, toPlanner }: { lang: Lang; t: Simulato
       <header className="flex flex-wrap items-end justify-between gap-4">
         <div className="grid max-w-3xl gap-3">
           <p className="eyebrow m-0">{t.eyebrow}</p>
-          <h1 className="m-0 text-3xl sm:text-4xl md:text-5xl">{t.title}</h1>
-          <p className="lead m-0 max-sm:text-base">{t.lead}</p>
-          <ul className="m-0 flex list-none flex-wrap gap-2 p-0 max-sm:hidden">
-            {t.badges.map((b) => (
-              <li key={b}>
-                <Badge variant="outline">{b}</Badge>
-              </li>
-            ))}
-          </ul>
+          <h1 className="m-0 text-2xl sm:text-3xl">{t.title}</h1>
+          <p className="m-0 max-w-3xl text-sm text-muted-foreground">{t.lead}</p>
+
         </div>
         <div className="flex flex-wrap gap-2">
           <button type="button" className={buttonVariants({ size: 'sm', className: 'max-md:hidden' })} onClick={toggleFull}>

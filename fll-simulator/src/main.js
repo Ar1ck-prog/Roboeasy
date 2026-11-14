@@ -2,6 +2,8 @@ import { icon } from './roboeasy/icons.js';
 import './styles.css';
 import './roboeasy/theme.css';
 import './roboeasy/mobile.css';
+import './roboeasy/workspace.css';
+import './roboeasy/look.css';
 // FLL BIOGLOW simulator — main thread: UI, rendering, communication with the physics worker.
 
 import { FieldView } from './render/fieldView.js';
@@ -50,10 +52,21 @@ const state = {
 // ---------------------------------------------------------------------------------------------
 // tabs
 // ---------------------------------------------------------------------------------------------
+const quickGuide = $('#quickGuide');
+// The RoboEasy page already supplies its own translated guide below the iframe.
+const standalone = window.self === window.top;
+quickGuide.hidden = !standalone;
+
 let builder = null;
 document.querySelectorAll('.tab').forEach((btn) => btn.addEventListener('click', async () => {
   document.querySelectorAll('.tab').forEach((b) => b.classList.toggle('active', b === btn));
   document.querySelectorAll('.tab-page').forEach((p) => p.classList.toggle('active', p.id === 'tab-' + btn.dataset.tab));
+  if (standalone) {
+    quickGuide.hidden = btn.dataset.tab !== 'sim';
+    document.querySelector('main').scrollTop = 0;
+    window.scrollTo(0, 0);
+    if (btn.dataset.tab === 'help') btn.focus();
+  }
   if (btn.dataset.tab === 'builder' && !builder) {
     const [{ RobotBuilder }] = await Promise.all([import('./builder/builder.js'), loadLDraw()]);
     builder = new RobotBuilder({
@@ -144,7 +157,6 @@ function updateHud(frame) {
   timer.classList.toggle('free', m.phase === 'free');
   showMode(m.phase);
   renderTokens(m.tokens);
-  field.setTokens(m.tokens);
   results.track(m);
   const phaseText = { free: `${icon('dumbbell')} Тренировка (без таймера)`, ready: 'Матч: ждёт старта таймера', running: 'Матч идёт', ended: 'Матч окончен' }[m.phase];
   $('#hudMatch').innerHTML = `<div class="ttl">${phaseText}</div>
@@ -190,6 +202,7 @@ function onWorkerMessage(msg) {
   switch (msg.type) {
     case 'ready':
       $('#loading').classList.add('hidden');
+      $('#runStatus').textContent = 'Поле готово';
       if (!msg.sab) logLine('Нет SharedArrayBuffer: пауза/стоп программы работают через перезапуск симулятора.', 'sys');
       break;
     case 'scene':
@@ -215,6 +228,8 @@ function onWorkerMessage(msg) {
       state.running = msg.state === 'running';
       clearTimeout(state.stopTimer);
       $('#btnRun').disabled = state.running;
+      $('#runStatus').textContent = { running: 'Программа выполняется', done: 'Программа завершена', stopped: 'Программа остановлена', error: 'Ошибка программы — см. консоль', matchend: 'Матч завершён' }[msg.state] || 'Поле готово';
+      $('#runStatus').classList.toggle('running', state.running);
       break;
     case 'py':
       $('#pyState').textContent = msg.state === 'loading' ? 'Python загружается…' : 'Python готов';
@@ -348,25 +363,33 @@ $('#btnMatch').onclick = () => {
   state.worker.postMessage({ type: 'matchStart', side: $('#matchSide').value });
   logLine('Матч: поле сброшено, осмотр оборудования… Нажмите «Старт 2:30» или «Запуск» — таймер пойдёт.', 'info');
 };
-// hide / show the code and score panels; with the code panel hidden its run buttons move to the toolbar
-state.settings.panels = { code: true, score: true, ...state.settings.panels };
-function applyPanels() {
-  const { code, score } = state.settings.panels;
-  $('#codePanel').classList.toggle('hidden', !code);
-  $('#scorePanel').classList.toggle('hidden', !score);
-  $('#btnToggleCode').classList.toggle('on', code);
-  $('#btnToggleScore').classList.toggle('on', score);
-  if (code) $('#codePanel').insertBefore($('#runBar'), $('#console'));
-  else $('#runSlot').appendChild($('#runBar'));
-}
-function togglePanel(name) {
-  state.settings.panels[name] = !state.settings.panels[name];
+// The inspector remembers the last selected panel. Focus mode only changes the view.
+let activePanel = state.settings.panels?.score && !state.settings.panels?.code ? 'score' : 'code';
+function selectPanel(name) {
+  activePanel = name;
+  for (const [key, button] of [['code', $('#btnToggleCode')], ['score', $('#btnToggleScore')]]) {
+    const selected = key === activePanel;
+    $(`#${key}Panel`).classList.toggle('hidden', !selected);
+    button.classList.toggle('on', selected);
+    button.setAttribute('aria-pressed', selected);
+  }
+  state.settings.panels = { code: name === 'code', score: name === 'score' };
   saveJSON(SETTINGS_KEY, state.settings);
-  applyPanels();
 }
-$('#btnToggleCode').onclick = () => togglePanel('code');
-$('#btnToggleScore').onclick = () => togglePanel('score');
-applyPanels();
+$('#btnToggleCode').onclick = () => selectPanel('code');
+$('#btnToggleScore').onclick = () => selectPanel('score');
+selectPanel(activePanel);
+$('#btnFocus').onclick = () => {
+  const expanded = $('#tab-sim').classList.toggle('field-only');
+  $('#btnFocus').classList.toggle('on', expanded);
+  $('#btnFocus').setAttribute('aria-pressed', expanded);
+};
+$('#btnResetView').onclick = () => {
+  field.setView('3d', true);
+  document.querySelectorAll('#viewSeg button').forEach(button => button.classList.toggle('on', button.dataset.view === '3d'));
+};
+$('#btnZoomIn').onclick = () => field.zoomBy(0.8);
+$('#btnZoomOut').onclick = () => field.zoomBy(1.25);
 // ---------------------------------------------------------------------------------------------
 // attachments: lie at the table edges, one click puts one on the robot (only while it is at home)
 // ---------------------------------------------------------------------------------------------
@@ -456,6 +479,10 @@ $('#btnPause').onclick = () => {
   state.paused = !state.paused;
   if (state.ctrl) Atomics.store(state.ctrl, 1, state.paused ? 1 : 0);
   $('#btnPause').innerHTML = icon(state.paused ? 'play' : 'pause');
+  $('#btnPause').title = state.paused ? 'Продолжить' : 'Пауза';
+  $('#btnPause').setAttribute('aria-label', $('#btnPause').title);
+  $('#btnPause').setAttribute('aria-pressed', state.paused);
+  $('#runStatus').textContent = state.paused ? 'Симуляция на паузе' : state.running ? 'Программа выполняется' : 'Поле готово';
 };
 $('#viewSeg').addEventListener('click', (e) => {
   const b = e.target.closest('button');
@@ -564,7 +591,6 @@ if (import.meta.env.DEV) {
 }
 
 renderHelp($('#help'));
-logLine('Добро пожаловать в симулятор FLL BIOGLOW! Слева — код робота (Python), справа — протокол очков.', 'info');
+logLine('Добро пожаловать в симулятор FLL BIOGLOW! Код робота (Python) и протокол очков находятся в рабочей панели.', 'info');
 logLine('Робот стоит в левой зоне запуска. Нажмите «Запуск» или поуправляйте с клавиатуры (щёлкните по полю).', 'sys');
 createWorker();
-

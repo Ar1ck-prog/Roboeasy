@@ -58,6 +58,16 @@
       btn.classList.remove('on')
       send('keyup', b)
     }
+    function releaseAll() {
+      if (!held) return
+      held = false
+      btn.classList.remove('on')
+      send('keyup', b)
+    }
+    window.addEventListener('blur', releaseAll)
+    document.addEventListener('visibilitychange', function () {
+      if (document.hidden) releaseAll()
+    })
     btn.addEventListener('pointerdown', press)
     btn.addEventListener('pointerup', release)
     btn.addEventListener('pointercancel', release)
@@ -69,7 +79,7 @@
   }
 
   function mount() {
-    var field = document.getElementById('field')
+    var field = document.getElementById('touchControls')
     if (!field || field.querySelector('.re-pad')) return
     var pad = document.createElement('div')
     pad.className = 're-pad'

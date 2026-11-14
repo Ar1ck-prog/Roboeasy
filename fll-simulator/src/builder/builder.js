@@ -120,9 +120,9 @@ export class RobotBuilder {
     this.viewEl.prepend(r.domElement);
     r.domElement.tabIndex = 0;
     this.scene = new THREE.Scene();
-    const builderColor = () => getComputedStyle(document.documentElement).getPropertyValue('--re-builder').trim() || '#1b1f26';
-    this.scene.background = new THREE.Color(builderColor());
-    new MutationObserver(() => this.scene.background.set(builderColor())).observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
+    // Background and the build grid follow the RoboEasy theme (tokens in roboeasy/theme.css).
+    const token = (name, fallback) => getComputedStyle(document.documentElement).getPropertyValue(name).trim() || fallback;
+    this.scene.background = new THREE.Color(token('--re-builder', '#1b1f26'));
     this.camera = new THREE.PerspectiveCamera(40, 1, 0.5, 2000);
     this.camera.position.set(30, 24, -36);
     this.controls = new OrbitControls(this.camera, r.domElement);
@@ -139,8 +139,21 @@ export class RobotBuilder {
     sun.shadow.mapSize.set(2048, 2048);
     Object.assign(sun.shadow.camera, { left: -40, right: 40, top: 40, bottom: -40 });
     this.scene.add(sun);
-    this.grid = new THREE.GridHelper(80, 100, '#3b4250', '#2a2f39');
-    this.scene.add(this.grid);
+    // A sparse 1-stud-ish grid (every 4 cm) in soft theme colours instead of a dense dark mesh.
+    const makeGrid = () => {
+      const y = this.grid ? this.grid.position.y : 0;   // keeps the ground height set in fitGround
+      if (this.grid) { this.scene.remove(this.grid); this.grid.geometry.dispose(); this.grid.material.dispose(); }
+      this.grid = new THREE.GridHelper(80, 20, token('--re-grid-major', '#3b4250'), token('--re-grid', '#2a2f39'));
+      this.grid.position.y = y;
+      this.grid.material.transparent = true;
+      this.grid.material.opacity = 0.9;
+      this.scene.add(this.grid);
+    };
+    makeGrid();
+    new MutationObserver(() => {
+      this.scene.background.set(token('--re-builder', '#1b1f26'));
+      makeGrid();
+    }).observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
     this.ground = new THREE.Mesh(new THREE.PlaneGeometry(200, 200), new THREE.ShadowMaterial({ opacity: 0.25 }));
     this.ground.rotation.x = -Math.PI / 2;
     this.ground.receiveShadow = true;

@@ -138,7 +138,7 @@ test('legal pages and redirects', async ({ page }) => {
   await expect(page).toHaveURL(/\/ru\/compete$/)
 })
 
-test('field simulator: the 3D simulator opens in its frame, in our font and without emoji', async ({ page }) => {
+test('field simulator: the 3D simulator opens in its frame, in our fonts and without emoji', async ({ page }) => {
   await page.goto('/ru/compete')
   await page.getByRole('link', { name: /Симулятор поля BIOGLOW/ }).click()
   await expect(page).toHaveURL(/\/ru\/compete\/simulator$/)
@@ -157,6 +157,7 @@ test('field simulator: the 3D simulator opens in its frame, in our font and with
   await expect(fieldTab.first().locator('svg.re-ico')).toHaveCount(1)
   const text = await frame.locator('body').innerText()
   expect(text).not.toMatch(/[\u{1F300}-\u{1FAFF}]/u)
-  const font = await frame.locator('body').evaluate((b) => getComputedStyle(b).fontFamily)
-  expect(font).toContain('Rubik')
+  // The site's fonts: Nunito for text, Rubik for headings.
+  expect(await frame.locator('body').evaluate((b) => getComputedStyle(b).fontFamily)).toContain('Nunito')
+  expect(await frame.locator('.brand-title').evaluate((b) => getComputedStyle(b).fontFamily)).toContain('Rubik')
 })

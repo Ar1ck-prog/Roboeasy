@@ -122,4 +122,50 @@ runloop.run(main())</pre>
 <p>${icon('ban')} — «ограничение без оборудования»: модель не приносит очков, если в конце матча касается робота/оборудования. Максимум — <b>530</b> очков.</p>
 <p>Источники: Robot Game Rulebook, Challenge Updates (2 сентября 2026), официальный Excel-калькулятор и протокол из папки <code>Manual/</code>.</p>
 `;
+  arrange(el);
+}
+
+// RoboEasy layout for the same text: an intro card, a contents list that follows the scroll,
+// and every <h2> section in a card of its own. Only the arrangement changes, never the words.
+function arrange(el) {
+  const intro = document.createElement('header');
+  intro.className = 'help-intro';
+  const sections = [];
+  let current = null;
+  for (const node of [...el.childNodes]) {
+    if (node.nodeName === 'H2') {
+      current = document.createElement('section');
+      current.className = 'help-card';
+      current.id = 'help-' + sections.length;
+      sections.push({ id: current.id, title: node.textContent.trim(), card: current });
+    }
+    (current || intro).appendChild(node);
+  }
+  const toc = document.createElement('nav');
+  toc.className = 'help-toc';
+  toc.setAttribute('aria-label', 'Разделы справки');
+  toc.innerHTML = '<b>Разделы</b><ol>' + sections.map((s, i) =>
+    `<li><a href="#${s.id}" data-i="${i}"><span>${String(i + 1).padStart(2, '0')}</span>${s.title}</a></li>`).join('') + '</ol>';
+  const body = document.createElement('div');
+  body.className = 'help-body';
+  body.append(intro, ...sections.map((s) => s.card));
+  el.replaceChildren(toc, body);
+  el.classList.add('help-arranged');
+
+  toc.addEventListener('click', (e) => {
+    const a = e.target.closest('a');
+    if (!a) return;
+    e.preventDefault();
+    document.getElementById(a.getAttribute('href').slice(1))?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  });
+  // Highlight the section being read.
+  const links = [...toc.querySelectorAll('a')];
+  const seen = new IntersectionObserver((entries) => {
+    for (const en of entries) {
+      if (!en.isIntersecting) continue;
+      const i = sections.findIndex((s) => s.card === en.target);
+      links.forEach((l, j) => l.classList.toggle('on', j === i));
+    }
+  }, { rootMargin: '-10% 0px -70% 0px' });   // the viewport, clipped by the scrolling help panel
+  sections.forEach((s) => seen.observe(s.card));
 }
