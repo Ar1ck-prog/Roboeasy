@@ -230,9 +230,6 @@ select,
   border-color: var(--re-outline);
   border-width: 2.5px;
 }
-.field-toolbar {
-  border-bottom: 2px solid var(--line);
-}
 .console {
   background: var(--re-code-bg);
   color: var(--re-code-text);

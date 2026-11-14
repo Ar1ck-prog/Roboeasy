@@ -58,6 +58,16 @@
       btn.classList.remove('on')
       send('keyup', b)
     }
+    function releaseAll() {
+      if (!held) return
+      held = false
+      btn.classList.remove('on')
+      send('keyup', b)
+    }
+    window.addEventListener('blur', releaseAll)
+    document.addEventListener('visibilitychange', function () {
+      if (document.hidden) releaseAll()
+    })
     btn.addEventListener('pointerdown', press)
     btn.addEventListener('pointerup', release)
     btn.addEventListener('pointercancel', release)
@@ -69,7 +79,7 @@
   }
 
   function mount() {
-    var field = document.getElementById('field')
+    var field = document.getElementById('touchControls')
     if (!field || field.querySelector('.re-pad')) return
     var pad = document.createElement('div')
     pad.className = 're-pad'
@@ -88,21 +98,6 @@
     field.appendChild(pad)
   }
 
-  // Rows that scroll sideways on a phone fade at the edge while there is more to see.
-  function watchScroll(el) {
-    var update = function () {
-      el.classList.toggle('re-more', el.scrollLeft + el.clientWidth < el.scrollWidth - 4)
-    }
-    el.addEventListener('scroll', update, { passive: true })
-    window.addEventListener('resize', update)
-    update()
-  }
-
-  function start() {
-    mount()
-    document.querySelectorAll('.field-toolbar').forEach(watchScroll)
-  }
-
-  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', start)
-  else start()
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', mount)
+  else mount()
 })()

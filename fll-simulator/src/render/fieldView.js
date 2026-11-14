@@ -10,7 +10,6 @@ import { GTAOPass } from 'three/addons/postprocessing/GTAOPass.js';
 import { OutputPass } from 'three/addons/postprocessing/OutputPass.js';
 import { buildShapesGroup, disposeGroup } from './meshes.js';
 import { onLDrawReady } from './ldraw.js';
-import { Referee } from './referee.js';
 import { MAT_W, MAT_D, TABLE_W, HALF_W, STRIP_W } from '../shared/field.js';
 
 export class FieldView {
@@ -20,9 +19,9 @@ export class FieldView {
     this.onAttachment = onAttachment;
     this.attGroups = [];
     this.renderer = new THREE.WebGLRenderer({ antialias: true, powerPreference: 'high-performance' });
-    this.renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+    this.renderer.setPixelRatio(Math.min(window.devicePixelRatio, 1.5));
     this.renderer.shadowMap.enabled = true;
-    this.renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+    this.renderer.shadowMap.type = THREE.PCFShadowMap;
     this.renderer.outputColorSpace = THREE.SRGBColorSpace;
     this.renderer.toneMapping = THREE.ACESFilmicToneMapping;
     this.renderer.toneMappingExposure = 1.0;
@@ -55,7 +54,7 @@ export class FieldView {
     const sun = new THREE.DirectionalLight('#fff6e8', 2.1);
     sun.position.set(-60, 220, 120);
     sun.castShadow = true;
-    sun.shadow.mapSize.set(4096, 4096);
+    sun.shadow.mapSize.set(2048, 2048);
     const sc = sun.shadow.camera;
     sc.left = -135; sc.right = 135; sc.top = 80; sc.bottom = -80; sc.near = 50; sc.far = 500;
     sun.shadow.bias = -0.0003;
@@ -91,10 +90,6 @@ export class FieldView {
     this.matMesh = mat;
 
     // the match judge behind the north wall, with the precision tokens on a stand
-    this.referee = new Referee();
-    this.referee.group.position.set(48, -78, -MAT_D / 2 - 26);
-    this.scene.add(this.referee.group);
-    this.lastFrame = performance.now();
 
     this.bodyGroups = [];
     this.bodyIndex = new Map();
@@ -122,7 +117,7 @@ export class FieldView {
     }, { passive: false });
 
     // post-processing: MSAA scene target + ground-truth ambient occlusion (contact shadows between bricks)
-    const rt = new THREE.WebGLRenderTarget(1, 1, { type: THREE.HalfFloatType, samples: 4 });
+    const rt = new THREE.WebGLRenderTarget(1, 1, { type: THREE.HalfFloatType, samples: 2 });
     this.composer = new EffectComposer(this.renderer, rt);
     this.composer.addPass(new RenderPass(this.scene, this.camera));
     this.ao = new GTAOPass(this.scene, this.camera, 1, 1);
@@ -141,8 +136,24 @@ export class FieldView {
 
     new ResizeObserver(() => this.resize()).observe(container);
     this.resize();
-    const loop = () => {
+    let previousFrame = 0;
+    let slowFrames = 0;
+    const loop = (now = performance.now()) => {
       requestAnimationFrame(loop);
+      if (document.hidden || !this.container.clientWidth || !this.container.clientHeight) {
+        previousFrame = 0;
+        return;
+      }
+      const elapsed = previousFrame ? now - previousFrame : 0;
+      previousFrame = now;
+      // Reduce expensive contact shadows on sustained slow frames.
+      if (elapsed > 40 && elapsed < 1000) slowFrames++;
+      else slowFrames = Math.max(0, slowFrames - 1);
+      if (slowFrames >= 60 && this.ao.enabled) {
+        this.ao.enabled = false;
+        this.renderer.setPixelRatio(Math.min(window.devicePixelRatio, 1));
+        this.resize();
+      }
       this.render();
     };
     loop();
@@ -188,7 +199,6 @@ export class FieldView {
     this.lastPoses = arr;
   }
 
-  setTokens(n) { this.referee.setTokens(n); }
 
   /** Attachments that are not on the robot lie on the storage strips left and right of the mat. */
   setAttachments(items) {
@@ -245,16 +255,26 @@ export class FieldView {
     return Math.max(w / 2 / Math.tan(hfov / 2), h / 2 / Math.tan(vfov / 2));
   }
 
+  zoomBy(factor) {
+    const offset = this.camera.position.clone().sub(this.controls.target);
+    const distance = THREE.MathUtils.clamp(offset.length() * factor, this.controls.minDistance, this.controls.maxDistance);
+    this.camera.position.copy(this.controls.target).add(offset.setLength(distance));
+    if (this.follow) this.followDistance = distance;
+    this.userMoved = true;
+    this.controls.update();
+  }
+
   setView(kind, byUser = false) {
+    this.followDistance = null;
     if (byUser) this.userMoved = false;
     this.follow = kind === 'follow';
     this.view = kind;
     const c = this.controls;
     if (kind === 'top') { const d = this.fitDistance(TABLE_W + 12, MAT_D + 14); this.camera.position.set(0, d, 0.01); c.target.set(0, 0, 0); }
     else if (kind === '3d') {
-      // the extra height keeps the judge behind the north wall in the picture
-      const d = this.fitDistance(TABLE_W + 4, MAT_D * 0.95 + 70) * 1.08;
-      const tgt = new THREE.Vector3(0, 16, -4);
+      // Frame the playable table and mission models.
+      const d = this.fitDistance(TABLE_W + 4, MAT_D * 0.95 + 28) * 1.04;
+      const tgt = new THREE.Vector3(0, 4, 0);
       const dir = new THREE.Vector3(0, 0.72, 0.69).normalize();
       this.camera.position.copy(dir.multiplyScalar(d)).add(tgt);
       c.target.copy(tgt);
@@ -271,16 +291,13 @@ export class FieldView {
         const fwd = new THREE.Vector3(0, 0, -1).applyQuaternion(rp.q);
         fwd.y = 0;
         fwd.normalize();
-        const desired = rp.p.clone().add(fwd.clone().multiplyScalar(-45)).add(new THREE.Vector3(0, 32, 0));
+        const offset = fwd.clone().multiplyScalar(-45).add(new THREE.Vector3(0, 32, 0));
+        if (this.followDistance) offset.setLength(this.followDistance);
+        const desired = rp.p.clone().add(offset);
         this.camera.position.lerp(desired, 0.08);
         this.controls.target.lerp(rp.p.clone().add(fwd.multiplyScalar(25)), 0.15);
       }
     }
-    const rp = this.robotPose();
-    if (rp) this.referee.watch(rp.p);
-    const now = performance.now();
-    this.referee.update(Math.min(0.05, (now - this.lastFrame) / 1000));
-    this.lastFrame = now;
     this.controls.update();
     this.composer.render();
   }
