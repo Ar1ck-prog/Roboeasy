@@ -5,7 +5,6 @@ import Link from 'next/link'
 import { ArrowRight, ExternalLink, Gamepad2, Keyboard, Maximize, Minimize, MousePointer2, RotateCw, Timer, Video } from 'lucide-react'
 
 import { Buddy } from '@/components/learn/buddy'
-import { Badge } from '@/components/ui/badge'
 import { buttonVariants } from '@/components/ui/button'
 import { Card } from '@/components/ui/card'
 import { FLL_SIM_SRC, type SimulatorText } from '@/lib/i18n/simulator'
@@ -85,15 +84,9 @@ export function FieldSimulator({ lang, t, toPlanner }: { lang: Lang; t: Simulato
       <header className="flex flex-wrap items-end justify-between gap-4">
         <div className="grid max-w-3xl gap-3">
           <p className="eyebrow m-0">{t.eyebrow}</p>
-          <h1 className="m-0 text-4xl md:text-5xl">{t.title}</h1>
-          <p className="lead m-0">{t.lead}</p>
-          <ul className="m-0 flex list-none flex-wrap gap-2 p-0">
-            {t.badges.map((b) => (
-              <li key={b}>
-                <Badge variant="outline">{b}</Badge>
-              </li>
-            ))}
-          </ul>
+          <h1 className="m-0 text-2xl sm:text-3xl">{t.title}</h1>
+          <p className="m-0 max-w-3xl text-sm text-muted-foreground">{t.lead}</p>
+
         </div>
         <div className="flex flex-wrap gap-2">
           <button type="button" className={buttonVariants({ size: 'sm', className: 'max-md:hidden' })} onClick={toggleFull}>
@@ -118,7 +111,7 @@ export function FieldSimulator({ lang, t, toPlanner }: { lang: Lang; t: Simulato
         ref={box}
         className={cn(
           'relative overflow-hidden rounded-(--radius-lg) border-(length:--stroke) border-outline bg-[#141826] shadow-(--shadow-hard)',
-          full ? 'rounded-none border-0' : 'h-[calc(100dvh-7.5rem)] min-h-[520px] md:h-[min(80dvh,860px)]',
+          full ? 'rounded-none border-0' : 'h-[calc(100dvh-9.5rem-env(safe-area-inset-bottom))] min-h-[520px] md:h-[min(80dvh,860px)]',
         )}
       >
         {ready && (
@@ -189,7 +182,7 @@ export function FieldSimulator({ lang, t, toPlanner }: { lang: Lang; t: Simulato
 
       <Card className="flex-col items-start gap-3 sm:flex-row sm:items-center sm:justify-between" flat>
         <p className="m-0 font-bold">{t.tip}</p>
-        <Link className={buttonVariants({ size: 'sm' })} href={`/${lang}/compete`}>
+        <Link className={buttonVariants({ size: 'sm', className: 'max-w-full max-sm:h-auto max-sm:py-2 max-sm:whitespace-normal max-sm:text-center' })} href={`/${lang}/compete`}>
           {toPlanner}
           <ArrowRight aria-hidden="true" />
         </Link>

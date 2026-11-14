@@ -230,7 +230,8 @@ export function assignPorts(parts) {
 export function partShapes(def, withHoles = true) {
   // LDraw parts: the primitives stay (colliders), and are drawn only as a stand-in (`alt`)
   // while the real LDraw mesh of their sub-body is not loaded.
-  const ld = def.ldraw;
+  // Keep the real mounting connectors, but give BIOGLOW motors their own visual shell.
+  const ld = def.electronic === 'motor' ? null : def.ldraw;
   const altFor = (sub) => ld && (ld.parts.find((p) => (p.sub || 'body') === (sub || 'body')) || ld.parts[0]).model;
   const shapes = ld ? def.shapes.map((s) => ({ ...s, alt: altFor(s.sub) })) : [...def.shapes];
   if (withHoles && !def.realHoles) {

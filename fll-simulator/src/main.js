@@ -1,6 +1,8 @@
+import { icon } from './roboeasy/icons.js';
 import './styles.css';
 import './roboeasy/theme.css';
 import './roboeasy/mobile.css';
+import './roboeasy/workspace.css';
 // FLL BIOGLOW simulator — main thread: UI, rendering, communication with the physics worker.
 
 import { FieldView } from './render/fieldView.js';
@@ -49,10 +51,21 @@ const state = {
 // ---------------------------------------------------------------------------------------------
 // tabs
 // ---------------------------------------------------------------------------------------------
+const quickGuide = $('#quickGuide');
+// The RoboEasy page already supplies its own translated guide below the iframe.
+const standalone = window.self === window.top;
+quickGuide.hidden = !standalone;
+
 let builder = null;
 document.querySelectorAll('.tab').forEach((btn) => btn.addEventListener('click', async () => {
   document.querySelectorAll('.tab').forEach((b) => b.classList.toggle('active', b === btn));
   document.querySelectorAll('.tab-page').forEach((p) => p.classList.toggle('active', p.id === 'tab-' + btn.dataset.tab));
+  if (standalone) {
+    quickGuide.hidden = btn.dataset.tab !== 'sim';
+    document.querySelector('main').scrollTop = 0;
+    window.scrollTo(0, 0);
+    if (btn.dataset.tab === 'help') btn.focus();
+  }
   if (btn.dataset.tab === 'builder' && !builder) {
     const [{ RobotBuilder }] = await Promise.all([import('./builder/builder.js'), loadLDraw()]);
     builder = new RobotBuilder({
@@ -75,7 +88,7 @@ function applyDesign(d) {
   refreshAttachments();
   state.worker?.postMessage({ type: 'setDesign', design: state.design });
   document.querySelector('.tab[data-tab="sim"]').click();
-  logLine('🤖 Новый робот загружен на поле: ' + (d.name || ''), 'info');
+  logLine('Новый робот загружен на поле: ' + (d.name || ''), 'info');
 }
 
 // ---------------------------------------------------------------------------------------------
@@ -143,16 +156,15 @@ function updateHud(frame) {
   timer.classList.toggle('free', m.phase === 'free');
   showMode(m.phase);
   renderTokens(m.tokens);
-  field.setTokens(m.tokens);
   results.track(m);
-  const phaseText = { free: '🏋 Тренировка (без таймера)', ready: 'Матч: ждёт старта таймера', running: 'Матч идёт', ended: 'Матч окончен' }[m.phase];
+  const phaseText = { free: `${icon('dumbbell')} Тренировка (без таймера)`, ready: 'Матч: ждёт старта таймера', running: 'Матч идёт', ended: 'Матч окончен' }[m.phase];
   $('#hudMatch').innerHTML = `<div class="ttl">${phaseText}</div>
     <div class="row"><span class="k">Время</span><span>${m.phase === 'free' ? '—' : fmtTime(m.time)}</span></div>
     <div class="row"><span class="k">Запусков</span><span>${m.launches}</span></div>
-    ${m.phase !== 'free' ? `<div class="row"><span class="k">Осмотр</span><span>${m.insp ? '✅ 20' : '❌ 0'}</span></div>` : ''}`;
+    ${m.phase !== 'free' ? `<div class="row"><span class="k">Осмотр</span><span>${m.insp ? icon('check') + ' 20' : icon('x') + ' 0'}</span></div>` : ''}`;
   const r = frame.robot;
   if (r) {
-    const motors = Object.entries(r.motors).map(([p, v]) => `<div class="row"><span class="k">Мотор ${p}</span><span>${v.angle}° · ${v.speed}°/с${v.stalled ? ' ⚠' : ''}</span></div>`).join('');
+    const motors = Object.entries(r.motors).map(([p, v]) => `<div class="row"><span class="k">Мотор ${p}</span><span>${v.angle}° · ${v.speed}°/с${v.stalled ? ' ' + icon('alert') : ''}</span></div>`).join('');
     $('#hudRobot').innerHTML = `<div class="ttl">Робот ${frame.running ? '· программа работает' : ''}</div>
       <div class="row"><span class="k">Гироскоп (курс)</span><span>${r.heading}°</span></div>${motors}`;
   }
@@ -189,12 +201,13 @@ function onWorkerMessage(msg) {
   switch (msg.type) {
     case 'ready':
       $('#loading').classList.add('hidden');
-      if (!msg.sab) logLine('⚠ Нет SharedArrayBuffer: пауза/стоп программы работают через перезапуск симулятора.', 'sys');
+      $('#runStatus').textContent = 'Поле готово';
+      if (!msg.sab) logLine('Нет SharedArrayBuffer: пауза/стоп программы работают через перезапуск симулятора.', 'sys');
       break;
     case 'scene':
       state.scene = msg;
       field.setScene(msg.bodies, msg.robot?.bodies);
-      if (msg.robot?.warnings?.length) for (const w of msg.robot.warnings) logLine('🤖 ' + w, 'err');
+      if (msg.robot?.warnings?.length) for (const w of msg.robot.warnings) logLine('' + w, 'err');
       break;
     case 'frame':
       field.applyPoses(msg.poses);
@@ -214,9 +227,11 @@ function onWorkerMessage(msg) {
       state.running = msg.state === 'running';
       clearTimeout(state.stopTimer);
       $('#btnRun').disabled = state.running;
+      $('#runStatus').textContent = { running: 'Программа выполняется', done: 'Программа завершена', stopped: 'Программа остановлена', error: 'Ошибка программы — см. консоль', matchend: 'Матч завершён' }[msg.state] || 'Поле готово';
+      $('#runStatus').classList.toggle('running', state.running);
       break;
     case 'py':
-      $('#pyState').textContent = msg.state === 'loading' ? '⏳ Python загружается…' : '🐍 Python готов';
+      $('#pyState').textContent = msg.state === 'loading' ? 'Python загружается…' : 'Python готов';
       break;
     case 'swap':
       if (msg.ok && state.pendingMount) {
@@ -226,13 +241,13 @@ function onWorkerMessage(msg) {
         if (state.pendingMsg) logLine(state.pendingMsg, 'info');
         const prog = state.pendingProgram;
         const pi = prog ? editor.programs.findIndex((p) => p.name === prog) : -1;
-        if (pi >= 0 && pi !== editor.current) { editor.select(pi); refreshPrograms(); logLine(`📄 Открыта программа «${prog}» для этой насадки`, 'sys'); }
+        if (pi >= 0 && pi !== editor.current) { editor.select(pi); refreshPrograms(); logLine(`Открыта программа «${prog}» для этой насадки`, 'sys'); }
       }
       state.pendingMount = null;
       break;
     case 'match':
       state.match = msg;
-      if (msg.inspText && msg.phase === 'ready') $('#inspText').textContent = (msg.insp ? '✅ ' : '❌ ') + msg.inspText;
+      if (msg.inspText && msg.phase === 'ready') $('#inspText').textContent = (msg.insp ? 'Пройден: ' : 'Не пройден: ') + msg.inspText;
       break;
     case 'debug':
       window.__debugResults = window.__debugResults || {};
@@ -266,7 +281,7 @@ function beep(freq, ms) {
 }
 
 function hardRestart() {
-  logLine('♻ Перезапуск симулятора…', 'sys');
+  logLine('Перезапуск симулятора…', 'sys');
   state.worker?.terminate();
   state.running = false;
   $('#btnRun').disabled = false;
@@ -291,7 +306,7 @@ $('#btnDelProg').onclick = () => { if (confirm('Удалить программ�
 const exSel = $('#exampleSelect');
 exSel.innerHTML += `<optgroup label="Примеры">${EXAMPLES.map((e) => `<option value="${e.id}">${e.name}</option>`).join('')}</optgroup>`
   + `<optgroup label="Готовые выезды (Робот-база FLL)">${RUNS.map((r) => `<option value="${r.id}">${r.name}</option>`).join('')}`
-  + '<option value="all-runs">⚡ Загрузить все выезды сразу</option></optgroup>';
+  + '<option value="all-runs">Загрузить все выезды сразу</option></optgroup>';
 exSel.addEventListener('change', () => {
   const id = exSel.value;
   exSel.value = '';
@@ -301,7 +316,7 @@ exSel.addEventListener('change', () => {
     for (const r of RUNS) editor.add(r.name, r.code);
     editor.select(first);
     refreshPrograms();
-    logLine('Выезды загружены. Порядок: 1 и 2 — с левой базы, 3 заканчивается в правой базе, 4 и 5 — с правой. Перед каждым выездом нажимайте «🏠 На старт».', 'info');
+    logLine('Выезды загружены. Порядок: 1 и 2 — с левой базы, 3 заканчивается в правой базе, 4 и 5 — с правой. Перед каждым выездом нажимайте «На старт».', 'info');
     return;
   }
   const ex = EXAMPLES.find((e) => e.id === id) || RUNS.find((r) => r.id === id);
@@ -312,7 +327,7 @@ exSel.addEventListener('change', () => {
 function runProgram() {
   if (state.running) return;
   editor.save();
-  logLine(`▶ Запуск «${editor.name}»`, 'sys');
+  logLine(`Запуск «${editor.name}»`, 'sys');
   state.worker.postMessage({ type: 'run', code: editor.code, name: editor.name });
 }
 function stopProgram() {
@@ -345,27 +360,35 @@ $('#btnMatch').onclick = () => {
   stopProgram();
   results.clear();
   state.worker.postMessage({ type: 'matchStart', side: $('#matchSide').value });
-  logLine('🏁 Матч: поле сброшено, осмотр оборудования… Нажмите ⏱ Старт 2:30 или ▶ Запуск — таймер пойдёт.', 'info');
+  logLine('Матч: поле сброшено, осмотр оборудования… Нажмите «Старт 2:30» или «Запуск» — таймер пойдёт.', 'info');
 };
-// hide / show the code and score panels; with the code panel hidden its run buttons move to the toolbar
-state.settings.panels = { code: true, score: true, ...state.settings.panels };
-function applyPanels() {
-  const { code, score } = state.settings.panels;
-  $('#codePanel').classList.toggle('hidden', !code);
-  $('#scorePanel').classList.toggle('hidden', !score);
-  $('#btnToggleCode').classList.toggle('on', code);
-  $('#btnToggleScore').classList.toggle('on', score);
-  if (code) $('#codePanel').insertBefore($('#runBar'), $('#console'));
-  else $('#runSlot').appendChild($('#runBar'));
-}
-function togglePanel(name) {
-  state.settings.panels[name] = !state.settings.panels[name];
+// The inspector remembers the last selected panel. Focus mode only changes the view.
+let activePanel = state.settings.panels?.score && !state.settings.panels?.code ? 'score' : 'code';
+function selectPanel(name) {
+  activePanel = name;
+  for (const [key, button] of [['code', $('#btnToggleCode')], ['score', $('#btnToggleScore')]]) {
+    const selected = key === activePanel;
+    $(`#${key}Panel`).classList.toggle('hidden', !selected);
+    button.classList.toggle('on', selected);
+    button.setAttribute('aria-pressed', selected);
+  }
+  state.settings.panels = { code: name === 'code', score: name === 'score' };
   saveJSON(SETTINGS_KEY, state.settings);
-  applyPanels();
 }
-$('#btnToggleCode').onclick = () => togglePanel('code');
-$('#btnToggleScore').onclick = () => togglePanel('score');
-applyPanels();
+$('#btnToggleCode').onclick = () => selectPanel('code');
+$('#btnToggleScore').onclick = () => selectPanel('score');
+selectPanel(activePanel);
+$('#btnFocus').onclick = () => {
+  const expanded = $('#tab-sim').classList.toggle('field-only');
+  $('#btnFocus').classList.toggle('on', expanded);
+  $('#btnFocus').setAttribute('aria-pressed', expanded);
+};
+$('#btnResetView').onclick = () => {
+  field.setView('3d', true);
+  document.querySelectorAll('#viewSeg button').forEach(button => button.classList.toggle('on', button.dataset.view === '3d'));
+};
+$('#btnZoomIn').onclick = () => field.zoomBy(0.8);
+$('#btnZoomOut').onclick = () => field.zoomBy(1.25);
 // ---------------------------------------------------------------------------------------------
 // attachments: lie at the table edges, one click puts one on the robot (only while it is at home)
 // ---------------------------------------------------------------------------------------------
@@ -384,25 +407,25 @@ function toggleAttachment(id) {
   const next = on ? state.mounted.filter((x) => x !== id) : [...state.mounted, id];
   if (!on) {
     const loose = looseParts(state.design, a);
-    if (loose === a.parts.length) { logLine(`⛔ Насадка «${a.name}» не держится на этом роботе: ни одна деталь не соединена с ним. Соберите её заново в 🔧 Конструкторе.`, 'err'); return; }
-    if (loose) logLine(`⚠ У насадки «${a.name}» ${loose} дет. не соединены с роботом — они не попадут на поле`, 'err');
+    if (loose === a.parts.length) { logLine(`Насадка «${a.name}» не держится на этом роботе: ни одна деталь не соединена с ним. Соберите её заново в Конструкторе.`, 'err'); return; }
+    if (loose) logLine(`У насадки «${a.name}» ${loose} дет. не соединены с роботом — они не попадут на поле`, 'err');
   }
   state.pendingMount = next;
-  state.pendingMsg = on ? `🧩 Насадка «${a.name}» снята и лежит у края стола` : `🧩 Надета насадка «${a.name}»${a.mission ? ' — ' + missionName(a.mission) : ''}`;
+  state.pendingMsg = on ? `Насадка «${a.name}» снята и лежит у края стола` : `Надета насадка «${a.name}»${a.mission ? ' — ' + missionName(a.mission) : ''}`;
   state.pendingProgram = on ? '' : a.program;
   state.worker.postMessage({ type: 'swapRobot', design: robotDesign(next), label: a.name });
 }
 function renderAttPanel() {
   const el = $('#attPanel');
   const list = state.attachments;
-  el.innerHTML = `<div class="ap-head"><b>🧩 Насадки</b><button class="res-close" data-ap="close" title="Закрыть">✕</button></div>
+  el.innerHTML = `<div class="ap-head"><b>${icon('puzzle')} Насадки</b><button class="res-close" data-ap="close" title="Закрыть"></button></div>
     ${list.length ? `<div class="muted ap-hint">Клик по насадке у края стола или кнопка — надеть / снять. Менять насадку можно, пока робот на базе.</div>
     <ul class="ap-list">${list.map((a) => {
       const on = state.mounted.includes(a.id);
       return `<li class="${on ? 'on' : ''}"><div class="ap-row"><div><b>${escHtml(a.name)}</b><small>${escHtml(missionName(a.mission))}</small></div>
         <button class="btn small ${on ? 'stop' : 'primary'}" data-ap="toggle" data-id="${a.id}">${on ? 'Снять' : 'Надеть'}</button></div>
         <label class="ap-prog">Программа <select data-ap="prog" data-id="${a.id}"><option value="">—</option>${editor.programs.map((p) => `<option ${a.program === p.name ? 'selected' : ''}>${escHtml(p.name)}</option>`).join('')}</select></label></li>`;
-    }).join('')}</ul>` : `<div class="muted ap-hint">Насадок пока нет. Откройте 🔧 Конструктор робота, соберите насадку на роботе, выделите её детали и нажмите «💾 Сохранить насадку».</div>`}`;
+    }).join('')}</ul>` : `<div class="muted ap-hint">Насадок пока нет. Откройте Конструктор робота, соберите насадку на роботе, выделите её детали и нажмите «Сохранить насадку».</div>`}`;
 }
 $('#attPanel').addEventListener('click', (e) => {
   const b = e.target.closest('[data-ap]');
@@ -440,7 +463,7 @@ $('#modeSeg').addEventListener('click', (e) => {
   if (state.match?.phase === 'free') return;
   results.clear();
   state.worker.postMessage({ type: 'freeMode' });
-  logLine('🏋 Тренировка: без таймера и штрафов.', 'sys');
+  logLine('Тренировка: без таймера и штрафов.', 'sys');
 });
 $('#btnTimer').onclick = () => state.worker.postMessage({ type: 'timerStart' });
 $('#btnReset').onclick = () => { stopProgram(); results.clear(); state.worker.postMessage({ type: 'reset' }); };
@@ -454,7 +477,11 @@ $('#speedSeg').addEventListener('click', (e) => {
 $('#btnPause').onclick = () => {
   state.paused = !state.paused;
   if (state.ctrl) Atomics.store(state.ctrl, 1, state.paused ? 1 : 0);
-  $('#btnPause').textContent = state.paused ? '▶' : '⏸';
+  $('#btnPause').innerHTML = icon(state.paused ? 'play' : 'pause');
+  $('#btnPause').title = state.paused ? 'Продолжить' : 'Пауза';
+  $('#btnPause').setAttribute('aria-label', $('#btnPause').title);
+  $('#btnPause').setAttribute('aria-pressed', state.paused);
+  $('#runStatus').textContent = state.paused ? 'Симуляция на паузе' : state.running ? 'Программа выполняется' : 'Поле готово';
 };
 $('#viewSeg').addEventListener('click', (e) => {
   const b = e.target.closest('button');
@@ -530,9 +557,9 @@ if (import.meta.env.DEV) {
     const s = window.__lastScore;
     const pts = Object.fromEntries(Object.entries(s.breakdown).filter(([k, v]) => v && k !== 'tokens' && k !== 'insp'));
     const pose = await window.simDebug('return simApi.debug_pose()');
-    return { total: s.total, pts, lines: lines.filter((l) => !l.startsWith('✅')), pose };
+    return { total: s.total, pts, lines: lines.filter((l) => !l.startsWith('Программа завершена')), pose };
   };
-  // dev helper: play ready-made runs one after another like a driver would (🏠 before each run)
+  // dev helper: play ready-made runs one after another like a driver would (before each run)
   window.simRuns = async (ids = RUNS.map((r) => r.id), { reset = true, settle = 1500 } = {}) => {
     const out = [];
     for (const [i, id] of ids.entries()) {
@@ -563,7 +590,6 @@ if (import.meta.env.DEV) {
 }
 
 renderHelp($('#help'));
-logLine('Добро пожаловать в симулятор FLL BIOGLOW! Слева — код робота (Python), справа — протокол очков.', 'info');
-logLine('Робот стоит в левой зоне запуска. Нажмите ▶ Запуск или поуправляйте с клавиатуры (щёлкните по полю).', 'sys');
+logLine('Добро пожаловать в симулятор FLL BIOGLOW! Код робота (Python) и протокол очков находятся в рабочей панели.', 'info');
+logLine('Робот стоит в левой зоне запуска. Нажмите «Запуск» или поуправляйте с клавиатуры (щёлкните по полю).', 'sys');
 createWorker();
-

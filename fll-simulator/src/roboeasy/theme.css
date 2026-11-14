@@ -230,9 +230,6 @@ select,
   border-color: var(--re-outline);
   border-width: 2.5px;
 }
-.field-toolbar {
-  border-bottom: 2px solid var(--line);
-}
 .console {
   background: var(--re-code-bg);
   color: var(--re-code-text);
@@ -340,3 +337,24 @@ select,
 .studio-info p { color: var(--muted); }
 .studio-view { background: var(--bg); }
 @media (max-width: 700px) { .studio-info { border-left: 0; border-top: 2px solid var(--line); } }
+
+/* RoboEasy line icons (src/roboeasy/icons.js) in place of emoji. */
+.re-ico {
+  width: 1.1em;
+  height: 1.1em;
+  flex: none;
+  vertical-align: -0.18em;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.tab .re-ico,
+.btn .re-ico,
+.icon-btn .re-ico {
+  margin-right: 0.15em;
+}
+.icon-btn .re-ico {
+  margin-right: 0;
+}

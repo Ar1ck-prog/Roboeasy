@@ -85,7 +85,7 @@ const ru = {
     loadingHint: 'Загружаем 3D-поле, физику и Python — первый раз это может занять до минуты.',
     slow: 'Долго грузится? Попробуй перезагрузить или открой симулятор в новой вкладке.',
     frame: '3D-симулятор поля FLL BIOGLOW',
-    phone: 'На телефоне рули экранным пультом в углу поля, а поле крути пальцем. Код и протокол очков — ниже под полем.',
+    phone: 'На телефоне рули экранным пультом под полем, а поле крути пальцем. Код и протокол очков — ниже под полем.',
     howTitle: 'Как пользоваться',
     how: [
       { title: 'Двигай робота', text: 'Перетащи робота мышью, колесо мыши или Q/E поворачивают. Кнопка «На старт» вернёт его в базу.' },
@@ -171,7 +171,7 @@ const kk: SimulatorText = {
     loadingHint: '3D-алаң, физика және Python жүктелуде — алғашқы рет бір минутқа дейін созылуы мүмкін.',
     slow: 'Ұзақ жүктеліп жатыр ма? Қайта жүктеп көр немесе симуляторды жаңа қойындыда аш.',
     frame: 'FLL BIOGLOW алаңының 3D-симуляторы',
-    phone: 'Телефонда алаң бұрышындағы экрандық пультпен басқар, ал алаңды саусақпен айналдыр. Код пен ұпай хаттамасы — алаңның астында.',
+    phone: 'Телефонда алаңның астындағы экрандық пультпен басқар, ал алаңды саусақпен айналдыр. Код пен ұпай хаттамасы — алаңның астында.',
     howTitle: 'Қалай қолдану керек',
     how: [
       { title: 'Роботты жылжыт', text: 'Роботты тінтуірмен сүйре, тінтуір дөңгелегі не Q/E бұрады. «Стартқа» батырмасы оны базаға қайтарады.' },
@@ -255,7 +255,7 @@ const en: SimulatorText = {
     loadingHint: 'Loading the 3D field, physics and Python; the first time can take up to a minute.',
     slow: 'Taking long? Try reloading, or open the simulator in a new tab.',
     frame: '3D simulator of the FLL BIOGLOW field',
-    phone: 'On a phone, drive with the on-screen pad in the corner of the field and turn the field with a finger. The code and the score sheet are below the field.',
+    phone: 'On a phone, drive with the on-screen pad under the field and turn the field with a finger. The code and the score sheet are below the field.',
     howTitle: 'How to use it',
     how: [
       { title: 'Move the robot', text: 'Drag the robot with the mouse; the wheel or Q/E turns it. “To start” puts it back in base.' },
@@ -274,4 +274,4 @@ export function getSimulatorText(lang: Locale): SimulatorText {
 }
 
 /** The copied 3D simulator (public/fll-sim) and the original site it came from. */
-export const FLL_SIM_SRC = '/fll-sim/index.html'
+export const FLL_SIM_SRC = '/fll-sim/index.html?v=arena'
