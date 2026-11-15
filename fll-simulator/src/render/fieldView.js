@@ -19,7 +19,7 @@ export class FieldView {
     this.onAttachment = onAttachment;
     this.attGroups = [];
     this.renderer = new THREE.WebGLRenderer({ antialias: true, powerPreference: 'high-performance' });
-    this.renderer.setPixelRatio(Math.min(window.devicePixelRatio, 1.5));
+    this.renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
     this.renderer.shadowMap.enabled = true;
     this.renderer.shadowMap.type = THREE.PCFShadowMap;
     this.renderer.outputColorSpace = THREE.SRGBColorSpace;
@@ -54,7 +54,7 @@ export class FieldView {
     const sun = new THREE.DirectionalLight('#fff6e8', 2.1);
     sun.position.set(-60, 220, 120);
     sun.castShadow = true;
-    sun.shadow.mapSize.set(2048, 2048);
+    sun.shadow.mapSize.set(4096, 4096);
     const sc = sun.shadow.camera;
     sc.left = -135; sc.right = 135; sc.top = 80; sc.bottom = -80; sc.near = 50; sc.far = 500;
     sun.shadow.bias = -0.0003;
@@ -117,7 +117,7 @@ export class FieldView {
     }, { passive: false });
 
     // post-processing: MSAA scene target + ground-truth ambient occlusion (contact shadows between bricks)
-    const rt = new THREE.WebGLRenderTarget(1, 1, { type: THREE.HalfFloatType, samples: 2 });
+    const rt = new THREE.WebGLRenderTarget(1, 1, { type: THREE.HalfFloatType, samples: 4 });
     this.composer = new EffectComposer(this.renderer, rt);
     this.composer.addPass(new RenderPass(this.scene, this.camera));
     this.ao = new GTAOPass(this.scene, this.camera, 1, 1);
@@ -149,12 +149,12 @@ export class FieldView {
       if (this.posesPending) this.applyPoses(this.lastPoses, true);
       const elapsed = previousFrame ? now - previousFrame : 0;
       previousFrame = now;
-      // Reduce expensive contact shadows on sustained slow frames.
+      // On a sustained slow machine draw slightly fewer pixels (2x -> 1.5x on sharp screens).
+      // Contact shadows, models and colours stay as they are.
       if (elapsed > 40 && elapsed < 1000) slowFrames++;
       else slowFrames = Math.max(0, slowFrames - 1);
-      if (slowFrames >= 60 && this.ao.enabled) {
-        this.ao.enabled = false;
-        this.renderer.setPixelRatio(Math.min(window.devicePixelRatio, 1));
+      if (slowFrames >= 90 && this.renderer.getPixelRatio() > 1.5) {
+        this.renderer.setPixelRatio(1.5);
         this.resize();
       }
       this.render();

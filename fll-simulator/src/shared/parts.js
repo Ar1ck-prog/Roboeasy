@@ -140,10 +140,8 @@ function motorPart(id, name, len, discR, specs) {
     electronic: 'motor', motor: specs,
     shapes: [
       b([3, 4, len], [0, 0, 0], { round: true }),
-      b([0.1, 3.2, len - 1], [-1.52, 0, 0], { color: '#343d58', collide: false }),
-      b([2.4, 0.12, len - 1.2], [0, 2.03, 0], { color: '#ffc531', collide: false, round: true }),
-      b([0.12, 2.3, len - 1.8], [1.53, 0, 0], { color: '#343d58', collide: false }),
-      c(discR, 1, [2, 0, 0], 'x', { color: '#ffc531', sub: 'rotor' }),
+      b([0.1, 3.2, len - 1], [-1.52, 0, 0], { color: '#5b6064', collide: false }),
+      c(discR, 1, [2, 0, 0], 'x', { color: '#11908f', sub: 'rotor' }),
       c(discR * 0.35, 1.02, [2, 0, 0], 'x', { color: '#2a2a2a', sub: 'rotor', collide: false }),
     ],
     conns,
