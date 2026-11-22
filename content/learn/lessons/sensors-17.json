@@ -1,0 +1,302 @@
+{
+  "id": "sensors-17",
+  "track": "sensors",
+  "unit": "sensors-line",
+  "minutes": 8,
+  "skills": [
+    "line-follow"
+  ],
+  "title": {
+    "ru": "Левее или правее",
+    "kk": "Солға ма, оңға ма",
+    "en": "Left or right of it"
+  },
+  "goal": {
+    "ru": "Сегодня робот научится ехать по линии.",
+    "kk": "Бүгін робот сызықпен жүруді үйренеді.",
+    "en": "Today the robot will learn to follow a line."
+  },
+  "summary": {
+    "ru": "Теперь ты умеешь ехать по краю линии одним датчиком.",
+    "kk": "Енді сен бір датчикпен сызықтың шетімен жүре аласың.",
+    "en": "Now you can follow the edge of a line with one sensor."
+  },
+  "steps": [
+    {
+      "id": "edge",
+      "type": "theory",
+      "title": {
+        "ru": "Едем по краю",
+        "kk": "Шетімен жүреміз",
+        "en": "Follow the edge"
+      },
+      "body": {
+        "ru": "Одним датчиком удобно ехать не по середине линии, а по её **краю**.\n\nЕсли датчик видит тёмное — он заехал на линию, надо подруливать в одну сторону. Видит светлое — съехал, подруливаем в другую.\n\nРобот всё время виляет вдоль края, но уверенно едет вперёд. Это «повторять, пока не»: **если отражение < 50 — руль вправо, иначе — руль влево**.",
+        "kk": "Бір датчикпен сызықтың ортасымен емес, оның **шетімен** жүру ыңғайлы.\n\nДатчик қараңғыны көрсе — сызыққа кірді, бір жаққа бұру керек. Ашықты көрсе — шығып кетті, екінші жаққа бұрамыз.\n\nРобот шетімен үнемі бұлғаңдайды, бірақ алға сенімді жүреді. Бұл «дейін қайталау»: **егер шағылысу < 50 — рульді оңға, әйтпесе — солға**.",
+        "en": "With one sensor it is easiest to follow not the middle of the line but its **edge**.\n\nIf the sensor sees dark, it is over the line — steer one way. If it sees light, it slipped off — steer the other way.\n\nThe robot wiggles along the edge but moves forward confidently. It is “repeat until”: **if reflection < 50 — steer right, else — steer left**."
+      },
+      "illustration": "r-line",
+      "example": [
+        {
+          "op": "repeat_until",
+          "condition": {
+            "sensor": "color",
+            "port": "D",
+            "color": "green"
+          },
+          "steps": [
+            {
+              "op": "if",
+              "condition": {
+                "sensor": "reflection",
+                "port": "D",
+                "comparator": "<",
+                "value": 50
+              },
+              "then": [
+                {
+                  "op": "start_steer",
+                  "steering": 20
+                }
+              ],
+              "else": [
+                {
+                  "op": "start_steer",
+                  "steering": -20
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "op": "stop_move"
+        }
+      ]
+    },
+    {
+      "id": "follow",
+      "type": "code",
+      "title": {
+        "ru": "По линии до зелёного",
+        "kk": "Сызықпен жасылға дейін",
+        "en": "Follow the line to green"
+      },
+      "task": {
+        "ru": "Езжай по краю линии, пока датчик не увидит зелёный финиш. Линия поворачивает — прямо не доедешь!",
+        "kk": "Жасыл мәрені датчик көргенше сызықтың шетімен жүр. Сызық бұрылады — тура жетпейсің!",
+        "en": "Follow the edge of the line until the sensor sees the green finish. The line bends — you cannot just go straight!"
+      },
+      "field": {
+        "width": 1500,
+        "height": 900,
+        "start": {
+          "x": 150,
+          "y": 300,
+          "heading": 0
+        },
+        "border": true,
+        "zones": [
+          {
+            "id": "end",
+            "x": 1300,
+            "y": 500,
+            "w": 180,
+            "h": 200,
+            "kind": "paint",
+            "color": "green"
+          },
+          {
+            "id": "finish",
+            "x": 1150,
+            "y": 480,
+            "w": 180,
+            "h": 240,
+            "kind": "target",
+            "label": {
+              "ru": "Финиш",
+              "kk": "Мәре",
+              "en": "Finish"
+            }
+          }
+        ],
+        "points": [],
+        "walls": [],
+        "lines": [
+          {
+            "points": [
+              [
+                100,
+                300
+              ],
+              [
+                700,
+                300
+              ],
+              [
+                1100,
+                600
+              ],
+              [
+                1400,
+                600
+              ]
+            ],
+            "width": 20,
+            "color": "black"
+          }
+        ]
+      },
+      "toolbox": [
+        "start_steer",
+        "stop_move",
+        "repeat_until",
+        "if",
+        "start_move"
+      ],
+      "start": [],
+      "checks": [
+        {
+          "type": "finishInZone",
+          "zone": "finish"
+        },
+        {
+          "type": "usesSensor",
+          "sensor": "reflection"
+        },
+        {
+          "type": "usesOp",
+          "op": "if",
+          "min": 1
+        }
+      ],
+      "hints": [
+        {
+          "ru": "Внешний цикл: «повторять, пока не цвет зелёный».",
+          "kk": "Сыртқы цикл: «түс жасыл болғанша қайталау».",
+          "en": "Outer loop: “repeat until colour is green”."
+        },
+        {
+          "ru": "Внутри: если отражение < 50 — начать движение с рулём 20, иначе — с рулём −20.",
+          "kk": "Ішінде: егер шағылысу < 50 — рульмен 20 қозғалысты бастау, әйтпесе — −20 рульмен.",
+          "en": "Inside: if reflection < 50 — start moving with steering 20, else with −20."
+        },
+        {
+          "ru": "После цикла — остановить движение.",
+          "kk": "Циклдан кейін — қозғалысты тоқтату.",
+          "en": "After the loop: stop moving."
+        }
+      ],
+      "reference": [
+        {
+          "op": "repeat_until",
+          "condition": {
+            "sensor": "color",
+            "port": "D",
+            "color": "green"
+          },
+          "steps": [
+            {
+              "op": "if",
+              "condition": {
+                "sensor": "reflection",
+                "port": "D",
+                "comparator": "<",
+                "value": 50
+              },
+              "then": [
+                {
+                  "op": "start_steer",
+                  "steering": 20
+                }
+              ],
+              "else": [
+                {
+                  "op": "start_steer",
+                  "steering": -20
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "op": "stop_move"
+        }
+      ],
+      "skill": "line-follow"
+    },
+    {
+      "id": "lost",
+      "type": "quiz",
+      "kind": "choice",
+      "question": {
+        "ru": "Робот съехал с линии в сторону белого поля и больше её не находит. Что вероятнее всего?",
+        "kk": "Робот сызықтан ақ алаңға қарай шығып кетіп, оны қайта таба алмайды. Ең ықтималы не?",
+        "en": "The robot slid off the line onto the white field and cannot find it again. What is most likely?"
+      },
+      "options": [
+        {
+          "ru": "Руль в части «иначе» повернули не в ту сторону",
+          "kk": "«Әйтпесе» бөлігінде рульді басқа жаққа бұрды",
+          "en": "The steering in the “else” part goes the wrong way"
+        },
+        {
+          "ru": "Линия слишком чёрная",
+          "kk": "Сызық тым қара",
+          "en": "The line is too black"
+        },
+        {
+          "ru": "Батарея слишком полная",
+          "kk": "Батарея тым толы",
+          "en": "The battery is too full"
+        }
+      ],
+      "correct": [
+        0
+      ],
+      "explanation": {
+        "ru": "На белом робот должен рулить обратно к линии. Если он рулит от неё, линия потеряется.",
+        "kk": "Ақ бетте робот сызыққа қайта бұрылуы керек. Егер одан алыстаса, сызық жоғалады.",
+        "en": "On white the robot must steer back toward the line. If it steers away, the line is lost."
+      },
+      "skill": "line-follow"
+    },
+    {
+      "id": "algo",
+      "type": "quiz",
+      "kind": "order",
+      "question": {
+        "ru": "Расставь алгоритм езды по краю",
+        "kk": "Шетімен жүру алгоритмін реттей қой",
+        "en": "Order the edge-following algorithm"
+      },
+      "items": [
+        {
+          "ru": "Посмотреть отражение",
+          "kk": "Шағылысуды қарау",
+          "en": "Read the reflection"
+        },
+        {
+          "ru": "Темно — подрулить в одну сторону",
+          "kk": "Қараңғы — бір жаққа бұру",
+          "en": "Dark — steer one way"
+        },
+        {
+          "ru": "Светло — подрулить в другую",
+          "kk": "Ашық — екінші жаққа бұру",
+          "en": "Light — steer the other way"
+        },
+        {
+          "ru": "Повторять до финиша",
+          "kk": "Мәреге дейін қайталау",
+          "en": "Repeat until the finish"
+        }
+      ],
+      "explanation": {
+        "ru": "Смотреть, решать, рулить — и снова. Робот проверяет датчик много раз в секунду.",
+        "kk": "Қарау, шешу, бұру — және қайтадан. Робот датчикті секундына көп рет тексереді.",
+        "en": "Look, decide, steer — again and again. The robot checks the sensor many times a second."
+      },
+      "skill": "line-follow"
+    }
+  ]
+}

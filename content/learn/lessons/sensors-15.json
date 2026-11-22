@@ -1,0 +1,247 @@
+{
+  "id": "sensors-15",
+  "track": "sensors",
+  "unit": "sensors-gyro",
+  "minutes": 8,
+  "skills": [
+    "gyro"
+  ],
+  "title": {
+    "ru": "Сброс угла",
+    "kk": "Бұрышты нөлдеу",
+    "en": "Resetting the angle"
+  },
+  "goal": {
+    "ru": "Сегодня ты поймёшь, зачем перед поворотом сбрасывать угол.",
+    "kk": "Бүгін сен бұрылар алдында бұрышты не үшін нөлдеу керегін түсінесің.",
+    "en": "Today you will see why the angle is reset before a turn."
+  },
+  "summary": {
+    "ru": "Теперь ты знаешь: каждый поворот по гироскопу начинается со сброса угла.",
+    "kk": "Енді сен білесің: гироскоп бойынша әр бұрылыс бұрышты нөлдеуден басталады.",
+    "en": "Now you know: every gyro turn starts with a reset."
+  },
+  "steps": [
+    {
+      "id": "reset",
+      "type": "theory",
+      "title": {
+        "ru": "Новый ноль",
+        "kk": "Жаңа нөл",
+        "en": "A new zero"
+      },
+      "body": {
+        "ru": "Гироскоп помнит все повороты с начала программы. После двух поворотов налево он покажет −180°.\n\n**«Сбросить угол поворота»** делает текущее направление новым нулём. Тогда условие «ждать, пока < −89°» означает «ещё 90° налево отсюда».\n\nЗабыл сбросить — условие может уже быть правдой, и робот вообще не повернётся.",
+        "kk": "Гироскоп бағдарлама басынан бергі барлық бұрылысты есте сақтайды. Солға екі бұрылыстан кейін ол −180° көрсетеді.\n\n**«Бұрылу бұрышын нөлдеу»** қазіргі бағытты жаңа нөлге айналдырады. Сонда «< −89° болғанша күту» шарты «осы жерден тағы 90° солға» дегенді білдіреді.\n\nНөлдеуді ұмытсаң — шарт ақиқат болуы мүмкін, және робот мүлдем бұрылмайды.",
+        "en": "The gyro remembers every turn since the program started. After two left turns it shows −180°.\n\n**“Reset yaw angle”** makes the current direction the new zero. Then “wait until < −89°” means “another 90° left from here”.\n\nForget the reset and the condition may already be true — the robot will not turn at all."
+      },
+      "illustration": "r-gyro"
+    },
+    {
+      "id": "no-reset",
+      "type": "debug",
+      "title": {
+        "ru": "Квадрат без сброса",
+        "kk": "Нөлдеусіз шаршы",
+        "en": "A square without reset"
+      },
+      "task": {
+        "ru": "Робот должен проехать квадрат с поворотами по гироскопу, но поворачивает только один раз. Найди ошибку.",
+        "kk": "Робот гироскоп бұрылыстарымен шаршыны жүруі керек, бірақ тек бір рет бұрылады. Қатені тап.",
+        "en": "The robot should drive a square with gyro turns, but it only turns once. Find the bug."
+      },
+      "field": {
+        "width": 1000,
+        "height": 850,
+        "start": {
+          "x": 300,
+          "y": 250,
+          "heading": 0
+        },
+        "border": true,
+        "zones": [
+          {
+            "id": "home",
+            "x": 200,
+            "y": 150,
+            "w": 200,
+            "h": 200,
+            "kind": "target",
+            "label": {
+              "ru": "Старт",
+              "kk": "Старт",
+              "en": "Start"
+            }
+          }
+        ],
+        "points": [
+          {
+            "id": "p1",
+            "x": 600,
+            "y": 250,
+            "r": 60,
+            "label": {
+              "ru": "Угол 1",
+              "kk": "1-бұрыш",
+              "en": "Corner 1"
+            }
+          },
+          {
+            "id": "p2",
+            "x": 600,
+            "y": 550,
+            "r": 60,
+            "label": {
+              "ru": "Угол 2",
+              "kk": "2-бұрыш",
+              "en": "Corner 2"
+            }
+          },
+          {
+            "id": "p3",
+            "x": 300,
+            "y": 550,
+            "r": 60,
+            "label": {
+              "ru": "Угол 3",
+              "kk": "3-бұрыш",
+              "en": "Corner 3"
+            }
+          }
+        ],
+        "walls": [],
+        "lines": []
+      },
+      "toolbox": [
+        "move",
+        "reset_yaw",
+        "start_move",
+        "stop_move",
+        "wait_until",
+        "repeat"
+      ],
+      "start": [
+        {
+          "op": "reset_yaw"
+        },
+        {
+          "op": "repeat",
+          "times": 4,
+          "steps": [
+            {
+              "op": "move",
+              "direction": "forward",
+              "value": 30,
+              "unit": "cm"
+            },
+            {
+              "op": "start_move",
+              "direction": "left"
+            },
+            {
+              "op": "wait_until",
+              "condition": {
+                "sensor": "gyro",
+                "axis": "yaw",
+                "comparator": "<",
+                "value": -89
+              }
+            },
+            {
+              "op": "stop_move"
+            }
+          ]
+        }
+      ],
+      "checks": [
+        {
+          "type": "passPoints",
+          "points": [
+            "p1",
+            "p2",
+            "p3"
+          ],
+          "ordered": true
+        },
+        {
+          "type": "finishInZone",
+          "zone": "home"
+        }
+      ],
+      "hints": [
+        {
+          "ru": "Сколько показывает гироскоп перед вторым поворотом?",
+          "kk": "Екінші бұрылыс алдында гироскоп қанша көрсетеді?",
+          "en": "What does the gyro show before the second turn?"
+        },
+        {
+          "ru": "Уже −90°: условие «< −89°» правда, робот не крутится.",
+          "kk": "Қазірдің өзінде −90°: «< −89°» шарты ақиқат, робот айналмайды.",
+          "en": "Already −90°: “< −89°” is true, so the robot does not spin."
+        },
+        {
+          "ru": "Перенеси «сбросить угол» внутрь цикла, перед вращением.",
+          "kk": "«Бұрышты нөлдеуді» цикл ішіне, айналудан бұрын апар.",
+          "en": "Move “reset yaw” inside the loop, before the spin."
+        }
+      ],
+      "reference": [
+        {
+          "op": "repeat",
+          "times": 4,
+          "steps": [
+            {
+              "op": "move",
+              "direction": "forward",
+              "value": 30,
+              "unit": "cm"
+            },
+            {
+              "op": "reset_yaw"
+            },
+            {
+              "op": "start_move",
+              "direction": "left"
+            },
+            {
+              "op": "wait_until",
+              "condition": {
+                "sensor": "gyro",
+                "axis": "yaw",
+                "comparator": "<",
+                "value": -89
+              }
+            },
+            {
+              "op": "stop_move"
+            }
+          ]
+        }
+      ],
+      "skill": "gyro"
+    },
+    {
+      "id": "two-left",
+      "type": "quiz",
+      "kind": "number",
+      "question": {
+        "ru": "Угол сбросили один раз, потом робот дважды повернул налево на 90°. Что покажет гироскоп?",
+        "kk": "Бұрышты бір рет нөлдеді, содан кейін робот екі рет солға 90°-қа бұрылды. Гироскоп не көрсетеді?",
+        "en": "The angle was reset once, then the robot turned left 90° twice. What does the gyro show?"
+      },
+      "answer": -180,
+      "tolerance": 0,
+      "explanation": {
+        "ru": "−90° + (−90°) = −180°. Гироскоп считает все повороты после сброса.",
+        "kk": "−90° + (−90°) = −180°. Гироскоп нөлдеуден кейінгі барлық бұрылысты санайды.",
+        "en": "−90° + (−90°) = −180°. The gyro counts every turn since the reset."
+      },
+      "unit": {
+        "ru": "°",
+        "kk": "°",
+        "en": "°"
+      },
+      "skill": "gyro"
+    }
+  ]
+}

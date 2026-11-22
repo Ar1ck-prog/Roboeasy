@@ -1,0 +1,419 @@
+{
+  "id": "sensors-02",
+  "track": "sensors",
+  "unit": "sensors-color",
+  "minutes": 7,
+  "skills": [
+    "sensor-color"
+  ],
+  "title": {
+    "ru": "Стоп на чёрной линии",
+    "kk": "Қара сызықта тоқта",
+    "en": "Stop on the black line"
+  },
+  "goal": {
+    "ru": "Сегодня робот научится останавливаться точно на линии.",
+    "kk": "Бүгін робот сызықта дәл тоқтауды үйренеді.",
+    "en": "Today the robot will learn to stop exactly on a line."
+  },
+  "summary": {
+    "ru": "Теперь ты умеешь останавливать робота по линии и находить ошибки в условии.",
+    "kk": "Енді сен роботты сызық бойынша тоқтатып, шарттағы қателерді таба аласың.",
+    "en": "Now you can stop the robot at a line and find bugs in a condition."
+  },
+  "steps": [
+    {
+      "id": "line",
+      "type": "theory",
+      "title": {
+        "ru": "Линия — это ориентир",
+        "kk": "Сызық — бағдар",
+        "en": "A line is a landmark"
+      },
+      "body": {
+        "ru": "На полях соревнований много чёрных линий. Робот может использовать их как **ориентиры**: доехать до линии — и точно знать, где он.\n\nКолёса могут проскальзывать, а линия не сдвинется. Поэтому остановка по линии точнее, чем «вперёд 50 см».",
+        "kk": "Жарыс алаңдарында қара сызықтар көп. Робот оларды **бағдар** ретінде қолдана алады: сызыққа жетіп, қай жерде екенін дәл білу.\n\nДөңгелектер тайып кетуі мүмкін, ал сызық жылжымайды. Сондықтан сызық бойынша тоқтау «50 см алға» дегеннен дәлірек.",
+        "en": "Competition fields have lots of black lines. The robot can use them as **landmarks**: drive to a line and know exactly where it is.\n\nWheels can slip, but a line does not move. So stopping at a line is more precise than “forward 50 cm”."
+      },
+      "illustration": "r-color",
+      "example": [
+        {
+          "op": "start_move",
+          "direction": "forward"
+        },
+        {
+          "op": "wait_until",
+          "condition": {
+            "sensor": "color",
+            "port": "D",
+            "color": "black"
+          }
+        },
+        {
+          "op": "stop_move"
+        }
+      ]
+    },
+    {
+      "id": "stop-line",
+      "type": "code",
+      "title": {
+        "ru": "Стоп на линии",
+        "kk": "Сызықта тоқта",
+        "en": "Stop at the line"
+      },
+      "task": {
+        "ru": "Доедь до чёрной линии и остановись на ней.",
+        "kk": "Қара сызыққа дейін жетіп, онда тоқта.",
+        "en": "Drive to the black line and stop on it."
+      },
+      "field": {
+        "width": 1400,
+        "height": 400,
+        "start": {
+          "x": 150,
+          "y": 200,
+          "heading": 0
+        },
+        "border": true,
+        "zones": [
+          {
+            "id": "at",
+            "x": 650,
+            "y": 50,
+            "w": 200,
+            "h": 300,
+            "kind": "target",
+            "label": {
+              "ru": "У линии",
+              "kk": "Сызық жанында",
+              "en": "At the line"
+            }
+          }
+        ],
+        "points": [],
+        "walls": [],
+        "lines": [
+          {
+            "points": [
+              [
+                800,
+                0
+              ],
+              [
+                800,
+                400
+              ]
+            ],
+            "width": 20,
+            "color": "black"
+          }
+        ]
+      },
+      "toolbox": [
+        "start_move",
+        "stop_move",
+        "wait_until",
+        "move"
+      ],
+      "start": [],
+      "checks": [
+        {
+          "type": "finishInZone",
+          "zone": "at"
+        },
+        {
+          "type": "usesSensor",
+          "sensor": "color"
+        }
+      ],
+      "hints": [
+        {
+          "ru": "Начать движение → ждать, пока… → остановить движение.",
+          "kk": "Қозғалысты бастау → әзірге күту… → қозғалысты тоқтату.",
+          "en": "Start moving → wait until… → stop moving."
+        },
+        {
+          "ru": "Нужен цвет «чёрный».",
+          "kk": "«Қара» түсі керек.",
+          "en": "You need the colour “black”."
+        },
+        {
+          "ru": "Начать движение; ждать, пока цвет чёрный; остановить.",
+          "kk": "Қозғалысты бастау; түс қара болғанша күту; тоқтату.",
+          "en": "Start moving; wait until black; stop."
+        }
+      ],
+      "reference": [
+        {
+          "op": "start_move",
+          "direction": "forward"
+        },
+        {
+          "op": "wait_until",
+          "condition": {
+            "sensor": "color",
+            "port": "D",
+            "color": "black"
+          }
+        },
+        {
+          "op": "stop_move"
+        }
+      ],
+      "skill": "sensor-color"
+    },
+    {
+      "id": "wrong-color",
+      "type": "debug",
+      "title": {
+        "ru": "Робот не трогается",
+        "kk": "Робот қозғалмайды",
+        "en": "The robot will not move"
+      },
+      "task": {
+        "ru": "Робот должен доехать до линии, но сразу останавливается на старте. Найди ошибку в условии.",
+        "kk": "Робот сызыққа жетуі керек, бірақ стартта бірден тоқтайды. Шарттағы қатені тап.",
+        "en": "The robot should drive to the line but stops right at the start. Find the bug in the condition."
+      },
+      "field": {
+        "width": 1400,
+        "height": 400,
+        "start": {
+          "x": 150,
+          "y": 200,
+          "heading": 0
+        },
+        "border": true,
+        "zones": [
+          {
+            "id": "at",
+            "x": 650,
+            "y": 50,
+            "w": 200,
+            "h": 300,
+            "kind": "target",
+            "label": {
+              "ru": "У линии",
+              "kk": "Сызық жанында",
+              "en": "At the line"
+            }
+          }
+        ],
+        "points": [],
+        "walls": [],
+        "lines": [
+          {
+            "points": [
+              [
+                800,
+                0
+              ],
+              [
+                800,
+                400
+              ]
+            ],
+            "width": 20,
+            "color": "black"
+          }
+        ]
+      },
+      "toolbox": [
+        "start_move",
+        "stop_move",
+        "wait_until",
+        "move"
+      ],
+      "start": [
+        {
+          "op": "start_move",
+          "direction": "forward"
+        },
+        {
+          "op": "wait_until",
+          "condition": {
+            "sensor": "color",
+            "port": "D",
+            "color": "white"
+          }
+        },
+        {
+          "op": "stop_move"
+        }
+      ],
+      "checks": [
+        {
+          "type": "finishInZone",
+          "zone": "at"
+        }
+      ],
+      "hints": [
+        {
+          "ru": "Какой цвет под роботом на старте?",
+          "kk": "Стартта робот астында қандай түс?",
+          "en": "Which colour is under the robot at the start?"
+        },
+        {
+          "ru": "Условие «белый» уже правда на старте, ждать нечего.",
+          "kk": "«Ақ» шарты стартта ақиқат, күтетін ештеңе жоқ.",
+          "en": "“White” is already true at the start, so nothing to wait for."
+        },
+        {
+          "ru": "Поменяй «белый» на «чёрный».",
+          "kk": "«Ақты» «қараға» ауыстыр.",
+          "en": "Change “white” to “black”."
+        }
+      ],
+      "reference": [
+        {
+          "op": "start_move",
+          "direction": "forward"
+        },
+        {
+          "op": "wait_until",
+          "condition": {
+            "sensor": "color",
+            "port": "D",
+            "color": "black"
+          }
+        },
+        {
+          "op": "stop_move"
+        }
+      ],
+      "skill": "sensor-color"
+    },
+    {
+      "id": "line-back",
+      "type": "code",
+      "title": {
+        "ru": "Линия и разворот",
+        "kk": "Сызық және бұрылу",
+        "en": "Line and turn back"
+      },
+      "task": {
+        "ru": "Доедь до линии, подай сигнал, развернись на 180° и вернись к старту на 40 см.",
+        "kk": "Сызыққа дейін жетіп, дыбыс бер, 180°-қа бұрылып, стартқа 40 см кері орал.",
+        "en": "Drive to the line, beep, turn 180° and drive 40 cm back toward the start."
+      },
+      "field": {
+        "width": 1400,
+        "height": 400,
+        "start": {
+          "x": 150,
+          "y": 200,
+          "heading": 0
+        },
+        "border": true,
+        "zones": [
+          {
+            "id": "back",
+            "x": 180,
+            "y": 50,
+            "w": 220,
+            "h": 300,
+            "kind": "target",
+            "label": {
+              "ru": "Возврат",
+              "kk": "Қайту",
+              "en": "Return"
+            }
+          }
+        ],
+        "points": [],
+        "walls": [],
+        "lines": [
+          {
+            "points": [
+              [
+                800,
+                0
+              ],
+              [
+                800,
+                400
+              ]
+            ],
+            "width": 20,
+            "color": "black"
+          }
+        ]
+      },
+      "toolbox": [
+        "start_move",
+        "stop_move",
+        "wait_until",
+        "move",
+        "turn",
+        "beep"
+      ],
+      "start": [],
+      "checks": [
+        {
+          "type": "beeped",
+          "min": 1
+        },
+        {
+          "type": "finishInZone",
+          "zone": "back"
+        },
+        {
+          "type": "usesSensor",
+          "sensor": "color"
+        }
+      ],
+      "hints": [
+        {
+          "ru": "Первая часть — как в прошлом задании.",
+          "kk": "Бірінші бөлігі — өткен тапсырмадағыдай.",
+          "en": "The first part is like the last task."
+        },
+        {
+          "ru": "Потом сигнал и поворот на 180°.",
+          "kk": "Содан кейін дыбыс және 180°-қа бұрылу.",
+          "en": "Then a beep and a 180° turn."
+        },
+        {
+          "ru": "В конце — вперёд 40 см.",
+          "kk": "Соңында — 40 см алға.",
+          "en": "Finish with forward 40 cm."
+        }
+      ],
+      "reference": [
+        {
+          "op": "start_move",
+          "direction": "forward"
+        },
+        {
+          "op": "wait_until",
+          "condition": {
+            "sensor": "color",
+            "port": "D",
+            "color": "black"
+          }
+        },
+        {
+          "op": "stop_move"
+        },
+        {
+          "op": "beep",
+          "note": 72,
+          "seconds": 0.3
+        },
+        {
+          "op": "turn",
+          "direction": "right",
+          "degrees": 180
+        },
+        {
+          "op": "move",
+          "direction": "forward",
+          "value": 40,
+          "unit": "cm"
+        }
+      ],
+      "skill": "sensor-color"
+    }
+  ]
+}

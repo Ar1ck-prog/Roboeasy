@@ -1,0 +1,190 @@
+{
+  "id": "sensors-16",
+  "track": "sensors",
+  "unit": "sensors-gyro",
+  "minutes": 6,
+  "skills": [
+    "gyro"
+  ],
+  "title": {
+    "ru": "Наклон",
+    "kk": "Көлбеу",
+    "en": "Tilt"
+  },
+  "goal": {
+    "ru": "Сегодня ты узнаешь, что гироскоп чувствует и наклоны.",
+    "kk": "Бүгін сен гироскоптың көлбеуді де сезетінін білесің.",
+    "en": "Today you will learn that the gyro also feels tilt."
+  },
+  "summary": {
+    "ru": "Теперь ты знаешь три оси хаба: поворот, наклон вперёд и наклон вбок.",
+    "kk": "Енді сен хабтың үш осін білесің: бұрылу, алға еңкею және бүйірге еңкею.",
+    "en": "Now you know the hub’s three axes: yaw, pitch and roll."
+  },
+  "steps": [
+    {
+      "id": "axes",
+      "type": "theory",
+      "title": {
+        "ru": "Три оси",
+        "kk": "Үш ось",
+        "en": "Three axes"
+      },
+      "body": {
+        "ru": "Хаб чувствует не только повороты на месте.\n\n**Поворот** (yaw) — как стрелка компаса.\n**Наклон вперёд** (pitch) — робот едет на горку или с горки.\n**Наклон вбок** (roll) — робот накренился на одно колесо.\n\nНаклон помогает понять, что робот заехал на рампу или вот-вот перевернётся. В нашем симуляторе поле ровное, а на настоящем роботе это легко проверить.",
+        "kk": "Хаб орнында бұрылуды ғана сезбейді.\n\n**Бұрылу** (yaw) — компас тілі сияқты.\n**Алға еңкею** (pitch) — робот төбеге шығады немесе түседі.\n**Бүйірге еңкею** (roll) — робот бір дөңгелекке қисайды.\n\nКөлбеу роботтың пандусқа шыққанын немесе аударылғалы тұрғанын түсінуге көмектеседі. Біздің симуляторда алаң тегіс, ал нағыз роботта мұны тексеру оңай.",
+        "en": "The hub feels more than spinning in place.\n\n**Yaw** — like a compass needle.\n**Pitch** — the robot drives up or down a slope.\n**Roll** — the robot leans onto one wheel.\n\nTilt tells you the robot is on a ramp or about to tip over. Our simulator field is flat, but on a real robot it is easy to test."
+      },
+      "illustration": "r-tilt"
+    },
+    {
+      "id": "which-axis",
+      "type": "quiz",
+      "kind": "match",
+      "question": {
+        "ru": "Какая ось меняется?",
+        "kk": "Қай ось өзгереді?",
+        "en": "Which axis changes?"
+      },
+      "pairs": [
+        {
+          "left": {
+            "ru": "Робот заехал на горку",
+            "kk": "Робот төбеге шықты",
+            "en": "The robot drives up a hill"
+          },
+          "right": {
+            "ru": "наклон вперёд",
+            "kk": "алға еңкею",
+            "en": "pitch"
+          }
+        },
+        {
+          "left": {
+            "ru": "Робот развернулся на месте",
+            "kk": "Робот орнында бұрылды",
+            "en": "The robot spins in place"
+          },
+          "right": {
+            "ru": "поворот",
+            "kk": "бұрылу",
+            "en": "yaw"
+          }
+        },
+        {
+          "left": {
+            "ru": "Одно колесо наехало на кубик",
+            "kk": "Бір дөңгелек текшеге шықты",
+            "en": "One wheel drove onto a cube"
+          },
+          "right": {
+            "ru": "наклон вбок",
+            "kk": "бүйірге еңкею",
+            "en": "roll"
+          }
+        }
+      ],
+      "explanation": {
+        "ru": "Поворот — вокруг вертикали, наклоны — вперёд-назад и вбок.",
+        "kk": "Бұрылу — тік ось айналасында, көлбеулер — алға-артқа және бүйірге.",
+        "en": "Yaw turns around the vertical; the tilts go forward-back and sideways."
+      },
+      "skill": "gyro"
+    },
+    {
+      "id": "ramp",
+      "type": "quiz",
+      "kind": "choice",
+      "question": {
+        "ru": "Как робот поймёт, что заехал на рампу?",
+        "kk": "Робот пандусқа шыққанын қалай түсінеді?",
+        "en": "How can the robot tell it is on a ramp?"
+      },
+      "options": [
+        {
+          "ru": "Наклон вперёд станет больше, например > 10°",
+          "kk": "Алға еңкею көбейеді, мысалы > 10°",
+          "en": "Pitch grows, for example above 10°"
+        },
+        {
+          "ru": "Датчик цвета увидит синий",
+          "kk": "Түс датчигі көкті көреді",
+          "en": "The colour sensor sees blue"
+        },
+        {
+          "ru": "Бампер нажмётся",
+          "kk": "Бампер басылады",
+          "en": "The bumper is pressed"
+        }
+      ],
+      "correct": [
+        0
+      ],
+      "explanation": {
+        "ru": "На подъёме хаб наклоняется вместе с роботом — гироскоп это замечает.",
+        "kk": "Өрге шыққанда хаб робот бірге еңкейеді — гироскоп мұны байқайды.",
+        "en": "On a slope the hub tilts with the robot — the gyro notices."
+      },
+      "skill": "gyro"
+    },
+    {
+      "id": "tilt-test",
+      "type": "real_robot",
+      "title": {
+        "ru": "Проверь на настоящем роботе",
+        "kk": "Нағыз роботта тексер",
+        "en": "Try it on a real robot"
+      },
+      "task": {
+        "ru": "Загрузи программу: хаб показывает стрелку вверх, если его наклонить вперёд больше чем на 20°, и улыбку, если он стоит ровно. Наклоняй хаб руками.",
+        "kk": "Бағдарламаны жүкте: хабты алға 20°-тан көп еңкейтсең, ол жоғары нұсқарды, тегіс тұрса — күлкіні көрсетеді. Хабты қолмен еңкейт.",
+        "en": "Load the program: the hub shows an up arrow when tilted forward more than 20°, and a smile when level. Tilt the hub by hand."
+      },
+      "checklist": [
+        {
+          "ru": "Хаб показывает улыбку, когда стоит ровно",
+          "kk": "Хаб тегіс тұрғанда күлкі көрсетеді",
+          "en": "The hub shows a smile when level"
+        },
+        {
+          "ru": "При наклоне вперёд появляется стрелка",
+          "kk": "Алға еңкейткенде нұсқар пайда болады",
+          "en": "Tilting forward shows the arrow"
+        },
+        {
+          "ru": "Я понял, какая ось — наклон вперёд",
+          "kk": "Мен қай ось алға еңкею екенін түсіндім",
+          "en": "I know which axis is pitch"
+        }
+      ],
+      "program": [
+        {
+          "op": "forever",
+          "steps": [
+            {
+              "op": "if",
+              "condition": {
+                "sensor": "gyro",
+                "axis": "pitch",
+                "comparator": ">",
+                "value": 20
+              },
+              "then": [
+                {
+                  "op": "show_image",
+                  "image": "arrow_up"
+                }
+              ],
+              "else": [
+                {
+                  "op": "show_image",
+                  "image": "smile"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

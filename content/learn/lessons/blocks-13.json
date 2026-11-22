@@ -1,0 +1,408 @@
+{
+  "id": "blocks-13",
+  "track": "blocks",
+  "unit": "blocks-conditions",
+  "minutes": 8,
+  "skills": [
+    "conditions"
+  ],
+  "title": {
+    "ru": "Если… то",
+    "kk": "Егер… онда",
+    "en": "If… then"
+  },
+  "goal": {
+    "ru": "Сегодня ты научишь робота принимать решения.",
+    "kk": "Бүгін сен роботты шешім қабылдауға үйретесің.",
+    "en": "Today you will teach the robot to make decisions."
+  },
+  "summary": {
+    "ru": "Теперь ты умеешь использовать «если… то»: робот проверяет условие и решает, что делать.",
+    "kk": "Енді сен «егер… онда» блогын қолдана аласың: робот шартты тексеріп, не істейтінін шешеді.",
+    "en": "Now you can use “if… then”: the robot checks a condition and decides what to do."
+  },
+  "steps": [
+    {
+      "id": "if",
+      "type": "theory",
+      "title": {
+        "ru": "Робот решает сам",
+        "kk": "Робот өзі шешеді",
+        "en": "The robot decides"
+      },
+      "body": {
+        "ru": "Блок **«если… то»** проверяет условие **один раз**, в тот момент, когда до него дошла программа.\n\nЕсли условие правда — выполняются блоки внутри. Если нет — робот просто идёт дальше.\n\nУсловие — это зелёный блок датчика: «расстояние < 30 см», «цвет чёрный», «кнопка нажата».",
+        "kk": "**«Егер… онда»** блогы шартты бағдарлама оған жеткен сәтте **бір рет** тексереді.\n\nШарт ақиқат болса — ішіндегі блоктар орындалады. Жоқ болса — робот жай әрі қарай жүреді.\n\nШарт — датчиктің жасыл блогы: «қашықтық < 30 см», «түс қара», «түйме басылды».",
+        "en": "The **“if… then”** block checks a condition **once**, at the moment the program reaches it.\n\nIf the condition is true, the blocks inside run. If not, the robot simply moves on.\n\nA condition is a green sensor block: “distance < 30 cm”, “colour is black”, “button pressed”."
+      },
+      "illustration": "r-if",
+      "example": [
+        {
+          "op": "move",
+          "direction": "forward",
+          "value": 40,
+          "unit": "cm"
+        },
+        {
+          "op": "if",
+          "condition": {
+            "sensor": "distance",
+            "port": "C",
+            "comparator": "<",
+            "value": 30,
+            "unit": "cm"
+          },
+          "then": [
+            {
+              "op": "beep",
+              "note": 72,
+              "seconds": 0.3
+            },
+            {
+              "op": "turn",
+              "direction": "right",
+              "degrees": 180
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "mark",
+      "type": "predict",
+      "title": {
+        "ru": "Куда повернёт?",
+        "kk": "Қайда бұрылады?",
+        "en": "Where will it turn?"
+      },
+      "question": {
+        "ru": "На поле чёрная метка. Робот едет 40 см и проверяет цвет. Какой путь он проедет?",
+        "kk": "Алаңда қара белгі бар. Робот 40 см жүріп, түсті тексереді. Ол қандай жолмен жүреді?",
+        "en": "There is a black mark on the field. The robot drives 40 cm and checks the colour. Which path will it take?"
+      },
+      "field": {
+        "width": 1400,
+        "height": 1000,
+        "start": {
+          "x": 150,
+          "y": 500,
+          "heading": 0
+        },
+        "border": true,
+        "zones": [
+          {
+            "id": "mark",
+            "x": 560,
+            "y": 440,
+            "w": 120,
+            "h": 120,
+            "kind": "paint",
+            "color": "black"
+          },
+          {
+            "id": "a",
+            "x": 480,
+            "y": 760,
+            "w": 220,
+            "h": 200,
+            "kind": "target",
+            "label": {
+              "ru": "Зона А",
+              "kk": "А аймағы",
+              "en": "Zone A"
+            }
+          },
+          {
+            "id": "b",
+            "x": 480,
+            "y": 40,
+            "w": 220,
+            "h": 200,
+            "kind": "target",
+            "label": {
+              "ru": "Зона Б",
+              "kk": "Б аймағы",
+              "en": "Zone B"
+            }
+          }
+        ],
+        "points": [],
+        "walls": [],
+        "lines": []
+      },
+      "program": [
+        {
+          "op": "move",
+          "direction": "forward",
+          "value": 40,
+          "unit": "cm"
+        },
+        {
+          "op": "if",
+          "condition": {
+            "sensor": "color",
+            "port": "D",
+            "color": "black"
+          },
+          "then": [
+            {
+              "op": "turn",
+              "direction": "left",
+              "degrees": 90
+            },
+            {
+              "op": "move",
+              "direction": "forward",
+              "value": 30,
+              "unit": "cm"
+            }
+          ]
+        }
+      ],
+      "options": [
+        {
+          "label": {
+            "ru": "Повернёт налево к зоне А",
+            "kk": "Солға, А аймағына бұрылады",
+            "en": "Turns left to zone A"
+          },
+          "steps": [
+            {
+              "op": "move",
+              "direction": "forward",
+              "value": 40,
+              "unit": "cm"
+            },
+            {
+              "op": "turn",
+              "direction": "left",
+              "degrees": 90
+            },
+            {
+              "op": "move",
+              "direction": "forward",
+              "value": 30,
+              "unit": "cm"
+            }
+          ]
+        },
+        {
+          "label": {
+            "ru": "Поедет дальше прямо",
+            "kk": "Тура әрі қарай жүреді",
+            "en": "Keeps going straight"
+          },
+          "steps": [
+            {
+              "op": "move",
+              "direction": "forward",
+              "value": 70,
+              "unit": "cm"
+            }
+          ]
+        },
+        {
+          "label": {
+            "ru": "Остановится через 40 см",
+            "kk": "40 см-ден кейін тоқтайды",
+            "en": "Stops after 40 cm"
+          },
+          "steps": [
+            {
+              "op": "move",
+              "direction": "forward",
+              "value": 40,
+              "unit": "cm"
+            },
+            {
+              "op": "turn",
+              "direction": "right",
+              "degrees": 90
+            },
+            {
+              "op": "move",
+              "direction": "forward",
+              "value": 30,
+              "unit": "cm"
+            }
+          ]
+        }
+      ],
+      "correct": 0,
+      "explanation": {
+        "ru": "Датчик цвета видит чёрную метку, условие правда — робот выполняет блоки внутри: налево и вперёд.",
+        "kk": "Түс датчигі қара белгіні көреді, шарт ақиқат — робот ішіндегі блоктарды орындайды: солға және алға.",
+        "en": "The colour sensor sees the black mark, the condition is true — the robot runs the blocks inside: left and forward."
+      },
+      "skill": "conditions"
+    },
+    {
+      "id": "careful",
+      "type": "code",
+      "title": {
+        "ru": "Осторожный робот",
+        "kk": "Абайлағыш робот",
+        "en": "Careful robot"
+      },
+      "task": {
+        "ru": "Робот едет 40 см и проверяет: **если** стена ближе 30 см — сигнал, разворот на 180° и обратно 40 см на старт.",
+        "kk": "Робот 40 см жүріп, тексереді: **егер** қабырға 30 см-ден жақын болса — дыбыс, 180°-қа бұрылу және 40 см кері стартқа.",
+        "en": "The robot drives 40 cm and checks: **if** the wall is closer than 30 cm — beep, turn 180° and drive 40 cm back to the start."
+      },
+      "field": {
+        "width": 1400,
+        "height": 400,
+        "start": {
+          "x": 150,
+          "y": 200,
+          "heading": 0
+        },
+        "border": true,
+        "zones": [
+          {
+            "id": "home",
+            "x": 60,
+            "y": 100,
+            "w": 200,
+            "h": 200,
+            "kind": "target",
+            "label": {
+              "ru": "Старт",
+              "kk": "Старт",
+              "en": "Start"
+            }
+          }
+        ],
+        "points": [],
+        "walls": [
+          {
+            "x": 780,
+            "y": 0,
+            "w": 40,
+            "h": 400
+          }
+        ],
+        "lines": []
+      },
+      "toolbox": [
+        "move",
+        "turn",
+        "beep",
+        "if"
+      ],
+      "start": [],
+      "checks": [
+        {
+          "type": "beeped",
+          "min": 1
+        },
+        {
+          "type": "finishInZone",
+          "zone": "home"
+        },
+        {
+          "type": "usesOp",
+          "op": "if",
+          "min": 1
+        },
+        {
+          "type": "usesSensor",
+          "sensor": "distance"
+        },
+        {
+          "type": "noCollision"
+        }
+      ],
+      "hints": [
+        {
+          "ru": "Сначала «вперёд 40 см», потом блок «если».",
+          "kk": "Алдымен «40 см алға», содан кейін «егер» блогы.",
+          "en": "First “forward 40 cm”, then the “if” block."
+        },
+        {
+          "ru": "В условие вставь «расстояние < 30 см».",
+          "kk": "Шартқа «қашықтық < 30 см» сал.",
+          "en": "Put “distance < 30 cm” into the condition."
+        },
+        {
+          "ru": "Внутри «если»: сигнал, направо 180°, вперёд 40 см.",
+          "kk": "«Егер» ішінде: дыбыс, оңға 180°, 40 см алға.",
+          "en": "Inside “if”: beep, right 180°, forward 40 cm."
+        }
+      ],
+      "reference": [
+        {
+          "op": "move",
+          "direction": "forward",
+          "value": 40,
+          "unit": "cm"
+        },
+        {
+          "op": "if",
+          "condition": {
+            "sensor": "distance",
+            "port": "C",
+            "comparator": "<",
+            "value": 30,
+            "unit": "cm"
+          },
+          "then": [
+            {
+              "op": "beep",
+              "note": 72,
+              "seconds": 0.3
+            },
+            {
+              "op": "turn",
+              "direction": "right",
+              "degrees": 180
+            },
+            {
+              "op": "move",
+              "direction": "forward",
+              "value": 40,
+              "unit": "cm"
+            }
+          ]
+        }
+      ],
+      "skill": "conditions"
+    },
+    {
+      "id": "once",
+      "type": "quiz",
+      "kind": "choice",
+      "question": {
+        "ru": "Сколько раз «если… то» проверяет условие?",
+        "kk": "«Егер… онда» шартты неше рет тексереді?",
+        "en": "How many times does “if… then” check its condition?"
+      },
+      "options": [
+        {
+          "ru": "Один раз, когда программа до него дошла",
+          "kk": "Бағдарлама оған жеткенде бір рет",
+          "en": "Once, when the program reaches it"
+        },
+        {
+          "ru": "Всё время, пока работает программа",
+          "kk": "Бағдарлама жұмыс істеп тұрғанда үнемі",
+          "en": "All the time while the program runs"
+        },
+        {
+          "ru": "Каждую секунду",
+          "kk": "Әр секунд сайын",
+          "en": "Every second"
+        }
+      ],
+      "correct": [
+        0
+      ],
+      "explanation": {
+        "ru": "«Если» смотрит один раз. Чтобы проверять снова и снова, его кладут в цикл.",
+        "kk": "«Егер» бір рет қарайды. Қайта-қайта тексеру үшін оны циклға салады.",
+        "en": "“If” looks once. To check again and again, put it inside a loop."
+      },
+      "skill": "conditions"
+    }
+  ]
+}

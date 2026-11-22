@@ -1,0 +1,273 @@
+{
+  "id": "sensors-07",
+  "track": "sensors",
+  "unit": "sensors-distance",
+  "minutes": 8,
+  "skills": [
+    "sensor-distance"
+  ],
+  "title": {
+    "ru": "Стоп перед стеной",
+    "kk": "Қабырға алдында тоқта",
+    "en": "Stop before the wall"
+  },
+  "goal": {
+    "ru": "Сегодня робот проедет комнату, не задев ни одной стены.",
+    "kk": "Бүгін робот бөлмені бірде-бір қабырғаға тимей жүріп өтеді.",
+    "en": "Today the robot will cross a room without touching a single wall."
+  },
+  "summary": {
+    "ru": "Теперь ты умеешь вести робота от стены к стене только по датчику.",
+    "kk": "Енді сен роботты қабырғадан қабырғаға тек датчик бойынша жүргізе аласың.",
+    "en": "Now you can drive the robot from wall to wall using only the sensor."
+  },
+  "steps": [
+    {
+      "id": "room",
+      "type": "theory",
+      "title": {
+        "ru": "Без линейки",
+        "kk": "Сызғышсыз",
+        "en": "Without a ruler"
+      },
+      "body": {
+        "ru": "В незнакомой комнате робот не знает размеров. Но ему и не нужно!\n\nЕхать до стены → остановиться в 10 см → повернуть → снова ехать до стены. Такая программа работает в комнате любого размера.\n\nСледи за знаком сравнения: «расстояние **<** 10» — ближе десяти. «Расстояние **>** 10» — дальше десяти.",
+        "kk": "Бейтаныс бөлмеде робот өлшемдерді білмейді. Бірақ оған керегі де жоқ!\n\nҚабырғаға дейін жүру → 10 см жерде тоқтау → бұрылу → қайтадан қабырғаға дейін жүру. Мұндай бағдарлама кез келген өлшемдегі бөлмеде жұмыс істейді.\n\nСалыстыру белгісіне назар аудар: «қашықтық **<** 10» — оннан жақын. «Қашықтық **>** 10» — оннан алыс.",
+        "en": "In an unknown room the robot does not know the size. It does not need to!\n\nDrive to the wall → stop at 10 cm → turn → drive to the wall again. Such a program works in a room of any size.\n\nWatch the comparison sign: “distance **<** 10” is closer than ten. “Distance **>** 10” is further than ten."
+      },
+      "illustration": "r-distance"
+    },
+    {
+      "id": "corner",
+      "type": "code",
+      "title": {
+        "ru": "В дальний угол",
+        "kk": "Алыс бұрышқа",
+        "en": "To the far corner"
+      },
+      "task": {
+        "ru": "Доедь до правой стены, остановись в 10 см, повернись налево и доедь до верхней стены. Стены не трогай.",
+        "kk": "Оң қабырғаға дейін жетіп, 10 см жерде тоқта, солға бұрылып, жоғарғы қабырғаға дейін жет. Қабырғаларға тиме.",
+        "en": "Drive to the right wall, stop at 10 cm, turn left and drive to the top wall. Do not touch the walls."
+      },
+      "field": {
+        "width": 1200,
+        "height": 1000,
+        "start": {
+          "x": 150,
+          "y": 150,
+          "heading": 0
+        },
+        "border": true,
+        "zones": [
+          {
+            "id": "corner",
+            "x": 820,
+            "y": 700,
+            "w": 300,
+            "h": 280,
+            "kind": "target",
+            "label": {
+              "ru": "Угол",
+              "kk": "Бұрыш",
+              "en": "Corner"
+            }
+          }
+        ],
+        "points": [],
+        "walls": [],
+        "lines": []
+      },
+      "toolbox": [
+        "start_move",
+        "stop_move",
+        "wait_until",
+        "turn",
+        "move"
+      ],
+      "start": [],
+      "checks": [
+        {
+          "type": "finishInZone",
+          "zone": "corner"
+        },
+        {
+          "type": "stopBeforeWall",
+          "maxMm": 150
+        },
+        {
+          "type": "noCollision"
+        },
+        {
+          "type": "usesSensor",
+          "sensor": "distance"
+        }
+      ],
+      "hints": [
+        {
+          "ru": "Это два раза «начать → ждать → стоп».",
+          "kk": "Бұл екі рет «бастау → күту → тоқта».",
+          "en": "It is “start → wait → stop” twice."
+        },
+        {
+          "ru": "Между ними — «налево 90°».",
+          "kk": "Олардың арасында — «солға 90°».",
+          "en": "Between them: “left 90°”."
+        },
+        {
+          "ru": "Начать; ждать < 10; стоп; налево 90°; начать; ждать < 10; стоп.",
+          "kk": "Бастау; < 10 күту; тоқта; солға 90°; бастау; < 10 күту; тоқта.",
+          "en": "Start; wait < 10; stop; left 90°; start; wait < 10; stop."
+        }
+      ],
+      "reference": [
+        {
+          "op": "start_move",
+          "direction": "forward"
+        },
+        {
+          "op": "wait_until",
+          "condition": {
+            "sensor": "distance",
+            "port": "C",
+            "comparator": "<",
+            "value": 10,
+            "unit": "cm"
+          }
+        },
+        {
+          "op": "stop_move"
+        },
+        {
+          "op": "turn",
+          "direction": "left",
+          "degrees": 90
+        },
+        {
+          "op": "start_move",
+          "direction": "forward"
+        },
+        {
+          "op": "wait_until",
+          "condition": {
+            "sensor": "distance",
+            "port": "C",
+            "comparator": "<",
+            "value": 10,
+            "unit": "cm"
+          }
+        },
+        {
+          "op": "stop_move"
+        }
+      ],
+      "skill": "sensor-distance"
+    },
+    {
+      "id": "sign",
+      "type": "debug",
+      "title": {
+        "ru": "Перепутан знак",
+        "kk": "Белгі шатасқан",
+        "en": "Wrong sign"
+      },
+      "task": {
+        "ru": "Робот должен остановиться у стены, но не двигается с места. Найди ошибку.",
+        "kk": "Робот қабырға жанында тоқтауы керек, бірақ орнынан қозғалмайды. Қатені тап.",
+        "en": "The robot should stop at the wall but does not move at all. Find the bug."
+      },
+      "field": {
+        "width": 1400,
+        "height": 400,
+        "start": {
+          "x": 150,
+          "y": 200,
+          "heading": 0
+        },
+        "border": true,
+        "zones": [],
+        "points": [],
+        "walls": [
+          {
+            "x": 1100,
+            "y": 0,
+            "w": 40,
+            "h": 400
+          }
+        ],
+        "lines": []
+      },
+      "toolbox": [
+        "start_move",
+        "stop_move",
+        "wait_until",
+        "move"
+      ],
+      "start": [
+        {
+          "op": "start_move",
+          "direction": "forward"
+        },
+        {
+          "op": "wait_until",
+          "condition": {
+            "sensor": "distance",
+            "port": "C",
+            "comparator": ">",
+            "value": 10,
+            "unit": "cm"
+          }
+        },
+        {
+          "op": "stop_move"
+        }
+      ],
+      "checks": [
+        {
+          "type": "stopBeforeWall",
+          "maxMm": 150
+        },
+        {
+          "type": "noCollision"
+        }
+      ],
+      "hints": [
+        {
+          "ru": "На старте стена далеко. Правда ли «расстояние > 10»?",
+          "kk": "Стартта қабырға алыс. «Қашықтық > 10» ақиқат па?",
+          "en": "At the start the wall is far. Is “distance > 10” true?"
+        },
+        {
+          "ru": "Условие уже правда — робот сразу останавливается.",
+          "kk": "Шарт ақиқат — робот бірден тоқтайды.",
+          "en": "The condition is already true, so the robot stops at once."
+        },
+        {
+          "ru": "Поменяй «>» на «<».",
+          "kk": "«>» белгісін «<» белгісіне ауыстыр.",
+          "en": "Change “>” to “<”."
+        }
+      ],
+      "reference": [
+        {
+          "op": "start_move",
+          "direction": "forward"
+        },
+        {
+          "op": "wait_until",
+          "condition": {
+            "sensor": "distance",
+            "port": "C",
+            "comparator": "<",
+            "value": 10,
+            "unit": "cm"
+          }
+        },
+        {
+          "op": "stop_move"
+        }
+      ],
+      "skill": "sensor-distance"
+    }
+  ]
+}

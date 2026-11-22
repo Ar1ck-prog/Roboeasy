@@ -1,0 +1,319 @@
+{
+  "id": "blocks-07",
+  "track": "blocks",
+  "unit": "blocks-loops",
+  "minutes": 7,
+  "skills": [
+    "loops"
+  ],
+  "title": {
+    "ru": "Повторить N раз",
+    "kk": "N рет қайталау",
+    "en": "Repeat N times"
+  },
+  "goal": {
+    "ru": "Сегодня ты научишь робота повторять команды, не копируя их.",
+    "kk": "Бүгін сен роботты командаларды көшірмей қайталауға үйретесің.",
+    "en": "Today you will teach the robot to repeat commands without copying them."
+  },
+  "summary": {
+    "ru": "Теперь ты умеешь пользоваться циклом «повторить»: одна запись — много повторов.",
+    "kk": "Енді сен «қайталау» циклін қолдана аласың: бір жазба — көп қайталау.",
+    "en": "Now you can use the “repeat” loop: write it once, run it many times."
+  },
+  "steps": [
+    {
+      "id": "loop",
+      "type": "theory",
+      "title": {
+        "ru": "Цикл — это повтор",
+        "kk": "Цикл — қайталау",
+        "en": "A loop repeats"
+      },
+      "body": {
+        "ru": "Представь, что роботу нужно сделать 10 одинаковых шагов. Можно поставить 10 блоков подряд, а можно один **цикл**.\n\nБлок **«повторить N раз»** выполняет всё, что лежит у него внутри, ровно N раз. Потом программа идёт дальше.\n\nЦиклы делают программу короче и понятнее, а ошибку в ней легче найти: исправляешь в одном месте.",
+        "kk": "Роботқа 10 бірдей қадам жасау керек делік. 10 блокты қатар қоюға болады, ал бір **цикл** қоюға да болады.\n\n**«N рет қайталау»** блогы ішіндегінің бәрін дәл N рет орындайды. Содан кейін бағдарлама әрі қарай жүреді.\n\nЦиклдар бағдарламаны қысқа әрі түсінікті етеді, ал қатені табу оңай: бір жерде түзетесің.",
+        "en": "Imagine the robot must take 10 identical steps. You could stack 10 blocks, or use one **loop**.\n\nThe **“repeat N times”** block runs everything inside it exactly N times. Then the program moves on.\n\nLoops make programs shorter and clearer, and mistakes are easier to fix: you change one place."
+      },
+      "illustration": "r-loop",
+      "example": [
+        {
+          "op": "repeat",
+          "times": 3,
+          "steps": [
+            {
+              "op": "move",
+              "direction": "forward",
+              "value": 10,
+              "unit": "cm"
+            },
+            {
+              "op": "beep",
+              "note": 72,
+              "seconds": 0.3
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "how-far",
+      "type": "predict",
+      "title": {
+        "ru": "Сколько проедет?",
+        "kk": "Қанша жүреді?",
+        "en": "How far?"
+      },
+      "question": {
+        "ru": "Посмотри на программу. Где остановится робот?",
+        "kk": "Бағдарламаға қара. Робот қай жерде тоқтайды?",
+        "en": "Read the program. Where will the robot stop?"
+      },
+      "field": {
+        "width": 1400,
+        "height": 400,
+        "start": {
+          "x": 150,
+          "y": 200,
+          "heading": 0
+        },
+        "border": true,
+        "zones": [],
+        "points": [],
+        "walls": [],
+        "lines": []
+      },
+      "program": [
+        {
+          "op": "repeat",
+          "times": 3,
+          "steps": [
+            {
+              "op": "move",
+              "direction": "forward",
+              "value": 15,
+              "unit": "cm"
+            }
+          ]
+        }
+      ],
+      "options": [
+        {
+          "label": {
+            "ru": "45 см вперёд",
+            "kk": "45 см алға",
+            "en": "45 cm forward"
+          },
+          "steps": [
+            {
+              "op": "move",
+              "direction": "forward",
+              "value": 45,
+              "unit": "cm"
+            }
+          ]
+        },
+        {
+          "label": {
+            "ru": "15 см вперёд",
+            "kk": "15 см алға",
+            "en": "15 cm forward"
+          },
+          "steps": [
+            {
+              "op": "move",
+              "direction": "forward",
+              "value": 15,
+              "unit": "cm"
+            }
+          ]
+        },
+        {
+          "label": {
+            "ru": "30 см вперёд",
+            "kk": "30 см алға",
+            "en": "30 cm forward"
+          },
+          "steps": [
+            {
+              "op": "move",
+              "direction": "forward",
+              "value": 30,
+              "unit": "cm"
+            }
+          ]
+        }
+      ],
+      "correct": 0,
+      "explanation": {
+        "ru": "Внутри цикла «вперёд 15 см», и он повторяется 3 раза: 15 + 15 + 15 = 45 см.",
+        "kk": "Цикл ішінде «15 см алға», ол 3 рет қайталанады: 15 + 15 + 15 = 45 см.",
+        "en": "Inside the loop is “forward 15 cm”, repeated 3 times: 15 + 15 + 15 = 45 cm."
+      },
+      "skill": "loops"
+    },
+    {
+      "id": "fence",
+      "type": "code",
+      "title": {
+        "ru": "Забор",
+        "kk": "Шарбақ",
+        "en": "Fence"
+      },
+      "task": {
+        "ru": "Робот ставит забор: 4 раза проехать 20 см и после каждого отрезка подать сигнал. Используй не больше 3 блоков.",
+        "kk": "Робот шарбақ қояды: 4 рет 20 см жүріп, әр бөліктен кейін дыбыс беру керек. 3 блоктан артық қолданба.",
+        "en": "The robot builds a fence: drive 20 cm and beep, 4 times. Use at most 3 blocks."
+      },
+      "field": {
+        "width": 1400,
+        "height": 400,
+        "start": {
+          "x": 150,
+          "y": 200,
+          "heading": 0
+        },
+        "border": true,
+        "zones": [
+          {
+            "id": "end",
+            "x": 880,
+            "y": 100,
+            "w": 160,
+            "h": 200,
+            "kind": "target",
+            "label": {
+              "ru": "Конец забора",
+              "kk": "Шарбақтың соңы",
+              "en": "Fence end"
+            }
+          }
+        ],
+        "points": [],
+        "walls": [],
+        "lines": []
+      },
+      "toolbox": [
+        "move",
+        "beep",
+        "repeat"
+      ],
+      "start": [],
+      "checks": [
+        {
+          "type": "finishInZone",
+          "zone": "end"
+        },
+        {
+          "type": "beeped",
+          "min": 4
+        },
+        {
+          "type": "usesOp",
+          "op": "repeat",
+          "min": 1
+        },
+        {
+          "type": "maxBlocks",
+          "max": 3
+        }
+      ],
+      "hints": [
+        {
+          "ru": "Какие блоки повторяются? Их можно положить внутрь «повторить».",
+          "kk": "Қай блоктар қайталанады? Оларды «қайталау» ішіне салуға болады.",
+          "en": "Which blocks repeat? Put them inside “repeat”."
+        },
+        {
+          "ru": "Внутри цикла два блока: «вперёд 20 см» и «сигнал».",
+          "kk": "Цикл ішінде екі блок: «20 см алға» және «дыбыс».",
+          "en": "Two blocks go inside the loop: “forward 20 cm” and “beep”."
+        },
+        {
+          "ru": "Повторить 4 раза: вперёд 20 см, сигнал.",
+          "kk": "4 рет қайталау: 20 см алға, дыбыс.",
+          "en": "Repeat 4 times: forward 20 cm, beep."
+        }
+      ],
+      "reference": [
+        {
+          "op": "repeat",
+          "times": 4,
+          "steps": [
+            {
+              "op": "move",
+              "direction": "forward",
+              "value": 20,
+              "unit": "cm"
+            },
+            {
+              "op": "beep",
+              "note": 72,
+              "seconds": 0.3
+            }
+          ]
+        }
+      ],
+      "skill": "loops"
+    },
+    {
+      "id": "waits",
+      "type": "quiz",
+      "kind": "number",
+      "question": {
+        "ru": "Внутри «повторить 5 раз» лежит «ждать 1 с». Сколько секунд будет ждать робот?",
+        "kk": "«5 рет қайталау» ішінде «1 с күту» тұр. Робот неше секунд күтеді?",
+        "en": "Inside “repeat 5 times” is “wait 1 s”. How many seconds will the robot wait?"
+      },
+      "answer": 5,
+      "tolerance": 0,
+      "explanation": {
+        "ru": "Пауза в 1 секунду повторяется 5 раз: 5 × 1 = 5 секунд.",
+        "kk": "1 секундтық үзіліс 5 рет қайталанады: 5 × 1 = 5 секунд.",
+        "en": "The 1-second pause repeats 5 times: 5 × 1 = 5 seconds."
+      },
+      "unit": {
+        "ru": "с",
+        "kk": "с",
+        "en": "s"
+      },
+      "skill": "loops"
+    },
+    {
+      "id": "why",
+      "type": "quiz",
+      "kind": "choice",
+      "question": {
+        "ru": "Зачем нужен цикл?",
+        "kk": "Цикл не үшін керек?",
+        "en": "Why use a loop?"
+      },
+      "options": [
+        {
+          "ru": "Чтобы не повторять одни и те же блоки много раз",
+          "kk": "Бірдей блоктарды көп рет қайталамау үшін",
+          "en": "So you do not stack the same blocks again and again"
+        },
+        {
+          "ru": "Чтобы робот ехал быстрее",
+          "kk": "Робот жылдамырақ жүруі үшін",
+          "en": "To make the robot faster"
+        },
+        {
+          "ru": "Чтобы робот сам выбирал, куда ехать",
+          "kk": "Робот қайда жүретінін өзі таңдауы үшін",
+          "en": "So the robot chooses where to go"
+        }
+      ],
+      "correct": [
+        0
+      ],
+      "explanation": {
+        "ru": "Цикл не меняет скорость и не принимает решений — он просто повторяет команды. Зато программа становится короче.",
+        "kk": "Цикл жылдамдықты өзгертпейді және шешім қабылдамайды — ол тек командаларды қайталайды. Есесіне бағдарлама қысқарады.",
+        "en": "A loop does not change speed or make decisions — it just repeats commands. The program gets shorter."
+      },
+      "skill": "loops"
+    }
+  ]
+}

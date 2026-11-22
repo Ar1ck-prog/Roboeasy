@@ -1,0 +1,219 @@
+{
+  "id": "sensors-11",
+  "track": "sensors",
+  "unit": "sensors-force",
+  "minutes": 7,
+  "skills": [
+    "sensor-force"
+  ],
+  "title": {
+    "ru": "Нажато, отпущено, сильно",
+    "kk": "Басылды, жіберілді, қатты",
+    "en": "Pressed, released, hard"
+  },
+  "goal": {
+    "ru": "Сегодня ты узнаешь три состояния датчика силы.",
+    "kk": "Бүгін сен күш датчигінің үш күйін білесің.",
+    "en": "Today you will learn the three states of the force sensor."
+  },
+  "summary": {
+    "ru": "Теперь ты различаешь «нажато», «отпущено» и «сильно нажато».",
+    "kk": "Енді сен «басылды», «жіберілді» және «қатты басылды» күйлерін ажыратасың.",
+    "en": "Now you can tell “pressed”, “released” and “hard pressed” apart."
+  },
+  "steps": [
+    {
+      "id": "states",
+      "type": "theory",
+      "title": {
+        "ru": "Три состояния",
+        "kk": "Үш күй",
+        "en": "Three states"
+      },
+      "body": {
+        "ru": "**Нажато** — кнопку касаются. **Отпущено** — её никто не трогает. **Сильно нажато** — давят изо всех сил.\n\n«Ждать, пока отпущено» удобно, когда робот отъезжает от стены: он остановится ровно в момент, когда перестал её касаться.\n\nНа настоящем роботе «сильно» помогает понять, что робот не просто коснулся, а упёрся.",
+        "kk": "**Басылды** — түймеге тиіп тұр. **Жіберілді** — оған ешкім тимейді. **Қатты басылды** — бар күшімен басып тұр.\n\n«Жіберілгенше күту» робот қабырғадан шегінгенде ыңғайлы: ол қабырғаға тиюді тоқтатқан сәтте дәл тоқтайды.\n\nНағыз роботта «қатты» робот жай тиіп қана қоймай, тірелгенін түсінуге көмектеседі.",
+        "en": "**Pressed** — something touches the button. **Released** — nothing touches it. **Hard pressed** — pushed with full force.\n\n“Wait until released” is handy when the robot backs away from a wall: it stops exactly when it stops touching.\n\nOn a real robot, “hard” tells you the robot did not just touch but pushed firmly."
+      },
+      "illustration": "r-force"
+    },
+    {
+      "id": "which-state",
+      "type": "quiz",
+      "kind": "match",
+      "question": {
+        "ru": "Подбери состояние",
+        "kk": "Күйді таңда",
+        "en": "Match the state"
+      },
+      "pairs": [
+        {
+          "left": {
+            "ru": "Бампер упёрся в стену",
+            "kk": "Бампер қабырғаға тірелді",
+            "en": "The bumper touches the wall"
+          },
+          "right": {
+            "ru": "нажато",
+            "kk": "басылды",
+            "en": "pressed"
+          }
+        },
+        {
+          "left": {
+            "ru": "Робот едет по пустому полю",
+            "kk": "Робот бос алаңмен жүріп келеді",
+            "en": "The robot drives across an empty field"
+          },
+          "right": {
+            "ru": "отпущено",
+            "kk": "жіберілді",
+            "en": "released"
+          }
+        },
+        {
+          "left": {
+            "ru": "Робот толкает тяжёлый ящик",
+            "kk": "Робот ауыр жәшікті итеріп келеді",
+            "en": "The robot pushes a heavy box"
+          },
+          "right": {
+            "ru": "сильно нажато",
+            "kk": "қатты басылды",
+            "en": "hard pressed"
+          }
+        }
+      ],
+      "explanation": {
+        "ru": "Касание — «нажато», ничего — «отпущено», большое усилие — «сильно».",
+        "kk": "Жанасу — «басылды», ештеңе — «жіберілді», үлкен күш — «қатты».",
+        "en": "A touch — “pressed”, nothing — “released”, big force — “hard”."
+      },
+      "skill": "sensor-force"
+    },
+    {
+      "id": "let-go",
+      "type": "code",
+      "title": {
+        "ru": "Отъехать до отпускания",
+        "kk": "Жіберілгенше шегіну",
+        "en": "Back off until released"
+      },
+      "task": {
+        "ru": "Доедь до стены, пока бампер не нажмётся. Потом поезжай назад, **пока бампер не отпустится**, остановись и покажи улыбку.",
+        "kk": "Бампер басылғанша қабырғаға жет. Содан кейін **бампер жіберілгенше** артқа жүріп, тоқта және күлкі көрсет.",
+        "en": "Drive to the wall until the bumper is pressed. Then drive back **until the bumper is released**, stop and show a smile."
+      },
+      "field": {
+        "width": 1400,
+        "height": 400,
+        "start": {
+          "x": 150,
+          "y": 200,
+          "heading": 0
+        },
+        "border": true,
+        "zones": [
+          {
+            "id": "touch",
+            "x": 830,
+            "y": 50,
+            "w": 170,
+            "h": 300,
+            "kind": "target",
+            "label": {
+              "ru": "У стены",
+              "kk": "Қабырға жанында",
+              "en": "By the wall"
+            }
+          }
+        ],
+        "points": [],
+        "walls": [
+          {
+            "x": 1000,
+            "y": 0,
+            "w": 40,
+            "h": 400
+          }
+        ],
+        "lines": []
+      },
+      "toolbox": [
+        "start_move",
+        "stop_move",
+        "wait_until",
+        "show_image"
+      ],
+      "start": [],
+      "checks": [
+        {
+          "type": "finishInZone",
+          "zone": "touch"
+        },
+        {
+          "type": "displayed",
+          "image": "smile"
+        },
+        {
+          "type": "usesSensor",
+          "sensor": "force"
+        }
+      ],
+      "hints": [
+        {
+          "ru": "Первая часть: начать вперёд, ждать «нажато», стоп.",
+          "kk": "Бірінші бөлігі: алға бастау, «басылды» күту, тоқта.",
+          "en": "Part one: start forward, wait for “pressed”, stop."
+        },
+        {
+          "ru": "Вторая: начать назад, ждать «отпущено», стоп.",
+          "kk": "Екіншісі: артқа бастау, «жіберілді» күту, тоқта.",
+          "en": "Part two: start back, wait for “released”, stop."
+        },
+        {
+          "ru": "В конце — показать улыбку.",
+          "kk": "Соңында — күлкі көрсету.",
+          "en": "Finally show a smile."
+        }
+      ],
+      "reference": [
+        {
+          "op": "start_move",
+          "direction": "forward"
+        },
+        {
+          "op": "wait_until",
+          "condition": {
+            "sensor": "force",
+            "port": "E",
+            "state": "pressed"
+          }
+        },
+        {
+          "op": "stop_move"
+        },
+        {
+          "op": "start_move",
+          "direction": "back"
+        },
+        {
+          "op": "wait_until",
+          "condition": {
+            "sensor": "force",
+            "port": "E",
+            "state": "released"
+          }
+        },
+        {
+          "op": "stop_move"
+        },
+        {
+          "op": "show_image",
+          "image": "smile"
+        }
+      ],
+      "skill": "sensor-force"
+    }
+  ]
+}

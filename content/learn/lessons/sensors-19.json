@@ -1,0 +1,265 @@
+{
+  "id": "sensors-19",
+  "track": "sensors",
+  "unit": "sensors-line",
+  "minutes": 9,
+  "skills": [
+    "line-follow"
+  ],
+  "title": {
+    "ru": "Перекрёстки",
+    "kk": "Қиылыстар",
+    "en": "Crossings"
+  },
+  "goal": {
+    "ru": "Сегодня робот будет ехать по линии и считать перекрёстки.",
+    "kk": "Бүгін робот сызықпен жүріп, қиылыстарды санайды.",
+    "en": "Today the robot will follow a line and count crossings."
+  },
+  "summary": {
+    "ru": "Теперь ты умеешь совмещать езду по линии и поиск меток.",
+    "kk": "Енді сен сызықпен жүру мен белгілерді іздеуді біріктіре аласың.",
+    "en": "Now you can combine line following with finding marks."
+  },
+  "steps": [
+    {
+      "id": "marks",
+      "type": "theory",
+      "title": {
+        "ru": "Метки на линии",
+        "kk": "Сызықтағы белгілер",
+        "en": "Marks on the line"
+      },
+      "body": {
+        "ru": "На трассе перекрёстки отмечены синими метками. Робот едет по краю линии и одновременно ждёт синий.\n\nУвидел метку — проезжает её прямо, чтобы не «посчитать» дважды, и снова едет по линии до следующей.\n\nТак робот находит нужный перекрёсток: второй, третий — какой скажешь.",
+        "kk": "Трассада қиылыстар көк белгілермен белгіленген. Робот сызықтың шетімен жүріп, бір мезгілде көкті күтеді.\n\nБелгіні көрді — екі рет «санамау» үшін оны тура өтіп, келесісіне дейін қайтадан сызықпен жүреді.\n\nОсылай робот керекті қиылысты табады: екінші, үшінші — қайсысын айтсаң.",
+        "en": "Crossings on the track are marked blue. The robot follows the edge of the line and waits for blue at the same time.\n\nOn a mark it drives straight over it so it does not “count” it twice, then follows the line again to the next.\n\nThat is how the robot finds the crossing you want: the second, the third — any."
+      },
+      "illustration": "r-crossing"
+    },
+    {
+      "id": "second",
+      "type": "code",
+      "title": {
+        "ru": "Второй перекрёсток",
+        "kk": "Екінші қиылыс",
+        "en": "The second crossing"
+      },
+      "task": {
+        "ru": "Езжай по линии до первой синей метки, проедь её прямо на 10 см, снова езжай по линии до второй метки и остановись на ней.",
+        "kk": "Бірінші көк белгіге дейін сызықпен жүр, оны 10 см тура өт, қайтадан екінші белгіге дейін сызықпен жүріп, онда тоқта.",
+        "en": "Follow the line to the first blue mark, drive straight over it for 10 cm, follow the line again to the second mark and stop there."
+      },
+      "field": {
+        "width": 1500,
+        "height": 400,
+        "start": {
+          "x": 150,
+          "y": 200,
+          "heading": 0
+        },
+        "border": true,
+        "zones": [
+          {
+            "id": "m1",
+            "x": 560,
+            "y": 150,
+            "w": 80,
+            "h": 100,
+            "kind": "paint",
+            "color": "blue"
+          },
+          {
+            "id": "m2",
+            "x": 960,
+            "y": 150,
+            "w": 80,
+            "h": 100,
+            "kind": "paint",
+            "color": "blue"
+          },
+          {
+            "id": "second",
+            "x": 830,
+            "y": 80,
+            "w": 200,
+            "h": 240,
+            "kind": "target",
+            "label": {
+              "ru": "Второй перекрёсток",
+              "kk": "Екінші қиылыс",
+              "en": "Second crossing"
+            }
+          }
+        ],
+        "points": [],
+        "walls": [],
+        "lines": [
+          {
+            "points": [
+              [
+                100,
+                205
+              ],
+              [
+                1450,
+                205
+              ]
+            ],
+            "width": 20,
+            "color": "black"
+          }
+        ]
+      },
+      "toolbox": [
+        "start_steer",
+        "stop_move",
+        "repeat_until",
+        "if",
+        "move"
+      ],
+      "start": [],
+      "checks": [
+        {
+          "type": "finishInZone",
+          "zone": "second"
+        },
+        {
+          "type": "usesSensor",
+          "sensor": "reflection"
+        },
+        {
+          "type": "usesSensor",
+          "sensor": "color"
+        }
+      ],
+      "hints": [
+        {
+          "ru": "Езда по линии до синего — «повторять, пока не цвет синий».",
+          "kk": "Көкке дейін сызықпен жүру — «түс көк болғанша қайталау».",
+          "en": "Line following to blue: “repeat until colour is blue”."
+        },
+        {
+          "ru": "Между двумя такими циклами — «вперёд 10 см».",
+          "kk": "Осындай екі циклдың арасында — «10 см алға».",
+          "en": "Between two such loops: “forward 10 cm”."
+        },
+        {
+          "ru": "Цикл до синего; вперёд 10; цикл до синего; стоп.",
+          "kk": "Көкке дейін цикл; 10 алға; көкке дейін цикл; тоқта.",
+          "en": "Loop to blue; forward 10; loop to blue; stop."
+        }
+      ],
+      "reference": [
+        {
+          "op": "repeat_until",
+          "condition": {
+            "sensor": "color",
+            "port": "D",
+            "color": "blue"
+          },
+          "steps": [
+            {
+              "op": "if",
+              "condition": {
+                "sensor": "reflection",
+                "port": "D",
+                "comparator": "<",
+                "value": 50
+              },
+              "then": [
+                {
+                  "op": "start_steer",
+                  "steering": 20
+                }
+              ],
+              "else": [
+                {
+                  "op": "start_steer",
+                  "steering": -20
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "op": "move",
+          "direction": "forward",
+          "value": 10,
+          "unit": "cm"
+        },
+        {
+          "op": "repeat_until",
+          "condition": {
+            "sensor": "color",
+            "port": "D",
+            "color": "blue"
+          },
+          "steps": [
+            {
+              "op": "if",
+              "condition": {
+                "sensor": "reflection",
+                "port": "D",
+                "comparator": "<",
+                "value": 50
+              },
+              "then": [
+                {
+                  "op": "start_steer",
+                  "steering": 20
+                }
+              ],
+              "else": [
+                {
+                  "op": "start_steer",
+                  "steering": -20
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "op": "stop_move"
+        }
+      ],
+      "skill": "line-follow"
+    },
+    {
+      "id": "why-skip",
+      "type": "quiz",
+      "kind": "choice",
+      "question": {
+        "ru": "Зачем проезжать метку прямо на 10 см?",
+        "kk": "Белгіні неге 10 см тура өту керек?",
+        "en": "Why drive straight over the mark for 10 cm?"
+      },
+      "options": [
+        {
+          "ru": "Чтобы следующий цикл не остановился сразу на той же метке",
+          "kk": "Келесі цикл сол белгіде бірден тоқтамауы үшін",
+          "en": "So the next loop does not stop on the same mark at once"
+        },
+        {
+          "ru": "Чтобы робот отдохнул",
+          "kk": "Робот демалуы үшін",
+          "en": "To let the robot rest"
+        },
+        {
+          "ru": "Так быстрее разряжается батарея",
+          "kk": "Батарея тезірек отырады",
+          "en": "It drains the battery faster"
+        }
+      ],
+      "correct": [
+        0
+      ],
+      "explanation": {
+        "ru": "Пока датчик на метке, условие «синий» правда. Нужно съехать с неё, прежде чем искать следующую.",
+        "kk": "Датчик белгіде тұрғанда «көк» шарты ақиқат. Келесісін іздеуден бұрын одан шығу керек.",
+        "en": "While the sensor is on the mark, “blue” is true. Get off it before looking for the next."
+      },
+      "skill": "line-follow"
+    }
+  ]
+}

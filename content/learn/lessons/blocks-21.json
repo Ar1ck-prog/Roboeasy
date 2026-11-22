@@ -1,0 +1,217 @@
+{
+  "id": "blocks-21",
+  "track": "blocks",
+  "unit": "blocks-variables",
+  "minutes": 10,
+  "skills": [
+    "variables"
+  ],
+  "title": {
+    "ru": "Проект «Считаем круги»",
+    "kk": "«Айналымдарды санаймыз» жобасы",
+    "en": "Project: Count the laps"
+  },
+  "goal": {
+    "ru": "Сегодня робот проедет несколько кругов и сам их посчитает.",
+    "kk": "Бүгін робот бірнеше айналым жүріп, оларды өзі санайды.",
+    "en": "Today the robot will drive several laps and count them itself."
+  },
+  "summary": {
+    "ru": "Теперь ты умеешь соединять цикл, счётчик и экран в одном проекте.",
+    "kk": "Енді сен цикл, санауыш пен экранды бір жобада біріктіре аласың.",
+    "en": "Now you can combine a loop, a counter and the screen in one project."
+  },
+  "steps": [
+    {
+      "id": "plan",
+      "type": "theory",
+      "title": {
+        "ru": "Гонка на 3 круга",
+        "kk": "3 айналымдық жарыс",
+        "en": "A 3-lap race"
+      },
+      "body": {
+        "ru": "Робот-гонщик едет по квадратной трассе со стороной 30 см.\n\nПосле каждого круга он показывает номер круга на экране. После третьего — финишный сигнал.\n\nКруг — это цикл из 4 сторон. А несколько кругов — цикл снаружи. Счётчик кругов растёт во внешнем цикле.",
+        "kk": "Робот-жарысшы қабырғасы 30 см шаршы трассамен жүреді.\n\nӘр айналымнан кейін ол айналым нөмірін экранда көрсетеді. Үшіншіден кейін — мәре дыбысы.\n\nАйналым — 4 қабырғадан тұратын цикл. Ал бірнеше айналым — сыртқы цикл. Айналым санауышы сыртқы циклда өседі.",
+        "en": "A racing robot drives a square track with 30 cm sides.\n\nAfter each lap it shows the lap number on the screen. After the third — a finish beep.\n\nOne lap is a loop of 4 sides. Several laps are a loop outside it. The lap counter grows in the outer loop."
+      },
+      "illustration": "r-counter"
+    },
+    {
+      "id": "laps",
+      "type": "project",
+      "title": {
+        "ru": "Три круга",
+        "kk": "Үш айналым",
+        "en": "Three laps"
+      },
+      "task": {
+        "ru": "Проедь 3 круга по квадрату 30 см (налево), после каждого круга показывай номер круга. В конце — **3** на экране, сигнал и остановка на старте.",
+        "kk": "30 см шаршы бойымен 3 айналым жүр (солға), әр айналымнан кейін айналым нөмірін көрсет. Соңында экранда — **3**, дыбыс және стартта тоқтау.",
+        "en": "Drive 3 laps of a 30 cm square (turning left), showing the lap number after each lap. At the end: **3** on the screen, a beep and a stop at the start."
+      },
+      "field": {
+        "width": 1000,
+        "height": 850,
+        "start": {
+          "x": 300,
+          "y": 250,
+          "heading": 0
+        },
+        "border": true,
+        "zones": [
+          {
+            "id": "home",
+            "x": 200,
+            "y": 150,
+            "w": 200,
+            "h": 200,
+            "kind": "target",
+            "label": {
+              "ru": "Старт",
+              "kk": "Старт",
+              "en": "Start"
+            }
+          }
+        ],
+        "points": [],
+        "walls": [],
+        "lines": []
+      },
+      "toolbox": [
+        "set_var",
+        "change_var",
+        "write_var",
+        "move",
+        "turn",
+        "repeat",
+        "beep"
+      ],
+      "start": [],
+      "checks": [
+        {
+          "type": "displayed",
+          "text": "3"
+        },
+        {
+          "type": "beeped",
+          "min": 1
+        },
+        {
+          "type": "finishInZone",
+          "zone": "home"
+        },
+        {
+          "type": "usesOp",
+          "op": "change_var",
+          "min": 1
+        },
+        {
+          "type": "noCollision"
+        }
+      ],
+      "hints": [
+        {
+          "ru": "Внутренний цикл — один круг: 4 раза вперёд 30 и налево 90°.",
+          "kk": "Ішкі цикл — бір айналым: 4 рет 30 алға және солға 90°.",
+          "en": "Inner loop — one lap: 4 times forward 30 and left 90°."
+        },
+        {
+          "ru": "Во внешнем цикле после круга: изменить laps на 1, написать laps.",
+          "kk": "Сыртқы циклда айналымнан кейін: laps мәнін 1 өзгерту, laps жазу.",
+          "en": "In the outer loop after the lap: change laps by 1, write laps."
+        },
+        {
+          "ru": "laps = 0; повторить 3: (повторить 4: вперёд 30, налево 90°), изменить laps на 1, написать laps; сигнал.",
+          "kk": "laps = 0; 3 рет: (4 рет: 30 алға, солға 90°), laps мәнін 1 өзгерту, laps жазу; дыбыс.",
+          "en": "laps = 0; repeat 3: (repeat 4: forward 30, left 90°), change laps by 1, write laps; beep."
+        }
+      ],
+      "reference": [
+        {
+          "op": "set_var",
+          "name": "laps",
+          "expr": {
+            "num": 0
+          }
+        },
+        {
+          "op": "repeat",
+          "times": 3,
+          "steps": [
+            {
+              "op": "repeat",
+              "times": 4,
+              "steps": [
+                {
+                  "op": "move",
+                  "direction": "forward",
+                  "value": 30,
+                  "unit": "cm"
+                },
+                {
+                  "op": "turn",
+                  "direction": "left",
+                  "degrees": 90
+                }
+              ]
+            },
+            {
+              "op": "change_var",
+              "name": "laps",
+              "expr": {
+                "num": 1
+              }
+            },
+            {
+              "op": "write_var",
+              "name": "laps"
+            }
+          ]
+        },
+        {
+          "op": "beep",
+          "note": 72,
+          "seconds": 0.3
+        }
+      ],
+      "skill": "variables"
+    },
+    {
+      "id": "where",
+      "type": "quiz",
+      "kind": "choice",
+      "question": {
+        "ru": "Где должен стоять блок «изменить laps на 1», чтобы считать круги, а не стороны?",
+        "kk": "Қабырғаларды емес, айналымдарды санау үшін «laps мәнін 1 өзгерту» блогы қайда тұруы керек?",
+        "en": "Where must “change laps by 1” go to count laps, not sides?"
+      },
+      "options": [
+        {
+          "ru": "Во внешнем цикле, после внутреннего",
+          "kk": "Сыртқы циклда, ішкіден кейін",
+          "en": "In the outer loop, after the inner one"
+        },
+        {
+          "ru": "Во внутреннем цикле",
+          "kk": "Ішкі циклда",
+          "en": "In the inner loop"
+        },
+        {
+          "ru": "Перед всеми циклами",
+          "kk": "Барлық циклдардың алдында",
+          "en": "Before all loops"
+        }
+      ],
+      "correct": [
+        0
+      ],
+      "explanation": {
+        "ru": "Во внутреннем цикле счётчик вырастет 4 раза за круг — посчитает стороны. Круг заканчивается после внутреннего цикла.",
+        "kk": "Ішкі циклда санауыш бір айналымда 4 рет өседі — қабырғаларды санайды. Айналым ішкі циклдан кейін аяқталады.",
+        "en": "Inside the inner loop the counter grows 4 times per lap — it counts sides. A lap ends after the inner loop."
+      },
+      "skill": "variables"
+    }
+  ]
+}

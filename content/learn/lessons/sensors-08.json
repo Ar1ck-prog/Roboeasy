@@ -1,0 +1,215 @@
+{
+  "id": "sensors-08",
+  "track": "sensors",
+  "unit": "sensors-distance",
+  "minutes": 8,
+  "skills": [
+    "sensor-distance"
+  ],
+  "title": {
+    "ru": "Держать дистанцию",
+    "kk": "Арақашықтықты ұстау",
+    "en": "Keep your distance"
+  },
+  "goal": {
+    "ru": "Сегодня робот научится держаться на нужном расстоянии от стены.",
+    "kk": "Бүгін робот қабырғадан керекті қашықтықта тұруды үйренеді.",
+    "en": "Today the robot will learn to hold a set distance from a wall."
+  },
+  "summary": {
+    "ru": "Теперь ты знаешь первый регулятор: робот всё время сравнивает и поправляется.",
+    "kk": "Енді сен алғашқы реттегішті білесің: робот үнемі салыстырып, түзетіледі.",
+    "en": "Now you know your first controller: the robot keeps comparing and correcting."
+  },
+  "steps": [
+    {
+      "id": "keep",
+      "type": "theory",
+      "title": {
+        "ru": "Всё время поправляться",
+        "kk": "Үнемі түзетілу",
+        "en": "Correct all the time"
+      },
+      "body": {
+        "ru": "Машина в пробке держит дистанцию: если впереди близко — притормозить, если далеко — подъехать.\n\nРобот может так же: **всегда** проверять расстояние. **Если** ближе 20 см — ехать назад, **иначе** — вперёд.\n\nРобот немного качается вперёд-назад около 20 см, но держится рядом. Это простейший **регулятор**.",
+        "kk": "Кептелістегі көлік арақашықтықты ұстайды: алда жақын болса — тежейді, алыс болса — жақындайды.\n\nРобот та солай істей алады: қашықтықты **әрдайым** тексеру. **Егер** 20 см-ден жақын болса — артқа, **әйтпесе** — алға жүру.\n\nРобот 20 см айналасында сәл алға-артқа тербеледі, бірақ жақын тұрады. Бұл — ең қарапайым **реттегіш**.",
+        "en": "A car in traffic keeps its distance: too close — slow down, too far — catch up.\n\nThe robot can do the same: **always** check the distance. **If** closer than 20 cm — drive back, **else** — forward.\n\nThe robot rocks back and forth around 20 cm but stays close. This is the simplest **controller**."
+      },
+      "illustration": "r-distance",
+      "example": [
+        {
+          "op": "forever",
+          "steps": [
+            {
+              "op": "if",
+              "condition": {
+                "sensor": "distance",
+                "port": "C",
+                "comparator": "<",
+                "value": 20,
+                "unit": "cm"
+              },
+              "then": [
+                {
+                  "op": "start_move",
+                  "direction": "back"
+                }
+              ],
+              "else": [
+                {
+                  "op": "start_move",
+                  "direction": "forward"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "hold",
+      "type": "code",
+      "title": {
+        "ru": "Держи 20 см",
+        "kk": "20 см ұста",
+        "en": "Hold 20 cm"
+      },
+      "task": {
+        "ru": "Напиши регулятор: всегда, если стена ближе 20 см — назад, иначе — вперёд. Робот должен держаться около стены и не врезаться.",
+        "kk": "Реттегіш жаз: әрдайым, егер қабырға 20 см-ден жақын болса — артқа, әйтпесе — алға. Робот қабырға жанында тұрып, соғылмауы керек.",
+        "en": "Write a controller: forever, if the wall is closer than 20 cm — back, else — forward. The robot must stay near the wall without crashing."
+      },
+      "field": {
+        "width": 1400,
+        "height": 400,
+        "start": {
+          "x": 150,
+          "y": 200,
+          "heading": 0
+        },
+        "border": true,
+        "zones": [],
+        "points": [],
+        "walls": [
+          {
+            "x": 900,
+            "y": 0,
+            "w": 40,
+            "h": 400
+          }
+        ],
+        "lines": []
+      },
+      "toolbox": [
+        "start_move",
+        "stop_move",
+        "forever",
+        "if",
+        "move"
+      ],
+      "start": [],
+      "checks": [
+        {
+          "type": "stopBeforeWall",
+          "maxMm": 260
+        },
+        {
+          "type": "usesOp",
+          "op": "forever",
+          "min": 1
+        },
+        {
+          "type": "usesOp",
+          "op": "if",
+          "min": 1
+        },
+        {
+          "type": "noCollision"
+        }
+      ],
+      "hints": [
+        {
+          "ru": "Внешний блок — «повторять всегда».",
+          "kk": "Сыртқы блок — «әрдайым қайталау».",
+          "en": "The outer block is “forever”."
+        },
+        {
+          "ru": "Внутри — «если… иначе» с расстоянием < 20 см.",
+          "kk": "Ішінде — қашықтығы < 20 см «егер… әйтпесе».",
+          "en": "Inside: “if… else” with distance < 20 cm."
+        },
+        {
+          "ru": "Если: начать движение назад; иначе: начать движение вперёд.",
+          "kk": "Егер: артқа қозғалысты бастау; әйтпесе: алға қозғалысты бастау.",
+          "en": "If: start moving back; else: start moving forward."
+        }
+      ],
+      "reference": [
+        {
+          "op": "forever",
+          "steps": [
+            {
+              "op": "if",
+              "condition": {
+                "sensor": "distance",
+                "port": "C",
+                "comparator": "<",
+                "value": 20,
+                "unit": "cm"
+              },
+              "then": [
+                {
+                  "op": "start_move",
+                  "direction": "back"
+                }
+              ],
+              "else": [
+                {
+                  "op": "start_move",
+                  "direction": "forward"
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "skill": "sensor-distance"
+    },
+    {
+      "id": "rock",
+      "type": "quiz",
+      "kind": "choice",
+      "question": {
+        "ru": "Почему робот качается вперёд-назад около 20 см?",
+        "kk": "Неге робот 20 см айналасында алға-артқа тербеледі?",
+        "en": "Why does the robot rock back and forth around 20 cm?"
+      },
+      "options": [
+        {
+          "ru": "Он умеет только «вперёд» или «назад», без «чуть-чуть»",
+          "kk": "Ол тек «алға» не «артқа» біледі, «сәл» жоқ",
+          "en": "It only knows “forward” or “back”, nothing in between"
+        },
+        {
+          "ru": "Датчик сломан",
+          "kk": "Датчик бұзылған",
+          "en": "The sensor is broken"
+        },
+        {
+          "ru": "Так задумали шины",
+          "kk": "Шиналар солай ойластырылған",
+          "en": "The tyres are made that way"
+        }
+      ],
+      "correct": [
+        0
+      ],
+      "explanation": {
+        "ru": "Регулятор «да/нет» всегда немного качается. Плавные регуляторы ты узнаешь в треке «Навигация».",
+        "kk": "«Иә/жоқ» реттегіші әрдайым сәл тербеледі. Біркелкі реттегіштерді «Навигация» трегінде білесің.",
+        "en": "A yes/no controller always rocks a little. Smooth controllers come in the Navigation track."
+      },
+      "skill": "sensor-distance"
+    }
+  ]
+}

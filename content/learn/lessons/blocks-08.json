@@ -1,0 +1,499 @@
+{
+  "id": "blocks-08",
+  "track": "blocks",
+  "unit": "blocks-loops",
+  "minutes": 8,
+  "skills": [
+    "loops"
+  ],
+  "title": {
+    "ru": "Квадрат короче",
+    "kk": "Қысқа шаршы",
+    "en": "A shorter square"
+  },
+  "goal": {
+    "ru": "Сегодня ты нарисуешь роботом квадрат всего тремя блоками.",
+    "kk": "Бүгін сен роботпен небәрі үш блокпен шаршы саласың.",
+    "en": "Today you will drive a square with just three blocks."
+  },
+  "summary": {
+    "ru": "Теперь ты умеешь находить повторяющуюся часть фигуры и прятать её в цикл.",
+    "kk": "Енді сен фигураның қайталанатын бөлігін тауып, оны циклға жасыра аласың.",
+    "en": "Now you can spot the repeating part of a shape and put it in a loop."
+  },
+  "steps": [
+    {
+      "id": "pattern",
+      "type": "theory",
+      "title": {
+        "ru": "Фигура из повторов",
+        "kk": "Қайталаудан тұратын фигура",
+        "en": "Shapes from repeats"
+      },
+      "body": {
+        "ru": "У квадрата 4 одинаковые стороны и 4 одинаковых угла. Значит, программа квадрата — это 4 раза «вперёд и поворот на 90°».\n\nСначала найди **повторяющуюся часть**, потом положи её в цикл и укажи, сколько раз повторить.\n\nТак можно нарисовать и треугольник, и шестиугольник — меняются только число повторов и угол.",
+        "kk": "Шаршының 4 бірдей қабырғасы және 4 бірдей бұрышы бар. Демек, шаршы бағдарламасы — 4 рет «алға және 90°-қа бұрылу».\n\nАлдымен **қайталанатын бөлікті** тап, содан кейін оны циклға салып, неше рет қайталау керегін көрсет.\n\nОсылай үшбұрышты да, алтыбұрышты да салуға болады — тек қайталау саны мен бұрыш өзгереді.",
+        "en": "A square has 4 equal sides and 4 equal corners. So a square program is 4 times “forward and turn 90°”.\n\nFirst find the **repeating part**, then put it in a loop and set how many times to repeat.\n\nThe same works for a triangle or a hexagon — only the number of repeats and the angle change."
+      },
+      "illustration": "square",
+      "example": [
+        {
+          "op": "repeat",
+          "times": 4,
+          "steps": [
+            {
+              "op": "move",
+              "direction": "forward",
+              "value": 30,
+              "unit": "cm"
+            },
+            {
+              "op": "turn",
+              "direction": "left",
+              "degrees": 90
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "square",
+      "type": "code",
+      "title": {
+        "ru": "Квадрат из трёх блоков",
+        "kk": "Үш блоктан шаршы",
+        "en": "A three-block square"
+      },
+      "task": {
+        "ru": "Проедь квадрат со стороной 30 см через все углы и вернись на старт. Поворачивай налево. Не больше 3 блоков.",
+        "kk": "Қабырғасы 30 см шаршыны барлық бұрыштар арқылы жүріп өтіп, стартқа орал. Солға бұрыл. 3 блоктан артық емес.",
+        "en": "Drive a 30 cm square through every corner and come back to the start. Turn left. At most 3 blocks."
+      },
+      "field": {
+        "width": 1000,
+        "height": 850,
+        "start": {
+          "x": 300,
+          "y": 250,
+          "heading": 0
+        },
+        "border": true,
+        "zones": [
+          {
+            "id": "home",
+            "x": 200,
+            "y": 150,
+            "w": 200,
+            "h": 200,
+            "kind": "target",
+            "label": {
+              "ru": "Старт",
+              "kk": "Старт",
+              "en": "Start"
+            }
+          }
+        ],
+        "points": [
+          {
+            "id": "p1",
+            "x": 600,
+            "y": 250,
+            "r": 60,
+            "label": {
+              "ru": "Угол 1",
+              "kk": "1-бұрыш",
+              "en": "Corner 1"
+            }
+          },
+          {
+            "id": "p2",
+            "x": 600,
+            "y": 550,
+            "r": 60,
+            "label": {
+              "ru": "Угол 2",
+              "kk": "2-бұрыш",
+              "en": "Corner 2"
+            }
+          },
+          {
+            "id": "p3",
+            "x": 300,
+            "y": 550,
+            "r": 60,
+            "label": {
+              "ru": "Угол 3",
+              "kk": "3-бұрыш",
+              "en": "Corner 3"
+            }
+          }
+        ],
+        "walls": [],
+        "lines": []
+      },
+      "toolbox": [
+        "move",
+        "turn",
+        "repeat"
+      ],
+      "start": [],
+      "checks": [
+        {
+          "type": "passPoints",
+          "points": [
+            "p1",
+            "p2",
+            "p3"
+          ],
+          "ordered": true
+        },
+        {
+          "type": "finishInZone",
+          "zone": "home"
+        },
+        {
+          "type": "maxBlocks",
+          "max": 3
+        },
+        {
+          "type": "noCollision"
+        }
+      ],
+      "hints": [
+        {
+          "ru": "Какие блоки повторяются? Их можно положить внутрь «повторить».",
+          "kk": "Қай блоктар қайталанады? Оларды «қайталау» ішіне салуға болады.",
+          "en": "Which blocks repeat? Put them inside “repeat”."
+        },
+        {
+          "ru": "Одна сторона квадрата: «вперёд 30 см» и «налево 90°».",
+          "kk": "Шаршының бір қабырғасы: «30 см алға» және «солға 90°».",
+          "en": "One side: “forward 30 cm” and “left 90°”."
+        },
+        {
+          "ru": "Повторить 4 раза: вперёд 30 см, налево 90°.",
+          "kk": "4 рет қайталау: 30 см алға, солға 90°.",
+          "en": "Repeat 4 times: forward 30 cm, left 90°."
+        }
+      ],
+      "reference": [
+        {
+          "op": "repeat",
+          "times": 4,
+          "steps": [
+            {
+              "op": "move",
+              "direction": "forward",
+              "value": 30,
+              "unit": "cm"
+            },
+            {
+              "op": "turn",
+              "direction": "left",
+              "degrees": 90
+            }
+          ]
+        }
+      ],
+      "skill": "loops"
+    },
+    {
+      "id": "shape",
+      "type": "predict",
+      "title": {
+        "ru": "Какая фигура?",
+        "kk": "Қандай фигура?",
+        "en": "Which shape?"
+      },
+      "question": {
+        "ru": "Робот выполняет эту программу. Какой путь он проедет?",
+        "kk": "Робот осы бағдарламаны орындайды. Ол қандай жолмен жүреді?",
+        "en": "The robot runs this program. Which path will it drive?"
+      },
+      "field": {
+        "width": 1000,
+        "height": 850,
+        "start": {
+          "x": 300,
+          "y": 250,
+          "heading": 0
+        },
+        "border": true,
+        "zones": [],
+        "points": [],
+        "walls": [],
+        "lines": []
+      },
+      "program": [
+        {
+          "op": "repeat",
+          "times": 3,
+          "steps": [
+            {
+              "op": "move",
+              "direction": "forward",
+              "value": 30,
+              "unit": "cm"
+            },
+            {
+              "op": "turn",
+              "direction": "left",
+              "degrees": 120
+            }
+          ]
+        }
+      ],
+      "options": [
+        {
+          "label": {
+            "ru": "Квадрат",
+            "kk": "Шаршы",
+            "en": "Square"
+          },
+          "steps": [
+            {
+              "op": "repeat",
+              "times": 4,
+              "steps": [
+                {
+                  "op": "move",
+                  "direction": "forward",
+                  "value": 30,
+                  "unit": "cm"
+                },
+                {
+                  "op": "turn",
+                  "direction": "left",
+                  "degrees": 90
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "label": {
+            "ru": "Треугольник",
+            "kk": "Үшбұрыш",
+            "en": "Triangle"
+          },
+          "steps": [
+            {
+              "op": "repeat",
+              "times": 3,
+              "steps": [
+                {
+                  "op": "move",
+                  "direction": "forward",
+                  "value": 30,
+                  "unit": "cm"
+                },
+                {
+                  "op": "turn",
+                  "direction": "left",
+                  "degrees": 120
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "label": {
+            "ru": "Прямая линия",
+            "kk": "Түзу сызық",
+            "en": "Straight line"
+          },
+          "steps": [
+            {
+              "op": "move",
+              "direction": "forward",
+              "value": 90,
+              "unit": "cm"
+            }
+          ]
+        }
+      ],
+      "correct": 1,
+      "explanation": {
+        "ru": "3 стороны и поворот на 120° каждый раз: 3 × 120° = 360°, робот замыкает треугольник.",
+        "kk": "3 қабырға және әр жолы 120°-қа бұрылу: 3 × 120° = 360°, робот үшбұрышты тұйықтайды.",
+        "en": "3 sides and a 120° turn each time: 3 × 120° = 360°, the robot closes a triangle."
+      },
+      "skill": "loops"
+    },
+    {
+      "id": "hexagon",
+      "type": "quiz",
+      "kind": "number",
+      "question": {
+        "ru": "Шестиугольник: повтори 6 раз «вперёд и налево на …°». Какой угол?",
+        "kk": "Алтыбұрыш: 6 рет «алға және солға …°» қайтала. Бұрыш қандай?",
+        "en": "Hexagon: repeat 6 times “forward and left …°”. Which angle?"
+      },
+      "answer": 60,
+      "tolerance": 0,
+      "explanation": {
+        "ru": "За всю фигуру робот поворачивается на 360°. 360° : 6 = 60°.",
+        "kk": "Бүкіл фигура бойы робот 360°-қа бұрылады. 360° : 6 = 60°.",
+        "en": "Over the whole shape the robot turns 360°. 360° ÷ 6 = 60°."
+      },
+      "unit": {
+        "ru": "°",
+        "kk": "°",
+        "en": "°"
+      },
+      "skill": "loops"
+    },
+    {
+      "id": "not-closed",
+      "type": "debug",
+      "title": {
+        "ru": "Квадрат не замкнулся",
+        "kk": "Шаршы тұйықталмады",
+        "en": "The square is not closed"
+      },
+      "task": {
+        "ru": "Робот должен проехать квадрат и вернуться на старт, но останавливается раньше. Найди ошибку.",
+        "kk": "Робот шаршыны жүріп, стартқа оралуы керек, бірақ ертерек тоқтайды. Қатені тап.",
+        "en": "The robot should drive a square and return to the start, but it stops early. Find the bug."
+      },
+      "field": {
+        "width": 1000,
+        "height": 850,
+        "start": {
+          "x": 300,
+          "y": 250,
+          "heading": 0
+        },
+        "border": true,
+        "zones": [
+          {
+            "id": "home",
+            "x": 200,
+            "y": 150,
+            "w": 200,
+            "h": 200,
+            "kind": "target",
+            "label": {
+              "ru": "Старт",
+              "kk": "Старт",
+              "en": "Start"
+            }
+          }
+        ],
+        "points": [
+          {
+            "id": "p1",
+            "x": 600,
+            "y": 250,
+            "r": 60,
+            "label": {
+              "ru": "Угол 1",
+              "kk": "1-бұрыш",
+              "en": "Corner 1"
+            }
+          },
+          {
+            "id": "p2",
+            "x": 600,
+            "y": 550,
+            "r": 60,
+            "label": {
+              "ru": "Угол 2",
+              "kk": "2-бұрыш",
+              "en": "Corner 2"
+            }
+          },
+          {
+            "id": "p3",
+            "x": 300,
+            "y": 550,
+            "r": 60,
+            "label": {
+              "ru": "Угол 3",
+              "kk": "3-бұрыш",
+              "en": "Corner 3"
+            }
+          }
+        ],
+        "walls": [],
+        "lines": []
+      },
+      "toolbox": [
+        "move",
+        "turn",
+        "repeat"
+      ],
+      "start": [
+        {
+          "op": "repeat",
+          "times": 3,
+          "steps": [
+            {
+              "op": "move",
+              "direction": "forward",
+              "value": 30,
+              "unit": "cm"
+            },
+            {
+              "op": "turn",
+              "direction": "left",
+              "degrees": 90
+            }
+          ]
+        }
+      ],
+      "checks": [
+        {
+          "type": "passPoints",
+          "points": [
+            "p1",
+            "p2",
+            "p3"
+          ],
+          "ordered": true
+        },
+        {
+          "type": "finishInZone",
+          "zone": "home"
+        }
+      ],
+      "hints": [
+        {
+          "ru": "Посчитай стороны, которые проехал робот.",
+          "kk": "Робот жүрген қабырғаларды сана.",
+          "en": "Count the sides the robot drove."
+        },
+        {
+          "ru": "У квадрата 4 стороны. Сколько раз повторяет цикл?",
+          "kk": "Шаршының 4 қабырғасы бар. Цикл неше рет қайталайды?",
+          "en": "A square has 4 sides. How many times does the loop repeat?"
+        },
+        {
+          "ru": "Поменяй 3 на 4.",
+          "kk": "3-ті 4-ке ауыстыр.",
+          "en": "Change 3 to 4."
+        }
+      ],
+      "reference": [
+        {
+          "op": "repeat",
+          "times": 4,
+          "steps": [
+            {
+              "op": "move",
+              "direction": "forward",
+              "value": 30,
+              "unit": "cm"
+            },
+            {
+              "op": "turn",
+              "direction": "left",
+              "degrees": 90
+            }
+          ]
+        }
+      ],
+      "skill": "loops"
+    }
+  ]
+}

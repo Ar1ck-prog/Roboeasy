@@ -1,0 +1,285 @@
+{
+  "id": "blocks-25",
+  "track": "blocks",
+  "unit": "blocks-functions",
+  "minutes": 12,
+  "skills": [
+    "functions"
+  ],
+  "title": {
+    "ru": "Проект «Робот-гид»",
+    "kk": "«Робот-гид» жобасы",
+    "en": "Project: Robot guide"
+  },
+  "goal": {
+    "ru": "Сегодня твой робот проведёт экскурсию по выставке.",
+    "kk": "Бүгін сенің роботың көрме бойынша экскурсия жүргізеді.",
+    "en": "Today your robot will give a tour of an exhibition."
+  },
+  "summary": {
+    "ru": "Трек «Блоки» пройден! Ты соединяешь циклы, переменные и свои блоки в настоящую программу.",
+    "kk": "«Блоктар» тректі өттің! Сен циклдарды, айнымалыларды және өз блоктарыңды нағыз бағдарламаға біріктіресің.",
+    "en": "The Blocks track is done! You combine loops, variables and your own blocks into a real program."
+  },
+  "steps": [
+    {
+      "id": "brief",
+      "type": "theory",
+      "title": {
+        "ru": "Экскурсия",
+        "kk": "Экскурсия",
+        "en": "The tour"
+      },
+      "body": {
+        "ru": "На выставке 4 стенда, каждые 25 см. Робот-гид подъезжает к стенду, показывает его номер на экране и рассказывает о нём: сигнал и пауза.\n\nИспользуй всё, что знаешь:\n\n1. **Цикл** — 4 стенда.\n2. **Переменная** n — номер стенда.\n3. **Свой блок** tell — сигнал и пауза 1 с.",
+        "kk": "Көрмеде әр 25 см сайын 4 стенд бар. Робот-гид стендке жақындап, экранда оның нөмірін көрсетеді және ол туралы айтады: дыбыс және үзіліс.\n\nБілгеніңнің бәрін қолдан:\n\n1. **Цикл** — 4 стенд.\n2. **Айнымалы** n — стенд нөмірі.\n3. **Өз блогың** tell — дыбыс және 1 с үзіліс.",
+        "en": "The exhibition has 4 stands, every 25 cm. The guide robot drives up to a stand, shows its number on the screen and tells about it: a beep and a pause.\n\nUse everything you know:\n\n1. A **loop** — 4 stands.\n2. A **variable** n — the stand number.\n3. **Your own block** tell — a beep and a 1 s pause."
+      },
+      "illustration": "r-myblock"
+    },
+    {
+      "id": "guide",
+      "type": "project",
+      "title": {
+        "ru": "Экскурсия по выставке",
+        "kk": "Көрме бойынша экскурсия",
+        "en": "Exhibition tour"
+      },
+      "task": {
+        "ru": "Посети 4 стенда (каждые 25 см). У каждого покажи номер стенда и выполни свой блок **tell** (сигнал + пауза 1 с). После последнего стенда проедь к выходу.",
+        "kk": "4 стендке бар (әр 25 см сайын). Әрқайсысында стенд нөмірін көрсетіп, өз **tell** блогыңды орында (дыбыс + 1 с үзіліс). Соңғы стендтен кейін шығуға жүр.",
+        "en": "Visit 4 stands (every 25 cm). At each, show the stand number and run your block **tell** (beep + 1 s pause). After the last stand, drive to the exit."
+      },
+      "field": {
+        "width": 1500,
+        "height": 400,
+        "start": {
+          "x": 100,
+          "y": 200,
+          "heading": 0
+        },
+        "border": true,
+        "zones": [
+          {
+            "id": "exit",
+            "x": 1250,
+            "y": 100,
+            "w": 200,
+            "h": 200,
+            "kind": "target",
+            "label": {
+              "ru": "Выход",
+              "kk": "Шығу",
+              "en": "Exit"
+            }
+          }
+        ],
+        "points": [
+          {
+            "id": "s1",
+            "x": 350,
+            "y": 200,
+            "r": 50,
+            "label": {
+              "ru": "Стенд 1",
+              "kk": "1-стенд",
+              "en": "Stand 1"
+            }
+          },
+          {
+            "id": "s2",
+            "x": 600,
+            "y": 200,
+            "r": 50,
+            "label": {
+              "ru": "Стенд 2",
+              "kk": "2-стенд",
+              "en": "Stand 2"
+            }
+          },
+          {
+            "id": "s3",
+            "x": 850,
+            "y": 200,
+            "r": 50,
+            "label": {
+              "ru": "Стенд 3",
+              "kk": "3-стенд",
+              "en": "Stand 3"
+            }
+          },
+          {
+            "id": "s4",
+            "x": 1100,
+            "y": 200,
+            "r": 50,
+            "label": {
+              "ru": "Стенд 4",
+              "kk": "4-стенд",
+              "en": "Stand 4"
+            }
+          }
+        ],
+        "walls": [],
+        "lines": []
+      },
+      "toolbox": [
+        "call",
+        "set_var",
+        "change_var",
+        "write_var",
+        "move",
+        "repeat",
+        "beep",
+        "wait"
+      ],
+      "start": [],
+      "checks": [
+        {
+          "type": "passPoints",
+          "points": [
+            "s1",
+            "s2",
+            "s3",
+            "s4"
+          ],
+          "ordered": true
+        },
+        {
+          "type": "displayed",
+          "text": "4"
+        },
+        {
+          "type": "beeped",
+          "min": 4
+        },
+        {
+          "type": "usesOp",
+          "op": "call",
+          "min": 1
+        },
+        {
+          "type": "usesOp",
+          "op": "repeat",
+          "min": 1
+        },
+        {
+          "type": "finishInZone",
+          "zone": "exit"
+        }
+      ],
+      "hints": [
+        {
+          "ru": "Блок tell: сигнал, ждать 1 с.",
+          "kk": "tell блогы: дыбыс, 1 с күту.",
+          "en": "Block tell: beep, wait 1 s."
+        },
+        {
+          "ru": "Перед циклом n = 1. В цикле: вперёд 25, написать n, tell, изменить n на 1.",
+          "kk": "Циклдан бұрын n = 1. Циклда: 25 алға, n жазу, tell, n мәнін 1 өзгерту.",
+          "en": "Before the loop n = 1. In the loop: forward 25, write n, tell, change n by 1."
+        },
+        {
+          "ru": "После цикла — вперёд 25 см к выходу.",
+          "kk": "Циклдан кейін — шығуға 25 см алға.",
+          "en": "After the loop — forward 25 cm to the exit."
+        }
+      ],
+      "reference": [
+        {
+          "op": "set_var",
+          "name": "n",
+          "expr": {
+            "num": 1
+          }
+        },
+        {
+          "op": "repeat",
+          "times": 4,
+          "steps": [
+            {
+              "op": "move",
+              "direction": "forward",
+              "value": 25,
+              "unit": "cm"
+            },
+            {
+              "op": "write_var",
+              "name": "n"
+            },
+            {
+              "op": "call",
+              "name": "tell"
+            },
+            {
+              "op": "change_var",
+              "name": "n",
+              "expr": {
+                "num": 1
+              }
+            }
+          ]
+        },
+        {
+          "op": "move",
+          "direction": "forward",
+          "value": 25,
+          "unit": "cm"
+        }
+      ],
+      "referenceFunctions": [
+        {
+          "name": "tell",
+          "steps": [
+            {
+              "op": "beep",
+              "note": 72,
+              "seconds": 0.3
+            },
+            {
+              "op": "wait",
+              "seconds": 1
+            }
+          ]
+        }
+      ],
+      "skill": "functions"
+    },
+    {
+      "id": "best",
+      "type": "quiz",
+      "kind": "choice",
+      "question": {
+        "ru": "Что сделало программу гида короткой?",
+        "kk": "Гид бағдарламасын не қысқа етті?",
+        "en": "What made the guide program short?"
+      },
+      "options": [
+        {
+          "ru": "Цикл, переменная и свой блок вместе",
+          "kk": "Цикл, айнымалы және өз блогың бірге",
+          "en": "A loop, a variable and your own block together"
+        },
+        {
+          "ru": "Высокая скорость",
+          "kk": "Жоғары жылдамдық",
+          "en": "High speed"
+        },
+        {
+          "ru": "Много блоков «вперёд»",
+          "kk": "Көп «алға» блоктары",
+          "en": "Lots of “forward” blocks"
+        }
+      ],
+      "correct": [
+        0
+      ],
+      "explanation": {
+        "ru": "Цикл повторяет, переменная помнит номер, свой блок прячет детали. Так пишут большие программы.",
+        "kk": "Цикл қайталайды, айнымалы нөмірді есте сақтайды, өз блогың егжей-тегжейді жасырады. Үлкен бағдарламалар осылай жазылады.",
+        "en": "The loop repeats, the variable remembers the number, your block hides the details. That is how big programs are written."
+      },
+      "skill": "functions"
+    }
+  ]
+}

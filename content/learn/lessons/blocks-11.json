@@ -1,0 +1,347 @@
+{
+  "id": "blocks-11",
+  "track": "blocks",
+  "unit": "blocks-loops",
+  "minutes": 7,
+  "skills": [
+    "loops"
+  ],
+  "title": {
+    "ru": "Лишний повтор",
+    "kk": "Артық қайталау",
+    "en": "One repeat too many"
+  },
+  "goal": {
+    "ru": "Сегодня ты найдёшь и исправишь ошибки в циклах.",
+    "kk": "Бүгін сен циклдардағы қателерді тауып, түзетесің.",
+    "en": "Today you will find and fix bugs in loops."
+  },
+  "summary": {
+    "ru": "Теперь ты проверяешь цикл так: сколько повторов и что лежит внутри.",
+    "kk": "Енді сен циклды былай тексересің: неше қайталау және ішінде не бар.",
+    "en": "Now you check a loop by asking: how many repeats, and what is inside?"
+  },
+  "steps": [
+    {
+      "id": "check",
+      "type": "theory",
+      "title": {
+        "ru": "Как проверять цикл",
+        "kk": "Циклды қалай тексеру керек",
+        "en": "How to check a loop"
+      },
+      "body": {
+        "ru": "Две частые ошибки в циклах:\n\n1. **Неправильное число повторов** — на один больше или меньше, чем нужно.\n2. **Блок не на своём месте** — должен быть внутри цикла, а лежит снаружи (или наоборот).\n\nЗапусти программу и следи, какой блок подсвечивается. Посчитай повторы вслух — ошибка найдётся быстро.",
+        "kk": "Циклдардағы жиі кездесетін екі қате:\n\n1. **Қайталау саны дұрыс емес** — керегінен бір артық немесе кем.\n2. **Блок өз орнында емес** — цикл ішінде болуы керек, бірақ сыртында тұр (немесе керісінше).\n\nБағдарламаны іске қосып, қай блок жанатынын қадағала. Қайталауларды дауыстап сана — қате тез табылады.",
+        "en": "Two common loop bugs:\n\n1. **Wrong number of repeats** — one too many or one too few.\n2. **A block in the wrong place** — it should be inside the loop but sits outside (or the other way round).\n\nRun the program and watch which block lights up. Count the repeats out loud — the bug shows up fast."
+      },
+      "illustration": "debug"
+    },
+    {
+      "id": "extra",
+      "type": "debug",
+      "title": {
+        "ru": "Квадрат с лишним",
+        "kk": "Артығы бар шаршы",
+        "en": "A square with extra"
+      },
+      "task": {
+        "ru": "Робот проезжает квадрат, но не останавливается на старте и смотрит не туда. Исправь программу.",
+        "kk": "Робот шаршыны жүреді, бірақ стартта тоқтамайды және басқа жаққа қарайды. Бағдарламаны түзет.",
+        "en": "The robot drives the square but does not stop at the start and faces the wrong way. Fix the program."
+      },
+      "field": {
+        "width": 1000,
+        "height": 850,
+        "start": {
+          "x": 300,
+          "y": 250,
+          "heading": 0
+        },
+        "border": true,
+        "zones": [
+          {
+            "id": "home",
+            "x": 200,
+            "y": 150,
+            "w": 200,
+            "h": 200,
+            "kind": "target",
+            "label": {
+              "ru": "Старт",
+              "kk": "Старт",
+              "en": "Start"
+            }
+          }
+        ],
+        "points": [
+          {
+            "id": "p1",
+            "x": 600,
+            "y": 250,
+            "r": 60,
+            "label": {
+              "ru": "Угол 1",
+              "kk": "1-бұрыш",
+              "en": "Corner 1"
+            }
+          },
+          {
+            "id": "p2",
+            "x": 600,
+            "y": 550,
+            "r": 60,
+            "label": {
+              "ru": "Угол 2",
+              "kk": "2-бұрыш",
+              "en": "Corner 2"
+            }
+          },
+          {
+            "id": "p3",
+            "x": 300,
+            "y": 550,
+            "r": 60,
+            "label": {
+              "ru": "Угол 3",
+              "kk": "3-бұрыш",
+              "en": "Corner 3"
+            }
+          }
+        ],
+        "walls": [],
+        "lines": []
+      },
+      "toolbox": [
+        "move",
+        "turn",
+        "repeat"
+      ],
+      "start": [
+        {
+          "op": "repeat",
+          "times": 5,
+          "steps": [
+            {
+              "op": "move",
+              "direction": "forward",
+              "value": 30,
+              "unit": "cm"
+            },
+            {
+              "op": "turn",
+              "direction": "left",
+              "degrees": 90
+            }
+          ]
+        }
+      ],
+      "checks": [
+        {
+          "type": "passPoints",
+          "points": [
+            "p1",
+            "p2",
+            "p3"
+          ],
+          "ordered": true
+        },
+        {
+          "type": "finishInZone",
+          "zone": "home"
+        },
+        {
+          "type": "heading",
+          "degrees": 0,
+          "tolerance": 5
+        }
+      ],
+      "hints": [
+        {
+          "ru": "Сравни, сколько сторон у квадрата и сколько повторов в цикле.",
+          "kk": "Шаршының неше қабырғасы бар және циклда неше қайталау бар — салыстыр.",
+          "en": "Compare the number of sides with the number of repeats."
+        },
+        {
+          "ru": "Один повтор лишний.",
+          "kk": "Бір қайталау артық.",
+          "en": "One repeat is extra."
+        },
+        {
+          "ru": "Поменяй 5 на 4.",
+          "kk": "5-ті 4-ке ауыстыр.",
+          "en": "Change 5 to 4."
+        }
+      ],
+      "reference": [
+        {
+          "op": "repeat",
+          "times": 4,
+          "steps": [
+            {
+              "op": "move",
+              "direction": "forward",
+              "value": 30,
+              "unit": "cm"
+            },
+            {
+              "op": "turn",
+              "direction": "left",
+              "degrees": 90
+            }
+          ]
+        }
+      ],
+      "skill": "loops"
+    },
+    {
+      "id": "outside",
+      "type": "debug",
+      "title": {
+        "ru": "Тихий забор",
+        "kk": "Үнсіз шарбақ",
+        "en": "A quiet fence"
+      },
+      "task": {
+        "ru": "Робот должен сигналить после каждого из 4 отрезков, но сигналит только один раз. Найди ошибку.",
+        "kk": "Робот 4 кесіндінің әрқайсысынан кейін дыбыс беруі керек, бірақ тек бір рет дыбыс береді. Қатені тап.",
+        "en": "The robot should beep after each of the 4 segments, but it beeps only once. Find the bug."
+      },
+      "field": {
+        "width": 1400,
+        "height": 400,
+        "start": {
+          "x": 150,
+          "y": 200,
+          "heading": 0
+        },
+        "border": true,
+        "zones": [
+          {
+            "id": "end",
+            "x": 880,
+            "y": 100,
+            "w": 160,
+            "h": 200,
+            "kind": "target",
+            "label": {
+              "ru": "Конец забора",
+              "kk": "Шарбақтың соңы",
+              "en": "Fence end"
+            }
+          }
+        ],
+        "points": [],
+        "walls": [],
+        "lines": []
+      },
+      "toolbox": [
+        "move",
+        "beep",
+        "repeat"
+      ],
+      "start": [
+        {
+          "op": "repeat",
+          "times": 4,
+          "steps": [
+            {
+              "op": "move",
+              "direction": "forward",
+              "value": 20,
+              "unit": "cm"
+            }
+          ]
+        },
+        {
+          "op": "beep",
+          "note": 72,
+          "seconds": 0.3
+        }
+      ],
+      "checks": [
+        {
+          "type": "finishInZone",
+          "zone": "end"
+        },
+        {
+          "type": "beeped",
+          "min": 4
+        }
+      ],
+      "hints": [
+        {
+          "ru": "Где лежит блок «сигнал» — внутри цикла или после него?",
+          "kk": "«Дыбыс» блогы қайда тұр — цикл ішінде ме, әлде одан кейін бе?",
+          "en": "Where is the “beep” block — inside the loop or after it?"
+        },
+        {
+          "ru": "Всё, что внутри цикла, повторяется. Всё, что снаружи, — один раз.",
+          "kk": "Цикл ішіндегінің бәрі қайталанады. Сыртындағысы — бір рет.",
+          "en": "Everything inside the loop repeats. Everything outside runs once."
+        },
+        {
+          "ru": "Перетащи «сигнал» внутрь цикла, под «вперёд 20 см».",
+          "kk": "«Дыбысты» цикл ішіне, «20 см алға» астына сүйреп апар.",
+          "en": "Drag “beep” inside the loop, under “forward 20 cm”."
+        }
+      ],
+      "reference": [
+        {
+          "op": "repeat",
+          "times": 4,
+          "steps": [
+            {
+              "op": "move",
+              "direction": "forward",
+              "value": 20,
+              "unit": "cm"
+            },
+            {
+              "op": "beep",
+              "note": 72,
+              "seconds": 0.3
+            }
+          ]
+        }
+      ],
+      "skill": "loops"
+    },
+    {
+      "id": "three-sides",
+      "type": "quiz",
+      "kind": "choice",
+      "question": {
+        "ru": "Цикл «повторить 4 раза: вперёд, налево 90°», а робот проехал только 3 стороны и врезался. Что проверить первым?",
+        "kk": "«4 рет қайталау: алға, солға 90°» циклі, бірақ робот тек 3 қабырғаны жүріп, соғылды. Алдымен нені тексеру керек?",
+        "en": "The loop is “repeat 4 times: forward, left 90°”, but the robot drove 3 sides and crashed. What do you check first?"
+      },
+      "options": [
+        {
+          "ru": "Хватает ли места на поле для стороны такой длины",
+          "kk": "Мұндай ұзындықтағы қабырғаға алаңда орын жеткілікті ме",
+          "en": "Whether the field has room for sides that long"
+        },
+        {
+          "ru": "Цвет робота",
+          "kk": "Роботтың түсі",
+          "en": "The robot’s colour"
+        },
+        {
+          "ru": "Громкость сигнала",
+          "kk": "Дыбыстың қаттылығы",
+          "en": "The beep volume"
+        }
+      ],
+      "correct": [
+        0
+      ],
+      "explanation": {
+        "ru": "Если робот врезался, программа могла быть верной, но стороны слишком длинные для поля. Уменьши расстояние или начни с другого места.",
+        "kk": "Робот соғылса, бағдарлама дұрыс болуы мүмкін, бірақ қабырғалар алаң үшін тым ұзын. Қашықтықты азайт немесе басқа жерден баста.",
+        "en": "If the robot crashed, the program may be right but the sides too long for the field. Shorten them or start elsewhere."
+      },
+      "skill": "loops"
+    }
+  ]
+}

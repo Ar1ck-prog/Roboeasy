@@ -1,0 +1,257 @@
+{
+  "id": "sensors-18",
+  "track": "sensors",
+  "unit": "sensors-line",
+  "minutes": 8,
+  "skills": [
+    "line-follow"
+  ],
+  "title": {
+    "ru": "Плавнее",
+    "kk": "Біркелкірек",
+    "en": "Smoother"
+  },
+  "goal": {
+    "ru": "Сегодня робот поедет по линии быстрее и ровнее.",
+    "kk": "Бүгін робот сызықпен жылдамырақ әрі тегісірек жүреді.",
+    "en": "Today the robot will follow the line faster and smoother."
+  },
+  "summary": {
+    "ru": "Теперь ты знаешь, как сила руля меняет езду по линии.",
+    "kk": "Енді сен рульдің күші сызықпен жүруді қалай өзгертетінін білесің.",
+    "en": "Now you know how steering strength changes line following."
+  },
+  "steps": [
+    {
+      "id": "strength",
+      "type": "theory",
+      "title": {
+        "ru": "Сила руля",
+        "kk": "Рульдің күші",
+        "en": "Steering strength"
+      },
+      "body": {
+        "ru": "Чем сильнее руль, тем больше робот виляет: он много поворачивает и мало едет вперёд.\n\nСлишком слабый руль — робот не успевает за поворотом линии и теряет её.\n\nНужна **золотая середина**: руль достаточно сильный для поворотов, но без лишнего виляния. Подбирают её опытом — запуск, взгляд, поправка.",
+        "kk": "Руль неғұрлым күшті болса, робот соғұрлым көп бұлғаңдайды: ол көп бұрылып, алға аз жүреді.\n\nТым әлсіз руль — робот сызықтың бұрылысына үлгермей, оны жоғалтады.\n\n**Алтын орта** керек: бұрылыстарға жеткілікті күшті, бірақ артық бұлғаңдаусыз руль. Оны тәжірибемен таңдайды — іске қосу, қарау, түзету.",
+        "en": "The stronger the steering, the more the robot wiggles: it turns a lot and moves forward little.\n\nToo weak — the robot cannot keep up with the bend and loses the line.\n\nYou need the **sweet spot**: strong enough for the bends, without extra wiggling. You find it by trying — run, watch, adjust."
+      },
+      "illustration": "r-line"
+    },
+    {
+      "id": "slow",
+      "type": "debug",
+      "title": {
+        "ru": "Слишком много виляет",
+        "kk": "Тым көп бұлғаңдайды",
+        "en": "Too much wiggling"
+      },
+      "task": {
+        "ru": "Робот доезжает до финиша, но очень долго: руль слишком сильный. Сделай так, чтобы он доехал не дольше чем за 6,5 секунды.",
+        "kk": "Робот мәреге жетеді, бірақ өте ұзақ: руль тым күшті. Ол 6,5 секундтан аспай жететіндей ет.",
+        "en": "The robot reaches the finish but takes too long: the steering is too strong. Make it arrive within 6.5 seconds."
+      },
+      "field": {
+        "width": 1500,
+        "height": 900,
+        "start": {
+          "x": 150,
+          "y": 300,
+          "heading": 0
+        },
+        "border": true,
+        "zones": [
+          {
+            "id": "end",
+            "x": 1300,
+            "y": 500,
+            "w": 180,
+            "h": 200,
+            "kind": "paint",
+            "color": "green"
+          },
+          {
+            "id": "finish",
+            "x": 1150,
+            "y": 480,
+            "w": 180,
+            "h": 240,
+            "kind": "target",
+            "label": {
+              "ru": "Финиш",
+              "kk": "Мәре",
+              "en": "Finish"
+            }
+          }
+        ],
+        "points": [],
+        "walls": [],
+        "lines": [
+          {
+            "points": [
+              [
+                100,
+                300
+              ],
+              [
+                700,
+                300
+              ],
+              [
+                1100,
+                600
+              ],
+              [
+                1400,
+                600
+              ]
+            ],
+            "width": 20,
+            "color": "black"
+          }
+        ]
+      },
+      "toolbox": [
+        "start_steer",
+        "stop_move",
+        "repeat_until",
+        "if"
+      ],
+      "start": [
+        {
+          "op": "repeat_until",
+          "condition": {
+            "sensor": "color",
+            "port": "D",
+            "color": "green"
+          },
+          "steps": [
+            {
+              "op": "if",
+              "condition": {
+                "sensor": "reflection",
+                "port": "D",
+                "comparator": "<",
+                "value": 50
+              },
+              "then": [
+                {
+                  "op": "start_steer",
+                  "steering": 60
+                }
+              ],
+              "else": [
+                {
+                  "op": "start_steer",
+                  "steering": -60
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "op": "stop_move"
+        }
+      ],
+      "checks": [
+        {
+          "type": "finishInZone",
+          "zone": "finish"
+        },
+        {
+          "type": "timeLimit",
+          "seconds": 6.5
+        }
+      ],
+      "hints": [
+        {
+          "ru": "Какие числа стоят в блоках руля?",
+          "kk": "Руль блоктарында қандай сандар тұр?",
+          "en": "Which numbers are in the steering blocks?"
+        },
+        {
+          "ru": "Уменьши силу руля в обеих частях.",
+          "kk": "Екі бөлікте де рульдің күшін азайт.",
+          "en": "Lower the steering strength in both parts."
+        },
+        {
+          "ru": "Попробуй 20 и −20.",
+          "kk": "20 және −20 байқап көр.",
+          "en": "Try 20 and −20."
+        }
+      ],
+      "reference": [
+        {
+          "op": "repeat_until",
+          "condition": {
+            "sensor": "color",
+            "port": "D",
+            "color": "green"
+          },
+          "steps": [
+            {
+              "op": "if",
+              "condition": {
+                "sensor": "reflection",
+                "port": "D",
+                "comparator": "<",
+                "value": 50
+              },
+              "then": [
+                {
+                  "op": "start_steer",
+                  "steering": 20
+                }
+              ],
+              "else": [
+                {
+                  "op": "start_steer",
+                  "steering": -20
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "op": "stop_move"
+        }
+      ],
+      "skill": "line-follow"
+    },
+    {
+      "id": "weak",
+      "type": "quiz",
+      "kind": "choice",
+      "question": {
+        "ru": "Руль 5 и −5. Что будет на крутом повороте линии?",
+        "kk": "Руль 5 және −5. Сызықтың тік бұрылысында не болады?",
+        "en": "Steering 5 and −5. What happens on a sharp bend?"
+      },
+      "options": [
+        {
+          "ru": "Робот не успеет повернуть и потеряет линию",
+          "kk": "Робот бұрылып үлгермей, сызықты жоғалтады",
+          "en": "The robot cannot turn in time and loses the line"
+        },
+        {
+          "ru": "Робот поедет идеально",
+          "kk": "Робот мінсіз жүреді",
+          "en": "The robot drives perfectly"
+        },
+        {
+          "ru": "Робот остановится",
+          "kk": "Робот тоқтайды",
+          "en": "The robot stops"
+        }
+      ],
+      "correct": [
+        0
+      ],
+      "explanation": {
+        "ru": "Слабый руль — плавно, но на крутом повороте не хватает разворота.",
+        "kk": "Әлсіз руль — біркелкі, бірақ тік бұрылыста бұрылуға жетпейді.",
+        "en": "Weak steering is smooth, but there is not enough turn for a sharp bend."
+      },
+      "skill": "line-follow"
+    }
+  ]
+}

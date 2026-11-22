@@ -1,0 +1,215 @@
+{
+  "id": "sensors-20",
+  "track": "sensors",
+  "unit": "sensors-line",
+  "minutes": 12,
+  "skills": [
+    "line-follow"
+  ],
+  "title": {
+    "ru": "Проект «Линия и стена»",
+    "kk": "«Сызық және қабырға» жобасы",
+    "en": "Project: Line and wall"
+  },
+  "goal": {
+    "ru": "Сегодня ты соединишь два датчика в одной программе.",
+    "kk": "Бүгін сен екі датчикті бір бағдарламада біріктіресің.",
+    "en": "Today you will combine two sensors in one program."
+  },
+  "summary": {
+    "ru": "Трек «Датчики» пройден! Робот едет по линии и сам останавливается перед препятствием.",
+    "kk": "«Датчиктер» тректі өттің! Робот сызықпен жүріп, кедергі алдында өзі тоқтайды.",
+    "en": "The Sensors track is done! The robot follows a line and stops before an obstacle by itself."
+  },
+  "steps": [
+    {
+      "id": "two",
+      "type": "theory",
+      "title": {
+        "ru": "Два датчика сразу",
+        "kk": "Бірден екі датчик",
+        "en": "Two sensors at once"
+      },
+      "body": {
+        "ru": "Датчик цвета ведёт робота по линии, а датчик расстояния следит за дорогой впереди.\n\nЦикл езды по линии теперь заканчивается не на цвете, а на расстоянии: «повторять, пока не **расстояние < 15 см**». Внутри — тот же руль по отражению.",
+        "kk": "Түс датчигі роботты сызықпен жүргізеді, ал қашықтық датчигі алдағы жолды бақылайды.\n\nСызықпен жүру циклі енді түспен емес, қашықтықпен аяқталады: «**қашықтық < 15 см** болғанша қайталау». Ішінде — шағылысу бойынша сол руль.",
+        "en": "The colour sensor guides the robot along the line while the distance sensor watches the road ahead.\n\nThe line-following loop now ends not on a colour but on distance: “repeat until **distance < 15 cm**”. Inside is the same reflection steering."
+      },
+      "illustration": "r-line"
+    },
+    {
+      "id": "line-wall",
+      "type": "project",
+      "title": {
+        "ru": "Линия и стена",
+        "kk": "Сызық және қабырға",
+        "en": "Line and wall"
+      },
+      "task": {
+        "ru": "Езжай по линии и остановись перед стеной, когда до неё останется меньше 15 см. Стену трогать нельзя.",
+        "kk": "Сызықпен жүріп, қабырғаға дейін 15 см-ден аз қалғанда оның алдында тоқта. Қабырғаға тиюге болмайды.",
+        "en": "Follow the line and stop before the wall when less than 15 cm is left. Do not touch the wall."
+      },
+      "field": {
+        "width": 1500,
+        "height": 900,
+        "start": {
+          "x": 150,
+          "y": 300,
+          "heading": 0
+        },
+        "border": true,
+        "zones": [],
+        "points": [],
+        "walls": [
+          {
+            "x": 1250,
+            "y": 450,
+            "w": 40,
+            "h": 300
+          }
+        ],
+        "lines": [
+          {
+            "points": [
+              [
+                100,
+                300
+              ],
+              [
+                700,
+                300
+              ],
+              [
+                1100,
+                600
+              ],
+              [
+                1400,
+                600
+              ]
+            ],
+            "width": 20,
+            "color": "black"
+          }
+        ]
+      },
+      "toolbox": [
+        "start_steer",
+        "stop_move",
+        "repeat_until",
+        "if"
+      ],
+      "start": [],
+      "checks": [
+        {
+          "type": "stopBeforeWall",
+          "maxMm": 200
+        },
+        {
+          "type": "noCollision"
+        },
+        {
+          "type": "usesSensor",
+          "sensor": "reflection"
+        },
+        {
+          "type": "usesSensor",
+          "sensor": "distance"
+        }
+      ],
+      "hints": [
+        {
+          "ru": "Это езда по линии из урока «Левее или правее».",
+          "kk": "Бұл — «Солға ма, оңға ма» сабағындағы сызықпен жүру.",
+          "en": "This is the line following from “Left or right of it”."
+        },
+        {
+          "ru": "Поменяй условие цикла на «расстояние < 15 см».",
+          "kk": "Цикл шартын «қашықтық < 15 см» деп өзгерт.",
+          "en": "Change the loop condition to “distance < 15 cm”."
+        },
+        {
+          "ru": "Пока не расстояние < 15: если отражение < 50 — руль 20, иначе −20; стоп.",
+          "kk": "Қашықтық < 15 болғанша: егер шағылысу < 50 — руль 20, әйтпесе −20; тоқта.",
+          "en": "Until distance < 15: if reflection < 50 — steer 20, else −20; stop."
+        }
+      ],
+      "reference": [
+        {
+          "op": "repeat_until",
+          "condition": {
+            "sensor": "distance",
+            "port": "C",
+            "comparator": "<",
+            "value": 15,
+            "unit": "cm"
+          },
+          "steps": [
+            {
+              "op": "if",
+              "condition": {
+                "sensor": "reflection",
+                "port": "D",
+                "comparator": "<",
+                "value": 50
+              },
+              "then": [
+                {
+                  "op": "start_steer",
+                  "steering": 20
+                }
+              ],
+              "else": [
+                {
+                  "op": "start_steer",
+                  "steering": -20
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "op": "stop_move"
+        }
+      ],
+      "skill": "line-follow"
+    },
+    {
+      "id": "next",
+      "type": "quiz",
+      "kind": "choice",
+      "question": {
+        "ru": "Что добавить, чтобы робот после остановки объехал стену?",
+        "kk": "Робот тоқтағаннан кейін қабырғаны айналып өтуі үшін не қосу керек?",
+        "en": "What would you add so the robot drives around the wall after stopping?"
+      },
+      "options": [
+        {
+          "ru": "Повороты и движения после цикла, а потом снова поиск линии",
+          "kk": "Циклдан кейін бұрылыстар мен қозғалыстар, содан кейін қайтадан сызықты іздеу",
+          "en": "Turns and moves after the loop, then search for the line again"
+        },
+        {
+          "ru": "Ещё один датчик цвета",
+          "kk": "Тағы бір түс датчигі",
+          "en": "Another colour sensor"
+        },
+        {
+          "ru": "Ничего, он объедет сам",
+          "kk": "Ештеңе, өзі айналып өтеді",
+          "en": "Nothing, it will go around by itself"
+        }
+      ],
+      "correct": [
+        0
+      ],
+      "explanation": {
+        "ru": "Объезд — это маленький маршрут после остановки. Робот делает только то, что написано в программе.",
+        "kk": "Айналып өту — тоқтағаннан кейінгі кішкене маршрут. Робот тек бағдарламада жазылғанды ғана істейді.",
+        "en": "Going around is a small route after the stop. The robot only does what the program says."
+      },
+      "skill": "line-follow"
+    }
+  ]
+}

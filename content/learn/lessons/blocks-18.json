@@ -1,0 +1,206 @@
+{
+  "id": "blocks-18",
+  "track": "blocks",
+  "unit": "blocks-variables",
+  "minutes": 8,
+  "skills": [
+    "variables"
+  ],
+  "title": {
+    "ru": "Что такое переменная",
+    "kk": "Айнымалы деген не",
+    "en": "What is a variable"
+  },
+  "goal": {
+    "ru": "Сегодня ты узнаешь, как робот запоминает числа.",
+    "kk": "Бүгін сен роботтың сандарды қалай есте сақтайтынын білесің.",
+    "en": "Today you will learn how a robot remembers numbers."
+  },
+  "summary": {
+    "ru": "Теперь ты умеешь создавать переменную, менять её и использовать в движении.",
+    "kk": "Енді сен айнымалы жасап, оны өзгертіп, қозғалыста қолдана аласың.",
+    "en": "Now you can create a variable, change it and use it to move."
+  },
+  "steps": [
+    {
+      "id": "box",
+      "type": "theory",
+      "title": {
+        "ru": "Коробка с именем",
+        "kk": "Аты бар қорап",
+        "en": "A box with a name"
+      },
+      "body": {
+        "ru": "**Переменная** — это коробка с именем, в которой лежит число. Например, коробка **step** с числом 20.\n\nБлок **«задать step = 20»** кладёт в коробку число. Блок **«изменить step на 5»** прибавляет: было 20, стало 25.\n\nВместо числа в блоке движения можно поставить имя переменной: «вперёд на step см». Поменяешь число в одном месте — изменится вся программа.\n\nИмена пишем латиницей: step, count, size.",
+        "kk": "**Айнымалы** — ішінде саны бар, аты бар қорап. Мысалы, ішінде 20 саны бар **step** қорабы.\n\n**«step = 20 орнату»** блогы қорапқа сан салады. **«step мәнін 5 өзгерту»** блогы қосады: 20 еді, 25 болды.\n\nҚозғалыс блогында санның орнына айнымалының атын қоюға болады: «step см алға». Санды бір жерде өзгертсең — бүкіл бағдарлама өзгереді.\n\nАттарды латынша жазамыз: step, count, size.",
+        "en": "A **variable** is a box with a name that holds a number. For example, a box **step** holding 20.\n\n**“set step = 20”** puts a number in the box. **“change step by 5”** adds: it was 20, now it is 25.\n\nInstead of a number, a move block can use the variable’s name: “forward step cm”. Change the number in one place and the whole program changes.\n\nNames use Latin letters: step, count, size."
+      },
+      "illustration": "r-variable",
+      "example": [
+        {
+          "op": "set_var",
+          "name": "step",
+          "expr": {
+            "num": 20
+          }
+        },
+        {
+          "op": "repeat",
+          "times": 3,
+          "steps": [
+            {
+              "op": "move_expr",
+              "direction": "forward",
+              "expr": {
+                "var": "step"
+              },
+              "unit": "cm"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "value",
+      "type": "quiz",
+      "kind": "number",
+      "question": {
+        "ru": "«задать count = 3», потом «изменить count на 2». Что лежит в count?",
+        "kk": "«count = 3 орнату», содан кейін «count мәнін 2 өзгерту». count ішінде не бар?",
+        "en": "“set count = 3”, then “change count by 2”. What is in count?"
+      },
+      "answer": 5,
+      "tolerance": 0,
+      "explanation": {
+        "ru": "3 + 2 = 5. «Изменить» прибавляет к тому, что уже лежит в коробке.",
+        "kk": "3 + 2 = 5. «Өзгерту» қораптағы бар санға қосады.",
+        "en": "3 + 2 = 5. “Change” adds to what is already in the box."
+      },
+      "skill": "variables"
+    },
+    {
+      "id": "step-var",
+      "type": "code",
+      "title": {
+        "ru": "Шаг в переменной",
+        "kk": "Айнымалыдағы қадам",
+        "en": "Step in a variable"
+      },
+      "task": {
+        "ru": "Задай переменную **step = 25** и проедь 3 шага по step сантиметров до зоны.",
+        "kk": "**step = 25** айнымалысын орнатып, аймаққа дейін step сантиметрден 3 қадам жүр.",
+        "en": "Set a variable **step = 25** and drive 3 steps of step centimetres to the zone."
+      },
+      "field": {
+        "width": 1400,
+        "height": 400,
+        "start": {
+          "x": 150,
+          "y": 200,
+          "heading": 0
+        },
+        "border": true,
+        "zones": [
+          {
+            "id": "goal",
+            "x": 820,
+            "y": 100,
+            "w": 200,
+            "h": 200,
+            "kind": "target",
+            "label": {
+              "ru": "Цель",
+              "kk": "Мақсат",
+              "en": "Goal"
+            }
+          }
+        ],
+        "points": [],
+        "walls": [],
+        "lines": []
+      },
+      "toolbox": [
+        "set_var",
+        "move_expr",
+        "repeat",
+        "move"
+      ],
+      "start": [],
+      "checks": [
+        {
+          "type": "finishInZone",
+          "zone": "goal"
+        },
+        {
+          "type": "usesOp",
+          "op": "set_var",
+          "min": 1
+        },
+        {
+          "type": "usesOp",
+          "op": "move_expr",
+          "min": 1
+        }
+      ],
+      "hints": [
+        {
+          "ru": "Сначала «задать step = 25».",
+          "kk": "Алдымен «step = 25 орнату».",
+          "en": "First “set step = 25”."
+        },
+        {
+          "ru": "Блок «вперёд на step см» берёт число из коробки.",
+          "kk": "«step см алға» блогы санды қораптан алады.",
+          "en": "The “forward step cm” block takes the number from the box."
+        },
+        {
+          "ru": "Задать step = 25; повторить 3 раза: вперёд на step см.",
+          "kk": "step = 25 орнату; 3 рет қайталау: step см алға.",
+          "en": "Set step = 25; repeat 3 times: forward step cm."
+        }
+      ],
+      "reference": [
+        {
+          "op": "set_var",
+          "name": "step",
+          "expr": {
+            "num": 25
+          }
+        },
+        {
+          "op": "repeat",
+          "times": 3,
+          "steps": [
+            {
+              "op": "move_expr",
+              "direction": "forward",
+              "expr": {
+                "var": "step"
+              },
+              "unit": "cm"
+            }
+          ]
+        }
+      ],
+      "skill": "variables"
+    },
+    {
+      "id": "adder",
+      "type": "quiz",
+      "kind": "number",
+      "question": {
+        "ru": "«задать n = 0», потом «повторить 4 раза: изменить n на 3». Чему равно n?",
+        "kk": "«n = 0 орнату», содан кейін «4 рет қайталау: n мәнін 3 өзгерту». n неге тең?",
+        "en": "“set n = 0”, then “repeat 4 times: change n by 3”. What is n?"
+      },
+      "answer": 12,
+      "tolerance": 0,
+      "explanation": {
+        "ru": "Каждый повтор добавляет 3: 0 → 3 → 6 → 9 → 12.",
+        "kk": "Әр қайталау 3 қосады: 0 → 3 → 6 → 9 → 12.",
+        "en": "Each repeat adds 3: 0 → 3 → 6 → 9 → 12."
+      },
+      "skill": "variables"
+    }
+  ]
+}

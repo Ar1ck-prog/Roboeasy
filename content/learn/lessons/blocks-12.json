@@ -1,0 +1,242 @@
+{
+  "id": "blocks-12",
+  "track": "blocks",
+  "unit": "blocks-loops",
+  "minutes": 10,
+  "skills": [
+    "loops"
+  ],
+  "title": {
+    "ru": "Проект «Узор»",
+    "kk": "«Өрнек» жобасы",
+    "en": "Project: Pattern"
+  },
+  "goal": {
+    "ru": "Сегодня ты сам придумаешь программу-узор с циклом.",
+    "kk": "Бүгін сен циклы бар өрнек-бағдарламаны өзің ойлап табасың.",
+    "en": "Today you will create a pattern program with a loop on your own."
+  },
+  "summary": {
+    "ru": "Теперь ты умеешь превращать узор в короткую программу с циклом.",
+    "kk": "Енді сен өрнекті циклы бар қысқа бағдарламаға айналдыра аласың.",
+    "en": "Now you can turn a pattern into a short program with a loop."
+  },
+  "steps": [
+    {
+      "id": "stairs",
+      "type": "theory",
+      "title": {
+        "ru": "Лесенка",
+        "kk": "Баспалдақ",
+        "en": "Stairs"
+      },
+      "body": {
+        "ru": "Узор «лесенка» — это ступенька, повторённая несколько раз. Одна ступенька: вперёд, налево, вперёд, направо.\n\nКогда ступенька готова, положи её в цикл. Сколько ступенек — столько повторов.",
+        "kk": "«Баспалдақ» өрнегі — бірнеше рет қайталанған бір саты. Бір саты: алға, солға, алға, оңға.\n\nСаты дайын болғанда оны циклға сал. Неше саты болса — сонша қайталау.",
+        "en": "A “stairs” pattern is one step repeated several times. One step: forward, left, forward, right.\n\nOnce the step works, put it in a loop. As many steps — as many repeats."
+      },
+      "illustration": "r-loop",
+      "example": [
+        {
+          "op": "move",
+          "direction": "forward",
+          "value": 20,
+          "unit": "cm"
+        },
+        {
+          "op": "turn",
+          "direction": "left",
+          "degrees": 90
+        },
+        {
+          "op": "move",
+          "direction": "forward",
+          "value": 20,
+          "unit": "cm"
+        },
+        {
+          "op": "turn",
+          "direction": "right",
+          "degrees": 90
+        }
+      ]
+    },
+    {
+      "id": "plan",
+      "type": "quiz",
+      "kind": "order",
+      "question": {
+        "ru": "Расставь шаги работы над проектом по порядку",
+        "kk": "Жобадағы жұмыс қадамдарын ретімен қой",
+        "en": "Put the project steps in order"
+      },
+      "items": [
+        {
+          "ru": "Найти повторяющуюся часть узора",
+          "kk": "Өрнектің қайталанатын бөлігін табу",
+          "en": "Find the repeating part of the pattern"
+        },
+        {
+          "ru": "Собрать одну ступеньку и проверить её",
+          "kk": "Бір сатыны құрап, тексеру",
+          "en": "Build one step and test it"
+        },
+        {
+          "ru": "Положить ступеньку в цикл",
+          "kk": "Сатыны циклға салу",
+          "en": "Put the step in a loop"
+        },
+        {
+          "ru": "Запустить и сравнить с узором",
+          "kk": "Іске қосып, өрнекпен салыстыру",
+          "en": "Run it and compare with the pattern"
+        }
+      ],
+      "explanation": {
+        "ru": "Сначала думаем, потом проверяем маленький кусок, потом повторяем — так инженеры и работают.",
+        "kk": "Алдымен ойлаймыз, содан кейін кішкене бөлікті тексереміз, содан кейін қайталаймыз — инженерлер осылай жұмыс істейді.",
+        "en": "Think first, test a small piece, then repeat — that is how engineers work."
+      },
+      "skill": "loops"
+    },
+    {
+      "id": "pattern",
+      "type": "project",
+      "title": {
+        "ru": "Лесенка из трёх ступенек",
+        "kk": "Үш сатылы баспалдақ",
+        "en": "Three-step stairs"
+      },
+      "task": {
+        "ru": "Нарисуй лесенку из 3 ступенек по 20 см и пройди через все флажки. Не больше 5 блоков.",
+        "kk": "20 см-лік 3 сатыдан тұратын баспалдақ салып, барлық жалаушалардан өт. 5 блоктан артық емес.",
+        "en": "Drive stairs of 3 steps, 20 cm each, through every flag. At most 5 blocks."
+      },
+      "field": {
+        "width": 1400,
+        "height": 950,
+        "start": {
+          "x": 200,
+          "y": 150,
+          "heading": 0
+        },
+        "border": true,
+        "zones": [],
+        "points": [
+          {
+            "id": "s1",
+            "x": 400,
+            "y": 350,
+            "r": 50,
+            "label": {
+              "ru": "Ступенька 1",
+              "kk": "1-саты",
+              "en": "Step 1"
+            }
+          },
+          {
+            "id": "s2",
+            "x": 600,
+            "y": 550,
+            "r": 50,
+            "label": {
+              "ru": "Ступенька 2",
+              "kk": "2-саты",
+              "en": "Step 2"
+            }
+          },
+          {
+            "id": "s3",
+            "x": 800,
+            "y": 750,
+            "r": 50,
+            "label": {
+              "ru": "Ступенька 3",
+              "kk": "3-саты",
+              "en": "Step 3"
+            }
+          }
+        ],
+        "walls": [],
+        "lines": []
+      },
+      "toolbox": [
+        "move",
+        "turn",
+        "repeat"
+      ],
+      "start": [],
+      "checks": [
+        {
+          "type": "passPoints",
+          "points": [
+            "s1",
+            "s2",
+            "s3"
+          ],
+          "ordered": true
+        },
+        {
+          "type": "usesOp",
+          "op": "repeat",
+          "min": 1
+        },
+        {
+          "type": "maxBlocks",
+          "max": 5
+        },
+        {
+          "type": "noCollision"
+        }
+      ],
+      "hints": [
+        {
+          "ru": "Одна ступенька — это 4 блока.",
+          "kk": "Бір саты — 4 блок.",
+          "en": "One step is 4 blocks."
+        },
+        {
+          "ru": "Вперёд 20, налево 90°, вперёд 20, направо 90°.",
+          "kk": "20 алға, солға 90°, 20 алға, оңға 90°.",
+          "en": "Forward 20, left 90°, forward 20, right 90°."
+        },
+        {
+          "ru": "Положи эти 4 блока в «повторить 3 раза».",
+          "kk": "Осы 4 блокты «3 рет қайталау» ішіне сал.",
+          "en": "Put those 4 blocks in “repeat 3 times”."
+        }
+      ],
+      "reference": [
+        {
+          "op": "repeat",
+          "times": 3,
+          "steps": [
+            {
+              "op": "move",
+              "direction": "forward",
+              "value": 20,
+              "unit": "cm"
+            },
+            {
+              "op": "turn",
+              "direction": "left",
+              "degrees": 90
+            },
+            {
+              "op": "move",
+              "direction": "forward",
+              "value": 20,
+              "unit": "cm"
+            },
+            {
+              "op": "turn",
+              "direction": "right",
+              "degrees": 90
+            }
+          ]
+        }
+      ],
+      "skill": "loops"
+    }
+  ]
+}

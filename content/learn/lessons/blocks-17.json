@@ -1,0 +1,231 @@
+{
+  "id": "blocks-17",
+  "track": "blocks",
+  "unit": "blocks-conditions",
+  "minutes": 10,
+  "skills": [
+    "conditions"
+  ],
+  "title": {
+    "ru": "Проект «Умная остановка»",
+    "kk": "«Ақылды аялдама» жобасы",
+    "en": "Project: Smart stop"
+  },
+  "goal": {
+    "ru": "Сегодня ты соберёшь программу, где робот сам решает, когда остановиться.",
+    "kk": "Бүгін сен робот қашан тоқтайтынын өзі шешетін бағдарлама құрастырасың.",
+    "en": "Today you will build a program where the robot decides when to stop."
+  },
+  "summary": {
+    "ru": "Теперь ты умеешь строить поведение робота из условий и ожиданий.",
+    "kk": "Енді сен робот мінез-құлқын шарттар мен күтулерден құра аласың.",
+    "en": "Now you can build robot behaviour from conditions and waits."
+  },
+  "steps": [
+    {
+      "id": "brief",
+      "type": "theory",
+      "title": {
+        "ru": "Задание проекта",
+        "kk": "Жоба тапсырмасы",
+        "en": "The brief"
+      },
+      "body": {
+        "ru": "Робот-курьер подъезжает к двери. Он не знает, сколько до неё ехать.\n\n1. Доехать до стены и **не врезаться**.\n2. Подать сигнал — «я приехал».\n3. Показать улыбку.\n4. Развернуться и вернуться на старт.\n\nПодсказка: обратный путь можно проехать так же — с датчиком расстояния, ведь у старта тоже стена.",
+        "kk": "Робот-курьер есікке жақындайды. Оған дейін қанша жүру керегін білмейді.\n\n1. Қабырғаға дейін жетіп, **соғылмау**.\n2. Дыбыс беру — «мен келдім».\n3. Күлкі көрсету.\n4. Бұрылып, стартқа оралу.\n\nКеңес: кері жолды да солай жүруге болады — қашықтық датчигімен, өйткені старт жанында да қабырға бар.",
+        "en": "A courier robot drives up to a door. It does not know how far it is.\n\n1. Drive to the wall and **do not crash**.\n2. Beep — “I have arrived”.\n3. Show a smile.\n4. Turn around and return to the start.\n\nTip: drive back the same way — with the distance sensor, since there is a wall behind the start too."
+      },
+      "illustration": "r-distance"
+    },
+    {
+      "id": "courier",
+      "type": "project",
+      "title": {
+        "ru": "Курьер у двери",
+        "kk": "Есік алдындағы курьер",
+        "en": "Courier at the door"
+      },
+      "task": {
+        "ru": "Доедь до стены без касания, подай сигнал, покажи улыбку и вернись в зону старта.",
+        "kk": "Қабырғаға тимей жетіп, дыбыс бер, күлкі көрсетіп, старт аймағына орал.",
+        "en": "Drive to the wall without touching it, beep, show a smile and return to the start zone."
+      },
+      "field": {
+        "width": 1400,
+        "height": 400,
+        "start": {
+          "x": 250,
+          "y": 200,
+          "heading": 0
+        },
+        "border": true,
+        "zones": [
+          {
+            "id": "home",
+            "x": 120,
+            "y": 100,
+            "w": 260,
+            "h": 200,
+            "kind": "target",
+            "label": {
+              "ru": "Старт",
+              "kk": "Старт",
+              "en": "Start"
+            }
+          }
+        ],
+        "points": [],
+        "walls": [
+          {
+            "x": 1150,
+            "y": 0,
+            "w": 40,
+            "h": 400
+          },
+          {
+            "x": 0,
+            "y": 0,
+            "w": 20,
+            "h": 400
+          }
+        ],
+        "lines": []
+      },
+      "toolbox": [
+        "start_move",
+        "stop_move",
+        "wait_until",
+        "move",
+        "turn",
+        "beep",
+        "show_image"
+      ],
+      "start": [],
+      "checks": [
+        {
+          "type": "beeped",
+          "min": 1
+        },
+        {
+          "type": "displayed",
+          "image": "smile"
+        },
+        {
+          "type": "finishInZone",
+          "zone": "home"
+        },
+        {
+          "type": "usesSensor",
+          "sensor": "distance"
+        },
+        {
+          "type": "noCollision"
+        }
+      ],
+      "hints": [
+        {
+          "ru": "Первая часть — как в уроке «Ждать, пока».",
+          "kk": "Бірінші бөлігі — «Әзірге күту» сабағындағыдай.",
+          "en": "The first part is like the “Wait until” lesson."
+        },
+        {
+          "ru": "После сигнала и улыбки развернись на 180°.",
+          "kk": "Дыбыс пен күлкіден кейін 180°-қа бұрыл.",
+          "en": "After the beep and smile, turn 180°."
+        },
+        {
+          "ru": "Обратно: снова «начать → ждать, пока ближе 15 см → стоп».",
+          "kk": "Кері: қайтадан «бастау → 15 см-ден жақын болғанша күту → тоқта».",
+          "en": "Back: again “start → wait until closer than 15 cm → stop”."
+        }
+      ],
+      "reference": [
+        {
+          "op": "start_move",
+          "direction": "forward"
+        },
+        {
+          "op": "wait_until",
+          "condition": {
+            "sensor": "distance",
+            "port": "C",
+            "comparator": "<",
+            "value": 10,
+            "unit": "cm"
+          }
+        },
+        {
+          "op": "stop_move"
+        },
+        {
+          "op": "beep",
+          "note": 72,
+          "seconds": 0.3
+        },
+        {
+          "op": "show_image",
+          "image": "smile"
+        },
+        {
+          "op": "turn",
+          "direction": "right",
+          "degrees": 180
+        },
+        {
+          "op": "start_move",
+          "direction": "forward"
+        },
+        {
+          "op": "wait_until",
+          "condition": {
+            "sensor": "distance",
+            "port": "C",
+            "comparator": "<",
+            "value": 15,
+            "unit": "cm"
+          }
+        },
+        {
+          "op": "stop_move"
+        }
+      ],
+      "skill": "conditions"
+    },
+    {
+      "id": "reuse",
+      "type": "quiz",
+      "kind": "choice",
+      "question": {
+        "ru": "Курьера перенесли в комнату, где стена дальше. Что нужно поменять в программе?",
+        "kk": "Курьерді қабырғасы алысырақ бөлмеге апарды. Бағдарламада нені өзгерту керек?",
+        "en": "The courier moved to a room where the wall is further away. What must change in the program?"
+      },
+      "options": [
+        {
+          "ru": "Ничего: датчик сам найдёт стену",
+          "kk": "Ештеңе: датчик қабырғаны өзі табады",
+          "en": "Nothing: the sensor finds the wall itself"
+        },
+        {
+          "ru": "Все расстояния в программе",
+          "kk": "Бағдарламадағы барлық қашықтықтар",
+          "en": "Every distance in the program"
+        },
+        {
+          "ru": "Цвет улыбки",
+          "kk": "Күлкінің түсі",
+          "en": "The smile colour"
+        }
+      ],
+      "correct": [
+        0
+      ],
+      "explanation": {
+        "ru": "В этом и сила датчиков: одна программа работает в разных местах.",
+        "kk": "Датчиктердің күші осында: бір бағдарлама әр түрлі жерде жұмыс істейді.",
+        "en": "That is the power of sensors: one program works in different places."
+      },
+      "skill": "conditions"
+    }
+  ]
+}

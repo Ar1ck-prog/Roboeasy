@@ -1,0 +1,207 @@
+{
+  "id": "sensors-13",
+  "track": "sensors",
+  "unit": "sensors-gyro",
+  "minutes": 7,
+  "skills": [
+    "gyro"
+  ],
+  "title": {
+    "ru": "Угол поворота",
+    "kk": "Бұрылу бұрышы",
+    "en": "Yaw angle"
+  },
+  "goal": {
+    "ru": "Сегодня ты узнаешь, как робот знает, куда он повернулся.",
+    "kk": "Бүгін сен роботтың қай жаққа бұрылғанын қалай білетінін білесің.",
+    "en": "Today you will learn how the robot knows which way it has turned."
+  },
+  "summary": {
+    "ru": "Теперь ты умеешь поворачивать робота по показаниям гироскопа.",
+    "kk": "Енді сен роботты гироскоп көрсеткіштері бойынша бұра аласың.",
+    "en": "Now you can turn the robot using the gyro readings."
+  },
+  "steps": [
+    {
+      "id": "yaw",
+      "type": "theory",
+      "title": {
+        "ru": "Компас внутри хаба",
+        "kk": "Хаб ішіндегі компас",
+        "en": "A compass inside the hub"
+      },
+      "body": {
+        "ru": "Внутри хаба есть **гироскоп** — датчик, который чувствует повороты. Он считает **угол поворота** (yaw) в градусах.\n\nПовернулся направо — угол растёт: +90°. Налево — становится отрицательным: −90°.\n\nБлок «развернуться на 90°» сам пользуется гироскопом. А ещё можно начать вращение и **ждать, пока угол > 89°** — так ты управляешь поворотом сам.",
+        "kk": "Хаб ішінде **гироскоп** бар — бұрылыстарды сезетін датчик. Ол **бұрылу бұрышын** (yaw) градуспен санайды.\n\nОңға бұрылды — бұрыш өседі: +90°. Солға — теріс болады: −90°.\n\n«90°-қа бұрылу» блогы гироскопты өзі қолданады. Сонымен қатар айналуды бастап, **бұрыш > 89° болғанша күтуге** болады — осылай бұрылысты өзің басқарасың.",
+        "en": "Inside the hub is a **gyro** — a sensor that feels turns. It counts the **yaw angle** in degrees.\n\nTurn right and the angle grows: +90°. Turn left and it goes negative: −90°.\n\nThe “turn 90°” block uses the gyro itself. You can also start spinning and **wait until the angle > 89°** — then you control the turn yourself."
+      },
+      "illustration": "r-gyro",
+      "example": [
+        {
+          "op": "reset_yaw"
+        },
+        {
+          "op": "start_move",
+          "direction": "right"
+        },
+        {
+          "op": "wait_until",
+          "condition": {
+            "sensor": "gyro",
+            "axis": "yaw",
+            "comparator": ">",
+            "value": 89
+          }
+        },
+        {
+          "op": "stop_move"
+        }
+      ]
+    },
+    {
+      "id": "right",
+      "type": "quiz",
+      "kind": "number",
+      "question": {
+        "ru": "Робот сбросил угол и повернулся направо на четверть оборота. Что покажет гироскоп?",
+        "kk": "Робот бұрышты нөлдеп, оңға ширек айналымға бұрылды. Гироскоп не көрсетеді?",
+        "en": "The robot reset its angle and turned right a quarter turn. What does the gyro show?"
+      },
+      "answer": 90,
+      "tolerance": 0,
+      "explanation": {
+        "ru": "Четверть оборота — 90°, направо — значит плюс.",
+        "kk": "Ширек айналым — 90°, оңға — плюс дегені.",
+        "en": "A quarter turn is 90°, and right means plus."
+      },
+      "unit": {
+        "ru": "°",
+        "kk": "°",
+        "en": "°"
+      },
+      "skill": "gyro"
+    },
+    {
+      "id": "spin",
+      "type": "code",
+      "title": {
+        "ru": "Поворот по гироскопу",
+        "kk": "Гироскоп бойынша бұрылу",
+        "en": "Turn by gyro"
+      },
+      "task": {
+        "ru": "Сбрось угол, начни вращаться направо и остановись, когда гироскоп покажет больше 89°.",
+        "kk": "Бұрышты нөлде, оңға айнала баста және гироскоп 89°-тан көп көрсеткенде тоқта.",
+        "en": "Reset the angle, start spinning right and stop when the gyro shows more than 89°."
+      },
+      "field": {
+        "width": 1000,
+        "height": 800,
+        "start": {
+          "x": 500,
+          "y": 400,
+          "heading": 0
+        },
+        "border": true,
+        "zones": [],
+        "points": [],
+        "walls": [],
+        "lines": []
+      },
+      "toolbox": [
+        "reset_yaw",
+        "start_move",
+        "stop_move",
+        "wait_until",
+        "turn"
+      ],
+      "start": [],
+      "checks": [
+        {
+          "type": "heading",
+          "degrees": 270,
+          "tolerance": 5
+        },
+        {
+          "type": "usesSensor",
+          "sensor": "gyro"
+        }
+      ],
+      "hints": [
+        {
+          "ru": "Сначала «сбросить угол поворота».",
+          "kk": "Алдымен «бұрылу бұрышын нөлдеу».",
+          "en": "First “reset yaw angle”."
+        },
+        {
+          "ru": "«Начать движение вправо» — робот крутится на месте.",
+          "kk": "«Оңға қозғалысты бастау» — робот орнында айналады.",
+          "en": "“Start moving right” spins the robot in place."
+        },
+        {
+          "ru": "Ждать, пока гироскоп поворот > 89°; остановить.",
+          "kk": "Гироскоп бұрылу > 89° болғанша күту; тоқтату.",
+          "en": "Wait until gyro yaw > 89°; stop."
+        }
+      ],
+      "reference": [
+        {
+          "op": "reset_yaw"
+        },
+        {
+          "op": "start_move",
+          "direction": "right"
+        },
+        {
+          "op": "wait_until",
+          "condition": {
+            "sensor": "gyro",
+            "axis": "yaw",
+            "comparator": ">",
+            "value": 89
+          }
+        },
+        {
+          "op": "stop_move"
+        }
+      ],
+      "skill": "gyro"
+    },
+    {
+      "id": "left",
+      "type": "quiz",
+      "kind": "choice",
+      "question": {
+        "ru": "Робот повернулся налево на 45°. Какой знак у угла?",
+        "kk": "Робот солға 45°-қа бұрылды. Бұрыштың таңбасы қандай?",
+        "en": "The robot turned left 45°. What sign does the angle have?"
+      },
+      "options": [
+        {
+          "ru": "Минус: −45°",
+          "kk": "Минус: −45°",
+          "en": "Minus: −45°"
+        },
+        {
+          "ru": "Плюс: +45°",
+          "kk": "Плюс: +45°",
+          "en": "Plus: +45°"
+        },
+        {
+          "ru": "Угол не меняется",
+          "kk": "Бұрыш өзгермейді",
+          "en": "The angle does not change"
+        }
+      ],
+      "correct": [
+        0
+      ],
+      "explanation": {
+        "ru": "Направо — плюс, налево — минус.",
+        "kk": "Оңға — плюс, солға — минус.",
+        "en": "Right is plus, left is minus."
+      },
+      "skill": "gyro"
+    }
+  ]
+}

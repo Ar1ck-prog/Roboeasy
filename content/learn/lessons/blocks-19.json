@@ -1,0 +1,325 @@
+{
+  "id": "blocks-19",
+  "track": "blocks",
+  "unit": "blocks-variables",
+  "minutes": 8,
+  "skills": [
+    "variables"
+  ],
+  "title": {
+    "ru": "Счётчик",
+    "kk": "Санауыш",
+    "en": "Counter"
+  },
+  "goal": {
+    "ru": "Сегодня робот научится считать.",
+    "kk": "Бүгін робот санауды үйренеді.",
+    "en": "Today the robot will learn to count."
+  },
+  "summary": {
+    "ru": "Теперь ты умеешь делать счётчик и показывать его на экране хаба.",
+    "kk": "Енді сен санауыш жасап, оны хаб экранында көрсете аласың.",
+    "en": "Now you can make a counter and show it on the hub screen."
+  },
+  "steps": [
+    {
+      "id": "count",
+      "type": "theory",
+      "title": {
+        "ru": "Считаем по одному",
+        "kk": "Бір-бірлеп санаймыз",
+        "en": "Counting one by one"
+      },
+      "body": {
+        "ru": "**Счётчик** — переменная, которая растёт на 1 каждый раз, когда что-то случилось.\n\n1. В начале: «задать count = 0».\n2. Когда произошло событие: «изменить count на 1».\n3. Показать результат: «написать count» — число появится на экране хаба.\n\nСчётчик может идти и вниз: «изменить на −1» — это обратный отсчёт.",
+        "kk": "**Санауыш** — бір нәрсе болған сайын 1-ге өсетін айнымалы.\n\n1. Басында: «count = 0 орнату».\n2. Оқиға болғанда: «count мәнін 1 өзгерту».\n3. Нәтижені көрсету: «count жазу» — сан хаб экранында пайда болады.\n\nСанауыш төмен де жүре алады: «−1 өзгерту» — бұл кері санау.",
+        "en": "A **counter** is a variable that grows by 1 every time something happens.\n\n1. At the start: “set count = 0”.\n2. When the event happens: “change count by 1”.\n3. Show the result: “write count” — the number appears on the hub screen.\n\nA counter can also go down: “change by −1” is a countdown."
+      },
+      "illustration": "r-counter",
+      "example": [
+        {
+          "op": "set_var",
+          "name": "count",
+          "expr": {
+            "num": 0
+          }
+        },
+        {
+          "op": "repeat",
+          "times": 5,
+          "steps": [
+            {
+              "op": "move",
+              "direction": "forward",
+              "value": 10,
+              "unit": "cm"
+            },
+            {
+              "op": "change_var",
+              "name": "count",
+              "expr": {
+                "num": 1
+              }
+            }
+          ]
+        },
+        {
+          "op": "write_var",
+          "name": "count"
+        }
+      ]
+    },
+    {
+      "id": "steps",
+      "type": "code",
+      "title": {
+        "ru": "Считаем шаги",
+        "kk": "Қадамдарды санаймыз",
+        "en": "Count the steps"
+      },
+      "task": {
+        "ru": "Робот делает 5 шагов по 10 см и считает их. В конце покажи на экране число шагов — **5**.",
+        "kk": "Робот 10 см-ден 5 қадам жасап, оларды санайды. Соңында экранда қадам санын көрсет — **5**.",
+        "en": "The robot takes 5 steps of 10 cm and counts them. At the end show the number of steps — **5**."
+      },
+      "field": {
+        "width": 1400,
+        "height": 400,
+        "start": {
+          "x": 150,
+          "y": 200,
+          "heading": 0
+        },
+        "border": true,
+        "zones": [],
+        "points": [],
+        "walls": [],
+        "lines": []
+      },
+      "toolbox": [
+        "set_var",
+        "change_var",
+        "write_var",
+        "move",
+        "repeat"
+      ],
+      "start": [],
+      "checks": [
+        {
+          "type": "displayed",
+          "text": "5"
+        },
+        {
+          "type": "usesOp",
+          "op": "change_var",
+          "min": 1
+        },
+        {
+          "type": "moved",
+          "minMm": 400
+        }
+      ],
+      "hints": [
+        {
+          "ru": "Начни с «задать count = 0».",
+          "kk": "«count = 0 орнату» блогынан баста.",
+          "en": "Start with “set count = 0”."
+        },
+        {
+          "ru": "В цикле после шага — «изменить count на 1».",
+          "kk": "Циклда қадамнан кейін — «count мәнін 1 өзгерту».",
+          "en": "In the loop, after the step: “change count by 1”."
+        },
+        {
+          "ru": "После цикла — «написать count».",
+          "kk": "Циклдан кейін — «count жазу».",
+          "en": "After the loop: “write count”."
+        }
+      ],
+      "reference": [
+        {
+          "op": "set_var",
+          "name": "count",
+          "expr": {
+            "num": 0
+          }
+        },
+        {
+          "op": "repeat",
+          "times": 5,
+          "steps": [
+            {
+              "op": "move",
+              "direction": "forward",
+              "value": 10,
+              "unit": "cm"
+            },
+            {
+              "op": "change_var",
+              "name": "count",
+              "expr": {
+                "num": 1
+              }
+            }
+          ]
+        },
+        {
+          "op": "write_var",
+          "name": "count"
+        }
+      ],
+      "skill": "variables"
+    },
+    {
+      "id": "countdown",
+      "type": "code",
+      "title": {
+        "ru": "Обратный отсчёт",
+        "kk": "Кері санау",
+        "en": "Countdown"
+      },
+      "task": {
+        "ru": "Перед стартом робот считает: 3, 2, 1 — каждое число на экране по секунде. Потом сигнал и вперёд на 30 см.",
+        "kk": "Старт алдында робот санайды: 3, 2, 1 — әр сан экранда бір секундтан. Содан кейін дыбыс және 30 см алға.",
+        "en": "Before starting, the robot counts 3, 2, 1 — each number on the screen for a second. Then a beep and forward 30 cm."
+      },
+      "field": {
+        "width": 1400,
+        "height": 400,
+        "start": {
+          "x": 150,
+          "y": 200,
+          "heading": 0
+        },
+        "border": true,
+        "zones": [],
+        "points": [],
+        "walls": [],
+        "lines": []
+      },
+      "toolbox": [
+        "set_var",
+        "change_var",
+        "write_var",
+        "wait",
+        "repeat",
+        "beep",
+        "move"
+      ],
+      "start": [],
+      "checks": [
+        {
+          "type": "displayed",
+          "text": "3"
+        },
+        {
+          "type": "displayed",
+          "text": "1"
+        },
+        {
+          "type": "beeped",
+          "min": 1
+        },
+        {
+          "type": "moved",
+          "minMm": 250
+        }
+      ],
+      "hints": [
+        {
+          "ru": "Начни с n = 3.",
+          "kk": "n = 3-тен баста.",
+          "en": "Start with n = 3."
+        },
+        {
+          "ru": "В цикле: написать n, ждать 1 с, изменить n на −1.",
+          "kk": "Циклда: n жазу, 1 с күту, n мәнін −1 өзгерту.",
+          "en": "In the loop: write n, wait 1 s, change n by −1."
+        },
+        {
+          "ru": "Повторить 3 раза; потом сигнал и вперёд 30 см.",
+          "kk": "3 рет қайталау; содан кейін дыбыс және 30 см алға.",
+          "en": "Repeat 3 times; then beep and forward 30 cm."
+        }
+      ],
+      "reference": [
+        {
+          "op": "set_var",
+          "name": "n",
+          "expr": {
+            "num": 3
+          }
+        },
+        {
+          "op": "repeat",
+          "times": 3,
+          "steps": [
+            {
+              "op": "write_var",
+              "name": "n"
+            },
+            {
+              "op": "wait",
+              "seconds": 1
+            },
+            {
+              "op": "change_var",
+              "name": "n",
+              "expr": {
+                "num": -1
+              }
+            }
+          ]
+        },
+        {
+          "op": "beep",
+          "note": 72,
+          "seconds": 0.3
+        },
+        {
+          "op": "move",
+          "direction": "forward",
+          "value": 30,
+          "unit": "cm"
+        }
+      ],
+      "skill": "variables"
+    },
+    {
+      "id": "reset",
+      "type": "quiz",
+      "kind": "choice",
+      "question": {
+        "ru": "Счётчик забыли обнулить в начале. Что может случиться?",
+        "kk": "Санауышты басында нөлдеуді ұмытты. Не болуы мүмкін?",
+        "en": "Someone forgot to set the counter to 0 at the start. What can happen?"
+      },
+      "options": [
+        {
+          "ru": "Счёт начнётся не с нуля и будет неверным",
+          "kk": "Санау нөлден басталмай, қате болады",
+          "en": "The count starts from the wrong number"
+        },
+        {
+          "ru": "Робот поедет назад",
+          "kk": "Робот артқа жүреді",
+          "en": "The robot drives backwards"
+        },
+        {
+          "ru": "Ничего не изменится никогда",
+          "kk": "Ешқашан ештеңе өзгермейді",
+          "en": "Nothing can ever change"
+        }
+      ],
+      "correct": [
+        0
+      ],
+      "explanation": {
+        "ru": "Всегда задавай начальное значение счётчика — так результат будет честным.",
+        "kk": "Санауыштың бастапқы мәнін әрдайым орнат — сонда нәтиже дұрыс болады.",
+        "en": "Always set the counter’s starting value — then the result is honest."
+      },
+      "skill": "variables"
+    }
+  ]
+}

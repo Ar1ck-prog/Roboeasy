@@ -619,7 +619,7 @@
               "skills": [
                 "loops"
               ],
-              "status": "todo",
+              "status": "ready",
               "project": false,
               "kit": false
             },
@@ -627,13 +627,13 @@
               "id": "blocks-08",
               "title": {
                 "ru": "Квадрат короче",
-                "kk": "Қысқарақ шаршы",
+                "kk": "Қысқа шаршы",
                 "en": "A shorter square"
               },
               "skills": [
                 "loops"
               ],
-              "status": "todo",
+              "status": "ready",
               "project": false,
               "kit": false
             },
@@ -641,13 +641,13 @@
               "id": "blocks-09",
               "title": {
                 "ru": "Всегда и «пока не»",
-                "kk": "Әрдайым және «болғанша»",
+                "kk": "Әрдайым және «дейін»",
                 "en": "Forever and “until”"
               },
               "skills": [
                 "loops"
               ],
-              "status": "todo",
+              "status": "ready",
               "project": false,
               "kit": false
             },
@@ -655,13 +655,13 @@
               "id": "blocks-10",
               "title": {
                 "ru": "Танец робота",
-                "kk": "Робот биі",
+                "kk": "Роботтың биі",
                 "en": "Robot dance"
               },
               "skills": [
                 "loops"
               ],
-              "status": "todo",
+              "status": "ready",
               "project": false,
               "kit": false
             },
@@ -675,7 +675,7 @@
               "skills": [
                 "loops"
               ],
-              "status": "todo",
+              "status": "ready",
               "project": false,
               "kit": false
             },
@@ -684,12 +684,12 @@
               "title": {
                 "ru": "Проект «Узор»",
                 "kk": "«Өрнек» жобасы",
-                "en": "Project “Pattern”"
+                "en": "Project: Pattern"
               },
               "skills": [
                 "loops"
               ],
-              "status": "todo",
+              "status": "ready",
               "project": true,
               "kit": false
             }
@@ -713,7 +713,7 @@
               "skills": [
                 "conditions"
               ],
-              "status": "todo",
+              "status": "ready",
               "project": false,
               "kit": false
             },
@@ -727,7 +727,7 @@
               "skills": [
                 "conditions"
               ],
-              "status": "todo",
+              "status": "ready",
               "project": false,
               "kit": false
             },
@@ -735,13 +735,13 @@
               "id": "blocks-15",
               "title": {
                 "ru": "Ждать, пока",
-                "kk": "Болғанша күту",
+                "kk": "Әзірге күту",
                 "en": "Wait until"
               },
               "skills": [
                 "conditions"
               ],
-              "status": "todo",
+              "status": "ready",
               "project": false,
               "kit": false
             },
@@ -755,7 +755,7 @@
               "skills": [
                 "conditions"
               ],
-              "status": "todo",
+              "status": "ready",
               "project": false,
               "kit": false
             },
@@ -764,12 +764,12 @@
               "title": {
                 "ru": "Проект «Умная остановка»",
                 "kk": "«Ақылды аялдама» жобасы",
-                "en": "Project “Smart stop”"
+                "en": "Project: Smart stop"
               },
               "skills": [
                 "conditions"
               ],
-              "status": "todo",
+              "status": "ready",
               "project": true,
               "kit": false
             }
@@ -788,12 +788,12 @@
               "title": {
                 "ru": "Что такое переменная",
                 "kk": "Айнымалы деген не",
-                "en": "What a variable is"
+                "en": "What is a variable"
               },
               "skills": [
                 "variables"
               ],
-              "status": "todo",
+              "status": "ready",
               "project": false,
               "kit": false
             },
@@ -802,26 +802,26 @@
               "title": {
                 "ru": "Счётчик",
                 "kk": "Санауыш",
-                "en": "A counter"
+                "en": "Counter"
               },
               "skills": [
                 "variables"
               ],
-              "status": "todo",
+              "status": "ready",
               "project": false,
               "kit": false
             },
             {
               "id": "blocks-20",
               "title": {
-                "ru": "Скорость в переменной",
-                "kk": "Айнымалыдағы жылдамдық",
-                "en": "Speed in a variable"
+                "ru": "Спираль из переменной",
+                "kk": "Айнымалыдан спираль",
+                "en": "A spiral from a variable"
               },
               "skills": [
                 "variables"
               ],
-              "status": "todo",
+              "status": "ready",
               "project": false,
               "kit": false
             },
@@ -830,12 +830,12 @@
               "title": {
                 "ru": "Проект «Считаем круги»",
                 "kk": "«Айналымдарды санаймыз» жобасы",
-                "en": "Project “Counting laps”"
+                "en": "Project: Count the laps"
               },
               "skills": [
                 "variables"
               ],
-              "status": "todo",
+              "status": "ready",
               "project": true,
               "kit": false
             }
@@ -859,7 +859,7 @@
               "skills": [
                 "functions"
               ],
-              "status": "todo",
+              "status": "ready",
               "project": false,
               "kit": false
             },
@@ -873,7 +873,7 @@
               "skills": [
                 "functions"
               ],
-              "status": "todo",
+              "status": "ready",
               "project": false,
               "kit": false
             },
@@ -882,12 +882,12 @@
               "title": {
                 "ru": "Короче со своими блоками",
                 "kk": "Өз блоктарыңмен қысқарақ",
-                "en": "Shorter with My Blocks"
+                "en": "Shorter with your own blocks"
               },
               "skills": [
                 "functions"
               ],
-              "status": "todo",
+              "status": "ready",
               "project": false,
               "kit": false
             },
@@ -896,12 +896,12 @@
               "title": {
                 "ru": "Проект «Робот-гид»",
                 "kk": "«Робот-гид» жобасы",
-                "en": "Project “Robot guide”"
+                "en": "Project: Robot guide"
               },
               "skills": [
                 "functions"
               ],
-              "status": "todo",
+              "status": "ready",
               "project": true,
               "kit": false
             }
@@ -945,7 +945,7 @@
               "skills": [
                 "sensor-color"
               ],
-              "status": "todo",
+              "status": "ready",
               "project": false,
               "kit": false
             },
@@ -959,7 +959,7 @@
               "skills": [
                 "sensor-color"
               ],
-              "status": "todo",
+              "status": "ready",
               "project": false,
               "kit": false
             },
@@ -968,12 +968,12 @@
               "title": {
                 "ru": "Считать линии",
                 "kk": "Сызықтарды санау",
-                "en": "Count the lines"
+                "en": "Counting lines"
               },
               "skills": [
                 "sensor-color"
               ],
-              "status": "todo",
+              "status": "ready",
               "project": false,
               "kit": false
             },
@@ -987,7 +987,7 @@
               "skills": [
                 "sensor-color"
               ],
-              "status": "todo",
+              "status": "ready",
               "project": false,
               "kit": false
             },
@@ -1001,7 +1001,7 @@
               "skills": [
                 "sensor-color"
               ],
-              "status": "todo",
+              "status": "ready",
               "project": false,
               "kit": false
             }
@@ -1025,7 +1025,7 @@
               "skills": [
                 "sensor-distance"
               ],
-              "status": "todo",
+              "status": "ready",
               "project": false,
               "kit": false
             },
@@ -1039,7 +1039,7 @@
               "skills": [
                 "sensor-distance"
               ],
-              "status": "todo",
+              "status": "ready",
               "project": false,
               "kit": false
             },
@@ -1047,13 +1047,13 @@
               "id": "sensors-08",
               "title": {
                 "ru": "Держать дистанцию",
-                "kk": "Арақашықтықты сақтау",
+                "kk": "Арақашықтықты ұстау",
                 "en": "Keep your distance"
               },
               "skills": [
                 "sensor-distance"
               ],
-              "status": "todo",
+              "status": "ready",
               "project": false,
               "kit": false
             },
@@ -1061,13 +1061,13 @@
               "id": "sensors-09",
               "title": {
                 "ru": "Робот-парковщик",
-                "kk": "Робот-тұрақтаушы",
+                "kk": "Робот-тұраққа қоюшы",
                 "en": "Parking robot"
               },
               "skills": [
                 "sensor-distance"
               ],
-              "status": "todo",
+              "status": "ready",
               "project": false,
               "kit": false
             }
@@ -1085,13 +1085,13 @@
               "id": "sensors-10",
               "title": {
                 "ru": "Кнопка-бампер",
-                "kk": "Бампер-түйме",
-                "en": "The bumper button"
+                "kk": "Түйме-бампер",
+                "en": "Bumper button"
               },
               "skills": [
                 "sensor-force"
               ],
-              "status": "todo",
+              "status": "ready",
               "project": false,
               "kit": false
             },
@@ -1099,13 +1099,13 @@
               "id": "sensors-11",
               "title": {
                 "ru": "Нажато, отпущено, сильно",
-                "kk": "Басылды, босатылды, қатты",
+                "kk": "Басылды, жіберілді, қатты",
                 "en": "Pressed, released, hard"
               },
               "skills": [
                 "sensor-force"
               ],
-              "status": "todo",
+              "status": "ready",
               "project": false,
               "kit": false
             },
@@ -1113,13 +1113,13 @@
               "id": "sensors-12",
               "title": {
                 "ru": "Робот ищет стену",
-                "kk": "Робот қабырғаны іздейді",
-                "en": "The robot finds the wall"
+                "kk": "Робот қабырға іздейді",
+                "en": "The robot looks for walls"
               },
               "skills": [
                 "sensor-force"
               ],
-              "status": "todo",
+              "status": "ready",
               "project": false,
               "kit": false
             }
@@ -1137,13 +1137,13 @@
               "id": "sensors-13",
               "title": {
                 "ru": "Угол поворота",
-                "kk": "Бұрылыс бұрышы",
-                "en": "The turn angle"
+                "kk": "Бұрылу бұрышы",
+                "en": "Yaw angle"
               },
               "skills": [
                 "gyro"
               ],
-              "status": "todo",
+              "status": "ready",
               "project": false,
               "kit": false
             },
@@ -1152,12 +1152,12 @@
               "title": {
                 "ru": "Точный поворот",
                 "kk": "Дәл бұрылыс",
-                "en": "An exact turn"
+                "en": "A precise turn"
               },
               "skills": [
                 "gyro"
               ],
-              "status": "todo",
+              "status": "ready",
               "project": false,
               "kit": false
             },
@@ -1171,7 +1171,7 @@
               "skills": [
                 "gyro"
               ],
-              "status": "todo",
+              "status": "ready",
               "project": false,
               "kit": false
             },
@@ -1179,13 +1179,13 @@
               "id": "sensors-16",
               "title": {
                 "ru": "Наклон",
-                "kk": "Еңкею",
+                "kk": "Көлбеу",
                 "en": "Tilt"
               },
               "skills": [
                 "gyro"
               ],
-              "status": "todo",
+              "status": "ready",
               "project": false,
               "kit": false
             }
@@ -1204,12 +1204,12 @@
               "title": {
                 "ru": "Левее или правее",
                 "kk": "Солға ма, оңға ма",
-                "en": "Left or right"
+                "en": "Left or right of it"
               },
               "skills": [
                 "line-follow"
               ],
-              "status": "todo",
+              "status": "ready",
               "project": false,
               "kit": false
             },
@@ -1217,13 +1217,13 @@
               "id": "sensors-18",
               "title": {
                 "ru": "Плавнее",
-                "kk": "Бірқалыпты",
+                "kk": "Біркелкірек",
                 "en": "Smoother"
               },
               "skills": [
                 "line-follow"
               ],
-              "status": "todo",
+              "status": "ready",
               "project": false,
               "kit": false
             },
@@ -1237,7 +1237,7 @@
               "skills": [
                 "line-follow"
               ],
-              "status": "todo",
+              "status": "ready",
               "project": false,
               "kit": false
             },
@@ -1245,13 +1245,13 @@
               "id": "sensors-20",
               "title": {
                 "ru": "Проект «Линия и стена»",
-                "kk": "«Сызық пен қабырға» жобасы",
-                "en": "Project “Line and wall”"
+                "kk": "«Сызық және қабырға» жобасы",
+                "en": "Project: Line and wall"
               },
               "skills": [
                 "line-follow"
               ],
-              "status": "todo",
+              "status": "ready",
               "project": true,
               "kit": false
             }

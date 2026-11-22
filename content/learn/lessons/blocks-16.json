@@ -1,0 +1,262 @@
+{
+  "id": "blocks-16",
+  "track": "blocks",
+  "unit": "blocks-conditions",
+  "minutes": 8,
+  "skills": [
+    "conditions"
+  ],
+  "title": {
+    "ru": "Робот-светофор",
+    "kk": "Робот-бағдаршам",
+    "en": "Traffic-light robot"
+  },
+  "goal": {
+    "ru": "Сегодня робот будет вести себя на дороге, как настоящая машина.",
+    "kk": "Бүгін робот жолда нағыз көлік сияқты жүреді.",
+    "en": "Today the robot will behave on the road like a real car."
+  },
+  "summary": {
+    "ru": "Теперь ты умеешь соединять «ждать, пока», паузу и сигнал в один алгоритм.",
+    "kk": "Енді сен «әзірге күту», үзіліс пен дыбысты бір алгоритмге біріктіре аласың.",
+    "en": "Now you can combine “wait until”, a pause and a beep into one algorithm."
+  },
+  "steps": [
+    {
+      "id": "rules",
+      "type": "theory",
+      "title": {
+        "ru": "Правила дороги",
+        "kk": "Жол ережелері",
+        "en": "Rules of the road"
+      },
+      "body": {
+        "ru": "Водитель видит красную линию — останавливается, ждёт, сигналит и только потом едет дальше.\n\nРобот сделает так же: едет, **ждёт, пока** датчик цвета не увидит красный, останавливается, ждёт 2 секунды, подаёт сигнал и едет к финишу.",
+        "kk": "Жүргізуші қызыл сызықты көрсе — тоқтайды, күтеді, белгі береді және содан кейін ғана әрі қарай жүреді.\n\nРобот да солай істейді: жүреді, түс датчигі қызылды көргенше **күтеді**, тоқтайды, 2 секунд күтеді, дыбыс беріп, мәреге жүреді.",
+        "en": "A driver sees a red line — stops, waits, signals and only then drives on.\n\nThe robot will do the same: drive, **wait until** the colour sensor sees red, stop, wait 2 seconds, beep and drive to the finish."
+      },
+      "illustration": "r-wait-until"
+    },
+    {
+      "id": "algorithm",
+      "type": "quiz",
+      "kind": "order",
+      "question": {
+        "ru": "Расставь алгоритм светофора по порядку",
+        "kk": "Бағдаршам алгоритмін ретімен қой",
+        "en": "Put the traffic-light algorithm in order"
+      },
+      "items": [
+        {
+          "ru": "Начать движение",
+          "kk": "Қозғалысты бастау",
+          "en": "Start moving"
+        },
+        {
+          "ru": "Ждать, пока цвет красный",
+          "kk": "Түс қызыл болғанша күту",
+          "en": "Wait until colour is red"
+        },
+        {
+          "ru": "Остановить движение",
+          "kk": "Қозғалысты тоқтату",
+          "en": "Stop moving"
+        },
+        {
+          "ru": "Ждать 2 секунды и подать сигнал",
+          "kk": "2 секунд күтіп, дыбыс беру",
+          "en": "Wait 2 seconds and beep"
+        },
+        {
+          "ru": "Ехать к финишу",
+          "kk": "Мәреге жүру",
+          "en": "Drive to the finish"
+        }
+      ],
+      "explanation": {
+        "ru": "Сначала едем, потом ловим красный, стоим, сигналим и продолжаем путь.",
+        "kk": "Алдымен жүреміз, содан кейін қызылды ұстаймыз, тұрамыз, белгі береміз және жолды жалғастырамыз.",
+        "en": "Drive, catch the red, stand, signal and continue."
+      },
+      "skill": "conditions"
+    },
+    {
+      "id": "traffic",
+      "type": "code",
+      "title": {
+        "ru": "Красная линия",
+        "kk": "Қызыл сызық",
+        "en": "Red line"
+      },
+      "task": {
+        "ru": "Доедь до красной линии, остановись на стоп-линии на 2 секунды, подай сигнал и поезжай к финишу.",
+        "kk": "Қызыл сызыққа дейін жетіп, тоқтау сызығында 2 секундқа тоқта, дыбыс беріп, мәреге жүр.",
+        "en": "Drive to the red line, stop at the stop line for 2 seconds, beep and drive to the finish."
+      },
+      "field": {
+        "width": 1400,
+        "height": 400,
+        "start": {
+          "x": 150,
+          "y": 200,
+          "heading": 0
+        },
+        "border": true,
+        "zones": [
+          {
+            "id": "red",
+            "x": 600,
+            "y": 0,
+            "w": 60,
+            "h": 400,
+            "kind": "paint",
+            "color": "red"
+          },
+          {
+            "id": "stopline",
+            "x": 420,
+            "y": 100,
+            "w": 200,
+            "h": 200,
+            "kind": "target",
+            "label": {
+              "ru": "Стоп-линия",
+              "kk": "Тоқтау сызығы",
+              "en": "Stop line"
+            }
+          },
+          {
+            "id": "finish",
+            "x": 1050,
+            "y": 100,
+            "w": 250,
+            "h": 200,
+            "kind": "target",
+            "label": {
+              "ru": "Финиш",
+              "kk": "Мәре",
+              "en": "Finish"
+            }
+          }
+        ],
+        "points": [],
+        "walls": [],
+        "lines": []
+      },
+      "toolbox": [
+        "start_move",
+        "stop_move",
+        "wait_until",
+        "wait",
+        "beep",
+        "move"
+      ],
+      "start": [],
+      "checks": [
+        {
+          "type": "waitInZone",
+          "zone": "stopline",
+          "seconds": 2
+        },
+        {
+          "type": "beeped",
+          "min": 1
+        },
+        {
+          "type": "finishInZone",
+          "zone": "finish"
+        },
+        {
+          "type": "usesSensor",
+          "sensor": "color"
+        }
+      ],
+      "hints": [
+        {
+          "ru": "Используй «ждать, пока цвет красный».",
+          "kk": "«Түс қызыл болғанша күту» блогын қолдан.",
+          "en": "Use “wait until colour is red”."
+        },
+        {
+          "ru": "После остановки: ждать 2 с и сигнал.",
+          "kk": "Тоқтағаннан кейін: 2 с күту және дыбыс.",
+          "en": "After stopping: wait 2 s and beep."
+        },
+        {
+          "ru": "В конце «вперёд 55 см» до финиша.",
+          "kk": "Соңында мәреге дейін «55 см алға».",
+          "en": "Finish with “forward 55 cm”."
+        }
+      ],
+      "reference": [
+        {
+          "op": "start_move",
+          "direction": "forward"
+        },
+        {
+          "op": "wait_until",
+          "condition": {
+            "sensor": "color",
+            "port": "D",
+            "color": "red"
+          }
+        },
+        {
+          "op": "stop_move"
+        },
+        {
+          "op": "wait",
+          "seconds": 2
+        },
+        {
+          "op": "beep",
+          "note": 72,
+          "seconds": 0.3
+        },
+        {
+          "op": "move",
+          "direction": "forward",
+          "value": 55,
+          "unit": "cm"
+        }
+      ],
+      "skill": "conditions"
+    },
+    {
+      "id": "why-sensor",
+      "type": "quiz",
+      "kind": "choice",
+      "question": {
+        "ru": "Почему здесь лучше датчик цвета, а не «вперёд 40 см»?",
+        "kk": "Мұнда неге «40 см алға» емес, түс датчигі жақсы?",
+        "en": "Why is the colour sensor better here than “forward 40 cm”?"
+      },
+      "options": [
+        {
+          "ru": "Робот остановится у линии, даже если её передвинут",
+          "kk": "Сызықты жылжытса да, робот оның алдында тоқтайды",
+          "en": "The robot stops at the line even if it is moved"
+        },
+        {
+          "ru": "Так робот едет быстрее",
+          "kk": "Осылай робот жылдамырақ жүреді",
+          "en": "The robot drives faster"
+        },
+        {
+          "ru": "Датчик цвета экономит батарею",
+          "kk": "Түс датчигі батареяны үнемдейді",
+          "en": "The colour sensor saves battery"
+        }
+      ],
+      "correct": [
+        0
+      ],
+      "explanation": {
+        "ru": "Программа с датчиком работает на любом поле, а не только на одном.",
+        "kk": "Датчигі бар бағдарлама тек бір алаңда емес, кез келген алаңда жұмыс істейді.",
+        "en": "A program with a sensor works on any field, not just one."
+      },
+      "skill": "conditions"
+    }
+  ]
+}

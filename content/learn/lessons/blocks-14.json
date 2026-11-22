@@ -1,0 +1,446 @@
+{
+  "id": "blocks-14",
+  "track": "blocks",
+  "unit": "blocks-conditions",
+  "minutes": 8,
+  "skills": [
+    "conditions"
+  ],
+  "title": {
+    "ru": "Если… иначе",
+    "kk": "Егер… әйтпесе",
+    "en": "If… else"
+  },
+  "goal": {
+    "ru": "Сегодня робот научится выбирать одну из двух дорог.",
+    "kk": "Бүгін робот екі жолдың бірін таңдауды үйренеді.",
+    "en": "Today the robot will learn to choose one of two roads."
+  },
+  "summary": {
+    "ru": "Теперь ты умеешь писать развилки: «если — одно, иначе — другое».",
+    "kk": "Енді сен айырықтар жаза аласың: «егер — біреуі, әйтпесе — басқасы».",
+    "en": "Now you can write forks: “if — one thing, else — another”."
+  },
+  "steps": [
+    {
+      "id": "else",
+      "type": "theory",
+      "title": {
+        "ru": "Две дороги",
+        "kk": "Екі жол",
+        "en": "Two roads"
+      },
+      "body": {
+        "ru": "У блока **«если… иначе»** две части. Если условие правда — выполняется верхняя часть. Если нет — нижняя, «иначе».\n\nОдна из двух частей выполнится **всегда**, обе — никогда. Это как развилка: робот поедет либо налево, либо направо.",
+        "kk": "**«Егер… әйтпесе»** блогының екі бөлігі бар. Шарт ақиқат болса — жоғарғы бөлігі орындалады. Жоқ болса — төменгісі, «әйтпесе».\n\nЕкі бөліктің біреуі **әрқашан** орындалады, екеуі бірден — ешқашан. Бұл айырық сияқты: робот не солға, не оңға жүреді.",
+        "en": "The **“if… else”** block has two parts. If the condition is true, the top part runs. If not, the bottom “else” part runs.\n\nOne of the two parts **always** runs, never both. It is a fork: the robot goes either left or right."
+      },
+      "illustration": "r-if-else",
+      "example": [
+        {
+          "op": "move",
+          "direction": "forward",
+          "value": 40,
+          "unit": "cm"
+        },
+        {
+          "op": "if",
+          "condition": {
+            "sensor": "color",
+            "port": "D",
+            "color": "green"
+          },
+          "then": [
+            {
+              "op": "turn",
+              "direction": "left",
+              "degrees": 90
+            }
+          ],
+          "else": [
+            {
+              "op": "turn",
+              "direction": "right",
+              "degrees": 90
+            }
+          ]
+        },
+        {
+          "op": "move",
+          "direction": "forward",
+          "value": 30,
+          "unit": "cm"
+        }
+      ]
+    },
+    {
+      "id": "fork",
+      "type": "code",
+      "title": {
+        "ru": "Развилка",
+        "kk": "Айырық",
+        "en": "Fork"
+      },
+      "task": {
+        "ru": "Робот едет 40 см и смотрит на метку. **Если** она зелёная — налево к зоне А, **иначе** — направо к зоне Б. Сейчас метка зелёная.",
+        "kk": "Робот 40 см жүріп, белгіге қарайды. **Егер** ол жасыл болса — солға, А аймағына, **әйтпесе** — оңға, Б аймағына. Қазір белгі жасыл.",
+        "en": "The robot drives 40 cm and looks at the mark. **If** it is green — left to zone A, **else** — right to zone B. The mark is green now."
+      },
+      "field": {
+        "width": 1400,
+        "height": 1000,
+        "start": {
+          "x": 150,
+          "y": 500,
+          "heading": 0
+        },
+        "border": true,
+        "zones": [
+          {
+            "id": "mark",
+            "x": 560,
+            "y": 440,
+            "w": 120,
+            "h": 120,
+            "kind": "paint",
+            "color": "green"
+          },
+          {
+            "id": "a",
+            "x": 480,
+            "y": 760,
+            "w": 220,
+            "h": 200,
+            "kind": "target",
+            "label": {
+              "ru": "Зона А",
+              "kk": "А аймағы",
+              "en": "Zone A"
+            }
+          },
+          {
+            "id": "b",
+            "x": 480,
+            "y": 40,
+            "w": 220,
+            "h": 200,
+            "kind": "target",
+            "label": {
+              "ru": "Зона Б",
+              "kk": "Б аймағы",
+              "en": "Zone B"
+            }
+          }
+        ],
+        "points": [],
+        "walls": [],
+        "lines": []
+      },
+      "toolbox": [
+        "move",
+        "turn",
+        "if"
+      ],
+      "start": [],
+      "checks": [
+        {
+          "type": "finishInZone",
+          "zone": "a"
+        },
+        {
+          "type": "usesOp",
+          "op": "if",
+          "min": 1
+        },
+        {
+          "type": "usesSensor",
+          "sensor": "color"
+        }
+      ],
+      "hints": [
+        {
+          "ru": "Нужен блок «если… иначе» с датчиком цвета.",
+          "kk": "Түс датчигі бар «егер… әйтпесе» блогы керек.",
+          "en": "Use “if… else” with the colour sensor."
+        },
+        {
+          "ru": "В верхнюю часть — «налево 90°», в нижнюю — «направо 90°».",
+          "kk": "Жоғарғы бөлікке — «солға 90°», төменгісіне — «оңға 90°».",
+          "en": "Top part: “left 90°”, bottom part: “right 90°”."
+        },
+        {
+          "ru": "Вперёд 40; если цвет зелёный: налево 90°, иначе: направо 90°; вперёд 30.",
+          "kk": "40 алға; егер түс жасыл: солға 90°, әйтпесе: оңға 90°; 30 алға.",
+          "en": "Forward 40; if green: left 90°, else: right 90°; forward 30."
+        }
+      ],
+      "reference": [
+        {
+          "op": "move",
+          "direction": "forward",
+          "value": 40,
+          "unit": "cm"
+        },
+        {
+          "op": "if",
+          "condition": {
+            "sensor": "color",
+            "port": "D",
+            "color": "green"
+          },
+          "then": [
+            {
+              "op": "turn",
+              "direction": "left",
+              "degrees": 90
+            }
+          ],
+          "else": [
+            {
+              "op": "turn",
+              "direction": "right",
+              "degrees": 90
+            }
+          ]
+        },
+        {
+          "op": "move",
+          "direction": "forward",
+          "value": 30,
+          "unit": "cm"
+        }
+      ],
+      "skill": "conditions"
+    },
+    {
+      "id": "red-mark",
+      "type": "predict",
+      "title": {
+        "ru": "А если метка красная?",
+        "kk": "Ал белгі қызыл болса ше?",
+        "en": "And if the mark is red?"
+      },
+      "question": {
+        "ru": "Та же программа, но метка теперь красная. Куда поедет робот?",
+        "kk": "Сол бағдарлама, бірақ белгі енді қызыл. Робот қайда жүреді?",
+        "en": "The same program, but the mark is red now. Where will the robot go?"
+      },
+      "field": {
+        "width": 1400,
+        "height": 1000,
+        "start": {
+          "x": 150,
+          "y": 500,
+          "heading": 0
+        },
+        "border": true,
+        "zones": [
+          {
+            "id": "mark",
+            "x": 560,
+            "y": 440,
+            "w": 120,
+            "h": 120,
+            "kind": "paint",
+            "color": "red"
+          },
+          {
+            "id": "a",
+            "x": 480,
+            "y": 760,
+            "w": 220,
+            "h": 200,
+            "kind": "target",
+            "label": {
+              "ru": "Зона А",
+              "kk": "А аймағы",
+              "en": "Zone A"
+            }
+          },
+          {
+            "id": "b",
+            "x": 480,
+            "y": 40,
+            "w": 220,
+            "h": 200,
+            "kind": "target",
+            "label": {
+              "ru": "Зона Б",
+              "kk": "Б аймағы",
+              "en": "Zone B"
+            }
+          }
+        ],
+        "points": [],
+        "walls": [],
+        "lines": []
+      },
+      "program": [
+        {
+          "op": "move",
+          "direction": "forward",
+          "value": 40,
+          "unit": "cm"
+        },
+        {
+          "op": "if",
+          "condition": {
+            "sensor": "color",
+            "port": "D",
+            "color": "green"
+          },
+          "then": [
+            {
+              "op": "turn",
+              "direction": "left",
+              "degrees": 90
+            }
+          ],
+          "else": [
+            {
+              "op": "turn",
+              "direction": "right",
+              "degrees": 90
+            }
+          ]
+        },
+        {
+          "op": "move",
+          "direction": "forward",
+          "value": 30,
+          "unit": "cm"
+        }
+      ],
+      "options": [
+        {
+          "label": {
+            "ru": "В зону А",
+            "kk": "А аймағына",
+            "en": "To zone A"
+          },
+          "steps": [
+            {
+              "op": "move",
+              "direction": "forward",
+              "value": 40,
+              "unit": "cm"
+            },
+            {
+              "op": "turn",
+              "direction": "left",
+              "degrees": 90
+            },
+            {
+              "op": "move",
+              "direction": "forward",
+              "value": 30,
+              "unit": "cm"
+            }
+          ]
+        },
+        {
+          "label": {
+            "ru": "В зону Б",
+            "kk": "Б аймағына",
+            "en": "To zone B"
+          },
+          "steps": [
+            {
+              "op": "move",
+              "direction": "forward",
+              "value": 40,
+              "unit": "cm"
+            },
+            {
+              "op": "turn",
+              "direction": "right",
+              "degrees": 90
+            },
+            {
+              "op": "move",
+              "direction": "forward",
+              "value": 30,
+              "unit": "cm"
+            }
+          ]
+        },
+        {
+          "label": {
+            "ru": "Прямо",
+            "kk": "Тура",
+            "en": "Straight"
+          },
+          "steps": [
+            {
+              "op": "move",
+              "direction": "forward",
+              "value": 70,
+              "unit": "cm"
+            }
+          ]
+        }
+      ],
+      "correct": 1,
+      "explanation": {
+        "ru": "Красный — не зелёный, условие ложно, поэтому выполняется «иначе»: направо в зону Б.",
+        "kk": "Қызыл — жасыл емес, шарт жалған, сондықтан «әйтпесе» орындалады: оңға, Б аймағына.",
+        "en": "Red is not green, the condition is false, so “else” runs: right to zone B."
+      },
+      "skill": "conditions"
+    },
+    {
+      "id": "pairs",
+      "type": "quiz",
+      "kind": "match",
+      "question": {
+        "ru": "Что сделает робот?",
+        "kk": "Робот не істейді?",
+        "en": "What will the robot do?"
+      },
+      "pairs": [
+        {
+          "left": {
+            "ru": "Если стена близко — стоп, иначе — вперёд. Стена далеко.",
+            "kk": "Егер қабырға жақын — тоқта, әйтпесе — алға. Қабырға алыс.",
+            "en": "If the wall is close — stop, else — forward. The wall is far."
+          },
+          "right": {
+            "ru": "Поедет вперёд",
+            "kk": "Алға жүреді",
+            "en": "Drives forward"
+          }
+        },
+        {
+          "left": {
+            "ru": "Если цвет чёрный — сигнал, иначе — ничего. Под датчиком чёрная линия.",
+            "kk": "Егер түс қара — дыбыс, әйтпесе — ештеңе. Датчик астында қара сызық.",
+            "en": "If black — beep, else — nothing. A black line is under the sensor."
+          },
+          "right": {
+            "ru": "Подаст сигнал",
+            "kk": "Дыбыс береді",
+            "en": "Beeps"
+          }
+        },
+        {
+          "left": {
+            "ru": "Если кнопка нажата — улыбка, иначе — грусть. Кнопку не трогали.",
+            "kk": "Егер түйме басылса — күлкі, әйтпесе — мұң. Түймеге тиіспеді.",
+            "en": "If pressed — smile, else — sad face. Nobody pressed it."
+          },
+          "right": {
+            "ru": "Покажет грусть",
+            "kk": "Мұңды көрсетеді",
+            "en": "Shows the sad face"
+          }
+        }
+      ],
+      "explanation": {
+        "ru": "Смотри на условие: правда — верхняя часть, ложь — «иначе».",
+        "kk": "Шартқа қара: ақиқат — жоғарғы бөлік, жалған — «әйтпесе».",
+        "en": "Look at the condition: true — the top part, false — “else”."
+      },
+      "skill": "conditions"
+    }
+  ]
+}

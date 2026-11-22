@@ -1,0 +1,289 @@
+{
+  "id": "sensors-06",
+  "track": "sensors",
+  "unit": "sensors-distance",
+  "minutes": 7,
+  "skills": [
+    "sensor-distance"
+  ],
+  "title": {
+    "ru": "Как датчик меряет расстояние",
+    "kk": "Датчик қашықтықты қалай өлшейді",
+    "en": "How the sensor measures distance"
+  },
+  "goal": {
+    "ru": "Сегодня ты узнаешь, как робот «видит» препятствия.",
+    "kk": "Бүгін сен роботтың кедергілерді қалай «көретінін» білесің.",
+    "en": "Today you will learn how a robot “sees” obstacles."
+  },
+  "summary": {
+    "ru": "Теперь ты знаешь, как работает датчик расстояния и как остановиться на нужном расстоянии.",
+    "kk": "Енді сен қашықтық датчигі қалай жұмыс істейтінін және керекті қашықтықта қалай тоқтау керегін білесің.",
+    "en": "Now you know how the distance sensor works and how to stop at a set distance."
+  },
+  "steps": [
+    {
+      "id": "echo",
+      "type": "theory",
+      "title": {
+        "ru": "Эхо, как у летучей мыши",
+        "kk": "Жарқанат сияқты жаңғырық",
+        "en": "An echo like a bat"
+      },
+      "body": {
+        "ru": "Датчик расстояния посылает вперёд звук — такой высокий, что мы его не слышим. Звук отражается от препятствия и возвращается.\n\nЧем дальше стена, тем дольше ждать эха. По этому времени датчик вычисляет расстояние в сантиметрах. Так же ориентируются летучие мыши!\n\nДатчик видит примерно до двух метров. Мягкие и наклонные поверхности он видит хуже — звук от них уходит в сторону.",
+        "kk": "Қашықтық датчигі алға дыбыс жібереді — соншалық жіңішке, біз оны естімейміз. Дыбыс кедергіден шағылып, қайтады.\n\nҚабырға неғұрлым алыс болса, жаңғырықты соғұрлым ұзақ күту керек. Осы уақыт бойынша датчик қашықтықты сантиметрмен есептейді. Жарқанаттар да осылай бағдарлайды!\n\nДатчик шамамен екі метрге дейін көреді. Жұмсақ және көлбеу беттерді нашар көреді — олардан дыбыс жан-жаққа кетеді.",
+        "en": "The distance sensor sends a sound forward — so high that we cannot hear it. The sound bounces off an obstacle and comes back.\n\nThe further the wall, the longer the echo takes. From that time the sensor works out the distance in centimetres. Bats find their way the same way!\n\nThe sensor sees up to about two metres. Soft and slanted surfaces are harder to see — the sound bounces away."
+      },
+      "illustration": "r-distance"
+    },
+    {
+      "id": "soft",
+      "type": "quiz",
+      "kind": "choice",
+      "question": {
+        "ru": "Какую преграду датчику расстояния увидеть труднее всего?",
+        "kk": "Қашықтық датчигіне қай кедергіні көру қиын?",
+        "en": "Which obstacle is hardest for the distance sensor to see?"
+      },
+      "options": [
+        {
+          "ru": "Мягкую подушку под углом",
+          "kk": "Бұрышпен тұрған жұмсақ жастық",
+          "en": "A soft pillow at an angle"
+        },
+        {
+          "ru": "Ровную деревянную стену",
+          "kk": "Тегіс ағаш қабырға",
+          "en": "A flat wooden wall"
+        },
+        {
+          "ru": "Пластиковую коробку прямо впереди",
+          "kk": "Тура алдындағы пластик қорап",
+          "en": "A plastic box straight ahead"
+        }
+      ],
+      "correct": [
+        0
+      ],
+      "explanation": {
+        "ru": "Мягкое глушит звук, а наклонная поверхность отражает его в сторону — эхо может не вернуться.",
+        "kk": "Жұмсақ зат дыбысты басады, ал көлбеу бет оны жан-жаққа шағылыстырады — жаңғырық қайтпауы мүмкін.",
+        "en": "Soft things absorb sound and slanted surfaces bounce it sideways — the echo may not return."
+      },
+      "skill": "sensor-distance"
+    },
+    {
+      "id": "where-stop",
+      "type": "predict",
+      "title": {
+        "ru": "Где встанет робот?",
+        "kk": "Робот қай жерде тұрады?",
+        "en": "Where will the robot stop?"
+      },
+      "question": {
+        "ru": "Робот едет, пока стена не станет ближе 40 см. Где он остановится?",
+        "kk": "Робот қабырға 40 см-ден жақын болғанша жүреді. Ол қайда тоқтайды?",
+        "en": "The robot drives until the wall is closer than 40 cm. Where will it stop?"
+      },
+      "field": {
+        "width": 1400,
+        "height": 400,
+        "start": {
+          "x": 150,
+          "y": 200,
+          "heading": 0
+        },
+        "border": true,
+        "zones": [],
+        "points": [],
+        "walls": [
+          {
+            "x": 1100,
+            "y": 0,
+            "w": 40,
+            "h": 400
+          }
+        ],
+        "lines": []
+      },
+      "program": [
+        {
+          "op": "start_move",
+          "direction": "forward"
+        },
+        {
+          "op": "wait_until",
+          "condition": {
+            "sensor": "distance",
+            "port": "C",
+            "comparator": "<",
+            "value": 40,
+            "unit": "cm"
+          }
+        },
+        {
+          "op": "stop_move"
+        }
+      ],
+      "options": [
+        {
+          "label": {
+            "ru": "Вплотную к стене",
+            "kk": "Қабырғаға тығыз",
+            "en": "Right against the wall"
+          },
+          "steps": [
+            {
+              "op": "move",
+              "direction": "forward",
+              "value": 86,
+              "unit": "cm"
+            }
+          ]
+        },
+        {
+          "label": {
+            "ru": "Примерно в 40 см от стены",
+            "kk": "Қабырғадан шамамен 40 см жерде",
+            "en": "About 40 cm from the wall"
+          },
+          "steps": [
+            {
+              "op": "move",
+              "direction": "forward",
+              "value": 47,
+              "unit": "cm"
+            }
+          ]
+        },
+        {
+          "label": {
+            "ru": "Сразу на старте",
+            "kk": "Бірден стартта",
+            "en": "Right at the start"
+          },
+          "steps": [
+            {
+              "op": "wait",
+              "seconds": 1
+            }
+          ]
+        }
+      ],
+      "correct": 1,
+      "explanation": {
+        "ru": "Робот останавливается, как только расстояние стало меньше 40 см.",
+        "kk": "Қашықтық 40 см-ден аз болған бойда робот тоқтайды.",
+        "en": "The robot stops as soon as the distance drops below 40 cm."
+      },
+      "skill": "sensor-distance"
+    },
+    {
+      "id": "stop30",
+      "type": "code",
+      "title": {
+        "ru": "Остановись в 30 см",
+        "kk": "30 см жерде тоқта",
+        "en": "Stop at 30 cm"
+      },
+      "task": {
+        "ru": "Подъедь к стене и остановись, когда до неё останется меньше 30 см.",
+        "kk": "Қабырғаға жақындап, оған дейін 30 см-ден аз қалғанда тоқта.",
+        "en": "Drive toward the wall and stop when less than 30 cm is left."
+      },
+      "field": {
+        "width": 1400,
+        "height": 400,
+        "start": {
+          "x": 150,
+          "y": 200,
+          "heading": 0
+        },
+        "border": true,
+        "zones": [
+          {
+            "id": "near",
+            "x": 700,
+            "y": 50,
+            "w": 220,
+            "h": 300,
+            "kind": "target",
+            "label": {
+              "ru": "30 см до стены",
+              "kk": "Қабырғаға дейін 30 см",
+              "en": "30 cm from the wall"
+            }
+          }
+        ],
+        "points": [],
+        "walls": [
+          {
+            "x": 1100,
+            "y": 0,
+            "w": 40,
+            "h": 400
+          }
+        ],
+        "lines": []
+      },
+      "toolbox": [
+        "start_move",
+        "stop_move",
+        "wait_until",
+        "move"
+      ],
+      "start": [],
+      "checks": [
+        {
+          "type": "finishInZone",
+          "zone": "near"
+        },
+        {
+          "type": "usesSensor",
+          "sensor": "distance"
+        },
+        {
+          "type": "noCollision"
+        }
+      ],
+      "hints": [
+        {
+          "ru": "Начать движение → ждать, пока… → остановить движение.",
+          "kk": "Қозғалысты бастау → әзірге күту… → қозғалысты тоқтату.",
+          "en": "Start moving → wait until… → stop moving."
+        },
+        {
+          "ru": "Условие: «расстояние < 30 см».",
+          "kk": "Шарт: «қашықтық < 30 см».",
+          "en": "Condition: “distance < 30 cm”."
+        },
+        {
+          "ru": "Начать; ждать, пока расстояние < 30 см; остановить.",
+          "kk": "Бастау; қашықтық < 30 см болғанша күту; тоқтату.",
+          "en": "Start; wait until distance < 30 cm; stop."
+        }
+      ],
+      "reference": [
+        {
+          "op": "start_move",
+          "direction": "forward"
+        },
+        {
+          "op": "wait_until",
+          "condition": {
+            "sensor": "distance",
+            "port": "C",
+            "comparator": "<",
+            "value": 30,
+            "unit": "cm"
+          }
+        },
+        {
+          "op": "stop_move"
+        }
+      ],
+      "skill": "sensor-distance"
+    }
+  ]
+}

@@ -1,0 +1,324 @@
+{
+  "id": "blocks-09",
+  "track": "blocks",
+  "unit": "blocks-loops",
+  "minutes": 8,
+  "skills": [
+    "loops"
+  ],
+  "title": {
+    "ru": "Всегда и «пока не»",
+    "kk": "Әрдайым және «дейін»",
+    "en": "Forever and “until”"
+  },
+  "goal": {
+    "ru": "Сегодня ты узнаешь циклы, которые повторяются бесконечно или до нужного момента.",
+    "kk": "Бүгін сен шексіз немесе керекті сәтке дейін қайталанатын циклдарды білесің.",
+    "en": "Today you will meet loops that repeat forever or until something happens."
+  },
+  "summary": {
+    "ru": "Теперь ты знаешь три цикла: N раз, всегда и «пока не».",
+    "kk": "Енді сен үш циклды білесің: N рет, әрдайым және «дейін».",
+    "en": "Now you know three loops: N times, forever and until."
+  },
+  "steps": [
+    {
+      "id": "kinds",
+      "type": "theory",
+      "title": {
+        "ru": "Три вида циклов",
+        "kk": "Циклдың үш түрі",
+        "en": "Three kinds of loops"
+      },
+      "body": {
+        "ru": "**«Повторить N раз»** — когда знаешь, сколько повторов нужно.\n\n**«Повторять всегда»** — повторяет, пока не выключишь программу. Так работают маяки и мигалки.\n\n**«Повторять, пока не…»** — повторяет, пока условие не станет правдой. Например: «ехать шагами по 10 см, пока стена не станет ближе 15 см». Робот сам решает, когда остановиться!",
+        "kk": "**«N рет қайталау»** — неше қайталау керегін білгенде.\n\n**«Әрдайым қайталау»** — бағдарламаны өшіргенше қайталайды. Маяктар мен жыпылықтағыштар осылай жұмыс істейді.\n\n**«…дейін қайталау»** — шарт ақиқат болғанша қайталайды. Мысалы: «қабырға 15 см-ден жақын болғанша 10 см-ден қадаммен жүру». Робот қашан тоқтайтынын өзі шешеді!",
+        "en": "**“Repeat N times”** — when you know how many repeats you need.\n\n**“Forever”** — repeats until you stop the program. Beacons and blinkers work like this.\n\n**“Repeat until…”** — repeats until a condition becomes true. For example: “drive in 10 cm steps until the wall is closer than 15 cm”. The robot decides when to stop!"
+      },
+      "illustration": "r-until",
+      "example": [
+        {
+          "op": "repeat_until",
+          "condition": {
+            "sensor": "distance",
+            "port": "C",
+            "comparator": "<",
+            "value": 15,
+            "unit": "cm"
+          },
+          "steps": [
+            {
+              "op": "move",
+              "direction": "forward",
+              "value": 10,
+              "unit": "cm"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "steps-to-wall",
+      "type": "code",
+      "title": {
+        "ru": "Шагами до стены",
+        "kk": "Қабырғаға дейін қадаммен",
+        "en": "Step to the wall"
+      },
+      "task": {
+        "ru": "Робот не знает, где стена. Пусть едет шагами по 10 см, **пока** датчик расстояния не увидит стену ближе 15 см. Не врезайся!",
+        "kk": "Робот қабырғаның қайда екенін білмейді. Қашықтық датчигі қабырғаны 15 см-ден жақын көргенше 10 см-ден қадаммен жүрсін. Соғылма!",
+        "en": "The robot does not know where the wall is. Let it step 10 cm at a time **until** the distance sensor sees the wall closer than 15 cm. Do not crash!"
+      },
+      "field": {
+        "width": 1400,
+        "height": 400,
+        "start": {
+          "x": 150,
+          "y": 200,
+          "heading": 0
+        },
+        "border": true,
+        "zones": [],
+        "points": [],
+        "walls": [
+          {
+            "x": 1100,
+            "y": 0,
+            "w": 40,
+            "h": 400
+          }
+        ],
+        "lines": []
+      },
+      "toolbox": [
+        "move",
+        "repeat_until",
+        "wait"
+      ],
+      "start": [],
+      "checks": [
+        {
+          "type": "stopBeforeWall",
+          "maxMm": 200
+        },
+        {
+          "type": "usesOp",
+          "op": "repeat_until",
+          "min": 1
+        },
+        {
+          "type": "noCollision"
+        }
+      ],
+      "hints": [
+        {
+          "ru": "Нужен цикл, который сам решает, когда закончиться.",
+          "kk": "Қашан аяқталатынын өзі шешетін цикл керек.",
+          "en": "You need a loop that decides by itself when to end."
+        },
+        {
+          "ru": "Возьми «повторять, пока не» и вставь в него зелёный блок расстояния.",
+          "kk": "«…дейін қайталау» блогын алып, оған қашықтықтың жасыл блогын сал.",
+          "en": "Take “repeat until” and put the green distance block into it."
+        },
+        {
+          "ru": "Повторять, пока не (расстояние < 15 см): вперёд 10 см.",
+          "kk": "(қашықтық < 15 см) дейін қайталау: 10 см алға.",
+          "en": "Repeat until (distance < 15 cm): forward 10 cm."
+        }
+      ],
+      "reference": [
+        {
+          "op": "repeat_until",
+          "condition": {
+            "sensor": "distance",
+            "port": "C",
+            "comparator": "<",
+            "value": 15,
+            "unit": "cm"
+          },
+          "steps": [
+            {
+              "op": "move",
+              "direction": "forward",
+              "value": 10,
+              "unit": "cm"
+            }
+          ]
+        }
+      ],
+      "skill": "loops"
+    },
+    {
+      "id": "forever-end",
+      "type": "quiz",
+      "kind": "choice",
+      "question": {
+        "ru": "Когда закончится цикл «повторять всегда»?",
+        "kk": "«Әрдайым қайталау» циклі қашан аяқталады?",
+        "en": "When does a “forever” loop end?"
+      },
+      "options": [
+        {
+          "ru": "Никогда — пока не остановишь программу",
+          "kk": "Ешқашан — бағдарламаны тоқтатқанша",
+          "en": "Never — until you stop the program"
+        },
+        {
+          "ru": "После 10 повторов",
+          "kk": "10 қайталаудан кейін",
+          "en": "After 10 repeats"
+        },
+        {
+          "ru": "Когда робот доедет до стены",
+          "kk": "Робот қабырғаға жеткенде",
+          "en": "When the robot reaches a wall"
+        }
+      ],
+      "correct": [
+        0
+      ],
+      "explanation": {
+        "ru": "«Всегда» значит всегда: блоки после такого цикла никогда не выполнятся.",
+        "kk": "«Әрдайым» — әрдайым деген сөз: мұндай циклдан кейінгі блоктар ешқашан орындалмайды.",
+        "en": "“Forever” means forever: blocks after such a loop never run."
+      },
+      "skill": "loops"
+    },
+    {
+      "id": "beacon",
+      "type": "code",
+      "title": {
+        "ru": "Маяк",
+        "kk": "Маяк",
+        "en": "Beacon"
+      },
+      "task": {
+        "ru": "Сделай маяк: робот всегда подаёт сигнал и ждёт 1 секунду. Пусть сигналит без конца.",
+        "kk": "Маяк жаса: робот әрдайым дыбыс беріп, 1 секунд күтеді. Шексіз дыбыс берсін.",
+        "en": "Make a beacon: the robot always beeps and waits 1 second, without end."
+      },
+      "field": {
+        "width": 1400,
+        "height": 400,
+        "start": {
+          "x": 150,
+          "y": 200,
+          "heading": 0
+        },
+        "border": true,
+        "zones": [],
+        "points": [],
+        "walls": [],
+        "lines": []
+      },
+      "toolbox": [
+        "beep",
+        "wait",
+        "forever",
+        "repeat"
+      ],
+      "start": [],
+      "checks": [
+        {
+          "type": "usesOp",
+          "op": "forever",
+          "min": 1
+        },
+        {
+          "type": "beeped",
+          "min": 5
+        }
+      ],
+      "hints": [
+        {
+          "ru": "Какой цикл никогда не заканчивается?",
+          "kk": "Қай цикл ешқашан аяқталмайды?",
+          "en": "Which loop never ends?"
+        },
+        {
+          "ru": "Внутрь «повторять всегда» положи «сигнал» и «ждать».",
+          "kk": "«Әрдайым қайталау» ішіне «дыбыс» пен «күтуді» сал.",
+          "en": "Put “beep” and “wait” inside “forever”."
+        },
+        {
+          "ru": "Повторять всегда: сигнал, ждать 1 с.",
+          "kk": "Әрдайым қайталау: дыбыс, 1 с күту.",
+          "en": "Forever: beep, wait 1 s."
+        }
+      ],
+      "reference": [
+        {
+          "op": "forever",
+          "steps": [
+            {
+              "op": "beep",
+              "note": 72,
+              "seconds": 0.3
+            },
+            {
+              "op": "wait",
+              "seconds": 1
+            }
+          ]
+        }
+      ],
+      "skill": "loops"
+    },
+    {
+      "id": "which-loop",
+      "type": "quiz",
+      "kind": "match",
+      "question": {
+        "ru": "Подбери цикл к задаче",
+        "kk": "Тапсырмаға цикл таңда",
+        "en": "Match the loop to the task"
+      },
+      "pairs": [
+        {
+          "left": {
+            "ru": "Мигать, пока включён",
+            "kk": "Қосулы тұрғанда жыпылықтау",
+            "en": "Blink while switched on"
+          },
+          "right": {
+            "ru": "повторять всегда",
+            "kk": "әрдайым қайталау",
+            "en": "forever"
+          }
+        },
+        {
+          "left": {
+            "ru": "Проехать 5 одинаковых отрезков",
+            "kk": "5 бірдей кесіндіні жүріп өту",
+            "en": "Drive 5 equal segments"
+          },
+          "right": {
+            "ru": "повторить 5 раз",
+            "kk": "5 рет қайталау",
+            "en": "repeat 5 times"
+          }
+        },
+        {
+          "left": {
+            "ru": "Ехать, пока не увидишь линию",
+            "kk": "Сызықты көргенше жүру",
+            "en": "Drive until you see a line"
+          },
+          "right": {
+            "ru": "повторять, пока не",
+            "kk": "дейін қайталау",
+            "en": "repeat until"
+          }
+        }
+      ],
+      "explanation": {
+        "ru": "Знаешь число повторов — «N раз». Ждёшь события — «пока не». Работаешь без конца — «всегда».",
+        "kk": "Қайталау санын білсең — «N рет». Оқиғаны күтсең — «дейін». Шексіз жұмыс — «әрдайым».",
+        "en": "Know the count — “N times”. Waiting for an event — “until”. Running without end — “forever”."
+      },
+      "skill": "loops"
+    }
+  ]
+}

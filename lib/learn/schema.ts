@@ -71,13 +71,35 @@ export const dslSteps = z.array(z.unknown()).transform((raw, ctx): Step[] => {
   // An empty editor is a valid start; programs from the AI need at least one step, lessons do not.
   if (raw.length === 0) return []
   const stubs = [...new Set(rawCalls(raw))].map((name) => ({ name, steps: [{ op: 'wait', seconds: 0 }] }))
-  const r = parseProgram({ title: 'lesson', description: '', steps: raw, ...(stubs.length ? { functions: stubs } : {}) })
+  // An own block may use variables the main program sets: give them a value here, drop it after.
+  const unset = rawVariables(raw).filter((name) => !rawAssigned(raw).includes(name))
+  const pre = unset.map((name) => ({ op: 'set_var', name, expr: { num: 0 } }))
+  const r = parseProgram({ title: 'lesson', description: '', steps: [...pre, ...raw], ...(stubs.length ? { functions: stubs } : {}) })
   if (!r.ok) {
     ctx.addIssue({ code: 'custom', message: `invalid DSL steps: ${r.error}` })
     return z.NEVER
   }
-  return r.value.steps
+  return r.value.steps.slice(pre.length)
 })
+
+/** Variable names read anywhere in raw steps ({var}, var conditions, change/write). */
+function rawVariables(raw: unknown): string[] {
+  if (Array.isArray(raw)) return [...new Set(raw.flatMap(rawVariables))]
+  if (typeof raw !== 'object' || raw === null) return []
+  const o = raw as Record<string, unknown>
+  const own: string[] = []
+  if (typeof o.var === 'string') own.push(o.var)
+  if (o.sensor === 'var' && typeof o.name === 'string') own.push(o.name)
+  if ((o.op === 'change_var' || o.op === 'write_var') && typeof o.name === 'string') own.push(o.name)
+  return [...new Set([...own, ...Object.values(o).flatMap(rawVariables)])]
+}
+
+function rawAssigned(raw: unknown): string[] {
+  if (Array.isArray(raw)) return raw.flatMap(rawAssigned)
+  if (typeof raw !== 'object' || raw === null) return []
+  const o = raw as Record<string, unknown>
+  return [...(o.op === 'set_var' && typeof o.name === 'string' ? [o.name] : []), ...rawAssigned(o.steps), ...rawAssigned(o.then), ...rawAssigned(o.else)]
+}
 
 /** "My Blocks" of a program: a name and its steps. */
 export const dslFunctions = z
@@ -93,7 +115,7 @@ function programIssue(steps: Step[], functions: ProgramFunction[] | undefined): 
 }
 
 const op = z.enum(STEP_OPS)
-const sensor = z.enum(['distance', 'color', 'reflection', 'force', 'button'])
+const sensor = z.enum(['distance', 'color', 'reflection', 'force', 'button', 'gyro'])
 
 // ── Automatic checks (lib/learn/checks.ts) ──────────────────────────────
 

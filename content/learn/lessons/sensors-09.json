@@ -1,0 +1,218 @@
+{
+  "id": "sensors-09",
+  "track": "sensors",
+  "unit": "sensors-distance",
+  "minutes": 9,
+  "skills": [
+    "sensor-distance"
+  ],
+  "title": {
+    "ru": "Робот-парковщик",
+    "kk": "Робот-тұраққа қоюшы",
+    "en": "Parking robot"
+  },
+  "goal": {
+    "ru": "Сегодня робот сам заедет в гараж.",
+    "kk": "Бүгін робот гаражға өзі кіреді.",
+    "en": "Today the robot will drive into a garage by itself."
+  },
+  "summary": {
+    "ru": "Теперь ты умеешь соединять точные движения и датчик расстояния.",
+    "kk": "Енді сен дәл қозғалыстар мен қашықтық датчигін біріктіре аласың.",
+    "en": "Now you can combine precise moves with the distance sensor."
+  },
+  "steps": [
+    {
+      "id": "park",
+      "type": "theory",
+      "title": {
+        "ru": "Парковка по датчику",
+        "kk": "Датчик бойынша тұраққа қою",
+        "en": "Parking by sensor"
+      },
+      "body": {
+        "ru": "Автомобили сами паркуются с помощью датчиков расстояния. Наш робот сделает похоже:\n\n1. Доехать до въезда (точное движение).\n2. Повернуть к гаражу.\n3. Въехать и остановиться у задней стенки по датчику.\n4. Показать галочку — «припарковался».",
+        "kk": "Автомобильдер қашықтық датчиктерінің көмегімен өздері тұраққа тұрады. Біздің робот та сол сияқты істейді:\n\n1. Кіреберіске дейін жету (дәл қозғалыс).\n2. Гаражға қарай бұрылу.\n3. Кіріп, артқы қабырға алдында датчик бойынша тоқтау.\n4. Құсбелгі көрсету — «тұраққа қойдым».",
+        "en": "Cars park themselves with distance sensors. Our robot will do something similar:\n\n1. Drive to the entrance (a precise move).\n2. Turn toward the garage.\n3. Drive in and stop at the back wall by sensor.\n4. Show a tick — “parked”."
+      },
+      "illustration": "r-distance"
+    },
+    {
+      "id": "garage",
+      "type": "code",
+      "title": {
+        "ru": "В гараж",
+        "kk": "Гаражға",
+        "en": "Into the garage"
+      },
+      "task": {
+        "ru": "Проедь 50 см, повернись налево, заедь в гараж и остановись у задней стенки, не касаясь её. Покажи галочку.",
+        "kk": "50 см жүр, солға бұрыл, гаражға кіріп, артқы қабырғаға тимей тоқта. Құсбелгі көрсет.",
+        "en": "Drive 50 cm, turn left, drive into the garage and stop at the back wall without touching it. Show a tick."
+      },
+      "field": {
+        "width": 1200,
+        "height": 1000,
+        "start": {
+          "x": 200,
+          "y": 200,
+          "heading": 0
+        },
+        "border": true,
+        "zones": [
+          {
+            "id": "garage",
+            "x": 580,
+            "y": 600,
+            "w": 240,
+            "h": 270,
+            "kind": "target",
+            "label": {
+              "ru": "Гараж",
+              "kk": "Гараж",
+              "en": "Garage"
+            }
+          }
+        ],
+        "points": [],
+        "walls": [
+          {
+            "x": 540,
+            "y": 550,
+            "w": 40,
+            "h": 350
+          },
+          {
+            "x": 820,
+            "y": 550,
+            "w": 40,
+            "h": 350
+          },
+          {
+            "x": 540,
+            "y": 880,
+            "w": 320,
+            "h": 20
+          }
+        ],
+        "lines": []
+      },
+      "toolbox": [
+        "move",
+        "turn",
+        "start_move",
+        "stop_move",
+        "wait_until",
+        "show_image"
+      ],
+      "start": [],
+      "checks": [
+        {
+          "type": "finishInZone",
+          "zone": "garage"
+        },
+        {
+          "type": "displayed",
+          "image": "yes"
+        },
+        {
+          "type": "noCollision"
+        },
+        {
+          "type": "usesSensor",
+          "sensor": "distance"
+        }
+      ],
+      "hints": [
+        {
+          "ru": "Сначала «вперёд 50 см» и «налево 90°».",
+          "kk": "Алдымен «50 см алға» және «солға 90°».",
+          "en": "First “forward 50 cm” and “left 90°”."
+        },
+        {
+          "ru": "Потом «начать → ждать, пока < 10 см → стоп».",
+          "kk": "Содан кейін «бастау → < 10 см болғанша күту → тоқта».",
+          "en": "Then “start → wait until < 10 cm → stop”."
+        },
+        {
+          "ru": "В конце покажи галочку.",
+          "kk": "Соңында құсбелгі көрсет.",
+          "en": "Finally show the tick."
+        }
+      ],
+      "reference": [
+        {
+          "op": "move",
+          "direction": "forward",
+          "value": 50,
+          "unit": "cm"
+        },
+        {
+          "op": "turn",
+          "direction": "left",
+          "degrees": 90
+        },
+        {
+          "op": "start_move",
+          "direction": "forward"
+        },
+        {
+          "op": "wait_until",
+          "condition": {
+            "sensor": "distance",
+            "port": "C",
+            "comparator": "<",
+            "value": 10,
+            "unit": "cm"
+          }
+        },
+        {
+          "op": "stop_move"
+        },
+        {
+          "op": "show_image",
+          "image": "yes"
+        }
+      ],
+      "skill": "sensor-distance"
+    },
+    {
+      "id": "steps",
+      "type": "quiz",
+      "kind": "order",
+      "question": {
+        "ru": "Расставь шаги парковки",
+        "kk": "Тұраққа қою қадамдарын реттей қой",
+        "en": "Order the parking steps"
+      },
+      "items": [
+        {
+          "ru": "Доехать до въезда",
+          "kk": "Кіреберіске дейін жету",
+          "en": "Drive to the entrance"
+        },
+        {
+          "ru": "Повернуть к гаражу",
+          "kk": "Гаражға қарай бұрылу",
+          "en": "Turn toward the garage"
+        },
+        {
+          "ru": "Ехать, пока стенка не ближе 10 см",
+          "kk": "Қабырға 10 см-ден жақын болғанша жүру",
+          "en": "Drive until the wall is closer than 10 cm"
+        },
+        {
+          "ru": "Остановиться и показать галочку",
+          "kk": "Тоқтап, құсбелгі көрсету",
+          "en": "Stop and show the tick"
+        }
+      ],
+      "explanation": {
+        "ru": "Сначала грубо подъезжаем, потом точно доезжаем по датчику.",
+        "kk": "Алдымен шамамен жақындаймыз, содан кейін датчик бойынша дәл жетеміз.",
+        "en": "First get close roughly, then finish precisely by sensor."
+      },
+      "skill": "sensor-distance"
+    }
+  ]
+}

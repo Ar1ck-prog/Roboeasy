@@ -1,0 +1,213 @@
+{
+  "id": "sensors-04",
+  "track": "sensors",
+  "unit": "sensors-color",
+  "minutes": 7,
+  "skills": [
+    "sensor-color"
+  ],
+  "title": {
+    "ru": "Отражение",
+    "kk": "Шағылысу",
+    "en": "Reflection"
+  },
+  "goal": {
+    "ru": "Сегодня ты узнаешь второй режим датчика — яркость.",
+    "kk": "Бүгін сен датчиктің екінші режимін — жарықтықты білесің.",
+    "en": "Today you will learn the sensor’s second mode — brightness."
+  },
+  "summary": {
+    "ru": "Теперь ты умеешь работать с отражением в процентах и выбирать порог.",
+    "kk": "Енді сен шағылысумен пайызбен жұмыс істеп, шекті таңдай аласың.",
+    "en": "Now you can work with reflection in percent and choose a threshold."
+  },
+  "steps": [
+    {
+      "id": "percent",
+      "type": "theory",
+      "title": {
+        "ru": "Светлее или темнее",
+        "kk": "Ашығырақ па, қараңғырақ па",
+        "en": "Lighter or darker"
+      },
+      "body": {
+        "ru": "В режиме **отражения** датчик не называет цвет, а говорит, сколько света вернулось: от 0 до 100 %.\n\nБелое поле — около 95 %, чёрная линия — около 8 %, цветные поверхности где-то между.\n\n**Порог** — число посередине. Белый 95 и чёрный 8: порог около 50. «Отражение < 50» значит «тёмное».",
+        "kk": "**Шағылысу** режимінде датчик түсті атамайды, қанша жарық қайтқанын айтады: 0-ден 100 %-ға дейін.\n\nАқ алаң — шамамен 95 %, қара сызық — шамамен 8 %, түрлі түсті беттер — арасында.\n\n**Шек** — ортадағы сан. Ақ 95 және қара 8: шек шамамен 50. «Шағылысу < 50» — «қараңғы» дегенді білдіреді.",
+        "en": "In **reflection** mode the sensor does not name a colour; it says how much light came back: 0 to 100 %.\n\nA white field is about 95 %, a black line about 8 %, colours somewhere in between.\n\nA **threshold** is a number in the middle. White 95 and black 8: the threshold is about 50. “Reflection < 50” means “dark”."
+      },
+      "illustration": "r-reflection"
+    },
+    {
+      "id": "threshold",
+      "type": "quiz",
+      "kind": "number",
+      "question": {
+        "ru": "Фон даёт 90 %, линия — 10 %. Какой порог взять?",
+        "kk": "Фон 90 %, сызық 10 % береді. Қандай шек алу керек?",
+        "en": "The background reads 90 %, the line 10 %. Which threshold do you take?"
+      },
+      "answer": 50,
+      "tolerance": 5,
+      "explanation": {
+        "ru": "Середина: (90 + 10) : 2 = 50.",
+        "kk": "Ортасы: (90 + 10) : 2 = 50.",
+        "en": "The middle: (90 + 10) ÷ 2 = 50."
+      },
+      "unit": {
+        "ru": "%",
+        "kk": "%",
+        "en": "%"
+      },
+      "skill": "sensor-color"
+    },
+    {
+      "id": "dark",
+      "type": "code",
+      "title": {
+        "ru": "Стоп на тёмном",
+        "kk": "Қараңғыда тоқта",
+        "en": "Stop on dark"
+      },
+      "task": {
+        "ru": "Впереди светлая жёлтая полоса, потом тёмная синяя. Остановись на **тёмной** с помощью отражения меньше 50 %.",
+        "kk": "Алда ашық сары жолақ, содан кейін қараңғы көк жолақ. **Қараңғысында** 50 %-дан аз шағылысу арқылы тоқта.",
+        "en": "Ahead is a light yellow strip, then a dark blue one. Stop on the **dark** one using reflection below 50 %."
+      },
+      "field": {
+        "width": 1400,
+        "height": 400,
+        "start": {
+          "x": 150,
+          "y": 200,
+          "heading": 0
+        },
+        "border": true,
+        "zones": [
+          {
+            "id": "yellow",
+            "x": 500,
+            "y": 0,
+            "w": 80,
+            "h": 400,
+            "kind": "paint",
+            "color": "yellow"
+          },
+          {
+            "id": "blue",
+            "x": 850,
+            "y": 0,
+            "w": 80,
+            "h": 400,
+            "kind": "paint",
+            "color": "blue"
+          },
+          {
+            "id": "stop",
+            "x": 690,
+            "y": 50,
+            "w": 180,
+            "h": 300,
+            "kind": "target",
+            "label": {
+              "ru": "Тёмная полоса",
+              "kk": "Қараңғы жолақ",
+              "en": "Dark strip"
+            }
+          }
+        ],
+        "points": [],
+        "walls": [],
+        "lines": []
+      },
+      "toolbox": [
+        "start_move",
+        "stop_move",
+        "wait_until",
+        "move"
+      ],
+      "start": [],
+      "checks": [
+        {
+          "type": "finishInZone",
+          "zone": "stop"
+        },
+        {
+          "type": "usesSensor",
+          "sensor": "reflection"
+        }
+      ],
+      "hints": [
+        {
+          "ru": "Возьми зелёный блок «отражение < …».",
+          "kk": "«Шағылысу < …» жасыл блогын ал.",
+          "en": "Take the green “reflection < …” block."
+        },
+        {
+          "ru": "Жёлтый отражает много света, синий — мало.",
+          "kk": "Сары жарықты көп шағылыстырады, көк — аз.",
+          "en": "Yellow reflects a lot of light, blue very little."
+        },
+        {
+          "ru": "Начать; ждать, пока отражение < 50; остановить.",
+          "kk": "Бастау; шағылысу < 50 болғанша күту; тоқтату.",
+          "en": "Start; wait until reflection < 50; stop."
+        }
+      ],
+      "reference": [
+        {
+          "op": "start_move",
+          "direction": "forward"
+        },
+        {
+          "op": "wait_until",
+          "condition": {
+            "sensor": "reflection",
+            "port": "D",
+            "comparator": "<",
+            "value": 50
+          }
+        },
+        {
+          "op": "stop_move"
+        }
+      ],
+      "skill": "sensor-color"
+    },
+    {
+      "id": "which-mode",
+      "type": "quiz",
+      "kind": "choice",
+      "question": {
+        "ru": "Когда отражение удобнее, чем цвет?",
+        "kk": "Шағылысу қашан түстен ыңғайлы?",
+        "en": "When is reflection handier than colour?"
+      },
+      "options": [
+        {
+          "ru": "Когда важно только «светло или темно», например для езды по линии",
+          "kk": "Тек «ашық па, қараңғы ма» маңызды болғанда, мысалы сызықпен жүру үшін",
+          "en": "When only “light or dark” matters, e.g. line following"
+        },
+        {
+          "ru": "Когда нужно отличить красный от синего",
+          "kk": "Қызылды көктен ажырату керек болғанда",
+          "en": "To tell red from blue"
+        },
+        {
+          "ru": "Никогда",
+          "kk": "Ешқашан",
+          "en": "Never"
+        }
+      ],
+      "correct": [
+        0
+      ],
+      "explanation": {
+        "ru": "Для линии важна яркость, а не название цвета. Отражение ещё и показывает, насколько датчик заехал на линию.",
+        "kk": "Сызық үшін түстің аты емес, жарықтығы маңызды. Шағылысу датчиктің сызыққа қаншалықты кіргенін де көрсетеді.",
+        "en": "For a line, brightness matters, not the colour name. Reflection also shows how far the sensor is over the line."
+      },
+      "skill": "sensor-color"
+    }
+  ]
+}

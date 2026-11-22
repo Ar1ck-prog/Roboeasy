@@ -1,0 +1,188 @@
+{
+  "id": "sensors-10",
+  "track": "sensors",
+  "unit": "sensors-force",
+  "minutes": 7,
+  "skills": [
+    "sensor-force"
+  ],
+  "title": {
+    "ru": "Кнопка-бампер",
+    "kk": "Түйме-бампер",
+    "en": "Bumper button"
+  },
+  "goal": {
+    "ru": "Сегодня робот научится чувствовать касание.",
+    "kk": "Бүгін робот жанасуды сезуді үйренеді.",
+    "en": "Today the robot will learn to feel a touch."
+  },
+  "summary": {
+    "ru": "Теперь ты умеешь использовать датчик силы как бампер.",
+    "kk": "Енді сен күш датчигін бампер ретінде қолдана аласың.",
+    "en": "Now you can use the force sensor as a bumper."
+  },
+  "steps": [
+    {
+      "id": "bumper",
+      "type": "theory",
+      "title": {
+        "ru": "Датчик силы",
+        "kk": "Күш датчигі",
+        "en": "The force sensor"
+      },
+      "body": {
+        "ru": "Датчик силы — это кнопка, которая знает, как сильно её нажали. Если поставить его спереди, получится **бампер**: робот почувствует, что упёрся в стену.\n\nТак робот может искать стены на ощупь, как человек в темноте. Ещё датчик силы — удобная кнопка «старт» для программы.",
+        "kk": "Күш датчигі — қаншалықты қатты басылғанын білетін түйме. Оны алдыға қойсаң, **бампер** шығады: робот қабырғаға тірелгенін сезеді.\n\nОсылай робот қараңғыдағы адам сияқты қабырғаларды сипап іздей алады. Сондай-ақ күш датчигі — бағдарламаға ыңғайлы «старт» түймесі.",
+        "en": "The force sensor is a button that knows how hard it is pressed. Put it at the front and you get a **bumper**: the robot feels when it hits a wall.\n\nThe robot can then find walls by touch, like a person in the dark. The force sensor is also a handy “start” button for a program."
+      },
+      "illustration": "r-force"
+    },
+    {
+      "id": "three-taps",
+      "type": "code",
+      "title": {
+        "ru": "Три касания",
+        "kk": "Үш жанасу",
+        "en": "Three taps"
+      },
+      "task": {
+        "ru": "Три раза: доехать до стены, пока бампер не нажмётся, остановиться, подать сигнал и отъехать на 15 см.",
+        "kk": "Үш рет: бампер басылғанша қабырғаға жету, тоқтау, дыбыс беру және 15 см шегіну.",
+        "en": "Three times: drive to the wall until the bumper is pressed, stop, beep and back up 15 cm."
+      },
+      "field": {
+        "width": 1400,
+        "height": 400,
+        "start": {
+          "x": 150,
+          "y": 200,
+          "heading": 0
+        },
+        "border": true,
+        "zones": [],
+        "points": [],
+        "walls": [
+          {
+            "x": 1000,
+            "y": 0,
+            "w": 40,
+            "h": 400
+          }
+        ],
+        "lines": []
+      },
+      "toolbox": [
+        "start_move",
+        "stop_move",
+        "wait_until",
+        "move",
+        "beep",
+        "repeat"
+      ],
+      "start": [],
+      "checks": [
+        {
+          "type": "beeped",
+          "min": 3
+        },
+        {
+          "type": "usesSensor",
+          "sensor": "force"
+        },
+        {
+          "type": "usesOp",
+          "op": "repeat",
+          "min": 1
+        }
+      ],
+      "hints": [
+        {
+          "ru": "Одно касание: начать, ждать нажатия, стоп, сигнал, назад 15.",
+          "kk": "Бір жанасу: бастау, басуды күту, тоқта, дыбыс, 15 артқа.",
+          "en": "One tap: start, wait for the press, stop, beep, back 15."
+        },
+        {
+          "ru": "Положи всё это в цикл.",
+          "kk": "Мұның бәрін циклға сал.",
+          "en": "Put all of it in a loop."
+        },
+        {
+          "ru": "Повторить 3 раза.",
+          "kk": "3 рет қайталау.",
+          "en": "Repeat 3 times."
+        }
+      ],
+      "reference": [
+        {
+          "op": "repeat",
+          "times": 3,
+          "steps": [
+            {
+              "op": "start_move",
+              "direction": "forward"
+            },
+            {
+              "op": "wait_until",
+              "condition": {
+                "sensor": "force",
+                "port": "E",
+                "state": "pressed"
+              }
+            },
+            {
+              "op": "stop_move"
+            },
+            {
+              "op": "beep",
+              "note": 72,
+              "seconds": 0.3
+            },
+            {
+              "op": "move",
+              "direction": "back",
+              "value": 15,
+              "unit": "cm"
+            }
+          ]
+        }
+      ],
+      "skill": "sensor-force"
+    },
+    {
+      "id": "use",
+      "type": "quiz",
+      "kind": "choice",
+      "question": {
+        "ru": "Где бампер полезнее датчика расстояния?",
+        "kk": "Бампер қай жерде қашықтық датчигінен пайдалырақ?",
+        "en": "Where is a bumper more useful than a distance sensor?"
+      },
+      "options": [
+        {
+          "ru": "Чтобы точно упереться в стенку и выровняться",
+          "kk": "Қабырғаға дәл тіреліп, түзелу үшін",
+          "en": "To press firmly against a wall and line up"
+        },
+        {
+          "ru": "Чтобы видеть стену за метр",
+          "kk": "Қабырғаны бір метрден көру үшін",
+          "en": "To see a wall a metre away"
+        },
+        {
+          "ru": "Чтобы различать цвета",
+          "kk": "Түстерді ажырату үшін",
+          "en": "To tell colours apart"
+        }
+      ],
+      "correct": [
+        0
+      ],
+      "explanation": {
+        "ru": "Бампер срабатывает только при касании — зато очень надёжно. На соревнованиях роботы так выравниваются о борт.",
+        "kk": "Бампер тек жанасқанда іске қосылады — есесіне өте сенімді. Жарыстарда роботтар бортқа осылай түзеледі.",
+        "en": "A bumper only triggers on contact — but very reliably. In competitions robots line up against the border this way."
+      },
+      "skill": "sensor-force"
+    }
+  ]
+}

@@ -1,0 +1,335 @@
+{
+  "id": "blocks-10",
+  "track": "blocks",
+  "unit": "blocks-loops",
+  "minutes": 8,
+  "skills": [
+    "loops"
+  ],
+  "title": {
+    "ru": "Танец робота",
+    "kk": "Роботтың биі",
+    "en": "Robot dance"
+  },
+  "goal": {
+    "ru": "Сегодня ты придумаешь танец и узнаешь, что циклы можно класть друг в друга.",
+    "kk": "Бүгін сен би ойлап табасың және циклдарды бір-біріне салуға болатынын білесің.",
+    "en": "Today you will make up a dance and learn that loops can go inside loops."
+  },
+  "summary": {
+    "ru": "Теперь ты умеешь собирать движения из циклов, даже вложенных.",
+    "kk": "Енді сен қимылдарды циклдардан, тіпті ішкі циклдардан құрастыра аласың.",
+    "en": "Now you can build movements from loops, even nested ones."
+  },
+  "steps": [
+    {
+      "id": "nested",
+      "type": "theory",
+      "title": {
+        "ru": "Цикл в цикле",
+        "kk": "Цикл ішінде цикл",
+        "en": "A loop in a loop"
+      },
+      "body": {
+        "ru": "Внутрь цикла можно положить другой цикл. Это называется **вложенный цикл**.\n\nНапример: «повторить 2 раза: (повторить 4 раза: поворот 90°), сигнал». Внутренний цикл сделает полный оборот, внешний — повторит оборот и сигнал дважды.\n\nСчитать просто: повторы перемножаются. 2 × 4 = 8 поворотов.",
+        "kk": "Цикл ішіне басқа циклды салуға болады. Бұл **ішкі цикл** деп аталады.\n\nМысалы: «2 рет қайталау: (4 рет қайталау: 90° бұрылу), дыбыс». Ішкі цикл толық айналым жасайды, сыртқысы айналым мен дыбысты екі рет қайталайды.\n\nСанау оңай: қайталаулар көбейтіледі. 2 × 4 = 8 бұрылыс.",
+        "en": "You can put a loop inside another loop. This is a **nested loop**.\n\nFor example: “repeat 2 times: (repeat 4 times: turn 90°), beep”. The inner loop makes a full spin, the outer one repeats the spin and the beep twice.\n\nCounting is easy: repeats multiply. 2 × 4 = 8 turns."
+      },
+      "illustration": "r-dance",
+      "example": [
+        {
+          "op": "repeat",
+          "times": 2,
+          "steps": [
+            {
+              "op": "repeat",
+              "times": 4,
+              "steps": [
+                {
+                  "op": "turn",
+                  "direction": "right",
+                  "degrees": 90
+                }
+              ]
+            },
+            {
+              "op": "beep",
+              "note": 72,
+              "seconds": 0.3
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "dance",
+      "type": "code",
+      "title": {
+        "ru": "Танцевальное движение",
+        "kk": "Би қимылы",
+        "en": "A dance move"
+      },
+      "task": {
+        "ru": "Танец: 3 раза повернуться направо на 90°, налево на 90° и подать сигнал. В конце робот должен смотреть туда же, куда и в начале.",
+        "kk": "Би: 3 рет оңға 90°, солға 90° бұрылып, дыбыс беру. Соңында робот бастапқы бағытқа қарап тұруы керек.",
+        "en": "The dance: 3 times turn right 90°, left 90° and beep. At the end the robot must face where it started."
+      },
+      "field": {
+        "width": 1400,
+        "height": 400,
+        "start": {
+          "x": 150,
+          "y": 200,
+          "heading": 0
+        },
+        "border": true,
+        "zones": [],
+        "points": [],
+        "walls": [],
+        "lines": []
+      },
+      "toolbox": [
+        "turn",
+        "beep",
+        "repeat",
+        "wait"
+      ],
+      "start": [],
+      "checks": [
+        {
+          "type": "beeped",
+          "min": 3
+        },
+        {
+          "type": "heading",
+          "degrees": 0,
+          "tolerance": 5
+        },
+        {
+          "type": "usesOp",
+          "op": "repeat",
+          "min": 1
+        },
+        {
+          "type": "maxBlocks",
+          "max": 4
+        }
+      ],
+      "hints": [
+        {
+          "ru": "Какие блоки повторяются? Их можно положить внутрь «повторить».",
+          "kk": "Қай блоктар қайталанады? Оларды «қайталау» ішіне салуға болады.",
+          "en": "Which blocks repeat? Put them inside “repeat”."
+        },
+        {
+          "ru": "Внутри цикла три блока.",
+          "kk": "Цикл ішінде үш блок.",
+          "en": "Three blocks go inside the loop."
+        },
+        {
+          "ru": "Повторить 3 раза: направо 90°, налево 90°, сигнал.",
+          "kk": "3 рет қайталау: оңға 90°, солға 90°, дыбыс.",
+          "en": "Repeat 3 times: right 90°, left 90°, beep."
+        }
+      ],
+      "reference": [
+        {
+          "op": "repeat",
+          "times": 3,
+          "steps": [
+            {
+              "op": "turn",
+              "direction": "right",
+              "degrees": 90
+            },
+            {
+              "op": "turn",
+              "direction": "left",
+              "degrees": 90
+            },
+            {
+              "op": "beep",
+              "note": 72,
+              "seconds": 0.3
+            }
+          ]
+        }
+      ],
+      "skill": "loops"
+    },
+    {
+      "id": "beeps",
+      "type": "quiz",
+      "kind": "number",
+      "question": {
+        "ru": "«Повторить 2 раза: (повторить 3 раза: сигнал)». Сколько сигналов прозвучит?",
+        "kk": "«2 рет қайталау: (3 рет қайталау: дыбыс)». Неше дыбыс естіледі?",
+        "en": "“Repeat 2 times: (repeat 3 times: beep)”. How many beeps?"
+      },
+      "answer": 6,
+      "tolerance": 0,
+      "explanation": {
+        "ru": "Повторы перемножаются: 2 × 3 = 6.",
+        "kk": "Қайталаулар көбейтіледі: 2 × 3 = 6.",
+        "en": "Repeats multiply: 2 × 3 = 6."
+      },
+      "skill": "loops"
+    },
+    {
+      "id": "star",
+      "type": "code",
+      "title": {
+        "ru": "Звёздочка",
+        "kk": "Жұлдызша",
+        "en": "Star"
+      },
+      "task": {
+        "ru": "Звёздочка из центра: 4 раза проехать 20 см вперёд, вернуться назад на 20 см и повернуть налево на 90°. Побывай во всех четырёх лучах.",
+        "kk": "Ортадан жұлдызша: 4 рет 20 см алға жүріп, 20 см артқа қайтып, солға 90° бұрылу. Барлық төрт сәулеге бар.",
+        "en": "A star from the centre: 4 times drive 20 cm forward, back 20 cm and turn left 90°. Visit all four rays."
+      },
+      "field": {
+        "width": 1000,
+        "height": 1000,
+        "start": {
+          "x": 500,
+          "y": 500,
+          "heading": 0
+        },
+        "border": true,
+        "zones": [
+          {
+            "id": "centre",
+            "x": 420,
+            "y": 420,
+            "w": 160,
+            "h": 160,
+            "kind": "target",
+            "label": {
+              "ru": "Центр",
+              "kk": "Орта",
+              "en": "Centre"
+            }
+          }
+        ],
+        "points": [
+          {
+            "id": "r1",
+            "x": 700,
+            "y": 500,
+            "r": 50,
+            "label": {
+              "ru": "Луч 1",
+              "kk": "1-сәуле",
+              "en": "Ray 1"
+            }
+          },
+          {
+            "id": "r2",
+            "x": 500,
+            "y": 700,
+            "r": 50,
+            "label": {
+              "ru": "Луч 2",
+              "kk": "2-сәуле",
+              "en": "Ray 2"
+            }
+          },
+          {
+            "id": "r3",
+            "x": 300,
+            "y": 500,
+            "r": 50,
+            "label": {
+              "ru": "Луч 3",
+              "kk": "3-сәуле",
+              "en": "Ray 3"
+            }
+          },
+          {
+            "id": "r4",
+            "x": 500,
+            "y": 300,
+            "r": 50,
+            "label": {
+              "ru": "Луч 4",
+              "kk": "4-сәуле",
+              "en": "Ray 4"
+            }
+          }
+        ],
+        "walls": [],
+        "lines": []
+      },
+      "toolbox": [
+        "move",
+        "turn",
+        "repeat"
+      ],
+      "start": [],
+      "checks": [
+        {
+          "type": "passPoints",
+          "points": [
+            "r1",
+            "r2",
+            "r3",
+            "r4"
+          ],
+          "ordered": false
+        },
+        {
+          "type": "finishInZone",
+          "zone": "centre"
+        },
+        {
+          "type": "maxBlocks",
+          "max": 4
+        }
+      ],
+      "hints": [
+        {
+          "ru": "Один луч: туда, обратно и поворот.",
+          "kk": "Бір сәуле: барып, қайтып, бұрылу.",
+          "en": "One ray: out, back and a turn."
+        },
+        {
+          "ru": "Назад едет блок «ехать назад».",
+          "kk": "Артқа «артқа жүру» блогы жүреді.",
+          "en": "Use the “move back” block to come back."
+        },
+        {
+          "ru": "Повторить 4 раза: вперёд 20, назад 20, налево 90°.",
+          "kk": "4 рет қайталау: 20 алға, 20 артқа, солға 90°.",
+          "en": "Repeat 4 times: forward 20, back 20, left 90°."
+        }
+      ],
+      "reference": [
+        {
+          "op": "repeat",
+          "times": 4,
+          "steps": [
+            {
+              "op": "move",
+              "direction": "forward",
+              "value": 20,
+              "unit": "cm"
+            },
+            {
+              "op": "move",
+              "direction": "back",
+              "value": 20,
+              "unit": "cm"
+            },
+            {
+              "op": "turn",
+              "direction": "left",
+              "degrees": 90
+            }
+          ]
+        }
+      ],
+      "skill": "loops"
+    }
+  ]
+}

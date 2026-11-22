@@ -1,0 +1,306 @@
+{
+  "id": "blocks-15",
+  "track": "blocks",
+  "unit": "blocks-conditions",
+  "minutes": 8,
+  "skills": [
+    "conditions"
+  ],
+  "title": {
+    "ru": "Ждать, пока",
+    "kk": "Әзірге күту",
+    "en": "Wait until"
+  },
+  "goal": {
+    "ru": "Сегодня робот научится ждать нужного момента.",
+    "kk": "Бүгін робот керекті сәтті күтуді үйренеді.",
+    "en": "Today the robot will learn to wait for the right moment."
+  },
+  "summary": {
+    "ru": "Теперь ты умеешь останавливать робота по сигналу датчика, а не по времени.",
+    "kk": "Енді сен роботты уақыт бойынша емес, датчик белгісі бойынша тоқтата аласың.",
+    "en": "Now you can stop the robot on a sensor signal, not by time."
+  },
+  "steps": [
+    {
+      "id": "wait-until",
+      "type": "theory",
+      "title": {
+        "ru": "Ждать события",
+        "kk": "Оқиғаны күту",
+        "en": "Wait for an event"
+      },
+      "body": {
+        "ru": "Блок **«ждать, пока…»** останавливает программу, пока условие не станет правдой. Робот при этом может ехать!\n\nСамый частый приём: «начать движение → ждать, пока стена ближе 10 см → остановить движение». Робот не знает расстояния заранее, но всё равно остановится точно.\n\n«Ждать 2 с» ждёт время. «Ждать, пока» ждёт событие.",
+        "kk": "**«Әзірге күту…»** блогы шарт ақиқат болғанша бағдарламаны тоқтатады. Бұл кезде робот жүре алады!\n\nЕң жиі тәсіл: «қозғалысты бастау → қабырға 10 см-ден жақын болғанша күту → қозғалысты тоқтату». Робот қашықтықты алдын ала білмейді, бірақ бәрібір дәл тоқтайды.\n\n«2 с күту» уақытты күтеді. «Әзірге күту» оқиғаны күтеді.",
+        "en": "The **“wait until…”** block pauses the program until the condition becomes true. The robot can keep driving meanwhile!\n\nThe classic trick: “start moving → wait until the wall is closer than 10 cm → stop moving”. The robot does not know the distance in advance, yet it stops precisely.\n\n“Wait 2 s” waits for time. “Wait until” waits for an event."
+      },
+      "illustration": "r-wait-until",
+      "example": [
+        {
+          "op": "start_move",
+          "direction": "forward"
+        },
+        {
+          "op": "wait_until",
+          "condition": {
+            "sensor": "distance",
+            "port": "C",
+            "comparator": "<",
+            "value": 10,
+            "unit": "cm"
+          }
+        },
+        {
+          "op": "stop_move"
+        }
+      ]
+    },
+    {
+      "id": "stop-wall",
+      "type": "code",
+      "title": {
+        "ru": "Стоп у стены",
+        "kk": "Қабырға алдында тоқта",
+        "en": "Stop at the wall"
+      },
+      "task": {
+        "ru": "Начни движение, дождись, пока стена станет ближе 10 см, и останови робота. Стену трогать нельзя.",
+        "kk": "Қозғалысты баста, қабырға 10 см-ден жақын болғанша күтіп, роботты тоқтат. Қабырғаға тиюге болмайды.",
+        "en": "Start moving, wait until the wall is closer than 10 cm and stop the robot. Do not touch the wall."
+      },
+      "field": {
+        "width": 1400,
+        "height": 400,
+        "start": {
+          "x": 150,
+          "y": 200,
+          "heading": 0
+        },
+        "border": true,
+        "zones": [],
+        "points": [],
+        "walls": [
+          {
+            "x": 1000,
+            "y": 0,
+            "w": 40,
+            "h": 400
+          }
+        ],
+        "lines": []
+      },
+      "toolbox": [
+        "start_move",
+        "stop_move",
+        "wait_until",
+        "move"
+      ],
+      "start": [],
+      "checks": [
+        {
+          "type": "stopBeforeWall",
+          "maxMm": 150
+        },
+        {
+          "type": "usesOp",
+          "op": "wait_until",
+          "min": 1
+        },
+        {
+          "type": "noCollision"
+        }
+      ],
+      "hints": [
+        {
+          "ru": "Три блока: начать, ждать, остановить.",
+          "kk": "Үш блок: бастау, күту, тоқтату.",
+          "en": "Three blocks: start, wait, stop."
+        },
+        {
+          "ru": "В «ждать, пока» вставь «расстояние < 10 см».",
+          "kk": "«Әзірге күту» ішіне «қашықтық < 10 см» сал.",
+          "en": "Put “distance < 10 cm” into “wait until”."
+        },
+        {
+          "ru": "Начать движение вперёд; ждать, пока расстояние < 10 см; остановить движение.",
+          "kk": "Алға қозғалысты бастау; қашықтық < 10 см болғанша күту; қозғалысты тоқтату.",
+          "en": "Start moving forward; wait until distance < 10 cm; stop moving."
+        }
+      ],
+      "reference": [
+        {
+          "op": "start_move",
+          "direction": "forward"
+        },
+        {
+          "op": "wait_until",
+          "condition": {
+            "sensor": "distance",
+            "port": "C",
+            "comparator": "<",
+            "value": 10,
+            "unit": "cm"
+          }
+        },
+        {
+          "op": "stop_move"
+        }
+      ],
+      "skill": "conditions"
+    },
+    {
+      "id": "bumper",
+      "type": "code",
+      "title": {
+        "ru": "Нащупать стену",
+        "kk": "Қабырғаны сипап табу",
+        "en": "Feel the wall"
+      },
+      "task": {
+        "ru": "Датчик силы спереди — это бампер. Пусть робот едет, пока бампер не нажмётся о стену, потом остановится, подаст сигнал и отъедет назад на 10 см.",
+        "kk": "Алдыңғы күш датчигі — бампер. Робот бампер қабырғаға басылғанша жүрсін, содан кейін тоқтап, дыбыс беріп, 10 см артқа шегінсін.",
+        "en": "The force sensor in front is a bumper. Let the robot drive until the bumper presses against the wall, then stop, beep and back up 10 cm."
+      },
+      "field": {
+        "width": 1400,
+        "height": 400,
+        "start": {
+          "x": 150,
+          "y": 200,
+          "heading": 0
+        },
+        "border": true,
+        "zones": [
+          {
+            "id": "near",
+            "x": 820,
+            "y": 50,
+            "w": 180,
+            "h": 300,
+            "kind": "target",
+            "label": {
+              "ru": "У стены",
+              "kk": "Қабырға жанында",
+              "en": "By the wall"
+            }
+          }
+        ],
+        "points": [],
+        "walls": [
+          {
+            "x": 1100,
+            "y": 0,
+            "w": 40,
+            "h": 400
+          }
+        ],
+        "lines": []
+      },
+      "toolbox": [
+        "start_move",
+        "stop_move",
+        "wait_until",
+        "move",
+        "beep"
+      ],
+      "start": [],
+      "checks": [
+        {
+          "type": "usesSensor",
+          "sensor": "force"
+        },
+        {
+          "type": "beeped",
+          "min": 1
+        },
+        {
+          "type": "finishInZone",
+          "zone": "near"
+        }
+      ],
+      "hints": [
+        {
+          "ru": "Как в прошлом задании, но ждём не расстояние, а нажатие.",
+          "kk": "Өткен тапсырмадағыдай, бірақ қашықтықты емес, басуды күтеміз.",
+          "en": "Like the last task, but wait for a press, not a distance."
+        },
+        {
+          "ru": "Зелёный блок: «E нажат».",
+          "kk": "Жасыл блок: «E басылды».",
+          "en": "Green block: “E pressed”."
+        },
+        {
+          "ru": "Начать движение; ждать, пока E нажат; остановить; сигнал; назад 10 см.",
+          "kk": "Қозғалысты бастау; E басылғанша күту; тоқтату; дыбыс; 10 см артқа.",
+          "en": "Start moving; wait until E pressed; stop; beep; back 10 cm."
+        }
+      ],
+      "reference": [
+        {
+          "op": "start_move",
+          "direction": "forward"
+        },
+        {
+          "op": "wait_until",
+          "condition": {
+            "sensor": "force",
+            "port": "E",
+            "state": "pressed"
+          }
+        },
+        {
+          "op": "stop_move"
+        },
+        {
+          "op": "beep",
+          "note": 72,
+          "seconds": 0.3
+        },
+        {
+          "op": "move",
+          "direction": "back",
+          "value": 10,
+          "unit": "cm"
+        }
+      ],
+      "skill": "conditions"
+    },
+    {
+      "id": "time-or-event",
+      "type": "quiz",
+      "kind": "choice",
+      "question": {
+        "ru": "Робот должен остановиться у линии, но ты не знаешь, далеко ли она. Какой блок выбрать?",
+        "kk": "Робот сызық алдында тоқтауы керек, бірақ сен оның қаншалықты алыс екенін білмейсің. Қай блокты таңдайсың?",
+        "en": "The robot must stop at a line, but you do not know how far it is. Which block do you choose?"
+      },
+      "options": [
+        {
+          "ru": "«Ждать, пока цвет чёрный»",
+          "kk": "«Түс қара болғанша күту»",
+          "en": "“Wait until colour is black”"
+        },
+        {
+          "ru": "«Ждать 3 с»",
+          "kk": "«3 с күту»",
+          "en": "“Wait 3 s”"
+        },
+        {
+          "ru": "«Вперёд 50 см»",
+          "kk": "«50 см алға»",
+          "en": "“Forward 50 cm”"
+        }
+      ],
+      "correct": [
+        0
+      ],
+      "explanation": {
+        "ru": "Когда расстояние неизвестно, нужно ждать события от датчика.",
+        "kk": "Қашықтық белгісіз болғанда, датчиктен оқиғаны күту керек.",
+        "en": "When the distance is unknown, wait for a sensor event."
+      },
+      "skill": "conditions"
+    }
+  ]
+}

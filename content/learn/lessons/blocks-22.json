@@ -1,0 +1,243 @@
+{
+  "id": "blocks-22",
+  "track": "blocks",
+  "unit": "blocks-functions",
+  "minutes": 8,
+  "skills": [
+    "functions"
+  ],
+  "title": {
+    "ru": "Свой блок",
+    "kk": "Өз блогың",
+    "en": "Your own block"
+  },
+  "goal": {
+    "ru": "Сегодня ты создашь свой собственный блок.",
+    "kk": "Бүгін сен өзіңнің жеке блогыңды жасайсың.",
+    "en": "Today you will create your very own block."
+  },
+  "summary": {
+    "ru": "Теперь ты умеешь определять свой блок и вызывать его много раз.",
+    "kk": "Енді сен өз блогыңды анықтап, оны көп рет шақыра аласың.",
+    "en": "Now you can define your own block and run it many times."
+  },
+  "steps": [
+    {
+      "id": "define",
+      "type": "theory",
+      "title": {
+        "ru": "Мои блоки",
+        "kk": "Менің блоктарым",
+        "en": "My Blocks"
+      },
+      "body": {
+        "ru": "Иногда один и тот же кусок программы нужен в разных местах. Можно дать ему **имя** и сделать **свой блок**.\n\n**«Определить блок step»** — розовая шапка, под которую кладут команды. Она стоит отдельно от старта.\n\n**«Выполнить блок step»** — запускает эти команды в любом месте программы.\n\nИмя пишем латиницей: step, square, wave.",
+        "kk": "Кейде бағдарламаның бір бөлігі әр түрлі жерде керек болады. Оған **ат** беріп, **өз блогыңды** жасауға болады.\n\n**«step блогын анықтау»** — астына командалар қойылатын қызғылт қалпақ. Ол стартттан бөлек тұрады.\n\n**«step блогын орындау»** — осы командаларды бағдарламаның кез келген жерінде іске қосады.\n\nАтты латынша жазамыз: step, square, wave.",
+        "en": "Sometimes the same piece of a program is needed in several places. Give it a **name** and make **your own block**.\n\n**“define block step”** is a pink hat with commands under it. It stands apart from the start block.\n\n**“run block step”** runs those commands anywhere in the program.\n\nNames use Latin letters: step, square, wave."
+      },
+      "illustration": "r-myblock",
+      "example": [
+        {
+          "op": "call",
+          "name": "step"
+        },
+        {
+          "op": "call",
+          "name": "step"
+        },
+        {
+          "op": "call",
+          "name": "step"
+        }
+      ]
+    },
+    {
+      "id": "step-block",
+      "type": "code",
+      "title": {
+        "ru": "Блок «шаг»",
+        "kk": "«Қадам» блогы",
+        "en": "The “step” block"
+      },
+      "task": {
+        "ru": "Определи блок **step**: вперёд 20 см и сигнал. Выполни его 3 раза, чтобы доехать до зоны.",
+        "kk": "**step** блогын анықта: 20 см алға және дыбыс. Аймаққа жету үшін оны 3 рет орында.",
+        "en": "Define block **step**: forward 20 cm and beep. Run it 3 times to reach the zone."
+      },
+      "field": {
+        "width": 1400,
+        "height": 400,
+        "start": {
+          "x": 150,
+          "y": 200,
+          "heading": 0
+        },
+        "border": true,
+        "zones": [
+          {
+            "id": "goal",
+            "x": 680,
+            "y": 100,
+            "w": 160,
+            "h": 200,
+            "kind": "target",
+            "label": {
+              "ru": "Цель",
+              "kk": "Мақсат",
+              "en": "Goal"
+            }
+          }
+        ],
+        "points": [],
+        "walls": [],
+        "lines": []
+      },
+      "toolbox": [
+        "call",
+        "move",
+        "beep",
+        "repeat"
+      ],
+      "start": [],
+      "checks": [
+        {
+          "type": "finishInZone",
+          "zone": "goal"
+        },
+        {
+          "type": "beeped",
+          "min": 3
+        },
+        {
+          "type": "usesOp",
+          "op": "call",
+          "min": 1
+        }
+      ],
+      "hints": [
+        {
+          "ru": "Вытащи розовую шапку «определить блок» и назови её step.",
+          "kk": "«Блокты анықтау» қызғылт қалпағын шығарып, оны step деп ата.",
+          "en": "Drag out the pink “define block” hat and name it step."
+        },
+        {
+          "ru": "Под шапку: вперёд 20 см, сигнал.",
+          "kk": "Қалпақтың астына: 20 см алға, дыбыс.",
+          "en": "Under the hat: forward 20 cm, beep."
+        },
+        {
+          "ru": "Под стартом: три раза «выполнить блок step» (или цикл).",
+          "kk": "Старт астында: үш рет «step блогын орындау» (немесе цикл).",
+          "en": "Under the start: “run block step” three times (or a loop)."
+        }
+      ],
+      "reference": [
+        {
+          "op": "call",
+          "name": "step"
+        },
+        {
+          "op": "call",
+          "name": "step"
+        },
+        {
+          "op": "call",
+          "name": "step"
+        }
+      ],
+      "referenceFunctions": [
+        {
+          "name": "step",
+          "steps": [
+            {
+              "op": "move",
+              "direction": "forward",
+              "value": 20,
+              "unit": "cm"
+            },
+            {
+              "op": "beep",
+              "note": 72,
+              "seconds": 0.3
+            }
+          ]
+        }
+      ],
+      "skill": "functions"
+    },
+    {
+      "id": "why",
+      "type": "quiz",
+      "kind": "choice",
+      "question": {
+        "ru": "Чем полезен свой блок?",
+        "kk": "Өз блогың несімен пайдалы?",
+        "en": "Why is your own block useful?"
+      },
+      "options": [
+        {
+          "ru": "Исправил блок в одном месте — изменилось везде",
+          "kk": "Блокты бір жерде түзеттің — барлық жерде өзгерді",
+          "en": "Fix it in one place and it changes everywhere"
+        },
+        {
+          "ru": "Робот становится тяжелее",
+          "kk": "Робот ауырлайды",
+          "en": "The robot gets heavier"
+        },
+        {
+          "ru": "Программа работает без хаба",
+          "kk": "Бағдарлама хабсыз жұмыс істейді",
+          "en": "The program runs without a hub"
+        }
+      ],
+      "correct": [
+        0
+      ],
+      "explanation": {
+        "ru": "Свой блок — как рецепт: написал один раз, пользуешься сколько хочешь.",
+        "kk": "Өз блогың — рецепт сияқты: бір рет жаздың, қалағаныңша қолданасың.",
+        "en": "Your own block is like a recipe: write it once, use it as often as you like."
+      },
+      "skill": "functions"
+    },
+    {
+      "id": "steps",
+      "type": "quiz",
+      "kind": "order",
+      "question": {
+        "ru": "Как создать свой блок? Расставь по порядку",
+        "kk": "Өз блогыңды қалай жасайсың? Ретімен қой",
+        "en": "How do you make your own block? Put it in order"
+      },
+      "items": [
+        {
+          "ru": "Придумать имя латиницей",
+          "kk": "Латынша ат ойлап табу",
+          "en": "Pick a Latin name"
+        },
+        {
+          "ru": "Положить команды под шапку «определить блок»",
+          "kk": "Командаларды «блокты анықтау» қалпағының астына салу",
+          "en": "Put commands under the “define block” hat"
+        },
+        {
+          "ru": "Поставить «выполнить блок» в программу",
+          "kk": "Бағдарламаға «блокты орындау» қою",
+          "en": "Put “run block” into the program"
+        },
+        {
+          "ru": "Запустить и проверить",
+          "kk": "Іске қосып, тексеру",
+          "en": "Run and test"
+        }
+      ],
+      "explanation": {
+        "ru": "Сначала определяем, потом вызываем.",
+        "kk": "Алдымен анықтаймыз, содан кейін шақырамыз.",
+        "en": "Define first, then call."
+      },
+      "skill": "functions"
+    }
+  ]
+}

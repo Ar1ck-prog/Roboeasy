@@ -1,0 +1,252 @@
+{
+  "id": "blocks-23",
+  "track": "blocks",
+  "unit": "blocks-functions",
+  "minutes": 9,
+  "skills": [
+    "functions"
+  ],
+  "title": {
+    "ru": "Блок с параметром",
+    "kk": "Параметрі бар блок",
+    "en": "A block with a parameter"
+  },
+  "goal": {
+    "ru": "Сегодня один твой блок нарисует квадраты разного размера.",
+    "kk": "Бүгін сенің бір блогың әр түрлі өлшемдегі шаршылар салады.",
+    "en": "Today one block of yours will draw squares of different sizes."
+  },
+  "summary": {
+    "ru": "Теперь ты умеешь настраивать свой блок через переменную-параметр.",
+    "kk": "Енді сен өз блогыңды айнымалы-параметр арқылы баптай аласың.",
+    "en": "Now you can tune your own block with a parameter variable."
+  },
+  "steps": [
+    {
+      "id": "param",
+      "type": "theory",
+      "title": {
+        "ru": "Настройка блока",
+        "kk": "Блокты баптау",
+        "en": "Tuning a block"
+      },
+      "body": {
+        "ru": "Блок **square** всегда рисует квадрат одного размера. А если нужен квадрат побольше?\n\nСделай так: внутри блока используй переменную **size** — «вперёд на size см». Перед вызовом задай size нужного размера.\n\n«задать size = 20; выполнить square» — маленький квадрат. «задать size = 40; выполнить square» — большой. Такая переменная называется **параметр**.",
+        "kk": "**square** блогы әрдайым бір өлшемдегі шаршы салады. Ал үлкенірек шаршы керек болса ше?\n\nБылай істе: блок ішінде **size** айнымалысын қолдан — «size см алға». Шақыру алдында size-ке керекті өлшемді орнат.\n\n«size = 20 орнату; square орындау» — кішкентай шаршы. «size = 40 орнату; square орындау» — үлкен шаршы. Мұндай айнымалы **параметр** деп аталады.",
+        "en": "Block **square** always draws a square of one size. What if you need a bigger one?\n\nDo this: inside the block use a variable **size** — “forward size cm”. Before calling it, set size to what you need.\n\n“set size = 20; run square” — a small square. “set size = 40; run square” — a big one. Such a variable is called a **parameter**."
+      },
+      "illustration": "r-myblock",
+      "example": [
+        {
+          "op": "set_var",
+          "name": "size",
+          "expr": {
+            "num": 20
+          }
+        },
+        {
+          "op": "call",
+          "name": "square"
+        },
+        {
+          "op": "set_var",
+          "name": "size",
+          "expr": {
+            "num": 40
+          }
+        },
+        {
+          "op": "call",
+          "name": "square"
+        }
+      ]
+    },
+    {
+      "id": "two-squares",
+      "type": "code",
+      "title": {
+        "ru": "Два квадрата",
+        "kk": "Екі шаршы",
+        "en": "Two squares"
+      },
+      "task": {
+        "ru": "Определи блок **square** со стороной size (налево). Нарисуй квадрат 20 см, потом квадрат 40 см. Пройди через оба дальних угла.",
+        "kk": "Қабырғасы size болатын **square** блогын анықта (солға). 20 см шаршы, содан кейін 40 см шаршы сал. Екі алыс бұрыштан да өт.",
+        "en": "Define block **square** with side size (turning left). Draw a 20 cm square, then a 40 cm square. Pass both far corners."
+      },
+      "field": {
+        "width": 1000,
+        "height": 900,
+        "start": {
+          "x": 300,
+          "y": 250,
+          "heading": 0
+        },
+        "border": true,
+        "zones": [],
+        "points": [
+          {
+            "id": "small",
+            "x": 500,
+            "y": 450,
+            "r": 50,
+            "label": {
+              "ru": "Малый угол",
+              "kk": "Кіші бұрыш",
+              "en": "Small corner"
+            }
+          },
+          {
+            "id": "big",
+            "x": 700,
+            "y": 650,
+            "r": 50,
+            "label": {
+              "ru": "Большой угол",
+              "kk": "Үлкен бұрыш",
+              "en": "Big corner"
+            }
+          }
+        ],
+        "walls": [],
+        "lines": []
+      },
+      "toolbox": [
+        "call",
+        "set_var",
+        "move_expr",
+        "turn",
+        "repeat",
+        "move"
+      ],
+      "start": [],
+      "checks": [
+        {
+          "type": "passPoints",
+          "points": [
+            "small",
+            "big"
+          ],
+          "ordered": true
+        },
+        {
+          "type": "usesOp",
+          "op": "call",
+          "min": 2
+        },
+        {
+          "type": "usesOp",
+          "op": "set_var",
+          "min": 2
+        },
+        {
+          "type": "noCollision"
+        }
+      ],
+      "hints": [
+        {
+          "ru": "Внутри square: повторить 4 раза — вперёд на size, налево 90°.",
+          "kk": "square ішінде: 4 рет қайталау — size алға, солға 90°.",
+          "en": "Inside square: repeat 4 times — forward size, left 90°."
+        },
+        {
+          "ru": "Перед каждым вызовом задай size.",
+          "kk": "Әр шақыру алдында size орнат.",
+          "en": "Set size before each call."
+        },
+        {
+          "ru": "size = 20; square; size = 40; square.",
+          "kk": "size = 20; square; size = 40; square.",
+          "en": "size = 20; square; size = 40; square."
+        }
+      ],
+      "reference": [
+        {
+          "op": "set_var",
+          "name": "size",
+          "expr": {
+            "num": 20
+          }
+        },
+        {
+          "op": "call",
+          "name": "square"
+        },
+        {
+          "op": "set_var",
+          "name": "size",
+          "expr": {
+            "num": 40
+          }
+        },
+        {
+          "op": "call",
+          "name": "square"
+        }
+      ],
+      "referenceFunctions": [
+        {
+          "name": "square",
+          "steps": [
+            {
+              "op": "repeat",
+              "times": 4,
+              "steps": [
+                {
+                  "op": "move_expr",
+                  "direction": "forward",
+                  "expr": {
+                    "var": "size"
+                  },
+                  "unit": "cm"
+                },
+                {
+                  "op": "turn",
+                  "direction": "left",
+                  "degrees": 90
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "skill": "functions"
+    },
+    {
+      "id": "result",
+      "type": "quiz",
+      "kind": "choice",
+      "question": {
+        "ru": "«задать size = 10; выполнить square; выполнить square». Что нарисует робот?",
+        "kk": "«size = 10 орнату; square орындау; square орындау». Робот не салады?",
+        "en": "“set size = 10; run square; run square”. What will the robot draw?"
+      },
+      "options": [
+        {
+          "ru": "Один и тот же квадрат 10 см дважды",
+          "kk": "Бір 10 см шаршыны екі рет",
+          "en": "The same 10 cm square twice"
+        },
+        {
+          "ru": "Квадраты 10 и 20 см",
+          "kk": "10 және 20 см шаршылар",
+          "en": "Squares of 10 and 20 cm"
+        },
+        {
+          "ru": "Ничего",
+          "kk": "Ештеңе",
+          "en": "Nothing"
+        }
+      ],
+      "correct": [
+        0
+      ],
+      "explanation": {
+        "ru": "size не менялся между вызовами — оба квадрата одинаковые.",
+        "kk": "Шақырулар арасында size өзгермеді — екі шаршы бірдей.",
+        "en": "size did not change between the calls — both squares are the same."
+      },
+      "skill": "functions"
+    }
+  ]
+}

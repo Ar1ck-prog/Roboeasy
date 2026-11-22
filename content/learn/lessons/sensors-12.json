@@ -1,0 +1,237 @@
+{
+  "id": "sensors-12",
+  "track": "sensors",
+  "unit": "sensors-force",
+  "minutes": 9,
+  "skills": [
+    "sensor-force"
+  ],
+  "title": {
+    "ru": "Робот ищет стену",
+    "kk": "Робот қабырға іздейді",
+    "en": "The robot looks for walls"
+  },
+  "goal": {
+    "ru": "Сегодня робот обойдёт тёмную комнату на ощупь.",
+    "kk": "Бүгін робот қараңғы бөлмені сипап айналып шығады.",
+    "en": "Today the robot will explore a dark room by touch."
+  },
+  "summary": {
+    "ru": "Теперь ты умеешь писать поиск: двигаться, пока не встретишь препятствие, и менять направление.",
+    "kk": "Енді сен іздеу жаза аласың: кедергі кездескенше қозғалып, бағытты өзгерту.",
+    "en": "Now you can write a search: move until you meet an obstacle, then change direction."
+  },
+  "steps": [
+    {
+      "id": "dark",
+      "type": "theory",
+      "title": {
+        "ru": "В темноте",
+        "kk": "Қараңғыда",
+        "en": "In the dark"
+      },
+      "body": {
+        "ru": "Представь, что свет выключили. Как найти все стены? Идти, пока не упрёшься, повернуться и снова идти.\n\nРобот с бампером делает то же: **начать → ждать касания → назад → повернуть**. Четыре повтора — и он побывает у каждой стены квадратной комнаты.",
+        "kk": "Жарықты өшірді деп елестет. Барлық қабырғаны қалай табасың? Тірелгенше жүріп, бұрылып, қайтадан жүру.\n\nБамперлі робот та солай істейді: **бастау → жанасуды күту → артқа → бұрылу**. Төрт қайталау — және ол шаршы бөлменің әр қабырғасында болады.",
+        "en": "Imagine the lights are off. How do you find every wall? Walk until you bump, turn, walk again.\n\nA robot with a bumper does the same: **start → wait for a touch → back → turn**. Four repeats and it visits every wall of a square room."
+      },
+      "illustration": "r-force"
+    },
+    {
+      "id": "explore",
+      "type": "code",
+      "title": {
+        "ru": "Обойди комнату",
+        "kk": "Бөлмені айналып шық",
+        "en": "Explore the room"
+      },
+      "task": {
+        "ru": "Найди все четыре стены на ощупь: доедь до стены, пока бампер не нажмётся, подай сигнал, отъедь на 10 см и повернись налево. И так 4 раза.",
+        "kk": "Төрт қабырғаның бәрін сипап тап: бампер басылғанша қабырғаға жет, дыбыс бер, 10 см шегініп, солға бұрыл. Осылай 4 рет.",
+        "en": "Find all four walls by touch: drive until the bumper is pressed, beep, back up 10 cm and turn left. Do it 4 times."
+      },
+      "field": {
+        "width": 1000,
+        "height": 1000,
+        "start": {
+          "x": 500,
+          "y": 500,
+          "heading": 0
+        },
+        "border": true,
+        "zones": [],
+        "points": [
+          {
+            "id": "east",
+            "x": 900,
+            "y": 500,
+            "r": 70,
+            "label": {
+              "ru": "Правая стена",
+              "kk": "Оң қабырға",
+              "en": "Right wall"
+            }
+          },
+          {
+            "id": "north",
+            "x": 815,
+            "y": 900,
+            "r": 70,
+            "label": {
+              "ru": "Верхняя стена",
+              "kk": "Жоғарғы қабырға",
+              "en": "Top wall"
+            }
+          },
+          {
+            "id": "west",
+            "x": 100,
+            "y": 815,
+            "r": 70,
+            "label": {
+              "ru": "Левая стена",
+              "kk": "Сол қабырға",
+              "en": "Left wall"
+            }
+          },
+          {
+            "id": "south",
+            "x": 185,
+            "y": 100,
+            "r": 70,
+            "label": {
+              "ru": "Нижняя стена",
+              "kk": "Төменгі қабырға",
+              "en": "Bottom wall"
+            }
+          }
+        ],
+        "walls": [],
+        "lines": []
+      },
+      "toolbox": [
+        "start_move",
+        "stop_move",
+        "wait_until",
+        "move",
+        "turn",
+        "beep",
+        "repeat"
+      ],
+      "start": [],
+      "checks": [
+        {
+          "type": "passPoints",
+          "points": [
+            "east",
+            "north",
+            "west",
+            "south"
+          ],
+          "ordered": false
+        },
+        {
+          "type": "beeped",
+          "min": 4
+        },
+        {
+          "type": "usesSensor",
+          "sensor": "force"
+        }
+      ],
+      "hints": [
+        {
+          "ru": "Одна стена: начать, ждать нажатия, стоп, сигнал, назад 10, налево 90°.",
+          "kk": "Бір қабырға: бастау, басуды күту, тоқта, дыбыс, 10 артқа, солға 90°.",
+          "en": "One wall: start, wait for the press, stop, beep, back 10, left 90°."
+        },
+        {
+          "ru": "Это тело цикла.",
+          "kk": "Бұл — цикл денесі.",
+          "en": "That is the loop body."
+        },
+        {
+          "ru": "Повторить 4 раза.",
+          "kk": "4 рет қайталау.",
+          "en": "Repeat 4 times."
+        }
+      ],
+      "reference": [
+        {
+          "op": "repeat",
+          "times": 4,
+          "steps": [
+            {
+              "op": "start_move",
+              "direction": "forward"
+            },
+            {
+              "op": "wait_until",
+              "condition": {
+                "sensor": "force",
+                "port": "E",
+                "state": "pressed"
+              }
+            },
+            {
+              "op": "stop_move"
+            },
+            {
+              "op": "beep",
+              "note": 72,
+              "seconds": 0.3
+            },
+            {
+              "op": "move",
+              "direction": "back",
+              "value": 10,
+              "unit": "cm"
+            },
+            {
+              "op": "turn",
+              "direction": "left",
+              "degrees": 90
+            }
+          ]
+        }
+      ],
+      "skill": "sensor-force"
+    },
+    {
+      "id": "why-back",
+      "type": "quiz",
+      "kind": "choice",
+      "question": {
+        "ru": "Зачем отъезжать назад перед поворотом?",
+        "kk": "Бұрылар алдында неге артқа шегіну керек?",
+        "en": "Why back up before turning?"
+      },
+      "options": [
+        {
+          "ru": "Чтобы при повороте не зацепить стену",
+          "kk": "Бұрылғанда қабырғаны ілмеу үшін",
+          "en": "So the robot does not scrape the wall while turning"
+        },
+        {
+          "ru": "Чтобы сэкономить батарею",
+          "kk": "Батареяны үнемдеу үшін",
+          "en": "To save battery"
+        },
+        {
+          "ru": "Так требует датчик цвета",
+          "kk": "Түс датчигі солай талап етеді",
+          "en": "The colour sensor demands it"
+        }
+      ],
+      "correct": [
+        0
+      ],
+      "explanation": {
+        "ru": "Вплотную к стене робот задевает её углами при повороте. Небольшой отъезд даёт место.",
+        "kk": "Қабырғаға тығыз тұрған робот бұрылғанда оны бұрыштарымен іледі. Сәл шегіну орын береді.",
+        "en": "Pressed against the wall, the robot scrapes it with its corners while turning. A short back-up makes room."
+      },
+      "skill": "sensor-force"
+    }
+  ]
+}

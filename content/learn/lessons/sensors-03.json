@@ -1,0 +1,289 @@
+{
+  "id": "sensors-03",
+  "track": "sensors",
+  "unit": "sensors-color",
+  "minutes": 8,
+  "skills": [
+    "sensor-color"
+  ],
+  "title": {
+    "ru": "Считать линии",
+    "kk": "Сызықтарды санау",
+    "en": "Counting lines"
+  },
+  "goal": {
+    "ru": "Сегодня робот посчитает линии, через которые проезжает.",
+    "kk": "Бүгін робот өзі өтетін сызықтарды санайды.",
+    "en": "Today the robot will count the lines it drives over."
+  },
+  "summary": {
+    "ru": "Теперь ты умеешь отслеживать переход «линия → фон» и считать события.",
+    "kk": "Енді сен «сызық → фон» ауысуын қадағалап, оқиғаларды санай аласың.",
+    "en": "Now you can track the “line → background” change and count events."
+  },
+  "steps": [
+    {
+      "id": "pass",
+      "type": "theory",
+      "title": {
+        "ru": "Наехал и съехал",
+        "kk": "Кіріп, шықты",
+        "en": "On and off"
+      },
+      "body": {
+        "ru": "Чтобы посчитать линию, мало увидеть чёрный: пока датчик над линией, он видит чёрный много раз подряд.\n\nПравильно так: **ждать, пока чёрный**, потом **ждать, пока белый**. Это одна пройденная линия. Повтори это N раз — робот проедет N линий.\n\nА если добавить счётчик, робот покажет, сколько линий уже пройдено.",
+        "kk": "Сызықты санау үшін қараны көру жеткіліксіз: датчик сызық үстінде тұрғанда, ол қараны қатарынан көп рет көреді.\n\nДұрысы былай: **қара болғанша күту**, содан кейін **ақ болғанша күту**. Бұл — өтілген бір сызық. Мұны N рет қайтала — робот N сызықтан өтеді.\n\nАл санауыш қоссаң, робот қанша сызық өтілгенін көрсетеді.",
+        "en": "To count a line, seeing black is not enough: while the sensor is over the line, it sees black many times in a row.\n\nDo it like this: **wait until black**, then **wait until white**. That is one line passed. Repeat N times and the robot crosses N lines.\n\nAdd a counter and the robot shows how many lines it has passed."
+      },
+      "illustration": "r-crossing",
+      "example": [
+        {
+          "op": "start_move",
+          "direction": "forward"
+        },
+        {
+          "op": "repeat",
+          "times": 3,
+          "steps": [
+            {
+              "op": "wait_until",
+              "condition": {
+                "sensor": "color",
+                "port": "D",
+                "color": "black"
+              }
+            },
+            {
+              "op": "wait_until",
+              "condition": {
+                "sensor": "color",
+                "port": "D",
+                "color": "white"
+              }
+            }
+          ]
+        },
+        {
+          "op": "stop_move"
+        }
+      ]
+    },
+    {
+      "id": "three",
+      "type": "code",
+      "title": {
+        "ru": "Третья линия",
+        "kk": "Үшінші сызық",
+        "en": "The third line"
+      },
+      "task": {
+        "ru": "Проедь три чёрные линии и остановись сразу после третьей. Покажи на экране число пройденных линий — **3**.",
+        "kk": "Үш қара сызықтан өтіп, үшіншісінен кейін бірден тоқта. Экранда өтілген сызықтар санын көрсет — **3**.",
+        "en": "Cross three black lines and stop right after the third. Show the number of lines passed — **3**."
+      },
+      "field": {
+        "width": 1400,
+        "height": 400,
+        "start": {
+          "x": 150,
+          "y": 200,
+          "heading": 0
+        },
+        "border": true,
+        "zones": [
+          {
+            "id": "third",
+            "x": 860,
+            "y": 50,
+            "w": 200,
+            "h": 300,
+            "kind": "target",
+            "label": {
+              "ru": "После 3-й линии",
+              "kk": "3-сызықтан кейін",
+              "en": "After line 3"
+            }
+          }
+        ],
+        "points": [],
+        "walls": [],
+        "lines": [
+          {
+            "points": [
+              [
+                500,
+                0
+              ],
+              [
+                500,
+                400
+              ]
+            ],
+            "width": 20,
+            "color": "black"
+          },
+          {
+            "points": [
+              [
+                750,
+                0
+              ],
+              [
+                750,
+                400
+              ]
+            ],
+            "width": 20,
+            "color": "black"
+          },
+          {
+            "points": [
+              [
+                1000,
+                0
+              ],
+              [
+                1000,
+                400
+              ]
+            ],
+            "width": 20,
+            "color": "black"
+          }
+        ]
+      },
+      "toolbox": [
+        "start_move",
+        "stop_move",
+        "wait_until",
+        "repeat",
+        "set_var",
+        "change_var",
+        "write_var"
+      ],
+      "start": [],
+      "checks": [
+        {
+          "type": "finishInZone",
+          "zone": "third"
+        },
+        {
+          "type": "displayed",
+          "text": "3"
+        },
+        {
+          "type": "usesSensor",
+          "sensor": "color"
+        },
+        {
+          "type": "usesOp",
+          "op": "repeat",
+          "min": 1
+        }
+      ],
+      "hints": [
+        {
+          "ru": "Одна линия = ждать чёрный + ждать белый.",
+          "kk": "Бір сызық = қараны күту + ақты күту.",
+          "en": "One line = wait for black + wait for white."
+        },
+        {
+          "ru": "В том же цикле: изменить count на 1 и написать count.",
+          "kk": "Сол циклда: count мәнін 1 өзгерту және count жазу.",
+          "en": "In the same loop: change count by 1 and write count."
+        },
+        {
+          "ru": "count = 0; начать; повторить 3: ждать чёрный, ждать белый, изменить count на 1, написать count; стоп.",
+          "kk": "count = 0; бастау; 3 рет: қараны күту, ақты күту, count мәнін 1 өзгерту, count жазу; тоқта.",
+          "en": "count = 0; start; repeat 3: wait black, wait white, change count by 1, write count; stop."
+        }
+      ],
+      "reference": [
+        {
+          "op": "set_var",
+          "name": "count",
+          "expr": {
+            "num": 0
+          }
+        },
+        {
+          "op": "start_move",
+          "direction": "forward"
+        },
+        {
+          "op": "repeat",
+          "times": 3,
+          "steps": [
+            {
+              "op": "wait_until",
+              "condition": {
+                "sensor": "color",
+                "port": "D",
+                "color": "black"
+              }
+            },
+            {
+              "op": "wait_until",
+              "condition": {
+                "sensor": "color",
+                "port": "D",
+                "color": "white"
+              }
+            },
+            {
+              "op": "change_var",
+              "name": "count",
+              "expr": {
+                "num": 1
+              }
+            },
+            {
+              "op": "write_var",
+              "name": "count"
+            }
+          ]
+        },
+        {
+          "op": "stop_move"
+        }
+      ],
+      "skill": "sensor-color"
+    },
+    {
+      "id": "only-black",
+      "type": "quiz",
+      "kind": "choice",
+      "question": {
+        "ru": "Что случится, если в цикле оставить только «ждать, пока чёрный»?",
+        "kk": "Циклда тек «қара болғанша күту» қалдырса, не болады?",
+        "en": "What happens if the loop only has “wait until black”?"
+      },
+      "options": [
+        {
+          "ru": "Робот «посчитает» одну линию несколько раз",
+          "kk": "Робот бір сызықты бірнеше рет «санайды»",
+          "en": "The robot “counts” one line several times"
+        },
+        {
+          "ru": "Робот поедет назад",
+          "kk": "Робот артқа жүреді",
+          "en": "The robot drives backwards"
+        },
+        {
+          "ru": "Ничего не изменится",
+          "kk": "Ештеңе өзгермейді",
+          "en": "Nothing changes"
+        }
+      ],
+      "correct": [
+        0
+      ],
+      "explanation": {
+        "ru": "Пока датчик над линией, условие «чёрный» сразу правда — все повторы пролетят на одной линии.",
+        "kk": "Датчик сызық үстінде тұрғанда «қара» шарты бірден ақиқат — барлық қайталау бір сызықта өтіп кетеді.",
+        "en": "While the sensor is over the line, “black” is instantly true — all repeats fly by on one line."
+      },
+      "skill": "sensor-color"
+    }
+  ]
+}

@@ -1,0 +1,365 @@
+{
+  "id": "sensors-05",
+  "track": "sensors",
+  "unit": "sensors-color",
+  "minutes": 7,
+  "skills": [
+    "sensor-color"
+  ],
+  "title": {
+    "ru": "Что покажет датчик?",
+    "kk": "Датчик не көрсетеді?",
+    "en": "What will the sensor show?"
+  },
+  "goal": {
+    "ru": "Сегодня ты научишься предсказывать, что увидит датчик.",
+    "kk": "Бүгін сен датчиктің не көретінін болжауды үйренесің.",
+    "en": "Today you will learn to predict what the sensor will see."
+  },
+  "summary": {
+    "ru": "Теперь ты читаешь поле глазами датчика — и заранее знаешь, где остановится робот.",
+    "kk": "Енді сен алаңды датчиктің көзімен оқисың — робот қай жерде тоқтайтынын алдын ала білесің.",
+    "en": "Now you read the field through the sensor’s eyes and know in advance where the robot stops."
+  },
+  "steps": [
+    {
+      "id": "think",
+      "type": "theory",
+      "title": {
+        "ru": "Думай как датчик",
+        "kk": "Датчик сияқты ойла",
+        "en": "Think like the sensor"
+      },
+      "body": {
+        "ru": "Чтобы предсказать поведение робота, пройди путь пальцем и спрашивай себя: «Что сейчас под датчиком? Правда ли условие?»\n\nДля отражения вспомни примерные числа: белый 95, жёлтый 80, красный 55, зелёный 45, синий 35, чёрный 8.",
+        "kk": "Робот мінезін болжау үшін жолды саусақпен жүріп өтіп, өзіңнен сұра: «Қазір датчик астында не бар? Шарт ақиқат па?»\n\nШағылысу үшін шамамен сандарды есіңе түсір: ақ 95, сары 80, қызыл 55, жасыл 45, көк 35, қара 8.",
+        "en": "To predict the robot, trace the path with your finger and ask: “What is under the sensor now? Is the condition true?”\n\nFor reflection, remember rough numbers: white 95, yellow 80, red 55, green 45, blue 35, black 8."
+      },
+      "illustration": "r-reflection"
+    },
+    {
+      "id": "red-green",
+      "type": "predict",
+      "title": {
+        "ru": "Где остановится?",
+        "kk": "Қайда тоқтайды?",
+        "en": "Where will it stop?"
+      },
+      "question": {
+        "ru": "Робот ждёт, пока отражение станет меньше 50. Впереди красная полоса, потом зелёная. Где он остановится?",
+        "kk": "Робот шағылысу 50-ден аз болғанша күтеді. Алда қызыл жолақ, содан кейін жасыл. Ол қайда тоқтайды?",
+        "en": "The robot waits until reflection drops below 50. Ahead is a red strip, then a green one. Where will it stop?"
+      },
+      "field": {
+        "width": 1400,
+        "height": 400,
+        "start": {
+          "x": 150,
+          "y": 200,
+          "heading": 0
+        },
+        "border": true,
+        "zones": [
+          {
+            "id": "red",
+            "x": 500,
+            "y": 0,
+            "w": 80,
+            "h": 400,
+            "kind": "paint",
+            "color": "red"
+          },
+          {
+            "id": "green",
+            "x": 850,
+            "y": 0,
+            "w": 80,
+            "h": 400,
+            "kind": "paint",
+            "color": "green"
+          }
+        ],
+        "points": [],
+        "walls": [],
+        "lines": []
+      },
+      "program": [
+        {
+          "op": "start_move",
+          "direction": "forward"
+        },
+        {
+          "op": "wait_until",
+          "condition": {
+            "sensor": "reflection",
+            "port": "D",
+            "comparator": "<",
+            "value": 50
+          }
+        },
+        {
+          "op": "stop_move"
+        }
+      ],
+      "options": [
+        {
+          "label": {
+            "ru": "На красной",
+            "kk": "Қызылда",
+            "en": "On red"
+          },
+          "steps": [
+            {
+              "op": "move",
+              "direction": "forward",
+              "value": 28,
+              "unit": "cm"
+            }
+          ]
+        },
+        {
+          "label": {
+            "ru": "На зелёной",
+            "kk": "Жасылда",
+            "en": "On green"
+          },
+          "steps": [
+            {
+              "op": "move",
+              "direction": "forward",
+              "value": 63,
+              "unit": "cm"
+            }
+          ]
+        },
+        {
+          "label": {
+            "ru": "Не остановится",
+            "kk": "Тоқтамайды",
+            "en": "Will not stop"
+          },
+          "steps": [
+            {
+              "op": "move",
+              "direction": "forward",
+              "value": 100,
+              "unit": "cm"
+            }
+          ]
+        }
+      ],
+      "correct": 1,
+      "explanation": {
+        "ru": "Красный ≈ 55 % — это больше 50, робот проезжает. Зелёный ≈ 45 % — меньше 50, остановка.",
+        "kk": "Қызыл ≈ 55 % — 50-ден көп, робот өтіп кетеді. Жасыл ≈ 45 % — 50-ден аз, тоқтайды.",
+        "en": "Red ≈ 55 % is above 50, the robot drives on. Green ≈ 45 % is below 50 — it stops."
+      },
+      "skill": "sensor-color"
+    },
+    {
+      "id": "values",
+      "type": "quiz",
+      "kind": "match",
+      "question": {
+        "ru": "Подбери примерное отражение",
+        "kk": "Шамамен шағылысуды таңда",
+        "en": "Match the rough reflection"
+      },
+      "pairs": [
+        {
+          "left": {
+            "ru": "Белое поле",
+            "kk": "Ақ алаң",
+            "en": "White field"
+          },
+          "right": {
+            "ru": "≈ 95 %",
+            "kk": "≈ 95 %",
+            "en": "≈ 95 %"
+          }
+        },
+        {
+          "left": {
+            "ru": "Жёлтая метка",
+            "kk": "Сары белгі",
+            "en": "Yellow mark"
+          },
+          "right": {
+            "ru": "≈ 80 %",
+            "kk": "≈ 80 %",
+            "en": "≈ 80 %"
+          }
+        },
+        {
+          "left": {
+            "ru": "Синяя метка",
+            "kk": "Көк белгі",
+            "en": "Blue mark"
+          },
+          "right": {
+            "ru": "≈ 35 %",
+            "kk": "≈ 35 %",
+            "en": "≈ 35 %"
+          }
+        },
+        {
+          "left": {
+            "ru": "Чёрная линия",
+            "kk": "Қара сызық",
+            "en": "Black line"
+          },
+          "right": {
+            "ru": "≈ 8 %",
+            "kk": "≈ 8 %",
+            "en": "≈ 8 %"
+          }
+        }
+      ],
+      "explanation": {
+        "ru": "Чем темнее поверхность, тем меньше света возвращается. Настоящие числа зависят от освещения — их меряют перед стартом.",
+        "kk": "Бет неғұрлым қараңғы болса, соғұрлым аз жарық қайтады. Нақты сандар жарыққа байланысты — оларды старт алдында өлшейді.",
+        "en": "The darker the surface, the less light returns. Real numbers depend on lighting — measure them before a run."
+      },
+      "skill": "sensor-color"
+    },
+    {
+      "id": "color-mode",
+      "type": "predict",
+      "title": {
+        "ru": "А в режиме цвета?",
+        "kk": "Ал түс режимінде ше?",
+        "en": "And in colour mode?"
+      },
+      "question": {
+        "ru": "Теперь робот ждёт **зелёный цвет**. Поле то же. Где он остановится?",
+        "kk": "Енді робот **жасыл түсті** күтеді. Алаң сол. Ол қайда тоқтайды?",
+        "en": "Now the robot waits for **green colour**. Same field. Where will it stop?"
+      },
+      "field": {
+        "width": 1400,
+        "height": 400,
+        "start": {
+          "x": 150,
+          "y": 200,
+          "heading": 0
+        },
+        "border": true,
+        "zones": [
+          {
+            "id": "red",
+            "x": 500,
+            "y": 0,
+            "w": 80,
+            "h": 400,
+            "kind": "paint",
+            "color": "red"
+          },
+          {
+            "id": "green",
+            "x": 850,
+            "y": 0,
+            "w": 80,
+            "h": 400,
+            "kind": "paint",
+            "color": "green"
+          }
+        ],
+        "points": [],
+        "walls": [],
+        "lines": []
+      },
+      "program": [
+        {
+          "op": "start_move",
+          "direction": "forward"
+        },
+        {
+          "op": "wait_until",
+          "condition": {
+            "sensor": "color",
+            "port": "D",
+            "color": "green"
+          }
+        },
+        {
+          "op": "stop_move"
+        }
+      ],
+      "options": [
+        {
+          "label": {
+            "ru": "На красной",
+            "kk": "Қызылда",
+            "en": "On red"
+          },
+          "steps": [
+            {
+              "op": "move",
+              "direction": "forward",
+              "value": 28,
+              "unit": "cm"
+            }
+          ]
+        },
+        {
+          "label": {
+            "ru": "На зелёной",
+            "kk": "Жасылда",
+            "en": "On green"
+          },
+          "steps": [
+            {
+              "op": "move",
+              "direction": "forward",
+              "value": 63,
+              "unit": "cm"
+            }
+          ]
+        },
+        {
+          "label": {
+            "ru": "Сразу на старте",
+            "kk": "Бірден стартта",
+            "en": "Right at the start"
+          },
+          "steps": [
+            {
+              "op": "wait",
+              "seconds": 1
+            }
+          ]
+        }
+      ],
+      "correct": 1,
+      "explanation": {
+        "ru": "Красный — не зелёный, робот едет дальше и останавливается на зелёной полосе.",
+        "kk": "Қызыл — жасыл емес, робот әрі қарай жүріп, жасыл жолақта тоқтайды.",
+        "en": "Red is not green, so the robot keeps going and stops on the green strip."
+      },
+      "skill": "sensor-color"
+    },
+    {
+      "id": "guess",
+      "type": "quiz",
+      "kind": "number",
+      "question": {
+        "ru": "Белый 95 %, синий 35 %. Какой порог разделит их ровно посередине?",
+        "kk": "Ақ 95 %, көк 35 %. Оларды тура ортасынан қай шек бөледі?",
+        "en": "White 95 %, blue 35 %. Which threshold splits them exactly in the middle?"
+      },
+      "answer": 65,
+      "tolerance": 2,
+      "explanation": {
+        "ru": "(95 + 35) : 2 = 65.",
+        "kk": "(95 + 35) : 2 = 65.",
+        "en": "(95 + 35) ÷ 2 = 65."
+      },
+      "unit": {
+        "ru": "%",
+        "kk": "%",
+        "en": "%"
+      },
+      "skill": "sensor-color"
+    }
+  ]
+}

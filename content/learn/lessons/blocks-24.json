@@ -1,0 +1,298 @@
+{
+  "id": "blocks-24",
+  "track": "blocks",
+  "unit": "blocks-functions",
+  "minutes": 9,
+  "skills": [
+    "functions"
+  ],
+  "title": {
+    "ru": "Короче со своими блоками",
+    "kk": "Өз блоктарыңмен қысқарақ",
+    "en": "Shorter with your own blocks"
+  },
+  "goal": {
+    "ru": "Сегодня ты сократишь длинную программу с помощью своих блоков.",
+    "kk": "Бүгін сен ұзын бағдарламаны өз блоктарыңның көмегімен қысқартасың.",
+    "en": "Today you will shorten a long program with your own blocks."
+  },
+  "summary": {
+    "ru": "Теперь ты замечаешь повторяющиеся куски и выносишь их в свои блоки.",
+    "kk": "Енді сен қайталанатын бөліктерді байқап, оларды өз блоктарыңа шығарасың.",
+    "en": "Now you spot repeated pieces and move them into your own blocks."
+  },
+  "steps": [
+    {
+      "id": "refactor",
+      "type": "theory",
+      "title": {
+        "ru": "Убираем повторы",
+        "kk": "Қайталауларды алып тастаймыз",
+        "en": "Removing repeats"
+      },
+      "body": {
+        "ru": "Программисты часто переписывают рабочую программу так, чтобы она стала короче и понятнее. Это называется **рефакторинг**.\n\nИщи куски, которые повторяются, но не подряд (подряд — это работа для цикла). Такой кусок — кандидат в свой блок.\n\nПосле рефакторинга робот делает то же самое, а программу легче читать.",
+        "kk": "Бағдарламашылар жұмыс істейтін бағдарламаны қысқа әрі түсінікті болатындай жиі қайта жазады. Бұл **рефакторинг** деп аталады.\n\nҚатарынан емес, қайталанатын бөліктерді ізде (қатарынан болса — цикл жұмысы). Мұндай бөлік — өз блогыңа үміткер.\n\nРефакторингтен кейін робот сол нәрсені істейді, ал бағдарламаны оқу оңайырақ.",
+        "en": "Programmers often rewrite a working program so it gets shorter and clearer. This is called **refactoring**.\n\nLook for pieces that repeat, but not one right after another (that is a job for a loop). Such a piece is a candidate for your own block.\n\nAfter refactoring the robot does the same thing, but the program is easier to read."
+      },
+      "illustration": "r-myblock"
+    },
+    {
+      "id": "long",
+      "type": "debug",
+      "title": {
+        "ru": "Слишком длинно",
+        "kk": "Тым ұзын",
+        "en": "Too long"
+      },
+      "task": {
+        "ru": "Программа ведёт робота через ворота: зигзаг, прямой участок, снова зигзаг. Она работает, но в ней 11 блоков. Сделай не больше 9, используя свой блок **zig**.",
+        "kk": "Бағдарлама роботты қақпалар арқылы жүргізеді: ирек, түзу бөлік, тағы ирек. Ол жұмыс істейді, бірақ онда 11 блок. Өз **zig** блогыңды қолданып, 9-дан артық жасама.",
+        "en": "The program drives through gates: a zigzag, a straight part, another zigzag. It works but has 11 blocks. Make it 9 or fewer using your own block **zig**."
+      },
+      "field": {
+        "width": 1500,
+        "height": 900,
+        "start": {
+          "x": 150,
+          "y": 250,
+          "heading": 0
+        },
+        "border": true,
+        "zones": [
+          {
+            "id": "end",
+            "x": 1050,
+            "y": 550,
+            "w": 200,
+            "h": 200,
+            "kind": "target",
+            "label": {
+              "ru": "Финиш",
+              "kk": "Мәре",
+              "en": "Finish"
+            }
+          }
+        ],
+        "points": [
+          {
+            "id": "g1",
+            "x": 350,
+            "y": 450,
+            "r": 50,
+            "label": {
+              "ru": "Ворота 1",
+              "kk": "1-қақпа",
+              "en": "Gate 1"
+            }
+          },
+          {
+            "id": "g2",
+            "x": 950,
+            "y": 450,
+            "r": 50,
+            "label": {
+              "ru": "Ворота 2",
+              "kk": "2-қақпа",
+              "en": "Gate 2"
+            }
+          }
+        ],
+        "walls": [],
+        "lines": []
+      },
+      "toolbox": [
+        "call",
+        "move",
+        "turn",
+        "repeat"
+      ],
+      "start": [
+        {
+          "op": "move",
+          "direction": "forward",
+          "value": 20,
+          "unit": "cm"
+        },
+        {
+          "op": "turn",
+          "direction": "left",
+          "degrees": 90
+        },
+        {
+          "op": "move",
+          "direction": "forward",
+          "value": 20,
+          "unit": "cm"
+        },
+        {
+          "op": "turn",
+          "direction": "right",
+          "degrees": 90
+        },
+        {
+          "op": "move",
+          "direction": "forward",
+          "value": 20,
+          "unit": "cm"
+        },
+        {
+          "op": "move",
+          "direction": "forward",
+          "value": 40,
+          "unit": "cm"
+        },
+        {
+          "op": "turn",
+          "direction": "left",
+          "degrees": 90
+        },
+        {
+          "op": "move",
+          "direction": "forward",
+          "value": 20,
+          "unit": "cm"
+        },
+        {
+          "op": "turn",
+          "direction": "right",
+          "degrees": 90
+        },
+        {
+          "op": "move",
+          "direction": "forward",
+          "value": 20,
+          "unit": "cm"
+        }
+      ],
+      "checks": [
+        {
+          "type": "passPoints",
+          "points": [
+            "g1",
+            "g2"
+          ],
+          "ordered": true
+        },
+        {
+          "type": "finishInZone",
+          "zone": "end"
+        },
+        {
+          "type": "maxBlocks",
+          "max": 9
+        },
+        {
+          "type": "usesOp",
+          "op": "call",
+          "min": 2
+        }
+      ],
+      "hints": [
+        {
+          "ru": "Какой кусок встречается дважды?",
+          "kk": "Қай бөлік екі рет кездеседі?",
+          "en": "Which piece appears twice?"
+        },
+        {
+          "ru": "zig: налево 90°, вперёд 20, направо 90°, вперёд 20.",
+          "kk": "zig: солға 90°, 20 алға, оңға 90°, 20 алға.",
+          "en": "zig: left 90°, forward 20, right 90°, forward 20."
+        },
+        {
+          "ru": "Программа: zig, вперёд 40, zig — и не забудь первые 20 см.",
+          "kk": "Бағдарлама: zig, 40 алға, zig — алғашқы 20 см-ді ұмытпа.",
+          "en": "Program: zig, forward 40, zig — and do not forget the first 20 cm."
+        }
+      ],
+      "reference": [
+        {
+          "op": "move",
+          "direction": "forward",
+          "value": 20,
+          "unit": "cm"
+        },
+        {
+          "op": "call",
+          "name": "zig"
+        },
+        {
+          "op": "move",
+          "direction": "forward",
+          "value": 40,
+          "unit": "cm"
+        },
+        {
+          "op": "call",
+          "name": "zig"
+        }
+      ],
+      "referenceFunctions": [
+        {
+          "name": "zig",
+          "steps": [
+            {
+              "op": "turn",
+              "direction": "left",
+              "degrees": 90
+            },
+            {
+              "op": "move",
+              "direction": "forward",
+              "value": 20,
+              "unit": "cm"
+            },
+            {
+              "op": "turn",
+              "direction": "right",
+              "degrees": 90
+            },
+            {
+              "op": "move",
+              "direction": "forward",
+              "value": 20,
+              "unit": "cm"
+            }
+          ]
+        }
+      ],
+      "skill": "functions"
+    },
+    {
+      "id": "loop-or-block",
+      "type": "quiz",
+      "kind": "choice",
+      "question": {
+        "ru": "Кусок программы повторяется 4 раза подряд. Что лучше?",
+        "kk": "Бағдарлама бөлігі қатарынан 4 рет қайталанады. Не жақсы?",
+        "en": "A piece of the program repeats 4 times in a row. What is better?"
+      },
+      "options": [
+        {
+          "ru": "Цикл «повторить 4 раза»",
+          "kk": "«4 рет қайталау» циклі",
+          "en": "A “repeat 4 times” loop"
+        },
+        {
+          "ru": "Четыре одинаковых своих блока",
+          "kk": "Төрт бірдей өз блогы",
+          "en": "Four identical own blocks"
+        },
+        {
+          "ru": "Оставить как есть",
+          "kk": "Сол күйінде қалдыру",
+          "en": "Leave it as it is"
+        }
+      ],
+      "correct": [
+        0
+      ],
+      "explanation": {
+        "ru": "Подряд — цикл. Вразброс по программе — свой блок. Можно и вместе: свой блок внутри цикла.",
+        "kk": "Қатарынан — цикл. Бағдарлама бойынша шашыраңқы — өз блогың. Бірге де болады: цикл ішінде өз блогың.",
+        "en": "In a row — a loop. Scattered around — your own block. Or both: your block inside a loop."
+      },
+      "skill": "functions"
+    }
+  ]
+}

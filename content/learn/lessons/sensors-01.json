@@ -1,0 +1,325 @@
+{
+  "id": "sensors-01",
+  "track": "sensors",
+  "unit": "sensors-color",
+  "minutes": 7,
+  "skills": [
+    "sensor-color"
+  ],
+  "title": {
+    "ru": "Что видит датчик цвета",
+    "kk": "Түс датчигі не көреді",
+    "en": "What the colour sensor sees"
+  },
+  "goal": {
+    "ru": "Сегодня ты узнаешь, как робот различает цвета.",
+    "kk": "Бүгін сен роботтың түстерді қалай ажырататынын білесің.",
+    "en": "Today you will learn how a robot tells colours apart."
+  },
+  "summary": {
+    "ru": "Теперь ты знаешь, что видит датчик цвета и как остановиться на нужном цвете.",
+    "kk": "Енді сен түс датчигі не көретінін және керекті түсте қалай тоқтау керегін білесің.",
+    "en": "Now you know what the colour sensor sees and how to stop on a colour."
+  },
+  "steps": [
+    {
+      "id": "see",
+      "type": "theory",
+      "title": {
+        "ru": "Глаз, который смотрит вниз",
+        "kk": "Төмен қарайтын көз",
+        "en": "An eye looking down"
+      },
+      "body": {
+        "ru": "Датчик цвета обычно ставят спереди и направляют **вниз**, на поле. Он светит на поверхность и смотрит, какой свет вернулся.\n\nДатчик различает несколько цветов: чёрный, белый, красный, жёлтый, зелёный, синий, голубой и фиолетовый. Если под ним пусто — «нет цвета».\n\nДатчик видит маленькое пятно прямо под собой. Поэтому робот замечает линию, только когда датчик на неё наехал.",
+        "kk": "Түс датчигін әдетте алдыға қойып, **төмен**, алаңға бағыттайды. Ол бетке жарық түсіріп, қандай жарық қайтқанын қарайды.\n\nДатчик бірнеше түсті ажыратады: қара, ақ, қызыл, сары, жасыл, көк, көгілдір және күлгін. Астында бос болса — «түс жоқ».\n\nДатчик тура астындағы кішкентай дақты көреді. Сондықтан робот сызықты датчик оған жеткенде ғана байқайды.",
+        "en": "The colour sensor usually sits at the front, pointing **down** at the field. It shines light on the surface and looks at what comes back.\n\nIt tells apart several colours: black, white, red, yellow, green, blue, azure and violet. If nothing is under it — “no colour”.\n\nThe sensor sees a small spot right under itself. So the robot notices a line only when the sensor is over it."
+      },
+      "illustration": "r-color"
+    },
+    {
+      "id": "where",
+      "type": "quiz",
+      "kind": "choice",
+      "question": {
+        "ru": "Куда обычно смотрит датчик цвета на роботе для поля?",
+        "kk": "Алаңға арналған роботта түс датчигі әдетте қайда қарайды?",
+        "en": "Where does the colour sensor usually look on a field robot?"
+      },
+      "options": [
+        {
+          "ru": "Вниз, на поле",
+          "kk": "Төмен, алаңға",
+          "en": "Down at the field"
+        },
+        {
+          "ru": "Вверх, на потолок",
+          "kk": "Жоғары, төбеге",
+          "en": "Up at the ceiling"
+        },
+        {
+          "ru": "Назад, на колёса",
+          "kk": "Артқа, дөңгелектерге",
+          "en": "Back at the wheels"
+        }
+      ],
+      "correct": [
+        0
+      ],
+      "explanation": {
+        "ru": "Линии и цветные метки нарисованы на поле, поэтому датчик смотрит вниз и близко к поверхности.",
+        "kk": "Сызықтар мен түрлі түсті белгілер алаңда салынған, сондықтан датчик төмен және бетке жақын қарайды.",
+        "en": "Lines and colour marks are on the field, so the sensor looks down, close to the surface."
+      },
+      "skill": "sensor-color"
+    },
+    {
+      "id": "first",
+      "type": "predict",
+      "title": {
+        "ru": "На каком цвете остановится?",
+        "kk": "Қай түсте тоқтайды?",
+        "en": "Which colour will it stop on?"
+      },
+      "question": {
+        "ru": "Робот едет, пока не увидит **синий**, и останавливается. Где он встанет?",
+        "kk": "Робот **көкті** көргенше жүріп, тоқтайды. Ол қай жерде тұрады?",
+        "en": "The robot drives until it sees **blue** and stops. Where will it stop?"
+      },
+      "field": {
+        "width": 1400,
+        "height": 400,
+        "start": {
+          "x": 150,
+          "y": 200,
+          "heading": 0
+        },
+        "border": true,
+        "zones": [
+          {
+            "id": "red",
+            "x": 450,
+            "y": 0,
+            "w": 60,
+            "h": 400,
+            "kind": "paint",
+            "color": "red"
+          },
+          {
+            "id": "blue",
+            "x": 650,
+            "y": 0,
+            "w": 60,
+            "h": 400,
+            "kind": "paint",
+            "color": "blue"
+          },
+          {
+            "id": "green",
+            "x": 900,
+            "y": 0,
+            "w": 60,
+            "h": 400,
+            "kind": "paint",
+            "color": "green"
+          }
+        ],
+        "points": [],
+        "walls": [],
+        "lines": []
+      },
+      "program": [
+        {
+          "op": "start_move",
+          "direction": "forward"
+        },
+        {
+          "op": "wait_until",
+          "condition": {
+            "sensor": "color",
+            "port": "D",
+            "color": "blue"
+          }
+        },
+        {
+          "op": "stop_move"
+        }
+      ],
+      "options": [
+        {
+          "label": {
+            "ru": "У красной полосы",
+            "kk": "Қызыл жолақ жанында",
+            "en": "At the red strip"
+          },
+          "steps": [
+            {
+              "op": "move",
+              "direction": "forward",
+              "value": 23,
+              "unit": "cm"
+            }
+          ]
+        },
+        {
+          "label": {
+            "ru": "У синей полосы",
+            "kk": "Көк жолақ жанында",
+            "en": "At the blue strip"
+          },
+          "steps": [
+            {
+              "op": "move",
+              "direction": "forward",
+              "value": 43,
+              "unit": "cm"
+            }
+          ]
+        },
+        {
+          "label": {
+            "ru": "У зелёной полосы",
+            "kk": "Жасыл жолақ жанында",
+            "en": "At the green strip"
+          },
+          "steps": [
+            {
+              "op": "move",
+              "direction": "forward",
+              "value": 68,
+              "unit": "cm"
+            }
+          ]
+        }
+      ],
+      "correct": 1,
+      "explanation": {
+        "ru": "Красная полоса — не синяя, робот проезжает её. Остановка — когда датчик наехал на синий.",
+        "kk": "Қызыл жолақ — көк емес, робот одан өтіп кетеді. Датчик көкке жеткенде тоқтайды.",
+        "en": "The red strip is not blue, so the robot passes it. It stops when the sensor reaches blue."
+      },
+      "skill": "sensor-color"
+    },
+    {
+      "id": "green",
+      "type": "code",
+      "title": {
+        "ru": "Найди зелёный",
+        "kk": "Жасылды тап",
+        "en": "Find green"
+      },
+      "task": {
+        "ru": "Поезжай вперёд и остановись, как только датчик цвета увидит **зелёную** полосу.",
+        "kk": "Алға жүріп, түс датчигі **жасыл** жолақты көрген бойда тоқта.",
+        "en": "Drive forward and stop as soon as the colour sensor sees the **green** strip."
+      },
+      "field": {
+        "width": 1400,
+        "height": 400,
+        "start": {
+          "x": 150,
+          "y": 200,
+          "heading": 0
+        },
+        "border": true,
+        "zones": [
+          {
+            "id": "red",
+            "x": 450,
+            "y": 0,
+            "w": 60,
+            "h": 400,
+            "kind": "paint",
+            "color": "red"
+          },
+          {
+            "id": "blue",
+            "x": 650,
+            "y": 0,
+            "w": 60,
+            "h": 400,
+            "kind": "paint",
+            "color": "blue"
+          },
+          {
+            "id": "green",
+            "x": 900,
+            "y": 0,
+            "w": 60,
+            "h": 400,
+            "kind": "paint",
+            "color": "green"
+          },
+          {
+            "id": "stop",
+            "x": 740,
+            "y": 50,
+            "w": 180,
+            "h": 300,
+            "kind": "target",
+            "label": {
+              "ru": "Остановка",
+              "kk": "Аялдама",
+              "en": "Stop"
+            }
+          }
+        ],
+        "points": [],
+        "walls": [],
+        "lines": []
+      },
+      "toolbox": [
+        "start_move",
+        "stop_move",
+        "wait_until",
+        "move"
+      ],
+      "start": [],
+      "checks": [
+        {
+          "type": "finishInZone",
+          "zone": "stop"
+        },
+        {
+          "type": "usesSensor",
+          "sensor": "color"
+        }
+      ],
+      "hints": [
+        {
+          "ru": "Начать движение → ждать, пока… → остановить движение.",
+          "kk": "Қозғалысты бастау → әзірге күту… → қозғалысты тоқтату.",
+          "en": "Start moving → wait until… → stop moving."
+        },
+        {
+          "ru": "В «ждать, пока» вставь «цвет зелёный».",
+          "kk": "«Әзірге күту» ішіне «түс жасыл» сал.",
+          "en": "Put “colour is green” into “wait until”."
+        },
+        {
+          "ru": "Начать движение; ждать, пока цвет зелёный; остановить.",
+          "kk": "Қозғалысты бастау; түс жасыл болғанша күту; тоқтату.",
+          "en": "Start moving; wait until green; stop."
+        }
+      ],
+      "reference": [
+        {
+          "op": "start_move",
+          "direction": "forward"
+        },
+        {
+          "op": "wait_until",
+          "condition": {
+            "sensor": "color",
+            "port": "D",
+            "color": "green"
+          }
+        },
+        {
+          "op": "stop_move"
+        }
+      ],
+      "skill": "sensor-color"
+    }
+  ]
+}

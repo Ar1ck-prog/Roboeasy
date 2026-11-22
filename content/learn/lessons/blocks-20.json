@@ -1,0 +1,409 @@
+{
+  "id": "blocks-20",
+  "track": "blocks",
+  "unit": "blocks-variables",
+  "minutes": 8,
+  "skills": [
+    "variables"
+  ],
+  "title": {
+    "ru": "Спираль из переменной",
+    "kk": "Айнымалыдан спираль",
+    "en": "A spiral from a variable"
+  },
+  "goal": {
+    "ru": "Сегодня ты нарисуешь спираль, меняя переменную в цикле.",
+    "kk": "Бүгін сен циклда айнымалыны өзгертіп, спираль саласың.",
+    "en": "Today you will draw a spiral by changing a variable in a loop."
+  },
+  "summary": {
+    "ru": "Теперь ты умеешь менять поведение робота на каждом повторе цикла.",
+    "kk": "Енді сен робот мінезін циклдың әр қайталауында өзгерте аласың.",
+    "en": "Now you can change the robot’s behaviour on every repeat of a loop."
+  },
+  "steps": [
+    {
+      "id": "grow",
+      "type": "theory",
+      "title": {
+        "ru": "Переменная растёт в цикле",
+        "kk": "Айнымалы циклда өседі",
+        "en": "A variable grows in a loop"
+      },
+      "body": {
+        "ru": "Если в цикле ехать на одно и то же расстояние, получится квадрат. А если каждый раз прибавлять к расстоянию 10 см — получится **спираль**!\n\nВ цикле: «вперёд на d см», «налево 90°», «изменить d на 10». Первая сторона 10 см, вторая 20, третья 30…",
+        "kk": "Циклда бірдей қашықтыққа жүрсең, шаршы шығады. Ал әр жолы қашықтыққа 10 см қоссаң — **спираль** шығады!\n\nЦиклда: «d см алға», «солға 90°», «d мәнін 10 өзгерту». Бірінші қабырға 10 см, екіншісі 20, үшіншісі 30…",
+        "en": "Driving the same distance in a loop gives a square. Add 10 cm to the distance each time and you get a **spiral**!\n\nIn the loop: “forward d cm”, “left 90°”, “change d by 10”. The first side is 10 cm, the second 20, the third 30…"
+      },
+      "illustration": "r-variable",
+      "example": [
+        {
+          "op": "set_var",
+          "name": "d",
+          "expr": {
+            "num": 10
+          }
+        },
+        {
+          "op": "repeat",
+          "times": 4,
+          "steps": [
+            {
+              "op": "move_expr",
+              "direction": "forward",
+              "expr": {
+                "var": "d"
+              },
+              "unit": "cm"
+            },
+            {
+              "op": "turn",
+              "direction": "left",
+              "degrees": 90
+            },
+            {
+              "op": "change_var",
+              "name": "d",
+              "expr": {
+                "num": 10
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "which",
+      "type": "predict",
+      "title": {
+        "ru": "Квадрат или спираль?",
+        "kk": "Шаршы ма, спираль ма?",
+        "en": "Square or spiral?"
+      },
+      "question": {
+        "ru": "Какой путь проедет робот по этой программе?",
+        "kk": "Робот осы бағдарлама бойынша қандай жолмен жүреді?",
+        "en": "Which path will the robot drive with this program?"
+      },
+      "field": {
+        "width": 1200,
+        "height": 1000,
+        "start": {
+          "x": 500,
+          "y": 500,
+          "heading": 0
+        },
+        "border": true,
+        "zones": [],
+        "points": [],
+        "walls": [],
+        "lines": []
+      },
+      "program": [
+        {
+          "op": "set_var",
+          "name": "d",
+          "expr": {
+            "num": 10
+          }
+        },
+        {
+          "op": "repeat",
+          "times": 4,
+          "steps": [
+            {
+              "op": "move_expr",
+              "direction": "forward",
+              "expr": {
+                "var": "d"
+              },
+              "unit": "cm"
+            },
+            {
+              "op": "turn",
+              "direction": "left",
+              "degrees": 90
+            },
+            {
+              "op": "change_var",
+              "name": "d",
+              "expr": {
+                "num": 10
+              }
+            }
+          ]
+        }
+      ],
+      "options": [
+        {
+          "label": {
+            "ru": "Квадрат 10 см",
+            "kk": "10 см шаршы",
+            "en": "A 10 cm square"
+          },
+          "steps": [
+            {
+              "op": "repeat",
+              "times": 4,
+              "steps": [
+                {
+                  "op": "move",
+                  "direction": "forward",
+                  "value": 10,
+                  "unit": "cm"
+                },
+                {
+                  "op": "turn",
+                  "direction": "left",
+                  "degrees": 90
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "label": {
+            "ru": "Спираль: 10, 20, 30, 40 см",
+            "kk": "Спираль: 10, 20, 30, 40 см",
+            "en": "Spiral: 10, 20, 30, 40 cm"
+          },
+          "steps": [
+            {
+              "op": "move",
+              "direction": "forward",
+              "value": 10,
+              "unit": "cm"
+            },
+            {
+              "op": "turn",
+              "direction": "left",
+              "degrees": 90
+            },
+            {
+              "op": "move",
+              "direction": "forward",
+              "value": 20,
+              "unit": "cm"
+            },
+            {
+              "op": "turn",
+              "direction": "left",
+              "degrees": 90
+            },
+            {
+              "op": "move",
+              "direction": "forward",
+              "value": 30,
+              "unit": "cm"
+            },
+            {
+              "op": "turn",
+              "direction": "left",
+              "degrees": 90
+            },
+            {
+              "op": "move",
+              "direction": "forward",
+              "value": 40,
+              "unit": "cm"
+            },
+            {
+              "op": "turn",
+              "direction": "left",
+              "degrees": 90
+            }
+          ]
+        },
+        {
+          "label": {
+            "ru": "Прямо 100 см",
+            "kk": "Тура 100 см",
+            "en": "Straight 100 cm"
+          },
+          "steps": [
+            {
+              "op": "move",
+              "direction": "forward",
+              "value": 100,
+              "unit": "cm"
+            }
+          ]
+        }
+      ],
+      "correct": 1,
+      "explanation": {
+        "ru": "d растёт после каждой стороны: 10, 20, 30, 40. Стороны становятся длиннее — это спираль.",
+        "kk": "d әр қабырғадан кейін өседі: 10, 20, 30, 40. Қабырғалар ұзарады — бұл спираль.",
+        "en": "d grows after every side: 10, 20, 30, 40. The sides get longer — a spiral."
+      },
+      "skill": "variables"
+    },
+    {
+      "id": "spiral",
+      "type": "code",
+      "title": {
+        "ru": "Спираль",
+        "kk": "Спираль",
+        "en": "Spiral"
+      },
+      "task": {
+        "ru": "Нарисуй спираль из 4 сторон: 10, 20, 30 и 40 см, поворачивая налево. Пройди через все флажки и используй переменную.",
+        "kk": "4 қабырғадан спираль сал: 10, 20, 30 және 40 см, солға бұрылып. Барлық жалаушалардан өтіп, айнымалыны қолдан.",
+        "en": "Draw a 4-side spiral: 10, 20, 30 and 40 cm, turning left. Pass every flag and use a variable."
+      },
+      "field": {
+        "width": 1200,
+        "height": 1000,
+        "start": {
+          "x": 500,
+          "y": 500,
+          "heading": 0
+        },
+        "border": true,
+        "zones": [],
+        "points": [
+          {
+            "id": "f1",
+            "x": 600,
+            "y": 700,
+            "r": 50,
+            "label": {
+              "ru": "Флажок 1",
+              "kk": "1-жалауша",
+              "en": "Flag 1"
+            }
+          },
+          {
+            "id": "f2",
+            "x": 300,
+            "y": 700,
+            "r": 50,
+            "label": {
+              "ru": "Флажок 2",
+              "kk": "2-жалауша",
+              "en": "Flag 2"
+            }
+          },
+          {
+            "id": "f3",
+            "x": 300,
+            "y": 300,
+            "r": 50,
+            "label": {
+              "ru": "Флажок 3",
+              "kk": "3-жалауша",
+              "en": "Flag 3"
+            }
+          }
+        ],
+        "walls": [],
+        "lines": []
+      },
+      "toolbox": [
+        "set_var",
+        "change_var",
+        "move_expr",
+        "turn",
+        "repeat",
+        "move"
+      ],
+      "start": [],
+      "checks": [
+        {
+          "type": "passPoints",
+          "points": [
+            "f1",
+            "f2",
+            "f3"
+          ],
+          "ordered": true
+        },
+        {
+          "type": "usesOp",
+          "op": "change_var",
+          "min": 1
+        },
+        {
+          "type": "maxBlocks",
+          "max": 6
+        }
+      ],
+      "hints": [
+        {
+          "ru": "Начни с d = 10.",
+          "kk": "d = 10-нан баста.",
+          "en": "Start with d = 10."
+        },
+        {
+          "ru": "В цикле: вперёд на d, налево 90°, изменить d на 10.",
+          "kk": "Циклда: d алға, солға 90°, d мәнін 10 өзгерту.",
+          "en": "In the loop: forward d, left 90°, change d by 10."
+        },
+        {
+          "ru": "Повторить 4 раза.",
+          "kk": "4 рет қайталау.",
+          "en": "Repeat 4 times."
+        }
+      ],
+      "reference": [
+        {
+          "op": "set_var",
+          "name": "d",
+          "expr": {
+            "num": 10
+          }
+        },
+        {
+          "op": "repeat",
+          "times": 4,
+          "steps": [
+            {
+              "op": "move_expr",
+              "direction": "forward",
+              "expr": {
+                "var": "d"
+              },
+              "unit": "cm"
+            },
+            {
+              "op": "turn",
+              "direction": "left",
+              "degrees": 90
+            },
+            {
+              "op": "change_var",
+              "name": "d",
+              "expr": {
+                "num": 10
+              }
+            }
+          ]
+        }
+      ],
+      "skill": "variables"
+    },
+    {
+      "id": "next",
+      "type": "quiz",
+      "kind": "number",
+      "question": {
+        "ru": "Спираль начинается с 15 см и растёт на 5 см. Какой длины будет четвёртая сторона?",
+        "kk": "Спираль 15 см-ден басталып, 5 см-ге өседі. Төртінші қабырғаның ұзындығы қандай?",
+        "en": "A spiral starts at 15 cm and grows by 5 cm. How long is the fourth side?"
+      },
+      "answer": 30,
+      "tolerance": 0,
+      "explanation": {
+        "ru": "15 → 20 → 25 → 30. Четвёртая сторона 30 см.",
+        "kk": "15 → 20 → 25 → 30. Төртінші қабырға 30 см.",
+        "en": "15 → 20 → 25 → 30. The fourth side is 30 cm."
+      },
+      "unit": {
+        "ru": "см",
+        "kk": "см",
+        "en": "cm"
+      },
+      "skill": "variables"
+    }
+  ]
+}

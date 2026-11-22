@@ -1,0 +1,290 @@
+{
+  "id": "sensors-14",
+  "track": "sensors",
+  "unit": "sensors-gyro",
+  "minutes": 8,
+  "skills": [
+    "gyro"
+  ],
+  "title": {
+    "ru": "Точный поворот",
+    "kk": "Дәл бұрылыс",
+    "en": "A precise turn"
+  },
+  "goal": {
+    "ru": "Сегодня робот проедет маршрут с поворотами по гироскопу.",
+    "kk": "Бүгін робот гироскоп бойынша бұрылыстары бар маршрутпен жүреді.",
+    "en": "Today the robot will drive a route with gyro turns."
+  },
+  "summary": {
+    "ru": "Теперь ты умеешь строить маршрут из прямых участков и поворотов по гироскопу.",
+    "kk": "Енді сен маршрутты түзу бөліктер мен гироскоп бұрылыстарынан құра аласың.",
+    "en": "Now you can build a route from straight parts and gyro turns."
+  },
+  "steps": [
+    {
+      "id": "precise",
+      "type": "theory",
+      "title": {
+        "ru": "Почему гироскоп точнее",
+        "kk": "Неге гироскоп дәлірек",
+        "en": "Why the gyro is more precise"
+      },
+      "body": {
+        "ru": "Можно повернуть «по колёсам»: моторы крутятся на нужное число градусов. Но если колесо проскользнёт, робот повернётся меньше.\n\nГироскоп меряет сам поворот робота, а не колёс. Поэтому повороты по гироскопу точнее.\n\nСекрет точности — **медленный** поворот: робот не проскакивает нужный угол.",
+        "kk": "«Дөңгелектер бойынша» бұруға болады: моторлар керекті градусқа айналады. Бірақ дөңгелек тайып кетсе, робот азырақ бұрылады.\n\nГироскоп дөңгелектің емес, роботтың өз бұрылысын өлшейді. Сондықтан гироскоппен бұрылыс дәлірек.\n\nДәлдіктің құпиясы — **баяу** бұрылу: робот керекті бұрыштан асып кетпейді.",
+        "en": "You can turn “by the wheels”: the motors spin a set number of degrees. But if a wheel slips, the robot turns less.\n\nThe gyro measures the robot’s own turn, not the wheels’. So gyro turns are more precise.\n\nThe secret of precision is a **slow** turn: the robot does not overshoot the angle."
+      },
+      "illustration": "r-gyro"
+    },
+    {
+      "id": "half",
+      "type": "predict",
+      "title": {
+        "ru": "Куда смотрит робот?",
+        "kk": "Робот қайда қарайды?",
+        "en": "Where does the robot face?"
+      },
+      "question": {
+        "ru": "Робот крутится налево, пока угол не станет меньше −45°, потом едет 30 см. Какой путь?",
+        "kk": "Робот бұрыш −45°-тан аз болғанша солға айналып, содан кейін 30 см жүреді. Қандай жол?",
+        "en": "The robot spins left until the angle is below −45°, then drives 30 cm. Which path?"
+      },
+      "field": {
+        "width": 1000,
+        "height": 900,
+        "start": {
+          "x": 300,
+          "y": 300,
+          "heading": 0
+        },
+        "border": true,
+        "zones": [],
+        "points": [],
+        "walls": [],
+        "lines": []
+      },
+      "program": [
+        {
+          "op": "reset_yaw"
+        },
+        {
+          "op": "start_move",
+          "direction": "left"
+        },
+        {
+          "op": "wait_until",
+          "condition": {
+            "sensor": "gyro",
+            "axis": "yaw",
+            "comparator": "<",
+            "value": -45
+          }
+        },
+        {
+          "op": "stop_move"
+        },
+        {
+          "op": "move",
+          "direction": "forward",
+          "value": 30,
+          "unit": "cm"
+        }
+      ],
+      "options": [
+        {
+          "label": {
+            "ru": "Наискосок вверх-вправо",
+            "kk": "Қиғаш жоғары-оңға",
+            "en": "Diagonally up and right"
+          },
+          "steps": [
+            {
+              "op": "reset_yaw"
+            },
+            {
+              "op": "start_move",
+              "direction": "left"
+            },
+            {
+              "op": "wait_until",
+              "condition": {
+                "sensor": "gyro",
+                "axis": "yaw",
+                "comparator": "<",
+                "value": -45
+              }
+            },
+            {
+              "op": "stop_move"
+            },
+            {
+              "op": "move",
+              "direction": "forward",
+              "value": 30,
+              "unit": "cm"
+            }
+          ]
+        },
+        {
+          "label": {
+            "ru": "Прямо вверх",
+            "kk": "Тура жоғары",
+            "en": "Straight up"
+          },
+          "steps": [
+            {
+              "op": "turn",
+              "direction": "left",
+              "degrees": 90
+            },
+            {
+              "op": "move",
+              "direction": "forward",
+              "value": 30,
+              "unit": "cm"
+            }
+          ]
+        },
+        {
+          "label": {
+            "ru": "Прямо вправо",
+            "kk": "Тура оңға",
+            "en": "Straight right"
+          },
+          "steps": [
+            {
+              "op": "move",
+              "direction": "forward",
+              "value": 30,
+              "unit": "cm"
+            }
+          ]
+        }
+      ],
+      "correct": 0,
+      "explanation": {
+        "ru": "−45° — это пол-оборота от прямого угла налево: робот едет по диагонали.",
+        "kk": "−45° — солға тік бұрыштың жартысы: робот диагональ бойымен жүреді.",
+        "en": "−45° is half a right angle to the left: the robot drives diagonally."
+      },
+      "skill": "gyro"
+    },
+    {
+      "id": "l-route",
+      "type": "code",
+      "title": {
+        "ru": "Маршрут буквой Г",
+        "kk": "Г әрпі тәрізді маршрут",
+        "en": "An L-shaped route"
+      },
+      "task": {
+        "ru": "Проедь 40 см, поверни налево **по гироскопу** (сброс угла, вращение, ждать < −89°) и проедь ещё 30 см до флажка.",
+        "kk": "40 см жүр, **гироскоп бойынша** солға бұрыл (бұрышты нөлдеу, айналу, < −89° күту) және жалаушаға дейін тағы 30 см жүр.",
+        "en": "Drive 40 cm, turn left **by gyro** (reset, spin, wait < −89°) and drive another 30 cm to the flag."
+      },
+      "field": {
+        "width": 1200,
+        "height": 900,
+        "start": {
+          "x": 200,
+          "y": 200,
+          "heading": 0
+        },
+        "border": true,
+        "zones": [
+          {
+            "id": "flag",
+            "x": 520,
+            "y": 400,
+            "w": 160,
+            "h": 160,
+            "kind": "target",
+            "label": {
+              "ru": "Флажок",
+              "kk": "Жалауша",
+              "en": "Flag"
+            }
+          }
+        ],
+        "points": [],
+        "walls": [],
+        "lines": []
+      },
+      "toolbox": [
+        "move",
+        "reset_yaw",
+        "start_move",
+        "stop_move",
+        "wait_until"
+      ],
+      "start": [],
+      "checks": [
+        {
+          "type": "finishInZone",
+          "zone": "flag"
+        },
+        {
+          "type": "usesSensor",
+          "sensor": "gyro"
+        },
+        {
+          "type": "heading",
+          "degrees": 90,
+          "tolerance": 5
+        }
+      ],
+      "hints": [
+        {
+          "ru": "Поворот: сбросить угол, начать движение влево, ждать…",
+          "kk": "Бұрылыс: бұрышты нөлдеу, солға қозғалысты бастау, күту…",
+          "en": "The turn: reset, start moving left, wait…"
+        },
+        {
+          "ru": "Налево — угол отрицательный: «поворот < −89°».",
+          "kk": "Солға — бұрыш теріс: «бұрылу < −89°».",
+          "en": "Left means negative: “yaw < −89°”."
+        },
+        {
+          "ru": "Вперёд 40; сброс; влево; ждать < −89°; стоп; вперёд 30.",
+          "kk": "40 алға; нөлдеу; солға; < −89° күту; тоқта; 30 алға.",
+          "en": "Forward 40; reset; left; wait < −89°; stop; forward 30."
+        }
+      ],
+      "reference": [
+        {
+          "op": "move",
+          "direction": "forward",
+          "value": 40,
+          "unit": "cm"
+        },
+        {
+          "op": "reset_yaw"
+        },
+        {
+          "op": "start_move",
+          "direction": "left"
+        },
+        {
+          "op": "wait_until",
+          "condition": {
+            "sensor": "gyro",
+            "axis": "yaw",
+            "comparator": "<",
+            "value": -89
+          }
+        },
+        {
+          "op": "stop_move"
+        },
+        {
+          "op": "move",
+          "direction": "forward",
+          "value": 30,
+          "unit": "cm"
+        }
+      ],
+      "skill": "gyro"
+    }
+  ]
+}
