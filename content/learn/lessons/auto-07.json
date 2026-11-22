@@ -1,0 +1,422 @@
+{
+  "id": "auto-07",
+  "track": "autonomy",
+  "unit": "auto-sort",
+  "minutes": 8,
+  "skills": [
+    "conditions",
+    "sensor-color"
+  ],
+  "title": {
+    "ru": "Красное налево",
+    "kk": "Қызыл солға",
+    "en": "Red goes left"
+  },
+  "goal": {
+    "ru": "Сегодня робот станет сортировщиком на складе.",
+    "kk": "Бүгін робот қоймада сұрыптаушы болады.",
+    "en": "Today the robot becomes a sorter in a warehouse."
+  },
+  "summary": {
+    "ru": "Теперь ты умеешь сортировать по цвету: одна программа — разные действия.",
+    "kk": "Енді сен түс бойынша сұрыптай аласың: бір бағдарлама — әр түрлі әрекеттер.",
+    "en": "Now you can sort by colour: one program — different actions."
+  },
+  "steps": [
+    {
+      "id": "sorter",
+      "type": "theory",
+      "title": {
+        "ru": "Робот-сортировщик",
+        "kk": "Робот-сұрыптаушы",
+        "en": "The sorter robot"
+      },
+      "body": {
+        "ru": "На складах роботы раскладывают посылки по адресам. Наш робот проще: смотрит на цвет ящика и везёт его в нужную корзину.\n\n**Если** ящик красный — показать стрелку влево и повернуть налево. **Иначе** — стрелку вправо и направо. Стрелка на экране — как поворотник: всем видно решение робота.",
+        "kk": "Қоймаларда роботтар сәлемдемелерді мекенжайлар бойынша орналастырады. Біздің робот қарапайымырақ: жәшіктің түсіне қарап, оны керекті себетке апарады.\n\n**Егер** жәшік қызыл болса — солға нұсқарды көрсетіп, солға бұрылу. **Әйтпесе** — оңға нұсқар және оңға. Экрандағы нұсқар — бұрылыс шамы сияқты: роботтың шешімін бәрі көреді.",
+        "en": "In warehouses robots sort parcels by address. Our robot is simpler: it looks at the box colour and takes it to the right bin.\n\n**If** the box is red — show a left arrow and turn left. **Else** — a right arrow and turn right. The arrow on the screen is like an indicator: everyone sees the robot’s decision."
+      },
+      "illustration": "r-sort",
+      "example": [
+        {
+          "op": "move",
+          "direction": "forward",
+          "value": 40,
+          "unit": "cm"
+        },
+        {
+          "op": "if",
+          "condition": {
+            "sensor": "color",
+            "port": "D",
+            "color": "red"
+          },
+          "then": [
+            {
+              "op": "show_image",
+              "image": "arrow_left"
+            },
+            {
+              "op": "turn",
+              "direction": "left",
+              "degrees": 90
+            }
+          ],
+          "else": [
+            {
+              "op": "show_image",
+              "image": "arrow_right"
+            },
+            {
+              "op": "turn",
+              "direction": "right",
+              "degrees": 90
+            }
+          ]
+        },
+        {
+          "op": "move",
+          "direction": "forward",
+          "value": 30,
+          "unit": "cm"
+        }
+      ]
+    },
+    {
+      "id": "sort-red",
+      "type": "code",
+      "title": {
+        "ru": "Красный ящик",
+        "kk": "Қызыл жәшік",
+        "en": "A red box"
+      },
+      "task": {
+        "ru": "Проедь 40 см до ящика. Если он красный — покажи стрелку влево и вези налево в корзину «Красные», иначе — стрелку вправо и направо. Потом ещё 30 см. Сейчас ящик красный.",
+        "kk": "Жәшікке дейін 40 см жүр. Егер ол қызыл болса — солға нұсқарды көрсетіп, солға «Қызылдар» себетіне апар, әйтпесе — оңға нұсқар және оңға. Содан кейін тағы 30 см. Қазір жәшік қызыл.",
+        "en": "Drive 40 cm to the box. If it is red, show a left arrow and take it left to the “Red bin”, else a right arrow and go right. Then 30 cm more. The box is red now."
+      },
+      "field": {
+        "width": 1400,
+        "height": 1000,
+        "start": {
+          "x": 150,
+          "y": 500,
+          "heading": 0
+        },
+        "border": true,
+        "zones": [
+          {
+            "id": "box",
+            "x": 560,
+            "y": 440,
+            "w": 120,
+            "h": 120,
+            "kind": "paint",
+            "color": "red"
+          },
+          {
+            "id": "red-bin",
+            "x": 480,
+            "y": 760,
+            "w": 220,
+            "h": 200,
+            "kind": "target",
+            "label": {
+              "ru": "Красные",
+              "kk": "Қызылдар",
+              "en": "Red bin"
+            }
+          },
+          {
+            "id": "other-bin",
+            "x": 480,
+            "y": 40,
+            "w": 220,
+            "h": 200,
+            "kind": "target",
+            "label": {
+              "ru": "Остальные",
+              "kk": "Қалғандары",
+              "en": "Other bin"
+            }
+          }
+        ],
+        "points": [],
+        "walls": [],
+        "lines": []
+      },
+      "toolbox": [
+        "move",
+        "turn",
+        "if",
+        "show_image"
+      ],
+      "start": [],
+      "checks": [
+        {
+          "type": "finishInZone",
+          "zone": "red-bin"
+        },
+        {
+          "type": "displayed",
+          "image": "arrow_left"
+        },
+        {
+          "type": "usesOp",
+          "op": "if",
+          "min": 1
+        },
+        {
+          "type": "usesSensor",
+          "sensor": "color"
+        }
+      ],
+      "hints": [
+        {
+          "ru": "Нужен «если… иначе» с цветом «красный».",
+          "kk": "«Қызыл» түсі бар «егер… әйтпесе» керек.",
+          "en": "Use “if… else” with the colour red."
+        },
+        {
+          "ru": "В каждой ветке: показать стрелку и повернуть.",
+          "kk": "Әр тармақта: нұсқар көрсету және бұрылу.",
+          "en": "In each branch: show an arrow and turn."
+        },
+        {
+          "ru": "Вперёд 40; если красный: стрелка влево, налево 90°; иначе: стрелка вправо, направо 90°; вперёд 30.",
+          "kk": "40 алға; егер қызыл: солға нұсқар, солға 90°; әйтпесе: оңға нұсқар, оңға 90°; 30 алға.",
+          "en": "Forward 40; if red: left arrow, left 90°; else: right arrow, right 90°; forward 30."
+        }
+      ],
+      "reference": [
+        {
+          "op": "move",
+          "direction": "forward",
+          "value": 40,
+          "unit": "cm"
+        },
+        {
+          "op": "if",
+          "condition": {
+            "sensor": "color",
+            "port": "D",
+            "color": "red"
+          },
+          "then": [
+            {
+              "op": "show_image",
+              "image": "arrow_left"
+            },
+            {
+              "op": "turn",
+              "direction": "left",
+              "degrees": 90
+            }
+          ],
+          "else": [
+            {
+              "op": "show_image",
+              "image": "arrow_right"
+            },
+            {
+              "op": "turn",
+              "direction": "right",
+              "degrees": 90
+            }
+          ]
+        },
+        {
+          "op": "move",
+          "direction": "forward",
+          "value": 30,
+          "unit": "cm"
+        }
+      ],
+      "skill": "conditions"
+    },
+    {
+      "id": "blue",
+      "type": "predict",
+      "title": {
+        "ru": "А синий ящик?",
+        "kk": "Ал көк жәшік ше?",
+        "en": "And a blue box?"
+      },
+      "question": {
+        "ru": "Та же программа, но ящик синий. Куда поедет робот?",
+        "kk": "Сол бағдарлама, бірақ жәшік көк. Робот қайда жүреді?",
+        "en": "The same program, but the box is blue. Where will the robot go?"
+      },
+      "field": {
+        "width": 1400,
+        "height": 1000,
+        "start": {
+          "x": 150,
+          "y": 500,
+          "heading": 0
+        },
+        "border": true,
+        "zones": [
+          {
+            "id": "box",
+            "x": 560,
+            "y": 440,
+            "w": 120,
+            "h": 120,
+            "kind": "paint",
+            "color": "blue"
+          },
+          {
+            "id": "red-bin",
+            "x": 480,
+            "y": 760,
+            "w": 220,
+            "h": 200,
+            "kind": "target",
+            "label": {
+              "ru": "Красные",
+              "kk": "Қызылдар",
+              "en": "Red bin"
+            }
+          },
+          {
+            "id": "other-bin",
+            "x": 480,
+            "y": 40,
+            "w": 220,
+            "h": 200,
+            "kind": "target",
+            "label": {
+              "ru": "Остальные",
+              "kk": "Қалғандары",
+              "en": "Other bin"
+            }
+          }
+        ],
+        "points": [],
+        "walls": [],
+        "lines": []
+      },
+      "program": [
+        {
+          "op": "move",
+          "direction": "forward",
+          "value": 40,
+          "unit": "cm"
+        },
+        {
+          "op": "if",
+          "condition": {
+            "sensor": "color",
+            "port": "D",
+            "color": "red"
+          },
+          "then": [
+            {
+              "op": "show_image",
+              "image": "arrow_left"
+            },
+            {
+              "op": "turn",
+              "direction": "left",
+              "degrees": 90
+            }
+          ],
+          "else": [
+            {
+              "op": "show_image",
+              "image": "arrow_right"
+            },
+            {
+              "op": "turn",
+              "direction": "right",
+              "degrees": 90
+            }
+          ]
+        },
+        {
+          "op": "move",
+          "direction": "forward",
+          "value": 30,
+          "unit": "cm"
+        }
+      ],
+      "options": [
+        {
+          "label": {
+            "ru": "В корзину «Красные»",
+            "kk": "«Қызылдар» себетіне",
+            "en": "To the red bin"
+          },
+          "steps": [
+            {
+              "op": "move",
+              "direction": "forward",
+              "value": 40,
+              "unit": "cm"
+            },
+            {
+              "op": "turn",
+              "direction": "left",
+              "degrees": 90
+            },
+            {
+              "op": "move",
+              "direction": "forward",
+              "value": 30,
+              "unit": "cm"
+            }
+          ]
+        },
+        {
+          "label": {
+            "ru": "В корзину «Остальные»",
+            "kk": "«Қалғандары» себетіне",
+            "en": "To the other bin"
+          },
+          "steps": [
+            {
+              "op": "move",
+              "direction": "forward",
+              "value": 40,
+              "unit": "cm"
+            },
+            {
+              "op": "turn",
+              "direction": "right",
+              "degrees": 90
+            },
+            {
+              "op": "move",
+              "direction": "forward",
+              "value": 30,
+              "unit": "cm"
+            }
+          ]
+        },
+        {
+          "label": {
+            "ru": "Прямо",
+            "kk": "Тура",
+            "en": "Straight"
+          },
+          "steps": [
+            {
+              "op": "move",
+              "direction": "forward",
+              "value": 70,
+              "unit": "cm"
+            }
+          ]
+        }
+      ],
+      "correct": 1,
+      "explanation": {
+        "ru": "Синий — не красный, выполняется «иначе»: направо в корзину «Остальные».",
+        "kk": "Көк — қызыл емес, «әйтпесе» орындалады: оңға, «Қалғандары» себетіне.",
+        "en": "Blue is not red, so “else” runs: right to the other bin."
+      },
+      "skill": "conditions"
+    }
+  ]
+}

@@ -280,6 +280,8 @@ const widget = z.discriminatedUnion('widget', [
   z.object({ ...widgetBase, widget: z.literal('lever') }),
   /** Brace a frame with beams so it stops wobbling when pushed. */
   z.object({ ...widgetBase, widget: z.literal('brace') }),
+  /** Pick the lane spacing of a zigzag search so the sensor sees everything without wasted lanes. */
+  z.object({ ...widgetBase, widget: z.literal('sweep'), sensorCm: z.number().int().positive().multipleOf(5) }),
 ])
 export type WidgetKind = z.infer<typeof widget>['widget']
 

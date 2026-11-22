@@ -1,0 +1,241 @@
+{
+  "id": "auto-02",
+  "track": "autonomy",
+  "unit": "auto-maze",
+  "minutes": 9,
+  "skills": [
+    "sensor-distance",
+    "conditions"
+  ],
+  "title": {
+    "ru": "Спиральный лабиринт",
+    "kk": "Спираль лабиринт",
+    "en": "The spiral maze"
+  },
+  "goal": {
+    "ru": "Сегодня робот пройдёт лабиринт-спираль одной короткой программой.",
+    "kk": "Бүгін робот спираль лабиринтті бір қысқа бағдарламамен өтеді.",
+    "en": "Today the robot will solve a spiral maze with one short program."
+  },
+  "summary": {
+    "ru": "Теперь ты соединяешь цикл и датчик: одна и та же реакция повторяется на каждом повороте.",
+    "kk": "Енді сен цикл мен датчикті біріктіресің: әр бұрылыста бір реакция қайталанады.",
+    "en": "Now you combine a loop with a sensor: the same reaction repeats at every turn."
+  },
+  "steps": [
+    {
+      "id": "loop",
+      "type": "theory",
+      "title": {
+        "ru": "Повторяем реакцию",
+        "kk": "Реакцияны қайталаймыз",
+        "en": "Repeat the reaction"
+      },
+      "body": {
+        "ru": "В спирали все повороты в одну сторону. Значит, на каждом углу робот делает одно и то же: **доехать до стены → повернуть налево**.\n\nПоложи эту реакцию в цикл — и робот пройдёт спираль любого размера. Коридоры могут быть короткими или длинными: датчик сам скажет, когда поворачивать.",
+        "kk": "Спиральда барлық бұрылыс бір жаққа. Демек, әр бұрышта робот бір нәрсені істейді: **қабырғаға дейін жету → солға бұрылу**.\n\nОсы реакцияны циклға сал — және робот кез келген өлшемдегі спиральды өтеді. Дәліздер қысқа немесе ұзын болуы мүмкін: қашан бұрылу керегін датчик өзі айтады.",
+        "en": "In a spiral every turn goes the same way. So at each corner the robot does the same thing: **drive to the wall → turn left**.\n\nPut that reaction in a loop and the robot solves a spiral of any size. Corridors can be short or long: the sensor tells it when to turn."
+      },
+      "illustration": "r-maze",
+      "example": [
+        {
+          "op": "repeat",
+          "times": 4,
+          "steps": [
+            {
+              "op": "start_move",
+              "direction": "forward"
+            },
+            {
+              "op": "wait_until",
+              "condition": {
+                "sensor": "distance",
+                "port": "C",
+                "comparator": "<",
+                "value": 15,
+                "unit": "cm"
+              }
+            },
+            {
+              "op": "stop_move"
+            },
+            {
+              "op": "turn",
+              "direction": "left",
+              "degrees": 90
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "spiral",
+      "type": "code",
+      "title": {
+        "ru": "В центр спирали",
+        "kk": "Спираль ортасына",
+        "en": "To the centre of the spiral"
+      },
+      "task": {
+        "ru": "Доберись до центра спирали: четыре раза доехать до стены (меньше 15 см) и повернуть налево. Используй цикл, не больше 6 блоков.",
+        "kk": "Спираль ортасына жет: төрт рет қабырғаға дейін жетіп (15 см-ден аз), солға бұрылу. Циклды қолдан, 6 блоктан артық емес.",
+        "en": "Reach the centre of the spiral: four times drive to the wall (closer than 15 cm) and turn left. Use a loop, at most 6 blocks."
+      },
+      "field": {
+        "width": 1400,
+        "height": 1000,
+        "start": {
+          "x": 150,
+          "y": 150,
+          "heading": 0
+        },
+        "border": true,
+        "zones": [
+          {
+            "id": "centre",
+            "x": 560,
+            "y": 520,
+            "w": 240,
+            "h": 220,
+            "kind": "target",
+            "label": {
+              "ru": "Центр",
+              "kk": "Орта",
+              "en": "Centre"
+            }
+          }
+        ],
+        "points": [],
+        "walls": [
+          {
+            "x": 400,
+            "y": 400,
+            "w": 40,
+            "h": 600
+          },
+          {
+            "x": 400,
+            "y": 360,
+            "w": 600,
+            "h": 40
+          }
+        ],
+        "lines": []
+      },
+      "toolbox": [
+        "start_move",
+        "stop_move",
+        "wait_until",
+        "turn",
+        "repeat"
+      ],
+      "start": [],
+      "checks": [
+        {
+          "type": "finishInZone",
+          "zone": "centre"
+        },
+        {
+          "type": "usesOp",
+          "op": "repeat",
+          "min": 1
+        },
+        {
+          "type": "maxBlocks",
+          "max": 6
+        },
+        {
+          "type": "usesSensor",
+          "sensor": "distance"
+        },
+        {
+          "type": "noCollision"
+        }
+      ],
+      "hints": [
+        {
+          "ru": "Тело цикла: начать, ждать < 15, стоп, налево 90°.",
+          "kk": "Цикл денесі: бастау, < 15 күту, тоқта, солға 90°.",
+          "en": "Loop body: start, wait < 15, stop, left 90°."
+        },
+        {
+          "ru": "Сколько углов до центра?",
+          "kk": "Ортаға дейін неше бұрыш?",
+          "en": "How many corners to the centre?"
+        },
+        {
+          "ru": "Повторить 4 раза.",
+          "kk": "4 рет қайталау.",
+          "en": "Repeat 4 times."
+        }
+      ],
+      "reference": [
+        {
+          "op": "repeat",
+          "times": 4,
+          "steps": [
+            {
+              "op": "start_move",
+              "direction": "forward"
+            },
+            {
+              "op": "wait_until",
+              "condition": {
+                "sensor": "distance",
+                "port": "C",
+                "comparator": "<",
+                "value": 15,
+                "unit": "cm"
+              }
+            },
+            {
+              "op": "stop_move"
+            },
+            {
+              "op": "turn",
+              "direction": "left",
+              "degrees": 90
+            }
+          ]
+        }
+      ],
+      "skill": "sensor-distance"
+    },
+    {
+      "id": "bigger",
+      "type": "quiz",
+      "kind": "choice",
+      "question": {
+        "ru": "Спираль сделали вдвое больше. Что поменять в программе?",
+        "kk": "Спиральды екі есе үлкен етті. Бағдарламада нені өзгерту керек?",
+        "en": "The spiral is now twice as big. What changes in the program?"
+      },
+      "options": [
+        {
+          "ru": "Ничего: датчик сам найдёт каждую стену",
+          "kk": "Ештеңе: әр қабырғаны датчик өзі табады",
+          "en": "Nothing: the sensor finds every wall itself"
+        },
+        {
+          "ru": "Все расстояния",
+          "kk": "Барлық қашықтықтар",
+          "en": "Every distance"
+        },
+        {
+          "ru": "Направление поворотов",
+          "kk": "Бұрылыстардың бағыты",
+          "en": "The turn direction"
+        }
+      ],
+      "correct": [
+        0
+      ],
+      "explanation": {
+        "ru": "Программа описывает поведение, а не размеры, — поэтому работает в любой спирали с тем же числом углов.",
+        "kk": "Бағдарлама өлшемдерді емес, мінез-құлықты сипаттайды — сондықтан бұрыш саны бірдей кез келген спиральда жұмыс істейді.",
+        "en": "The program describes behaviour, not sizes — so it works in any spiral with the same number of corners."
+      },
+      "skill": "conditions"
+    }
+  ]
+}

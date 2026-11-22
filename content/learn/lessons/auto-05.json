@@ -1,0 +1,224 @@
+{
+  "id": "auto-05",
+  "track": "autonomy",
+  "unit": "auto-search",
+  "minutes": 9,
+  "skills": [
+    "loops",
+    "sensor-color"
+  ],
+  "title": {
+    "ru": "Найди метку",
+    "kk": "Белгіні тап",
+    "en": "Find the mark"
+  },
+  "goal": {
+    "ru": "Сегодня робот обыщет поле и сам найдёт красную метку.",
+    "kk": "Бүгін робот алаңды тінтіп, қызыл белгіні өзі табады.",
+    "en": "Today the robot will search the field and find the red mark by itself."
+  },
+  "summary": {
+    "ru": "Теперь ты соединяешь змейку поиска и датчик цвета.",
+    "kk": "Енді сен іздеу жыланы мен түс датчигін біріктіресің.",
+    "en": "Now you combine the search zigzag with the colour sensor."
+  },
+  "steps": [
+    {
+      "id": "plan",
+      "type": "theory",
+      "title": {
+        "ru": "Поиск по плану",
+        "kk": "Жоспар бойынша іздеу",
+        "en": "Searching by plan"
+      },
+      "body": {
+        "ru": "На первом проходе метки нет — робот доезжает до стены. Тогда он **сдвигается** на следующую полосу и едет обратно, пока датчик цвета не увидит красный.\n\nЭто два приёма вместе: «доехать до стены» по датчику расстояния и «ждать, пока цвет красный» по датчику цвета.",
+        "kk": "Бірінші өтуде белгі жоқ — робот қабырғаға жетеді. Сонда ол келесі жолаққа **жылжиды** және түс датчигі қызылды көргенше кері жүреді.\n\nБұл бірге екі тәсіл: қашықтық датчигімен «қабырғаға жету» және түс датчигімен «түс қызыл болғанша күту».",
+        "en": "On the first pass there is no mark — the robot reaches the wall. Then it **shifts** to the next strip and drives back until the colour sensor sees red.\n\nThese are two tricks together: “drive to the wall” with the distance sensor and “wait until red” with the colour sensor."
+      },
+      "illustration": "r-search"
+    },
+    {
+      "id": "find",
+      "type": "code",
+      "title": {
+        "ru": "Красная метка",
+        "kk": "Қызыл белгі",
+        "en": "The red mark"
+      },
+      "task": {
+        "ru": "Проедь первую полосу до стены (меньше 15 см), повернись налево, сдвинься на 25 см, снова налево и езжай, пока не увидишь **красный**. Остановись на метке.",
+        "kk": "Бірінші жолақты қабырғаға дейін жүр (15 см-ден аз), солға бұрыл, 25 см жылжы, қайтадан солға бұрылып, **қызылды** көргенше жүр. Белгіде тоқта.",
+        "en": "Drive the first strip to the wall (closer than 15 cm), turn left, shift 25 cm, turn left again and drive until you see **red**. Stop on the mark."
+      },
+      "field": {
+        "width": 1400,
+        "height": 700,
+        "start": {
+          "x": 150,
+          "y": 150,
+          "heading": 0
+        },
+        "border": true,
+        "zones": [
+          {
+            "id": "red",
+            "x": 500,
+            "y": 340,
+            "w": 80,
+            "h": 120,
+            "kind": "paint",
+            "color": "red"
+          },
+          {
+            "id": "mark",
+            "x": 560,
+            "y": 300,
+            "w": 200,
+            "h": 200,
+            "kind": "target",
+            "label": {
+              "ru": "Метка",
+              "kk": "Белгі",
+              "en": "Mark"
+            }
+          }
+        ],
+        "points": [],
+        "walls": [],
+        "lines": []
+      },
+      "toolbox": [
+        "start_move",
+        "stop_move",
+        "wait_until",
+        "turn",
+        "move"
+      ],
+      "start": [],
+      "checks": [
+        {
+          "type": "finishInZone",
+          "zone": "mark"
+        },
+        {
+          "type": "usesSensor",
+          "sensor": "color"
+        },
+        {
+          "type": "usesSensor",
+          "sensor": "distance"
+        },
+        {
+          "type": "noCollision"
+        }
+      ],
+      "hints": [
+        {
+          "ru": "Первая полоса: начать, ждать < 15 см, стоп.",
+          "kk": "Бірінші жолақ: бастау, < 15 см күту, тоқта.",
+          "en": "First strip: start, wait < 15 cm, stop."
+        },
+        {
+          "ru": "Сдвиг: налево 90°, вперёд 25, налево 90°.",
+          "kk": "Жылжу: солға 90°, 25 алға, солға 90°.",
+          "en": "Shift: left 90°, forward 25, left 90°."
+        },
+        {
+          "ru": "Вторая полоса: начать, ждать красный, стоп.",
+          "kk": "Екінші жолақ: бастау, қызылды күту, тоқта.",
+          "en": "Second strip: start, wait for red, stop."
+        }
+      ],
+      "reference": [
+        {
+          "op": "start_move",
+          "direction": "forward"
+        },
+        {
+          "op": "wait_until",
+          "condition": {
+            "sensor": "distance",
+            "port": "C",
+            "comparator": "<",
+            "value": 15,
+            "unit": "cm"
+          }
+        },
+        {
+          "op": "stop_move"
+        },
+        {
+          "op": "turn",
+          "direction": "left",
+          "degrees": 90
+        },
+        {
+          "op": "move",
+          "direction": "forward",
+          "value": 25,
+          "unit": "cm"
+        },
+        {
+          "op": "turn",
+          "direction": "left",
+          "degrees": 90
+        },
+        {
+          "op": "start_move",
+          "direction": "forward"
+        },
+        {
+          "op": "wait_until",
+          "condition": {
+            "sensor": "color",
+            "port": "D",
+            "color": "red"
+          }
+        },
+        {
+          "op": "stop_move"
+        }
+      ],
+      "skill": "sensor-color"
+    },
+    {
+      "id": "steps",
+      "type": "quiz",
+      "kind": "order",
+      "question": {
+        "ru": "Расставь шаги поиска",
+        "kk": "Іздеу қадамдарын реттей қой",
+        "en": "Order the search steps"
+      },
+      "items": [
+        {
+          "ru": "Проехать полосу до стены",
+          "kk": "Жолақты қабырғаға дейін жүру",
+          "en": "Drive a strip to the wall"
+        },
+        {
+          "ru": "Сдвинуться на ширину полосы",
+          "kk": "Жолақ еніне жылжу",
+          "en": "Shift by one strip width"
+        },
+        {
+          "ru": "Ехать обратно и смотреть датчиком цвета",
+          "kk": "Кері жүріп, түс датчигімен қарау",
+          "en": "Drive back watching the colour sensor"
+        },
+        {
+          "ru": "Остановиться на метке",
+          "kk": "Белгіде тоқтау",
+          "en": "Stop on the mark"
+        }
+      ],
+      "explanation": {
+        "ru": "Если и на второй полосе метки нет — повторяем сдвиг и проход.",
+        "kk": "Екінші жолақта да белгі болмаса — жылжу мен өтуді қайталаймыз.",
+        "en": "If the second strip has no mark either, repeat the shift and the pass."
+      },
+      "skill": "loops"
+    }
+  ]
+}

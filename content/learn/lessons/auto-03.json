@@ -1,0 +1,221 @@
+{
+  "id": "auto-03",
+  "track": "autonomy",
+  "unit": "auto-maze",
+  "minutes": 8,
+  "skills": [
+    "sensor-distance",
+    "conditions"
+  ],
+  "title": {
+    "ru": "Тупик и разворот",
+    "kk": "Тұйық және бұрылу",
+    "en": "Dead end and turn back"
+  },
+  "goal": {
+    "ru": "Сегодня робот научится выбираться из тупика.",
+    "kk": "Бүгін робот тұйықтан шығуды үйренеді.",
+    "en": "Today the robot will learn to get out of a dead end."
+  },
+  "summary": {
+    "ru": "Теперь ты умеешь находить тупик и возвращаться по датчику.",
+    "kk": "Енді сен тұйықты тауып, датчик бойынша қайта алатын боласың.",
+    "en": "Now you can detect a dead end and come back by sensor."
+  },
+  "steps": [
+    {
+      "id": "dead-end",
+      "type": "theory",
+      "title": {
+        "ru": "Если дальше пути нет",
+        "kk": "Әрі қарай жол болмаса",
+        "en": "When there is no way on"
+      },
+      "body": {
+        "ru": "Иногда коридор заканчивается тупиком. Робот должен это понять и **развернуться на 180°**.\n\nОбратный путь тоже можно проехать по датчику: позади старта стена, и робот остановится перед ней сам.\n\nВ настоящих лабиринтах робот запоминает тупики, чтобы не заезжать в них снова. Это уже начало **карты**.",
+        "kk": "Кейде дәліз тұйықпен аяқталады. Робот мұны түсініп, **180°-қа бұрылуы** керек.\n\nКері жолды да датчикпен жүруге болады: старттың артында қабырға бар, және робот оның алдында өзі тоқтайды.\n\nНағыз лабиринттерде робот тұйықтарды қайта кірмеу үшін есте сақтайды. Бұл — **картаның** бастамасы.",
+        "en": "Sometimes a corridor ends in a dead end. The robot must notice and **turn 180°**.\n\nThe way back can also be driven by sensor: there is a wall behind the start, and the robot stops in front of it by itself.\n\nIn real mazes the robot remembers dead ends so it does not enter them again. That is the start of a **map**."
+      },
+      "illustration": "r-maze"
+    },
+    {
+      "id": "back",
+      "type": "code",
+      "title": {
+        "ru": "Из тупика домой",
+        "kk": "Тұйықтан үйге",
+        "en": "From the dead end home"
+      },
+      "task": {
+        "ru": "Доедь до конца тупика (меньше 15 см до стены), подай сигнал, развернись на 180° и вернись к стене за стартом, тоже по датчику.",
+        "kk": "Тұйықтың соңына дейін жет (қабырғаға дейін 15 см-ден аз), дыбыс бер, 180°-қа бұрылып, старт артындағы қабырғаға да датчик бойынша орал.",
+        "en": "Drive to the end of the dead end (closer than 15 cm), beep, turn 180° and return to the wall behind the start, by sensor too."
+      },
+      "field": {
+        "width": 1400,
+        "height": 400,
+        "start": {
+          "x": 350,
+          "y": 200,
+          "heading": 0
+        },
+        "border": true,
+        "zones": [
+          {
+            "id": "home",
+            "x": 120,
+            "y": 80,
+            "w": 320,
+            "h": 240,
+            "kind": "target",
+            "label": {
+              "ru": "Старт",
+              "kk": "Старт",
+              "en": "Start"
+            }
+          }
+        ],
+        "points": [],
+        "walls": [
+          {
+            "x": 1100,
+            "y": 0,
+            "w": 40,
+            "h": 400
+          }
+        ],
+        "lines": []
+      },
+      "toolbox": [
+        "start_move",
+        "stop_move",
+        "wait_until",
+        "turn",
+        "beep"
+      ],
+      "start": [],
+      "checks": [
+        {
+          "type": "beeped",
+          "min": 1
+        },
+        {
+          "type": "finishInZone",
+          "zone": "home"
+        },
+        {
+          "type": "heading",
+          "degrees": 180,
+          "tolerance": 5
+        },
+        {
+          "type": "usesSensor",
+          "sensor": "distance"
+        },
+        {
+          "type": "noCollision"
+        }
+      ],
+      "hints": [
+        {
+          "ru": "Первая часть — доехать до стены по датчику.",
+          "kk": "Бірінші бөлігі — датчикпен қабырғаға жету.",
+          "en": "Part one: drive to the wall by sensor."
+        },
+        {
+          "ru": "Потом сигнал и «направо 180°».",
+          "kk": "Содан кейін дыбыс және «оңға 180°».",
+          "en": "Then a beep and “right 180°”."
+        },
+        {
+          "ru": "Назад — снова «начать → ждать < 15 → стоп».",
+          "kk": "Кері — қайтадан «бастау → < 15 күту → тоқта».",
+          "en": "Back: again “start → wait < 15 → stop”."
+        }
+      ],
+      "reference": [
+        {
+          "op": "start_move",
+          "direction": "forward"
+        },
+        {
+          "op": "wait_until",
+          "condition": {
+            "sensor": "distance",
+            "port": "C",
+            "comparator": "<",
+            "value": 15,
+            "unit": "cm"
+          }
+        },
+        {
+          "op": "stop_move"
+        },
+        {
+          "op": "beep",
+          "note": 72,
+          "seconds": 0.3
+        },
+        {
+          "op": "turn",
+          "direction": "right",
+          "degrees": 180
+        },
+        {
+          "op": "start_move",
+          "direction": "forward"
+        },
+        {
+          "op": "wait_until",
+          "condition": {
+            "sensor": "distance",
+            "port": "C",
+            "comparator": "<",
+            "value": 15,
+            "unit": "cm"
+          }
+        },
+        {
+          "op": "stop_move"
+        }
+      ],
+      "skill": "sensor-distance"
+    },
+    {
+      "id": "hand",
+      "type": "quiz",
+      "kind": "choice",
+      "question": {
+        "ru": "Правило «держись правой рукой за стену» помогает…",
+        "kk": "«Қабырғаны оң қолмен ұста» ережесі көмектеседі…",
+        "en": "The “keep your right hand on the wall” rule helps…"
+      },
+      "options": [
+        {
+          "ru": "Найти выход из обычного лабиринта без карты",
+          "kk": "Картасыз қарапайым лабиринттен шығуды табу",
+          "en": "Find the way out of an ordinary maze without a map"
+        },
+        {
+          "ru": "Ехать быстрее",
+          "kk": "Жылдамырақ жүру",
+          "en": "Drive faster"
+        },
+        {
+          "ru": "Различать цвета",
+          "kk": "Түстерді ажырату",
+          "en": "Tell colours apart"
+        }
+      ],
+      "correct": [
+        0
+      ],
+      "explanation": {
+        "ru": "Если стены лабиринта связаны между собой, рука на стене обязательно приведёт к выходу.",
+        "kk": "Лабиринт қабырғалары бір-бірімен байланысты болса, қабырғадағы қол міндетті түрде шығуға апарады.",
+        "en": "If the maze walls are all connected, a hand on the wall always leads to the exit."
+      },
+      "skill": "conditions"
+    }
+  ]
+}

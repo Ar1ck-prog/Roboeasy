@@ -1,0 +1,253 @@
+{
+  "id": "auto-12",
+  "track": "autonomy",
+  "unit": "auto-behavior",
+  "minutes": 12,
+  "skills": [
+    "control",
+    "conditions"
+  ],
+  "title": {
+    "ru": "Проект «Марсоход»",
+    "kk": "«Марсоход» жобасы",
+    "en": "Project: Mars rover"
+  },
+  "goal": {
+    "ru": "Сегодня твой робот выполнит настоящую миссию марсохода.",
+    "kk": "Бүгін сенің роботың нағыз марсоход миссиясын орындайды.",
+    "en": "Today your robot will carry out a real Mars rover mission."
+  },
+  "summary": {
+    "ru": "Трек «Автономные роботы» пройден! Твой робот сам находит цель, работает с ней и возвращается домой.",
+    "kk": "«Автономды роботтар» тректі өттің! Сенің роботың мақсатты өзі тауып, онымен жұмыс істеп, үйге оралады.",
+    "en": "The Autonomous robots track is done! Your robot finds a target, works with it and comes home by itself."
+  },
+  "steps": [
+    {
+      "id": "mission",
+      "type": "theory",
+      "title": {
+        "ru": "Миссия на Марсе",
+        "kk": "Марстағы миссия",
+        "en": "A mission on Mars"
+      },
+      "body": {
+        "ru": "Сигнал до Марса идёт несколько минут, поэтому марсоход не управляют джойстиком — он работает **сам**.\n\nТвоя миссия:\n\n1. Выехать с базы к краю кратера (чёрная линия).\n2. Взять образец: манипулятор (мотор C) опускается на 90° и поднимается.\n3. Развернуться и вернуться на базу по датчику расстояния.\n4. Показать галочку — «образец доставлен».",
+        "kk": "Марсқа сигнал бірнеше минут жүреді, сондықтан марсоходты джойстикпен басқармайды — ол **өзі** жұмыс істейді.\n\nСенің миссияң:\n\n1. Базадан кратер шетіне (қара сызық) шығу.\n2. Үлгі алу: манипулятор (C моторы) 90°-қа түсіп, көтеріледі.\n3. Бұрылып, қашықтық датчигімен базаға оралу.\n4. Құсбелгі көрсету — «үлгі жеткізілді».",
+        "en": "A signal takes minutes to reach Mars, so a rover is not driven with a joystick — it works **on its own**.\n\nYour mission:\n\n1. Drive from base to the crater edge (the black line).\n2. Take a sample: the arm (motor C) goes down 90° and back up.\n3. Turn around and return to base using the distance sensor.\n4. Show a tick — “sample delivered”."
+      },
+      "illustration": "r-mars"
+    },
+    {
+      "id": "rover",
+      "type": "project",
+      "title": {
+        "ru": "Образец из кратера",
+        "kk": "Кратерден үлгі",
+        "en": "A sample from the crater"
+      },
+      "task": {
+        "ru": "Доедь до чёрной линии, возьми образец (мотор C: 90° по часовой и обратно), развернись на 180°, вернись на базу — остановись в 15 см от стены — и покажи галочку.",
+        "kk": "Қара сызыққа дейін жет, үлгі ал (C моторы: сағат тілімен 90° және кері), 180°-қа бұрыл, базаға орал — қабырғадан 15 см жерде тоқта — және құсбелгі көрсет.",
+        "en": "Drive to the black line, take a sample (motor C: 90° clockwise and back), turn 180°, return to base — stop 15 cm from the wall — and show a tick."
+      },
+      "field": {
+        "width": 1400,
+        "height": 400,
+        "start": {
+          "x": 250,
+          "y": 200,
+          "heading": 0
+        },
+        "border": true,
+        "zones": [
+          {
+            "id": "base",
+            "x": 100,
+            "y": 80,
+            "w": 300,
+            "h": 240,
+            "kind": "target",
+            "label": {
+              "ru": "База",
+              "kk": "База",
+              "en": "Base"
+            }
+          }
+        ],
+        "points": [],
+        "walls": [],
+        "lines": [
+          {
+            "points": [
+              [
+                1000,
+                0
+              ],
+              [
+                1000,
+                400
+              ]
+            ],
+            "width": 20,
+            "color": "black"
+          }
+        ]
+      },
+      "toolbox": [
+        "start_move",
+        "stop_move",
+        "wait_until",
+        "turn",
+        "motor_run",
+        "show_image"
+      ],
+      "start": [],
+      "checks": [
+        {
+          "type": "finishInZone",
+          "zone": "base"
+        },
+        {
+          "type": "displayed",
+          "image": "yes"
+        },
+        {
+          "type": "usesOp",
+          "op": "motor_run",
+          "min": 2
+        },
+        {
+          "type": "motorTurned",
+          "port": "C",
+          "degrees": 0,
+          "tolerance": 5
+        },
+        {
+          "type": "usesSensor",
+          "sensor": "color"
+        },
+        {
+          "type": "usesSensor",
+          "sensor": "distance"
+        },
+        {
+          "type": "noCollision"
+        }
+      ],
+      "hints": [
+        {
+          "ru": "Сначала: начать, ждать чёрный, стоп.",
+          "kk": "Алдымен: бастау, қараны күту, тоқта.",
+          "en": "First: start, wait for black, stop."
+        },
+        {
+          "ru": "Образец: C по часовой 90, C против часовой 90.",
+          "kk": "Үлгі: C сағат тілімен 90, C қарсы 90.",
+          "en": "Sample: C clockwise 90, C anticlockwise 90."
+        },
+        {
+          "ru": "Домой: направо 180°, начать, ждать < 15 см, стоп, показать галочку.",
+          "kk": "Үйге: оңға 180°, бастау, < 15 см күту, тоқта, құсбелгі көрсету.",
+          "en": "Home: right 180°, start, wait < 15 cm, stop, show the tick."
+        }
+      ],
+      "reference": [
+        {
+          "op": "start_move",
+          "direction": "forward"
+        },
+        {
+          "op": "wait_until",
+          "condition": {
+            "sensor": "color",
+            "port": "D",
+            "color": "black"
+          }
+        },
+        {
+          "op": "stop_move"
+        },
+        {
+          "op": "motor_run",
+          "port": "C",
+          "direction": "clockwise",
+          "value": 90,
+          "unit": "degrees"
+        },
+        {
+          "op": "motor_run",
+          "port": "C",
+          "direction": "counterclockwise",
+          "value": 90,
+          "unit": "degrees"
+        },
+        {
+          "op": "turn",
+          "direction": "right",
+          "degrees": 180
+        },
+        {
+          "op": "start_move",
+          "direction": "forward"
+        },
+        {
+          "op": "wait_until",
+          "condition": {
+            "sensor": "distance",
+            "port": "C",
+            "comparator": "<",
+            "value": 15,
+            "unit": "cm"
+          }
+        },
+        {
+          "op": "stop_move"
+        },
+        {
+          "op": "show_image",
+          "image": "yes"
+        }
+      ],
+      "skill": "control"
+    },
+    {
+      "id": "review",
+      "type": "quiz",
+      "kind": "order",
+      "question": {
+        "ru": "Из каких частей состоит автономная миссия?",
+        "kk": "Автономды миссия қандай бөліктерден тұрады?",
+        "en": "What parts make up an autonomous mission?"
+      },
+      "items": [
+        {
+          "ru": "Найти цель по датчику",
+          "kk": "Мақсатты датчикпен табу",
+          "en": "Find the target by sensor"
+        },
+        {
+          "ru": "Выполнить действие механизмом",
+          "kk": "Механизммен әрекет орындау",
+          "en": "Do the job with a mechanism"
+        },
+        {
+          "ru": "Вернуться по ориентиру",
+          "kk": "Бағдар бойынша оралу",
+          "en": "Return by a landmark"
+        },
+        {
+          "ru": "Сообщить о результате",
+          "kk": "Нәтиже туралы хабарлау",
+          "en": "Report the result"
+        }
+      ],
+      "explanation": {
+        "ru": "Найти → сделать → вернуться → сообщить. По такой схеме работают и марсоходы, и складские роботы.",
+        "kk": "Табу → істеу → оралу → хабарлау. Марсоходтар да, қойма роботтары да осы сызба бойынша жұмыс істейді.",
+        "en": "Find → do → return → report. Mars rovers and warehouse robots both follow this scheme."
+      },
+      "skill": "control"
+    }
+  ]
+}

@@ -2277,6 +2277,246 @@
       ]
     },
     {
+      "id": "autonomy",
+      "title": {
+        "ru": "Автономные роботы",
+        "kk": "Автономды роботтар",
+        "en": "Autonomous robots"
+      },
+      "description": {
+        "ru": "Лабиринты, поиск и спасение, сортировка и поведение: робот решает задачи сам.",
+        "kk": "Лабиринттер, іздеу мен құтқару, сұрыптау және мінез-құлық: робот тапсырмаларды өзі шешеді.",
+        "en": "Mazes, search and rescue, sorting and behaviour: the robot solves tasks on its own."
+      },
+      "icon": "Bot",
+      "color": "var(--blk-control)",
+      "prerequisites": [
+        "sensors"
+      ],
+      "units": [
+        {
+          "id": "auto-maze",
+          "title": {
+            "ru": "Робот в лабиринте",
+            "kk": "Лабиринттегі робот",
+            "en": "A robot in a maze"
+          },
+          "lessons": [
+            {
+              "id": "auto-01",
+              "title": {
+                "ru": "Правило стены",
+                "kk": "Қабырға ережесі",
+                "en": "The wall rule"
+              },
+              "skills": [
+                "sensor-distance",
+                "conditions"
+              ],
+              "status": "ready",
+              "project": false,
+              "kit": false
+            },
+            {
+              "id": "auto-02",
+              "title": {
+                "ru": "Спиральный лабиринт",
+                "kk": "Спираль лабиринт",
+                "en": "The spiral maze"
+              },
+              "skills": [
+                "sensor-distance",
+                "conditions"
+              ],
+              "status": "ready",
+              "project": false,
+              "kit": false
+            },
+            {
+              "id": "auto-03",
+              "title": {
+                "ru": "Тупик и разворот",
+                "kk": "Тұйық және бұрылу",
+                "en": "Dead end and turn back"
+              },
+              "skills": [
+                "sensor-distance",
+                "conditions"
+              ],
+              "status": "ready",
+              "project": false,
+              "kit": false
+            }
+          ]
+        },
+        {
+          "id": "auto-search",
+          "title": {
+            "ru": "Поиск и спасение",
+            "kk": "Іздеу және құтқару",
+            "en": "Search and rescue"
+          },
+          "lessons": [
+            {
+              "id": "auto-04",
+              "title": {
+                "ru": "Змейка поиска",
+                "kk": "Іздеу жыланы",
+                "en": "The search zigzag"
+              },
+              "skills": [
+                "loops",
+                "sensor-color"
+              ],
+              "status": "ready",
+              "project": false,
+              "kit": false
+            },
+            {
+              "id": "auto-05",
+              "title": {
+                "ru": "Найди метку",
+                "kk": "Белгіні тап",
+                "en": "Find the mark"
+              },
+              "skills": [
+                "loops",
+                "sensor-color"
+              ],
+              "status": "ready",
+              "project": false,
+              "kit": false
+            },
+            {
+              "id": "auto-06",
+              "title": {
+                "ru": "Спасатель",
+                "kk": "Құтқарушы",
+                "en": "The rescuer"
+              },
+              "skills": [
+                "loops",
+                "sensor-color"
+              ],
+              "status": "ready",
+              "project": false,
+              "kit": false
+            }
+          ]
+        },
+        {
+          "id": "auto-sort",
+          "title": {
+            "ru": "Сортировка и доставка",
+            "kk": "Сұрыптау және жеткізу",
+            "en": "Sorting and delivery"
+          },
+          "lessons": [
+            {
+              "id": "auto-07",
+              "title": {
+                "ru": "Красное налево",
+                "kk": "Қызыл солға",
+                "en": "Red goes left"
+              },
+              "skills": [
+                "conditions",
+                "sensor-color"
+              ],
+              "status": "ready",
+              "project": false,
+              "kit": false
+            },
+            {
+              "id": "auto-08",
+              "title": {
+                "ru": "Конвейер",
+                "kk": "Конвейер",
+                "en": "The conveyor"
+              },
+              "skills": [
+                "conditions",
+                "sensor-color"
+              ],
+              "status": "ready",
+              "project": false,
+              "kit": false
+            },
+            {
+              "id": "auto-09",
+              "title": {
+                "ru": "Доставка в три точки",
+                "kk": "Үш нүктеге жеткізу",
+                "en": "Three-stop delivery"
+              },
+              "skills": [
+                "conditions",
+                "sensor-color"
+              ],
+              "status": "ready",
+              "project": false,
+              "kit": false
+            }
+          ]
+        },
+        {
+          "id": "auto-behavior",
+          "title": {
+            "ru": "Поведение робота",
+            "kk": "Робот мінез-құлқы",
+            "en": "Robot behaviour"
+          },
+          "lessons": [
+            {
+              "id": "auto-10",
+              "title": {
+                "ru": "Состояния робота",
+                "kk": "Робот күйлері",
+                "en": "Robot states"
+              },
+              "skills": [
+                "control",
+                "conditions"
+              ],
+              "status": "ready",
+              "project": false,
+              "kit": false
+            },
+            {
+              "id": "auto-11",
+              "title": {
+                "ru": "Робот-охранник",
+                "kk": "Робот-күзетші",
+                "en": "The guard robot"
+              },
+              "skills": [
+                "control",
+                "conditions"
+              ],
+              "status": "ready",
+              "project": false,
+              "kit": false
+            },
+            {
+              "id": "auto-12",
+              "title": {
+                "ru": "Проект «Марсоход»",
+                "kk": "«Марсоход» жобасы",
+                "en": "Project: Mars rover"
+              },
+              "skills": [
+                "control",
+                "conditions"
+              ],
+              "status": "ready",
+              "project": true,
+              "kit": false
+            }
+          ]
+        }
+      ]
+    },
+    {
       "id": "ai-basics",
       "title": {
         "ru": "ИИ с нуля",

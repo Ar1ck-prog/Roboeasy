@@ -1,0 +1,246 @@
+{
+  "id": "auto-06",
+  "track": "autonomy",
+  "unit": "auto-search",
+  "minutes": 9,
+  "skills": [
+    "loops",
+    "sensor-color"
+  ],
+  "title": {
+    "ru": "Спасатель",
+    "kk": "Құтқарушы",
+    "en": "The rescuer"
+  },
+  "goal": {
+    "ru": "Сегодня робот-спасатель найдёт пострадавшего и вернётся на базу.",
+    "kk": "Бүгін робот-құтқарушы зардап шегушіні тауып, базаға оралады.",
+    "en": "Today the rescue robot will find a casualty and return to base."
+  },
+  "summary": {
+    "ru": "Теперь ты строишь полную миссию: найти, сообщить, вернуться.",
+    "kk": "Енді сен толық миссия құрасың: табу, хабарлау, оралу.",
+    "en": "Now you build a full mission: find, report, return."
+  },
+  "steps": [
+    {
+      "id": "mission",
+      "type": "theory",
+      "title": {
+        "ru": "Миссия спасения",
+        "kk": "Құтқару миссиясы",
+        "en": "A rescue mission"
+      },
+      "body": {
+        "ru": "Роботы-спасатели ищут людей там, куда опасно идти человеку. Их миссия из трёх частей:\n\n1. **Найти** — ехать, пока датчик не заметит цель (синяя метка).\n2. **Сообщить** — подать три сигнала.\n3. **Вернуться** — развернуться и доехать до стены базы по датчику расстояния.",
+        "kk": "Робот-құтқарушылар адамға баруға қауіпті жерлерде адамдарды іздейді. Олардың миссиясы үш бөліктен тұрады:\n\n1. **Табу** — датчик мақсатты байқағанша жүру (көк белгі).\n2. **Хабарлау** — үш дыбыс беру.\n3. **Оралу** — бұрылып, қашықтық датчигімен база қабырғасына дейін жету.",
+        "en": "Rescue robots search for people where it is dangerous for humans to go. Their mission has three parts:\n\n1. **Find** — drive until the sensor spots the target (a blue mark).\n2. **Report** — give three beeps.\n3. **Return** — turn around and drive to the base wall using the distance sensor."
+      },
+      "illustration": "r-rescue"
+    },
+    {
+      "id": "rescue",
+      "type": "code",
+      "title": {
+        "ru": "Найти и вернуться",
+        "kk": "Тауып, оралу",
+        "en": "Find and return"
+      },
+      "task": {
+        "ru": "Езжай, пока не увидишь синюю метку, остановись и подай **три** сигнала. Потом развернись на 180° и вернись на базу: остановись в 15 см от стены.",
+        "kk": "Көк белгіні көргенше жүр, тоқта және **үш** дыбыс бер. Содан кейін 180°-қа бұрылып, базаға орал: қабырғадан 15 см жерде тоқта.",
+        "en": "Drive until you see the blue mark, stop and give **three** beeps. Then turn 180° and return to base: stop 15 cm from the wall."
+      },
+      "field": {
+        "width": 1400,
+        "height": 400,
+        "start": {
+          "x": 250,
+          "y": 200,
+          "heading": 0
+        },
+        "border": true,
+        "zones": [
+          {
+            "id": "victim",
+            "x": 900,
+            "y": 0,
+            "w": 60,
+            "h": 400,
+            "kind": "paint",
+            "color": "blue"
+          },
+          {
+            "id": "base",
+            "x": 100,
+            "y": 80,
+            "w": 300,
+            "h": 240,
+            "kind": "target",
+            "label": {
+              "ru": "База",
+              "kk": "База",
+              "en": "Base"
+            }
+          }
+        ],
+        "points": [
+          {
+            "id": "found",
+            "x": 830,
+            "y": 200,
+            "r": 70,
+            "label": {
+              "ru": "Пострадавший",
+              "kk": "Зардап шегуші",
+              "en": "Casualty"
+            }
+          }
+        ],
+        "walls": [],
+        "lines": []
+      },
+      "toolbox": [
+        "start_move",
+        "stop_move",
+        "wait_until",
+        "turn",
+        "beep",
+        "repeat"
+      ],
+      "start": [],
+      "checks": [
+        {
+          "type": "passPoints",
+          "points": [
+            "found"
+          ],
+          "ordered": true
+        },
+        {
+          "type": "beeped",
+          "min": 3
+        },
+        {
+          "type": "finishInZone",
+          "zone": "base"
+        },
+        {
+          "type": "usesSensor",
+          "sensor": "color"
+        },
+        {
+          "type": "usesSensor",
+          "sensor": "distance"
+        },
+        {
+          "type": "noCollision"
+        }
+      ],
+      "hints": [
+        {
+          "ru": "Найти: начать, ждать синий, стоп.",
+          "kk": "Табу: бастау, көкті күту, тоқта.",
+          "en": "Find: start, wait for blue, stop."
+        },
+        {
+          "ru": "Сообщить: повторить 3 раза — сигнал.",
+          "kk": "Хабарлау: 3 рет қайталау — дыбыс.",
+          "en": "Report: repeat 3 times — beep."
+        },
+        {
+          "ru": "Вернуться: направо 180°, начать, ждать < 15 см, стоп.",
+          "kk": "Оралу: оңға 180°, бастау, < 15 см күту, тоқта.",
+          "en": "Return: right 180°, start, wait < 15 cm, stop."
+        }
+      ],
+      "reference": [
+        {
+          "op": "start_move",
+          "direction": "forward"
+        },
+        {
+          "op": "wait_until",
+          "condition": {
+            "sensor": "color",
+            "port": "D",
+            "color": "blue"
+          }
+        },
+        {
+          "op": "stop_move"
+        },
+        {
+          "op": "repeat",
+          "times": 3,
+          "steps": [
+            {
+              "op": "beep",
+              "note": 72,
+              "seconds": 0.3
+            }
+          ]
+        },
+        {
+          "op": "turn",
+          "direction": "right",
+          "degrees": 180
+        },
+        {
+          "op": "start_move",
+          "direction": "forward"
+        },
+        {
+          "op": "wait_until",
+          "condition": {
+            "sensor": "distance",
+            "port": "C",
+            "comparator": "<",
+            "value": 15,
+            "unit": "cm"
+          }
+        },
+        {
+          "op": "stop_move"
+        }
+      ],
+      "skill": "sensor-color"
+    },
+    {
+      "id": "why-sensor-back",
+      "type": "quiz",
+      "kind": "choice",
+      "question": {
+        "ru": "Почему на базу лучше возвращаться по датчику, а не «назад 65 см»?",
+        "kk": "Неге базаға «65 см артқа» емес, датчикпен оралған жақсы?",
+        "en": "Why return to base by sensor instead of “back 65 cm”?"
+      },
+      "options": [
+        {
+          "ru": "Пострадавший может быть дальше или ближе — датчик найдёт стену в любом случае",
+          "kk": "Зардап шегуші алысырақ не жақынырақ болуы мүмкін — датчик қабырғаны кез келген жағдайда табады",
+          "en": "The casualty may be nearer or further — the sensor finds the wall either way"
+        },
+        {
+          "ru": "Так ярче светит хаб",
+          "kk": "Осылай хаб жарқырақ жанады",
+          "en": "The hub shines brighter"
+        },
+        {
+          "ru": "Назад робот ехать не умеет",
+          "kk": "Робот артқа жүре алмайды",
+          "en": "The robot cannot drive backwards"
+        }
+      ],
+      "correct": [
+        0
+      ],
+      "explanation": {
+        "ru": "Расстояние до цели каждый раз разное, поэтому и возвращаться надо по ориентиру.",
+        "kk": "Мақсатқа дейінгі қашықтық әр жолы әр түрлі, сондықтан бағдар бойынша оралу керек.",
+        "en": "The distance to the target differs every time, so return by a landmark."
+      },
+      "skill": "sensor-distance"
+    }
+  ]
+}

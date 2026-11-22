@@ -1,0 +1,215 @@
+{
+  "id": "auto-08",
+  "track": "autonomy",
+  "unit": "auto-sort",
+  "minutes": 9,
+  "skills": [
+    "conditions",
+    "sensor-color"
+  ],
+  "title": {
+    "ru": "Конвейер",
+    "kk": "Конвейер",
+    "en": "The conveyor"
+  },
+  "goal": {
+    "ru": "Сегодня робот проверит ящики на конвейере и посчитает красные.",
+    "kk": "Бүгін робот конвейердегі жәшіктерді тексеріп, қызылдарын санайды.",
+    "en": "Today the robot will inspect boxes on a conveyor and count the red ones."
+  },
+  "summary": {
+    "ru": "Теперь ты соединяешь цикл, условие и счётчик — как настоящая система контроля.",
+    "kk": "Енді сен цикл, шарт және санауышты біріктіресің — нағыз бақылау жүйесі сияқты.",
+    "en": "Now you combine a loop, a condition and a counter — like a real inspection system."
+  },
+  "steps": [
+    {
+      "id": "inspect",
+      "type": "theory",
+      "title": {
+        "ru": "Контроль качества",
+        "kk": "Сапаны бақылау",
+        "en": "Quality control"
+      },
+      "body": {
+        "ru": "На заводах роботы проверяют каждую деталь на ленте. Наш робот подъезжает к ящику, смотрит цвет и, **если** ящик красный, отмечает его сигналом и прибавляет 1 к счётчику.\n\nТак повторяется для каждого ящика. В конце на экране — сколько красных нашлось.",
+        "kk": "Зауыттарда роботтар таспадағы әр бөлшекті тексереді. Біздің робот жәшікке жақындап, түсіне қарайды және **егер** жәшік қызыл болса, оны дыбыспен белгілеп, санауышқа 1 қосады.\n\nОсылай әр жәшік үшін қайталанады. Соңында экранда — қанша қызыл табылды.",
+        "en": "In factories robots check every part on the belt. Our robot drives up to a box, looks at its colour and, **if** it is red, marks it with a beep and adds 1 to the counter.\n\nThis repeats for every box. At the end the screen shows how many red ones were found."
+      },
+      "illustration": "r-sort"
+    },
+    {
+      "id": "count-red",
+      "type": "code",
+      "title": {
+        "ru": "Сколько красных?",
+        "kk": "Қанша қызыл?",
+        "en": "How many red?"
+      },
+      "task": {
+        "ru": "Три ящика стоят через каждые 25 см. Подъезжай к каждому; если ящик красный — подай сигнал и прибавь 1 к счётчику. В конце покажи число красных ящиков — **2**.",
+        "kk": "Үш жәшік әр 25 см сайын тұр. Әрқайсысына жақында; егер жәшік қызыл болса — дыбыс беріп, санауышқа 1 қос. Соңында қызыл жәшіктер санын көрсет — **2**.",
+        "en": "Three boxes stand every 25 cm. Drive to each; if a box is red, beep and add 1 to the counter. At the end show the number of red boxes — **2**."
+      },
+      "field": {
+        "width": 1400,
+        "height": 400,
+        "start": {
+          "x": 150,
+          "y": 200,
+          "heading": 0
+        },
+        "border": true,
+        "zones": [
+          {
+            "id": "b1",
+            "x": 440,
+            "y": 120,
+            "w": 60,
+            "h": 160,
+            "kind": "paint",
+            "color": "red"
+          },
+          {
+            "id": "b2",
+            "x": 690,
+            "y": 120,
+            "w": 60,
+            "h": 160,
+            "kind": "paint",
+            "color": "green"
+          },
+          {
+            "id": "b3",
+            "x": 940,
+            "y": 120,
+            "w": 60,
+            "h": 160,
+            "kind": "paint",
+            "color": "red"
+          }
+        ],
+        "points": [],
+        "walls": [],
+        "lines": []
+      },
+      "toolbox": [
+        "move",
+        "repeat",
+        "if",
+        "beep",
+        "set_var",
+        "change_var",
+        "write_var"
+      ],
+      "start": [],
+      "checks": [
+        {
+          "type": "displayed",
+          "text": "2"
+        },
+        {
+          "type": "beeped",
+          "min": 2
+        },
+        {
+          "type": "usesOp",
+          "op": "if",
+          "min": 1
+        },
+        {
+          "type": "usesOp",
+          "op": "repeat",
+          "min": 1
+        },
+        {
+          "type": "usesSensor",
+          "sensor": "color"
+        }
+      ],
+      "hints": [
+        {
+          "ru": "count = 0; потом цикл на 3 ящика.",
+          "kk": "count = 0; содан кейін 3 жәшікке цикл.",
+          "en": "count = 0; then a loop over 3 boxes."
+        },
+        {
+          "ru": "В цикле: вперёд 25; если цвет красный — сигнал и изменить count на 1.",
+          "kk": "Циклда: 25 алға; егер түс қызыл — дыбыс және count мәнін 1 өзгерту.",
+          "en": "In the loop: forward 25; if red — beep and change count by 1."
+        },
+        {
+          "ru": "После цикла — написать count.",
+          "kk": "Циклдан кейін — count жазу.",
+          "en": "After the loop: write count."
+        }
+      ],
+      "reference": [
+        {
+          "op": "set_var",
+          "name": "count",
+          "expr": {
+            "num": 0
+          }
+        },
+        {
+          "op": "repeat",
+          "times": 3,
+          "steps": [
+            {
+              "op": "move",
+              "direction": "forward",
+              "value": 25,
+              "unit": "cm"
+            },
+            {
+              "op": "if",
+              "condition": {
+                "sensor": "color",
+                "port": "D",
+                "color": "red"
+              },
+              "then": [
+                {
+                  "op": "beep",
+                  "note": 72,
+                  "seconds": 0.3
+                },
+                {
+                  "op": "change_var",
+                  "name": "count",
+                  "expr": {
+                    "num": 1
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "op": "write_var",
+          "name": "count"
+        }
+      ],
+      "skill": "conditions"
+    },
+    {
+      "id": "more",
+      "type": "quiz",
+      "kind": "number",
+      "question": {
+        "ru": "На ленте 10 ящиков, каждый третий красный. Что покажет счётчик?",
+        "kk": "Таспада 10 жәшік, әр үшіншісі қызыл. Санауыш не көрсетеді?",
+        "en": "There are 10 boxes on the belt; every third one is red. What will the counter show?"
+      },
+      "answer": 3,
+      "tolerance": 0,
+      "explanation": {
+        "ru": "Красные — 3-й, 6-й и 9-й: всего 3.",
+        "kk": "Қызылдар — 3-ші, 6-шы және 9-шы: барлығы 3.",
+        "en": "The red ones are the 3rd, 6th and 9th: 3 in total."
+      },
+      "skill": "conditions"
+    }
+  ]
+}

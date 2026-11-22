@@ -1,0 +1,253 @@
+{
+  "id": "auto-09",
+  "track": "autonomy",
+  "unit": "auto-sort",
+  "minutes": 10,
+  "skills": [
+    "conditions",
+    "sensor-color"
+  ],
+  "title": {
+    "ru": "Доставка в три точки",
+    "kk": "Үш нүктеге жеткізу",
+    "en": "Three-stop delivery"
+  },
+  "goal": {
+    "ru": "Сегодня робот-курьер развезёт посылки по трём адресам.",
+    "kk": "Бүгін робот-курьер сәлемдемелерді үш мекенжайға таратады.",
+    "en": "Today the courier robot will deliver parcels to three addresses."
+  },
+  "summary": {
+    "ru": "Теперь ты собираешь маршрут доставки из своего блока и движений.",
+    "kk": "Енді сен жеткізу маршрутын өз блогың мен қозғалыстардан құрастырасың.",
+    "en": "Now you build a delivery route from your own block and moves."
+  },
+  "steps": [
+    {
+      "id": "courier",
+      "type": "theory",
+      "title": {
+        "ru": "Курьерский маршрут",
+        "kk": "Курьерлік маршрут",
+        "en": "A courier route"
+      },
+      "body": {
+        "ru": "У курьера на каждом адресе одно и то же действие: открыть отсек и отдать посылку. Значит, это **свой блок** — назовём его **drop**: мотор C открывает отсек на 90° и закрывает обратно.\n\nМаршрут: адрес → drop → поворот → следующий адрес → drop… Программа короткая и понятная.",
+        "kk": "Курьердің әр мекенжайда бір әрекеті бар: бөлікті ашып, сәлемдемені беру. Демек, бұл — **өз блогың**, оны **drop** деп атайық: C моторы бөлікті 90°-қа ашып, кері жабады.\n\nМаршрут: мекенжай → drop → бұрылыс → келесі мекенжай → drop… Бағдарлама қысқа әрі түсінікті.",
+        "en": "At every address the courier does the same thing: open the hatch and hand over the parcel. So it is **your own block** — call it **drop**: motor C opens the hatch 90° and closes it again.\n\nThe route: address → drop → turn → next address → drop… The program is short and clear."
+      },
+      "illustration": "r-myblock"
+    },
+    {
+      "id": "deliver",
+      "type": "code",
+      "title": {
+        "ru": "Три адреса",
+        "kk": "Үш мекенжай",
+        "en": "Three addresses"
+      },
+      "task": {
+        "ru": "Сделай свой блок **drop** (мотор C на 90° по часовой и обратно). Маршрут: 30 см → drop → налево → 30 см → drop → налево → 30 см → drop.",
+        "kk": "Өз **drop** блогыңды жаса (C моторы сағат тілімен 90° және кері). Маршрут: 30 см → drop → солға → 30 см → drop → солға → 30 см → drop.",
+        "en": "Make your own block **drop** (motor C 90° clockwise and back). Route: 30 cm → drop → left → 30 cm → drop → left → 30 cm → drop."
+      },
+      "field": {
+        "width": 900,
+        "height": 800,
+        "start": {
+          "x": 150,
+          "y": 200,
+          "heading": 0
+        },
+        "border": true,
+        "zones": [],
+        "points": [
+          {
+            "id": "d1",
+            "x": 450,
+            "y": 200,
+            "r": 50,
+            "label": {
+              "ru": "Адрес 1",
+              "kk": "1-мекенжай",
+              "en": "Stop 1"
+            }
+          },
+          {
+            "id": "d2",
+            "x": 450,
+            "y": 500,
+            "r": 50,
+            "label": {
+              "ru": "Адрес 2",
+              "kk": "2-мекенжай",
+              "en": "Stop 2"
+            }
+          },
+          {
+            "id": "d3",
+            "x": 150,
+            "y": 500,
+            "r": 50,
+            "label": {
+              "ru": "Адрес 3",
+              "kk": "3-мекенжай",
+              "en": "Stop 3"
+            }
+          }
+        ],
+        "walls": [],
+        "lines": []
+      },
+      "toolbox": [
+        "call",
+        "move",
+        "turn",
+        "motor_run"
+      ],
+      "start": [],
+      "checks": [
+        {
+          "type": "passPoints",
+          "points": [
+            "d1",
+            "d2",
+            "d3"
+          ],
+          "ordered": true
+        },
+        {
+          "type": "usesOp",
+          "op": "call",
+          "min": 3
+        },
+        {
+          "type": "motorTurned",
+          "port": "C",
+          "degrees": 0,
+          "tolerance": 5
+        },
+        {
+          "type": "noCollision"
+        }
+      ],
+      "hints": [
+        {
+          "ru": "Блок drop: C по часовой 90, C против часовой 90.",
+          "kk": "drop блогы: C сағат тілімен 90, C қарсы 90.",
+          "en": "Block drop: C clockwise 90, C anticlockwise 90."
+        },
+        {
+          "ru": "Между адресами — поворот налево и 30 см.",
+          "kk": "Мекенжайлар арасында — солға бұрылу және 30 см.",
+          "en": "Between addresses: turn left and drive 30 cm."
+        },
+        {
+          "ru": "Вперёд 30; drop; налево 90°; вперёд 30; drop; налево 90°; вперёд 30; drop.",
+          "kk": "30 алға; drop; солға 90°; 30 алға; drop; солға 90°; 30 алға; drop.",
+          "en": "Forward 30; drop; left 90°; forward 30; drop; left 90°; forward 30; drop."
+        }
+      ],
+      "reference": [
+        {
+          "op": "move",
+          "direction": "forward",
+          "value": 30,
+          "unit": "cm"
+        },
+        {
+          "op": "call",
+          "name": "drop"
+        },
+        {
+          "op": "turn",
+          "direction": "left",
+          "degrees": 90
+        },
+        {
+          "op": "move",
+          "direction": "forward",
+          "value": 30,
+          "unit": "cm"
+        },
+        {
+          "op": "call",
+          "name": "drop"
+        },
+        {
+          "op": "turn",
+          "direction": "left",
+          "degrees": 90
+        },
+        {
+          "op": "move",
+          "direction": "forward",
+          "value": 30,
+          "unit": "cm"
+        },
+        {
+          "op": "call",
+          "name": "drop"
+        }
+      ],
+      "referenceFunctions": [
+        {
+          "name": "drop",
+          "steps": [
+            {
+              "op": "motor_run",
+              "port": "C",
+              "direction": "clockwise",
+              "value": 90,
+              "unit": "degrees"
+            },
+            {
+              "op": "motor_run",
+              "port": "C",
+              "direction": "counterclockwise",
+              "value": 90,
+              "unit": "degrees"
+            }
+          ]
+        }
+      ],
+      "skill": "conditions"
+    },
+    {
+      "id": "change",
+      "type": "quiz",
+      "kind": "choice",
+      "question": {
+        "ru": "Отсек стал открываться на 120° вместо 90°. Сколько мест в программе исправить?",
+        "kk": "Бөлік 90°-тың орнына 120°-қа ашылатын болды. Бағдарламада неше жерді түзету керек?",
+        "en": "The hatch now opens 120° instead of 90°. How many places in the program must change?"
+      },
+      "options": [
+        {
+          "ru": "Только блок drop",
+          "kk": "Тек drop блогын",
+          "en": "Only the drop block"
+        },
+        {
+          "ru": "Все три доставки",
+          "kk": "Үш жеткізудің бәрін",
+          "en": "All three deliveries"
+        },
+        {
+          "ru": "Весь маршрут",
+          "kk": "Бүкіл маршрутты",
+          "en": "The whole route"
+        }
+      ],
+      "correct": [
+        0
+      ],
+      "explanation": {
+        "ru": "Ради этого и делают свои блоки: исправил в одном месте — работает везде.",
+        "kk": "Өз блоктарын осы үшін жасайды: бір жерде түзеттің — барлық жерде жұмыс істейді.",
+        "en": "That is why you make your own blocks: fix one place, it works everywhere."
+      },
+      "skill": "conditions"
+    }
+  ]
+}
