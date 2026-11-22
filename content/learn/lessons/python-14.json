@@ -1,0 +1,226 @@
+{
+  "id": "python-14",
+  "track": "python",
+  "unit": "python-project",
+  "minutes": 9,
+  "skills": [
+    "python"
+  ],
+  "title": {
+    "ru": "Точный поворот функцией",
+    "kk": "Функциямен дәл бұрылыс",
+    "en": "A precise turn as a function"
+  },
+  "goal": {
+    "ru": "Сегодня ты спрячешь поворот по гироскопу в функцию.",
+    "kk": "Бүгін сен гироскоп бойынша бұрылысты функцияға жасырасың.",
+    "en": "Today you will hide a gyro turn inside a function."
+  },
+  "summary": {
+    "ru": "Теперь у тебя есть своя функция точного поворота — пользуйся ею в любых программах.",
+    "kk": "Енді сенің дәл бұрылыстың өз функцияң бар — оны кез келген бағдарламада қолдан.",
+    "en": "Now you have your own precise-turn function — use it in any program."
+  },
+  "steps": [
+    {
+      "id": "turn",
+      "type": "theory",
+      "title": {
+        "ru": "Поворот, который всегда точен",
+        "kk": "Әрдайым дәл бұрылыс",
+        "en": "A turn that is always precise"
+      },
+      "body": {
+        "ru": "Поворот по гироскопу — это несколько строк: сбросить угол, начать вращение, ждать нужного угла, остановиться.\n\nПоложи их в функцию **turn_left()** — и каждый поворот в программе станет одной строкой.\n\nГироскоп хаба отдаёт угол в десятых долях градуса, поэтому в коде делят на 10.",
+        "kk": "Гироскоп бойынша бұрылыс — бірнеше жол: бұрышты нөлдеу, айналуды бастау, керекті бұрышты күту, тоқтау.\n\nОларды **turn_left()** функциясына сал — сонда бағдарламадағы әр бұрылыс бір жол болады.\n\nХаб гироскопы бұрышты градустың оннан бір үлесімен береді, сондықтан кодта 10-ға бөледі.",
+        "en": "A gyro turn is a few lines: reset the angle, start spinning, wait for the angle, stop.\n\nPut them in a function **turn_left()** and every turn in the program becomes one line.\n\nThe hub gyro reports the angle in tenths of a degree, so the code divides by 10."
+      },
+      "illustration": "r-gyro",
+      "code": "async def turn_left():\n    motion_sensor.reset_yaw(0)\n    motor_pair.move_tank(motor_pair.PAIR_1, -200, 200)\n    await runloop.until(lambda: motion_sensor.tilt_angles()[0] / 10 > 89)\n    motor_pair.stop(motor_pair.PAIR_1)"
+    },
+    {
+      "id": "reset",
+      "type": "quiz",
+      "kind": "fill",
+      "question": {
+        "ru": "С чего начинается точный поворот?",
+        "kk": "Дәл бұрылыс неден басталады?",
+        "en": "How does a precise turn begin?"
+      },
+      "code": "async def turn_left():\n    motion_sensor.[[0]](0)\n    motor_pair.move_tank(motor_pair.PAIR_1, -200, 200)",
+      "blanks": [
+        {
+          "options": [
+            "reset_yaw",
+            "stop",
+            "pair"
+          ],
+          "correct": 0
+        }
+      ],
+      "explanation": {
+        "ru": "Сначала новый ноль угла, иначе условие может уже быть правдой.",
+        "kk": "Алдымен бұрыштың жаңа нөлі, әйтпесе шарт ақиқат болуы мүмкін.",
+        "en": "First a new zero, otherwise the condition may already be true."
+      },
+      "skill": "python"
+    },
+    {
+      "id": "u-turn",
+      "type": "code",
+      "title": {
+        "ru": "Маршрут буквой П",
+        "kk": "П әрпі тәрізді маршрут",
+        "en": "A U-shaped route"
+      },
+      "task": {
+        "ru": "Сделай свой блок **turn_left** (сброс угла, вращение влево, ждать < −89°, стоп). Маршрут: 50 см, turn_left, 40 см, turn_left, 50 см — до финиша.",
+        "kk": "Өз **turn_left** блогыңды жаса (бұрышты нөлдеу, солға айналу, < −89° күту, тоқта). Маршрут: 50 см, turn_left, 40 см, turn_left, 50 см — мәреге дейін.",
+        "en": "Make your own block **turn_left** (reset, spin left, wait < −89°, stop). Route: 50 cm, turn_left, 40 cm, turn_left, 50 cm — to the finish."
+      },
+      "field": {
+        "width": 1200,
+        "height": 900,
+        "start": {
+          "x": 200,
+          "y": 200,
+          "heading": 0
+        },
+        "border": true,
+        "zones": [
+          {
+            "id": "back",
+            "x": 120,
+            "y": 500,
+            "w": 180,
+            "h": 200,
+            "kind": "target",
+            "label": {
+              "ru": "Финиш",
+              "kk": "Мәре",
+              "en": "Finish"
+            }
+          }
+        ],
+        "points": [
+          {
+            "id": "top",
+            "x": 700,
+            "y": 600,
+            "r": 60,
+            "label": {
+              "ru": "Поворот",
+              "kk": "Бұрылыс",
+              "en": "Turn"
+            }
+          }
+        ],
+        "walls": [],
+        "lines": []
+      },
+      "toolbox": [
+        "call",
+        "move",
+        "reset_yaw",
+        "start_move",
+        "stop_move",
+        "wait_until"
+      ],
+      "start": [],
+      "checks": [
+        {
+          "type": "passPoints",
+          "points": [
+            "top"
+          ],
+          "ordered": true
+        },
+        {
+          "type": "finishInZone",
+          "zone": "back"
+        },
+        {
+          "type": "usesOp",
+          "op": "call",
+          "min": 2
+        },
+        {
+          "type": "usesSensor",
+          "sensor": "gyro"
+        }
+      ],
+      "hints": [
+        {
+          "ru": "Внутри turn_left четыре блока.",
+          "kk": "turn_left ішінде төрт блок.",
+          "en": "turn_left has four blocks inside."
+        },
+        {
+          "ru": "Налево — угол отрицательный: ждать «поворот < −89°».",
+          "kk": "Солға — бұрыш теріс: «бұрылу < −89°» күту.",
+          "en": "Left means negative: wait for “yaw < −89°”."
+        },
+        {
+          "ru": "Вперёд 50; turn_left; вперёд 40; turn_left; вперёд 50.",
+          "kk": "50 алға; turn_left; 40 алға; turn_left; 50 алға.",
+          "en": "Forward 50; turn_left; forward 40; turn_left; forward 50."
+        }
+      ],
+      "reference": [
+        {
+          "op": "move",
+          "direction": "forward",
+          "value": 50,
+          "unit": "cm"
+        },
+        {
+          "op": "call",
+          "name": "turn_left"
+        },
+        {
+          "op": "move",
+          "direction": "forward",
+          "value": 40,
+          "unit": "cm"
+        },
+        {
+          "op": "call",
+          "name": "turn_left"
+        },
+        {
+          "op": "move",
+          "direction": "forward",
+          "value": 50,
+          "unit": "cm"
+        }
+      ],
+      "referenceFunctions": [
+        {
+          "name": "turn_left",
+          "steps": [
+            {
+              "op": "reset_yaw"
+            },
+            {
+              "op": "start_move",
+              "direction": "left"
+            },
+            {
+              "op": "wait_until",
+              "condition": {
+                "sensor": "gyro",
+                "axis": "yaw",
+                "comparator": "<",
+                "value": -89
+              }
+            },
+            {
+              "op": "stop_move"
+            }
+          ]
+        }
+      ],
+      "skill": "python"
+    }
+  ]
+}

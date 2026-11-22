@@ -1,0 +1,138 @@
+{
+  "id": "nav-05",
+  "track": "navigation",
+  "unit": "nav-calibration",
+  "minutes": 7,
+  "skills": [
+    "calibration"
+  ],
+  "title": {
+    "ru": "Поправочные коэффициенты",
+    "kk": "Түзету коэффициенттері",
+    "en": "Correction factors"
+  },
+  "goal": {
+    "ru": "Сегодня ты научишься пользоваться коэффициентами калибровки.",
+    "kk": "Бүгін сен калибрлеу коэффициенттерін қолдануды үйренесің.",
+    "en": "Today you will learn to use calibration factors."
+  },
+  "summary": {
+    "ru": "Теперь ты знаешь, как коэффициенты делают одну программу точной на разных роботах.",
+    "kk": "Енді сен коэффициенттер бір бағдарламаны әр түрлі роботтарда қалай дәл ететінін білесің.",
+    "en": "Now you know how factors make one program precise on different robots."
+  },
+  "steps": [
+    {
+      "id": "factors",
+      "type": "theory",
+      "title": {
+        "ru": "Два числа на всю программу",
+        "kk": "Бүкіл бағдарламаға екі сан",
+        "en": "Two numbers for the whole program"
+      },
+      "body": {
+        "ru": "Не нужно исправлять каждое число в программе. Достаточно двух коэффициентов: **для расстояния** и **для поворота**.\n\nКоманда × коэффициент = что попросить у моторов. Если робот недоезжает, коэффициент больше 1. Переезжает — меньше 1.\n\nВ студии RoboEasy есть мастер калибровки: он проведёт тесты 50 см и 360° и сам запомнит оба коэффициента для твоего робота.",
+        "kk": "Бағдарламадағы әр санды түзетудің қажеті жоқ. Екі коэффициент жеткілікті: **қашықтыққа** және **бұрылысқа**.\n\nКоманда × коэффициент = моторлардан не сұрау керек. Робот жетпей қалса, коэффициент 1-ден көп. Асып кетсе — 1-ден аз.\n\nRoboEasy студиясында калибрлеу шебері бар: ол 50 см және 360° тестілерін өткізіп, роботыңның екі коэффициентін өзі есте сақтайды.",
+        "en": "You do not have to fix every number in the program. Two factors are enough: **for distance** and **for turns**.\n\nCommand × factor = what to ask from the motors. If the robot falls short, the factor is above 1. If it overshoots — below 1.\n\nThe RoboEasy studio has a calibration wizard: it runs the 50 cm and 360° tests and remembers both factors for your robot."
+      },
+      "illustration": "r-calibrate"
+    },
+    {
+      "id": "over",
+      "type": "quiz",
+      "kind": "choice",
+      "question": {
+        "ru": "Робот переезжает: просили 50 см, он проехал 55. Каким будет коэффициент?",
+        "kk": "Робот асып кетеді: 50 см сұрадық, ол 55 жүрді. Коэффициент қандай болады?",
+        "en": "The robot overshoots: you asked for 50 cm and it drove 55. What will the factor be?"
+      },
+      "options": [
+        {
+          "ru": "Меньше 1 (около 0,91)",
+          "kk": "1-ден аз (шамамен 0,91)",
+          "en": "Below 1 (about 0.91)"
+        },
+        {
+          "ru": "Больше 1 (около 1,1)",
+          "kk": "1-ден көп (шамамен 1,1)",
+          "en": "Above 1 (about 1.1)"
+        },
+        {
+          "ru": "Ровно 1",
+          "kk": "Дәл 1",
+          "en": "Exactly 1"
+        }
+      ],
+      "correct": [
+        0
+      ],
+      "explanation": {
+        "ru": "50 : 55 ≈ 0,91. Просим меньше, чтобы робот проехал ровно сколько нужно.",
+        "kk": "50 : 55 ≈ 0,91. Робот дәл керегінше жүруі үшін азырақ сұраймыз.",
+        "en": "50 ÷ 55 ≈ 0.91. Ask for less so the robot drives exactly what is needed."
+      },
+      "skill": "calibration"
+    },
+    {
+      "id": "apply",
+      "type": "quiz",
+      "kind": "number",
+      "question": {
+        "ru": "Коэффициент поворота 1,1. На сколько градусов попросить поворот, чтобы робот повернулся на 90°?",
+        "kk": "Бұрылыс коэффициенті 1,1. Робот 90°-қа бұрылуы үшін неше градусқа бұрылуды сұрау керек?",
+        "en": "The turn factor is 1.1. How many degrees do you ask for to get a 90° turn?"
+      },
+      "answer": 99,
+      "tolerance": 0.5,
+      "explanation": {
+        "ru": "90 × 1,1 = 99°.",
+        "kk": "90 × 1,1 = 99°.",
+        "en": "90 × 1.1 = 99°."
+      },
+      "unit": {
+        "ru": "°",
+        "kk": "°",
+        "en": "°"
+      },
+      "skill": "calibration"
+    },
+    {
+      "id": "process",
+      "type": "quiz",
+      "kind": "order",
+      "question": {
+        "ru": "Расставь шаги калибровки",
+        "kk": "Калибрлеу қадамдарын реттей қой",
+        "en": "Order the calibration steps"
+      },
+      "items": [
+        {
+          "ru": "Зарядить батарею",
+          "kk": "Батареяны зарядтау",
+          "en": "Charge the battery"
+        },
+        {
+          "ru": "Провести тест 50 см и записать результат",
+          "kk": "50 см тестін өткізіп, нәтижені жазу",
+          "en": "Run the 50 cm test and note the result"
+        },
+        {
+          "ru": "Провести тест 360°",
+          "kk": "360° тестін өткізу",
+          "en": "Run the 360° test"
+        },
+        {
+          "ru": "Посчитать коэффициенты и проверить маршрут",
+          "kk": "Коэффициенттерді есептеп, маршрутты тексеру",
+          "en": "Compute the factors and test a route"
+        }
+      ],
+      "explanation": {
+        "ru": "Калибруют на заряженном роботе — иначе коэффициенты изменятся, когда батарею зарядят.",
+        "kk": "Зарядталған роботта калибрлейді — әйтпесе батарея зарядталғанда коэффициенттер өзгереді.",
+        "en": "Calibrate with a charged battery — otherwise the factors change after charging."
+      },
+      "skill": "calibration"
+    }
+  ]
+}

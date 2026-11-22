@@ -1,0 +1,112 @@
+{
+  "id": "nav-08",
+  "track": "navigation",
+  "unit": "nav-straight",
+  "minutes": 8,
+  "skills": [
+    "control",
+    "gyro"
+  ],
+  "title": {
+    "ru": "P-регулятор",
+    "kk": "P-реттегіш",
+    "en": "P controller"
+  },
+  "goal": {
+    "ru": "Сегодня ты узнаешь регулятор, который рулит «по чуть-чуть».",
+    "kk": "Бүгін сен «аздап» бұратын реттегішті білесің.",
+    "en": "Today you will meet a controller that steers “just enough”."
+  },
+  "summary": {
+    "ru": "Теперь ты знаешь P-регулятор: поправка = Kp × ошибка.",
+    "kk": "Енді сен P-реттегішті білесің: түзету = Kp × қате.",
+    "en": "Now you know the P controller: correction = Kp × error."
+  },
+  "steps": [
+    {
+      "id": "p",
+      "type": "theory",
+      "title": {
+        "ru": "Пропорционально ошибке",
+        "kk": "Қатеге пропорционал",
+        "en": "In proportion to the error"
+      },
+      "body": {
+        "ru": "**Ошибка** — насколько робот ушёл от цели: от линии, от курса. **P-регулятор** рулит тем сильнее, чем больше ошибка:\n\n**поправка = Kp × ошибка**\n\nДалеко от цели — руль сильный. Почти на цели — совсем слабый. Поэтому робот подъезжает к линии плавно, без качки.\n\n**Kp** — коэффициент, его подбирают. Маленький — робот ленивый. Большой — снова начинает качаться.",
+        "kk": "**Қате** — робот мақсаттан қаншалықты кетті: сызықтан, бағыттан. **P-реттегіш** қате неғұрлым үлкен болса, соғұрлым қатты бұрады:\n\n**түзету = Kp × қате**\n\nМақсаттан алыс — руль күшті. Мақсатқа жақын — өте әлсіз. Сондықтан робот сызыққа тербеліссіз, біркелкі жақындайды.\n\n**Kp** — коэффициент, оны таңдайды. Кішкентай — робот жалқау. Үлкен — қайтадан тербеле бастайды.",
+        "en": "The **error** is how far the robot is from the goal: from the line, from the heading. A **P controller** steers harder the bigger the error:\n\n**correction = Kp × error**\n\nFar from the goal — strong steering. Almost there — very gentle. So the robot approaches the line smoothly, without rocking.\n\n**Kp** is a factor you tune. Too small — the robot is lazy. Too big — it starts rocking again."
+      },
+      "illustration": "r-p-control"
+    },
+    {
+      "id": "calc",
+      "type": "quiz",
+      "kind": "number",
+      "question": {
+        "ru": "Ошибка 10 мм, Kp = 2. Какая поправка руля?",
+        "kk": "Қате 10 мм, Kp = 2. Руль түзетуі қандай?",
+        "en": "Error 10 mm, Kp = 2. What is the steering correction?"
+      },
+      "answer": 20,
+      "tolerance": 0,
+      "explanation": {
+        "ru": "2 × 10 = 20.",
+        "kk": "2 × 10 = 20.",
+        "en": "2 × 10 = 20."
+      },
+      "skill": "control"
+    },
+    {
+      "id": "tune-p",
+      "type": "widget",
+      "widget": "pid",
+      "title": {
+        "ru": "Подбери Kp",
+        "kk": "Kp таңда",
+        "en": "Tune Kp"
+      },
+      "task": {
+        "ru": "Подбери Kp так, чтобы робот вышел на линию быстрее чем за 3 секунды и перелетел за неё не больше чем на 8 мм.",
+        "kk": "Робот сызыққа 3 секундтан тез шығып, одан 8 мм-ден аспай асатындай Kp таңда.",
+        "en": "Tune Kp so the robot reaches the line within 3 seconds and overshoots it by at most 8 mm."
+      },
+      "mode": "p"
+    },
+    {
+      "id": "zero",
+      "type": "quiz",
+      "kind": "choice",
+      "question": {
+        "ru": "Робот точно на линии, ошибка 0. Что делает P-регулятор?",
+        "kk": "Робот дәл сызықта, қате 0. P-реттегіш не істейді?",
+        "en": "The robot is exactly on the line, error 0. What does the P controller do?"
+      },
+      "options": [
+        {
+          "ru": "Не поворачивает: поправка 0",
+          "kk": "Бұрмайды: түзету 0",
+          "en": "Does not steer: correction 0"
+        },
+        {
+          "ru": "Резко поворачивает",
+          "kk": "Күрт бұрылады",
+          "en": "Steers hard"
+        },
+        {
+          "ru": "Останавливает робота",
+          "kk": "Роботты тоқтатады",
+          "en": "Stops the robot"
+        }
+      ],
+      "correct": [
+        0
+      ],
+      "explanation": {
+        "ru": "Kp × 0 = 0: на цели руль прямо.",
+        "kk": "Kp × 0 = 0: мақсатта руль тура.",
+        "en": "Kp × 0 = 0: on target the steering is straight."
+      },
+      "skill": "control"
+    }
+  ]
+}

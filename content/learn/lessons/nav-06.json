@@ -1,0 +1,142 @@
+{
+  "id": "nav-06",
+  "track": "navigation",
+  "unit": "nav-calibration",
+  "minutes": 10,
+  "skills": [
+    "calibration"
+  ],
+  "title": {
+    "ru": "Калибровка настоящего робота",
+    "kk": "Нағыз роботты калибрлеу",
+    "en": "Calibrating a real robot"
+  },
+  "goal": {
+    "ru": "Сегодня ты откалибруешь своего настоящего робота.",
+    "kk": "Бүгін сен өзіңнің нағыз роботыңды калибрлейсің.",
+    "en": "Today you will calibrate your real robot."
+  },
+  "summary": {
+    "ru": "Теперь у твоего робота есть свои коэффициенты — его программы стали точнее.",
+    "kk": "Енді роботыңның өз коэффициенттері бар — оның бағдарламалары дәлірек болды.",
+    "en": "Now your robot has its own factors — its programs are more precise."
+  },
+  "steps": [
+    {
+      "id": "prep",
+      "type": "theory",
+      "title": {
+        "ru": "Подготовка",
+        "kk": "Дайындық",
+        "en": "Getting ready"
+      },
+      "body": {
+        "ru": "Понадобятся: заряженный робот, рулетка или линейка, малярный скотч для меток.\n\nНаклей метку старта. Ставь робота всегда одинаково: задние колёса на метке. Делай каждый тест 3 раза и бери среднее — так случайная ошибка не испортит результат.",
+        "kk": "Керек болады: зарядталған робот, рулетка немесе сызғыш, белгілерге арналған малярлық скотч.\n\nСтарт белгісін жапсыр. Роботты әрдайым бірдей қой: артқы дөңгелектер белгіде. Әр тестті 3 рет жасап, орташасын ал — сонда кездейсоқ қате нәтижені бұзбайды.",
+        "en": "You need: a charged robot, a tape measure or ruler, masking tape for marks.\n\nStick a start mark. Always place the robot the same way: rear wheels on the mark. Run each test 3 times and take the average — then a random error will not spoil the result."
+      },
+      "illustration": "r-calibrate"
+    },
+    {
+      "id": "distance",
+      "type": "real_robot",
+      "title": {
+        "ru": "Тест 50 см",
+        "kk": "50 см тесті",
+        "en": "The 50 cm test"
+      },
+      "task": {
+        "ru": "Скачай программу, запусти робота от метки и измерь, сколько он проехал. Повтори 3 раза и посчитай среднее.",
+        "kk": "Бағдарламаны жүктеп, роботты белгіден іске қос және оның қанша жүргенін өлше. 3 рет қайталап, орташасын есепте.",
+        "en": "Download the program, run the robot from the mark and measure how far it went. Repeat 3 times and average."
+      },
+      "checklist": [
+        {
+          "ru": "Робот стоит задними колёсами на метке",
+          "kk": "Робот артқы дөңгелектерімен белгіде тұр",
+          "en": "The rear wheels are on the mark"
+        },
+        {
+          "ru": "Сделал 3 замера",
+          "kk": "3 өлшем жасадым",
+          "en": "I took 3 measurements"
+        },
+        {
+          "ru": "Посчитал коэффициент: 50 : среднее",
+          "kk": "Коэффициентті есептедім: 50 : орташа",
+          "en": "I computed the factor: 50 ÷ average"
+        }
+      ],
+      "program": [
+        {
+          "op": "move",
+          "direction": "forward",
+          "value": 50,
+          "unit": "cm"
+        }
+      ]
+    },
+    {
+      "id": "turn",
+      "type": "real_robot",
+      "title": {
+        "ru": "Тест 360°",
+        "kk": "360° тесті",
+        "en": "The 360° test"
+      },
+      "task": {
+        "ru": "Поставь робота носом вдоль края стола и запусти поворот на 360°. Оцени, на сколько градусов он не довернул или перевернул.",
+        "kk": "Роботты тұмсығымен үстел шетінің бойымен қойып, 360° бұрылысты іске қос. Ол неше градусқа жетпей не асып бұрылғанын бағала.",
+        "en": "Place the robot nose along the table edge and run a 360° turn. Estimate how many degrees it under- or over-turned."
+      },
+      "checklist": [
+        {
+          "ru": "Робот стоит ровно вдоль края",
+          "kk": "Робот шеттің бойымен түзу тұр",
+          "en": "The robot is aligned with the edge"
+        },
+        {
+          "ru": "Оценил ошибку поворота",
+          "kk": "Бұрылыс қатесін бағаладым",
+          "en": "I estimated the turn error"
+        },
+        {
+          "ru": "Записал оба коэффициента в мастер калибровки",
+          "kk": "Екі коэффициентті калибрлеу шеберіне жаздым",
+          "en": "I entered both factors in the calibration wizard"
+        }
+      ],
+      "program": [
+        {
+          "op": "turn",
+          "direction": "right",
+          "degrees": 360
+        }
+      ]
+    },
+    {
+      "id": "avg",
+      "type": "quiz",
+      "kind": "number",
+      "question": {
+        "ru": "Три замера: 48, 47 и 49 см. Какое среднее?",
+        "kk": "Үш өлшем: 48, 47 және 49 см. Орташасы қандай?",
+        "en": "Three measurements: 48, 47 and 49 cm. What is the average?"
+      },
+      "answer": 48,
+      "tolerance": 0,
+      "explanation": {
+        "ru": "(48 + 47 + 49) : 3 = 48 см. Коэффициент 50 : 48 ≈ 1,04.",
+        "kk": "(48 + 47 + 49) : 3 = 48 см. Коэффициент 50 : 48 ≈ 1,04.",
+        "en": "(48 + 47 + 49) ÷ 3 = 48 cm. The factor is 50 ÷ 48 ≈ 1.04."
+      },
+      "unit": {
+        "ru": "см",
+        "kk": "см",
+        "en": "cm"
+      },
+      "skill": "calibration"
+    }
+  ],
+  "kit": true
+}

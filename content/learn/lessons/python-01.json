@@ -1,0 +1,261 @@
+{
+  "id": "python-01",
+  "track": "python",
+  "unit": "python-bridge",
+  "minutes": 8,
+  "skills": [
+    "python"
+  ],
+  "title": {
+    "ru": "Квадрат в Python",
+    "kk": "Python-дағы шаршы",
+    "en": "A square in Python"
+  },
+  "goal": {
+    "ru": "Сегодня ты увидишь, как блоки превращаются в настоящий код.",
+    "kk": "Бүгін сен блоктардың нағыз кодқа қалай айналатынын көресің.",
+    "en": "Today you will see how blocks turn into real code."
+  },
+  "summary": {
+    "ru": "Теперь ты узнаёшь в Python те же команды, что и в блоках.",
+    "kk": "Енді сен Python-да блоктардағы сол командаларды танисың.",
+    "en": "Now you recognise in Python the same commands you know from blocks."
+  },
+  "steps": [
+    {
+      "id": "same",
+      "type": "theory",
+      "title": {
+        "ru": "Те же команды, другие слова",
+        "kk": "Сол командалар, басқа сөздер",
+        "en": "Same commands, other words"
+      },
+      "body": {
+        "ru": "Python — язык, на котором пишут программы для роботов, игр и сайтов. SPIKE Prime тоже понимает Python.\n\nКвадрат блоками — «повторить 4 раза: вперёд, налево». В Python это **for i in range(4):** и две команды ниже со сдвигом.\n\nКод читается сверху вниз, как блоки. А числа 617 и 180 — это градусы колеса: так моторы понимают «30 см» и «поворот».",
+        "kk": "Python — роботтарға, ойындар мен сайттарға бағдарлама жазатын тіл. SPIKE Prime да Python-ды түсінеді.\n\nБлоктармен шаршы — «4 рет қайталау: алға, солға». Python-да бұл **for i in range(4):** және астында шегініспен екі команда.\n\nКод блоктар сияқты жоғарыдан төмен оқылады. Ал 617 және 180 сандары — дөңгелек градустары: моторлар «30 см» мен «бұрылысты» осылай түсінеді.",
+        "en": "Python is a language used for robots, games and websites. SPIKE Prime understands Python too.\n\nA square in blocks is “repeat 4 times: forward, left”. In Python it is **for i in range(4):** with two indented commands below.\n\nCode reads top to bottom, like blocks. The numbers 617 and 180 are wheel degrees: that is how the motors understand “30 cm” and “a turn”."
+      },
+      "illustration": "r-python",
+      "code": "from hub import port\nimport runloop, motor_pair\n\nasync def main():\n    motor_pair.pair(motor_pair.PAIR_1, port.A, port.B)\n    for i in range(4):\n        await motor_pair.move_for_degrees(motor_pair.PAIR_1, 617, 0)   # 30 cm\n        await motor_pair.move_for_degrees(motor_pair.PAIR_1, 180, -100) # turn left\n\nrunloop.run(main())"
+    },
+    {
+      "id": "square",
+      "type": "code",
+      "title": {
+        "ru": "Квадрат блоками и кодом",
+        "kk": "Блоктармен және кодпен шаршы",
+        "en": "A square in blocks and code"
+      },
+      "task": {
+        "ru": "Проедь квадрат 30 см (налево) тремя блоками и вернись на старт. Потом открой вкладку Python и найди там цикл for.",
+        "kk": "Үш блокпен 30 см шаршыны жүр (солға) және стартқа орал. Содан кейін Python қойындысын ашып, for циклін тап.",
+        "en": "Drive a 30 cm square (turning left) with three blocks and return to the start. Then open the Python tab and find the for loop."
+      },
+      "field": {
+        "width": 1000,
+        "height": 850,
+        "start": {
+          "x": 300,
+          "y": 250,
+          "heading": 0
+        },
+        "border": true,
+        "zones": [
+          {
+            "id": "home",
+            "x": 200,
+            "y": 150,
+            "w": 200,
+            "h": 200,
+            "kind": "target",
+            "label": {
+              "ru": "Старт",
+              "kk": "Старт",
+              "en": "Start"
+            }
+          }
+        ],
+        "points": [
+          {
+            "id": "p1",
+            "x": 600,
+            "y": 250,
+            "r": 60,
+            "label": {
+              "ru": "Угол 1",
+              "kk": "1-бұрыш",
+              "en": "Corner 1"
+            }
+          },
+          {
+            "id": "p2",
+            "x": 600,
+            "y": 550,
+            "r": 60,
+            "label": {
+              "ru": "Угол 2",
+              "kk": "2-бұрыш",
+              "en": "Corner 2"
+            }
+          },
+          {
+            "id": "p3",
+            "x": 300,
+            "y": 550,
+            "r": 60,
+            "label": {
+              "ru": "Угол 3",
+              "kk": "3-бұрыш",
+              "en": "Corner 3"
+            }
+          }
+        ],
+        "walls": [],
+        "lines": []
+      },
+      "toolbox": [
+        "move",
+        "turn",
+        "repeat"
+      ],
+      "start": [],
+      "checks": [
+        {
+          "type": "passPoints",
+          "points": [
+            "p1",
+            "p2",
+            "p3"
+          ],
+          "ordered": true
+        },
+        {
+          "type": "finishInZone",
+          "zone": "home"
+        },
+        {
+          "type": "maxBlocks",
+          "max": 3
+        }
+      ],
+      "hints": [
+        {
+          "ru": "Собери программу блоками, а потом открой вкладку **Python** над редактором — там та же программа кодом.",
+          "kk": "Бағдарламаны блоктармен құрастыр, содан кейін редактордың үстіндегі **Python** қойындысын аш — онда сол бағдарлама кодпен.",
+          "en": "Build the program with blocks, then open the **Python** tab above the editor — the same program is there as code."
+        },
+        {
+          "ru": "Повторить 4 раза: вперёд 30, налево 90°.",
+          "kk": "4 рет қайталау: 30 алға, солға 90°.",
+          "en": "Repeat 4 times: forward 30, left 90°."
+        },
+        {
+          "ru": "В Python цикл выглядит как for _ in range(4):",
+          "kk": "Python-да цикл for _ in range(4): сияқты көрінеді.",
+          "en": "In Python the loop looks like for _ in range(4):"
+        }
+      ],
+      "reference": [
+        {
+          "op": "repeat",
+          "times": 4,
+          "steps": [
+            {
+              "op": "move",
+              "direction": "forward",
+              "value": 30,
+              "unit": "cm"
+            },
+            {
+              "op": "turn",
+              "direction": "left",
+              "degrees": 90
+            }
+          ]
+        }
+      ],
+      "skill": "python"
+    },
+    {
+      "id": "range",
+      "type": "quiz",
+      "kind": "fill",
+      "question": {
+        "ru": "Вставь число, чтобы цикл повторился 4 раза",
+        "kk": "Цикл 4 рет қайталануы үшін санды қой",
+        "en": "Fill in the number so the loop runs 4 times"
+      },
+      "code": "for i in range([[0]]):\n    await motor_pair.move_for_degrees(motor_pair.PAIR_1, 617, 0)",
+      "blanks": [
+        {
+          "options": [
+            "3",
+            "4",
+            "5"
+          ],
+          "correct": 1
+        }
+      ],
+      "explanation": {
+        "ru": "range(4) даёт четыре повтора: i = 0, 1, 2, 3.",
+        "kk": "range(4) төрт қайталау береді: i = 0, 1, 2, 3.",
+        "en": "range(4) gives four repeats: i = 0, 1, 2, 3."
+      },
+      "skill": "python"
+    },
+    {
+      "id": "words",
+      "type": "quiz",
+      "kind": "match",
+      "question": {
+        "ru": "Подбери блок к коду",
+        "kk": "Блокты кодқа сәйкестендір",
+        "en": "Match the block to the code"
+      },
+      "pairs": [
+        {
+          "left": {
+            "ru": "повторить 4 раза",
+            "kk": "4 рет қайталау",
+            "en": "repeat 4 times"
+          },
+          "right": {
+            "ru": "for i in range(4):",
+            "kk": "for i in range(4):",
+            "en": "for i in range(4):"
+          }
+        },
+        {
+          "left": {
+            "ru": "когда программа запускается",
+            "kk": "бағдарлама іске қосылғанда",
+            "en": "when program starts"
+          },
+          "right": {
+            "ru": "async def main():",
+            "kk": "async def main():",
+            "en": "async def main():"
+          }
+        },
+        {
+          "left": {
+            "ru": "ехать вперёд",
+            "kk": "алға жүру",
+            "en": "move forward"
+          },
+          "right": {
+            "ru": "motor_pair.move_for_degrees(...)",
+            "kk": "motor_pair.move_for_degrees(...)",
+            "en": "motor_pair.move_for_degrees(...)"
+          }
+        }
+      ],
+      "explanation": {
+        "ru": "У каждого блока есть строчка кода, которая делает то же самое.",
+        "kk": "Әр блоктың дәл сол нәрсені істейтін код жолы бар.",
+        "en": "Every block has a line of code that does the same thing."
+      },
+      "skill": "python"
+    }
+  ]
+}

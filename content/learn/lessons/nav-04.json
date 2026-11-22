@@ -1,0 +1,168 @@
+{
+  "id": "nav-04",
+  "track": "navigation",
+  "unit": "nav-calibration",
+  "minutes": 7,
+  "skills": [
+    "calibration"
+  ],
+  "title": {
+    "ru": "Тест поворота 360°",
+    "kk": "360° бұрылыс тесті",
+    "en": "The 360° turn test"
+  },
+  "goal": {
+    "ru": "Сегодня ты проверишь точность поворотов.",
+    "kk": "Бүгін сен бұрылыстардың дәлдігін тексересің.",
+    "en": "Today you will check how precise the turns are."
+  },
+  "summary": {
+    "ru": "Теперь ты умеешь проверять поворот полным оборотом и считать поправку.",
+    "kk": "Енді сен бұрылысты толық айналыммен тексеріп, түзетуді есептей аласың.",
+    "en": "Now you can test turns with a full spin and work out the correction."
+  },
+  "steps": [
+    {
+      "id": "spin",
+      "type": "theory",
+      "title": {
+        "ru": "Полный оборот",
+        "kk": "Толық айналым",
+        "en": "A full spin"
+      },
+      "body": {
+        "ru": "Маленькая ошибка в повороте незаметна. Но если робот 4 раза повернётся на 90°, ошибка сложится.\n\n**Тест 360°**: поставь робота носом на линию и попроси развернуться на 360°. Смотри, куда он смотрит в конце.\n\nПовернулся только на 340° — коэффициент 360 : 340 ≈ 1,06.",
+        "kk": "Бұрылыстағы кішкене қате байқалмайды. Бірақ робот 4 рет 90°-қа бұрылса, қате қосылады.\n\n**360° тесті**: роботты тұмсығымен сызыққа қойып, 360°-қа бұрылуды сұра. Соңында қайда қарап тұрғанына назар аудар.\n\nТек 340°-қа бұрылды — коэффициент 360 : 340 ≈ 1,06.",
+        "en": "A small turn error goes unnoticed. But if the robot turns 90° four times, the error adds up.\n\n**The 360° test**: place the robot nose-on to a line and ask for a 360° spin. Check where it faces at the end.\n\nIt only turned 340° — the factor is 360 ÷ 340 ≈ 1.06."
+      },
+      "illustration": "r-gyro"
+    },
+    {
+      "id": "sum",
+      "type": "quiz",
+      "kind": "number",
+      "question": {
+        "ru": "Каждый поворот на 90° у робота выходит 87°. На сколько градусов он ошибётся после четырёх поворотов?",
+        "kk": "Роботтың әр 90° бұрылысы 87° шығады. Төрт бұрылыстан кейін ол неше градусқа қателеседі?",
+        "en": "Every 90° turn comes out as 87°. By how many degrees is the robot off after four turns?"
+      },
+      "answer": 12,
+      "tolerance": 0,
+      "explanation": {
+        "ru": "Каждый раз не хватает 3°: 4 × 3° = 12°.",
+        "kk": "Әр жолы 3° жетпейді: 4 × 3° = 12°.",
+        "en": "3° short every time: 4 × 3° = 12°."
+      },
+      "unit": {
+        "ru": "°",
+        "kk": "°",
+        "en": "°"
+      },
+      "skill": "calibration"
+    },
+    {
+      "id": "full",
+      "type": "code",
+      "title": {
+        "ru": "Полный оборот",
+        "kk": "Толық айналым",
+        "en": "A full spin"
+      },
+      "task": {
+        "ru": "Развернись на месте четыре раза по 90° направо и подай сигнал после каждого поворота. В конце робот должен смотреть туда же, куда в начале.",
+        "kk": "Орнында оңға 90°-тан төрт рет бұрылып, әр бұрылыстан кейін дыбыс бер. Соңында робот бастапқы бағытқа қарап тұруы керек.",
+        "en": "Turn right in place four times by 90° and beep after each turn. At the end the robot must face where it started."
+      },
+      "field": {
+        "width": 1000,
+        "height": 800,
+        "start": {
+          "x": 500,
+          "y": 400,
+          "heading": 0
+        },
+        "border": true,
+        "zones": [],
+        "points": [],
+        "walls": [],
+        "lines": []
+      },
+      "toolbox": [
+        "turn",
+        "beep",
+        "repeat"
+      ],
+      "start": [],
+      "checks": [
+        {
+          "type": "heading",
+          "degrees": 0,
+          "tolerance": 3
+        },
+        {
+          "type": "beeped",
+          "min": 4
+        },
+        {
+          "type": "usesOp",
+          "op": "repeat",
+          "min": 1
+        }
+      ],
+      "hints": [
+        {
+          "ru": "Четыре одинаковых поворота — это цикл.",
+          "kk": "Төрт бірдей бұрылыс — бұл цикл.",
+          "en": "Four identical turns make a loop."
+        },
+        {
+          "ru": "Внутри — поворот и сигнал.",
+          "kk": "Ішінде — бұрылыс және дыбыс.",
+          "en": "Inside: a turn and a beep."
+        },
+        {
+          "ru": "Повторить 4 раза: направо 90°, сигнал.",
+          "kk": "4 рет қайталау: оңға 90°, дыбыс.",
+          "en": "Repeat 4 times: right 90°, beep."
+        }
+      ],
+      "reference": [
+        {
+          "op": "repeat",
+          "times": 4,
+          "steps": [
+            {
+              "op": "turn",
+              "direction": "right",
+              "degrees": 90
+            },
+            {
+              "op": "beep",
+              "note": 72,
+              "seconds": 0.3
+            }
+          ]
+        }
+      ],
+      "skill": "calibration"
+    },
+    {
+      "id": "factor",
+      "type": "quiz",
+      "kind": "number",
+      "question": {
+        "ru": "Робот должен был повернуться на 360°, а повернулся на 300°. Какой коэффициент?",
+        "kk": "Робот 360°-қа бұрылуы керек еді, бірақ 300°-қа бұрылды. Коэффициент қандай?",
+        "en": "The robot should have turned 360° but turned 300°. What is the factor?"
+      },
+      "answer": 1.2,
+      "tolerance": 0.01,
+      "explanation": {
+        "ru": "360 : 300 = 1,2.",
+        "kk": "360 : 300 = 1,2.",
+        "en": "360 ÷ 300 = 1.2."
+      },
+      "skill": "calibration"
+    }
+  ]
+}

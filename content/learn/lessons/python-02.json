@@ -1,0 +1,129 @@
+{
+  "id": "python-02",
+  "track": "python",
+  "unit": "python-bridge",
+  "minutes": 7,
+  "skills": [
+    "python"
+  ],
+  "title": {
+    "ru": "Отступы и комментарии",
+    "kk": "Шегіністер мен түсініктемелер",
+    "en": "Indentation and comments"
+  },
+  "goal": {
+    "ru": "Сегодня ты узнаешь два правила записи кода на Python.",
+    "kk": "Бүгін сен Python кодын жазудың екі ережесін білесің.",
+    "en": "Today you will learn two rules for writing Python code."
+  },
+  "summary": {
+    "ru": "Теперь ты знаешь, что отступы показывают, что внутри цикла, а комментарии — для людей.",
+    "kk": "Енді сен шегіністер цикл ішінде не бар екенін көрсететінін, ал түсініктемелер адамдарға арналғанын білесің.",
+    "en": "Now you know indentation shows what is inside a loop, and comments are for people."
+  },
+  "steps": [
+    {
+      "id": "indent",
+      "type": "theory",
+      "title": {
+        "ru": "Сдвиг — это «внутри»",
+        "kk": "Шегініс — «ішінде»",
+        "en": "Indent means “inside”"
+      },
+      "body": {
+        "ru": "В блоках видно, что лежит внутри цикла. В Python это показывают **отступом** — 4 пробела в начале строки.\n\nВсё, что сдвинуто под **for**, повторяется. Строка без сдвига выполнится после цикла, один раз.\n\nТекст после **#** — **комментарий**. Робот его не читает, он для людей: объясняет, что делает код.",
+        "kk": "Блоктарда цикл ішінде не жатқаны көрінеді. Python-да мұны **шегініспен** көрсетеді — жол басындағы 4 бос орын.\n\n**for** астына жылжытылғанның бәрі қайталанады. Шегініссіз жол циклдан кейін бір рет орындалады.\n\n**#** белгісінен кейінгі мәтін — **түсініктеме**. Робот оны оқымайды, ол адамдарға арналған: код не істейтінін түсіндіреді.",
+        "en": "In blocks you can see what sits inside a loop. In Python it is shown with **indentation** — 4 spaces at the start of a line.\n\nEverything indented under **for** repeats. A line without indentation runs after the loop, once.\n\nText after **#** is a **comment**. The robot ignores it; it is for people and explains what the code does."
+      },
+      "illustration": "r-indent",
+      "code": "for i in range(3):\n    await sound.beep(440, 200)   # inside: 3 times\nawait sound.beep(880, 500)       # after the loop: once"
+    },
+    {
+      "id": "beeps",
+      "type": "quiz",
+      "kind": "number",
+      "question": {
+        "ru": "Сколько всего сигналов прозвучит в примере справа?",
+        "kk": "Оң жақтағы мысалда барлығы неше дыбыс естіледі?",
+        "en": "How many beeps in total in the example?"
+      },
+      "answer": 4,
+      "tolerance": 0,
+      "explanation": {
+        "ru": "Три сигнала внутри цикла и один после: 3 + 1 = 4.",
+        "kk": "Цикл ішінде үш дыбыс және одан кейін бір: 3 + 1 = 4.",
+        "en": "Three inside the loop and one after: 3 + 1 = 4."
+      },
+      "skill": "python"
+    },
+    {
+      "id": "comment",
+      "type": "quiz",
+      "kind": "choice",
+      "question": {
+        "ru": "Что делает робот со строкой «# поворот налево»?",
+        "kk": "Робот «# солға бұрылыс» жолымен не істейді?",
+        "en": "What does the robot do with the line “# turn left”?"
+      },
+      "options": [
+        {
+          "ru": "Ничего: это комментарий для людей",
+          "kk": "Ештеңе: бұл адамдарға арналған түсініктеме",
+          "en": "Nothing: it is a comment for people"
+        },
+        {
+          "ru": "Поворачивает налево",
+          "kk": "Солға бұрылады",
+          "en": "Turns left"
+        },
+        {
+          "ru": "Выдаёт ошибку",
+          "kk": "Қате береді",
+          "en": "Shows an error"
+        }
+      ],
+      "correct": [
+        0
+      ],
+      "explanation": {
+        "ru": "Всё после # робот пропускает. Хорошие комментарии помогают команде понимать код.",
+        "kk": "# белгісінен кейінгінің бәрін робот өткізіп жібереді. Жақсы түсініктемелер командаға кодты түсінуге көмектеседі.",
+        "en": "The robot skips everything after #. Good comments help the team understand the code."
+      },
+      "skill": "python"
+    },
+    {
+      "id": "lines",
+      "type": "quiz",
+      "kind": "order",
+      "question": {
+        "ru": "Собери программу «3 раза вперёд, потом сигнал» по порядку строк",
+        "kk": "«3 рет алға, содан кейін дыбыс» бағдарламасын жолдар ретімен құрастыр",
+        "en": "Order the lines of “forward 3 times, then beep”"
+      },
+      "items": [
+        {
+          "ru": "for i in range(3):",
+          "kk": "for i in range(3):",
+          "en": "for i in range(3):"
+        },
+        {
+          "ru": "    await motor_pair.move_for_degrees(motor_pair.PAIR_1, 360, 0)",
+          "kk": "    await motor_pair.move_for_degrees(motor_pair.PAIR_1, 360, 0)",
+          "en": "    await motor_pair.move_for_degrees(motor_pair.PAIR_1, 360, 0)"
+        },
+        {
+          "ru": "await sound.beep(440, 200)",
+          "kk": "await sound.beep(440, 200)",
+          "en": "await sound.beep(440, 200)"
+        }
+      ],
+      "explanation": {
+        "ru": "Сначала заголовок цикла, потом сдвинутая команда внутри, потом команда после цикла.",
+        "kk": "Алдымен цикл тақырыбы, содан кейін ішіндегі шегіністі команда, содан кейін циклдан кейінгі команда.",
+        "en": "First the loop header, then the indented command inside, then the command after the loop."
+      },
+      "skill": "python"
+    }
+  ]
+}

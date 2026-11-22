@@ -1,0 +1,232 @@
+{
+  "id": "python-15",
+  "track": "python",
+  "unit": "python-project",
+  "minutes": 12,
+  "skills": [
+    "python"
+  ],
+  "title": {
+    "ru": "Итоговый проект",
+    "kk": "Қорытынды жоба",
+    "en": "Final project"
+  },
+  "goal": {
+    "ru": "Сегодня ты соберёшь программу из всего, что узнал о Python.",
+    "kk": "Бүгін сен Python туралы білгеннің бәрінен бағдарлама құрастырасың.",
+    "en": "Today you will build a program from everything you learned about Python."
+  },
+  "summary": {
+    "ru": "Трек «Python» пройден! Ты понимаешь, как устроена настоящая программа робота на Python.",
+    "kk": "«Python» тректі өттің! Сен роботтың нағыз Python бағдарламасы қалай құрылғанын түсінесің.",
+    "en": "The Python track is done! You understand how a real Python robot program is built."
+  },
+  "steps": [
+    {
+      "id": "mission",
+      "type": "theory",
+      "title": {
+        "ru": "Миссия «Курьер по линии»",
+        "kk": "«Сызықтағы курьер» миссиясы",
+        "en": "Mission: Line courier"
+      },
+      "body": {
+        "ru": "Робот-курьер едет по линии, пока впереди не окажется стена, останавливается, подаёт сигнал и показывает на экране, что посылка доставлена.\n\nВ программе будет всё: модули, main, цикл while, условие if/else, датчики и функция. Сначала собери блоками, потом внимательно прочитай Python-версию — ты должен понимать каждую строку.",
+        "kk": "Робот-курьер алда қабырға болғанша сызықпен жүріп, тоқтайды, дыбыс береді және экранда сәлемдеме жеткізілгенін көрсетеді.\n\nБағдарламада бәрі болады: модульдер, main, while циклі, if/else шарты, датчиктер және функция. Алдымен блоктармен құрастыр, содан кейін Python нұсқасын мұқият оқы — әр жолды түсінуің керек.",
+        "en": "The courier robot follows the line until a wall is ahead, stops, beeps and shows on the screen that the parcel is delivered.\n\nThe program has everything: modules, main, a while loop, if/else, sensors and a function. Build it with blocks first, then read the Python version carefully — you should understand every line."
+      },
+      "illustration": "r-python"
+    },
+    {
+      "id": "courier",
+      "type": "project",
+      "title": {
+        "ru": "Курьер по линии",
+        "kk": "Сызықтағы курьер",
+        "en": "Line courier"
+      },
+      "task": {
+        "ru": "Езжай по линии, пока стена не станет ближе 15 см, остановись, подай сигнал и покажи галочку. Потом прочитай вкладку Python.",
+        "kk": "Қабырға 15 см-ден жақын болғанша сызықпен жүр, тоқта, дыбыс бер және құсбелгі көрсет. Содан кейін Python қойындысын оқы.",
+        "en": "Follow the line until the wall is closer than 15 cm, stop, beep and show a tick. Then read the Python tab."
+      },
+      "field": {
+        "width": 1500,
+        "height": 900,
+        "start": {
+          "x": 150,
+          "y": 300,
+          "heading": 0
+        },
+        "border": true,
+        "zones": [],
+        "points": [],
+        "walls": [
+          {
+            "x": 1250,
+            "y": 450,
+            "w": 40,
+            "h": 300
+          }
+        ],
+        "lines": [
+          {
+            "points": [
+              [
+                100,
+                300
+              ],
+              [
+                700,
+                300
+              ],
+              [
+                1100,
+                600
+              ],
+              [
+                1400,
+                600
+              ]
+            ],
+            "width": 20,
+            "color": "black"
+          }
+        ]
+      },
+      "toolbox": [
+        "start_steer",
+        "stop_move",
+        "repeat_until",
+        "if",
+        "beep",
+        "show_image"
+      ],
+      "start": [],
+      "checks": [
+        {
+          "type": "stopBeforeWall",
+          "maxMm": 200
+        },
+        {
+          "type": "beeped",
+          "min": 1
+        },
+        {
+          "type": "displayed",
+          "image": "yes"
+        },
+        {
+          "type": "noCollision"
+        },
+        {
+          "type": "usesSensor",
+          "sensor": "distance"
+        }
+      ],
+      "hints": [
+        {
+          "ru": "Собери программу блоками, а потом открой вкладку **Python** над редактором — там та же программа кодом.",
+          "kk": "Бағдарламаны блоктармен құрастыр, содан кейін редактордың үстіндегі **Python** қойындысын аш — онда сол бағдарлама кодпен.",
+          "en": "Build the program with blocks, then open the **Python** tab above the editor — the same program is there as code."
+        },
+        {
+          "ru": "Повторять, пока не расстояние < 15: если отражение < 50 — руль 20, иначе −20.",
+          "kk": "Қашықтық < 15 болғанша қайталау: егер шағылысу < 50 — руль 20, әйтпесе −20.",
+          "en": "Repeat until distance < 15: if reflection < 50 — steer 20, else −20."
+        },
+        {
+          "ru": "После цикла: стоп, сигнал, показать галочку.",
+          "kk": "Циклдан кейін: тоқта, дыбыс, құсбелгі көрсету.",
+          "en": "After the loop: stop, beep, show the tick."
+        }
+      ],
+      "reference": [
+        {
+          "op": "repeat_until",
+          "condition": {
+            "sensor": "distance",
+            "port": "C",
+            "comparator": "<",
+            "value": 15,
+            "unit": "cm"
+          },
+          "steps": [
+            {
+              "op": "if",
+              "condition": {
+                "sensor": "reflection",
+                "port": "D",
+                "comparator": "<",
+                "value": 50
+              },
+              "then": [
+                {
+                  "op": "start_steer",
+                  "steering": 20
+                }
+              ],
+              "else": [
+                {
+                  "op": "start_steer",
+                  "steering": -20
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "op": "stop_move"
+        },
+        {
+          "op": "beep",
+          "note": 72,
+          "seconds": 0.3
+        },
+        {
+          "op": "show_image",
+          "image": "yes"
+        }
+      ],
+      "skill": "python"
+    },
+    {
+      "id": "read",
+      "type": "quiz",
+      "kind": "order",
+      "question": {
+        "ru": "В каком порядке идут части программы на Python?",
+        "kk": "Python бағдарламасының бөліктері қандай ретпен жүреді?",
+        "en": "In what order do the parts of a Python program go?"
+      },
+      "items": [
+        {
+          "ru": "import — модули",
+          "kk": "import — модульдер",
+          "en": "import — modules"
+        },
+        {
+          "ru": "Свои функции (def)",
+          "kk": "Өз функцияларың (def)",
+          "en": "Your functions (def)"
+        },
+        {
+          "ru": "async def main(): — главная функция",
+          "kk": "async def main(): — басты функция",
+          "en": "async def main(): — the main function"
+        },
+        {
+          "ru": "runloop.run(main()) — запуск",
+          "kk": "runloop.run(main()) — іске қосу",
+          "en": "runloop.run(main()) — start"
+        }
+      ],
+      "explanation": {
+        "ru": "Сначала инструменты, потом помощники, потом главная функция и, наконец, её запуск.",
+        "kk": "Алдымен құралдар, содан кейін көмекшілер, содан кейін басты функция және соңында оны іске қосу.",
+        "en": "Tools first, then helpers, then the main function and finally starting it."
+      },
+      "skill": "python"
+    }
+  ]
+}

@@ -1,0 +1,184 @@
+{
+  "id": "python-07",
+  "track": "python",
+  "unit": "python-flow",
+  "minutes": 8,
+  "skills": [
+    "python",
+    "loops",
+    "conditions"
+  ],
+  "title": {
+    "ru": "for и while",
+    "kk": "for және while",
+    "en": "for and while"
+  },
+  "goal": {
+    "ru": "Сегодня ты узнаешь два цикла Python.",
+    "kk": "Бүгін сен Python-ның екі циклін білесің.",
+    "en": "Today you will learn Python’s two loops."
+  },
+  "summary": {
+    "ru": "Теперь ты знаешь: for — когда известно число повторов, while — пока условие правда.",
+    "kk": "Енді сен білесің: for — қайталау саны белгілі болғанда, while — шарт ақиқат болғанша.",
+    "en": "Now you know: for — when the count is known, while — as long as a condition is true."
+  },
+  "steps": [
+    {
+      "id": "loops",
+      "type": "theory",
+      "title": {
+        "ru": "Два цикла",
+        "kk": "Екі цикл",
+        "en": "Two loops"
+      },
+      "body": {
+        "ru": "**for i in range(5):** — повторить 5 раз. Это блок «повторить N раз».\n\n**while условие:** — повторять, **пока** условие правда. Например, «пока стена дальше 10 см — ехать».\n\nЗаметь разницу с блоком «повторять, пока не…»: while повторяет, пока условие правда, а «пока не» — пока оно ложно. **while True:** — это «повторять всегда».",
+        "kk": "**for i in range(5):** — 5 рет қайталау. Бұл «N рет қайталау» блогы.\n\n**while шарт:** — шарт ақиқат **болғанша** қайталау. Мысалы, «қабырға 10 см-ден алыс болғанша — жүру».\n\n«…дейін қайталау» блогынан айырмашылығына назар аудар: while шарт ақиқат болғанша қайталайды, ал «дейін» — ол жалған болғанша. **while True:** — бұл «әрдайым қайталау».",
+        "en": "**for i in range(5):** — repeat 5 times. That is the “repeat N times” block.\n\n**while condition:** — repeat **as long as** the condition is true. For example, “while the wall is further than 10 cm — drive”.\n\nNote the difference from “repeat until…”: while repeats while the condition is true, “until” while it is false. **while True:** means “forever”."
+      },
+      "illustration": "r-loop",
+      "code": "while distance_sensor.distance(port.C) > 100:   # mm\n    motor_pair.move(motor_pair.PAIR_1, 0)\n    await runloop.sleep_ms(10)\nmotor_pair.stop(motor_pair.PAIR_1)"
+    },
+    {
+      "id": "count",
+      "type": "quiz",
+      "kind": "number",
+      "question": {
+        "ru": "Сколько раз пискнет «for i in range(3): await sound.beep(440, 100)»?",
+        "kk": "«for i in range(3): await sound.beep(440, 100)» неше рет дыбыс береді?",
+        "en": "How many times does “for i in range(3): await sound.beep(440, 100)” beep?"
+      },
+      "answer": 3,
+      "tolerance": 0,
+      "explanation": {
+        "ru": "range(3) — три повтора.",
+        "kk": "range(3) — үш қайталау.",
+        "en": "range(3) means three repeats."
+      },
+      "skill": "python"
+    },
+    {
+      "id": "while",
+      "type": "quiz",
+      "kind": "fill",
+      "question": {
+        "ru": "Робот должен ехать, пока стена дальше 10 см (100 мм). Выбери знак",
+        "kk": "Робот қабырға 10 см-ден (100 мм) алыс болғанша жүруі керек. Белгіні таңда",
+        "en": "The robot drives while the wall is further than 10 cm (100 mm). Pick the sign"
+      },
+      "code": "while distance_sensor.distance(port.C) [[0]] 100:\n    motor_pair.move(motor_pair.PAIR_1, 0)\n    await runloop.sleep_ms(10)",
+      "blanks": [
+        {
+          "options": [
+            ">",
+            "<",
+            "=="
+          ],
+          "correct": 0
+        }
+      ],
+      "explanation": {
+        "ru": "«Дальше 100 мм» — значит расстояние больше 100: знак >.",
+        "kk": "«100 мм-ден алыс» — қашықтық 100-ден көп дегені: > белгісі.",
+        "en": "“Further than 100 mm” means the distance is greater than 100: the > sign."
+      },
+      "skill": "python"
+    },
+    {
+      "id": "wall",
+      "type": "code",
+      "title": {
+        "ru": "Пока стена далеко",
+        "kk": "Қабырға алыс болғанша",
+        "en": "While the wall is far"
+      },
+      "task": {
+        "ru": "Собери блоками: **повторять, пока** стена дальше 10 см — ехать вперёд; потом остановиться. Открой вкладку Python и найди там while.",
+        "kk": "Блоктармен құрастыр: қабырға 10 см-ден алыс **болғанша қайталау** — алға жүру; содан кейін тоқтау. Python қойындысын ашып, while-ды тап.",
+        "en": "Build with blocks: **repeat while** the wall is further than 10 cm — drive forward; then stop. Open the Python tab and find the while."
+      },
+      "field": {
+        "width": 1400,
+        "height": 400,
+        "start": {
+          "x": 150,
+          "y": 200,
+          "heading": 0
+        },
+        "border": true,
+        "zones": [],
+        "points": [],
+        "walls": [
+          {
+            "x": 1000,
+            "y": 0,
+            "w": 40,
+            "h": 400
+          }
+        ],
+        "lines": []
+      },
+      "toolbox": [
+        "while",
+        "start_move",
+        "stop_move",
+        "wait"
+      ],
+      "start": [],
+      "checks": [
+        {
+          "type": "stopBeforeWall",
+          "maxMm": 150
+        },
+        {
+          "type": "usesOp",
+          "op": "while",
+          "min": 1
+        },
+        {
+          "type": "noCollision"
+        }
+      ],
+      "hints": [
+        {
+          "ru": "Собери программу блоками, а потом открой вкладку **Python** над редактором — там та же программа кодом.",
+          "kk": "Бағдарламаны блоктармен құрастыр, содан кейін редактордың үстіндегі **Python** қойындысын аш — онда сол бағдарлама кодпен.",
+          "en": "Build the program with blocks, then open the **Python** tab above the editor — the same program is there as code."
+        },
+        {
+          "ru": "Блок «повторять, пока» с условием «расстояние > 10 см».",
+          "kk": "«Әзірге қайталау» блогы «қашықтық > 10 см» шартымен.",
+          "en": "A “repeat while” block with “distance > 10 cm”."
+        },
+        {
+          "ru": "Внутри — начать движение; после цикла — остановить.",
+          "kk": "Ішінде — қозғалысты бастау; циклдан кейін — тоқтату.",
+          "en": "Inside: start moving; after the loop: stop."
+        }
+      ],
+      "reference": [
+        {
+          "op": "while",
+          "condition": {
+            "sensor": "distance",
+            "port": "C",
+            "comparator": ">",
+            "value": 10,
+            "unit": "cm"
+          },
+          "steps": [
+            {
+              "op": "start_move",
+              "direction": "forward"
+            }
+          ]
+        },
+        {
+          "op": "stop_move"
+        }
+      ],
+      "skill": "python"
+    }
+  ]
+}

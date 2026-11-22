@@ -1,0 +1,96 @@
+{
+  "id": "nav-11",
+  "track": "navigation",
+  "unit": "nav-pid",
+  "minutes": 9,
+  "skills": [
+    "control",
+    "line-follow"
+  ],
+  "title": {
+    "ru": "Подбор коэффициентов",
+    "kk": "Коэффициенттерді таңдау",
+    "en": "Tuning the gains"
+  },
+  "goal": {
+    "ru": "Сегодня ты настроишь полный PID-регулятор.",
+    "kk": "Бүгін сен толық PID-реттегішті баптайсың.",
+    "en": "Today you will tune a full PID controller."
+  },
+  "summary": {
+    "ru": "Теперь ты умеешь настраивать PID по шагам: P, потом D, потом I.",
+    "kk": "Енді сен PID-ті қадаммен баптай аласың: P, содан кейін D, содан кейін I.",
+    "en": "Now you can tune PID step by step: P, then D, then I."
+  },
+  "steps": [
+    {
+      "id": "recipe",
+      "type": "theory",
+      "title": {
+        "ru": "Рецепт настройки",
+        "kk": "Баптау рецепті",
+        "en": "The tuning recipe"
+      },
+      "body": {
+        "ru": "Настраивать все три буквы сразу трудно. Есть рецепт:\n\n1. I и D = 0. Увеличивай **P**, пока робот не начнёт качаться, и чуть уменьши.\n2. Добавляй **D**, пока качка не исчезнет.\n3. Если робот всё равно стоит чуть сбоку от линии — добавь немного **I**.\n\nМеняй одно число за раз и смотри, что изменилось.",
+        "kk": "Үш әріпті бірден баптау қиын. Рецепт бар:\n\n1. I және D = 0. Робот тербеле бастағанша **P**-ны көбейтіп, сәл азайт.\n2. Тербеліс жоғалғанша **D** қос.\n3. Робот бәрібір сызықтан сәл шетте тұрса — сәл **I** қос.\n\nБір уақытта бір санды өзгертіп, не өзгергеніне қара.",
+        "en": "Tuning all three letters at once is hard. There is a recipe:\n\n1. I and D = 0. Raise **P** until the robot starts rocking, then lower it a bit.\n2. Add **D** until the rocking is gone.\n3. If the robot still sits a little off the line, add a little **I**.\n\nChange one number at a time and watch what changes."
+      },
+      "illustration": "r-pid"
+    },
+    {
+      "id": "steps",
+      "type": "quiz",
+      "kind": "order",
+      "question": {
+        "ru": "Расставь шаги настройки PID",
+        "kk": "PID баптау қадамдарын реттей қой",
+        "en": "Order the PID tuning steps"
+      },
+      "items": [
+        {
+          "ru": "Обнулить I и D",
+          "kk": "I мен D-ны нөлдеу",
+          "en": "Set I and D to zero"
+        },
+        {
+          "ru": "Подобрать P",
+          "kk": "P-ны таңдау",
+          "en": "Tune P"
+        },
+        {
+          "ru": "Добавить D против качки",
+          "kk": "Тербеліске қарсы D қосу",
+          "en": "Add D against rocking"
+        },
+        {
+          "ru": "Добавить немного I против упрямой ошибки",
+          "kk": "Қыңыр қатеге қарсы сәл I қосу",
+          "en": "Add a little I against the stubborn error"
+        }
+      ],
+      "explanation": {
+        "ru": "Сначала главное (P), потом успокоить (D), потом добить остаток (I).",
+        "kk": "Алдымен негізгісі (P), содан кейін тыныштандыру (D), содан кейін қалдықты жою (I).",
+        "en": "First the main part (P), then calm it (D), then finish off the rest (I)."
+      },
+      "skill": "control"
+    },
+    {
+      "id": "full",
+      "type": "widget",
+      "widget": "pid",
+      "title": {
+        "ru": "Слабое колесо",
+        "kk": "Әлсіз дөңгелек",
+        "en": "A weak wheel"
+      },
+      "task": {
+        "ru": "У этого робота одно колесо слабее, и его всё время тянет в сторону. Настрой P, I и D так, чтобы он вышел на линию и остался на ней (быстрее 4 с, перелёт не больше 12 мм).",
+        "kk": "Бұл роботтың бір дөңгелегі әлсіз, ол үнемі бүйірге тартылады. Ол сызыққа шығып, онда қалатындай P, I және D-ны бапта (4 с-тан тез, асу 12 мм-ден аспайды).",
+        "en": "This robot has one weaker wheel and keeps pulling aside. Tune P, I and D so it reaches the line and stays there (within 4 s, overshoot at most 12 mm)."
+      },
+      "mode": "pid"
+    }
+  ]
+}

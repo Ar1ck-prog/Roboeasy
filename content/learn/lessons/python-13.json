@@ -1,0 +1,222 @@
+{
+  "id": "python-13",
+  "track": "python",
+  "unit": "python-project",
+  "minutes": 9,
+  "skills": [
+    "python"
+  ],
+  "title": {
+    "ru": "Езда по линии на Python",
+    "kk": "Python-да сызықпен жүру",
+    "en": "Line following in Python"
+  },
+  "goal": {
+    "ru": "Сегодня ты разберёшь езду по линии в коде.",
+    "kk": "Бүгін сен кодтағы сызықпен жүруді талдайсың.",
+    "en": "Today you will take apart line following in code."
+  },
+  "summary": {
+    "ru": "Теперь ты читаешь и пишешь езду по линии на Python.",
+    "kk": "Енді сен Python-да сызықпен жүруді оқып, жаза аласың.",
+    "en": "Now you can read and write line following in Python."
+  },
+  "steps": [
+    {
+      "id": "code",
+      "type": "theory",
+      "title": {
+        "ru": "Линия кодом",
+        "kk": "Кодпен сызық",
+        "en": "The line in code"
+      },
+      "body": {
+        "ru": "Езда по краю линии в Python — это цикл **while**, внутри которого **if/else**: тёмно — руль в одну сторону, светло — в другую.\n\n**motor_pair.move(PAIR_1, руль)** едет с заданным рулём, пока его не остановят. Короткая пауза **sleep_ms(10)** даёт моторам время повернуть.\n\nЦикл заканчивается, когда датчик увидит зелёный финиш.",
+        "kk": "Python-да сызық шетімен жүру — ішінде **if/else** бар **while** циклі: қараңғы — руль бір жаққа, ашық — екіншісіне.\n\n**motor_pair.move(PAIR_1, руль)** берілген рульмен тоқтатқанша жүреді. Қысқа **sleep_ms(10)** үзілісі моторларға бұрылуға уақыт береді.\n\nДатчик жасыл мәрені көргенде цикл аяқталады.",
+        "en": "Edge following in Python is a **while** loop with **if/else** inside: dark — steer one way, light — the other.\n\n**motor_pair.move(PAIR_1, steering)** drives with that steering until stopped. A short **sleep_ms(10)** gives the motors time to turn.\n\nThe loop ends when the sensor sees the green finish."
+      },
+      "illustration": "r-line",
+      "code": "while color_sensor.color(port.D) != color.GREEN:\n    if color_sensor.reflection(port.D) < 50:\n        motor_pair.move(motor_pair.PAIR_1, 20)\n    else:\n        motor_pair.move(motor_pair.PAIR_1, -20)\n    await runloop.sleep_ms(10)\nmotor_pair.stop(motor_pair.PAIR_1)"
+    },
+    {
+      "id": "cond",
+      "type": "quiz",
+      "kind": "fill",
+      "question": {
+        "ru": "Заполни условие и руль",
+        "kk": "Шарт пен рульді толтыр",
+        "en": "Fill in the condition and the steering"
+      },
+      "code": "if color_sensor.reflection(port.D) [[0]] 50:\n    motor_pair.move(motor_pair.PAIR_1, 20)\nelse:\n    motor_pair.move(motor_pair.PAIR_1, [[1]])",
+      "blanks": [
+        {
+          "options": [
+            "<",
+            ">",
+            "=="
+          ],
+          "correct": 0
+        },
+        {
+          "options": [
+            "-20",
+            "20",
+            "0"
+          ],
+          "correct": 0
+        }
+      ],
+      "explanation": {
+        "ru": "Тёмно (< 50) — руль 20, иначе — руль в другую сторону: −20.",
+        "kk": "Қараңғы (< 50) — руль 20, әйтпесе — руль басқа жаққа: −20.",
+        "en": "Dark (< 50) — steering 20, otherwise the other way: −20."
+      },
+      "skill": "python"
+    },
+    {
+      "id": "follow",
+      "type": "code",
+      "title": {
+        "ru": "Линия до зелёного",
+        "kk": "Жасылға дейін сызық",
+        "en": "The line to green"
+      },
+      "task": {
+        "ru": "Собери езду по линии до зелёного финиша и сравни вкладку Python с кодом из теории.",
+        "kk": "Жасыл мәреге дейін сызықпен жүруді құрастырып, Python қойындысын теориядағы кодпен салыстыр.",
+        "en": "Build line following to the green finish and compare the Python tab with the code from the theory."
+      },
+      "field": {
+        "width": 1500,
+        "height": 900,
+        "start": {
+          "x": 150,
+          "y": 300,
+          "heading": 0
+        },
+        "border": true,
+        "zones": [
+          {
+            "id": "end",
+            "x": 1300,
+            "y": 500,
+            "w": 180,
+            "h": 200,
+            "kind": "paint",
+            "color": "green"
+          },
+          {
+            "id": "finish",
+            "x": 1150,
+            "y": 480,
+            "w": 180,
+            "h": 240,
+            "kind": "target",
+            "label": {
+              "ru": "Финиш",
+              "kk": "Мәре",
+              "en": "Finish"
+            }
+          }
+        ],
+        "points": [],
+        "walls": [],
+        "lines": [
+          {
+            "points": [
+              [
+                100,
+                300
+              ],
+              [
+                700,
+                300
+              ],
+              [
+                1100,
+                600
+              ],
+              [
+                1400,
+                600
+              ]
+            ],
+            "width": 20,
+            "color": "black"
+          }
+        ]
+      },
+      "toolbox": [
+        "start_steer",
+        "stop_move",
+        "repeat_until",
+        "if"
+      ],
+      "start": [],
+      "checks": [
+        {
+          "type": "finishInZone",
+          "zone": "finish"
+        },
+        {
+          "type": "usesSensor",
+          "sensor": "reflection"
+        }
+      ],
+      "hints": [
+        {
+          "ru": "Собери программу блоками, а потом открой вкладку **Python** над редактором — там та же программа кодом.",
+          "kk": "Бағдарламаны блоктармен құрастыр, содан кейін редактордың үстіндегі **Python** қойындысын аш — онда сол бағдарлама кодпен.",
+          "en": "Build the program with blocks, then open the **Python** tab above the editor — the same program is there as code."
+        },
+        {
+          "ru": "Повторять, пока не цвет зелёный: если отражение < 50 — руль 20, иначе −20.",
+          "kk": "Түс жасыл болғанша қайталау: егер шағылысу < 50 — руль 20, әйтпесе −20.",
+          "en": "Repeat until green: if reflection < 50 — steering 20, else −20."
+        },
+        {
+          "ru": "После цикла — остановить движение.",
+          "kk": "Циклдан кейін — қозғалысты тоқтату.",
+          "en": "After the loop: stop moving."
+        }
+      ],
+      "reference": [
+        {
+          "op": "repeat_until",
+          "condition": {
+            "sensor": "color",
+            "port": "D",
+            "color": "green"
+          },
+          "steps": [
+            {
+              "op": "if",
+              "condition": {
+                "sensor": "reflection",
+                "port": "D",
+                "comparator": "<",
+                "value": 50
+              },
+              "then": [
+                {
+                  "op": "start_steer",
+                  "steering": 20
+                }
+              ],
+              "else": [
+                {
+                  "op": "start_steer",
+                  "steering": -20
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "op": "stop_move"
+        }
+      ],
+      "skill": "python"
+    }
+  ]
+}

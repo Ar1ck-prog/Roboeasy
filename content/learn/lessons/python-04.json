@@ -1,0 +1,143 @@
+{
+  "id": "python-04",
+  "track": "python",
+  "unit": "python-async",
+  "minutes": 7,
+  "skills": [
+    "python"
+  ],
+  "title": {
+    "ru": "Зачем await",
+    "kk": "await не үшін",
+    "en": "Why await"
+  },
+  "goal": {
+    "ru": "Сегодня ты узнаешь самое важное слово в программах SPIKE 3.",
+    "kk": "Бүгін сен SPIKE 3 бағдарламаларындағы ең маңызды сөзді білесің.",
+    "en": "Today you will learn the most important word in SPIKE 3 programs."
+  },
+  "summary": {
+    "ru": "Теперь ты знаешь: await значит «дождись, пока команда закончится».",
+    "kk": "Енді сен білесің: await — «команда аяқталғанша күт» дегені.",
+    "en": "Now you know: await means “wait until the command finishes”."
+  },
+  "steps": [
+    {
+      "id": "await",
+      "type": "theory",
+      "title": {
+        "ru": "Дождись!",
+        "kk": "Күт!",
+        "en": "Wait for it!"
+      },
+      "body": {
+        "ru": "Поездка на 30 см занимает время. Что делать программе, пока колёса крутятся?\n\nСлово **await** говорит: «дождись, пока эта команда закончится, и только потом иди дальше». Так команды выполняются по очереди — как блоки.\n\nКоманды, которые занимают время (ехать, повернуть мотор, пищать, ждать), пишутся с **await**.",
+        "kk": "30 см жүру уақыт алады. Дөңгелектер айналып жатқанда бағдарлама не істеуі керек?\n\n**await** сөзі айтады: «осы команда аяқталғанша күт, содан кейін ғана әрі қарай жүр». Осылай командалар блоктар сияқты кезекпен орындалады.\n\nУақыт алатын командалар (жүру, моторды бұру, дыбыс беру, күту) **await**-пен жазылады.",
+        "en": "Driving 30 cm takes time. What should the program do while the wheels turn?\n\nThe word **await** says: “wait until this command finishes, then go on”. So commands run one after another — like blocks.\n\nCommands that take time (drive, turn a motor, beep, wait) are written with **await**."
+      },
+      "illustration": "r-await",
+      "code": "await motor_pair.move_for_degrees(motor_pair.PAIR_1, 617, 0)  # drive 30 cm\nawait sound.beep(440, 300)                                      # then beep\nawait runloop.sleep_ms(1000)                                    # then wait 1 s"
+    },
+    {
+      "id": "add-await",
+      "type": "quiz",
+      "kind": "fill",
+      "question": {
+        "ru": "Вставь слово, чтобы робот сначала доехал, а потом пискнул",
+        "kk": "Робот алдымен жетіп, содан кейін дыбыс беруі үшін сөзді қой",
+        "en": "Fill in the word so the robot drives first, then beeps"
+      },
+      "code": "[[0]] motor_pair.move_for_degrees(motor_pair.PAIR_1, 617, 0)\nawait sound.beep(440, 300)",
+      "blanks": [
+        {
+          "options": [
+            "await",
+            "import",
+            "def"
+          ],
+          "correct": 0
+        }
+      ],
+      "explanation": {
+        "ru": "Без await сигнал прозвучит сразу, пока робот ещё едет.",
+        "kk": "await болмаса, дыбыс робот әлі жүріп келе жатқанда бірден естіледі.",
+        "en": "Without await the beep sounds right away, while the robot is still driving."
+      },
+      "skill": "python"
+    },
+    {
+      "id": "which",
+      "type": "quiz",
+      "kind": "choice",
+      "question": {
+        "ru": "Какой команде НЕ нужен await?",
+        "kk": "Қай командаға await КЕРЕК ЕМЕС?",
+        "en": "Which command does NOT need await?"
+      },
+      "options": [
+        {
+          "ru": "motor_pair.pair(...) — просто связать моторы в пару",
+          "kk": "motor_pair.pair(...) — моторларды жұпқа байлау ғана",
+          "en": "motor_pair.pair(...) — just pairs the motors"
+        },
+        {
+          "ru": "Ехать 30 см",
+          "kk": "30 см жүру",
+          "en": "Drive 30 cm"
+        },
+        {
+          "ru": "Ждать 1 секунду",
+          "kk": "1 секунд күту",
+          "en": "Wait 1 second"
+        }
+      ],
+      "correct": [
+        0
+      ],
+      "explanation": {
+        "ru": "pair выполняется мгновенно. await нужен там, где команда длится какое-то время.",
+        "kk": "pair лезде орындалады. await команда біраз уақыт созылатын жерде керек.",
+        "en": "pair is instant. await is needed where a command takes time."
+      },
+      "skill": "python"
+    },
+    {
+      "id": "story",
+      "type": "quiz",
+      "kind": "order",
+      "question": {
+        "ru": "Расставь, что происходит при строке «await поездка»",
+        "kk": "«await жүру» жолында не болатынын реттей қой",
+        "en": "Order what happens on the line “await drive”"
+      },
+      "items": [
+        {
+          "ru": "Программа даёт моторам команду ехать",
+          "kk": "Бағдарлама моторларға жүруге команда береді",
+          "en": "The program tells the motors to drive"
+        },
+        {
+          "ru": "Программа ждёт",
+          "kk": "Бағдарлама күтеді",
+          "en": "The program waits"
+        },
+        {
+          "ru": "Моторы доезжают и останавливаются",
+          "kk": "Моторлар жетіп, тоқтайды",
+          "en": "The motors arrive and stop"
+        },
+        {
+          "ru": "Программа переходит к следующей строке",
+          "kk": "Бағдарлама келесі жолға өтеді",
+          "en": "The program moves to the next line"
+        }
+      ],
+      "explanation": {
+        "ru": "await — это пауза программы до конца команды.",
+        "kk": "await — команда аяқталғанша бағдарлама үзілісі.",
+        "en": "await pauses the program until the command ends."
+      },
+      "skill": "python"
+    }
+  ]
+}

@@ -1290,12 +1290,12 @@
               "title": {
                 "ru": "Проскальзывание и батарея",
                 "kk": "Тайғанау және батарея",
-                "en": "Slipping and the battery"
+                "en": "Slipping and battery"
               },
               "skills": [
                 "control"
               ],
-              "status": "todo",
+              "status": "ready",
               "project": false,
               "kit": false
             },
@@ -1309,7 +1309,7 @@
               "skills": [
                 "control"
               ],
-              "status": "todo",
+              "status": "ready",
               "project": false,
               "kit": false
             }
@@ -1333,7 +1333,7 @@
               "skills": [
                 "calibration"
               ],
-              "status": "todo",
+              "status": "ready",
               "project": false,
               "kit": false
             },
@@ -1347,7 +1347,7 @@
               "skills": [
                 "calibration"
               ],
-              "status": "todo",
+              "status": "ready",
               "project": false,
               "kit": false
             },
@@ -1361,7 +1361,7 @@
               "skills": [
                 "calibration"
               ],
-              "status": "todo",
+              "status": "ready",
               "project": false,
               "kit": false
             },
@@ -1370,12 +1370,12 @@
               "title": {
                 "ru": "Калибровка настоящего робота",
                 "kk": "Нағыз роботты калибрлеу",
-                "en": "Calibrating the real robot"
+                "en": "Calibrating a real robot"
               },
               "skills": [
                 "calibration"
               ],
-              "status": "todo",
+              "status": "ready",
               "project": false,
               "kit": true
             }
@@ -1394,13 +1394,13 @@
               "title": {
                 "ru": "Прямо по гироскопу",
                 "kk": "Гироскоп бойынша тура",
-                "en": "Straight with the gyro"
+                "en": "Straight by gyro"
               },
               "skills": [
                 "control",
                 "gyro"
               ],
-              "status": "todo",
+              "status": "ready",
               "project": false,
               "kit": false
             },
@@ -1409,13 +1409,13 @@
               "title": {
                 "ru": "P-регулятор",
                 "kk": "P-реттегіш",
-                "en": "The P controller"
+                "en": "P controller"
               },
               "skills": [
                 "control",
                 "gyro"
               ],
-              "status": "todo",
+              "status": "ready",
               "project": false,
               "kit": false
             },
@@ -1430,7 +1430,7 @@
                 "control",
                 "gyro"
               ],
-              "status": "todo",
+              "status": "ready",
               "project": false,
               "kit": false
             }
@@ -1455,7 +1455,7 @@
                 "control",
                 "line-follow"
               ],
-              "status": "todo",
+              "status": "ready",
               "project": false,
               "kit": false
             },
@@ -1470,7 +1470,7 @@
                 "control",
                 "line-follow"
               ],
-              "status": "todo",
+              "status": "ready",
               "project": false,
               "kit": false
             },
@@ -1485,7 +1485,7 @@
                 "control",
                 "line-follow"
               ],
-              "status": "todo",
+              "status": "ready",
               "project": false,
               "kit": false
             },
@@ -1494,13 +1494,13 @@
               "title": {
                 "ru": "Проект «Точный маршрут»",
                 "kk": "«Дәл маршрут» жобасы",
-                "en": "Project “Exact route”"
+                "en": "Project: Precise route"
               },
               "skills": [
                 "control",
                 "line-follow"
               ],
-              "status": "todo",
+              "status": "ready",
               "project": true,
               "kit": false
             }
@@ -1544,7 +1544,7 @@
               "skills": [
                 "python"
               ],
-              "status": "todo",
+              "status": "ready",
               "project": false,
               "kit": false
             },
@@ -1553,12 +1553,12 @@
               "title": {
                 "ru": "Отступы и комментарии",
                 "kk": "Шегіністер мен түсініктемелер",
-                "en": "Indents and comments"
+                "en": "Indentation and comments"
               },
               "skills": [
                 "python"
               ],
-              "status": "todo",
+              "status": "ready",
               "project": false,
               "kit": false
             },
@@ -1572,7 +1572,7 @@
               "skills": [
                 "python"
               ],
-              "status": "todo",
+              "status": "ready",
               "project": false,
               "kit": false
             }
@@ -1590,13 +1590,13 @@
               "id": "python-04",
               "title": {
                 "ru": "Зачем await",
-                "kk": "await не үшін керек",
+                "kk": "await не үшін",
                 "en": "Why await"
               },
               "skills": [
                 "python"
               ],
-              "status": "todo",
+              "status": "ready",
               "project": false,
               "kit": false
             },
@@ -1610,7 +1610,7 @@
               "skills": [
                 "python"
               ],
-              "status": "todo",
+              "status": "ready",
               "project": false,
               "kit": false
             },
@@ -1618,13 +1618,13 @@
               "id": "python-06",
               "title": {
                 "ru": "Забыли await",
-                "kk": "await ұмытылды",
-                "en": "A forgotten await"
+                "kk": "await-ты ұмыттық",
+                "en": "Forgot await"
               },
               "skills": [
                 "python"
               ],
-              "status": "todo",
+              "status": "ready",
               "project": false,
               "kit": false
             }
@@ -1650,7 +1650,7 @@
                 "loops",
                 "conditions"
               ],
-              "status": "todo",
+              "status": "ready",
               "project": false,
               "kit": false
             },
@@ -1666,7 +1666,7 @@
                 "loops",
                 "conditions"
               ],
-              "status": "todo",
+              "status": "ready",
               "project": false,
               "kit": false
             },
@@ -1682,7 +1682,7 @@
                 "loops",
                 "conditions"
               ],
-              "status": "todo",
+              "status": "ready",
               "project": false,
               "kit": false
             }
@@ -1700,7 +1700,7 @@
               "id": "python-10",
               "title": {
                 "ru": "Переменные и типы",
-                "kk": "Айнымалылар мен типтер",
+                "kk": "Айнымалылар және типтер",
                 "en": "Variables and types"
               },
               "skills": [
@@ -1708,7 +1708,7 @@
                 "variables",
                 "functions"
               ],
-              "status": "todo",
+              "status": "ready",
               "project": false,
               "kit": false
             },
@@ -1724,7 +1724,7 @@
                 "variables",
                 "functions"
               ],
-              "status": "todo",
+              "status": "ready",
               "project": false,
               "kit": false
             },
@@ -1740,7 +1740,7 @@
                 "variables",
                 "functions"
               ],
-              "status": "todo",
+              "status": "ready",
               "project": false,
               "kit": false
             }
@@ -1758,13 +1758,13 @@
               "id": "python-13",
               "title": {
                 "ru": "Езда по линии на Python",
-                "kk": "Python-да сызық бойымен жүру",
+                "kk": "Python-да сызықпен жүру",
                 "en": "Line following in Python"
               },
               "skills": [
                 "python"
               ],
-              "status": "todo",
+              "status": "ready",
               "project": false,
               "kit": false
             },
@@ -1773,12 +1773,12 @@
               "title": {
                 "ru": "Точный поворот функцией",
                 "kk": "Функциямен дәл бұрылыс",
-                "en": "An exact turn as a function"
+                "en": "A precise turn as a function"
               },
               "skills": [
                 "python"
               ],
-              "status": "todo",
+              "status": "ready",
               "project": false,
               "kit": false
             },
@@ -1792,7 +1792,7 @@
               "skills": [
                 "python"
               ],
-              "status": "todo",
+              "status": "ready",
               "project": true,
               "kit": false
             }

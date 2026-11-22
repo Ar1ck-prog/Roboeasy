@@ -1,0 +1,155 @@
+{
+  "id": "python-10",
+  "track": "python",
+  "unit": "python-functions",
+  "minutes": 7,
+  "skills": [
+    "python",
+    "variables",
+    "functions"
+  ],
+  "title": {
+    "ru": "Переменные и типы",
+    "kk": "Айнымалылар және типтер",
+    "en": "Variables and types"
+  },
+  "goal": {
+    "ru": "Сегодня ты узнаешь, какие бывают данные в Python.",
+    "kk": "Бүгін сен Python-да қандай деректер болатынын білесің.",
+    "en": "Today you will learn what kinds of data Python has."
+  },
+  "summary": {
+    "ru": "Теперь ты знаешь основные типы: числа, текст и правду/ложь.",
+    "kk": "Енді сен негізгі типтерді білесің: сандар, мәтін және ақиқат/жалған.",
+    "en": "Now you know the main types: numbers, text and true/false."
+  },
+  "steps": [
+    {
+      "id": "types",
+      "type": "theory",
+      "title": {
+        "ru": "Что лежит в коробке",
+        "kk": "Қорапта не жатыр",
+        "en": "What is in the box"
+      },
+      "body": {
+        "ru": "В Python переменная создаётся просто: **count = 0**.\n\nВ коробке могут лежать разные **типы**:\n\n**int** — целое число: 3, −10.\n**float** — дробное: 0,5 пишется как 0.5.\n**str** — текст в кавычках: \"GO\".\n**bool** — правда или ложь: True, False.\n\nЧтобы вывести число на экран хаба, его превращают в текст: **str(count)**.",
+        "kk": "Python-да айнымалы оңай жасалады: **count = 0**.\n\nҚорапта әр түрлі **типтер** жата алады:\n\n**int** — бүтін сан: 3, −10.\n**float** — бөлшек: 0,5 саны 0.5 деп жазылады.\n**str** — тырнақшадағы мәтін: \"GO\".\n**bool** — ақиқат не жалған: True, False.\n\nСанды хаб экранына шығару үшін оны мәтінге айналдырады: **str(count)**.",
+        "en": "In Python a variable is created simply: **count = 0**.\n\nThe box can hold different **types**:\n\n**int** — a whole number: 3, −10.\n**float** — a fraction: 0.5.\n**str** — text in quotes: \"GO\".\n**bool** — true or false: True, False.\n\nTo show a number on the hub screen, turn it into text: **str(count)**."
+      },
+      "illustration": "r-variable",
+      "code": "count = 0\nspeed = 0.5\nname = \"GO\"\ndone = False\ncount = count + 1\nawait light_matrix.write(str(count))"
+    },
+    {
+      "id": "which-type",
+      "type": "quiz",
+      "kind": "match",
+      "question": {
+        "ru": "Подбери тип к значению",
+        "kk": "Типті мәнге сәйкестендір",
+        "en": "Match the type to the value"
+      },
+      "pairs": [
+        {
+          "left": {
+            "ru": "42",
+            "kk": "42",
+            "en": "42"
+          },
+          "right": {
+            "ru": "int — целое",
+            "kk": "int — бүтін",
+            "en": "int — whole number"
+          }
+        },
+        {
+          "left": {
+            "ru": "3.5",
+            "kk": "3.5",
+            "en": "3.5"
+          },
+          "right": {
+            "ru": "float — дробное",
+            "kk": "float — бөлшек",
+            "en": "float — fraction"
+          }
+        },
+        {
+          "left": {
+            "ru": "\"Привет\"",
+            "kk": "\"Сәлем\"",
+            "en": "\"Hello\""
+          },
+          "right": {
+            "ru": "str — текст",
+            "kk": "str — мәтін",
+            "en": "str — text"
+          }
+        },
+        {
+          "left": {
+            "ru": "True",
+            "kk": "True",
+            "en": "True"
+          },
+          "right": {
+            "ru": "bool — правда/ложь",
+            "kk": "bool — ақиқат/жалған",
+            "en": "bool — true/false"
+          }
+        }
+      ],
+      "explanation": {
+        "ru": "Тип подсказывает Python, что можно делать со значением: числа складывать, текст писать на экране.",
+        "kk": "Тип Python-ға мәнмен не істеуге болатынын айтады: сандарды қосу, мәтінді экранға жазу.",
+        "en": "The type tells Python what you can do with a value: add numbers, write text on the screen."
+      },
+      "skill": "python"
+    },
+    {
+      "id": "plus",
+      "type": "quiz",
+      "kind": "fill",
+      "question": {
+        "ru": "Увеличь счётчик на 1",
+        "kk": "Санауышты 1-ге көбейт",
+        "en": "Increase the counter by 1"
+      },
+      "code": "count = count [[0]] 1",
+      "blanks": [
+        {
+          "options": [
+            "+",
+            "-",
+            "=="
+          ],
+          "correct": 0
+        }
+      ],
+      "explanation": {
+        "ru": "count = count + 1 — взять старое значение, прибавить 1 и положить обратно.",
+        "kk": "count = count + 1 — ескі мәнді алып, 1 қосып, қайта салу.",
+        "en": "count = count + 1 — take the old value, add 1 and store it back."
+      },
+      "skill": "python"
+    },
+    {
+      "id": "value",
+      "type": "quiz",
+      "kind": "number",
+      "question": {
+        "ru": "a = 7, потом a = a * 2, потом a = a − 4. Чему равно a?",
+        "kk": "a = 7, содан кейін a = a * 2, содан кейін a = a − 4. a неге тең?",
+        "en": "a = 7, then a = a * 2, then a = a − 4. What is a?"
+      },
+      "answer": 10,
+      "tolerance": 0,
+      "explanation": {
+        "ru": "7 × 2 = 14, 14 − 4 = 10.",
+        "kk": "7 × 2 = 14, 14 − 4 = 10.",
+        "en": "7 × 2 = 14, 14 − 4 = 10."
+      },
+      "skill": "python"
+    }
+  ]
+}

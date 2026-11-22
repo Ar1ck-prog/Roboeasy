@@ -1,0 +1,112 @@
+{
+  "id": "nav-10",
+  "track": "navigation",
+  "unit": "nav-pid",
+  "minutes": 8,
+  "skills": [
+    "control",
+    "line-follow"
+  ],
+  "title": {
+    "ru": "I и D на примерах",
+    "kk": "I және D мысалдармен",
+    "en": "I and D by example"
+  },
+  "goal": {
+    "ru": "Сегодня ты узнаешь, что делают буквы I и D в PID.",
+    "kk": "Бүгін сен PID-тегі I және D әріптері не істейтінін білесің.",
+    "en": "Today you will learn what the I and D in PID do."
+  },
+  "summary": {
+    "ru": "Теперь ты знаешь: P тянет к цели, D гасит качку, I убирает упрямую ошибку.",
+    "kk": "Енді сен білесің: P мақсатқа тартады, D тербелісті басады, I қыңыр қатені жояды.",
+    "en": "Now you know: P pulls to the goal, D damps the rocking, I removes a stubborn error."
+  },
+  "steps": [
+    {
+      "id": "pid",
+      "type": "theory",
+      "title": {
+        "ru": "Три помощника",
+        "kk": "Үш көмекші",
+        "en": "Three helpers"
+      },
+      "body": {
+        "ru": "**P** (пропорциональный) — смотрит на ошибку сейчас: далеко — рули сильнее.\n\n**D** (дифференциальный) — смотрит, как быстро ошибка меняется. Робот несётся к линии — D заранее притормаживает поворот, и перелёта нет. Как водитель, который отпускает газ перед поворотом.\n\n**I** (интегральный) — копит маленькую ошибку, которая никак не уходит (например, одно колесо слабее). Чем дольше она держится, тем сильнее I её исправляет.",
+        "kk": "**P** (пропорционал) — қазіргі қатеге қарайды: алыс болса — күштірек бұр.\n\n**D** (дифференциалдық) — қатенің қаншалықты тез өзгеретініне қарайды. Робот сызыққа зымырап келе жатса — D бұрылысты алдын ала тежейді, асып кету болмайды. Бұрылыс алдында газды жіберетін жүргізуші сияқты.\n\n**I** (интегралдық) — ешқашан кетпейтін кішкене қатені жинайды (мысалы, бір дөңгелек әлсіз). Ол неғұрлым ұзақ сақталса, I соғұрлым қатты түзетеді.",
+        "en": "**P** (proportional) looks at the error now: far away — steer harder.\n\n**D** (derivative) looks at how fast the error changes. The robot rushes at the line — D eases the turn in advance, so there is no overshoot. Like a driver lifting off the gas before a bend.\n\n**I** (integral) collects a small error that never goes away (say, one wheel is weaker). The longer it lasts, the harder I corrects it."
+      },
+      "illustration": "r-pid"
+    },
+    {
+      "id": "who",
+      "type": "quiz",
+      "kind": "match",
+      "question": {
+        "ru": "Кто поможет?",
+        "kk": "Кім көмектеседі?",
+        "en": "Who helps?"
+      },
+      "pairs": [
+        {
+          "left": {
+            "ru": "Робот далеко от линии",
+            "kk": "Робот сызықтан алыс",
+            "en": "The robot is far from the line"
+          },
+          "right": {
+            "ru": "P — сильнее рулить",
+            "kk": "P — күштірек бұру",
+            "en": "P — steer harder"
+          }
+        },
+        {
+          "left": {
+            "ru": "Робот перелетает линию",
+            "kk": "Робот сызықтан асып кетеді",
+            "en": "The robot overshoots the line"
+          },
+          "right": {
+            "ru": "D — притормозить поворот",
+            "kk": "D — бұрылысты тежеу",
+            "en": "D — ease the turn"
+          }
+        },
+        {
+          "left": {
+            "ru": "Робот всё время чуть сбоку от линии",
+            "kk": "Робот үнемі сызықтан сәл шетте",
+            "en": "The robot always sits a bit off the line"
+          },
+          "right": {
+            "ru": "I — убрать упрямую ошибку",
+            "kk": "I — қыңыр қатені жою",
+            "en": "I — remove the stubborn error"
+          }
+        }
+      ],
+      "explanation": {
+        "ru": "Каждая буква решает свою задачу, а вместе они дают точную и плавную езду.",
+        "kk": "Әр әріп өз міндетін шешеді, ал бірге олар дәл әрі біркелкі жүріс береді.",
+        "en": "Each letter solves its own problem; together they give precise, smooth driving."
+      },
+      "skill": "control"
+    },
+    {
+      "id": "pd",
+      "type": "widget",
+      "widget": "pid",
+      "title": {
+        "ru": "Добавь D",
+        "kk": "D қос",
+        "en": "Add D"
+      },
+      "task": {
+        "ru": "Теперь задача строже: выйти на линию быстрее 1,3 с и перелететь не больше чем на 2 мм. Одного P мало — добавь D.",
+        "kk": "Енді тапсырма қатаңырақ: сызыққа 1,3 с-тан тез шығып, 2 мм-ден аспай асу. Жалғыз P жеткіліксіз — D қос.",
+        "en": "The task is stricter now: reach the line within 1.3 s and overshoot by at most 2 mm. P alone is not enough — add D."
+      },
+      "mode": "pd"
+    }
+  ]
+}

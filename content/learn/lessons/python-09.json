@@ -1,0 +1,228 @@
+{
+  "id": "python-09",
+  "track": "python",
+  "unit": "python-flow",
+  "minutes": 8,
+  "skills": [
+    "python",
+    "loops",
+    "conditions"
+  ],
+  "title": {
+    "ru": "Датчики в Python",
+    "kk": "Python-дағы датчиктер",
+    "en": "Sensors in Python"
+  },
+  "goal": {
+    "ru": "Сегодня ты научишься читать датчики в коде.",
+    "kk": "Бүгін сен кодта датчиктерді оқуды үйренесің.",
+    "en": "Today you will learn to read sensors in code."
+  },
+  "summary": {
+    "ru": "Теперь ты знаешь, как спросить у каждого датчика его значение на Python.",
+    "kk": "Енді сен Python-да әр датчиктен оның мәнін қалай сұрау керегін білесің.",
+    "en": "Now you know how to ask every sensor for its value in Python."
+  },
+  "steps": [
+    {
+      "id": "read",
+      "type": "theory",
+      "title": {
+        "ru": "Спросить датчик",
+        "kk": "Датчиктен сұрау",
+        "en": "Ask the sensor"
+      },
+      "body": {
+        "ru": "Каждый датчик отвечает на вопрос функцией:\n\n**color_sensor.color(port.D)** — какой цвет (color.BLACK, color.RED…).\n**color_sensor.reflection(port.D)** — отражение в процентах.\n**distance_sensor.distance(port.C)** — расстояние в **миллиметрах** (−1, если ничего не видно).\n**force_sensor.pressed(port.E)** — нажата ли кнопка (True или False).\n\nВ скобках — порт, к которому подключён датчик.",
+        "kk": "Әр датчик сұраққа функциямен жауап береді:\n\n**color_sensor.color(port.D)** — қандай түс (color.BLACK, color.RED…).\n**color_sensor.reflection(port.D)** — пайыздағы шағылысу.\n**distance_sensor.distance(port.C)** — **миллиметрдегі** қашықтық (ештеңе көрінбесе −1).\n**force_sensor.pressed(port.E)** — түйме басылды ма (True немесе False).\n\nЖақшада — датчик қосылған порт.",
+        "en": "Each sensor answers with a function:\n\n**color_sensor.color(port.D)** — which colour (color.BLACK, color.RED…).\n**color_sensor.reflection(port.D)** — reflection in percent.\n**distance_sensor.distance(port.C)** — distance in **millimetres** (−1 if nothing is seen).\n**force_sensor.pressed(port.E)** — is the button pressed (True or False).\n\nIn brackets is the port the sensor is plugged into."
+      },
+      "illustration": "r-distance",
+      "code": "if force_sensor.pressed(port.E):\n    await sound.beep(440, 200)\nd = distance_sensor.distance(port.C)   # millimetres\nlight_matrix.write(str(d))"
+    },
+    {
+      "id": "funcs",
+      "type": "quiz",
+      "kind": "match",
+      "question": {
+        "ru": "Подбери функцию к вопросу",
+        "kk": "Функцияны сұраққа сәйкестендір",
+        "en": "Match the function to the question"
+      },
+      "pairs": [
+        {
+          "left": {
+            "ru": "Нажат ли бампер?",
+            "kk": "Бампер басылды ма?",
+            "en": "Is the bumper pressed?"
+          },
+          "right": {
+            "ru": "force_sensor.pressed(port.E)",
+            "kk": "force_sensor.pressed(port.E)",
+            "en": "force_sensor.pressed(port.E)"
+          }
+        },
+        {
+          "left": {
+            "ru": "Далеко ли стена?",
+            "kk": "Қабырға алыс па?",
+            "en": "How far is the wall?"
+          },
+          "right": {
+            "ru": "distance_sensor.distance(port.C)",
+            "kk": "distance_sensor.distance(port.C)",
+            "en": "distance_sensor.distance(port.C)"
+          }
+        },
+        {
+          "left": {
+            "ru": "Насколько темно под роботом?",
+            "kk": "Робот астында қаншалықты қараңғы?",
+            "en": "How dark is it under the robot?"
+          },
+          "right": {
+            "ru": "color_sensor.reflection(port.D)",
+            "kk": "color_sensor.reflection(port.D)",
+            "en": "color_sensor.reflection(port.D)"
+          }
+        }
+      ],
+      "explanation": {
+        "ru": "У каждого датчика своя функция, а порт пишется в скобках.",
+        "kk": "Әр датчиктің өз функциясы бар, ал порт жақшада жазылады.",
+        "en": "Each sensor has its own function, with the port in brackets."
+      },
+      "skill": "python"
+    },
+    {
+      "id": "mm",
+      "type": "quiz",
+      "kind": "number",
+      "question": {
+        "ru": "distance_sensor.distance(port.C) вернул 250. Сколько это сантиметров?",
+        "kk": "distance_sensor.distance(port.C) 250 қайтарды. Бұл неше сантиметр?",
+        "en": "distance_sensor.distance(port.C) returned 250. How many centimetres is that?"
+      },
+      "answer": 25,
+      "tolerance": 0,
+      "explanation": {
+        "ru": "Датчик отвечает в миллиметрах: 250 мм = 25 см.",
+        "kk": "Датчик миллиметрмен жауап береді: 250 мм = 25 см.",
+        "en": "The sensor answers in millimetres: 250 mm = 25 cm."
+      },
+      "unit": {
+        "ru": "см",
+        "kk": "см",
+        "en": "cm"
+      },
+      "skill": "python"
+    },
+    {
+      "id": "bumper",
+      "type": "code",
+      "title": {
+        "ru": "Бампер в коде",
+        "kk": "Кодтағы бампер",
+        "en": "The bumper in code"
+      },
+      "task": {
+        "ru": "Доедь до стены, пока бампер не нажмётся, остановись и отъедь на 10 см. Потом найди в Python строчку с force_sensor.pressed.",
+        "kk": "Бампер басылғанша қабырғаға жет, тоқтап, 10 см шегін. Содан кейін Python-дан force_sensor.pressed жолын тап.",
+        "en": "Drive to the wall until the bumper is pressed, stop and back up 10 cm. Then find the force_sensor.pressed line in Python."
+      },
+      "field": {
+        "width": 1400,
+        "height": 400,
+        "start": {
+          "x": 150,
+          "y": 200,
+          "heading": 0
+        },
+        "border": true,
+        "zones": [
+          {
+            "id": "near",
+            "x": 820,
+            "y": 50,
+            "w": 180,
+            "h": 300,
+            "kind": "target",
+            "label": {
+              "ru": "У стены",
+              "kk": "Қабырға жанында",
+              "en": "By the wall"
+            }
+          }
+        ],
+        "points": [],
+        "walls": [
+          {
+            "x": 1100,
+            "y": 0,
+            "w": 40,
+            "h": 400
+          }
+        ],
+        "lines": []
+      },
+      "toolbox": [
+        "start_move",
+        "stop_move",
+        "wait_until",
+        "move"
+      ],
+      "start": [],
+      "checks": [
+        {
+          "type": "finishInZone",
+          "zone": "near"
+        },
+        {
+          "type": "usesSensor",
+          "sensor": "force"
+        }
+      ],
+      "hints": [
+        {
+          "ru": "Собери программу блоками, а потом открой вкладку **Python** над редактором — там та же программа кодом.",
+          "kk": "Бағдарламаны блоктармен құрастыр, содан кейін редактордың үстіндегі **Python** қойындысын аш — онда сол бағдарлама кодпен.",
+          "en": "Build the program with blocks, then open the **Python** tab above the editor — the same program is there as code."
+        },
+        {
+          "ru": "Начать; ждать, пока E нажат; остановить.",
+          "kk": "Бастау; E басылғанша күту; тоқтату.",
+          "en": "Start; wait until E pressed; stop."
+        },
+        {
+          "ru": "В конце — назад 10 см.",
+          "kk": "Соңында — 10 см артқа.",
+          "en": "At the end: back 10 cm."
+        }
+      ],
+      "reference": [
+        {
+          "op": "start_move",
+          "direction": "forward"
+        },
+        {
+          "op": "wait_until",
+          "condition": {
+            "sensor": "force",
+            "port": "E",
+            "state": "pressed"
+          }
+        },
+        {
+          "op": "stop_move"
+        },
+        {
+          "op": "move",
+          "direction": "back",
+          "value": 10,
+          "unit": "cm"
+        }
+      ],
+      "skill": "python"
+    }
+  ]
+}

@@ -1,0 +1,148 @@
+{
+  "id": "nav-09",
+  "track": "navigation",
+  "unit": "nav-straight",
+  "minutes": 7,
+  "skills": [
+    "control",
+    "gyro"
+  ],
+  "title": {
+    "ru": "Что делает коэффициент",
+    "kk": "Коэффициент не істейді",
+    "en": "What the gain does"
+  },
+  "goal": {
+    "ru": "Сегодня ты увидишь, как Kp меняет поведение робота.",
+    "kk": "Бүгін сен Kp роботтың мінезін қалай өзгертетінін көресің.",
+    "en": "Today you will see how Kp changes the robot’s behaviour."
+  },
+  "summary": {
+    "ru": "Теперь ты узнаёшь по поведению робота, мал коэффициент или велик.",
+    "kk": "Енді сен робот мінезінен коэффициенттің аз не көп екенін танисың.",
+    "en": "Now you can tell from the robot’s behaviour whether the gain is too small or too big."
+  },
+  "steps": [
+    {
+      "id": "gain",
+      "type": "theory",
+      "title": {
+        "ru": "Три характера",
+        "kk": "Үш мінез",
+        "en": "Three characters"
+      },
+      "body": {
+        "ru": "Один и тот же робот с разным Kp ведёт себя по-разному:\n\n**Kp мал** — «соня»: долго ползёт к линии.\n**Kp в самый раз** — быстро и плавно выходит на линию.\n**Kp велик** — «нервный»: перелетает линию и качается.\n\nПодбирают так: начинают с маленького Kp и увеличивают, пока робот не начнёт перелетать. Потом чуть уменьшают.",
+        "kk": "Kp әр түрлі бір робот әр түрлі мінез көрсетеді:\n\n**Kp аз** — «ұйқышыл»: сызыққа ұзақ жорғалайды.\n**Kp дәл** — сызыққа тез әрі біркелкі шығады.\n**Kp көп** — «жүйке»: сызықтан асып, тербеледі.\n\nБылай таңдайды: кішкентай Kp-дан бастап, робот аса бастағанша көбейтеді. Содан кейін сәл азайтады.",
+        "en": "The same robot behaves differently with different Kp:\n\n**Kp too small** — a “sleepyhead”: crawls to the line.\n**Kp just right** — reaches the line fast and smoothly.\n**Kp too big** — “nervous”: overshoots and rocks.\n\nTune it like this: start small and increase until the robot starts overshooting. Then back off a little."
+      },
+      "illustration": "r-pid"
+    },
+    {
+      "id": "characters",
+      "type": "quiz",
+      "kind": "match",
+      "question": {
+        "ru": "Подбери поведение к коэффициенту",
+        "kk": "Мінезді коэффициентке сәйкестендір",
+        "en": "Match the behaviour to the gain"
+      },
+      "pairs": [
+        {
+          "left": {
+            "ru": "Kp = 0,05",
+            "kk": "Kp = 0,05",
+            "en": "Kp = 0.05"
+          },
+          "right": {
+            "ru": "Медленно ползёт к линии",
+            "kk": "Сызыққа баяу жорғалайды",
+            "en": "Crawls slowly to the line"
+          }
+        },
+        {
+          "left": {
+            "ru": "Kp = 0,5",
+            "kk": "Kp = 0,5",
+            "en": "Kp = 0.5"
+          },
+          "right": {
+            "ru": "Быстро и плавно на линии",
+            "kk": "Сызыққа тез әрі біркелкі",
+            "en": "Fast and smooth onto the line"
+          }
+        },
+        {
+          "left": {
+            "ru": "Kp = 3",
+            "kk": "Kp = 3",
+            "en": "Kp = 3"
+          },
+          "right": {
+            "ru": "Перелетает и качается",
+            "kk": "Асып кетіп, тербеледі",
+            "en": "Overshoots and rocks"
+          }
+        }
+      ],
+      "explanation": {
+        "ru": "Маленький коэффициент — слабая реакция, большой — слишком сильная.",
+        "kk": "Кішкентай коэффициент — әлсіз реакция, үлкен — тым күшті.",
+        "en": "A small gain gives a weak reaction, a big one an overreaction."
+      },
+      "skill": "control"
+    },
+    {
+      "id": "find-p",
+      "type": "widget",
+      "widget": "pid",
+      "title": {
+        "ru": "Найди «в самый раз»",
+        "kk": "«Дәл» мәнді тап",
+        "en": "Find “just right”"
+      },
+      "task": {
+        "ru": "Начни с Kp = 0,2 и увеличивай. Запусти робота несколько раз и найди значение, при котором он выходит на линию быстрее 3 с и почти не перелетает.",
+        "kk": "Kp = 0,2-ден бастап көбейт. Роботты бірнеше рет іске қосып, ол сызыққа 3 с-тан тез шығып, асып кетпейтін мәнді тап.",
+        "en": "Start at Kp = 0.2 and increase it. Run the robot a few times and find the value where it reaches the line within 3 s and barely overshoots."
+      },
+      "mode": "p"
+    },
+    {
+      "id": "order",
+      "type": "quiz",
+      "kind": "choice",
+      "question": {
+        "ru": "Робот перелетает линию. Что сделать?",
+        "kk": "Робот сызықтан асып кетеді. Не істеу керек?",
+        "en": "The robot overshoots the line. What do you do?"
+      },
+      "options": [
+        {
+          "ru": "Немного уменьшить Kp",
+          "kk": "Kp-ны сәл азайту",
+          "en": "Lower Kp a little"
+        },
+        {
+          "ru": "Увеличить Kp в два раза",
+          "kk": "Kp-ны екі есе көбейту",
+          "en": "Double Kp"
+        },
+        {
+          "ru": "Выключить гироскоп",
+          "kk": "Гироскопты сөндіру",
+          "en": "Turn off the gyro"
+        }
+      ],
+      "correct": [
+        0
+      ],
+      "explanation": {
+        "ru": "Перелёт — признак слишком сильной реакции.",
+        "kk": "Асып кету — тым күшті реакцияның белгісі.",
+        "en": "Overshoot means the reaction is too strong."
+      },
+      "skill": "control"
+    }
+  ]
+}

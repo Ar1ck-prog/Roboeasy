@@ -1,0 +1,149 @@
+{
+  "id": "python-06",
+  "track": "python",
+  "unit": "python-async",
+  "minutes": 7,
+  "skills": [
+    "python"
+  ],
+  "title": {
+    "ru": "Забыли await",
+    "kk": "await-ты ұмыттық",
+    "en": "Forgot await"
+  },
+  "goal": {
+    "ru": "Сегодня ты найдёшь самую частую ошибку в программах на Python для SPIKE.",
+    "kk": "Бүгін сен SPIKE-қа арналған Python бағдарламаларындағы ең жиі қатені табасың.",
+    "en": "Today you will find the most common bug in SPIKE Python programs."
+  },
+  "summary": {
+    "ru": "Теперь ты замечаешь пропущенный await по странному поведению робота.",
+    "kk": "Енді сен робот мінезінің оғаштығынан өткізіп алған await-ты байқайсың.",
+    "en": "Now you spot a missing await from the robot’s odd behaviour."
+  },
+  "steps": [
+    {
+      "id": "symptom",
+      "type": "theory",
+      "title": {
+        "ru": "Всё сразу",
+        "kk": "Бәрі бірден",
+        "en": "Everything at once"
+      },
+      "body": {
+        "ru": "Если забыть **await**, программа не ждёт конца команды и сразу берёт следующую.\n\nЧто видно на роботе:\n\n1. Сигнал звучит **в начале** поездки, а не в конце.\n2. Робот почти не едет: следующая команда сразу перебивает предыдущую.\n3. Программа заканчивается мгновенно.\n\nУвидел такое — ищи строку без await.",
+        "kk": "**await**-ты ұмытсаң, бағдарлама команданың соңын күтпей, бірден келесісін алады.\n\nРоботта не көрінеді:\n\n1. Дыбыс жүрістің соңында емес, **басында** естіледі.\n2. Робот жүрмейді дерлік: келесі команда алдыңғысын бірден бөледі.\n3. Бағдарлама лезде аяқталады.\n\nОсыны көрсең — await-сыз жолды ізде.",
+        "en": "If you forget **await**, the program does not wait for the command to end and takes the next one right away.\n\nWhat you see on the robot:\n\n1. The beep sounds at the **start** of the drive, not the end.\n2. The robot barely moves: the next command interrupts the previous one.\n3. The program ends instantly.\n\nSee that — look for a line without await."
+      },
+      "illustration": "r-await",
+      "code": "motor_pair.move_for_degrees(motor_pair.PAIR_1, 617, 0)   # bug: no await!\nawait sound.beep(440, 300)"
+    },
+    {
+      "id": "what",
+      "type": "quiz",
+      "kind": "choice",
+      "question": {
+        "ru": "В примере справа нет await перед поездкой. Что услышим и увидим?",
+        "kk": "Оң жақтағы мысалда жүріс алдында await жоқ. Не естиміз және көреміз?",
+        "en": "The example has no await before the drive. What will we hear and see?"
+      },
+      "options": [
+        {
+          "ru": "Сигнал сразу, пока робот только трогается",
+          "kk": "Робот енді қозғала бастағанда бірден дыбыс",
+          "en": "The beep right away, as the robot just starts"
+        },
+        {
+          "ru": "Сигнал после того, как робот доедет",
+          "kk": "Робот жеткеннен кейін дыбыс",
+          "en": "The beep after the robot arrives"
+        },
+        {
+          "ru": "Ни сигнала, ни поездки",
+          "kk": "Дыбыс та, жүріс те жоқ",
+          "en": "Neither a beep nor a drive"
+        }
+      ],
+      "correct": [
+        0
+      ],
+      "explanation": {
+        "ru": "Без await программа не ждёт поездку и сразу переходит к сигналу.",
+        "kk": "await болмаса, бағдарлама жүрісті күтпей, бірден дыбысқа өтеді.",
+        "en": "Without await the program does not wait for the drive and goes straight to the beep."
+      },
+      "skill": "python"
+    },
+    {
+      "id": "fix",
+      "type": "quiz",
+      "kind": "fill",
+      "question": {
+        "ru": "Исправь программу: робот должен проехать квадрат",
+        "kk": "Бағдарламаны түзет: робот шаршыны жүруі керек",
+        "en": "Fix the program: the robot must drive a square"
+      },
+      "code": "for i in range(4):\n    [[0]] motor_pair.move_for_degrees(motor_pair.PAIR_1, 617, 0)\n    [[1]] motor_pair.move_for_degrees(motor_pair.PAIR_1, 180, -100)",
+      "blanks": [
+        {
+          "options": [
+            "await",
+            "#",
+            "async"
+          ],
+          "correct": 0
+        },
+        {
+          "options": [
+            "await",
+            "#",
+            "async"
+          ],
+          "correct": 0
+        }
+      ],
+      "explanation": {
+        "ru": "Обе команды движения занимают время, обеим нужен await.",
+        "kk": "Қозғалыстың екі командасы да уақыт алады, екеуіне де await керек.",
+        "en": "Both moves take time, so both need await."
+      },
+      "skill": "python"
+    },
+    {
+      "id": "check",
+      "type": "quiz",
+      "kind": "choice",
+      "question": {
+        "ru": "Как быстрее всего проверить программу на пропущенные await?",
+        "kk": "Бағдарламаны өткізіп алған await-қа қалай тез тексеруге болады?",
+        "en": "What is the quickest way to check a program for missing awaits?"
+      },
+      "options": [
+        {
+          "ru": "Пройти по каждой строке с движением, звуком или паузой",
+          "kk": "Қозғалысы, дыбысы немесе үзілісі бар әр жолды қарап шығу",
+          "en": "Go through every line with a move, sound or pause"
+        },
+        {
+          "ru": "Удалить все комментарии",
+          "kk": "Барлық түсініктемелерді өшіру",
+          "en": "Delete all comments"
+        },
+        {
+          "ru": "Запустить робота быстрее",
+          "kk": "Роботты жылдамырақ іске қосу",
+          "en": "Run the robot faster"
+        }
+      ],
+      "correct": [
+        0
+      ],
+      "explanation": {
+        "ru": "Ищи команды, которые длятся: им нужен await.",
+        "kk": "Созылатын командаларды ізде: оларға await керек.",
+        "en": "Look for commands that take time: they need await."
+      },
+      "skill": "python"
+    }
+  ]
+}

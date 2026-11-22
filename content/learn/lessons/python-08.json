@@ -1,0 +1,272 @@
+{
+  "id": "python-08",
+  "track": "python",
+  "unit": "python-flow",
+  "minutes": 8,
+  "skills": [
+    "python",
+    "loops",
+    "conditions"
+  ],
+  "title": {
+    "ru": "if, elif, else",
+    "kk": "if, elif, else",
+    "en": "if, elif, else"
+  },
+  "goal": {
+    "ru": "Сегодня ты научишь программу на Python выбирать из нескольких вариантов.",
+    "kk": "Бүгін сен Python бағдарламасын бірнеше нұсқадан таңдауға үйретесің.",
+    "en": "Today you will teach a Python program to choose between several options."
+  },
+  "summary": {
+    "ru": "Теперь ты пишешь развилки на Python: if, elif и else.",
+    "kk": "Енді сен Python-да айырықтар жазасың: if, elif және else.",
+    "en": "Now you write forks in Python: if, elif and else."
+  },
+  "steps": [
+    {
+      "id": "if",
+      "type": "theory",
+      "title": {
+        "ru": "Много дорог",
+        "kk": "Көп жол",
+        "en": "Many roads"
+      },
+      "body": {
+        "ru": "**if** условие: — «если». **else:** — «иначе». А **elif** — «иначе, если»: можно проверить сколько угодно вариантов по очереди.\n\nPython проверяет условия сверху вниз и выполняет **первое**, которое правда. Остальные пропускает.\n\nДва знака **==** означают «равно?». Один знак = — это «положить в переменную».",
+        "kk": "**if** шарт: — «егер». **else:** — «әйтпесе». Ал **elif** — «әйтпесе, егер»: кез келген санды нұсқаны кезекпен тексеруге болады.\n\nPython шарттарды жоғарыдан төмен тексеріп, ақиқат болған **біріншісін** орындайды. Қалғандарын өткізіп жібереді.\n\nЕкі **==** белгісі «тең бе?» дегенді білдіреді. Бір = белгісі — «айнымалыға салу».",
+        "en": "**if** condition: — “if”. **else:** — “otherwise”. And **elif** — “else if”: you can check as many options as you like, one by one.\n\nPython checks conditions top to bottom and runs the **first** true one. It skips the rest.\n\nTwo signs **==** mean “equal?”. A single = means “put into a variable”."
+      },
+      "illustration": "r-if-else",
+      "code": "c = color_sensor.color(port.D)\nif c == color.RED:\n    await sound.beep(262, 300)\nelif c == color.GREEN:\n    await sound.beep(523, 300)\nelse:\n    await runloop.sleep_ms(300)"
+    },
+    {
+      "id": "result",
+      "type": "quiz",
+      "kind": "match",
+      "question": {
+        "ru": "Что сделает пример справа?",
+        "kk": "Оң жақтағы мысал не істейді?",
+        "en": "What will the example do?"
+      },
+      "pairs": [
+        {
+          "left": {
+            "ru": "Под датчиком красный",
+            "kk": "Датчик астында қызыл",
+            "en": "Red under the sensor"
+          },
+          "right": {
+            "ru": "Низкий сигнал",
+            "kk": "Төмен дыбыс",
+            "en": "A low beep"
+          }
+        },
+        {
+          "left": {
+            "ru": "Под датчиком зелёный",
+            "kk": "Датчик астында жасыл",
+            "en": "Green under the sensor"
+          },
+          "right": {
+            "ru": "Высокий сигнал",
+            "kk": "Жоғары дыбыс",
+            "en": "A high beep"
+          }
+        },
+        {
+          "left": {
+            "ru": "Под датчиком синий",
+            "kk": "Датчик астында көк",
+            "en": "Blue under the sensor"
+          },
+          "right": {
+            "ru": "Просто пауза",
+            "kk": "Жай үзіліс",
+            "en": "Just a pause"
+          }
+        }
+      ],
+      "explanation": {
+        "ru": "Выполняется первая подходящая ветка; синий не подошёл ни к if, ни к elif — сработал else.",
+        "kk": "Бірінші сай келетін тармақ орындалады; көк if-ке де, elif-ке де сай келмеді — else іске қосылды.",
+        "en": "The first matching branch runs; blue matched neither if nor elif, so else ran."
+      },
+      "skill": "python"
+    },
+    {
+      "id": "equals",
+      "type": "quiz",
+      "kind": "fill",
+      "question": {
+        "ru": "Заполни условие: «если цвет чёрный»",
+        "kk": "Шартты толтыр: «егер түс қара»",
+        "en": "Complete the condition: “if the colour is black”"
+      },
+      "code": "if color_sensor.color(port.D) [[0]] color.[[1]]:\n    motor_pair.stop(motor_pair.PAIR_1)",
+      "blanks": [
+        {
+          "options": [
+            "==",
+            "=",
+            ">"
+          ],
+          "correct": 0
+        },
+        {
+          "options": [
+            "BLACK",
+            "WHITE",
+            "RED"
+          ],
+          "correct": 0
+        }
+      ],
+      "explanation": {
+        "ru": "Сравнение — два знака равенства. Цвет — color.BLACK.",
+        "kk": "Салыстыру — екі теңдік белгісі. Түс — color.BLACK.",
+        "en": "Comparison uses two equals signs. The colour is color.BLACK."
+      },
+      "skill": "python"
+    },
+    {
+      "id": "fork",
+      "type": "code",
+      "title": {
+        "ru": "Развилка блоками и кодом",
+        "kk": "Блоктармен және кодпен айырық",
+        "en": "A fork in blocks and code"
+      },
+      "task": {
+        "ru": "Робот едет 40 см и смотрит на метку: если зелёная — налево к зоне А, иначе — направо к зоне Б. Сейчас метка зелёная. Потом посмотри if/else во вкладке Python.",
+        "kk": "Робот 40 см жүріп, белгіге қарайды: жасыл болса — солға, А аймағына, әйтпесе — оңға, Б аймағына. Қазір белгі жасыл. Содан кейін Python қойындысынан if/else-ті қара.",
+        "en": "The robot drives 40 cm and checks the mark: green — left to zone A, otherwise — right to zone B. The mark is green now. Then look at if/else in the Python tab."
+      },
+      "field": {
+        "width": 1400,
+        "height": 1000,
+        "start": {
+          "x": 150,
+          "y": 500,
+          "heading": 0
+        },
+        "border": true,
+        "zones": [
+          {
+            "id": "mark",
+            "x": 560,
+            "y": 440,
+            "w": 120,
+            "h": 120,
+            "kind": "paint",
+            "color": "green"
+          },
+          {
+            "id": "a",
+            "x": 480,
+            "y": 760,
+            "w": 220,
+            "h": 200,
+            "kind": "target",
+            "label": {
+              "ru": "Зона А",
+              "kk": "А аймағы",
+              "en": "Zone A"
+            }
+          },
+          {
+            "id": "b",
+            "x": 480,
+            "y": 40,
+            "w": 220,
+            "h": 200,
+            "kind": "target",
+            "label": {
+              "ru": "Зона Б",
+              "kk": "Б аймағы",
+              "en": "Zone B"
+            }
+          }
+        ],
+        "points": [],
+        "walls": [],
+        "lines": []
+      },
+      "toolbox": [
+        "move",
+        "turn",
+        "if"
+      ],
+      "start": [],
+      "checks": [
+        {
+          "type": "finishInZone",
+          "zone": "a"
+        },
+        {
+          "type": "usesOp",
+          "op": "if",
+          "min": 1
+        },
+        {
+          "type": "usesSensor",
+          "sensor": "color"
+        }
+      ],
+      "hints": [
+        {
+          "ru": "Собери программу блоками, а потом открой вкладку **Python** над редактором — там та же программа кодом.",
+          "kk": "Бағдарламаны блоктармен құрастыр, содан кейін редактордың үстіндегі **Python** қойындысын аш — онда сол бағдарлама кодпен.",
+          "en": "Build the program with blocks, then open the **Python** tab above the editor — the same program is there as code."
+        },
+        {
+          "ru": "Если цвет зелёный: налево 90°, иначе: направо 90°.",
+          "kk": "Егер түс жасыл: солға 90°, әйтпесе: оңға 90°.",
+          "en": "If green: left 90°, else: right 90°."
+        },
+        {
+          "ru": "Вперёд 40; если… иначе…; вперёд 30.",
+          "kk": "40 алға; егер… әйтпесе…; 30 алға.",
+          "en": "Forward 40; if… else…; forward 30."
+        }
+      ],
+      "reference": [
+        {
+          "op": "move",
+          "direction": "forward",
+          "value": 40,
+          "unit": "cm"
+        },
+        {
+          "op": "if",
+          "condition": {
+            "sensor": "color",
+            "port": "D",
+            "color": "green"
+          },
+          "then": [
+            {
+              "op": "turn",
+              "direction": "left",
+              "degrees": 90
+            }
+          ],
+          "else": [
+            {
+              "op": "turn",
+              "direction": "right",
+              "degrees": 90
+            }
+          ]
+        },
+        {
+          "op": "move",
+          "direction": "forward",
+          "value": 30,
+          "unit": "cm"
+        }
+      ],
+      "skill": "python"
+    }
+  ]
+}

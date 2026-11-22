@@ -1,0 +1,161 @@
+{
+  "id": "nav-03",
+  "track": "navigation",
+  "unit": "nav-calibration",
+  "minutes": 7,
+  "skills": [
+    "calibration"
+  ],
+  "title": {
+    "ru": "Тест 50 см",
+    "kk": "50 см тесті",
+    "en": "The 50 cm test"
+  },
+  "goal": {
+    "ru": "Сегодня ты узнаешь, как проверить, правильно ли робот меряет расстояние.",
+    "kk": "Бүгін сен робот қашықтықты дұрыс өлшей ме, соны қалай тексеруді білесің.",
+    "en": "Today you will learn how to check whether the robot measures distance correctly."
+  },
+  "summary": {
+    "ru": "Теперь ты умеешь проводить тест расстояния и считать поправку.",
+    "kk": "Енді сен қашықтық тестін өткізіп, түзетуді есептей аласың.",
+    "en": "Now you can run a distance test and work out the correction."
+  },
+  "steps": [
+    {
+      "id": "test",
+      "type": "theory",
+      "title": {
+        "ru": "Измерь робота",
+        "kk": "Роботты өлше",
+        "en": "Measure the robot"
+      },
+      "body": {
+        "ru": "Робот думает, что 1 оборот колеса — это определённое расстояние. Но колёса бывают разные, шины изнашиваются.\n\n**Тест 50 см**: прикажи роботу проехать 50 см и измерь рулеткой, сколько он проехал на самом деле.\n\nЕсли проехал 47 см, нужен **коэффициент**: 50 : 47 ≈ 1,06. Теперь каждое расстояние умножаем на 1,06 — и робот приезжает точно.",
+        "kk": "Робот дөңгелектің 1 айналымы белгілі бір қашықтық деп ойлайды. Бірақ дөңгелектер әр түрлі, шиналар тозады.\n\n**50 см тесті**: роботқа 50 см жүруді бұйырып, оның шын мәнінде қанша жүргенін рулеткамен өлше.\n\nЕгер 47 см жүрсе, **коэффициент** керек: 50 : 47 ≈ 1,06. Енді әр қашықтықты 1,06-ға көбейтеміз — және робот дәл келеді.",
+        "en": "The robot believes one wheel turn is a certain distance. But wheels differ and tyres wear.\n\n**The 50 cm test**: tell the robot to drive 50 cm and measure with a tape how far it really went.\n\nIf it drove 47 cm you need a **factor**: 50 ÷ 47 ≈ 1.06. Now multiply every distance by 1.06 — and the robot arrives exactly."
+      },
+      "illustration": "r-calibrate"
+    },
+    {
+      "id": "factor",
+      "type": "quiz",
+      "kind": "number",
+      "question": {
+        "ru": "Робот должен был проехать 50 см, а проехал 40 см. Какой коэффициент? (команда : факт)",
+        "kk": "Робот 50 см жүруі керек еді, бірақ 40 см жүрді. Коэффициент қандай? (команда : нақты)",
+        "en": "The robot should have driven 50 cm but drove 40 cm. What is the factor? (command ÷ actual)"
+      },
+      "answer": 1.25,
+      "tolerance": 0.01,
+      "explanation": {
+        "ru": "50 : 40 = 1,25. Каждое расстояние в программе умножаем на 1,25.",
+        "kk": "50 : 40 = 1,25. Бағдарламадағы әр қашықтықты 1,25-ке көбейтеміз.",
+        "en": "50 ÷ 40 = 1.25. Multiply every distance in the program by 1.25."
+      },
+      "skill": "calibration"
+    },
+    {
+      "id": "fixed",
+      "type": "quiz",
+      "kind": "number",
+      "question": {
+        "ru": "Коэффициент 1,25. Сколько написать в программе, чтобы робот проехал 40 см?",
+        "kk": "Коэффициент 1,25. Робот 40 см жүруі үшін бағдарламаға не жазу керек?",
+        "en": "The factor is 1.25. What do you write so the robot drives 40 cm?"
+      },
+      "answer": 50,
+      "tolerance": 0.5,
+      "explanation": {
+        "ru": "40 × 1,25 = 50 см. Робот «недоезжает», поэтому просим чуть больше.",
+        "kk": "40 × 1,25 = 50 см. Робот «жетпей қалады», сондықтан сәл көбірек сұраймыз.",
+        "en": "40 × 1.25 = 50 cm. The robot falls short, so we ask for a bit more."
+      },
+      "unit": {
+        "ru": "см",
+        "kk": "см",
+        "en": "cm"
+      },
+      "skill": "calibration"
+    },
+    {
+      "id": "exact",
+      "type": "code",
+      "title": {
+        "ru": "Ровно 50 см",
+        "kk": "Дәл 50 см",
+        "en": "Exactly 50 cm"
+      },
+      "task": {
+        "ru": "В симуляторе робот откалиброван. Проедь ровно 50 см: финиш — узкая полоса шириной 4 см.",
+        "kk": "Симуляторда робот калибрленген. Дәл 50 см жүр: мәре — ені 4 см тар жолақ.",
+        "en": "In the simulator the robot is calibrated. Drive exactly 50 cm: the finish is a narrow 4 cm strip."
+      },
+      "field": {
+        "width": 1400,
+        "height": 400,
+        "start": {
+          "x": 150,
+          "y": 200,
+          "heading": 0
+        },
+        "border": true,
+        "zones": [
+          {
+            "id": "strip",
+            "x": 630,
+            "y": 80,
+            "w": 40,
+            "h": 240,
+            "kind": "target",
+            "label": {
+              "ru": "50 см",
+              "kk": "50 см",
+              "en": "50 cm"
+            }
+          }
+        ],
+        "points": [],
+        "walls": [],
+        "lines": []
+      },
+      "toolbox": [
+        "move",
+        "set_speed"
+      ],
+      "start": [],
+      "checks": [
+        {
+          "type": "finishInZone",
+          "zone": "strip"
+        }
+      ],
+      "hints": [
+        {
+          "ru": "Нужен один блок движения.",
+          "kk": "Бір қозғалыс блогы керек.",
+          "en": "One move block is enough."
+        },
+        {
+          "ru": "Единица — сантиметры.",
+          "kk": "Бірлігі — сантиметр.",
+          "en": "The unit is centimetres."
+        },
+        {
+          "ru": "Вперёд 50 см.",
+          "kk": "50 см алға.",
+          "en": "Forward 50 cm."
+        }
+      ],
+      "reference": [
+        {
+          "op": "move",
+          "direction": "forward",
+          "value": 50,
+          "unit": "cm"
+        }
+      ],
+      "skill": "calibration"
+    }
+  ]
+}

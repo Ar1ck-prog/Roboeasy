@@ -1,0 +1,156 @@
+{
+  "id": "python-05",
+  "track": "python",
+  "unit": "python-async",
+  "minutes": 7,
+  "skills": [
+    "python"
+  ],
+  "title": {
+    "ru": "runloop.run(main())",
+    "kk": "runloop.run(main())",
+    "en": "runloop.run(main())"
+  },
+  "goal": {
+    "ru": "Сегодня ты разберёшь, как устроена любая программа SPIKE 3 на Python.",
+    "kk": "Бүгін сен Python-дағы кез келген SPIKE 3 бағдарламасының құрылымын талдайсың.",
+    "en": "Today you will take apart how every SPIKE 3 Python program is built."
+  },
+  "summary": {
+    "ru": "Теперь ты можешь сам написать каркас программы: импорт, async def main и runloop.run.",
+    "kk": "Енді сен бағдарлама қаңқасын өзің жаза аласың: импорт, async def main және runloop.run.",
+    "en": "Now you can write the program skeleton yourself: imports, async def main and runloop.run."
+  },
+  "steps": [
+    {
+      "id": "skeleton",
+      "type": "theory",
+      "title": {
+        "ru": "Каркас программы",
+        "kk": "Бағдарлама қаңқасы",
+        "en": "The program skeleton"
+      },
+      "body": {
+        "ru": "Каждая программа SPIKE 3 устроена одинаково:\n\n1. **import** — подключить модули.\n2. **async def main():** — главная функция, внутри — все команды робота со сдвигом.\n3. **runloop.run(main())** — последняя строка: «запусти main».\n\nСлово **async** перед def разрешает использовать await внутри функции. Без последней строки программа ничего не сделает: main надо запустить!",
+        "kk": "Әр SPIKE 3 бағдарламасы бірдей құрылған:\n\n1. **import** — модульдерді қосу.\n2. **async def main():** — басты функция, ішінде — роботтың барлық командалары шегініспен.\n3. **runloop.run(main())** — соңғы жол: «main-ды іске қос».\n\ndef алдындағы **async** сөзі функция ішінде await қолдануға рұқсат береді. Соңғы жолсыз бағдарлама ештеңе істемейді: main-ды іске қосу керек!",
+        "en": "Every SPIKE 3 program has the same shape:\n\n1. **import** — bring in the modules.\n2. **async def main():** — the main function; all robot commands go inside, indented.\n3. **runloop.run(main())** — the last line: “run main”.\n\nThe word **async** before def allows await inside the function. Without the last line the program does nothing: main must be started!"
+      },
+      "illustration": "r-python",
+      "code": "from hub import sound\nimport runloop\n\nasync def main():\n    await sound.beep(440, 500)\n\nrunloop.run(main())"
+    },
+    {
+      "id": "build",
+      "type": "quiz",
+      "kind": "order",
+      "question": {
+        "ru": "Собери программу «пискнуть» по порядку",
+        "kk": "«Дыбыс беру» бағдарламасын ретімен құрастыр",
+        "en": "Order the lines of a “beep” program"
+      },
+      "items": [
+        {
+          "ru": "from hub import sound",
+          "kk": "from hub import sound",
+          "en": "from hub import sound"
+        },
+        {
+          "ru": "import runloop",
+          "kk": "import runloop",
+          "en": "import runloop"
+        },
+        {
+          "ru": "async def main():",
+          "kk": "async def main():",
+          "en": "async def main():"
+        },
+        {
+          "ru": "    await sound.beep(440, 500)",
+          "kk": "    await sound.beep(440, 500)",
+          "en": "    await sound.beep(440, 500)"
+        },
+        {
+          "ru": "runloop.run(main())",
+          "kk": "runloop.run(main())",
+          "en": "runloop.run(main())"
+        }
+      ],
+      "explanation": {
+        "ru": "Импорты — наверху, команды — внутри main, запуск — в самом конце.",
+        "kk": "Импорттар — жоғарыда, командалар — main ішінде, іске қосу — ең соңында.",
+        "en": "Imports at the top, commands inside main, the start at the very end."
+      },
+      "skill": "python"
+    },
+    {
+      "id": "run",
+      "type": "quiz",
+      "kind": "fill",
+      "question": {
+        "ru": "Заполни последнюю строку программы",
+        "kk": "Бағдарламаның соңғы жолын толтыр",
+        "en": "Complete the last line of the program"
+      },
+      "code": "async def main():\n    await sound.beep(440, 500)\n\nrunloop.[[0]]([[1]]())",
+      "blanks": [
+        {
+          "options": [
+            "run",
+            "sleep_ms",
+            "until"
+          ],
+          "correct": 0
+        },
+        {
+          "options": [
+            "main",
+            "sound",
+            "beep"
+          ],
+          "correct": 1
+        }
+      ],
+      "explanation": {
+        "ru": "runloop.run(main()) запускает главную функцию.",
+        "kk": "runloop.run(main()) басты функцияны іске қосады.",
+        "en": "runloop.run(main()) starts the main function."
+      },
+      "skill": "python"
+    },
+    {
+      "id": "async",
+      "type": "quiz",
+      "kind": "choice",
+      "question": {
+        "ru": "Зачем перед def main стоит слово async?",
+        "kk": "def main алдында неге async сөзі тұр?",
+        "en": "Why is there the word async before def main?"
+      },
+      "options": [
+        {
+          "ru": "Чтобы внутри можно было писать await",
+          "kk": "Ішінде await жазуға болуы үшін",
+          "en": "So await can be used inside"
+        },
+        {
+          "ru": "Чтобы робот ехал быстрее",
+          "kk": "Робот жылдамырақ жүруі үшін",
+          "en": "To make the robot faster"
+        },
+        {
+          "ru": "Так красивее",
+          "kk": "Осылай әдемірек",
+          "en": "It looks nicer"
+        }
+      ],
+      "correct": [
+        0
+      ],
+      "explanation": {
+        "ru": "await работает только внутри функций, объявленных через async def.",
+        "kk": "await тек async def арқылы жарияланған функциялар ішінде жұмыс істейді.",
+        "en": "await only works inside functions declared with async def."
+      },
+      "skill": "python"
+    }
+  ]
+}

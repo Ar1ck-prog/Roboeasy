@@ -1,0 +1,171 @@
+{
+  "id": "python-03",
+  "track": "python",
+  "unit": "python-bridge",
+  "minutes": 7,
+  "skills": [
+    "python"
+  ],
+  "title": {
+    "ru": "Модули SPIKE 3",
+    "kk": "SPIKE 3 модульдері",
+    "en": "SPIKE 3 modules"
+  },
+  "goal": {
+    "ru": "Сегодня ты узнаешь, откуда в Python берутся команды для робота.",
+    "kk": "Бүгін сен Python-да робот командалары қайдан алынатынын білесің.",
+    "en": "Today you will learn where Python gets its robot commands from."
+  },
+  "summary": {
+    "ru": "Теперь ты знаешь главные модули SPIKE 3 и как их подключать.",
+    "kk": "Енді сен SPIKE 3-тің негізгі модульдерін және оларды қалай қосу керегін білесің.",
+    "en": "Now you know the main SPIKE 3 modules and how to import them."
+  },
+  "steps": [
+    {
+      "id": "import",
+      "type": "theory",
+      "title": {
+        "ru": "Ящики с инструментами",
+        "kk": "Құрал жәшіктері",
+        "en": "Toolboxes"
+      },
+      "body": {
+        "ru": "Команды для робота лежат в **модулях** — как инструменты в ящиках. В начале программы ящики «открывают» словом **import**.\n\n**motor_pair** — пара моторов для езды. **motor** — один мотор. **color_sensor**, **distance_sensor**, **force_sensor** — датчики. **runloop** — запуск и паузы. Из **hub** берут порты, экран, звук и гироскоп.",
+        "kk": "Робот командалары **модульдерде** жатады — жәшіктегі құралдар сияқты. Бағдарлама басында жәшіктерді **import** сөзімен «ашады».\n\n**motor_pair** — жүруге арналған моторлар жұбы. **motor** — бір мотор. **color_sensor**, **distance_sensor**, **force_sensor** — датчиктер. **runloop** — іске қосу және үзілістер. **hub**-тан порттарды, экранды, дыбысты және гироскопты алады.",
+        "en": "Robot commands live in **modules** — like tools in boxes. At the top of the program you “open” the boxes with **import**.\n\n**motor_pair** — a pair of motors for driving. **motor** — a single motor. **color_sensor**, **distance_sensor**, **force_sensor** — sensors. **runloop** — starting and pauses. From **hub** you take ports, the screen, sound and the gyro."
+      },
+      "illustration": "r-python",
+      "code": "from hub import port, light_matrix, sound, motion_sensor\nimport runloop, motor_pair, motor\nimport color_sensor, distance_sensor, force_sensor, color"
+    },
+    {
+      "id": "modules",
+      "type": "quiz",
+      "kind": "match",
+      "question": {
+        "ru": "Подбери модуль к задаче",
+        "kk": "Модульді тапсырмаға сәйкестендір",
+        "en": "Match the module to the job"
+      },
+      "pairs": [
+        {
+          "left": {
+            "ru": "Ехать вперёд на двух моторах",
+            "kk": "Екі мотормен алға жүру",
+            "en": "Drive forward on two motors"
+          },
+          "right": {
+            "ru": "motor_pair",
+            "kk": "motor_pair",
+            "en": "motor_pair"
+          }
+        },
+        {
+          "left": {
+            "ru": "Узнать цвет под роботом",
+            "kk": "Робот астындағы түсті білу",
+            "en": "Read the colour under the robot"
+          },
+          "right": {
+            "ru": "color_sensor",
+            "kk": "color_sensor",
+            "en": "color_sensor"
+          }
+        },
+        {
+          "left": {
+            "ru": "Измерить расстояние до стены",
+            "kk": "Қабырғаға дейінгі қашықтықты өлшеу",
+            "en": "Measure the distance to a wall"
+          },
+          "right": {
+            "ru": "distance_sensor",
+            "kk": "distance_sensor",
+            "en": "distance_sensor"
+          }
+        },
+        {
+          "left": {
+            "ru": "Поднять руку одним мотором",
+            "kk": "Бір мотормен қолды көтеру",
+            "en": "Raise an arm with one motor"
+          },
+          "right": {
+            "ru": "motor",
+            "kk": "motor",
+            "en": "motor"
+          }
+        }
+      ],
+      "explanation": {
+        "ru": "У каждой части робота свой модуль.",
+        "kk": "Роботтың әр бөлігінің өз модулі бар.",
+        "en": "Each part of the robot has its own module."
+      },
+      "skill": "python"
+    },
+    {
+      "id": "from-hub",
+      "type": "quiz",
+      "kind": "fill",
+      "question": {
+        "ru": "Что нужно взять из hub, чтобы показать картинку на экране?",
+        "kk": "Экранда сурет көрсету үшін hub-тан не алу керек?",
+        "en": "What do you take from hub to show a picture on the screen?"
+      },
+      "code": "from hub import port, [[0]]\n\nlight_matrix.show_image(light_matrix.IMAGE_HAPPY)",
+      "blanks": [
+        {
+          "options": [
+            "motor",
+            "light_matrix",
+            "color"
+          ],
+          "correct": 1
+        }
+      ],
+      "explanation": {
+        "ru": "Экран 5 × 5 — это light_matrix.",
+        "kk": "5 × 5 экран — бұл light_matrix.",
+        "en": "The 5 × 5 screen is light_matrix."
+      },
+      "skill": "python"
+    },
+    {
+      "id": "forgot",
+      "type": "quiz",
+      "kind": "choice",
+      "question": {
+        "ru": "Программа использует color_sensor, но в import его нет. Что будет?",
+        "kk": "Бағдарлама color_sensor қолданады, бірақ import-та ол жоқ. Не болады?",
+        "en": "The program uses color_sensor but it is not imported. What happens?"
+      },
+      "options": [
+        {
+          "ru": "Ошибка: Python не знает, что такое color_sensor",
+          "kk": "Қате: Python color_sensor деген не екенін білмейді",
+          "en": "An error: Python does not know what color_sensor is"
+        },
+        {
+          "ru": "Робот догадается сам",
+          "kk": "Робот өзі түсінеді",
+          "en": "The robot figures it out"
+        },
+        {
+          "ru": "Датчик заработает медленнее",
+          "kk": "Датчик баяуырақ жұмыс істейді",
+          "en": "The sensor works slower"
+        }
+      ],
+      "correct": [
+        0
+      ],
+      "explanation": {
+        "ru": "Ящик с инструментом надо открыть, прежде чем им пользоваться.",
+        "kk": "Құрал жәшігін оны қолданбас бұрын ашу керек.",
+        "en": "You must open the toolbox before using its tools."
+      },
+      "skill": "python"
+    }
+  ]
+}

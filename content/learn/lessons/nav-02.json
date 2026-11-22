@@ -1,0 +1,93 @@
+{
+  "id": "nav-02",
+  "track": "navigation",
+  "unit": "nav-errors",
+  "minutes": 7,
+  "skills": [
+    "control"
+  ],
+  "title": {
+    "ru": "Пять запусков подряд",
+    "kk": "Қатарынан бес іске қосу",
+    "en": "Five runs in a row"
+  },
+  "goal": {
+    "ru": "Сегодня ты проверишь, насколько твой робот повторяем.",
+    "kk": "Бүгін сен роботыңның қаншалықты қайталанатынын тексересің.",
+    "en": "Today you will test how repeatable your robot is."
+  },
+  "summary": {
+    "ru": "Теперь ты проверяешь программу серией запусков и знаешь, что делает её надёжнее.",
+    "kk": "Енді сен бағдарламаны бірнеше іске қосумен тексересің және оны не сенімді ететінін білесің.",
+    "en": "Now you test a program with a series of runs and know what makes it more reliable."
+  },
+  "steps": [
+    {
+      "id": "cloud",
+      "type": "theory",
+      "title": {
+        "ru": "Облако попаданий",
+        "kk": "Тию бұлты",
+        "en": "A cloud of hits"
+      },
+      "body": {
+        "ru": "Один удачный запуск ничего не доказывает. На соревнованиях важно, чтобы робот попадал **каждый** раз.\n\nЗапусти программу 5 раз и отметь, где робот остановился. Получится «облако» точек. Маленькое облако — робот **повторяем**. Большое — ему нельзя доверять.\n\nОблако уменьшают: ехать медленнее и держать курс по гироскопу.",
+        "kk": "Бір сәтті іске қосу ештеңені дәлелдемейді. Жарыстарда роботтың **әр** жолы тиюі маңызды.\n\nБағдарламаны 5 рет іске қосып, робот қай жерде тоқтағанын белгіле. Нүктелер «бұлты» шығады. Кішкентай бұлт — робот **қайталанады**. Үлкен — оған сенуге болмайды.\n\nБұлтты кішірейтеді: баяуырақ жүру және бағытты гироскоппен ұстау.",
+        "en": "One lucky run proves nothing. In competitions the robot must hit **every** time.\n\nRun the program 5 times and mark where the robot stopped. You get a “cloud” of points. A small cloud — the robot is **repeatable**. A big one — you cannot trust it.\n\nShrink the cloud: drive slower and hold the heading with the gyro."
+      },
+      "illustration": "r-scatter"
+    },
+    {
+      "id": "runs",
+      "type": "widget",
+      "widget": "scatter",
+      "title": {
+        "ru": "Попади 5 раз из 5",
+        "kk": "5-тен 5 рет тигіз",
+        "en": "Hit 5 out of 5"
+      },
+      "task": {
+        "ru": "Робот едет 1 метр к цели. Подбери скорость и включи или выключи гироскоп так, чтобы **все 5 запусков** попали в зелёный круг.",
+        "kk": "Робот мақсатқа 1 метр жүреді. Барлық **5 іске қосу** жасыл шеңберге тиетіндей жылдамдықты таңда және гироскопты қос не өшір.",
+        "en": "The robot drives 1 metre to the target. Choose a speed and switch the gyro on or off so that **all 5 runs** land in the green circle."
+      },
+      "distanceCm": 100
+    },
+    {
+      "id": "trust",
+      "type": "quiz",
+      "kind": "choice",
+      "question": {
+        "ru": "Робот попал 1 раз из 5, но очень точно. Готова ли программа к соревнованию?",
+        "kk": "Робот 5-тен 1 рет, бірақ өте дәл тиді. Бағдарлама жарысқа дайын ба?",
+        "en": "The robot hit 1 out of 5, very precisely. Is the program ready for competition?"
+      },
+      "options": [
+        {
+          "ru": "Нет: важна повторяемость, а не один удачный раз",
+          "kk": "Жоқ: бір сәтті рет емес, қайталанушылық маңызды",
+          "en": "No: repeatability matters, not one lucky run"
+        },
+        {
+          "ru": "Да, раз попал хоть однажды",
+          "kk": "Иә, бір рет болса да тиді ғой",
+          "en": "Yes, it hit at least once"
+        },
+        {
+          "ru": "Да, если ехать быстрее",
+          "kk": "Иә, жылдамырақ жүрсе",
+          "en": "Yes, if it drives faster"
+        }
+      ],
+      "correct": [
+        0
+      ],
+      "explanation": {
+        "ru": "На матче у тебя одна попытка. Надёжность 5 из 5 важнее рекорда 1 из 5.",
+        "kk": "Матчта бір-ақ мүмкіндік бар. 5-тен 5 сенімділік 5-тен 1 рекордтан маңыздырақ.",
+        "en": "In a match you get one attempt. 5 out of 5 reliability beats a 1 out of 5 record."
+      },
+      "skill": "control"
+    }
+  ]
+}

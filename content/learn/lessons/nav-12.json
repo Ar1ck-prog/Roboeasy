@@ -1,0 +1,182 @@
+{
+  "id": "nav-12",
+  "track": "navigation",
+  "unit": "nav-pid",
+  "minutes": 8,
+  "skills": [
+    "control",
+    "line-follow"
+  ],
+  "title": {
+    "ru": "Координаты поля",
+    "kk": "Алаң координаттары",
+    "en": "Field coordinates"
+  },
+  "goal": {
+    "ru": "Сегодня ты научишься описывать любое место на поле двумя числами.",
+    "kk": "Бүгін сен алаңдағы кез келген жерді екі санмен сипаттауды үйренесің.",
+    "en": "Today you will learn to describe any spot on the field with two numbers."
+  },
+  "summary": {
+    "ru": "Теперь ты умеешь переводить координаты в движения робота.",
+    "kk": "Енді сен координаттарды робот қозғалыстарына аудара аласың.",
+    "en": "Now you can turn coordinates into robot moves."
+  },
+  "steps": [
+    {
+      "id": "xy",
+      "type": "theory",
+      "title": {
+        "ru": "x и y",
+        "kk": "x және y",
+        "en": "x and y"
+      },
+      "body": {
+        "ru": "Поле — как лист в клетку. Левый нижний угол — начало: (0, 0). **x** — сколько миллиметров вправо, **y** — сколько вверх.\n\nТочка (600, 500) — 600 мм вправо и 500 мм вверх.\n\nЧтобы доехать из (200, 200) в (600, 500): сначала по x на 400 мм (40 см), потом повернуть и проехать по y 300 мм (30 см).",
+        "kk": "Алаң — торкөз парақ сияқты. Сол жақ төменгі бұрыш — бастама: (0, 0). **x** — оңға қанша миллиметр, **y** — жоғары қанша.\n\n(600, 500) нүктесі — оңға 600 мм және жоғары 500 мм.\n\n(200, 200)-ден (600, 500)-ге жету үшін: алдымен x бойымен 400 мм (40 см), содан кейін бұрылып, y бойымен 300 мм (30 см).",
+        "en": "The field is like squared paper. The bottom-left corner is the origin: (0, 0). **x** is how many millimetres right, **y** how many up.\n\nPoint (600, 500) is 600 mm right and 500 mm up.\n\nTo get from (200, 200) to (600, 500): first 400 mm along x (40 cm), then turn and drive 300 mm along y (30 cm)."
+      },
+      "illustration": "r-coordinates"
+    },
+    {
+      "id": "dx",
+      "type": "quiz",
+      "kind": "number",
+      "question": {
+        "ru": "Робот в точке (200, 200). Сколько сантиметров ехать вправо до x = 600?",
+        "kk": "Робот (200, 200) нүктесінде. x = 600-ге дейін оңға неше сантиметр жүру керек?",
+        "en": "The robot is at (200, 200). How many centimetres right to x = 600?"
+      },
+      "answer": 40,
+      "tolerance": 0,
+      "explanation": {
+        "ru": "600 − 200 = 400 мм = 40 см.",
+        "kk": "600 − 200 = 400 мм = 40 см.",
+        "en": "600 − 200 = 400 mm = 40 cm."
+      },
+      "unit": {
+        "ru": "см",
+        "kk": "см",
+        "en": "cm"
+      },
+      "skill": "control"
+    },
+    {
+      "id": "go-xy",
+      "type": "code",
+      "title": {
+        "ru": "В точку (600, 500)",
+        "kk": "(600, 500) нүктесіне",
+        "en": "To point (600, 500)"
+      },
+      "task": {
+        "ru": "Робот стоит в (200, 200) и смотрит вправо. Доедь точно в точку (600, 500).",
+        "kk": "Робот (200, 200)-де тұр және оңға қарайды. (600, 500) нүктесіне дәл жет.",
+        "en": "The robot is at (200, 200) facing right. Drive exactly to point (600, 500)."
+      },
+      "field": {
+        "width": 1200,
+        "height": 800,
+        "start": {
+          "x": 200,
+          "y": 200,
+          "heading": 0
+        },
+        "border": true,
+        "zones": [],
+        "points": [
+          {
+            "id": "target",
+            "x": 600,
+            "y": 500,
+            "r": 35,
+            "label": {
+              "ru": "(600, 500)",
+              "kk": "(600, 500)",
+              "en": "(600, 500)"
+            }
+          }
+        ],
+        "walls": [],
+        "lines": []
+      },
+      "toolbox": [
+        "move",
+        "turn"
+      ],
+      "start": [],
+      "checks": [
+        {
+          "type": "passPoints",
+          "points": [
+            "target"
+          ],
+          "ordered": true
+        },
+        {
+          "type": "noCollision"
+        }
+      ],
+      "hints": [
+        {
+          "ru": "Сначала по x: на сколько сантиметров вправо?",
+          "kk": "Алдымен x бойымен: оңға неше сантиметр?",
+          "en": "First along x: how many centimetres right?"
+        },
+        {
+          "ru": "Потом налево 90° — робот смотрит вверх, по y.",
+          "kk": "Содан кейін солға 90° — робот жоғары, y бойымен қарайды.",
+          "en": "Then left 90° — the robot faces up, along y."
+        },
+        {
+          "ru": "Вперёд 40, налево 90°, вперёд 30.",
+          "kk": "40 алға, солға 90°, 30 алға.",
+          "en": "Forward 40, left 90°, forward 30."
+        }
+      ],
+      "reference": [
+        {
+          "op": "move",
+          "direction": "forward",
+          "value": 40,
+          "unit": "cm"
+        },
+        {
+          "op": "turn",
+          "direction": "left",
+          "degrees": 90
+        },
+        {
+          "op": "move",
+          "direction": "forward",
+          "value": 30,
+          "unit": "cm"
+        }
+      ],
+      "skill": "control"
+    },
+    {
+      "id": "dy",
+      "type": "quiz",
+      "kind": "number",
+      "question": {
+        "ru": "Робот в точке (600, 500) и смотрит вверх. Сколько сантиметров ехать до (600, 750)?",
+        "kk": "Робот (600, 500) нүктесінде және жоғары қарайды. (600, 750)-ге дейін неше сантиметр жүру керек?",
+        "en": "The robot is at (600, 500) facing up. How many centimetres to (600, 750)?"
+      },
+      "answer": 25,
+      "tolerance": 0,
+      "explanation": {
+        "ru": "750 − 500 = 250 мм = 25 см.",
+        "kk": "750 − 500 = 250 мм = 25 см.",
+        "en": "750 − 500 = 250 mm = 25 cm."
+      },
+      "unit": {
+        "ru": "см",
+        "kk": "см",
+        "en": "cm"
+      },
+      "skill": "control"
+    }
+  ]
+}

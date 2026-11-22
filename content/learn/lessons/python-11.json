@@ -1,0 +1,261 @@
+{
+  "id": "python-11",
+  "track": "python",
+  "unit": "python-functions",
+  "minutes": 8,
+  "skills": [
+    "python",
+    "variables",
+    "functions"
+  ],
+  "title": {
+    "ru": "def и параметры",
+    "kk": "def және параметрлер",
+    "en": "def and parameters"
+  },
+  "goal": {
+    "ru": "Сегодня ты напишешь свою функцию на Python.",
+    "kk": "Бүгін сен Python-да өз функцияңды жазасың.",
+    "en": "Today you will write your own function in Python."
+  },
+  "summary": {
+    "ru": "Теперь ты умеешь объявлять функцию с параметром и вызывать её.",
+    "kk": "Енді сен параметрі бар функцияны жариялап, оны шақыра аласың.",
+    "en": "Now you can declare a function with a parameter and call it."
+  },
+  "steps": [
+    {
+      "id": "def",
+      "type": "theory",
+      "title": {
+        "ru": "Свой блок в коде",
+        "kk": "Кодтағы өз блогың",
+        "en": "Your own block in code"
+      },
+      "body": {
+        "ru": "Функция в Python — это «свой блок». Её объявляют словами **async def**, имя и скобки:\n\n**async def square(size):** — функция square с **параметром** size. Внутри size работает как переменная.\n\nВызов: **await square(20)** — квадрат 20, **await square(40)** — квадрат 40. Число в скобках попадает в size.\n\nВ Python параметр передают прямо в скобках — не нужно заранее задавать переменную, как в блоках.",
+        "kk": "Python-дағы функция — «өз блогың». Оны **async def** сөздерімен, атымен және жақшамен жариялайды:\n\n**async def square(size):** — **параметрі** size болатын square функциясы. Ішінде size айнымалы сияқты жұмыс істейді.\n\nШақыру: **await square(20)** — 20 шаршы, **await square(40)** — 40 шаршы. Жақшадағы сан size-ке түседі.\n\nPython-да параметр тікелей жақшада беріледі — блоктардағыдай айнымалыны алдын ала орнату керек емес.",
+        "en": "A function in Python is “your own block”. Declare it with **async def**, a name and brackets:\n\n**async def square(size):** — a function square with a **parameter** size. Inside, size works like a variable.\n\nCall it: **await square(20)** — a 20 square, **await square(40)** — a 40 square. The number in brackets goes into size.\n\nIn Python the parameter goes right in the brackets — no need to set a variable first, as in blocks."
+      },
+      "illustration": "r-myblock",
+      "code": "async def square(size):\n    for i in range(4):\n        await drive_cm(size)\n        await turn_left()\n\nawait square(20)\nawait square(40)"
+    },
+    {
+      "id": "call",
+      "type": "quiz",
+      "kind": "fill",
+      "question": {
+        "ru": "Вызови функцию, чтобы нарисовать квадрат 30",
+        "kk": "30 шаршы салу үшін функцияны шақыр",
+        "en": "Call the function to draw a 30 square"
+      },
+      "code": "async def square(size):\n    ...\n\n[[0]] square([[1]])",
+      "blanks": [
+        {
+          "options": [
+            "await",
+            "def",
+            "import"
+          ],
+          "correct": 0
+        },
+        {
+          "options": [
+            "30",
+            "size",
+            "\"30\""
+          ],
+          "correct": 0
+        }
+      ],
+      "explanation": {
+        "ru": "Функции с движением вызывают через await, а размер передают числом.",
+        "kk": "Қозғалысы бар функцияларды await арқылы шақырады, ал өлшемді санмен береді.",
+        "en": "Functions that move are called with await, and the size is passed as a number."
+      },
+      "skill": "python"
+    },
+    {
+      "id": "param",
+      "type": "quiz",
+      "kind": "choice",
+      "question": {
+        "ru": "Внутри square написано drive_cm(size). Что проедет робот при вызове square(15)?",
+        "kk": "square ішінде drive_cm(size) деп жазылған. square(15) шақырғанда робот не жүреді?",
+        "en": "Inside square is drive_cm(size). What does the robot drive when you call square(15)?"
+      },
+      "options": [
+        {
+          "ru": "Стороны по 15 см",
+          "kk": "15 см-ден қабырғалар",
+          "en": "Sides of 15 cm"
+        },
+        {
+          "ru": "Стороны по size см",
+          "kk": "size см-ден қабырғалар",
+          "en": "Sides of size cm"
+        },
+        {
+          "ru": "Ничего",
+          "kk": "Ештеңе",
+          "en": "Nothing"
+        }
+      ],
+      "correct": [
+        0
+      ],
+      "explanation": {
+        "ru": "При вызове size становится 15.",
+        "kk": "Шақырғанда size 15 болады.",
+        "en": "On the call, size becomes 15."
+      },
+      "skill": "python"
+    },
+    {
+      "id": "squares",
+      "type": "code",
+      "title": {
+        "ru": "Два квадрата",
+        "kk": "Екі шаршы",
+        "en": "Two squares"
+      },
+      "task": {
+        "ru": "Сделай блоками свой блок **square** со стороной size и нарисуй квадраты 20 и 40 см. Во вкладке Python посмотри, как выглядит async def.",
+        "kk": "Блоктармен қабырғасы size болатын өз **square** блогыңды жасап, 20 және 40 см шаршыларды сал. Python қойындысынан async def қалай көрінетінін қара.",
+        "en": "Make your own block **square** with side size and draw 20 and 40 cm squares. In the Python tab, see what async def looks like."
+      },
+      "field": {
+        "width": 1000,
+        "height": 900,
+        "start": {
+          "x": 300,
+          "y": 250,
+          "heading": 0
+        },
+        "border": true,
+        "zones": [],
+        "points": [
+          {
+            "id": "small",
+            "x": 500,
+            "y": 450,
+            "r": 50,
+            "label": {
+              "ru": "Малый угол",
+              "kk": "Кіші бұрыш",
+              "en": "Small corner"
+            }
+          },
+          {
+            "id": "big",
+            "x": 700,
+            "y": 650,
+            "r": 50,
+            "label": {
+              "ru": "Большой угол",
+              "kk": "Үлкен бұрыш",
+              "en": "Big corner"
+            }
+          }
+        ],
+        "walls": [],
+        "lines": []
+      },
+      "toolbox": [
+        "call",
+        "set_var",
+        "move_expr",
+        "turn",
+        "repeat",
+        "move"
+      ],
+      "start": [],
+      "checks": [
+        {
+          "type": "passPoints",
+          "points": [
+            "small",
+            "big"
+          ],
+          "ordered": true
+        },
+        {
+          "type": "usesOp",
+          "op": "call",
+          "min": 2
+        },
+        {
+          "type": "noCollision"
+        }
+      ],
+      "hints": [
+        {
+          "ru": "Собери программу блоками, а потом открой вкладку **Python** над редактором — там та же программа кодом.",
+          "kk": "Бағдарламаны блоктармен құрастыр, содан кейін редактордың үстіндегі **Python** қойындысын аш — онда сол бағдарлама кодпен.",
+          "en": "Build the program with blocks, then open the **Python** tab above the editor — the same program is there as code."
+        },
+        {
+          "ru": "Внутри square: повторить 4 — вперёд на size, налево 90°.",
+          "kk": "square ішінде: 4 рет — size алға, солға 90°.",
+          "en": "Inside square: repeat 4 — forward size, left 90°."
+        },
+        {
+          "ru": "size = 20; square; size = 40; square.",
+          "kk": "size = 20; square; size = 40; square.",
+          "en": "size = 20; square; size = 40; square."
+        }
+      ],
+      "reference": [
+        {
+          "op": "set_var",
+          "name": "size",
+          "expr": {
+            "num": 20
+          }
+        },
+        {
+          "op": "call",
+          "name": "square"
+        },
+        {
+          "op": "set_var",
+          "name": "size",
+          "expr": {
+            "num": 40
+          }
+        },
+        {
+          "op": "call",
+          "name": "square"
+        }
+      ],
+      "referenceFunctions": [
+        {
+          "name": "square",
+          "steps": [
+            {
+              "op": "repeat",
+              "times": 4,
+              "steps": [
+                {
+                  "op": "move_expr",
+                  "direction": "forward",
+                  "expr": {
+                    "var": "size"
+                  },
+                  "unit": "cm"
+                },
+                {
+                  "op": "turn",
+                  "direction": "left",
+                  "degrees": 90
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "skill": "python"
+    }
+  ]
+}

@@ -1,0 +1,249 @@
+{
+  "id": "nav-13",
+  "track": "navigation",
+  "unit": "nav-pid",
+  "minutes": 12,
+  "skills": [
+    "control",
+    "line-follow"
+  ],
+  "title": {
+    "ru": "Проект «Точный маршрут»",
+    "kk": "«Дәл маршрут» жобасы",
+    "en": "Project: Precise route"
+  },
+  "goal": {
+    "ru": "Сегодня ты проведёшь робота по маршруту с допуском в 3 сантиметра.",
+    "kk": "Бүгін сен роботты 3 сантиметр рұқсатпен маршрутпен жүргізесің.",
+    "en": "Today you will drive the robot along a route with a 3 cm tolerance."
+  },
+  "summary": {
+    "ru": "Трек «Навигация» пройден! Ты планируешь маршрут в координатах и проходишь его точно.",
+    "kk": "«Навигация» тректі өттің! Сен маршрутты координаттарда жоспарлап, оны дәл өтесің.",
+    "en": "The Navigation track is done! You plan a route in coordinates and drive it precisely."
+  },
+  "steps": [
+    {
+      "id": "plan",
+      "type": "theory",
+      "title": {
+        "ru": "План маршрута",
+        "kk": "Маршрут жоспары",
+        "en": "Route plan"
+      },
+      "body": {
+        "ru": "Старт (200, 200), робот смотрит вправо. Нужно пройти точки A (500, 200), B (500, 600), C (900, 600) и остановиться в маленьком финише у C.\n\nПеред программой посчитай на бумаге: сколько ехать между точками и куда поворачивать. Инженеры всегда сначала считают, потом программируют.",
+        "kk": "Старт (200, 200), робот оңға қарайды. A (500, 200), B (500, 600), C (900, 600) нүктелерінен өтіп, C жанындағы кішкентай мәреде тоқтау керек.\n\nБағдарламаның алдында қағазда есепте: нүктелер арасында қанша жүру керек және қайда бұрылу керек. Инженерлер әрқашан алдымен есептейді, содан кейін бағдарламалайды.",
+        "en": "Start at (200, 200), facing right. Pass points A (500, 200), B (500, 600), C (900, 600) and stop in the small finish at C.\n\nBefore programming, work it out on paper: how far between points and which way to turn. Engineers always calculate first, then program."
+      },
+      "illustration": "r-coordinates"
+    },
+    {
+      "id": "ab",
+      "type": "quiz",
+      "kind": "number",
+      "question": {
+        "ru": "Сколько сантиметров от A (500, 200) до B (500, 600)?",
+        "kk": "A (500, 200)-ден B (500, 600)-ге дейін неше сантиметр?",
+        "en": "How many centimetres from A (500, 200) to B (500, 600)?"
+      },
+      "answer": 40,
+      "tolerance": 0,
+      "explanation": {
+        "ru": "Меняется только y: 600 − 200 = 400 мм = 40 см.",
+        "kk": "Тек y өзгереді: 600 − 200 = 400 мм = 40 см.",
+        "en": "Only y changes: 600 − 200 = 400 mm = 40 cm."
+      },
+      "unit": {
+        "ru": "см",
+        "kk": "см",
+        "en": "cm"
+      },
+      "skill": "control"
+    },
+    {
+      "id": "route",
+      "type": "project",
+      "title": {
+        "ru": "Точный маршрут",
+        "kk": "Дәл маршрут",
+        "en": "Precise route"
+      },
+      "task": {
+        "ru": "Пройди через A, B и C (допуск 3 см) и остановись в финише 8 × 8 см. Без столкновений.",
+        "kk": "A, B және C арқылы өтіп (рұқсат 3 см), 8 × 8 см мәреде тоқта. Соқтығысусыз.",
+        "en": "Pass through A, B and C (3 cm tolerance) and stop in the 8 × 8 cm finish. No collisions."
+      },
+      "field": {
+        "width": 1200,
+        "height": 900,
+        "start": {
+          "x": 200,
+          "y": 200,
+          "heading": 0
+        },
+        "border": true,
+        "zones": [
+          {
+            "id": "finish",
+            "x": 860,
+            "y": 560,
+            "w": 80,
+            "h": 80,
+            "kind": "target",
+            "label": {
+              "ru": "Финиш",
+              "kk": "Мәре",
+              "en": "Finish"
+            }
+          }
+        ],
+        "points": [
+          {
+            "id": "a",
+            "x": 500,
+            "y": 200,
+            "r": 30,
+            "label": {
+              "ru": "A (500, 200)",
+              "kk": "A (500, 200)",
+              "en": "A (500, 200)"
+            }
+          },
+          {
+            "id": "b",
+            "x": 500,
+            "y": 600,
+            "r": 30,
+            "label": {
+              "ru": "B (500, 600)",
+              "kk": "B (500, 600)",
+              "en": "B (500, 600)"
+            }
+          },
+          {
+            "id": "c",
+            "x": 900,
+            "y": 600,
+            "r": 30,
+            "label": {
+              "ru": "C (900, 600)",
+              "kk": "C (900, 600)",
+              "en": "C (900, 600)"
+            }
+          }
+        ],
+        "walls": [],
+        "lines": []
+      },
+      "toolbox": [
+        "move",
+        "turn",
+        "set_speed"
+      ],
+      "start": [],
+      "checks": [
+        {
+          "type": "passPoints",
+          "points": [
+            "a",
+            "b",
+            "c"
+          ],
+          "ordered": true
+        },
+        {
+          "type": "finishInZone",
+          "zone": "finish"
+        },
+        {
+          "type": "noCollision"
+        }
+      ],
+      "hints": [
+        {
+          "ru": "Старт → A: 30 см вправо.",
+          "kk": "Старт → A: оңға 30 см.",
+          "en": "Start → A: 30 cm right."
+        },
+        {
+          "ru": "A → B: налево и 40 см вверх.",
+          "kk": "A → B: солға және жоғары 40 см.",
+          "en": "A → B: left and 40 cm up."
+        },
+        {
+          "ru": "B → C: направо и 40 см вправо.",
+          "kk": "B → C: оңға және оңға қарай 40 см.",
+          "en": "B → C: right and 40 cm to the right."
+        }
+      ],
+      "reference": [
+        {
+          "op": "move",
+          "direction": "forward",
+          "value": 30,
+          "unit": "cm"
+        },
+        {
+          "op": "turn",
+          "direction": "left",
+          "degrees": 90
+        },
+        {
+          "op": "move",
+          "direction": "forward",
+          "value": 40,
+          "unit": "cm"
+        },
+        {
+          "op": "turn",
+          "direction": "right",
+          "degrees": 90
+        },
+        {
+          "op": "move",
+          "direction": "forward",
+          "value": 40,
+          "unit": "cm"
+        }
+      ],
+      "skill": "control"
+    },
+    {
+      "id": "real",
+      "type": "quiz",
+      "kind": "choice",
+      "question": {
+        "ru": "В симуляторе маршрут идеален. Что сделать на настоящем роботе, чтобы попасть так же?",
+        "kk": "Симуляторда маршрут мінсіз. Нағыз роботта дәл солай тию үшін не істеу керек?",
+        "en": "In the simulator the route is perfect. What do you do on a real robot to hit the same?"
+      },
+      "options": [
+        {
+          "ru": "Откалибровать, ехать плавно и поворачивать по гироскопу",
+          "kk": "Калибрлеу, біркелкі жүру және гироскоппен бұрылу",
+          "en": "Calibrate, drive smoothly and turn by gyro"
+        },
+        {
+          "ru": "Ничего, всё будет так же",
+          "kk": "Ештеңе, бәрі сол сияқты болады",
+          "en": "Nothing, it will be the same"
+        },
+        {
+          "ru": "Ехать на максимальной скорости",
+          "kk": "Ең жоғары жылдамдықпен жүру",
+          "en": "Drive at full speed"
+        }
+      ],
+      "correct": [
+        0
+      ],
+      "explanation": {
+        "ru": "Всё, что ты узнал в этом треке, работает вместе: калибровка, плавность, гироскоп и проверка серией запусков.",
+        "kk": "Осы тректе білгеннің бәрі бірге жұмыс істейді: калибрлеу, біркелкілік, гироскоп және бірнеше іске қосумен тексеру.",
+        "en": "Everything from this track works together: calibration, smoothness, the gyro and testing with a series of runs."
+      },
+      "skill": "control"
+    }
+  ]
+}

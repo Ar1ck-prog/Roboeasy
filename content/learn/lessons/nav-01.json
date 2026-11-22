@@ -1,0 +1,179 @@
+{
+  "id": "nav-01",
+  "track": "navigation",
+  "unit": "nav-errors",
+  "minutes": 6,
+  "skills": [
+    "control"
+  ],
+  "title": {
+    "ru": "Проскальзывание и батарея",
+    "kk": "Тайғанау және батарея",
+    "en": "Slipping and battery"
+  },
+  "goal": {
+    "ru": "Сегодня ты узнаешь, почему робот приезжает не туда, куда ты написал.",
+    "kk": "Бүгін сен роботтың неге сен жазған жерге келмейтінін білесің.",
+    "en": "Today you will learn why the robot does not arrive where you told it to."
+  },
+  "summary": {
+    "ru": "Теперь ты знаешь главные причины ошибок робота и как с ними бороться.",
+    "kk": "Енді сен робот қателерінің басты себептерін және олармен қалай күресу керегін білесің.",
+    "en": "Now you know the main reasons robots miss and how to fight them."
+  },
+  "steps": [
+    {
+      "id": "why",
+      "type": "theory",
+      "title": {
+        "ru": "Мир не идеален",
+        "kk": "Әлем мінсіз емес",
+        "en": "The world is not perfect"
+      },
+      "body": {
+        "ru": "В программе написано «вперёд 50 см», а робот проехал 48. Почему?\n\n1. **Проскальзывание**: колесо крутится, а робот стоит на месте — пыль, гладкое поле, резкий старт.\n2. **Батарея**: на слабой батарее моторы тянут хуже.\n3. **Люфт**: детали чуть-чуть болтаются, и поворот выходит неточным.\n4. **Старт**: робота каждый раз ставят немного по-другому.\n\nХорошая новость: каждую причину можно уменьшить.",
+        "kk": "Бағдарламада «50 см алға» деп жазылған, ал робот 48 жүрді. Неге?\n\n1. **Тайғанау**: дөңгелек айналады, ал робот орнында тұрады — шаң, тегіс алаң, күрт старт.\n2. **Батарея**: әлсіз батареяда моторлар нашар тартады.\n3. **Саңылау**: бөлшектер сәл солқылдайды, бұрылыс дәл шықпайды.\n4. **Старт**: роботты әр жолы сәл басқаша қояды.\n\nЖақсы жаңалық: әр себепті азайтуға болады.",
+        "en": "The program says “forward 50 cm”, but the robot drove 48. Why?\n\n1. **Slipping**: the wheel spins while the robot stands still — dust, a smooth field, a sudden start.\n2. **Battery**: on a weak battery the motors pull less.\n3. **Play**: parts wobble slightly and turns come out inexact.\n4. **Start**: the robot is placed a little differently every time.\n\nThe good news: every cause can be reduced."
+      },
+      "illustration": "r-slip"
+    },
+    {
+      "id": "fixes",
+      "type": "quiz",
+      "kind": "match",
+      "question": {
+        "ru": "Подбери, как уменьшить ошибку",
+        "kk": "Қатені қалай азайтуға болатынын таңда",
+        "en": "Match each cause to a fix"
+      },
+      "pairs": [
+        {
+          "left": {
+            "ru": "Колёса проскальзывают на старте",
+            "kk": "Дөңгелектер стартта тайғанайды",
+            "en": "Wheels slip at the start"
+          },
+          "right": {
+            "ru": "Трогаться медленнее",
+            "kk": "Баяуырақ қозғалу",
+            "en": "Start more slowly"
+          }
+        },
+        {
+          "left": {
+            "ru": "Слабая батарея",
+            "kk": "Әлсіз батарея",
+            "en": "Weak battery"
+          },
+          "right": {
+            "ru": "Заряжать перед соревнованием",
+            "kk": "Жарыс алдында зарядтау",
+            "en": "Charge before the competition"
+          }
+        },
+        {
+          "left": {
+            "ru": "Робота ставят по-разному",
+            "kk": "Роботты әр түрлі қояды",
+            "en": "The robot is placed differently"
+          },
+          "right": {
+            "ru": "Ставить по меткам или упору",
+            "kk": "Белгілер немесе тірек бойынша қою",
+            "en": "Place it against marks or a jig"
+          }
+        },
+        {
+          "left": {
+            "ru": "Детали болтаются",
+            "kk": "Бөлшектер солқылдайды",
+            "en": "Parts wobble"
+          },
+          "right": {
+            "ru": "Укрепить конструкцию",
+            "kk": "Құрылымды бекіту",
+            "en": "Make the build sturdier"
+          }
+        }
+      ],
+      "explanation": {
+        "ru": "Инженеры не ждут идеального робота — они уменьшают каждую ошибку понемногу.",
+        "kk": "Инженерлер мінсіз роботты күтпейді — олар әр қатені біртіндеп азайтады.",
+        "en": "Engineers do not wait for a perfect robot — they shrink every error bit by bit."
+      },
+      "skill": "control"
+    },
+    {
+      "id": "sensor-help",
+      "type": "quiz",
+      "kind": "choice",
+      "question": {
+        "ru": "Что лучше всего исправит накопившуюся ошибку в середине маршрута?",
+        "kk": "Маршрут ортасында жиналған қатені не жақсы түзетеді?",
+        "en": "What best fixes error that has built up mid-route?"
+      },
+      "options": [
+        {
+          "ru": "Доехать до линии или стены по датчику",
+          "kk": "Датчик бойынша сызыққа немесе қабырғаға жету",
+          "en": "Drive to a line or wall using a sensor"
+        },
+        {
+          "ru": "Ехать быстрее",
+          "kk": "Жылдамырақ жүру",
+          "en": "Drive faster"
+        },
+        {
+          "ru": "Добавить ещё одно «вперёд 50 см»",
+          "kk": "Тағы бір «50 см алға» қосу",
+          "en": "Add another “forward 50 cm”"
+        }
+      ],
+      "correct": [
+        0
+      ],
+      "explanation": {
+        "ru": "Ориентир на поле не ошибается: доехав до него, робот снова точно знает, где он.",
+        "kk": "Алаңдағы бағдар қателеспейді: оған жеткен робот қай жерде екенін қайтадан дәл біледі.",
+        "en": "A landmark on the field does not drift: once there, the robot knows exactly where it is again."
+      },
+      "skill": "control"
+    },
+    {
+      "id": "fast-start",
+      "type": "quiz",
+      "kind": "choice",
+      "question": {
+        "ru": "Почему резкий старт на полной скорости — плохая идея?",
+        "kk": "Толық жылдамдықпен күрт старт неге жаман идея?",
+        "en": "Why is a sudden full-speed start a bad idea?"
+      },
+      "options": [
+        {
+          "ru": "Колёса проскальзывают, и робот проезжает меньше",
+          "kk": "Дөңгелектер тайғанап, робот азырақ жүреді",
+          "en": "The wheels slip and the robot drives less"
+        },
+        {
+          "ru": "Робот становится легче",
+          "kk": "Робот жеңілдейді",
+          "en": "The robot gets lighter"
+        },
+        {
+          "ru": "Датчики выключаются",
+          "kk": "Датчиктер сөнеді",
+          "en": "The sensors switch off"
+        }
+      ],
+      "correct": [
+        0
+      ],
+      "explanation": {
+        "ru": "Резкий рывок срывает сцепление шин с полем. Плавный разгон точнее.",
+        "kk": "Күрт серпіліс шиналардың алаңмен ілінісін үзеді. Біркелкі үдеу дәлірек.",
+        "en": "A sudden jerk breaks the tyres’ grip. A smooth start is more precise."
+      },
+      "skill": "control"
+    }
+  ]
+}

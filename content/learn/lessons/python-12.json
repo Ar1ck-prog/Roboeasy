@@ -1,0 +1,138 @@
+{
+  "id": "python-12",
+  "track": "python",
+  "unit": "python-functions",
+  "minutes": 8,
+  "skills": [
+    "python",
+    "variables",
+    "functions"
+  ],
+  "title": {
+    "ru": "Свои помощники",
+    "kk": "Өз көмекшілерің",
+    "en": "Your own helpers"
+  },
+  "goal": {
+    "ru": "Сегодня ты напишешь функцию-помощника, которая считает за тебя.",
+    "kk": "Бүгін сен сен үшін есептейтін көмекші функция жазасың.",
+    "en": "Today you will write a helper function that does the maths for you."
+  },
+  "summary": {
+    "ru": "Теперь ты умеешь писать помощников с return и прятать в них вычисления.",
+    "kk": "Енді сен return-ы бар көмекшілер жазып, есептеулерді соларға жасыра аласың.",
+    "en": "Now you can write helpers with return and hide calculations inside them."
+  },
+  "steps": [
+    {
+      "id": "helper",
+      "type": "theory",
+      "title": {
+        "ru": "Функция, которая отвечает",
+        "kk": "Жауап беретін функция",
+        "en": "A function that answers"
+      },
+      "body": {
+        "ru": "Моторы понимают градусы, а людям удобнее сантиметры. Напишем помощника, который переводит одно в другое.\n\nКолесо 56 мм за оборот проезжает около 17,6 см. Значит, градусы = см : 17,6 × 360.\n\nСлово **return** возвращает ответ: **degrees(35.2)** вернёт 720. Теперь можно писать понятно: «проехать degrees(30)».",
+        "kk": "Моторлар градусты түсінеді, ал адамдарға сантиметр ыңғайлы. Біреуін екіншісіне аударатын көмекші жазайық.\n\n56 мм дөңгелек бір айналымда шамамен 17,6 см жүреді. Демек, градус = см : 17,6 × 360.\n\n**return** сөзі жауапты қайтарады: **degrees(35.2)** 720 қайтарады. Енді түсінікті жазуға болады: «degrees(30) жүру».",
+        "en": "Motors understand degrees, but people prefer centimetres. Let us write a helper that converts.\n\nA 56 mm wheel travels about 17.6 cm per turn. So degrees = cm ÷ 17.6 × 360.\n\nThe word **return** gives the answer back: **degrees(35.2)** returns 720. Now you can write clearly: “drive degrees(30)”."
+      },
+      "illustration": "r-wheel-distance",
+      "code": "def degrees(cm):\n    return round(cm / 17.6 * 360)\n\nasync def drive_cm(cm):\n    await motor_pair.move_for_degrees(motor_pair.PAIR_1, degrees(cm), 0)"
+    },
+    {
+      "id": "calc",
+      "type": "quiz",
+      "kind": "number",
+      "question": {
+        "ru": "Сколько градусов вернёт degrees(17.6)?",
+        "kk": "degrees(17.6) неше градус қайтарады?",
+        "en": "How many degrees does degrees(17.6) return?"
+      },
+      "answer": 360,
+      "tolerance": 0,
+      "explanation": {
+        "ru": "17,6 : 17,6 × 360 = 360 — ровно один оборот колеса.",
+        "kk": "17,6 : 17,6 × 360 = 360 — дөңгелектің дәл бір айналымы.",
+        "en": "17.6 ÷ 17.6 × 360 = 360 — exactly one wheel turn."
+      },
+      "unit": {
+        "ru": "°",
+        "kk": "°",
+        "en": "°"
+      },
+      "skill": "python"
+    },
+    {
+      "id": "return",
+      "type": "quiz",
+      "kind": "fill",
+      "question": {
+        "ru": "Допиши помощника, который переводит обороты в градусы",
+        "kk": "Айналымдарды градусқа аударатын көмекшіні толықтыр",
+        "en": "Finish the helper that turns rotations into degrees"
+      },
+      "code": "def to_degrees(rotations):\n    [[0]] rotations * [[1]]",
+      "blanks": [
+        {
+          "options": [
+            "return",
+            "await",
+            "print"
+          ],
+          "correct": 0
+        },
+        {
+          "options": [
+            "360",
+            "100",
+            "17.6"
+          ],
+          "correct": 0
+        }
+      ],
+      "explanation": {
+        "ru": "Один оборот — 360°, а ответ отдаёт return.",
+        "kk": "Бір айналым — 360°, ал жауапты return береді.",
+        "en": "One rotation is 360°, and return hands back the answer."
+      },
+      "skill": "python"
+    },
+    {
+      "id": "why",
+      "type": "quiz",
+      "kind": "choice",
+      "question": {
+        "ru": "Чем помогают функции-помощники?",
+        "kk": "Көмекші функциялар несімен көмектеседі?",
+        "en": "How do helper functions help?"
+      },
+      "options": [
+        {
+          "ru": "Код короче и понятнее, а формула в одном месте",
+          "kk": "Код қысқа әрі түсінікті, ал формула бір жерде",
+          "en": "The code is shorter and clearer, and the formula lives in one place"
+        },
+        {
+          "ru": "Робот становится быстрее",
+          "kk": "Робот жылдамырақ болады",
+          "en": "The robot gets faster"
+        },
+        {
+          "ru": "Не нужен хаб",
+          "kk": "Хаб керек емес",
+          "en": "You do not need a hub"
+        }
+      ],
+      "correct": [
+        0
+      ],
+      "explanation": {
+        "ru": "Поменял колесо — исправил одно число в помощнике, и вся программа снова точна.",
+        "kk": "Дөңгелекті ауыстырдың — көмекшідегі бір санды түзеттің, және бүкіл бағдарлама қайтадан дәл.",
+        "en": "Change the wheel, fix one number in the helper, and the whole program is precise again."
+      },
+      "skill": "python"
+    }
+  ]
+}

@@ -1,0 +1,94 @@
+{
+  "id": "nav-07",
+  "track": "navigation",
+  "unit": "nav-straight",
+  "minutes": 7,
+  "skills": [
+    "control",
+    "gyro"
+  ],
+  "title": {
+    "ru": "Прямо по гироскопу",
+    "kk": "Гироскоп бойынша тура",
+    "en": "Straight by gyro"
+  },
+  "goal": {
+    "ru": "Сегодня ты узнаешь, как робот держит курс.",
+    "kk": "Бүгін сен роботтың бағытты қалай ұстайтынын білесің.",
+    "en": "Today you will learn how a robot holds its heading."
+  },
+  "summary": {
+    "ru": "Теперь ты знаешь, как гироскоп помогает ехать прямо, и чем плох регулятор «да/нет».",
+    "kk": "Енді сен гироскоп тура жүруге қалай көмектесетінін және «иә/жоқ» реттегішінің кемшілігін білесің.",
+    "en": "Now you know how the gyro helps drive straight and what is wrong with a yes/no controller."
+  },
+  "steps": [
+    {
+      "id": "heading",
+      "type": "theory",
+      "title": {
+        "ru": "Держать курс",
+        "kk": "Бағытты ұстау",
+        "en": "Holding the heading"
+      },
+      "body": {
+        "ru": "Даже одинаковые моторы крутятся чуть по-разному, и робот медленно уходит в сторону.\n\nГироскоп замечает это: угол поворота стал не 0. Тогда робот подруливает обратно.\n\nСамый простой способ: ушёл влево — руль вправо, ушёл вправо — руль влево. Это регулятор **«да/нет»**. Он работает, но робот виляет. Попробуй сам!",
+        "kk": "Тіпті бірдей моторлар да сәл басқаша айналады, ал робот баяу бүйірге кетеді.\n\nГироскоп мұны байқайды: бұрылу бұрышы 0 емес болды. Сонда робот кері бұрылады.\n\nЕң қарапайым тәсіл: солға кетті — руль оңға, оңға кетті — руль солға. Бұл **«иә/жоқ»** реттегіші. Ол жұмыс істейді, бірақ робот бұлғаңдайды. Өзің байқап көр!",
+        "en": "Even identical motors spin slightly differently, and the robot slowly drifts aside.\n\nThe gyro notices: the yaw angle is no longer 0. Then the robot steers back.\n\nThe simplest way: drifted left — steer right, drifted right — steer left. This is a **yes/no** controller. It works, but the robot wiggles. Try it yourself!"
+      },
+      "illustration": "r-p-control"
+    },
+    {
+      "id": "onoff",
+      "type": "widget",
+      "widget": "pid",
+      "title": {
+        "ru": "Регулятор «да/нет»",
+        "kk": "«Иә/жоқ» реттегіші",
+        "en": "Yes/no controller"
+      },
+      "task": {
+        "ru": "Робот начинает в 6 см от линии курса. Регулятор умеет только «руль влево» или «руль вправо» с одной силой. Подбери силу так, чтобы робот быстро вышел на курс и вилял поменьше.",
+        "kk": "Робот бағыт сызығынан 6 см жерден басталады. Реттегіш тек бір күшпен «руль солға» не «руль оңға» біледі. Робот бағытқа тез шығып, азырақ бұлғаңдайтындай күшті таңда.",
+        "en": "The robot starts 6 cm off the course line. The controller only knows “steer left” or “steer right” with one strength. Pick the strength so it reaches the course quickly and wiggles little."
+      },
+      "mode": "onoff"
+    },
+    {
+      "id": "tradeoff",
+      "type": "quiz",
+      "kind": "choice",
+      "question": {
+        "ru": "Что будет, если силу руля в «да/нет» сделать очень большой?",
+        "kk": "«Иә/жоқ» рульінің күшін өте үлкен етсе, не болады?",
+        "en": "What happens if the yes/no steering strength is very large?"
+      },
+      "options": [
+        {
+          "ru": "Быстро выйдет на курс, но будет сильно вилять",
+          "kk": "Бағытқа тез шығады, бірақ қатты бұлғаңдайды",
+          "en": "It reaches the course fast but wiggles a lot"
+        },
+        {
+          "ru": "Поедет идеально прямо",
+          "kk": "Мінсіз тура жүреді",
+          "en": "It drives perfectly straight"
+        },
+        {
+          "ru": "Не сдвинется с места",
+          "kk": "Орнынан қозғалмайды",
+          "en": "It will not move"
+        }
+      ],
+      "correct": [
+        0
+      ],
+      "explanation": {
+        "ru": "«Да/нет» не умеет «чуть-чуть». Чем сильнее руль, тем больше качка. Решение — регулятор, который рулит пропорционально ошибке.",
+        "kk": "«Иә/жоқ» «сәл» дегенді білмейді. Руль неғұрлым күшті болса, соғұрлым тербеліс көп. Шешімі — қатеге пропорционал бұратын реттегіш.",
+        "en": "Yes/no cannot do “a little”. The stronger the steering, the more it rocks. The fix is a controller that steers in proportion to the error."
+      },
+      "skill": "control"
+    }
+  ]
+}
