@@ -1,0 +1,232 @@
+{
+  "id": "mech-11",
+  "track": "mechanisms",
+  "unit": "mech-design",
+  "minutes": 15,
+  "skills": [
+    "mechanisms",
+    "structures"
+  ],
+  "title": {
+    "ru": "Проект «Своя насадка»",
+    "kk": "«Өз саптамаң» жобасы",
+    "en": "Project: Your own attachment"
+  },
+  "goal": {
+    "ru": "Сегодня ты пройдёшь весь путь инженера: от брифа до испытаний.",
+    "kk": "Бүгін сен инженердің бүкіл жолынан өтесің: брифтен сынақтарға дейін.",
+    "en": "Today you will walk the whole engineer’s path: from brief to tests."
+  },
+  "summary": {
+    "ru": "Трек «Механизмы» пройден! Ты проектируешь насадку под задачу и проверяешь её в деле.",
+    "kk": "«Механизмдер» тректі өттің! Сен тапсырмаға саптама жобалап, оны іс жүзінде тексересің.",
+    "en": "The Mechanisms track is done! You design an attachment for a task and test it for real."
+  },
+  "steps": [
+    {
+      "id": "brief",
+      "type": "theory",
+      "title": {
+        "ru": "Бриф проекта",
+        "kk": "Жоба брифі",
+        "en": "Project brief"
+      },
+      "body": {
+        "ru": "**Что**: поднять флажок на модели — рычаг модели нужно поднять вверх на 60°.\n**Где**: модель в 60 см прямо от базы.\n**Ограничения**: свободен мотор D, передача 8 → 24, насадка не шире робота.\n**Успех**: флажок поднят, робот вернулся на базу, рука опущена.\n\nСначала реши задачу в симуляторе, потом собери насадку и проверь на настоящем роботе.",
+        "kk": "**Не**: модельдегі жалаушаны көтеру — модель тұтқасын 60°-қа жоғары көтеру керек.\n**Қайда**: модель базадан тура 60 см жерде.\n**Шектеулер**: D моторы бос, 8 → 24 берілісі, саптама роботтан кең емес.\n**Табыс**: жалауша көтерілді, робот базаға оралды, қол түсірілді.\n\nАлдымен тапсырманы симуляторда шеш, содан кейін саптаманы құрастырып, нағыз роботта тексер.",
+        "en": "**What**: raise the flag on a model — its lever must go up 60°.\n**Where**: the model is 60 cm straight ahead of base.\n**Limits**: motor D is free, 8 → 24 gearing, the attachment no wider than the robot.\n**Success**: flag raised, robot back at base, arm lowered.\n\nSolve it in the simulator first, then build the attachment and test it on a real robot."
+      },
+      "illustration": "r-lift"
+    },
+    {
+      "id": "flag",
+      "type": "project",
+      "title": {
+        "ru": "Подними флажок",
+        "kk": "Жалаушаны көтер",
+        "en": "Raise the flag"
+      },
+      "task": {
+        "ru": "Доедь до модели (60 см), подними рычаг на 60° (мотор D через 8 → 24), опусти руку и вернись на базу.",
+        "kk": "Модельге дейін жет (60 см), тұтқаны 60°-қа көтер (D моторы 8 → 24 арқылы), қолды түсіріп, базаға орал.",
+        "en": "Drive to the model (60 cm), raise the lever 60° (motor D through 8 → 24), lower the arm and return to base."
+      },
+      "field": {
+        "width": 1400,
+        "height": 400,
+        "start": {
+          "x": 200,
+          "y": 200,
+          "heading": 0
+        },
+        "border": true,
+        "zones": [
+          {
+            "id": "base",
+            "x": 100,
+            "y": 100,
+            "w": 200,
+            "h": 200,
+            "kind": "target",
+            "label": {
+              "ru": "База",
+              "kk": "База",
+              "en": "Base"
+            }
+          }
+        ],
+        "points": [
+          {
+            "id": "model",
+            "x": 800,
+            "y": 200,
+            "r": 50,
+            "label": {
+              "ru": "Модель",
+              "kk": "Модель",
+              "en": "Model"
+            }
+          }
+        ],
+        "walls": [],
+        "lines": []
+      },
+      "toolbox": [
+        "move",
+        "motor_run",
+        "wait"
+      ],
+      "start": [],
+      "checks": [
+        {
+          "type": "passPoints",
+          "points": [
+            "model"
+          ],
+          "ordered": true
+        },
+        {
+          "type": "finishInZone",
+          "zone": "base"
+        },
+        {
+          "type": "usesOp",
+          "op": "motor_run",
+          "min": 2
+        },
+        {
+          "type": "motorTurned",
+          "port": "D",
+          "degrees": 0,
+          "tolerance": 5
+        }
+      ],
+      "hints": [
+        {
+          "ru": "Угол мотора = 60° × 3.",
+          "kk": "Мотор бұрышы = 60° × 3.",
+          "en": "Motor angle = 60° × 3."
+        },
+        {
+          "ru": "Поднять по часовой, опустить против.",
+          "kk": "Сағат тілімен көтеру, қарсы түсіру.",
+          "en": "Raise clockwise, lower anticlockwise."
+        },
+        {
+          "ru": "Вперёд 60; D по часовой 180; D против 180; назад 60.",
+          "kk": "60 алға; D сағат тілімен 180; D қарсы 180; 60 артқа.",
+          "en": "Forward 60; D clockwise 180; D anticlockwise 180; back 60."
+        }
+      ],
+      "reference": [
+        {
+          "op": "move",
+          "direction": "forward",
+          "value": 60,
+          "unit": "cm"
+        },
+        {
+          "op": "motor_run",
+          "port": "D",
+          "direction": "clockwise",
+          "value": 180,
+          "unit": "degrees"
+        },
+        {
+          "op": "motor_run",
+          "port": "D",
+          "direction": "counterclockwise",
+          "value": 180,
+          "unit": "degrees"
+        },
+        {
+          "op": "move",
+          "direction": "back",
+          "value": 60,
+          "unit": "cm"
+        }
+      ],
+      "skill": "mechanisms"
+    },
+    {
+      "id": "build-test",
+      "type": "real_robot",
+      "title": {
+        "ru": "Собери и испытай",
+        "kk": "Құрастырып, сына",
+        "en": "Build and test"
+      },
+      "task": {
+        "ru": "Собери насадку-подъёмник на мотор D, поставь вместо модели коробку с рычагом из балки и запусти программу 3 раза.",
+        "kk": "D моторына көтергіш-саптама құрастырып, модельдің орнына арқалықтан тұтқасы бар қорап қой және бағдарламаны 3 рет іске қос.",
+        "en": "Build a lift attachment on motor D, use a box with a beam lever in place of the model and run the program 3 times."
+      },
+      "checklist": [
+        {
+          "ru": "Насадка не шире робота",
+          "kk": "Саптама роботтан кең емес",
+          "en": "The attachment is no wider than the robot"
+        },
+        {
+          "ru": "Рычаг поднимается 3 раза из 3",
+          "kk": "Тұтқа 3-тен 3 рет көтеріледі",
+          "en": "The lever rises 3 times out of 3"
+        },
+        {
+          "ru": "Записал, что улучшить",
+          "kk": "Нені жақсарту керегін жаздым",
+          "en": "I noted what to improve"
+        }
+      ],
+      "program": [
+        {
+          "op": "move",
+          "direction": "forward",
+          "value": 60,
+          "unit": "cm"
+        },
+        {
+          "op": "motor_run",
+          "port": "D",
+          "direction": "clockwise",
+          "value": 180,
+          "unit": "degrees"
+        },
+        {
+          "op": "motor_run",
+          "port": "D",
+          "direction": "counterclockwise",
+          "value": 180,
+          "unit": "degrees"
+        },
+        {
+          "op": "move",
+          "direction": "back",
+          "value": 60,
+          "unit": "cm"
+        }
+      ]
+    }
+  ],
+  "kit": true
+}

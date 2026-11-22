@@ -1,0 +1,117 @@
+{
+  "id": "build-04",
+  "track": "build",
+  "unit": "build-parts",
+  "minutes": 7,
+  "skills": [
+    "parts"
+  ],
+  "title": {
+    "ru": "Колёса и шины",
+    "kk": "Дөңгелектер және шиналар",
+    "en": "Wheels and tyres"
+  },
+  "goal": {
+    "ru": "Сегодня ты узнаешь, как размер колеса меняет поездку.",
+    "kk": "Бүгін сен дөңгелек өлшемі жүрісті қалай өзгертетінін білесің.",
+    "en": "Today you will learn how wheel size changes a drive."
+  },
+  "summary": {
+    "ru": "Теперь ты знаешь, как диаметр колеса связан с расстоянием за оборот.",
+    "kk": "Енді сен дөңгелек диаметрі бір айналымдағы қашықтықпен қалай байланысты екенін білесің.",
+    "en": "Now you know how wheel diameter relates to distance per turn."
+  },
+  "steps": [
+    {
+      "id": "wheel",
+      "type": "theory",
+      "title": {
+        "ru": "Колесо = диск + шина",
+        "kk": "Дөңгелек = диск + шина",
+        "en": "Wheel = rim + tyre"
+      },
+      "body": {
+        "ru": "Колесо робота — это **диск** и резиновая **шина**. Шина цепляется за поле, чтобы робот не буксовал.\n\nЗа один оборот колесо проезжает длину своей окружности: **π × диаметр**. Колесо 56 мм — около 17,6 см за оборот, колесо 88 мм — около 27,6 см.\n\nБольшое колесо — быстрее и дальше за оборот. Маленькое — точнее и сильнее.",
+        "kk": "Робот дөңгелегі — **диск** және резеңке **шина**. Шина робот тайғанамауы үшін алаңға ілінеді.\n\nБір айналымда дөңгелек өз шеңберінің ұзындығын жүреді: **π × диаметр**. 56 мм дөңгелек — бір айналымда шамамен 17,6 см, 88 мм дөңгелек — шамамен 27,6 см.\n\nҮлкен дөңгелек — бір айналымда жылдамырақ әрі алысырақ. Кішкентайы — дәлірек әрі күштірек.",
+        "en": "A robot wheel is a **rim** and a rubber **tyre**. The tyre grips the field so the robot does not spin out.\n\nIn one turn a wheel travels its circumference: **π × diameter**. A 56 mm wheel goes about 17.6 cm per turn, an 88 mm wheel about 27.6 cm.\n\nA big wheel is faster and goes further per turn. A small one is more precise and stronger."
+      },
+      "illustration": "r-wheels"
+    },
+    {
+      "id": "big",
+      "type": "quiz",
+      "kind": "number",
+      "question": {
+        "ru": "Колесо диаметром 88 мм. Сколько сантиметров оно проедет за 1 оборот? (π ≈ 3,14)",
+        "kk": "Диаметрі 88 мм дөңгелек. Ол 1 айналымда неше сантиметр жүреді? (π ≈ 3,14)",
+        "en": "A wheel of 88 mm. How many centimetres does it travel in one turn? (π ≈ 3.14)"
+      },
+      "answer": 27.6,
+      "tolerance": 0.3,
+      "explanation": {
+        "ru": "3,14 × 88 мм ≈ 276 мм ≈ 27,6 см.",
+        "kk": "3,14 × 88 мм ≈ 276 мм ≈ 27,6 см.",
+        "en": "3.14 × 88 mm ≈ 276 mm ≈ 27.6 cm."
+      },
+      "unit": {
+        "ru": "см",
+        "kk": "см",
+        "en": "cm"
+      },
+      "skill": "parts"
+    },
+    {
+      "id": "roll",
+      "type": "widget",
+      "widget": "wheel",
+      "title": {
+        "ru": "Прокати колесо",
+        "kk": "Дөңгелекті домалат",
+        "en": "Roll the wheel"
+      },
+      "task": {
+        "ru": "Выбери колесо и число оборотов мотора так, чтобы робот проехал **35,2 см** (±1 см). Нажми «Поехали» и проверь.",
+        "kk": "Робот **35,2 см** (±1 см) жүретіндей дөңгелекті және мотор айналымдарының санын таңда. «Жүрдік» батырмасын басып, тексер.",
+        "en": "Choose a wheel and the number of motor rotations so the robot drives **35.2 cm** (±1 cm). Press “Go” and check."
+      },
+      "targetCm": 35.2,
+      "toleranceCm": 1
+    },
+    {
+      "id": "precise",
+      "type": "quiz",
+      "kind": "choice",
+      "question": {
+        "ru": "Нужно очень точно подъехать к модели на поле. Какое колесо лучше?",
+        "kk": "Алаңдағы модельге өте дәл жақындау керек. Қай дөңгелек жақсы?",
+        "en": "You must approach a model on the field very precisely. Which wheel is better?"
+      },
+      "options": [
+        {
+          "ru": "Поменьше — за оборот проезжает меньше, легче точно",
+          "kk": "Кішірек — бір айналымда азырақ жүреді, дәл болу оңай",
+          "en": "A smaller one — less distance per turn, easier to be precise"
+        },
+        {
+          "ru": "Самое большое — так быстрее",
+          "kk": "Ең үлкені — осылай жылдамырақ",
+          "en": "The biggest — it is faster"
+        },
+        {
+          "ru": "Без шины",
+          "kk": "Шинасыз",
+          "en": "One without a tyre"
+        }
+      ],
+      "correct": [
+        0
+      ],
+      "explanation": {
+        "ru": "Ошибка в градусах мотора на маленьком колесе даёт меньшую ошибку в сантиметрах.",
+        "kk": "Кішкентай дөңгелекте мотор градусындағы қате сантиметрде азырақ қате береді.",
+        "en": "An error in motor degrees on a small wheel means a smaller error in centimetres."
+      },
+      "skill": "parts"
+    }
+  ]
+}

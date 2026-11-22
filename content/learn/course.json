@@ -187,13 +187,13 @@
               "id": "build-01",
               "title": {
                 "ru": "Балки и рамы",
-                "kk": "Арқалықтар мен рамалар",
+                "kk": "Арқалықтар және жақтаулар",
                 "en": "Beams and frames"
               },
               "skills": [
                 "parts"
               ],
-              "status": "todo",
+              "status": "ready",
               "project": false,
               "kit": false
             },
@@ -201,13 +201,13 @@
               "id": "build-02",
               "title": {
                 "ru": "Оси и штифты",
-                "kk": "Осьтер мен штифтер",
+                "kk": "Осьтер және штифттер",
                 "en": "Axles and pins"
               },
               "skills": [
                 "parts"
               ],
-              "status": "todo",
+              "status": "ready",
               "project": false,
               "kit": false
             },
@@ -215,13 +215,13 @@
               "id": "build-03",
               "title": {
                 "ru": "Втулки и соединители",
-                "kk": "Втулкалар мен жалғағыштар",
+                "kk": "Төлкелер және қосқыштар",
                 "en": "Bushes and connectors"
               },
               "skills": [
                 "parts"
               ],
-              "status": "todo",
+              "status": "ready",
               "project": false,
               "kit": false
             },
@@ -229,13 +229,13 @@
               "id": "build-04",
               "title": {
                 "ru": "Колёса и шины",
-                "kk": "Доңғалақтар мен шиналар",
+                "kk": "Дөңгелектер және шиналар",
                 "en": "Wheels and tyres"
               },
               "skills": [
                 "parts"
               ],
-              "status": "todo",
+              "status": "ready",
               "project": false,
               "kit": false
             },
@@ -249,7 +249,7 @@
               "skills": [
                 "parts"
               ],
-              "status": "todo",
+              "status": "ready",
               "project": false,
               "kit": false
             }
@@ -273,7 +273,7 @@
               "skills": [
                 "structures"
               ],
-              "status": "todo",
+              "status": "ready",
               "project": false,
               "kit": false
             },
@@ -281,13 +281,13 @@
               "id": "build-07",
               "title": {
                 "ru": "Двойные балки и упоры",
-                "kk": "Қос арқалықтар мен тіректер",
+                "kk": "Қос арқалықтар және тіректер",
                 "en": "Double beams and braces"
               },
               "skills": [
                 "structures"
               ],
-              "status": "todo",
+              "status": "ready",
               "project": false,
               "kit": false
             },
@@ -301,7 +301,7 @@
               "skills": [
                 "structures"
               ],
-              "status": "todo",
+              "status": "ready",
               "project": false,
               "kit": false
             }
@@ -319,13 +319,13 @@
               "id": "build-09",
               "title": {
                 "ru": "Как шестерни передают вращение",
-                "kk": "Тісті доңғалақтар айналымды қалай береді",
+                "kk": "Тісті доңғалақтар айналуды қалай береді",
                 "en": "How gears pass on rotation"
               },
               "skills": [
                 "gears"
               ],
-              "status": "todo",
+              "status": "ready",
               "project": false,
               "kit": false
             },
@@ -339,7 +339,7 @@
               "skills": [
                 "gears"
               ],
-              "status": "todo",
+              "status": "ready",
               "project": false,
               "kit": false
             },
@@ -348,12 +348,12 @@
               "title": {
                 "ru": "Червячная передача",
                 "kk": "Бұрамалы беріліс",
-                "en": "The worm gear"
+                "en": "Worm gear"
               },
               "skills": [
                 "gears"
               ],
-              "status": "todo",
+              "status": "ready",
               "project": false,
               "kit": false
             },
@@ -367,7 +367,7 @@
               "skills": [
                 "gears"
               ],
-              "status": "todo",
+              "status": "ready",
               "project": false,
               "kit": false
             }
@@ -386,13 +386,13 @@
               "title": {
                 "ru": "Шасси",
                 "kk": "Шасси",
-                "en": "The chassis"
+                "en": "Chassis"
               },
               "skills": [
                 "structures",
                 "parts"
               ],
-              "status": "todo",
+              "status": "ready",
               "project": false,
               "kit": true
             },
@@ -400,14 +400,14 @@
               "id": "build-14",
               "title": {
                 "ru": "Моторы и колёса",
-                "kk": "Моторлар мен доңғалақтар",
+                "kk": "Моторлар және дөңгелектер",
                 "en": "Motors and wheels"
               },
               "skills": [
                 "structures",
                 "parts"
               ],
-              "status": "todo",
+              "status": "ready",
               "project": false,
               "kit": true
             },
@@ -415,14 +415,14 @@
               "id": "build-15",
               "title": {
                 "ru": "Хаб и провода",
-                "kk": "Хаб пен сымдар",
-                "en": "The hub and cables"
+                "kk": "Хаб және сымдар",
+                "en": "Hub and cables"
               },
               "skills": [
                 "structures",
                 "parts"
               ],
-              "status": "todo",
+              "status": "ready",
               "project": false,
               "kit": true
             },
@@ -430,14 +430,14 @@
               "id": "build-16",
               "title": {
                 "ru": "Собери и проверь",
-                "kk": "Құрастыр да тексер",
+                "kk": "Құрастырып, тексер",
                 "en": "Build and test"
               },
               "skills": [
                 "structures",
                 "parts"
               ],
-              "status": "todo",
+              "status": "ready",
               "project": false,
               "kit": true
             }
@@ -455,14 +455,14 @@
               "id": "build-17",
               "title": {
                 "ru": "Диаметр колеса и расстояние",
-                "kk": "Доңғалақ диаметрі және қашықтық",
-                "en": "Wheel size and distance"
+                "kk": "Дөңгелек диаметрі және қашықтық",
+                "en": "Wheel diameter and distance"
               },
               "skills": [
                 "mechanisms",
                 "motion"
               ],
-              "status": "todo",
+              "status": "ready",
               "project": false,
               "kit": false
             },
@@ -477,7 +477,7 @@
                 "mechanisms",
                 "motion"
               ],
-              "status": "todo",
+              "status": "ready",
               "project": true,
               "kit": true
             }
@@ -1831,13 +1831,13 @@
               "id": "mech-01",
               "title": {
                 "ru": "Как работает захват",
-                "kk": "Қармағыш қалай жұмыс істейді",
-                "en": "How a grabber works"
+                "kk": "Қармауыш қалай жұмыс істейді",
+                "en": "How a gripper works"
               },
               "skills": [
                 "mechanisms"
               ],
-              "status": "todo",
+              "status": "ready",
               "project": false,
               "kit": false
             },
@@ -1845,13 +1845,13 @@
               "id": "mech-02",
               "title": {
                 "ru": "Собери захват",
-                "kk": "Қармағышты құрастыр",
-                "en": "Build a grabber"
+                "kk": "Қармауышты құрастыр",
+                "en": "Build a gripper"
               },
               "skills": [
                 "mechanisms"
               ],
-              "status": "todo",
+              "status": "ready",
               "project": false,
               "kit": true
             },
@@ -1860,12 +1860,12 @@
               "title": {
                 "ru": "Перенеси кубик",
                 "kk": "Текшені тасы",
-                "en": "Carry a cube"
+                "en": "Carry the cube"
               },
               "skills": [
                 "mechanisms"
               ],
-              "status": "todo",
+              "status": "ready",
               "project": false,
               "kit": false
             }
@@ -1883,14 +1883,14 @@
               "id": "mech-04",
               "title": {
                 "ru": "Рычаг и шестерни",
-                "kk": "Иінтірек пен тісті доңғалақтар",
+                "kk": "Иін және тісті доңғалақтар",
                 "en": "Levers and gears"
               },
               "skills": [
                 "mechanisms",
                 "gears"
               ],
-              "status": "todo",
+              "status": "ready",
               "project": false,
               "kit": false
             },
@@ -1905,7 +1905,7 @@
                 "mechanisms",
                 "gears"
               ],
-              "status": "todo",
+              "status": "ready",
               "project": false,
               "kit": true
             },
@@ -1920,7 +1920,7 @@
                 "mechanisms",
                 "gears"
               ],
-              "status": "todo",
+              "status": "ready",
               "project": false,
               "kit": false
             }
@@ -1938,13 +1938,13 @@
               "id": "mech-07",
               "title": {
                 "ru": "Толкатель и упор",
-                "kk": "Итергіш пен тірек",
+                "kk": "Итергіш және тірек",
                 "en": "Pusher and stop"
               },
               "skills": [
                 "mechanisms"
               ],
-              "status": "todo",
+              "status": "ready",
               "project": false,
               "kit": false
             },
@@ -1953,12 +1953,12 @@
               "title": {
                 "ru": "Толкни в зону",
                 "kk": "Аймаққа итер",
-                "en": "Push into the zone"
+                "en": "Push it into the zone"
               },
               "skills": [
                 "mechanisms"
               ],
-              "status": "todo",
+              "status": "ready",
               "project": false,
               "kit": false
             }
@@ -1977,13 +1977,13 @@
               "title": {
                 "ru": "Бриф задачи",
                 "kk": "Тапсырма брифі",
-                "en": "The task brief"
+                "en": "The design brief"
               },
               "skills": [
                 "mechanisms",
                 "structures"
               ],
-              "status": "todo",
+              "status": "ready",
               "project": false,
               "kit": false
             },
@@ -1992,13 +1992,13 @@
               "title": {
                 "ru": "Быстрая смена насадок",
                 "kk": "Саптамаларды жылдам ауыстыру",
-                "en": "Quick attachment changes"
+                "en": "Quick attachment swaps"
               },
               "skills": [
                 "mechanisms",
                 "structures"
               ],
-              "status": "todo",
+              "status": "ready",
               "project": false,
               "kit": false
             },
@@ -2007,13 +2007,13 @@
               "title": {
                 "ru": "Проект «Своя насадка»",
                 "kk": "«Өз саптамаң» жобасы",
-                "en": "Project “Your attachment”"
+                "en": "Project: Your own attachment"
               },
               "skills": [
                 "mechanisms",
                 "structures"
               ],
-              "status": "todo",
+              "status": "ready",
               "project": true,
               "kit": true
             }

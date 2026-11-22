@@ -1,0 +1,131 @@
+{
+  "id": "build-11",
+  "track": "build",
+  "unit": "build-gears",
+  "minutes": 7,
+  "skills": [
+    "gears"
+  ],
+  "title": {
+    "ru": "Червячная передача",
+    "kk": "Бұрамалы беріліс",
+    "en": "Worm gear"
+  },
+  "goal": {
+    "ru": "Сегодня ты узнаешь самую сильную передачу.",
+    "kk": "Бүгін сен ең күшті берілісті білесің.",
+    "en": "Today you will meet the strongest gear drive."
+  },
+  "summary": {
+    "ru": "Теперь ты знаешь, как работает червяк и почему он держит груз сам.",
+    "kk": "Енді сен бұраманың қалай жұмыс істейтінін және ол жүкті неге өзі ұстайтынын білесің.",
+    "en": "Now you know how a worm works and why it holds a load by itself."
+  },
+  "steps": [
+    {
+      "id": "worm",
+      "type": "theory",
+      "title": {
+        "ru": "Червяк",
+        "kk": "Бұрама",
+        "en": "The worm"
+      },
+      "body": {
+        "ru": "**Червяк** похож на винт. За один его оборот шестерня поворачивается **всего на один зуб**.\n\nЧервяк и шестерня 24: чтобы шестерня сделала один оборот, червяк должен провернуться 24 раза. Передаточное число 24 — огромная сила!\n\nЕщё одно свойство: шестерня **не может крутить червяк** обратно. Подъёмник на червяке держит груз сам, даже если мотор выключен.",
+        "kk": "**Бұрама** бұрандаға ұқсайды. Оның бір айналымында тісті доңғалақ **бір-ақ тіске** бұрылады.\n\nБұрама және 24 тісті доңғалақ: тісті доңғалақ бір айналым жасауы үшін бұрама 24 рет айналуы керек. Беріліс саны 24 — орасан күш!\n\nТағы бір қасиеті: тісті доңғалақ бұраманы кері **айналдыра алмайды**. Бұрамадағы көтергіш мотор өшірулі болса да жүкті өзі ұстайды.",
+        "en": "A **worm** looks like a screw. One turn of it moves the gear **just one tooth**.\n\nA worm and a 24-tooth gear: for the gear to make one turn, the worm must turn 24 times. A ratio of 24 — huge strength!\n\nOne more property: the gear **cannot turn the worm** back. A lift on a worm holds its load by itself, even with the motor off."
+      },
+      "illustration": "r-worm"
+    },
+    {
+      "id": "turns",
+      "type": "quiz",
+      "kind": "number",
+      "question": {
+        "ru": "Червяк крутит шестерню 24. Мотор сделал 48 оборотов. Сколько оборотов сделала шестерня?",
+        "kk": "Бұрама 24 тісті доңғалақты айналдырады. Мотор 48 айналым жасады. Тісті доңғалақ неше айналым жасады?",
+        "en": "A worm drives a 24-tooth gear. The motor made 48 turns. How many turns did the gear make?"
+      },
+      "answer": 2,
+      "tolerance": 0,
+      "explanation": {
+        "ru": "48 : 24 = 2.",
+        "kk": "48 : 24 = 2.",
+        "en": "48 ÷ 24 = 2."
+      },
+      "skill": "gears"
+    },
+    {
+      "id": "hold",
+      "type": "quiz",
+      "kind": "choice",
+      "question": {
+        "ru": "Где самоторможение червяка особенно полезно?",
+        "kk": "Бұраманың өздігінен тежелуі қай жерде әсіресе пайдалы?",
+        "en": "Where is the worm’s self-locking especially useful?"
+      },
+      "options": [
+        {
+          "ru": "В подъёмнике, который должен держать груз",
+          "kk": "Жүкті ұстауы керек көтергіште",
+          "en": "In a lift that must hold a load"
+        },
+        {
+          "ru": "В быстрой гоночной машине",
+          "kk": "Жылдам жарыс көлігінде",
+          "en": "In a fast race car"
+        },
+        {
+          "ru": "В вентиляторе",
+          "kk": "Желдеткіште",
+          "en": "In a fan"
+        }
+      ],
+      "correct": [
+        0
+      ],
+      "explanation": {
+        "ru": "Груз не опустится сам, даже без питания.",
+        "kk": "Жүк қуатсыз да өзі түспейді.",
+        "en": "The load will not drop by itself, even without power."
+      },
+      "skill": "gears"
+    },
+    {
+      "id": "slow",
+      "type": "quiz",
+      "kind": "choice",
+      "question": {
+        "ru": "Минус червячной передачи?",
+        "kk": "Бұрамалы берілістің кемшілігі?",
+        "en": "The downside of a worm drive?"
+      },
+      "options": [
+        {
+          "ru": "Очень медленно",
+          "kk": "Өте баяу",
+          "en": "Very slow"
+        },
+        {
+          "ru": "Очень слабо",
+          "kk": "Өте әлсіз",
+          "en": "Very weak"
+        },
+        {
+          "ru": "Крутится в обе стороны сама",
+          "kk": "Екі жаққа да өзі айналады",
+          "en": "It spins both ways by itself"
+        }
+      ],
+      "correct": [
+        0
+      ],
+      "explanation": {
+        "ru": "Огромная сила оборачивается маленькой скоростью.",
+        "kk": "Орасан күш кішкентай жылдамдыққа айналады.",
+        "en": "Huge strength comes with low speed."
+      },
+      "skill": "gears"
+    }
+  ]
+}

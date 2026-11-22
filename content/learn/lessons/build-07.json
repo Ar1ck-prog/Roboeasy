@@ -1,0 +1,178 @@
+{
+  "id": "build-07",
+  "track": "build",
+  "unit": "build-structures",
+  "minutes": 6,
+  "skills": [
+    "structures"
+  ],
+  "title": {
+    "ru": "Двойные балки и упоры",
+    "kk": "Қос арқалықтар және тіректер",
+    "en": "Double beams and braces"
+  },
+  "goal": {
+    "ru": "Сегодня ты узнаешь ещё два способа сделать конструкцию жёстче.",
+    "kk": "Бүгін сен құрылымды қаттырақ етудің тағы екі тәсілін білесің.",
+    "en": "Today you will learn two more ways to stiffen a build."
+  },
+  "summary": {
+    "ru": "Теперь ты умеешь укреплять конструкцию двойными балками и упорами.",
+    "kk": "Енді сен құрылымды қос арқалықтармен және тіректермен бекіте аласың.",
+    "en": "Now you can stiffen a build with double beams and braces."
+  },
+  "steps": [
+    {
+      "id": "double",
+      "type": "theory",
+      "title": {
+        "ru": "Вдвоём крепче",
+        "kk": "Екеуі мықтырақ",
+        "en": "Stronger together"
+      },
+      "body": {
+        "ru": "Одна длинная балка на одном конце гнётся, как удочка. Две балки рядом, соединённые штифтами в нескольких местах, — **двойная балка** — гнутся намного меньше.\n\n**Упор** — короткая балка или подпорка, которая не даёт детали отклониться. Например, хаб лучше закрепить сразу в нескольких точках, а не на одном штифте.",
+        "kk": "Бір ұзын арқалық бір ұшында қармақ сияқты майысады. Бірнеше жерде штифттермен қосылған қатар тұрған екі арқалық — **қос арқалық** — әлдеқайда аз майысады.\n\n**Тірек** — бөлшектің ауытқуына жол бермейтін қысқа арқалық немесе таяныш. Мысалы, хабты бір штифтте емес, бірден бірнеше нүктеде бекіткен жақсы.",
+        "en": "One long beam fixed at one end bends like a fishing rod. Two beams side by side, pinned together in several places — a **double beam** — bend far less.\n\nA **brace** is a short beam or prop that stops a part from flexing. For example, mount the hub at several points, not on a single pin."
+      },
+      "illustration": "r-double-beam"
+    },
+    {
+      "id": "rod",
+      "type": "quiz",
+      "kind": "choice",
+      "question": {
+        "ru": "Длинная рука робота гнётся вниз под грузом. Что сделать в первую очередь?",
+        "kk": "Роботтың ұзын қолы жүк астында төмен майысады. Алдымен не істеу керек?",
+        "en": "A long robot arm bends down under a load. What do you try first?"
+      },
+      "options": [
+        {
+          "ru": "Сделать её из двух балок и соединить штифтами",
+          "kk": "Оны екі арқалықтан жасап, штифттермен қосу",
+          "en": "Make it from two beams pinned together"
+        },
+        {
+          "ru": "Взять балку длиннее",
+          "kk": "Ұзынырақ арқалық алу",
+          "en": "Use a longer beam"
+        },
+        {
+          "ru": "Убрать все штифты",
+          "kk": "Барлық штифтті алып тастау",
+          "en": "Remove all the pins"
+        }
+      ],
+      "correct": [
+        0
+      ],
+      "explanation": {
+        "ru": "Двойная балка — самый быстрый способ сделать руку жёстче.",
+        "kk": "Қос арқалық — қолды қаттырақ етудің ең жылдам тәсілі.",
+        "en": "A double beam is the quickest way to stiffen an arm."
+      },
+      "skill": "structures"
+    },
+    {
+      "id": "fix",
+      "type": "quiz",
+      "kind": "match",
+      "question": {
+        "ru": "Подбери укрепление",
+        "kk": "Бекітуді таңда",
+        "en": "Match the reinforcement"
+      },
+      "pairs": [
+        {
+          "left": {
+            "ru": "Длинная рука гнётся",
+            "kk": "Ұзын қол майысады",
+            "en": "A long arm bends"
+          },
+          "right": {
+            "ru": "Двойная балка",
+            "kk": "Қос арқалық",
+            "en": "Double beam"
+          }
+        },
+        {
+          "left": {
+            "ru": "Квадратная рама перекашивается",
+            "kk": "Шаршы жақтау қисаяды",
+            "en": "A square frame skews"
+          },
+          "right": {
+            "ru": "Диагональ",
+            "kk": "Диагональ",
+            "en": "Diagonal"
+          }
+        },
+        {
+          "left": {
+            "ru": "Хаб качается на одном штифте",
+            "kk": "Хаб бір штифтте тербеледі",
+            "en": "The hub rocks on one pin"
+          },
+          "right": {
+            "ru": "Ещё точки крепления",
+            "kk": "Тағы бекіту нүктелері",
+            "en": "More mounting points"
+          }
+        }
+      ],
+      "explanation": {
+        "ru": "У каждой слабости своё лекарство.",
+        "kk": "Әр әлсіздіктің өз емі бар.",
+        "en": "Each weakness has its own cure."
+      },
+      "skill": "structures"
+    },
+    {
+      "id": "stiffen",
+      "type": "build",
+      "title": {
+        "ru": "Укрепи стойку",
+        "kk": "Тіректі бекіт",
+        "en": "Stiffen a post"
+      },
+      "intro": {
+        "ru": "Попробуй на настоящем конструкторе или просто разбери шаги.",
+        "kk": "Нағыз конструкторда байқап көр немесе жай қадамдарды талда.",
+        "en": "Try it with a real kit or just read through the steps."
+      },
+      "instructions": [
+        {
+          "text": {
+            "ru": "Поставь вертикально балку 11 на раму и покачай её — она гнётся.",
+            "kk": "Жақтауға 11 арқалықты тік қойып, тербет — ол майысады.",
+            "en": "Stand a beam 11 upright on a frame and rock it — it bends."
+          },
+          "illustration": "r-beams"
+        },
+        {
+          "text": {
+            "ru": "Добавь вторую балку рядом и соедини их штифтами в трёх местах.",
+            "kk": "Жанына екінші арқалықты қойып, оларды үш жерден штифттермен қос.",
+            "en": "Add a second beam next to it and pin them together in three places."
+          },
+          "illustration": "r-double-beam"
+        },
+        {
+          "text": {
+            "ru": "Поставь наклонную балку от верха стойки к раме — получится треугольник.",
+            "kk": "Тіректің жоғарғы жағынан жақтауға қиғаш арқалық қой — үшбұрыш шығады.",
+            "en": "Add a slanted beam from the top of the post to the frame — a triangle."
+          },
+          "illustration": "r-triangle"
+        },
+        {
+          "text": {
+            "ru": "Снова покачай: стойка стоит намертво.",
+            "kk": "Қайтадан тербет: тірек мықты тұр.",
+            "en": "Rock it again: the post stands solid."
+          }
+        }
+      ]
+    }
+  ]
+}

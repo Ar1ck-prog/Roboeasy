@@ -1,0 +1,149 @@
+{
+  "id": "build-02",
+  "track": "build",
+  "unit": "build-parts",
+  "minutes": 6,
+  "skills": [
+    "parts"
+  ],
+  "title": {
+    "ru": "Оси и штифты",
+    "kk": "Осьтер және штифттер",
+    "en": "Axles and pins"
+  },
+  "goal": {
+    "ru": "Сегодня ты узнаешь, чем соединяют балки и как передаётся вращение.",
+    "kk": "Бүгін сен арқалықтарды немен қосатынын және айналу қалай берілетінін білесің.",
+    "en": "Today you will learn how beams are joined and how rotation is passed on."
+  },
+  "summary": {
+    "ru": "Теперь ты отличаешь ось от штифта и знаешь, где что нужно.",
+    "kk": "Енді сен осьті штифттен ажыратасың және қайда не керек екенін білесің.",
+    "en": "Now you can tell an axle from a pin and know where each belongs."
+  },
+  "steps": [
+    {
+      "id": "pins",
+      "type": "theory",
+      "title": {
+        "ru": "Держит или крутит",
+        "kk": "Ұстайды ма, айналдырады ма",
+        "en": "Hold or spin"
+      },
+      "body": {
+        "ru": "**Штифт** — короткая круглая деталь. Его вставляют в отверстия двух балок, и они держатся вместе. Штифты бывают **с трением** — держат крепко — и **без трения** — детали на них свободно вращаются.\n\n**Ось** — стержень с крестом в сечении. Крест не проворачивается в шестерне или колесе, поэтому ось **передаёт вращение** от мотора.",
+        "kk": "**Штифт** — қысқа дөңгелек бөлшек. Оны екі арқалықтың тесігіне салады, сонда олар бірге ұсталады. Штифттер **үйкелісті** — мықты ұстайды — және **үйкеліссіз** — бөлшектер оларда еркін айналады — болады.\n\n**Ось** — қимасы айқыш тәрізді өзек. Айқыш тісті доңғалақта немесе дөңгелекте айналып кетпейді, сондықтан ось мотордан **айналуды береді**.",
+        "en": "A **pin** is a short round part. Push it through the holes of two beams and they hold together. Pins come **with friction** — they grip tight — and **frictionless** — parts spin freely on them.\n\nAn **axle** is a rod with a cross-shaped section. The cross cannot slip inside a gear or wheel, so an axle **passes rotation** from the motor."
+      },
+      "illustration": "r-pins"
+    },
+    {
+      "id": "job",
+      "type": "quiz",
+      "kind": "match",
+      "question": {
+        "ru": "Подбери деталь к задаче",
+        "kk": "Бөлшекті тапсырмаға сәйкестендір",
+        "en": "Match the part to the job"
+      },
+      "pairs": [
+        {
+          "left": {
+            "ru": "Передать вращение от мотора к колесу",
+            "kk": "Айналуды мотордан дөңгелекке беру",
+            "en": "Pass rotation from motor to wheel"
+          },
+          "right": {
+            "ru": "Ось",
+            "kk": "Ось",
+            "en": "Axle"
+          }
+        },
+        {
+          "left": {
+            "ru": "Крепко соединить две балки",
+            "kk": "Екі арқалықты мықты қосу",
+            "en": "Join two beams firmly"
+          },
+          "right": {
+            "ru": "Штифт с трением",
+            "kk": "Үйкелісті штифт",
+            "en": "Friction pin"
+          }
+        },
+        {
+          "left": {
+            "ru": "Сделать шарнир, который свободно гнётся",
+            "kk": "Еркін бүгілетін топса жасау",
+            "en": "Make a hinge that bends freely"
+          },
+          "right": {
+            "ru": "Штифт без трения",
+            "kk": "Үйкеліссіз штифт",
+            "en": "Frictionless pin"
+          }
+        }
+      ],
+      "explanation": {
+        "ru": "Крест — для вращения, круг — для соединения или шарнира.",
+        "kk": "Айқыш — айналу үшін, дөңгелек — қосу немесе топса үшін.",
+        "en": "A cross is for rotation, a circle for joining or hinges."
+      },
+      "skill": "parts"
+    },
+    {
+      "id": "round",
+      "type": "quiz",
+      "kind": "choice",
+      "question": {
+        "ru": "Почему колесо нельзя надеть на круглый штифт, чтобы мотор его крутил?",
+        "kk": "Неге мотор айналдыруы үшін дөңгелекті дөңгелек штифтке кигізуге болмайды?",
+        "en": "Why can a wheel not sit on a round pin for the motor to drive it?"
+      },
+      "options": [
+        {
+          "ru": "Колесо будет проворачиваться, вращение не передастся",
+          "kk": "Дөңгелек айналып кетеді, айналу берілмейді",
+          "en": "The wheel would slip; rotation would not pass on"
+        },
+        {
+          "ru": "Штифт слишком тяжёлый",
+          "kk": "Штифт тым ауыр",
+          "en": "The pin is too heavy"
+        },
+        {
+          "ru": "Колесо станет квадратным",
+          "kk": "Дөңгелек шаршы болады",
+          "en": "The wheel would turn square"
+        }
+      ],
+      "correct": [
+        0
+      ],
+      "explanation": {
+        "ru": "Вращение передаёт только ось с крестом.",
+        "kk": "Айналуды тек айқышы бар ось береді.",
+        "en": "Only a cross axle passes rotation on."
+      },
+      "skill": "parts"
+    },
+    {
+      "id": "two-pins",
+      "type": "quiz",
+      "kind": "number",
+      "question": {
+        "ru": "Чтобы две балки не поворачивались относительно друг друга, нужно минимум сколько штифтов?",
+        "kk": "Екі арқалық бір-біріне қатысты бұрылмауы үшін кемінде неше штифт керек?",
+        "en": "At least how many pins stop two beams from rotating against each other?"
+      },
+      "answer": 2,
+      "tolerance": 0,
+      "explanation": {
+        "ru": "На одном штифте балки крутятся, как ножницы. Два штифта фиксируют их намертво.",
+        "kk": "Бір штифтте арқалықтар қайшы сияқты айналады. Екі штифт оларды мықтап бекітеді.",
+        "en": "On one pin the beams swivel like scissors. Two pins lock them solid."
+      },
+      "skill": "parts"
+    }
+  ]
+}

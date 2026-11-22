@@ -1,0 +1,128 @@
+{
+  "id": "build-06",
+  "track": "build",
+  "unit": "build-structures",
+  "minutes": 7,
+  "skills": [
+    "structures"
+  ],
+  "title": {
+    "ru": "Почему треугольник прочный",
+    "kk": "Үшбұрыш неге берік",
+    "en": "Why triangles are strong"
+  },
+  "goal": {
+    "ru": "Сегодня ты узнаешь главный секрет прочных конструкций.",
+    "kk": "Бүгін сен берік құрылымдардың басты құпиясын білесің.",
+    "en": "Today you will learn the main secret of strong builds."
+  },
+  "summary": {
+    "ru": "Теперь ты знаешь: диагональ превращает шаткий прямоугольник в жёсткие треугольники.",
+    "kk": "Енді сен білесің: диагональ шайқалмалы тіктөртбұрышты қатты үшбұрыштарға айналдырады.",
+    "en": "Now you know: a diagonal turns a wobbly rectangle into rigid triangles."
+  },
+  "steps": [
+    {
+      "id": "triangle",
+      "type": "theory",
+      "title": {
+        "ru": "Треугольник не складывается",
+        "kk": "Үшбұрыш бүктелмейді",
+        "en": "A triangle does not fold"
+      },
+      "body": {
+        "ru": "Собери квадрат из четырёх балок на штифтах и толкни угол: он перекосится в ромб. Углы квадрата могут меняться.\n\nУ треугольника так не выйдет: при трёх сторонах фиксированной длины углы изменить нельзя. Поэтому треугольник **жёсткий**.\n\nДобавь в квадрат **диагональ** — он превратится в два треугольника и перестанет шататься. Так строят мосты, краны и опоры.",
+        "kk": "Штифттердегі төрт арқалықтан шаршы құрап, бұрышын итер: ол ромбқа қисаяды. Шаршының бұрыштары өзгере алады.\n\nҮшбұрышта олай болмайды: ұзындығы тұрақты үш қабырғада бұрыштарды өзгерту мүмкін емес. Сондықтан үшбұрыш **қатты**.\n\nШаршыға **диагональ** қос — ол екі үшбұрышқа айналып, шайқалуды тоқтатады. Көпірлер, крандар мен тіректер осылай салынады.",
+        "en": "Build a square from four beams on pins and push a corner: it skews into a rhombus. A square’s angles can change.\n\nA triangle cannot do that: with three sides of fixed length the angles cannot change. So a triangle is **rigid**.\n\nAdd a **diagonal** to the square and it becomes two triangles that stop wobbling. Bridges, cranes and towers are built like this."
+      },
+      "illustration": "r-triangle"
+    },
+    {
+      "id": "brace",
+      "type": "widget",
+      "widget": "brace",
+      "title": {
+        "ru": "Укрепи раму",
+        "kk": "Жақтауды бекіт",
+        "en": "Brace the frame"
+      },
+      "task": {
+        "ru": "Рама из четырёх балок шатается. Добавь балки так, чтобы она выдержала толчок, и нажми «Толкнуть раму».",
+        "kk": "Төрт арқалықтан жасалған жақтау шайқалады. Ол итеруге шыдайтындай арқалықтар қосып, «Жақтауды итеру» батырмасын бас.",
+        "en": "A four-beam frame wobbles. Add beams so it survives a push, then press “Push the frame”."
+      }
+    },
+    {
+      "id": "middle",
+      "type": "quiz",
+      "kind": "choice",
+      "question": {
+        "ru": "Помогает ли перекладина посередине, параллельная сторонам?",
+        "kk": "Қабырғаларға параллель ортадағы көлденең арқалық көмектесе ме?",
+        "en": "Does a crossbar in the middle, parallel to the sides, help?"
+      },
+      "options": [
+        {
+          "ru": "Нет: получаются два маленьких прямоугольника, они тоже шатаются",
+          "kk": "Жоқ: екі кішкентай тіктөртбұрыш шығады, олар да шайқалады",
+          "en": "No: you get two small rectangles that wobble too"
+        },
+        {
+          "ru": "Да, это лучше диагонали",
+          "kk": "Иә, бұл диагональдан жақсы",
+          "en": "Yes, it is better than a diagonal"
+        },
+        {
+          "ru": "Да, если она красная",
+          "kk": "Иә, егер ол қызыл болса",
+          "en": "Yes, if it is red"
+        }
+      ],
+      "correct": [
+        0
+      ],
+      "explanation": {
+        "ru": "Жёсткость дают только треугольники.",
+        "kk": "Қаттылықты тек үшбұрыштар береді.",
+        "en": "Only triangles give rigidity."
+      },
+      "skill": "structures"
+    },
+    {
+      "id": "where",
+      "type": "quiz",
+      "kind": "choice",
+      "question": {
+        "ru": "Где на роботе стоит поискать места для треугольников?",
+        "kk": "Роботта үшбұрыштар үшін қай жерді іздеген жөн?",
+        "en": "Where on a robot should you look for spots for triangles?"
+      },
+      "options": [
+        {
+          "ru": "В длинных руках и высоких стойках, которые гнутся",
+          "kk": "Майысатын ұзын қолдар мен биік тіректерде",
+          "en": "In long arms and tall posts that bend"
+        },
+        {
+          "ru": "На шинах",
+          "kk": "Шиналарда",
+          "en": "On the tyres"
+        },
+        {
+          "ru": "Внутри хаба",
+          "kk": "Хаб ішінде",
+          "en": "Inside the hub"
+        }
+      ],
+      "correct": [
+        0
+      ],
+      "explanation": {
+        "ru": "Всё длинное и высокое гнётся первым — туда и ставят диагонали.",
+        "kk": "Ұзын әрі биіктің бәрі бірінші майысады — диагональдарды сонда қояды.",
+        "en": "Long and tall parts bend first — that is where diagonals go."
+      },
+      "skill": "structures"
+    }
+  ]
+}

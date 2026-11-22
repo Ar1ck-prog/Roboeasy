@@ -1,0 +1,184 @@
+{
+  "id": "mech-01",
+  "track": "mechanisms",
+  "unit": "mech-gripper",
+  "minutes": 7,
+  "skills": [
+    "mechanisms"
+  ],
+  "title": {
+    "ru": "Как работает захват",
+    "kk": "Қармауыш қалай жұмыс істейді",
+    "en": "How a gripper works"
+  },
+  "goal": {
+    "ru": "Сегодня ты узнаешь, как робот берёт предметы.",
+    "kk": "Бүгін сен роботтың заттарды қалай алатынын білесің.",
+    "en": "Today you will learn how a robot picks things up."
+  },
+  "summary": {
+    "ru": "Теперь ты знаешь, как устроен захват и как управлять им мотором.",
+    "kk": "Енді сен қармауыштың қалай құрылғанын және оны мотормен қалай басқару керегін білесің.",
+    "en": "Now you know how a gripper is built and how to drive it with a motor."
+  },
+  "steps": [
+    {
+      "id": "claws",
+      "type": "theory",
+      "title": {
+        "ru": "Две лапки",
+        "kk": "Екі тырнақ",
+        "en": "Two claws"
+      },
+      "body": {
+        "ru": "**Захват** — две лапки, которые сходятся и держат предмет. Их двигает **третий мотор** — обычно на порту C или D.\n\nМотор поворачивается на нужный угол: например, на 90° по часовой — лапки сходятся, на 90° против — расходятся.\n\nВажно не пережать: если мотор крутит дальше, чем нужно, лапки упираются в предмет, и мотор напрягается зря.",
+        "kk": "**Қармауыш** — бір-біріне жақындап, затты ұстайтын екі тырнақ. Оларды **үшінші мотор** қозғалтады — әдетте C немесе D портында.\n\nМотор керекті бұрышқа бұрылады: мысалы, сағат тілімен 90° — тырнақтар жабылады, қарсы 90° — ашылады.\n\nАртық қыспау маңызды: мотор керегінен әрі айналса, тырнақтар затқа тіреліп, мотор бекер күш жұмсайды.",
+        "en": "A **gripper** is two claws that close and hold an object. A **third motor** moves them — usually on port C or D.\n\nThe motor turns to a set angle: say, 90° clockwise — the claws close, 90° anticlockwise — they open.\n\nDo not over-squeeze: if the motor turns further than needed, the claws press on the object and the motor strains for nothing."
+      },
+      "illustration": "r-gripper"
+    },
+    {
+      "id": "steps",
+      "type": "quiz",
+      "kind": "order",
+      "question": {
+        "ru": "Расставь шаги «взять предмет»",
+        "kk": "«Затты алу» қадамдарын реттей қой",
+        "en": "Order the steps of “pick up an object”"
+      },
+      "items": [
+        {
+          "ru": "Открыть захват",
+          "kk": "Қармауышты ашу",
+          "en": "Open the gripper"
+        },
+        {
+          "ru": "Подъехать к предмету",
+          "kk": "Затқа жақындау",
+          "en": "Drive up to the object"
+        },
+        {
+          "ru": "Закрыть захват",
+          "kk": "Қармауышты жабу",
+          "en": "Close the gripper"
+        },
+        {
+          "ru": "Отвезти предмет",
+          "kk": "Затты апару",
+          "en": "Carry the object away"
+        }
+      ],
+      "explanation": {
+        "ru": "Сначала открыть, потом подъехать: закрытый захват столкнёт предмет.",
+        "kk": "Алдымен ашып, содан кейін жақындау керек: жабық қармауыш затты итеріп жібереді.",
+        "en": "Open first, then approach: a closed gripper pushes the object away."
+      },
+      "skill": "mechanisms"
+    },
+    {
+      "id": "close",
+      "type": "code",
+      "title": {
+        "ru": "Закрой захват",
+        "kk": "Қармауышты жап",
+        "en": "Close the gripper"
+      },
+      "task": {
+        "ru": "Захват стоит на моторе C. Закрой его: поверни мотор C на 90° по часовой.",
+        "kk": "Қармауыш C моторында тұр. Оны жап: C моторын сағат тілімен 90° бұр.",
+        "en": "The gripper is on motor C. Close it: turn motor C 90° clockwise."
+      },
+      "field": {
+        "width": 1000,
+        "height": 600,
+        "start": {
+          "x": 300,
+          "y": 300,
+          "heading": 0
+        },
+        "border": true,
+        "zones": [],
+        "points": [],
+        "walls": [],
+        "lines": []
+      },
+      "toolbox": [
+        "motor_run",
+        "motor_speed",
+        "wait"
+      ],
+      "start": [],
+      "checks": [
+        {
+          "type": "motorTurned",
+          "port": "C",
+          "degrees": 90,
+          "tolerance": 5
+        }
+      ],
+      "hints": [
+        {
+          "ru": "Нужен синий блок мотора.",
+          "kk": "Мотордың көк блогы керек.",
+          "en": "You need the blue motor block."
+        },
+        {
+          "ru": "Порт C, по часовой, единица — градусы.",
+          "kk": "C порты, сағат тілімен, бірлігі — градус.",
+          "en": "Port C, clockwise, unit — degrees."
+        },
+        {
+          "ru": "C мотор по часовой на 90 град.",
+          "kk": "C мотор сағат тілімен 90 град.",
+          "en": "C motor clockwise 90 deg."
+        }
+      ],
+      "reference": [
+        {
+          "op": "motor_run",
+          "port": "C",
+          "direction": "clockwise",
+          "value": 90,
+          "unit": "degrees"
+        }
+      ],
+      "skill": "mechanisms"
+    },
+    {
+      "id": "too-much",
+      "type": "quiz",
+      "kind": "choice",
+      "question": {
+        "ru": "Захват закрывается, а мотор продолжает гудеть и греться. Что не так?",
+        "kk": "Қармауыш жабылады, ал мотор гуілдеп, қызуын жалғастырады. Не дұрыс емес?",
+        "en": "The gripper closes, but the motor keeps humming and heating up. What is wrong?"
+      },
+      "options": [
+        {
+          "ru": "Мотор поворачивает на слишком большой угол",
+          "kk": "Мотор тым үлкен бұрышқа бұрылады",
+          "en": "The motor turns too far"
+        },
+        {
+          "ru": "Слишком маленький предмет",
+          "kk": "Зат тым кішкентай",
+          "en": "The object is too small"
+        },
+        {
+          "ru": "Нужен датчик цвета",
+          "kk": "Түс датчигі керек",
+          "en": "It needs a colour sensor"
+        }
+      ],
+      "correct": [
+        0
+      ],
+      "explanation": {
+        "ru": "Подбери угол так, чтобы лапки только-только сжимали предмет.",
+        "kk": "Тырнақтар затты әзер қысатындай бұрышты таңда.",
+        "en": "Pick an angle where the claws just grip the object."
+      },
+      "skill": "mechanisms"
+    }
+  ]
+}

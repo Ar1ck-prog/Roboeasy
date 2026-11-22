@@ -1,0 +1,130 @@
+{
+  "id": "build-09",
+  "track": "build",
+  "unit": "build-gears",
+  "minutes": 7,
+  "skills": [
+    "gears"
+  ],
+  "title": {
+    "ru": "Как шестерни передают вращение",
+    "kk": "Тісті доңғалақтар айналуды қалай береді",
+    "en": "How gears pass on rotation"
+  },
+  "goal": {
+    "ru": "Сегодня ты узнаешь, как вращение переходит от одной шестерни к другой.",
+    "kk": "Бүгін сен айналу бір тісті доңғалақтан екіншісіне қалай өтетінін білесің.",
+    "en": "Today you will learn how rotation passes from one gear to another."
+  },
+  "summary": {
+    "ru": "Теперь ты знаешь, в какую сторону крутятся шестерни и зачем нужна промежуточная.",
+    "kk": "Енді сен тісті доңғалақтар қай жаққа айналатынын және аралық тісті доңғалақ не үшін керек екенін білесің.",
+    "en": "Now you know which way gears turn and why an idler gear is used."
+  },
+  "steps": [
+    {
+      "id": "mesh",
+      "type": "theory",
+      "title": {
+        "ru": "Зубья к зубьям",
+        "kk": "Тіс тіске",
+        "en": "Tooth to tooth"
+      },
+      "body": {
+        "ru": "**Шестерня** — колесо с зубьями. Когда зубья двух шестерён сцеплены, ведущая (на моторе) крутит ведомую.\n\nСоседние шестерни крутятся **в разные стороны**. Если между ними поставить третью — **промежуточную** — крайние будут крутиться в одну сторону.\n\nЕсли шестерни одинаковые, скорость не меняется. Как её менять — в следующем уроке.",
+        "kk": "**Тісті доңғалақ** — тістері бар дөңгелек. Екі тісті доңғалақтың тістері ілінгенде, жетекшісі (моторда) жетектегісін айналдырады.\n\nКөрші тісті доңғалақтар **әр түрлі жаққа** айналады. Олардың арасына үшіншісін — **аралық** — қойсаң, шеткілері бір жаққа айналады.\n\nТісті доңғалақтар бірдей болса, жылдамдық өзгермейді. Оны қалай өзгерту — келесі сабақта.",
+        "en": "A **gear** is a wheel with teeth. When two gears mesh, the driving gear (on the motor) turns the driven one.\n\nNeighbouring gears turn **in opposite directions**. Put a third — **idler** — gear between them and the outer two turn the same way.\n\nIf the gears are the same size, the speed does not change. How to change it — next lesson."
+      },
+      "illustration": "r-gears"
+    },
+    {
+      "id": "direction",
+      "type": "quiz",
+      "kind": "choice",
+      "question": {
+        "ru": "Ведущая шестерня крутится по часовой. Куда крутится соседняя?",
+        "kk": "Жетекші тісті доңғалақ сағат тілімен айналады. Көршісі қай жаққа айналады?",
+        "en": "The driving gear turns clockwise. Which way does its neighbour turn?"
+      },
+      "options": [
+        {
+          "ru": "Против часовой",
+          "kk": "Сағат тіліне қарсы",
+          "en": "Anticlockwise"
+        },
+        {
+          "ru": "По часовой",
+          "kk": "Сағат тілімен",
+          "en": "Clockwise"
+        },
+        {
+          "ru": "Стоит на месте",
+          "kk": "Орнында тұрады",
+          "en": "It stays still"
+        }
+      ],
+      "correct": [
+        0
+      ],
+      "explanation": {
+        "ru": "Сцепленные шестерни всегда крутятся в разные стороны.",
+        "kk": "Ілінген тісті доңғалақтар әрдайым әр түрлі жаққа айналады.",
+        "en": "Meshed gears always turn in opposite directions."
+      },
+      "skill": "gears"
+    },
+    {
+      "id": "three",
+      "type": "quiz",
+      "kind": "choice",
+      "question": {
+        "ru": "Три шестерни в ряд. Первая крутится по часовой. Куда крутится третья?",
+        "kk": "Қатарынан үш тісті доңғалақ. Біріншісі сағат тілімен айналады. Үшіншісі қай жаққа айналады?",
+        "en": "Three gears in a row. The first turns clockwise. Which way does the third turn?"
+      },
+      "options": [
+        {
+          "ru": "По часовой",
+          "kk": "Сағат тілімен",
+          "en": "Clockwise"
+        },
+        {
+          "ru": "Против часовой",
+          "kk": "Сағат тіліне қарсы",
+          "en": "Anticlockwise"
+        },
+        {
+          "ru": "Никуда",
+          "kk": "Ешқайда",
+          "en": "Nowhere"
+        }
+      ],
+      "correct": [
+        0
+      ],
+      "explanation": {
+        "ru": "Каждая следующая меняет направление: по → против → по.",
+        "kk": "Әр келесісі бағытты өзгертеді: сағат тілімен → қарсы → сағат тілімен.",
+        "en": "Each next gear flips the direction: clockwise → anticlockwise → clockwise."
+      },
+      "skill": "gears"
+    },
+    {
+      "id": "gears2",
+      "type": "widget",
+      "widget": "gears",
+      "title": {
+        "ru": "Вдвое медленнее",
+        "kk": "Екі есе баяу",
+        "en": "Twice as slow"
+      },
+      "task": {
+        "ru": "Подбери две шестерни так, чтобы выход крутился **в 2 раза медленнее** мотора. Смотри, как меняется скорость.",
+        "kk": "Шығыс мотордан **2 есе баяу** айналатындай екі тісті доңғалақты таңда. Жылдамдықтың қалай өзгеретініне қара.",
+        "en": "Pick two gears so the output turns **2 times slower** than the motor. Watch the speed change."
+      },
+      "goal": "slower",
+      "ratio": 2
+    }
+  ]
+}

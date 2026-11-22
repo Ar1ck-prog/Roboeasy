@@ -1,0 +1,127 @@
+{
+  "id": "build-13",
+  "track": "build",
+  "unit": "build-base",
+  "minutes": 10,
+  "skills": [
+    "structures",
+    "parts"
+  ],
+  "title": {
+    "ru": "Шасси",
+    "kk": "Шасси",
+    "en": "Chassis"
+  },
+  "goal": {
+    "ru": "Сегодня ты соберёшь основу своего робота — шасси.",
+    "kk": "Бүгін сен роботыңның негізін — шассиді құрастырасың.",
+    "en": "Today you will build your robot’s base — the chassis."
+  },
+  "summary": {
+    "ru": "Теперь у тебя есть прочное шасси, на которое встанут моторы и хаб.",
+    "kk": "Енді сенің моторлар мен хаб орнатылатын берік шассиің бар.",
+    "en": "Now you have a sturdy chassis for the motors and hub."
+  },
+  "steps": [
+    {
+      "id": "plan",
+      "type": "theory",
+      "title": {
+        "ru": "Что такое шасси",
+        "kk": "Шасси деген не",
+        "en": "What a chassis is"
+      },
+      "body": {
+        "ru": "**Шасси** — нижняя часть робота, к которой крепится всё остальное. Хорошее шасси:\n\n1. **Жёсткое** — не гнётся, когда робот толкает модель.\n2. **Компактное** — робот должен помещаться в зону старта.\n3. **Низкое** — центр тяжести внизу, робот не переворачивается.\n4. С **опорой** — третья точка (шарик или колёсико), чтобы робот не заваливался.",
+        "kk": "**Шасси** — роботтың қалғанының бәрі бекітілетін төменгі бөлігі. Жақсы шасси:\n\n1. **Қатты** — робот модельді итергенде майыспайды.\n2. **Ықшам** — робот старт аймағына сыюы керек.\n3. **Аласа** — ауырлық орталығы төменде, робот аударылмайды.\n4. **Тірегі** бар — робот құламауы үшін үшінші нүкте (шар немесе дөңгелекше).",
+        "en": "The **chassis** is the bottom of the robot that everything else attaches to. A good chassis is:\n\n1. **Rigid** — it does not bend when the robot pushes a model.\n2. **Compact** — the robot must fit in the launch area.\n3. **Low** — the centre of gravity is low, so it does not tip.\n4. With a **caster** — a third point (a ball or small wheel) so it does not fall over."
+      },
+      "illustration": "r-chassis"
+    },
+    {
+      "id": "frame",
+      "type": "build",
+      "title": {
+        "ru": "Собери раму шасси",
+        "kk": "Шасси жақтауын құрастыр",
+        "en": "Build the chassis frame"
+      },
+      "intro": {
+        "ru": "Используй свой набор SPIKE Prime. Точная форма может отличаться — главное, соблюдай принципы.",
+        "kk": "Өз SPIKE Prime жиынтығыңды қолдан. Нақты пішіні басқаша болуы мүмкін — бастысы, қағидаларды сақта.",
+        "en": "Use your SPIKE Prime set. The exact shape may differ — just follow the principles."
+      },
+      "instructions": [
+        {
+          "text": {
+            "ru": "Возьми две рамы или две длинные балки — это бока шасси.",
+            "kk": "Екі жақтау немесе екі ұзын арқалық ал — бұл шассидің бүйірлері.",
+            "en": "Take two frames or two long beams — the sides of the chassis."
+          },
+          "illustration": "r-beams"
+        },
+        {
+          "text": {
+            "ru": "Соедини бока поперечными балками спереди и сзади, минимум по два штифта на каждое соединение.",
+            "kk": "Бүйірлерді алдынан және артынан көлденең арқалықтармен қос, әр қосылысқа кемінде екі штифттен.",
+            "en": "Join the sides with cross beams at the front and back, at least two pins per joint."
+          },
+          "illustration": "r-pins"
+        },
+        {
+          "text": {
+            "ru": "Добавь диагональ или упор, если рама перекашивается.",
+            "kk": "Жақтау қисайса, диагональ немесе тірек қос.",
+            "en": "Add a diagonal or brace if the frame skews."
+          },
+          "illustration": "r-triangle"
+        },
+        {
+          "text": {
+            "ru": "Прикрепи сзади опору: шарик или маленькое колесо.",
+            "kk": "Артына тірек бекіт: шар немесе кішкентай дөңгелек.",
+            "en": "Attach a caster at the back: a ball or small wheel."
+          },
+          "illustration": "r-chassis"
+        }
+      ]
+    },
+    {
+      "id": "low",
+      "type": "quiz",
+      "kind": "choice",
+      "question": {
+        "ru": "Почему шасси делают низким?",
+        "kk": "Шассиді неге аласа етеді?",
+        "en": "Why is a chassis built low?"
+      },
+      "options": [
+        {
+          "ru": "Чтобы центр тяжести был внизу и робот не переворачивался",
+          "kk": "Ауырлық орталығы төменде болып, робот аударылмауы үшін",
+          "en": "So the centre of gravity is low and the robot does not tip"
+        },
+        {
+          "ru": "Чтобы робот был быстрее",
+          "kk": "Робот жылдамырақ болуы үшін",
+          "en": "To make the robot faster"
+        },
+        {
+          "ru": "Так требует хаб",
+          "kk": "Хаб солай талап етеді",
+          "en": "The hub demands it"
+        }
+      ],
+      "correct": [
+        0
+      ],
+      "explanation": {
+        "ru": "Высокий тяжёлый робот легко опрокидывается на поворотах и при толчке.",
+        "kk": "Биік ауыр робот бұрылыстарда және итергенде оңай аударылады.",
+        "en": "A tall, heavy robot easily tips on turns and pushes."
+      },
+      "skill": "structures"
+    }
+  ],
+  "kit": true
+}

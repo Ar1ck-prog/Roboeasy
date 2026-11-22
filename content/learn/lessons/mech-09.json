@@ -1,0 +1,187 @@
+{
+  "id": "mech-09",
+  "track": "mechanisms",
+  "unit": "mech-design",
+  "minutes": 7,
+  "skills": [
+    "mechanisms",
+    "structures"
+  ],
+  "title": {
+    "ru": "Бриф задачи",
+    "kk": "Тапсырма брифі",
+    "en": "The design brief"
+  },
+  "goal": {
+    "ru": "Сегодня ты научишься начинать проект как инженер — с брифа.",
+    "kk": "Бүгін сен жобаны инженер сияқты — брифтен бастауды үйренесің.",
+    "en": "Today you will learn to start a project like an engineer — with a brief."
+  },
+  "summary": {
+    "ru": "Теперь ты умеешь описать задачу так, чтобы было понятно, какую насадку строить.",
+    "kk": "Енді сен қандай саптама құру керек екені түсінікті болатындай тапсырманы сипаттай аласың.",
+    "en": "Now you can describe a task so it is clear which attachment to build."
+  },
+  "steps": [
+    {
+      "id": "brief",
+      "type": "theory",
+      "title": {
+        "ru": "Что такое бриф",
+        "kk": "Бриф деген не",
+        "en": "What a brief is"
+      },
+      "body": {
+        "ru": "**Бриф** — короткое описание задачи перед тем, как что-то строить. В нём четыре части:\n\n1. **Что** нужно сделать (поднять кольцо, сдвинуть ящик).\n2. **Где** это на поле и как туда подъехать.\n3. **Ограничения**: размер, время, вес, какие моторы свободны.\n4. **Как поймём, что получилось**: что должно оказаться где.\n\nХороший бриф экономит часы: ты строишь именно то, что нужно.",
+        "kk": "**Бриф** — бір нәрсе құрмас бұрынғы тапсырманың қысқа сипаттамасы. Онда төрт бөлік бар:\n\n1. **Не** істеу керек (сақинаны көтеру, жәшікті жылжыту).\n2. Бұл алаңның **қай жерінде** және оған қалай жақындау керек.\n3. **Шектеулер**: өлшем, уақыт, салмақ, қай моторлар бос.\n4. **Шыққанын қалай түсінеміз**: не қай жерде болуы керек.\n\nЖақсы бриф сағаттарды үнемдейді: сен дәл керекті нәрсені құрасың.",
+        "en": "A **brief** is a short task description before you build anything. It has four parts:\n\n1. **What** to do (lift a ring, push a box).\n2. **Where** it is on the field and how to get there.\n3. **Limits**: size, time, weight, which motors are free.\n4. **How we know it worked**: what must end up where.\n\nA good brief saves hours: you build exactly what is needed."
+      },
+      "illustration": "r-notebook"
+    },
+    {
+      "id": "process",
+      "type": "quiz",
+      "kind": "order",
+      "question": {
+        "ru": "Расставь этапы проектирования насадки",
+        "kk": "Саптаманы жобалау кезеңдерін реттей қой",
+        "en": "Order the stages of designing an attachment"
+      },
+      "items": [
+        {
+          "ru": "Написать бриф",
+          "kk": "Бриф жазу",
+          "en": "Write the brief"
+        },
+        {
+          "ru": "Нарисовать эскиз",
+          "kk": "Эскиз салу",
+          "en": "Sketch it"
+        },
+        {
+          "ru": "Собрать прототип",
+          "kk": "Прототип құрастыру",
+          "en": "Build a prototype"
+        },
+        {
+          "ru": "Написать программу",
+          "kk": "Бағдарлама жазу",
+          "en": "Write the program"
+        },
+        {
+          "ru": "Испытать и улучшить",
+          "kk": "Сынап, жақсарту",
+          "en": "Test and improve"
+        }
+      ],
+      "explanation": {
+        "ru": "Это инженерный цикл. Последний шаг часто возвращает к эскизу — и это нормально.",
+        "kk": "Бұл инженерлік цикл. Соңғы қадам жиі эскизге қайтарады — бұл қалыпты.",
+        "en": "This is the engineering cycle. The last step often sends you back to the sketch — that is fine."
+      },
+      "skill": "mechanisms"
+    },
+    {
+      "id": "parts",
+      "type": "quiz",
+      "kind": "match",
+      "question": {
+        "ru": "К какой части брифа относится фраза?",
+        "kk": "Сөйлем брифтің қай бөлігіне жатады?",
+        "en": "Which part of the brief is it?"
+      },
+      "pairs": [
+        {
+          "left": {
+            "ru": "«Поднять флажок на модели»",
+            "kk": "«Модельдегі жалаушаны көтеру»",
+            "en": "“Raise the flag on the model”"
+          },
+          "right": {
+            "ru": "Что сделать",
+            "kk": "Не істеу",
+            "en": "What"
+          }
+        },
+        {
+          "left": {
+            "ru": "«Свободен только мотор D»",
+            "kk": "«Тек D моторы бос»",
+            "en": "“Only motor D is free”"
+          },
+          "right": {
+            "ru": "Ограничения",
+            "kk": "Шектеулер",
+            "en": "Limits"
+          }
+        },
+        {
+          "left": {
+            "ru": "«Флажок стоит вертикально после заезда»",
+            "kk": "«Жүрістен кейін жалауша тік тұрады»",
+            "en": "“The flag stands upright after the run”"
+          },
+          "right": {
+            "ru": "Как поймём, что получилось",
+            "kk": "Шыққанын қалай түсінеміз",
+            "en": "How we know it worked"
+          }
+        },
+        {
+          "left": {
+            "ru": "«Модель у правого борта, 60 см от базы»",
+            "kk": "«Модель оң борт жанында, базадан 60 см»",
+            "en": "“The model is by the right wall, 60 cm from base”"
+          },
+          "right": {
+            "ru": "Где",
+            "kk": "Қайда",
+            "en": "Where"
+          }
+        }
+      ],
+      "explanation": {
+        "ru": "Все четыре части вместе дают ясную цель.",
+        "kk": "Төрт бөліктің бәрі бірге анық мақсат береді.",
+        "en": "All four parts together give a clear goal."
+      },
+      "skill": "mechanisms"
+    },
+    {
+      "id": "vague",
+      "type": "quiz",
+      "kind": "choice",
+      "question": {
+        "ru": "Какой бриф лучше?",
+        "kk": "Қай бриф жақсы?",
+        "en": "Which brief is better?"
+      },
+      "options": [
+        {
+          "ru": "«Сдвинуть красный ящик на 20 см в синюю зону, мотор C, не шире 25 см»",
+          "kk": "«Қызыл жәшікті көк аймаққа 20 см жылжыту, C моторы, ені 25 см-ден аспайды»",
+          "en": "“Push the red box 20 cm into the blue zone, motor C, no wider than 25 cm”"
+        },
+        {
+          "ru": "«Сделать что-то с ящиком»",
+          "kk": "«Жәшікпен бір нәрсе істеу»",
+          "en": "“Do something with the box”"
+        },
+        {
+          "ru": "«Сделать крутую насадку»",
+          "kk": "«Керемет саптама жасау»",
+          "en": "“Make a cool attachment”"
+        }
+      ],
+      "correct": [
+        0
+      ],
+      "explanation": {
+        "ru": "В хорошем брифе есть цифры и критерий успеха.",
+        "kk": "Жақсы брифте сандар мен табыс өлшемі бар.",
+        "en": "A good brief has numbers and a success criterion."
+      },
+      "skill": "mechanisms"
+    }
+  ]
+}

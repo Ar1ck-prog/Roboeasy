@@ -1,0 +1,161 @@
+{
+  "id": "build-15",
+  "track": "build",
+  "unit": "build-base",
+  "minutes": 10,
+  "skills": [
+    "structures",
+    "parts"
+  ],
+  "title": {
+    "ru": "Хаб и провода",
+    "kk": "Хаб және сымдар",
+    "en": "Hub and cables"
+  },
+  "goal": {
+    "ru": "Сегодня ты поставишь на робота хаб и аккуратно проложишь провода.",
+    "kk": "Бүгін сен роботқа хаб орнатып, сымдарды ұқыпты жүргізесің.",
+    "en": "Today you will mount the hub and route the cables neatly."
+  },
+  "summary": {
+    "ru": "Теперь у робота есть «мозг», и провода не мешают ему ездить.",
+    "kk": "Енді роботтың «миы» бар, ал сымдар оның жүруіне кедергі жасамайды.",
+    "en": "Now the robot has a “brain”, and the cables do not get in the way."
+  },
+  "steps": [
+    {
+      "id": "hub",
+      "type": "theory",
+      "title": {
+        "ru": "Мозг на месте",
+        "kk": "Ми орнында",
+        "en": "The brain in place"
+      },
+      "body": {
+        "ru": "Хаб — самая тяжёлая деталь. Ставь его **низко и по центру**, между колёсами — тогда робот устойчив и поворачивает ровно.\n\nОставь доступ к кнопке, экрану и порту зарядки. Провода прокладывай вдоль балок, чтобы они не касались колёс и не цеплялись за модели на поле.",
+        "kk": "Хаб — ең ауыр бөлшек. Оны **аласа әрі ортаға**, дөңгелектердің арасына қой — сонда робот тұрақты және түзу бұрылады.\n\nТүймеге, экранға және зарядтау портына қол жеткізуді қалдыр. Сымдарды дөңгелектерге тимейтіндей және алаңдағы модельдерге ілінбейтіндей арқалықтардың бойымен жүргіз.",
+        "en": "The hub is the heaviest part. Mount it **low and centred**, between the wheels — then the robot is stable and turns evenly.\n\nKeep the button, screen and charging port reachable. Route the cables along the beams so they do not touch the wheels or snag on field models."
+      },
+      "illustration": "r-chassis"
+    },
+    {
+      "id": "mount-hub",
+      "type": "build",
+      "title": {
+        "ru": "Поставь хаб и провода",
+        "kk": "Хаб пен сымдарды орнат",
+        "en": "Mount the hub and cables"
+      },
+      "intro": {
+        "ru": "Проверь каждый шаг, прежде чем идти дальше.",
+        "kk": "Әрі қарай жүрмес бұрын әр қадамды тексер.",
+        "en": "Check each step before moving on."
+      },
+      "instructions": [
+        {
+          "text": {
+            "ru": "Закрепи хаб на шасси минимум в четырёх точках.",
+            "kk": "Хабты шассиге кемінде төрт нүктеде бекіт.",
+            "en": "Fix the hub to the chassis at four points at least."
+          },
+          "illustration": "r-chassis"
+        },
+        {
+          "text": {
+            "ru": "Подключи левый мотор к A, правый к B.",
+            "kk": "Сол моторды A-ға, оңын B-ға қос.",
+            "en": "Plug the left motor into A and the right into B."
+          }
+        },
+        {
+          "text": {
+            "ru": "Проложи провода вдоль балок, лишнюю длину аккуратно сложи.",
+            "kk": "Сымдарды арқалықтардың бойымен жүргізіп, артық ұзындығын ұқыпты жина.",
+            "en": "Run the cables along the beams and tuck away spare length."
+          }
+        },
+        {
+          "text": {
+            "ru": "Проверь: кнопка нажимается, экран виден, зарядка подключается.",
+            "kk": "Тексер: түйме басылады, экран көрінеді, зарядтау қосылады.",
+            "en": "Check: the button presses, the screen is visible, the charger plugs in."
+          },
+          "illustration": "r-pins"
+        }
+      ]
+    },
+    {
+      "id": "centre",
+      "type": "quiz",
+      "kind": "choice",
+      "question": {
+        "ru": "Почему хаб ставят по центру между колёсами?",
+        "kk": "Неге хабты дөңгелектердің арасына ортаға қояды?",
+        "en": "Why is the hub mounted centred between the wheels?"
+      },
+      "options": [
+        {
+          "ru": "Тяжесть распределена ровно, робот устойчив",
+          "kk": "Салмақ біркелкі бөлінеді, робот тұрақты",
+          "en": "The weight is balanced and the robot is stable"
+        },
+        {
+          "ru": "Так красивее",
+          "kk": "Осылай әдемірек",
+          "en": "It looks nicer"
+        },
+        {
+          "ru": "Чтобы провода были длиннее",
+          "kk": "Сымдар ұзынырақ болуы үшін",
+          "en": "To make the cables longer"
+        }
+      ],
+      "correct": [
+        0
+      ],
+      "explanation": {
+        "ru": "Тяжёлый хаб сбоку перегружает одно колесо — робот уводит и может опрокинуться.",
+        "kk": "Бүйірдегі ауыр хаб бір дөңгелекке артық жүктеме түсіреді — робот бүйірге кетіп, аударылуы мүмкін.",
+        "en": "A heavy hub off to one side overloads one wheel — the robot veers and may tip."
+      },
+      "skill": "structures"
+    },
+    {
+      "id": "cables",
+      "type": "quiz",
+      "kind": "choice",
+      "question": {
+        "ru": "Провод цепляется за колесо. Чем это грозит?",
+        "kk": "Сым дөңгелекке ілінеді. Бұл неге қауіпті?",
+        "en": "A cable catches on a wheel. What can happen?"
+      },
+      "options": [
+        {
+          "ru": "Робот затормозит, повернёт или выдернет провод",
+          "kk": "Робот тежеледі, бұрылады немесе сымды жұлып алады",
+          "en": "The robot brakes, turns or rips the cable out"
+        },
+        {
+          "ru": "Ничего страшного",
+          "kk": "Ештеңе қорқынышты емес",
+          "en": "Nothing bad"
+        },
+        {
+          "ru": "Робот поедет быстрее",
+          "kk": "Робот жылдамырақ жүреді",
+          "en": "The robot goes faster"
+        }
+      ],
+      "correct": [
+        0
+      ],
+      "explanation": {
+        "ru": "Аккуратные провода — тоже часть надёжного робота.",
+        "kk": "Ұқыпты сымдар — сенімді роботтың да бөлігі.",
+        "en": "Tidy cables are part of a reliable robot too."
+      },
+      "skill": "parts"
+    }
+  ],
+  "kit": true
+}

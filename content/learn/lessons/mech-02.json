@@ -1,0 +1,141 @@
+{
+  "id": "mech-02",
+  "track": "mechanisms",
+  "unit": "mech-gripper",
+  "minutes": 12,
+  "skills": [
+    "mechanisms"
+  ],
+  "title": {
+    "ru": "Собери захват",
+    "kk": "Қармауышты құрастыр",
+    "en": "Build a gripper"
+  },
+  "goal": {
+    "ru": "Сегодня ты соберёшь захват на своего робота.",
+    "kk": "Бүгін сен роботыңа қармауыш құрастырасың.",
+    "en": "Today you will build a gripper for your robot."
+  },
+  "summary": {
+    "ru": "Теперь у твоего робота есть рабочий захват.",
+    "kk": "Енді роботыңның жұмыс істейтін қармауышы бар.",
+    "en": "Now your robot has a working gripper."
+  },
+  "steps": [
+    {
+      "id": "design",
+      "type": "theory",
+      "title": {
+        "ru": "Простой захват",
+        "kk": "Қарапайым қармауыш",
+        "en": "A simple gripper"
+      },
+      "body": {
+        "ru": "Самый простой захват: мотор крутит шестерню, а она — две шестерни-«лапки», которые вращаются навстречу друг другу. Так обе лапки сходятся одновременно.\n\nЛапки делают из балок. Чтобы предмет не выскальзывал, на концы можно поставить детали с резиной или загнуть балки внутрь.",
+        "kk": "Ең қарапайым қармауыш: мотор тісті доңғалақты, ал ол бір-біріне қарсы айналатын екі «тырнақ» тісті доңғалақты айналдырады. Осылай екі тырнақ бір мезгілде жабылады.\n\nТырнақтарды арқалықтардан жасайды. Зат сырғып кетпеуі үшін ұштарына резеңкелі бөлшектер қоюға немесе арқалықтарды ішке қарай бүгуге болады.",
+        "en": "The simplest gripper: the motor turns a gear that drives two “claw” gears rotating toward each other. Both claws close at once.\n\nClaws are made of beams. To stop objects slipping, add rubber parts at the tips or angle the beams inward."
+      },
+      "illustration": "r-gripper"
+    },
+    {
+      "id": "build",
+      "type": "build",
+      "title": {
+        "ru": "Сборка захвата",
+        "kk": "Қармауышты құрастыру",
+        "en": "Building the gripper"
+      },
+      "intro": {
+        "ru": "Собери по шагам из деталей своего набора.",
+        "kk": "Жиынтығыңның бөлшектерінен қадаммен құрастыр.",
+        "en": "Build it step by step from your set."
+      },
+      "instructions": [
+        {
+          "text": {
+            "ru": "Закрепи мотор на передней части робота, ось смотрит вниз или вперёд.",
+            "kk": "Моторды роботтың алдыңғы бөлігіне бекіт, ось төмен немесе алға қарайды.",
+            "en": "Mount the motor at the front of the robot, axle facing down or forward."
+          },
+          "illustration": "r-chassis"
+        },
+        {
+          "text": {
+            "ru": "Поставь на ось мотора шестерню, рядом — вторую такую же, чтобы они сцепились.",
+            "kk": "Мотор осіне тісті доңғалақ қой, жанына — ілінетіндей тағы біреуін.",
+            "en": "Put a gear on the motor axle and an identical one next to it so they mesh."
+          },
+          "illustration": "r-gears"
+        },
+        {
+          "text": {
+            "ru": "К каждой шестерне прикрепи балку-лапку.",
+            "kk": "Әр тісті доңғалаққа тырнақ-арқалық бекіт.",
+            "en": "Attach a claw beam to each gear."
+          },
+          "illustration": "r-beams"
+        },
+        {
+          "text": {
+            "ru": "Подключи мотор к порту C и проверь, что лапки сходятся и расходятся.",
+            "kk": "Моторды C портына қосып, тырнақтардың жабылып, ашылатынын тексер.",
+            "en": "Plug the motor into port C and check the claws open and close."
+          },
+          "illustration": "r-gripper"
+        }
+      ]
+    },
+    {
+      "id": "test",
+      "type": "real_robot",
+      "title": {
+        "ru": "Проверь захват",
+        "kk": "Қармауышты тексер",
+        "en": "Test the gripper"
+      },
+      "task": {
+        "ru": "Скачай программу: захват закрывается, ждёт 2 секунды и открывается. Поставь между лапками кубик или мячик.",
+        "kk": "Бағдарламаны жүкте: қармауыш жабылып, 2 секунд күтеді және ашылады. Тырнақтардың арасына текше немесе доп қой.",
+        "en": "Download the program: the gripper closes, waits 2 seconds and opens. Put a cube or ball between the claws."
+      },
+      "checklist": [
+        {
+          "ru": "Лапки сходятся одновременно",
+          "kk": "Тырнақтар бір мезгілде жабылады",
+          "en": "The claws close together"
+        },
+        {
+          "ru": "Предмет держится и не выпадает",
+          "kk": "Зат ұсталып тұрады, түсіп қалмайды",
+          "en": "The object stays put"
+        },
+        {
+          "ru": "Мотор не гудит после закрытия",
+          "kk": "Жабылғаннан кейін мотор гуілдемейді",
+          "en": "The motor does not hum after closing"
+        }
+      ],
+      "program": [
+        {
+          "op": "motor_run",
+          "port": "C",
+          "direction": "clockwise",
+          "value": 90,
+          "unit": "degrees"
+        },
+        {
+          "op": "wait",
+          "seconds": 2
+        },
+        {
+          "op": "motor_run",
+          "port": "C",
+          "direction": "counterclockwise",
+          "value": 90,
+          "unit": "degrees"
+        }
+      ]
+    }
+  ],
+  "kit": true
+}

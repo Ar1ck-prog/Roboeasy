@@ -1,0 +1,239 @@
+{
+  "id": "mech-06",
+  "track": "mechanisms",
+  "unit": "mech-lift",
+  "minutes": 8,
+  "skills": [
+    "mechanisms",
+    "gears"
+  ],
+  "title": {
+    "ru": "Подними на угол",
+    "kk": "Бұрышқа көтер",
+    "en": "Lift to an angle"
+  },
+  "goal": {
+    "ru": "Сегодня ты научишься поднимать руку ровно на нужный угол.",
+    "kk": "Бүгін сен қолды дәл керекті бұрышқа көтеруді үйренесің.",
+    "en": "Today you will learn to raise the arm to an exact angle."
+  },
+  "summary": {
+    "ru": "Теперь ты считаешь угол мотора через передаточное число.",
+    "kk": "Енді сен мотор бұрышын беріліс саны арқылы есептейсің.",
+    "en": "Now you work out the motor angle through the gear ratio."
+  },
+  "steps": [
+    {
+      "id": "angle",
+      "type": "theory",
+      "title": {
+        "ru": "Угол руки и угол мотора",
+        "kk": "Қол бұрышы және мотор бұрышы",
+        "en": "Arm angle and motor angle"
+      },
+      "body": {
+        "ru": "Если рука сидит прямо на моторе, угол руки = угол мотора.\n\nНо с передачей 8 → 24 рука крутится в 3 раза медленнее. Чтобы поднять руку на 60°, мотор должен повернуться на **60 × 3 = 180°**.\n\nПравило: **угол мотора = угол руки × передаточное число**.",
+        "kk": "Егер қол тікелей моторда отырса, қол бұрышы = мотор бұрышы.\n\nБірақ 8 → 24 берілісімен қол 3 есе баяу айналады. Қолды 60°-қа көтеру үшін мотор **60 × 3 = 180°**-қа бұрылуы керек.\n\nЕреже: **мотор бұрышы = қол бұрышы × беріліс саны**.",
+        "en": "If the arm sits right on the motor, arm angle = motor angle.\n\nBut with an 8 → 24 gearing the arm turns 3 times slower. To raise the arm 60°, the motor must turn **60 × 3 = 180°**.\n\nRule: **motor angle = arm angle × gear ratio**."
+      },
+      "illustration": "r-lift"
+    },
+    {
+      "id": "calc",
+      "type": "quiz",
+      "kind": "number",
+      "question": {
+        "ru": "Передача 8 → 24. На сколько градусов повернуть мотор, чтобы рука поднялась на 30°?",
+        "kk": "8 → 24 берілісі. Қол 30°-қа көтерілуі үшін моторды неше градусқа бұру керек?",
+        "en": "Gearing 8 → 24. How many degrees must the motor turn for the arm to rise 30°?"
+      },
+      "answer": 90,
+      "tolerance": 0,
+      "explanation": {
+        "ru": "30 × 3 = 90°.",
+        "kk": "30 × 3 = 90°.",
+        "en": "30 × 3 = 90°."
+      },
+      "unit": {
+        "ru": "°",
+        "kk": "°",
+        "en": "°"
+      },
+      "skill": "gears"
+    },
+    {
+      "id": "raise",
+      "type": "code",
+      "title": {
+        "ru": "Рука на 60°",
+        "kk": "Қол 60°-қа",
+        "en": "Arm to 60°"
+      },
+      "task": {
+        "ru": "Рука на моторе D через передачу 8 → 24. Подними её на 60°.",
+        "kk": "Қол D моторында 8 → 24 берілісі арқылы. Оны 60°-қа көтер.",
+        "en": "The arm is on motor D through an 8 → 24 gearing. Raise it 60°."
+      },
+      "field": {
+        "width": 1000,
+        "height": 600,
+        "start": {
+          "x": 300,
+          "y": 300,
+          "heading": 0
+        },
+        "border": true,
+        "zones": [],
+        "points": [],
+        "walls": [],
+        "lines": []
+      },
+      "toolbox": [
+        "motor_run",
+        "motor_speed",
+        "wait"
+      ],
+      "start": [],
+      "checks": [
+        {
+          "type": "motorTurned",
+          "port": "D",
+          "degrees": 180,
+          "tolerance": 5
+        }
+      ],
+      "hints": [
+        {
+          "ru": "Сначала посчитай угол мотора.",
+          "kk": "Алдымен мотор бұрышын есепте.",
+          "en": "First work out the motor angle."
+        },
+        {
+          "ru": "60 × 3 = ?",
+          "kk": "60 × 3 = ?",
+          "en": "60 × 3 = ?"
+        },
+        {
+          "ru": "D мотор по часовой на 180 град.",
+          "kk": "D мотор сағат тілімен 180 град.",
+          "en": "D motor clockwise 180 deg."
+        }
+      ],
+      "reference": [
+        {
+          "op": "motor_run",
+          "port": "D",
+          "direction": "clockwise",
+          "value": 180,
+          "unit": "degrees"
+        }
+      ],
+      "skill": "mechanisms"
+    },
+    {
+      "id": "lift-carry",
+      "type": "code",
+      "title": {
+        "ru": "Поднять, перевезти, опустить",
+        "kk": "Көтеру, тасу, түсіру",
+        "en": "Lift, carry, lower"
+      },
+      "task": {
+        "ru": "Подними руку на 60° (мотор D), проедь 40 см до зоны и опусти руку обратно.",
+        "kk": "Қолды 60°-қа көтер (D моторы), аймаққа дейін 40 см жүр және қолды кері түсір.",
+        "en": "Raise the arm 60° (motor D), drive 40 cm to the zone and lower the arm again."
+      },
+      "field": {
+        "width": 1400,
+        "height": 400,
+        "start": {
+          "x": 150,
+          "y": 200,
+          "heading": 0
+        },
+        "border": true,
+        "zones": [
+          {
+            "id": "zone",
+            "x": 470,
+            "y": 100,
+            "w": 200,
+            "h": 200,
+            "kind": "target",
+            "label": {
+              "ru": "Зона",
+              "kk": "Аймақ",
+              "en": "Zone"
+            }
+          }
+        ],
+        "points": [],
+        "walls": [],
+        "lines": []
+      },
+      "toolbox": [
+        "motor_run",
+        "move",
+        "wait"
+      ],
+      "start": [],
+      "checks": [
+        {
+          "type": "finishInZone",
+          "zone": "zone"
+        },
+        {
+          "type": "usesOp",
+          "op": "motor_run",
+          "min": 2
+        },
+        {
+          "type": "motorTurned",
+          "port": "D",
+          "degrees": 0,
+          "tolerance": 5
+        }
+      ],
+      "hints": [
+        {
+          "ru": "Поднять — по часовой, опустить — против.",
+          "kk": "Көтеру — сағат тілімен, түсіру — қарсы.",
+          "en": "Raise — clockwise, lower — anticlockwise."
+        },
+        {
+          "ru": "Между ними — «вперёд 40 см».",
+          "kk": "Олардың арасында — «40 см алға».",
+          "en": "Between them: “forward 40 cm”."
+        },
+        {
+          "ru": "D по часовой 180; вперёд 40; D против часовой 180.",
+          "kk": "D сағат тілімен 180; 40 алға; D қарсы 180.",
+          "en": "D clockwise 180; forward 40; D anticlockwise 180."
+        }
+      ],
+      "reference": [
+        {
+          "op": "motor_run",
+          "port": "D",
+          "direction": "clockwise",
+          "value": 180,
+          "unit": "degrees"
+        },
+        {
+          "op": "move",
+          "direction": "forward",
+          "value": 40,
+          "unit": "cm"
+        },
+        {
+          "op": "motor_run",
+          "port": "D",
+          "direction": "counterclockwise",
+          "value": 180,
+          "unit": "degrees"
+        }
+      ],
+      "skill": "mechanisms"
+    }
+  ]
+}

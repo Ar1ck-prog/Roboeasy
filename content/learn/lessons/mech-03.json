@@ -1,0 +1,207 @@
+{
+  "id": "mech-03",
+  "track": "mechanisms",
+  "unit": "mech-gripper",
+  "minutes": 9,
+  "skills": [
+    "mechanisms"
+  ],
+  "title": {
+    "ru": "Перенеси кубик",
+    "kk": "Текшені тасы",
+    "en": "Carry the cube"
+  },
+  "goal": {
+    "ru": "Сегодня робот возьмёт кубик и отвезёт его на склад.",
+    "kk": "Бүгін робот текшені алып, оны қоймаға апарады.",
+    "en": "Today the robot will pick up a cube and take it to the store."
+  },
+  "summary": {
+    "ru": "Теперь ты умеешь соединять езду и работу захвата в одной программе.",
+    "kk": "Енді сен жүру мен қармауыш жұмысын бір бағдарламада біріктіре аласың.",
+    "en": "Now you can combine driving and gripper moves in one program."
+  },
+  "steps": [
+    {
+      "id": "plan",
+      "type": "theory",
+      "title": {
+        "ru": "План доставки",
+        "kk": "Жеткізу жоспары",
+        "en": "The delivery plan"
+      },
+      "body": {
+        "ru": "Доставка — это последовательность: подъехать, закрыть захват, отвезти, открыть, отъехать.\n\nКубик стоит в 45 см от старта, склад — дальше. Раздели путь на части и между ними поставь команды захвата. Мотор захвата на порту C.",
+        "kk": "Жеткізу — тізбек: жақындау, қармауышты жабу, апару, ашу, шегіну.\n\nТекше стартттан 45 см жерде тұр, қойма — әрірек. Жолды бөліктерге бөліп, олардың арасына қармауыш командаларын қой. Қармауыш моторы C портында.",
+        "en": "A delivery is a sequence: approach, close the gripper, carry, open, back away.\n\nThe cube is 45 cm from the start, the store further on. Split the route into parts and put gripper commands between them. The gripper motor is on port C."
+      },
+      "illustration": "r-gripper"
+    },
+    {
+      "id": "deliver",
+      "type": "code",
+      "title": {
+        "ru": "Доставка кубика",
+        "kk": "Текшені жеткізу",
+        "en": "Cube delivery"
+      },
+      "task": {
+        "ru": "Доедь до кубика (45 см), закрой захват (C, 90° по часовой), отвези на склад (ещё 50 см) и открой захват (C, 90° против часовой).",
+        "kk": "Текшеге дейін жет (45 см), қармауышты жап (C, сағат тілімен 90°), қоймаға апар (тағы 50 см) және қармауышты аш (C, сағат тіліне қарсы 90°).",
+        "en": "Drive to the cube (45 cm), close the gripper (C, 90° clockwise), carry it to the store (another 50 cm) and open the gripper (C, 90° anticlockwise)."
+      },
+      "field": {
+        "width": 1400,
+        "height": 600,
+        "start": {
+          "x": 150,
+          "y": 300,
+          "heading": 0
+        },
+        "border": true,
+        "zones": [
+          {
+            "id": "drop",
+            "x": 1050,
+            "y": 200,
+            "w": 220,
+            "h": 200,
+            "kind": "target",
+            "label": {
+              "ru": "Склад",
+              "kk": "Қойма",
+              "en": "Store"
+            }
+          }
+        ],
+        "points": [
+          {
+            "id": "cube",
+            "x": 600,
+            "y": 300,
+            "r": 50,
+            "label": {
+              "ru": "Кубик",
+              "kk": "Текше",
+              "en": "Cube"
+            }
+          }
+        ],
+        "walls": [],
+        "lines": []
+      },
+      "toolbox": [
+        "move",
+        "motor_run",
+        "wait"
+      ],
+      "start": [],
+      "checks": [
+        {
+          "type": "passPoints",
+          "points": [
+            "cube"
+          ],
+          "ordered": true
+        },
+        {
+          "type": "finishInZone",
+          "zone": "drop"
+        },
+        {
+          "type": "usesOp",
+          "op": "motor_run",
+          "min": 2
+        },
+        {
+          "type": "motorTurned",
+          "port": "C",
+          "degrees": 0,
+          "tolerance": 5
+        }
+      ],
+      "hints": [
+        {
+          "ru": "Четыре блока: ехать, мотор, ехать, мотор.",
+          "kk": "Төрт блок: жүру, мотор, жүру, мотор.",
+          "en": "Four blocks: move, motor, move, motor."
+        },
+        {
+          "ru": "Закрыть — по часовой, открыть — против часовой.",
+          "kk": "Жабу — сағат тілімен, ашу — қарсы.",
+          "en": "Close — clockwise, open — anticlockwise."
+        },
+        {
+          "ru": "Вперёд 45; C по часовой 90; вперёд 50; C против часовой 90.",
+          "kk": "45 алға; C сағат тілімен 90; 50 алға; C қарсы 90.",
+          "en": "Forward 45; C clockwise 90; forward 50; C anticlockwise 90."
+        }
+      ],
+      "reference": [
+        {
+          "op": "move",
+          "direction": "forward",
+          "value": 45,
+          "unit": "cm"
+        },
+        {
+          "op": "motor_run",
+          "port": "C",
+          "direction": "clockwise",
+          "value": 90,
+          "unit": "degrees"
+        },
+        {
+          "op": "move",
+          "direction": "forward",
+          "value": 50,
+          "unit": "cm"
+        },
+        {
+          "op": "motor_run",
+          "port": "C",
+          "direction": "counterclockwise",
+          "value": 90,
+          "unit": "degrees"
+        }
+      ],
+      "skill": "mechanisms"
+    },
+    {
+      "id": "open-first",
+      "type": "quiz",
+      "kind": "choice",
+      "question": {
+        "ru": "Почему в конце захват обязательно открыть?",
+        "kk": "Неге соңында қармауышты міндетті түрде ашу керек?",
+        "en": "Why must the gripper open at the end?"
+      },
+      "options": [
+        {
+          "ru": "Чтобы оставить кубик на складе и быть готовым к следующему",
+          "kk": "Текшені қоймада қалдырып, келесісіне дайын болу үшін",
+          "en": "To leave the cube in the store and be ready for the next one"
+        },
+        {
+          "ru": "Чтобы сэкономить заряд",
+          "kk": "Зарядты үнемдеу үшін",
+          "en": "To save charge"
+        },
+        {
+          "ru": "Так красивее",
+          "kk": "Осылай әдемірек",
+          "en": "It looks nicer"
+        }
+      ],
+      "correct": [
+        0
+      ],
+      "explanation": {
+        "ru": "Закрытый захват увезёт кубик обратно.",
+        "kk": "Жабық қармауыш текшені кері алып кетеді.",
+        "en": "A closed gripper would take the cube back."
+      },
+      "skill": "mechanisms"
+    }
+  ]
+}

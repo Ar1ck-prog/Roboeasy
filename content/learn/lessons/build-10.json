@@ -1,0 +1,129 @@
+{
+  "id": "build-10",
+  "track": "build",
+  "unit": "build-gears",
+  "minutes": 8,
+  "skills": [
+    "gears"
+  ],
+  "title": {
+    "ru": "Передаточное число",
+    "kk": "Беріліс саны",
+    "en": "Gear ratio"
+  },
+  "goal": {
+    "ru": "Сегодня ты научишься делать механизм быстрее или сильнее.",
+    "kk": "Бүгін сен механизмді жылдамырақ немесе күштірек етуді үйренесің.",
+    "en": "Today you will learn to make a mechanism faster or stronger."
+  },
+  "summary": {
+    "ru": "Теперь ты умеешь считать передаточное число и выбирать: скорость или сила.",
+    "kk": "Енді сен беріліс санын есептеп, таңдай аласың: жылдамдық па, күш пе.",
+    "en": "Now you can work out a gear ratio and choose: speed or strength."
+  },
+  "steps": [
+    {
+      "id": "ratio",
+      "type": "theory",
+      "title": {
+        "ru": "Скорость или сила",
+        "kk": "Жылдамдық па, күш пе",
+        "en": "Speed or strength"
+      },
+      "body": {
+        "ru": "**Передаточное число** = зубья ведомой : зубья ведущей.\n\nМаленькая 8 крутит большую 24: 24 : 8 = 3. Выход крутится **в 3 раза медленнее**, но **в 3 раза сильнее** — легко поднять тяжёлое.\n\nНаоборот, большая 24 крутит маленькую 8 — выход в 3 раза **быстрее**, но слабее.\n\nБесплатно ничего не бывает: выигрываешь в силе — проигрываешь в скорости.",
+        "kk": "**Беріліс саны** = жетектегінің тістері : жетекшінің тістері.\n\nКішкентай 8 үлкен 24-ті айналдырады: 24 : 8 = 3. Шығыс **3 есе баяу**, бірақ **3 есе күшті** айналады — ауырды көтеру оңай.\n\nКерісінше, үлкен 24 кішкентай 8-ді айналдырады — шығыс 3 есе **жылдам**, бірақ әлсіз.\n\nТегін ештеңе болмайды: күштен ұтасың — жылдамдықтан ұтыласың.",
+        "en": "The **gear ratio** = driven teeth ÷ driving teeth.\n\nA small 8 drives a big 24: 24 ÷ 8 = 3. The output turns **3 times slower** but **3 times stronger** — easy to lift heavy things.\n\nThe other way round, a big 24 drives a small 8 — the output is 3 times **faster** but weaker.\n\nNothing is free: gain strength — lose speed."
+      },
+      "illustration": "r-ratio"
+    },
+    {
+      "id": "calc",
+      "type": "quiz",
+      "kind": "number",
+      "question": {
+        "ru": "Ведущая 12 зубьев, ведомая 36. Во сколько раз медленнее крутится выход?",
+        "kk": "Жетекші 12 тіс, жетектегі 36. Шығыс неше есе баяу айналады?",
+        "en": "Driving gear 12 teeth, driven 36. How many times slower does the output turn?"
+      },
+      "answer": 3,
+      "tolerance": 0,
+      "explanation": {
+        "ru": "36 : 12 = 3.",
+        "kk": "36 : 12 = 3.",
+        "en": "36 ÷ 12 = 3."
+      },
+      "skill": "gears"
+    },
+    {
+      "id": "slow3",
+      "type": "widget",
+      "widget": "gears",
+      "title": {
+        "ru": "Сильный подъёмник",
+        "kk": "Күшті көтергіш",
+        "en": "A strong lift"
+      },
+      "task": {
+        "ru": "Подъёмнику нужна сила. Сделай выход **в 3 раза медленнее** мотора.",
+        "kk": "Көтергішке күш керек. Шығысты мотордан **3 есе баяу** ет.",
+        "en": "The lift needs strength. Make the output **3 times slower** than the motor."
+      },
+      "goal": "slower",
+      "ratio": 3
+    },
+    {
+      "id": "fast3",
+      "type": "widget",
+      "widget": "gears",
+      "title": {
+        "ru": "Быстрая вертушка",
+        "kk": "Жылдам айналмалы",
+        "en": "A fast spinner"
+      },
+      "task": {
+        "ru": "Вертушке нужна скорость. Сделай выход **в 3 раза быстрее** мотора.",
+        "kk": "Айналмалыға жылдамдық керек. Шығысты мотордан **3 есе жылдам** ет.",
+        "en": "The spinner needs speed. Make the output **3 times faster** than the motor."
+      },
+      "goal": "faster",
+      "ratio": 3
+    },
+    {
+      "id": "trade",
+      "type": "quiz",
+      "kind": "choice",
+      "question": {
+        "ru": "Ты поставил передачу 1 : 5 на колёса. Что станет с роботом?",
+        "kk": "Дөңгелектерге 1 : 5 берілісін қойдың. Роботпен не болады?",
+        "en": "You put a 1 : 5 reduction on the wheels. What happens to the robot?"
+      },
+      "options": [
+        {
+          "ru": "Поедет медленно, но легко заберётся на горку",
+          "kk": "Баяу жүреді, бірақ төбеге оңай шығады",
+          "en": "It drives slowly but climbs a hill easily"
+        },
+        {
+          "ru": "Станет в 5 раз быстрее",
+          "kk": "5 есе жылдам болады",
+          "en": "It gets 5 times faster"
+        },
+        {
+          "ru": "Ничего не изменится",
+          "kk": "Ештеңе өзгермейді",
+          "en": "Nothing changes"
+        }
+      ],
+      "correct": [
+        0
+      ],
+      "explanation": {
+        "ru": "Понижающая передача — больше силы, меньше скорости.",
+        "kk": "Төмендететін беріліс — күш көбірек, жылдамдық азырақ.",
+        "en": "A reduction gear means more strength, less speed."
+      },
+      "skill": "gears"
+    }
+  ]
+}

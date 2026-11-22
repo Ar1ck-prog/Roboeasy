@@ -1,0 +1,169 @@
+{
+  "id": "build-08",
+  "track": "build",
+  "unit": "build-structures",
+  "minutes": 6,
+  "skills": [
+    "structures"
+  ],
+  "title": {
+    "ru": "Найди слабое место",
+    "kk": "Әлсіз жерді тап",
+    "en": "Find the weak spot"
+  },
+  "goal": {
+    "ru": "Сегодня ты научишься находить, где конструкция сломается первой.",
+    "kk": "Бүгін сен құрылымның қай жерде бірінші сынатынын табуды үйренесің.",
+    "en": "Today you will learn to find where a build breaks first."
+  },
+  "summary": {
+    "ru": "Теперь ты смотришь на робота глазами инженера и видишь слабые места заранее.",
+    "kk": "Енді сен роботқа инженердің көзімен қарап, әлсіз жерлерді алдын ала көресің.",
+    "en": "Now you see the robot through an engineer’s eyes and spot weak points in advance."
+  },
+  "steps": [
+    {
+      "id": "weak",
+      "type": "theory",
+      "title": {
+        "ru": "Где тонко, там и рвётся",
+        "kk": "Жіңішке жерден үзіледі",
+        "en": "It breaks where it is thin"
+      },
+      "body": {
+        "ru": "Конструкция ломается в самом слабом месте. Обычно это:\n\n1. Соединение на **одном штифте**.\n2. **Длинная** балка, закреплённая только с одной стороны.\n3. Место, куда приходится **удар** — например, передний бампер.\n\nИнженеры проверяют робота «на прочность»: трясут, нажимают, роняют с небольшой высоты — и укрепляют то, что сдалось первым.",
+        "kk": "Құрылым ең әлсіз жерінен сынады. Әдетте бұл:\n\n1. **Бір штифттегі** қосылыс.\n2. Тек бір жағынан бекітілген **ұзын** арқалық.\n3. **Соққы** түсетін жер — мысалы, алдыңғы бампер.\n\nИнженерлер роботты «беріктікке» тексереді: сілкиді, басады, аз биіктіктен түсіреді — және бірінші берілгенді бекітеді.",
+        "en": "A build breaks at its weakest spot. Usually that is:\n\n1. A joint on **one pin**.\n2. A **long** beam fixed only at one end.\n3. A spot that takes **hits** — like the front bumper.\n\nEngineers stress-test robots: shake, press, drop from a small height — and reinforce whatever gave way first."
+      },
+      "illustration": "r-break"
+    },
+    {
+      "id": "which",
+      "type": "quiz",
+      "kind": "choice",
+      "question": {
+        "ru": "Какое соединение сдастся первым?",
+        "kk": "Қай қосылыс бірінші сынады?",
+        "en": "Which joint gives way first?"
+      },
+      "options": [
+        {
+          "ru": "Длинная рука на одном штифте",
+          "kk": "Бір штифттегі ұзын қол",
+          "en": "A long arm on one pin"
+        },
+        {
+          "ru": "Рама, приколотая четырьмя штифтами",
+          "kk": "Төрт штифтпен бекітілген жақтау",
+          "en": "A frame pinned with four pins"
+        },
+        {
+          "ru": "Треугольник из трёх балок",
+          "kk": "Үш арқалықтан жасалған үшбұрыш",
+          "en": "A triangle of three beams"
+        }
+      ],
+      "correct": [
+        0
+      ],
+      "explanation": {
+        "ru": "Один штифт плюс длинный рычаг — самое слабое сочетание.",
+        "kk": "Бір штифт пен ұзын иін — ең әлсіз үйлесім.",
+        "en": "One pin plus a long lever is the weakest combo."
+      },
+      "skill": "structures"
+    },
+    {
+      "id": "test",
+      "type": "quiz",
+      "kind": "order",
+      "question": {
+        "ru": "Расставь шаги проверки на прочность",
+        "kk": "Беріктікке тексеру қадамдарын реттей қой",
+        "en": "Order the stress-test steps"
+      },
+      "items": [
+        {
+          "ru": "Аккуратно потрясти и понажимать на робота",
+          "kk": "Роботты абайлап сілкіп, басып көру",
+          "en": "Gently shake and press the robot"
+        },
+        {
+          "ru": "Найти деталь, которая двигается или отходит",
+          "kk": "Қозғалатын немесе ажырайтын бөлшекті табу",
+          "en": "Find the part that moves or comes loose"
+        },
+        {
+          "ru": "Укрепить её",
+          "kk": "Оны бекіту",
+          "en": "Reinforce it"
+        },
+        {
+          "ru": "Проверить снова",
+          "kk": "Қайта тексеру",
+          "en": "Test again"
+        }
+      ],
+      "explanation": {
+        "ru": "Проверка и укрепление повторяются, пока робот не станет надёжным.",
+        "kk": "Тексеру мен бекіту робот сенімді болғанша қайталанады.",
+        "en": "Testing and reinforcing repeat until the robot is reliable."
+      },
+      "skill": "structures"
+    },
+    {
+      "id": "cures",
+      "type": "quiz",
+      "kind": "match",
+      "question": {
+        "ru": "Подбери решение",
+        "kk": "Шешімді таңда",
+        "en": "Match the fix"
+      },
+      "pairs": [
+        {
+          "left": {
+            "ru": "Бампер отваливается от ударов",
+            "kk": "Бампер соққыдан түсіп қалады",
+            "en": "The bumper falls off from hits"
+          },
+          "right": {
+            "ru": "Закрепить его в нескольких точках",
+            "kk": "Оны бірнеше нүктеде бекіту",
+            "en": "Mount it at several points"
+          }
+        },
+        {
+          "left": {
+            "ru": "Колесо болтается на оси",
+            "kk": "Дөңгелек осьте солқылдайды",
+            "en": "The wheel wobbles on its axle"
+          },
+          "right": {
+            "ru": "Добавить втулку и опору оси с двух сторон",
+            "kk": "Төлке және осьтің екі жағынан тірек қосу",
+            "en": "Add a bush and support the axle on both sides"
+          }
+        },
+        {
+          "left": {
+            "ru": "Рама перекашивается",
+            "kk": "Жақтау қисаяды",
+            "en": "The frame skews"
+          },
+          "right": {
+            "ru": "Добавить диагональ",
+            "kk": "Диагональ қосу",
+            "en": "Add a diagonal"
+          }
+        }
+      ],
+      "explanation": {
+        "ru": "Ось лучше держать с двух сторон — тогда колесо не гуляет.",
+        "kk": "Осьті екі жағынан ұстаған жақсы — сонда дөңгелек қозғалмайды.",
+        "en": "Support an axle on both sides — then the wheel does not wander."
+      },
+      "skill": "structures"
+    }
+  ]
+}

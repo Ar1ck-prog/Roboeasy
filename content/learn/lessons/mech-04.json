@@ -1,0 +1,110 @@
+{
+  "id": "mech-04",
+  "track": "mechanisms",
+  "unit": "mech-lift",
+  "minutes": 8,
+  "skills": [
+    "mechanisms",
+    "gears"
+  ],
+  "title": {
+    "ru": "Рычаг и шестерни",
+    "kk": "Иін және тісті доңғалақтар",
+    "en": "Levers and gears"
+  },
+  "goal": {
+    "ru": "Сегодня ты узнаешь, как мотору поднять тяжёлое.",
+    "kk": "Бүгін сен моторға ауырды қалай көтеруге болатынын білесің.",
+    "en": "Today you will learn how a motor can lift something heavy."
+  },
+  "summary": {
+    "ru": "Теперь ты понимаешь рычаг и знаешь, как передачи помогают подъёмнику.",
+    "kk": "Енді сен иінді түсінесің және берілістер көтергішке қалай көмектесетінін білесің.",
+    "en": "Now you understand levers and how gearing helps a lift."
+  },
+  "steps": [
+    {
+      "id": "lever",
+      "type": "theory",
+      "title": {
+        "ru": "Длинное плечо — сила",
+        "kk": "Ұзын иін — күш",
+        "en": "A long arm means strength"
+      },
+      "body": {
+        "ru": "**Рычаг** — балка на опоре. Чем дальше груз от опоры, тем тяжелее его поднять. Чем ближе — тем легче, но поднимется он невысоко.\n\nЭто как качели: лёгкий ребёнок далеко от центра перевешивает взрослого у центра.\n\nВ подъёмниках часто вместе с рычагом ставят **понижающую передачу**: мотор крутится быстро, а рука поднимается медленно, но сильно.",
+        "kk": "**Иін** — тіректегі арқалық. Жүк тіректен неғұрлым алыс болса, оны көтеру соғұрлым ауыр. Жақын болса — жеңіл, бірақ ол биікке көтерілмейді.\n\nБұл әткеншек сияқты: ортадан алыстағы жеңіл бала ортаға жақын үлкен адамнан басым түседі.\n\nКөтергіштерде иінмен бірге жиі **төмендететін беріліс** қояды: мотор тез айналады, ал қол баяу, бірақ күшті көтеріледі.",
+        "en": "A **lever** is a beam on a fulcrum. The further the load from the fulcrum, the harder it is to lift. The closer, the easier — but it rises less.\n\nLike a seesaw: a light child far from the centre outweighs an adult near the centre.\n\nLifts often pair a lever with a **reduction gear**: the motor spins fast, the arm rises slowly but strongly."
+      },
+      "illustration": "r-lever"
+    },
+    {
+      "id": "lift-load",
+      "type": "widget",
+      "widget": "lever",
+      "title": {
+        "ru": "Подними груз",
+        "kk": "Жүкті көтер",
+        "en": "Lift the load"
+      },
+      "task": {
+        "ru": "Груз в 3 раза тяжелее, чем может поднять мотор на том же плече. Передвинь опору так, чтобы мотор поднял груз, и при этом груз поднялся достаточно высоко.",
+        "kk": "Жүк мотор сол иінде көтере алатыннан 3 есе ауыр. Мотор жүкті көтеретіндей, әрі жүк жеткілікті биікке көтерілетіндей тіректі жылжыт.",
+        "en": "The load is 3 times heavier than the motor can lift on an equal arm. Move the fulcrum so the motor lifts it and the load still rises high enough."
+      }
+    },
+    {
+      "id": "lift-gears",
+      "type": "widget",
+      "widget": "gears",
+      "title": {
+        "ru": "Передача для подъёмника",
+        "kk": "Көтергішке арналған беріліс",
+        "en": "Gearing for the lift"
+      },
+      "task": {
+        "ru": "Подъёмнику нужна сила: сделай выход **в 3 раза медленнее** мотора.",
+        "kk": "Көтергішке күш керек: шығысты мотордан **3 есе баяу** ет.",
+        "en": "The lift needs strength: make the output **3 times slower** than the motor."
+      },
+      "goal": "slower",
+      "ratio": 3
+    },
+    {
+      "id": "trade",
+      "type": "quiz",
+      "kind": "choice",
+      "question": {
+        "ru": "Опору придвинули к грузу. Что изменилось?",
+        "kk": "Тіректі жүкке жақындатты. Не өзгерді?",
+        "en": "The fulcrum moved closer to the load. What changed?"
+      },
+      "options": [
+        {
+          "ru": "Поднять легче, но груз поднимается ниже",
+          "kk": "Көтеру жеңілірек, бірақ жүк төменірек көтеріледі",
+          "en": "Easier to lift, but the load rises less"
+        },
+        {
+          "ru": "Поднять труднее и выше",
+          "kk": "Көтеру қиынырақ және биігірек",
+          "en": "Harder to lift, and higher"
+        },
+        {
+          "ru": "Ничего",
+          "kk": "Ештеңе",
+          "en": "Nothing"
+        }
+      ],
+      "correct": [
+        0
+      ],
+      "explanation": {
+        "ru": "В механике всегда обмен: сила против расстояния.",
+        "kk": "Механикада әрқашан алмасу бар: күш қашықтыққа қарсы.",
+        "en": "Mechanics is always a trade: force against distance."
+      },
+      "skill": "mechanisms"
+    }
+  ]
+}

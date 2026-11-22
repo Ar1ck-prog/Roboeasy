@@ -1,0 +1,154 @@
+{
+  "id": "build-01",
+  "track": "build",
+  "unit": "build-parts",
+  "minutes": 6,
+  "skills": [
+    "parts"
+  ],
+  "title": {
+    "ru": "Балки и рамы",
+    "kk": "Арқалықтар және жақтаулар",
+    "en": "Beams and frames"
+  },
+  "goal": {
+    "ru": "Сегодня ты познакомишься с главными деталями любой конструкции.",
+    "kk": "Бүгін сен кез келген құрылымның басты бөлшектерімен танысасың.",
+    "en": "Today you will meet the main parts of any build."
+  },
+  "summary": {
+    "ru": "Теперь ты знаешь, что такое балка, рама и как считать их длину.",
+    "kk": "Енді сен арқалық, жақтау деген не және олардың ұзындығын қалай санау керегін білесің.",
+    "en": "Now you know what beams and frames are and how to count their length."
+  },
+  "steps": [
+    {
+      "id": "beam",
+      "type": "theory",
+      "title": {
+        "ru": "Скелет робота",
+        "kk": "Роботтың қаңқасы",
+        "en": "The robot’s skeleton"
+      },
+      "body": {
+        "ru": "**Балка** — длинная деталь с рядом круглых отверстий. Длину балки считают в отверстиях: балка 7, балка 9, балка 15.\n\nОтверстия стоят через одинаковое расстояние — **8 мм**. Поэтому балка 9 длиной около 72 мм.\n\n**Рама** — замкнутая деталь, похожая на рамку для фото. Она прочная и помогает собрать жёсткую основу робота.",
+        "kk": "**Арқалық** — бір қатар дөңгелек тесігі бар ұзын бөлшек. Арқалықтың ұзындығын тесіктермен санайды: 7 арқалық, 9 арқалық, 15 арқалық.\n\nТесіктер бірдей қашықтықта — **8 мм** сайын тұрады. Сондықтан 9 арқалықтың ұзындығы шамамен 72 мм.\n\n**Жақтау** — фотоға арналған рамкаға ұқсас тұйық бөлшек. Ол берік және роботтың қатты негізін құрастыруға көмектеседі.",
+        "en": "A **beam** is a long part with a row of round holes. Beam length is counted in holes: beam 7, beam 9, beam 15.\n\nThe holes are evenly spaced — **8 mm** apart. So a beam 9 is about 72 mm long.\n\nA **frame** is a closed part, like a picture frame. It is strong and helps build a rigid base for the robot."
+      },
+      "illustration": "r-beams"
+    },
+    {
+      "id": "length",
+      "type": "quiz",
+      "kind": "number",
+      "question": {
+        "ru": "Отверстия стоят через 8 мм. Какой длины балка на 11 отверстий?",
+        "kk": "Тесіктер 8 мм сайын тұрады. 11 тесікті арқалықтың ұзындығы қандай?",
+        "en": "Holes are 8 mm apart. How long is a beam with 11 holes?"
+      },
+      "answer": 88,
+      "tolerance": 0,
+      "explanation": {
+        "ru": "11 × 8 = 88 мм.",
+        "kk": "11 × 8 = 88 мм.",
+        "en": "11 × 8 = 88 mm."
+      },
+      "unit": {
+        "ru": "мм",
+        "kk": "мм",
+        "en": "mm"
+      },
+      "skill": "parts"
+    },
+    {
+      "id": "which",
+      "type": "quiz",
+      "kind": "match",
+      "question": {
+        "ru": "Какая деталь подойдёт?",
+        "kk": "Қай бөлшек сай келеді?",
+        "en": "Which part fits?"
+      },
+      "pairs": [
+        {
+          "left": {
+            "ru": "Длинная рука робота",
+            "kk": "Роботтың ұзын қолы",
+            "en": "A long robot arm"
+          },
+          "right": {
+            "ru": "Длинная балка",
+            "kk": "Ұзын арқалық",
+            "en": "A long beam"
+          }
+        },
+        {
+          "left": {
+            "ru": "Жёсткая основа под хаб",
+            "kk": "Хаб астындағы қатты негіз",
+            "en": "A rigid base under the hub"
+          },
+          "right": {
+            "ru": "Рама",
+            "kk": "Жақтау",
+            "en": "A frame"
+          }
+        },
+        {
+          "left": {
+            "ru": "Короткая перемычка",
+            "kk": "Қысқа көпірше",
+            "en": "A short link"
+          },
+          "right": {
+            "ru": "Короткая балка",
+            "kk": "Қысқа арқалық",
+            "en": "A short beam"
+          }
+        }
+      ],
+      "explanation": {
+        "ru": "Балки — для длины, рамы — для жёсткости.",
+        "kk": "Арқалықтар — ұзындық үшін, жақтаулар — қаттылық үшін.",
+        "en": "Beams give length, frames give rigidity."
+      },
+      "skill": "parts"
+    },
+    {
+      "id": "holes",
+      "type": "quiz",
+      "kind": "choice",
+      "question": {
+        "ru": "Зачем у балок отверстия на одинаковом расстоянии?",
+        "kk": "Арқалықтардың тесіктері неге бірдей қашықтықта?",
+        "en": "Why are beam holes evenly spaced?"
+      },
+      "options": [
+        {
+          "ru": "Чтобы детали совпадали и соединялись в любом месте",
+          "kk": "Бөлшектер сәйкес келіп, кез келген жерде қосылуы үшін",
+          "en": "So parts line up and connect anywhere"
+        },
+        {
+          "ru": "Чтобы балка была легче",
+          "kk": "Арқалық жеңіл болуы үшін",
+          "en": "To make the beam lighter"
+        },
+        {
+          "ru": "Для красоты",
+          "kk": "Әдемілік үшін",
+          "en": "For looks"
+        }
+      ],
+      "correct": [
+        0
+      ],
+      "explanation": {
+        "ru": "Одинаковый шаг — главный секрет конструктора: любые детали стыкуются друг с другом.",
+        "kk": "Бірдей қадам — конструктордың басты құпиясы: кез келген бөлшектер бір-бірімен түйіседі.",
+        "en": "An even pitch is the kit’s main secret: any parts fit together."
+      },
+      "skill": "parts"
+    }
+  ]
+}

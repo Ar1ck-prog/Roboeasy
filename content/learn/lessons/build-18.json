@@ -1,0 +1,237 @@
+{
+  "id": "build-18",
+  "track": "build",
+  "unit": "build-wheels",
+  "minutes": 12,
+  "skills": [
+    "mechanisms",
+    "motion"
+  ],
+  "title": {
+    "ru": "Итоговый проект",
+    "kk": "Қорытынды жоба",
+    "en": "Final project"
+  },
+  "goal": {
+    "ru": "Сегодня ты завершишь трек «Сборка» испытанием своей тележки.",
+    "kk": "Бүгін сен «Құрастыру» тректі арбашаңды сынаумен аяқтайсың.",
+    "en": "Today you will finish the Build track by testing your cart."
+  },
+  "summary": {
+    "ru": "Трек «Сборка» пройден! Ты знаешь детали, умеешь строить прочно и понимаешь передачи и колёса.",
+    "kk": "«Құрастыру» тректі өттің! Сен бөлшектерді білесің, берік құрастыра аласың және берілістер мен дөңгелектерді түсінесің.",
+    "en": "The Build track is done! You know the parts, build strong and understand gears and wheels."
+  },
+  "steps": [
+    {
+      "id": "brief",
+      "type": "theory",
+      "title": {
+        "ru": "Испытание «Склад»",
+        "kk": "«Қойма» сынағы",
+        "en": "The “Warehouse” trial"
+      },
+      "body": {
+        "ru": "Твоя тележка — робот на складе. Ему нужно объехать стеллаж квадратом и вернуться на базу.\n\nСначала пройди маршрут в симуляторе, потом — на настоящем роботе. Сравни результаты: где робот ошибается сильнее и почему?",
+        "kk": "Сенің арбашаң — қоймадағы робот. Оған стеллажды шаршы бойымен айналып, базаға оралу керек.\n\nАлдымен маршрутты симуляторда, содан кейін — нағыз роботта өт. Нәтижелерді салыстыр: робот қай жерде көбірек қателеседі және неге?",
+        "en": "Your cart is a warehouse robot. It must drive around a rack in a square and return to base.\n\nRun the route in the simulator first, then on the real robot. Compare: where does the robot miss more, and why?"
+      },
+      "illustration": "r-chassis"
+    },
+    {
+      "id": "warehouse",
+      "type": "project",
+      "title": {
+        "ru": "Вокруг стеллажа",
+        "kk": "Стеллажды айнала",
+        "en": "Around the rack"
+      },
+      "task": {
+        "ru": "Объедь стеллаж по квадрату 40 см (налево), пройди все углы и вернись на базу. Стеллаж не задевай.",
+        "kk": "Стеллажды 40 см шаршы бойымен айналып өт (солға), барлық бұрыштардан өтіп, базаға орал. Стеллажға тиме.",
+        "en": "Drive around the rack in a 40 cm square (turning left), pass every corner and return to base. Do not touch the rack."
+      },
+      "field": {
+        "width": 1100,
+        "height": 1000,
+        "start": {
+          "x": 250,
+          "y": 250,
+          "heading": 0
+        },
+        "border": true,
+        "zones": [
+          {
+            "id": "base",
+            "x": 150,
+            "y": 150,
+            "w": 200,
+            "h": 200,
+            "kind": "target",
+            "label": {
+              "ru": "База",
+              "kk": "База",
+              "en": "Base"
+            }
+          }
+        ],
+        "points": [
+          {
+            "id": "c1",
+            "x": 650,
+            "y": 250,
+            "r": 60,
+            "label": {
+              "ru": "Угол 1",
+              "kk": "1-бұрыш",
+              "en": "Corner 1"
+            }
+          },
+          {
+            "id": "c2",
+            "x": 650,
+            "y": 650,
+            "r": 60,
+            "label": {
+              "ru": "Угол 2",
+              "kk": "2-бұрыш",
+              "en": "Corner 2"
+            }
+          },
+          {
+            "id": "c3",
+            "x": 250,
+            "y": 650,
+            "r": 60,
+            "label": {
+              "ru": "Угол 3",
+              "kk": "3-бұрыш",
+              "en": "Corner 3"
+            }
+          }
+        ],
+        "walls": [
+          {
+            "x": 380,
+            "y": 380,
+            "w": 140,
+            "h": 140
+          }
+        ],
+        "lines": []
+      },
+      "toolbox": [
+        "move",
+        "turn",
+        "repeat"
+      ],
+      "start": [],
+      "checks": [
+        {
+          "type": "passPoints",
+          "points": [
+            "c1",
+            "c2",
+            "c3"
+          ],
+          "ordered": true
+        },
+        {
+          "type": "finishInZone",
+          "zone": "base"
+        },
+        {
+          "type": "noCollision"
+        }
+      ],
+      "hints": [
+        {
+          "ru": "Это квадрат — значит, цикл.",
+          "kk": "Бұл шаршы — демек, цикл.",
+          "en": "It is a square — so a loop."
+        },
+        {
+          "ru": "Сторона 40 см, поворот налево 90°.",
+          "kk": "Қабырға 40 см, солға 90° бұрылу.",
+          "en": "Side 40 cm, turn left 90°."
+        },
+        {
+          "ru": "Повторить 4 раза: вперёд 40, налево 90°.",
+          "kk": "4 рет қайталау: 40 алға, солға 90°.",
+          "en": "Repeat 4 times: forward 40, left 90°."
+        }
+      ],
+      "reference": [
+        {
+          "op": "repeat",
+          "times": 4,
+          "steps": [
+            {
+              "op": "move",
+              "direction": "forward",
+              "value": 40,
+              "unit": "cm"
+            },
+            {
+              "op": "turn",
+              "direction": "left",
+              "degrees": 90
+            }
+          ]
+        }
+      ],
+      "skill": "motion"
+    },
+    {
+      "id": "real-run",
+      "type": "real_robot",
+      "title": {
+        "ru": "Испытание на столе",
+        "kk": "Үстелдегі сынақ",
+        "en": "The table trial"
+      },
+      "task": {
+        "ru": "Поставь коробку вместо стеллажа и запусти ту же программу на своей тележке. Запусти 3 раза и запиши, насколько робот промахнулся мимо базы.",
+        "kk": "Стеллаждың орнына қорап қойып, сол бағдарламаны арбашаңда іске қос. 3 рет іске қосып, робот базадан қаншалықты жаңылғанын жаз.",
+        "en": "Put a box in place of the rack and run the same program on your cart. Run it 3 times and note how far the robot misses the base."
+      },
+      "checklist": [
+        {
+          "ru": "Робот объехал коробку и не задел её",
+          "kk": "Робот қорапты айналып өтіп, оған тимеді",
+          "en": "The robot drove around the box without touching it"
+        },
+        {
+          "ru": "Сделал 3 запуска",
+          "kk": "3 рет іске қостым",
+          "en": "I did 3 runs"
+        },
+        {
+          "ru": "Записал промах в сантиметрах",
+          "kk": "Жаңылысты сантиметрмен жаздым",
+          "en": "I noted the miss in centimetres"
+        }
+      ],
+      "program": [
+        {
+          "op": "repeat",
+          "times": 4,
+          "steps": [
+            {
+              "op": "move",
+              "direction": "forward",
+              "value": 40,
+              "unit": "cm"
+            },
+            {
+              "op": "turn",
+              "direction": "left",
+              "degrees": 90
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "kit": true
+}

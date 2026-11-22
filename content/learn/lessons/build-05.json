@@ -1,0 +1,212 @@
+{
+  "id": "build-05",
+  "track": "build",
+  "unit": "build-parts",
+  "minutes": 7,
+  "skills": [
+    "parts"
+  ],
+  "title": {
+    "ru": "Найди деталь",
+    "kk": "Бөлшекті тап",
+    "en": "Find the part"
+  },
+  "goal": {
+    "ru": "Сегодня ты проверишь, как хорошо знаешь детали конструктора.",
+    "kk": "Бүгін сен конструктор бөлшектерін қаншалықты жақсы білетініңді тексересің.",
+    "en": "Today you will test how well you know the parts."
+  },
+  "summary": {
+    "ru": "Теперь ты уверенно называешь детали и знаешь, для чего каждая.",
+    "kk": "Енді сен бөлшектерді сенімді атайсың және әрқайсысы не үшін екенін білесің.",
+    "en": "Now you confidently name parts and know what each is for."
+  },
+  "steps": [
+    {
+      "id": "quiz",
+      "type": "theory",
+      "title": {
+        "ru": "Детективная игра",
+        "kk": "Детектив ойыны",
+        "en": "A detective game"
+      },
+      "body": {
+        "ru": "Инженер, который знает детали, собирает быстрее и реже ошибается. В этом уроке — загадки про детали.\n\nВспомни: **балки** и **рамы** — скелет, **штифты** соединяют, **оси** передают вращение, **втулки** держат оси, **соединители** дают углы, **колёса** везут.",
+        "kk": "Бөлшектерді білетін инженер тезірек құрастырады және сирек қателеседі. Бұл сабақта — бөлшектер туралы жұмбақтар.\n\nЕсіңе түсір: **арқалықтар** мен **жақтаулар** — қаңқа, **штифттер** қосады, **осьтер** айналуды береді, **төлкелер** осьтерді ұстайды, **қосқыштар** бұрыш береді, **дөңгелектер** тасиды.",
+        "en": "An engineer who knows the parts builds faster and makes fewer mistakes. This lesson is a set of part riddles.\n\nRemember: **beams** and **frames** are the skeleton, **pins** join, **axles** pass rotation, **bushes** hold axles, **connectors** give angles, **wheels** carry."
+      },
+      "illustration": "r-beams"
+    },
+    {
+      "id": "riddle1",
+      "type": "quiz",
+      "kind": "choice",
+      "question": {
+        "ru": "«У меня крест в сечении, я передаю вращение». Кто я?",
+        "kk": "«Менің қимам айқыш, мен айналуды беремін». Мен кіммін?",
+        "en": "“My section is a cross; I pass rotation.” What am I?"
+      },
+      "options": [
+        {
+          "ru": "Ось",
+          "kk": "Ось",
+          "en": "Axle"
+        },
+        {
+          "ru": "Штифт",
+          "kk": "Штифт",
+          "en": "Pin"
+        },
+        {
+          "ru": "Балка",
+          "kk": "Арқалық",
+          "en": "Beam"
+        }
+      ],
+      "correct": [
+        0
+      ],
+      "explanation": {
+        "ru": "Крест — примета оси.",
+        "kk": "Айқыш — осьтің белгісі.",
+        "en": "The cross is the sign of an axle."
+      },
+      "skill": "parts"
+    },
+    {
+      "id": "riddle2",
+      "type": "quiz",
+      "kind": "choice",
+      "question": {
+        "ru": "«Я замкнутый, как рамка для фото, и очень жёсткий». Кто я?",
+        "kk": "«Мен фотоға арналған рамка сияқты тұйықпын және өте қаттымын». Мен кіммін?",
+        "en": "“I am closed like a picture frame and very rigid.” What am I?"
+      },
+      "options": [
+        {
+          "ru": "Рама",
+          "kk": "Жақтау",
+          "en": "Frame"
+        },
+        {
+          "ru": "Втулка",
+          "kk": "Төлке",
+          "en": "Bush"
+        },
+        {
+          "ru": "Шина",
+          "kk": "Шина",
+          "en": "Tyre"
+        }
+      ],
+      "correct": [
+        0
+      ],
+      "explanation": {
+        "ru": "Рама — замкнутая и жёсткая.",
+        "kk": "Жақтау — тұйық және қатты.",
+        "en": "A frame is closed and rigid."
+      },
+      "skill": "parts"
+    },
+    {
+      "id": "kit",
+      "type": "quiz",
+      "kind": "match",
+      "question": {
+        "ru": "Собери пары: деталь — её работа",
+        "kk": "Жұптарды құр: бөлшек — оның жұмысы",
+        "en": "Pair each part with its job"
+      },
+      "pairs": [
+        {
+          "left": {
+            "ru": "Втулка",
+            "kk": "Төлке",
+            "en": "Bush"
+          },
+          "right": {
+            "ru": "Держит ось на месте",
+            "kk": "Осьті орнында ұстайды",
+            "en": "Keeps an axle in place"
+          }
+        },
+        {
+          "left": {
+            "ru": "Шина",
+            "kk": "Шина",
+            "en": "Tyre"
+          },
+          "right": {
+            "ru": "Цепляется за поле",
+            "kk": "Алаңға ілінеді",
+            "en": "Grips the field"
+          }
+        },
+        {
+          "left": {
+            "ru": "Штифт",
+            "kk": "Штифт",
+            "en": "Pin"
+          },
+          "right": {
+            "ru": "Соединяет балки",
+            "kk": "Арқалықтарды қосады",
+            "en": "Joins beams"
+          }
+        },
+        {
+          "left": {
+            "ru": "Соединитель",
+            "kk": "Қосқыш",
+            "en": "Connector"
+          },
+          "right": {
+            "ru": "Даёт угол",
+            "kk": "Бұрыш береді",
+            "en": "Gives an angle"
+          }
+        }
+      ],
+      "explanation": {
+        "ru": "Отлично! С такими знаниями можно браться за прочные конструкции.",
+        "kk": "Тамаша! Мұндай біліммен берік құрылымдарға кірісуге болады.",
+        "en": "Great! With this you are ready for strong builds."
+      },
+      "skill": "parts"
+    },
+    {
+      "id": "build-order",
+      "type": "quiz",
+      "kind": "order",
+      "question": {
+        "ru": "В каком порядке собирают колесо на оси у мотора?",
+        "kk": "Мотордағы осьте дөңгелекті қандай ретпен құрастырады?",
+        "en": "In what order do you mount a wheel on a motor axle?"
+      },
+      "items": [
+        {
+          "ru": "Вставить ось в мотор",
+          "kk": "Осьті моторға салу",
+          "en": "Push the axle into the motor"
+        },
+        {
+          "ru": "Надеть колесо на ось",
+          "kk": "Дөңгелекті оське кигізу",
+          "en": "Slide the wheel onto the axle"
+        },
+        {
+          "ru": "Надеть втулку снаружи",
+          "kk": "Сыртынан төлке кигізу",
+          "en": "Add a bush on the outside"
+        }
+      ],
+      "explanation": {
+        "ru": "Втулка — последняя: она запирает колесо на оси.",
+        "kk": "Төлке — соңғы: ол дөңгелекті осьте бекітеді.",
+        "en": "The bush goes last: it locks the wheel on the axle."
+      },
+      "skill": "parts"
+    }
+  ]
+}

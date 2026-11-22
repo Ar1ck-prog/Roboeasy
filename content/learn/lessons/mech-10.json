@@ -1,0 +1,139 @@
+{
+  "id": "mech-10",
+  "track": "mechanisms",
+  "unit": "mech-design",
+  "minutes": 7,
+  "skills": [
+    "mechanisms",
+    "structures"
+  ],
+  "title": {
+    "ru": "Быстрая смена насадок",
+    "kk": "Саптамаларды жылдам ауыстыру",
+    "en": "Quick attachment swaps"
+  },
+  "goal": {
+    "ru": "Сегодня ты узнаешь, как менять насадки за секунды.",
+    "kk": "Бүгін сен саптамаларды секундтарда қалай ауыстыруды білесің.",
+    "en": "Today you will learn to swap attachments in seconds."
+  },
+  "summary": {
+    "ru": "Теперь ты знаешь, как устроить робота, чтобы насадки менялись быстро и надёжно.",
+    "kk": "Енді сен саптамалар тез әрі сенімді ауысатындай роботты қалай жасау керегін білесің.",
+    "en": "Now you know how to build a robot so attachments swap fast and reliably."
+  },
+  "steps": [
+    {
+      "id": "swap",
+      "type": "theory",
+      "title": {
+        "ru": "Секунды решают",
+        "kk": "Секундтар шешеді",
+        "en": "Seconds matter"
+      },
+      "body": {
+        "ru": "В матче время идёт, пока ты меняешь насадку. Поэтому их делают **быстросъёмными**:\n\n1. **Одно место крепления** для всех насадок — например, два штифта или ось спереди.\n2. Насадка **садится сама**: направляющие не дают поставить её криво.\n3. Мотор на роботе, а насадка просто надевается на его ось — провода переключать не надо.\n\nПотренируйся: смена должна занимать несколько секунд.",
+        "kk": "Матчта саптаманы ауыстырып жатқанда уақыт өтеді. Сондықтан оларды **тез алынатын** етеді:\n\n1. Барлық саптамаға **бір бекіту орны** — мысалы, алдындағы екі штифт немесе ось.\n2. Саптама **өзі отырады**: бағыттағыштар оны қисық қоюға жол бермейді.\n3. Мотор роботта, ал саптама жай оның осіне кигізіледі — сымдарды ауыстырудың қажеті жоқ.\n\nЖаттық: ауыстыру бірнеше секунд алуы керек.",
+        "en": "In a match the clock runs while you swap attachments. So they are made **quick-release**:\n\n1. **One mounting point** for all attachments — say, two pins or an axle at the front.\n2. The attachment **seats itself**: guides stop it going on crooked.\n3. The motor stays on the robot and the attachment just slides onto its axle — no cables to swap.\n\nPractise: a swap should take a few seconds."
+      },
+      "illustration": "r-swap"
+    },
+    {
+      "id": "best",
+      "type": "quiz",
+      "kind": "choice",
+      "question": {
+        "ru": "Какое крепление насадки лучше для матча?",
+        "kk": "Матч үшін саптаманың қай бекітуі жақсы?",
+        "en": "Which mount is best for a match?"
+      },
+      "options": [
+        {
+          "ru": "Надевается на ось мотора по направляющим",
+          "kk": "Бағыттағыштар бойынша мотор осіне кигізіледі",
+          "en": "Slides onto the motor axle along guides"
+        },
+        {
+          "ru": "Прикручивается восемью штифтами",
+          "kk": "Сегіз штифтпен бекітіледі",
+          "en": "Fastened with eight pins"
+        },
+        {
+          "ru": "Со своим мотором и проводом",
+          "kk": "Өз моторы мен сымымен",
+          "en": "With its own motor and cable"
+        }
+      ],
+      "correct": [
+        0
+      ],
+      "explanation": {
+        "ru": "Меньше движений при смене — меньше потерянных секунд и ошибок.",
+        "kk": "Ауыстырғанда қимыл неғұрлым аз болса, жоғалған секундтар мен қателер соғұрлым аз.",
+        "en": "Fewer movements in a swap — fewer lost seconds and mistakes."
+      },
+      "skill": "mechanisms"
+    },
+    {
+      "id": "time",
+      "type": "quiz",
+      "kind": "number",
+      "question": {
+        "ru": "За матч 4 смены насадок по 10 секунд. Сколько секунд уходит на смены?",
+        "kk": "Матчта 10 секундтан саптаманы 4 рет ауыстыру. Ауыстыруларға неше секунд кетеді?",
+        "en": "In a match, 4 swaps of 10 seconds each. How many seconds go on swaps?"
+      },
+      "answer": 40,
+      "tolerance": 0,
+      "explanation": {
+        "ru": "4 × 10 = 40 секунд — больше четверти матча в 2:30!",
+        "kk": "4 × 10 = 40 секунд — 2:30 матчтың төрттен бірінен көп!",
+        "en": "4 × 10 = 40 seconds — over a quarter of a 2:30 match!"
+      },
+      "unit": {
+        "ru": "с",
+        "kk": "с",
+        "en": "s"
+      },
+      "skill": "mechanisms"
+    },
+    {
+      "id": "practice",
+      "type": "quiz",
+      "kind": "order",
+      "question": {
+        "ru": "Как тренировать смену насадок?",
+        "kk": "Саптамаларды ауыстыруды қалай жаттықтыру керек?",
+        "en": "How do you practise attachment swaps?"
+      },
+      "items": [
+        {
+          "ru": "Разложить насадки в порядке заездов",
+          "kk": "Саптамаларды жүрістер ретімен орналастыру",
+          "en": "Lay out attachments in run order"
+        },
+        {
+          "ru": "Снять старую насадку",
+          "kk": "Ескі саптаманы алу",
+          "en": "Take off the old one"
+        },
+        {
+          "ru": "Надеть новую по направляющим",
+          "kk": "Жаңасын бағыттағыштар бойынша кигізу",
+          "en": "Fit the new one along the guides"
+        },
+        {
+          "ru": "Проверить, что она держится",
+          "kk": "Ұсталып тұрғанын тексеру",
+          "en": "Check it holds"
+        }
+      ],
+      "explanation": {
+        "ru": "Порядок на столе экономит секунды не меньше, чем удобное крепление.",
+        "kk": "Үстелдегі тәртіп ыңғайлы бекітуден кем емес секундтарды үнемдейді.",
+        "en": "A tidy table saves as many seconds as a good mount."
+      },
+      "skill": "mechanisms"
+    }
+  ]
+}

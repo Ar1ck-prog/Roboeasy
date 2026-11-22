@@ -1,0 +1,207 @@
+{
+  "id": "mech-08",
+  "track": "mechanisms",
+  "unit": "mech-pusher",
+  "minutes": 8,
+  "skills": [
+    "mechanisms"
+  ],
+  "title": {
+    "ru": "Толкни в зону",
+    "kk": "Аймаққа итер",
+    "en": "Push it into the zone"
+  },
+  "goal": {
+    "ru": "Сегодня робот выдвинет толкатель и затолкнёт предмет в зону.",
+    "kk": "Бүгін робот итергішті шығарып, затты аймаққа итереді.",
+    "en": "Today the robot will extend its pusher and shove an object into a zone."
+  },
+  "summary": {
+    "ru": "Теперь ты умеешь управлять толкателем на моторе.",
+    "kk": "Енді сен мотордағы итергішті басқара аласың.",
+    "en": "Now you can drive a motorised pusher."
+  },
+  "steps": [
+    {
+      "id": "extend",
+      "type": "theory",
+      "title": {
+        "ru": "Выдвижной толкатель",
+        "kk": "Шығарылмалы итергіш",
+        "en": "An extending pusher"
+      },
+      "body": {
+        "ru": "Толкатель на моторе C выдвигается поворотом на 90° по часовой и убирается поворотом на 90° против.\n\nСначала робот подъезжает к предмету, потом толкатель выдвигается и сталкивает предмет, а потом обязательно убирается — иначе зацепится за что-нибудь на обратном пути.",
+        "kk": "C моторындағы итергіш сағат тілімен 90° бұрылғанда шығып, қарсы 90° бұрылғанда жиналады.\n\nАлдымен робот затқа жақындайды, содан кейін итергіш шығып, затты итеріп жібереді, содан кейін міндетті түрде жиналады — әйтпесе кері жолда бір нәрсеге ілінеді.",
+        "en": "The pusher on motor C extends with a 90° clockwise turn and retracts with 90° anticlockwise.\n\nFirst the robot drives up to the object, then the pusher extends and shoves it, then it must retract — or it will catch on something on the way back."
+      },
+      "illustration": "r-pusher"
+    },
+    {
+      "id": "shove",
+      "type": "code",
+      "title": {
+        "ru": "Затолкни ящик",
+        "kk": "Жәшікті итеріп кіргіз",
+        "en": "Shove the box"
+      },
+      "task": {
+        "ru": "Подъедь к ящику (50 см), выдвинь толкатель (C, 90° по часовой), убери его (C, 90° против часовой) и вернись на старт (назад 50 см).",
+        "kk": "Жәшікке жақында (50 см), итергішті шығар (C, сағат тілімен 90°), оны жина (C, сағат тіліне қарсы 90°) және стартқа орал (артқа 50 см).",
+        "en": "Drive to the box (50 cm), extend the pusher (C, 90° clockwise), retract it (C, 90° anticlockwise) and return to the start (back 50 cm)."
+      },
+      "field": {
+        "width": 1400,
+        "height": 400,
+        "start": {
+          "x": 200,
+          "y": 200,
+          "heading": 0
+        },
+        "border": true,
+        "zones": [
+          {
+            "id": "home",
+            "x": 100,
+            "y": 100,
+            "w": 200,
+            "h": 200,
+            "kind": "target",
+            "label": {
+              "ru": "Старт",
+              "kk": "Старт",
+              "en": "Start"
+            }
+          }
+        ],
+        "points": [
+          {
+            "id": "box",
+            "x": 700,
+            "y": 200,
+            "r": 50,
+            "label": {
+              "ru": "Ящик",
+              "kk": "Жәшік",
+              "en": "Box"
+            }
+          }
+        ],
+        "walls": [],
+        "lines": []
+      },
+      "toolbox": [
+        "move",
+        "motor_run",
+        "wait"
+      ],
+      "start": [],
+      "checks": [
+        {
+          "type": "passPoints",
+          "points": [
+            "box"
+          ],
+          "ordered": true
+        },
+        {
+          "type": "finishInZone",
+          "zone": "home"
+        },
+        {
+          "type": "usesOp",
+          "op": "motor_run",
+          "min": 2
+        },
+        {
+          "type": "motorTurned",
+          "port": "C",
+          "degrees": 0,
+          "tolerance": 5
+        }
+      ],
+      "hints": [
+        {
+          "ru": "Четыре блока: вперёд, мотор, мотор, назад.",
+          "kk": "Төрт блок: алға, мотор, мотор, артқа.",
+          "en": "Four blocks: forward, motor, motor, back."
+        },
+        {
+          "ru": "Не забудь убрать толкатель до возвращения.",
+          "kk": "Қайту алдында итергішті жинауды ұмытпа.",
+          "en": "Remember to retract the pusher before driving back."
+        },
+        {
+          "ru": "Вперёд 50; C по часовой 90; C против 90; назад 50.",
+          "kk": "50 алға; C сағат тілімен 90; C қарсы 90; 50 артқа.",
+          "en": "Forward 50; C clockwise 90; C anticlockwise 90; back 50."
+        }
+      ],
+      "reference": [
+        {
+          "op": "move",
+          "direction": "forward",
+          "value": 50,
+          "unit": "cm"
+        },
+        {
+          "op": "motor_run",
+          "port": "C",
+          "direction": "clockwise",
+          "value": 90,
+          "unit": "degrees"
+        },
+        {
+          "op": "motor_run",
+          "port": "C",
+          "direction": "counterclockwise",
+          "value": 90,
+          "unit": "degrees"
+        },
+        {
+          "op": "move",
+          "direction": "back",
+          "value": 50,
+          "unit": "cm"
+        }
+      ],
+      "skill": "mechanisms"
+    },
+    {
+      "id": "why-retract",
+      "type": "quiz",
+      "kind": "choice",
+      "question": {
+        "ru": "Что будет, если толкатель не убрать перед возвращением?",
+        "kk": "Қайту алдында итергішті жинамаса, не болады?",
+        "en": "What happens if the pusher is not retracted before driving back?"
+      },
+      "options": [
+        {
+          "ru": "Он может зацепиться за модели и сломать их или насадку",
+          "kk": "Ол модельдерге ілініп, оларды немесе саптаманы сындыруы мүмкін",
+          "en": "It may catch on models and break them or itself"
+        },
+        {
+          "ru": "Робот поедет быстрее",
+          "kk": "Робот жылдамырақ жүреді",
+          "en": "The robot goes faster"
+        },
+        {
+          "ru": "Ничего",
+          "kk": "Ештеңе",
+          "en": "Nothing"
+        }
+      ],
+      "correct": [
+        0
+      ],
+      "explanation": {
+        "ru": "Насадка в рабочем положении шире робота — её убирают, когда работа сделана.",
+        "kk": "Жұмыс күйіндегі саптама роботтан кең — жұмыс біткенде оны жинайды.",
+        "en": "An extended attachment is wider than the robot — retract it once the job is done."
+      },
+      "skill": "mechanisms"
+    }
+  ]
+}

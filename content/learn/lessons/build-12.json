@@ -1,0 +1,166 @@
+{
+  "id": "build-12",
+  "track": "build",
+  "unit": "build-gears",
+  "minutes": 8,
+  "skills": [
+    "gears"
+  ],
+  "title": {
+    "ru": "Куда и как быстро?",
+    "kk": "Қайда және қаншалықты жылдам?",
+    "en": "Which way and how fast?"
+  },
+  "goal": {
+    "ru": "Сегодня ты потренируешься предсказывать работу передач.",
+    "kk": "Бүгін сен берілістердің жұмысын болжауға жаттығасың.",
+    "en": "Today you will practise predicting how gear trains behave."
+  },
+  "summary": {
+    "ru": "Теперь ты легко скажешь, куда и с какой скоростью повернётся выход любой передачи.",
+    "kk": "Енді сен кез келген берілістің шығысы қай жаққа және қандай жылдамдықпен бұрылатынын оңай айтасың.",
+    "en": "Now you can easily tell which way and how fast any gear train’s output turns."
+  },
+  "steps": [
+    {
+      "id": "chain",
+      "type": "theory",
+      "title": {
+        "ru": "Цепочка передач",
+        "kk": "Берілістер тізбегі",
+        "en": "Gear chains"
+      },
+      "body": {
+        "ru": "Передачи можно ставить друг за другом. Тогда передаточные числа **перемножаются**.\n\n8 → 24, а на той же оси снова 8 → 24: 3 × 3 = 9. Выход в 9 раз медленнее!\n\nНаправление считай по шагам: каждая пара сцепленных шестерён меняет направление, а шестерни на одной оси крутятся вместе.",
+        "kk": "Берілістерді бірінен соң бірін қоюға болады. Сонда беріліс сандары **көбейтіледі**.\n\n8 → 24, ал сол оське тағы 8 → 24: 3 × 3 = 9. Шығыс 9 есе баяу!\n\nБағытты қадаммен сана: ілінген тісті доңғалақтардың әр жұбы бағытты өзгертеді, ал бір осьтегі тісті доңғалақтар бірге айналады.",
+        "en": "You can put gear stages one after another. Then the ratios **multiply**.\n\n8 → 24, and on the same axle again 8 → 24: 3 × 3 = 9. The output is 9 times slower!\n\nCount direction step by step: every meshing pair flips the direction, while gears on one axle turn together."
+      },
+      "illustration": "r-ratio"
+    },
+    {
+      "id": "compound",
+      "type": "quiz",
+      "kind": "number",
+      "question": {
+        "ru": "Две ступени подряд: 8 → 24 и 12 → 24. Во сколько раз медленнее выход?",
+        "kk": "Қатарынан екі саты: 8 → 24 және 12 → 24. Шығыс неше есе баяу?",
+        "en": "Two stages in a row: 8 → 24 and 12 → 24. How many times slower is the output?"
+      },
+      "answer": 6,
+      "tolerance": 0,
+      "explanation": {
+        "ru": "3 × 2 = 6.",
+        "kk": "3 × 2 = 6.",
+        "en": "3 × 2 = 6."
+      },
+      "skill": "gears"
+    },
+    {
+      "id": "four",
+      "type": "quiz",
+      "kind": "choice",
+      "question": {
+        "ru": "Четыре шестерни в ряд, первая крутится по часовой. Куда крутится последняя?",
+        "kk": "Қатарынан төрт тісті доңғалақ, біріншісі сағат тілімен айналады. Соңғысы қай жаққа айналады?",
+        "en": "Four gears in a row, the first turns clockwise. Which way does the last turn?"
+      },
+      "options": [
+        {
+          "ru": "Против часовой",
+          "kk": "Сағат тіліне қарсы",
+          "en": "Anticlockwise"
+        },
+        {
+          "ru": "По часовой",
+          "kk": "Сағат тілімен",
+          "en": "Clockwise"
+        },
+        {
+          "ru": "Не крутится",
+          "kk": "Айналмайды",
+          "en": "It does not turn"
+        }
+      ],
+      "correct": [
+        0
+      ],
+      "explanation": {
+        "ru": "по → против → по → против: у чётного числа шестерён последняя крутится против первой.",
+        "kk": "сағат тілімен → қарсы → сағат тілімен → қарсы: жұп санда соңғысы біріншісіне қарсы айналады.",
+        "en": "clockwise → anti → clockwise → anti: with an even number the last turns against the first."
+      },
+      "skill": "gears"
+    },
+    {
+      "id": "fast5",
+      "type": "widget",
+      "widget": "gears",
+      "title": {
+        "ru": "В 5 раз быстрее",
+        "kk": "5 есе жылдам",
+        "en": "Five times faster"
+      },
+      "task": {
+        "ru": "Найди пару шестерён, при которой выход крутится **в 5 раз быстрее** мотора.",
+        "kk": "Шығыс мотордан **5 есе жылдам** айналатын тісті доңғалақтар жұбын тап.",
+        "en": "Find a pair of gears that makes the output turn **5 times faster** than the motor."
+      },
+      "goal": "faster",
+      "ratio": 5
+    },
+    {
+      "id": "which",
+      "type": "quiz",
+      "kind": "match",
+      "question": {
+        "ru": "Подбери передачу к задаче",
+        "kk": "Берілісті тапсырмаға сәйкестендір",
+        "en": "Match the gearing to the task"
+      },
+      "pairs": [
+        {
+          "left": {
+            "ru": "Медленно поднять тяжёлую корзину",
+            "kk": "Ауыр себетті баяу көтеру",
+            "en": "Slowly lift a heavy basket"
+          },
+          "right": {
+            "ru": "Маленькая крутит большую",
+            "kk": "Кішкентай үлкенді айналдырады",
+            "en": "Small drives big"
+          }
+        },
+        {
+          "left": {
+            "ru": "Быстро раскрутить вертушку",
+            "kk": "Айналмалыны тез айналдыру",
+            "en": "Spin a spinner fast"
+          },
+          "right": {
+            "ru": "Большая крутит маленькую",
+            "kk": "Үлкен кішкентайды айналдырады",
+            "en": "Big drives small"
+          }
+        },
+        {
+          "left": {
+            "ru": "Держать груз без мотора",
+            "kk": "Жүкті моторсыз ұстау",
+            "en": "Hold a load without the motor"
+          },
+          "right": {
+            "ru": "Червяк",
+            "kk": "Бұрама",
+            "en": "Worm"
+          }
+        }
+      ],
+      "explanation": {
+        "ru": "Сила — понижающая передача, скорость — повышающая, удержание — червяк.",
+        "kk": "Күш — төмендететін беріліс, жылдамдық — арттыратын, ұстау — бұрама.",
+        "en": "Strength — reduce, speed — step up, holding — a worm."
+      },
+      "skill": "gears"
+    }
+  ]
+}

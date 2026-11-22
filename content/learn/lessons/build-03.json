@@ -1,0 +1,167 @@
+{
+  "id": "build-03",
+  "track": "build",
+  "unit": "build-parts",
+  "minutes": 6,
+  "skills": [
+    "parts"
+  ],
+  "title": {
+    "ru": "Втулки и соединители",
+    "kk": "Төлкелер және қосқыштар",
+    "en": "Bushes and connectors"
+  },
+  "goal": {
+    "ru": "Сегодня ты узнаешь детали, которые держат оси и соединяют их под углом.",
+    "kk": "Бүгін сен осьтерді ұстайтын және оларды бұрышпен қосатын бөлшектерді білесің.",
+    "en": "Today you will meet parts that hold axles and join them at angles."
+  },
+  "summary": {
+    "ru": "Теперь ты знаешь, зачем нужны втулки и соединители.",
+    "kk": "Енді сен төлкелер мен қосқыштар не үшін керек екенін білесің.",
+    "en": "Now you know what bushes and connectors are for."
+  },
+  "steps": [
+    {
+      "id": "bush",
+      "type": "theory",
+      "title": {
+        "ru": "Маленькие помощники",
+        "kk": "Кішкентай көмекшілер",
+        "en": "Little helpers"
+      },
+      "body": {
+        "ru": "**Втулка** надевается на ось и не даёт ей выскользнуть из балки или колеса. Без втулок колёса на ходу сползают с осей.\n\n**Соединители** скрепляют оси и балки под разными углами: прямо, под 90°, под другими углами. С ними можно строить не только плоские, но и объёмные конструкции.",
+        "kk": "**Төлке** оське кигізіледі және оның арқалықтан немесе дөңгелектен сырғып шығуына жол бермейді. Төлкесіз дөңгелектер жүріс кезінде осьтен сырғиды.\n\n**Қосқыштар** осьтер мен арқалықтарды әр түрлі бұрышпен бекітеді: тура, 90°-пен, басқа бұрыштармен. Олармен тек жазық емес, көлемді құрылымдар да жасауға болады.",
+        "en": "A **bush** slides onto an axle and stops it slipping out of a beam or wheel. Without bushes wheels creep off their axles while driving.\n\n**Connectors** join axles and beams at different angles: straight, at 90°, at other angles. With them you can build in 3D, not just flat."
+      },
+      "illustration": "r-connectors"
+    },
+    {
+      "id": "falls",
+      "type": "quiz",
+      "kind": "choice",
+      "question": {
+        "ru": "Колесо на ходу сползает с оси. Чего не хватает?",
+        "kk": "Дөңгелек жүріс кезінде осьтен сырғиды. Не жетіспейді?",
+        "en": "A wheel slides off its axle while driving. What is missing?"
+      },
+      "options": [
+        {
+          "ru": "Втулки снаружи колеса",
+          "kk": "Дөңгелектің сыртындағы төлке",
+          "en": "A bush outside the wheel"
+        },
+        {
+          "ru": "Ещё одного мотора",
+          "kk": "Тағы бір мотор",
+          "en": "Another motor"
+        },
+        {
+          "ru": "Датчика цвета",
+          "kk": "Түс датчигі",
+          "en": "A colour sensor"
+        }
+      ],
+      "correct": [
+        0
+      ],
+      "explanation": {
+        "ru": "Втулка — «стопор» на оси.",
+        "kk": "Төлке — осьтегі «тоқтатқыш».",
+        "en": "A bush is a stopper on the axle."
+      },
+      "skill": "parts"
+    },
+    {
+      "id": "parts",
+      "type": "quiz",
+      "kind": "match",
+      "question": {
+        "ru": "Подбери деталь",
+        "kk": "Бөлшекті таңда",
+        "en": "Match the part"
+      },
+      "pairs": [
+        {
+          "left": {
+            "ru": "Не дать оси выскользнуть",
+            "kk": "Осьтің сырғып шығуына жол бермеу",
+            "en": "Keep an axle from slipping out"
+          },
+          "right": {
+            "ru": "Втулка",
+            "kk": "Төлке",
+            "en": "Bush"
+          }
+        },
+        {
+          "left": {
+            "ru": "Соединить балки под прямым углом",
+            "kk": "Арқалықтарды тік бұрышпен қосу",
+            "en": "Join beams at a right angle"
+          },
+          "right": {
+            "ru": "Угловой соединитель",
+            "kk": "Бұрыштық қосқыш",
+            "en": "Angle connector"
+          }
+        },
+        {
+          "left": {
+            "ru": "Продлить ось",
+            "kk": "Осьті ұзарту",
+            "en": "Extend an axle"
+          },
+          "right": {
+            "ru": "Прямой соединитель осей",
+            "kk": "Осьтердің тура қосқышы",
+            "en": "Straight axle connector"
+          }
+        }
+      ],
+      "explanation": {
+        "ru": "Маленькие детали решают большие проблемы.",
+        "kk": "Кішкентай бөлшектер үлкен мәселелерді шешеді.",
+        "en": "Small parts solve big problems."
+      },
+      "skill": "parts"
+    },
+    {
+      "id": "3d",
+      "type": "quiz",
+      "kind": "choice",
+      "question": {
+        "ru": "Что дают угловые соединители?",
+        "kk": "Бұрыштық қосқыштар не береді?",
+        "en": "What do angle connectors give you?"
+      },
+      "options": [
+        {
+          "ru": "Возможность строить объёмные конструкции",
+          "kk": "Көлемді құрылымдар жасау мүмкіндігі",
+          "en": "The ability to build in 3D"
+        },
+        {
+          "ru": "Больше скорости",
+          "kk": "Көбірек жылдамдық",
+          "en": "More speed"
+        },
+        {
+          "ru": "Лишний вес и ничего больше",
+          "kk": "Артық салмақ және басқа ештеңе",
+          "en": "Extra weight and nothing else"
+        }
+      ],
+      "correct": [
+        0
+      ],
+      "explanation": {
+        "ru": "Плоская конструкция гнётся. Объёмная, собранная с углами, гораздо жёстче.",
+        "kk": "Жазық құрылым майысады. Бұрыштармен құрастырылған көлемді құрылым әлдеқайда қатты.",
+        "en": "A flat build bends. A 3D one built with angles is much stiffer."
+      },
+      "skill": "parts"
+    }
+  ]
+}

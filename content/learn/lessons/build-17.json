@@ -1,0 +1,160 @@
+{
+  "id": "build-17",
+  "track": "build",
+  "unit": "build-wheels",
+  "minutes": 8,
+  "skills": [
+    "mechanisms",
+    "motion"
+  ],
+  "title": {
+    "ru": "Диаметр колеса и расстояние",
+    "kk": "Дөңгелек диаметрі және қашықтық",
+    "en": "Wheel diameter and distance"
+  },
+  "goal": {
+    "ru": "Сегодня ты научишься точно задавать расстояние в оборотах колеса.",
+    "kk": "Бүгін сен қашықтықты дөңгелек айналымдарымен дәл беруді үйренесің.",
+    "en": "Today you will learn to set distance precisely in wheel rotations."
+  },
+  "summary": {
+    "ru": "Теперь ты переводишь обороты в сантиметры и обратно.",
+    "kk": "Енді сен айналымдарды сантиметрге және кері аударасың.",
+    "en": "Now you can convert rotations to centimetres and back."
+  },
+  "steps": [
+    {
+      "id": "formula",
+      "type": "theory",
+      "title": {
+        "ru": "Обороты и сантиметры",
+        "kk": "Айналымдар және сантиметрлер",
+        "en": "Rotations and centimetres"
+      },
+      "body": {
+        "ru": "Расстояние = **π × диаметр × обороты**.\n\nКолесо 56 мм: за оборот ≈ 17,6 см. Три оборота ≈ 52,8 см.\n\nВ блоке «ехать» можно выбрать не сантиметры, а **обороты** — моторы получат команду напрямую. Тогда важно знать, какое колесо стоит на роботе.",
+        "kk": "Қашықтық = **π × диаметр × айналымдар**.\n\n56 мм дөңгелек: бір айналымда ≈ 17,6 см. Үш айналым ≈ 52,8 см.\n\n«Жүру» блогында сантиметр емес, **айналымды** таңдауға болады — моторлар команданы тікелей алады. Сонда роботта қандай дөңгелек тұрғанын білу маңызды.",
+        "en": "Distance = **π × diameter × rotations**.\n\nA 56 mm wheel: about 17.6 cm per turn. Three turns ≈ 52.8 cm.\n\nIn the “move” block you can choose **rotations** instead of centimetres — the motors get the command directly. Then you need to know which wheel the robot has."
+      },
+      "illustration": "r-wheel-distance"
+    },
+    {
+      "id": "three",
+      "type": "quiz",
+      "kind": "number",
+      "question": {
+        "ru": "Колесо 56 мм, 3 оборота. Сколько сантиметров? (за оборот 17,6 см)",
+        "kk": "56 мм дөңгелек, 3 айналым. Неше сантиметр? (бір айналымда 17,6 см)",
+        "en": "A 56 mm wheel, 3 rotations. How many centimetres? (17.6 cm per turn)"
+      },
+      "answer": 52.8,
+      "tolerance": 0.5,
+      "explanation": {
+        "ru": "17,6 × 3 = 52,8 см.",
+        "kk": "17,6 × 3 = 52,8 см.",
+        "en": "17.6 × 3 = 52.8 cm."
+      },
+      "unit": {
+        "ru": "см",
+        "kk": "см",
+        "en": "cm"
+      },
+      "skill": "motion"
+    },
+    {
+      "id": "rotations",
+      "type": "code",
+      "title": {
+        "ru": "Три оборота",
+        "kk": "Үш айналым",
+        "en": "Three rotations"
+      },
+      "task": {
+        "ru": "Проедь ровно **3 оборота** колеса (выбери единицу «об.» в блоке) и остановись в зоне.",
+        "kk": "Дөңгелектің дәл **3 айналымын** жүр (блокта «айн.» бірлігін таңда) және аймақта тоқта.",
+        "en": "Drive exactly **3 wheel rotations** (choose the “rot.” unit in the block) and stop in the zone."
+      },
+      "field": {
+        "width": 1400,
+        "height": 400,
+        "start": {
+          "x": 150,
+          "y": 200,
+          "heading": 0
+        },
+        "border": true,
+        "zones": [
+          {
+            "id": "three",
+            "x": 620,
+            "y": 80,
+            "w": 120,
+            "h": 240,
+            "kind": "target",
+            "label": {
+              "ru": "3 оборота",
+              "kk": "3 айналым",
+              "en": "3 rotations"
+            }
+          }
+        ],
+        "points": [],
+        "walls": [],
+        "lines": []
+      },
+      "toolbox": [
+        "move"
+      ],
+      "start": [],
+      "checks": [
+        {
+          "type": "finishInZone",
+          "zone": "three"
+        }
+      ],
+      "hints": [
+        {
+          "ru": "Один блок «ехать».",
+          "kk": "Бір «жүру» блогы.",
+          "en": "One “move” block."
+        },
+        {
+          "ru": "Поменяй единицу на «об.».",
+          "kk": "Бірлікті «айн.» деп өзгерт.",
+          "en": "Change the unit to “rot.”."
+        },
+        {
+          "ru": "Вперёд 3 об.",
+          "kk": "3 айн. алға.",
+          "en": "Forward 3 rot."
+        }
+      ],
+      "reference": [
+        {
+          "op": "move",
+          "direction": "forward",
+          "value": 3,
+          "unit": "rotations"
+        }
+      ],
+      "skill": "motion"
+    },
+    {
+      "id": "big-wheel",
+      "type": "widget",
+      "widget": "wheel",
+      "title": {
+        "ru": "Большое колесо",
+        "kk": "Үлкен дөңгелек",
+        "en": "The big wheel"
+      },
+      "task": {
+        "ru": "Подбери колесо и обороты, чтобы проехать **55,3 см** (±1 см).",
+        "kk": "**55,3 см** (±1 см) жүру үшін дөңгелек пен айналымдарды таңда.",
+        "en": "Pick a wheel and rotations to drive **55.3 cm** (±1 cm)."
+      },
+      "targetCm": 55.3,
+      "toleranceCm": 1
+    }
+  ]
+}

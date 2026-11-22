@@ -1,0 +1,168 @@
+{
+  "id": "build-14",
+  "track": "build",
+  "unit": "build-base",
+  "minutes": 10,
+  "skills": [
+    "structures",
+    "parts"
+  ],
+  "title": {
+    "ru": "Моторы и колёса",
+    "kk": "Моторлар және дөңгелектер",
+    "en": "Motors and wheels"
+  },
+  "goal": {
+    "ru": "Сегодня ты поставишь на шасси моторы и колёса.",
+    "kk": "Бүгін сен шассиге моторлар мен дөңгелектерді орнатасың.",
+    "en": "Today you will mount the motors and wheels on the chassis."
+  },
+  "summary": {
+    "ru": "Теперь твой робот стоит на колёсах и готов ездить.",
+    "kk": "Енді роботың дөңгелектерде тұр және жүруге дайын.",
+    "en": "Now your robot stands on wheels and is ready to drive."
+  },
+  "steps": [
+    {
+      "id": "drive",
+      "type": "theory",
+      "title": {
+        "ru": "Два мотора — две стороны",
+        "kk": "Екі мотор — екі жақ",
+        "en": "Two motors — two sides"
+      },
+      "body": {
+        "ru": "Робот ездит на двух моторах: **левый** крутит левое колесо, **правый** — правое. Одинаково быстро — едет прямо. По-разному — поворачивает.\n\nВ программах RoboEasy левый мотор подключают к порту **A**, правый — к **B**. Моторы ставят **симметрично**, колёса — на одной линии.",
+        "kk": "Робот екі моторда жүреді: **сол жақ** сол дөңгелекті, **оң жақ** оң дөңгелекті айналдырады. Бірдей жылдам — тура жүреді. Әр түрлі — бұрылады.\n\nRoboEasy бағдарламаларында сол моторды **A** портына, оң моторды **B** портына қосады. Моторлар **симметриялы** қойылады, дөңгелектер — бір сызықта.",
+        "en": "The robot drives on two motors: the **left** turns the left wheel, the **right** the right wheel. Equally fast — straight. Different speeds — it turns.\n\nIn RoboEasy programs the left motor goes to port **A**, the right to **B**. Mount the motors **symmetrically**, wheels on one line."
+      },
+      "illustration": "r-chassis"
+    },
+    {
+      "id": "mount",
+      "type": "build",
+      "title": {
+        "ru": "Установи моторы и колёса",
+        "kk": "Моторлар мен дөңгелектерді орнат",
+        "en": "Mount motors and wheels"
+      },
+      "intro": {
+        "ru": "Следи, чтобы обе стороны были одинаковыми — иначе робот будет уводить в сторону.",
+        "kk": "Екі жақтың бірдей болуын қадағала — әйтпесе робот бүйірге кетеді.",
+        "en": "Make sure both sides match — otherwise the robot will veer."
+      },
+      "instructions": [
+        {
+          "text": {
+            "ru": "Закрепи левый и правый моторы на шасси зеркально друг другу.",
+            "kk": "Сол және оң моторларды шассиге бір-біріне айнадай бекіт.",
+            "en": "Fix the left and right motors on the chassis as mirror images."
+          },
+          "illustration": "r-chassis"
+        },
+        {
+          "text": {
+            "ru": "Вставь оси в моторы и надень колёса.",
+            "kk": "Осьтерді моторларға салып, дөңгелектерді кигіз.",
+            "en": "Push axles into the motors and fit the wheels."
+          },
+          "illustration": "r-wheels"
+        },
+        {
+          "text": {
+            "ru": "Надень втулки снаружи колёс.",
+            "kk": "Дөңгелектердің сыртынан төлкелер кигіз.",
+            "en": "Add bushes outside the wheels."
+          },
+          "illustration": "r-connectors"
+        },
+        {
+          "text": {
+            "ru": "Покрути колёса рукой: они не должны тереться о раму.",
+            "kk": "Дөңгелектерді қолмен айналдыр: олар жақтауға үйкелмеуі керек.",
+            "en": "Spin the wheels by hand: they must not rub the frame."
+          }
+        }
+      ]
+    },
+    {
+      "id": "ports",
+      "type": "quiz",
+      "kind": "match",
+      "question": {
+        "ru": "Куда подключить?",
+        "kk": "Қайда қосу керек?",
+        "en": "Where does it plug in?"
+      },
+      "pairs": [
+        {
+          "left": {
+            "ru": "Левый мотор",
+            "kk": "Сол мотор",
+            "en": "Left motor"
+          },
+          "right": {
+            "ru": "Порт A",
+            "kk": "A порты",
+            "en": "Port A"
+          }
+        },
+        {
+          "left": {
+            "ru": "Правый мотор",
+            "kk": "Оң мотор",
+            "en": "Right motor"
+          },
+          "right": {
+            "ru": "Порт B",
+            "kk": "B порты",
+            "en": "Port B"
+          }
+        }
+      ],
+      "explanation": {
+        "ru": "Так программы RoboEasy сразу знают, где какой мотор.",
+        "kk": "Осылай RoboEasy бағдарламалары қай мотордың қайда екенін бірден біледі.",
+        "en": "That way RoboEasy programs know which motor is where."
+      },
+      "skill": "parts"
+    },
+    {
+      "id": "veer",
+      "type": "quiz",
+      "kind": "choice",
+      "question": {
+        "ru": "Робот на «вперёд» уводит вправо. Что проверить?",
+        "kk": "Робот «алға» дегенде оңға кетеді. Нені тексеру керек?",
+        "en": "On “forward” the robot veers right. What do you check?"
+      },
+      "options": [
+        {
+          "ru": "Не трётся ли правое колесо и одинаковы ли колёса",
+          "kk": "Оң дөңгелек үйкеліп тұрған жоқ па және дөңгелектер бірдей ме",
+          "en": "Whether the right wheel rubs and the wheels match"
+        },
+        {
+          "ru": "Цвет хаба",
+          "kk": "Хабтың түсі",
+          "en": "The hub colour"
+        },
+        {
+          "ru": "Громкость",
+          "kk": "Дыбыс қаттылығы",
+          "en": "The volume"
+        }
+      ],
+      "correct": [
+        0
+      ],
+      "explanation": {
+        "ru": "Трение или разные колёса тормозят одну сторону — робот поворачивает.",
+        "kk": "Үйкеліс немесе әр түрлі дөңгелектер бір жақты тежейді — робот бұрылады.",
+        "en": "Friction or mismatched wheels slow one side — the robot turns."
+      },
+      "skill": "parts"
+    }
+  ],
+  "kit": true
+}

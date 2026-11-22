@@ -1,0 +1,167 @@
+{
+  "id": "mech-07",
+  "track": "mechanisms",
+  "unit": "mech-pusher",
+  "minutes": 6,
+  "skills": [
+    "mechanisms"
+  ],
+  "title": {
+    "ru": "Толкатель и упор",
+    "kk": "Итергіш және тірек",
+    "en": "Pusher and stop"
+  },
+  "goal": {
+    "ru": "Сегодня ты узнаешь самую простую и надёжную насадку.",
+    "kk": "Бүгін сен ең қарапайым әрі сенімді саптаманы білесің.",
+    "en": "Today you will meet the simplest, most reliable attachment."
+  },
+  "summary": {
+    "ru": "Теперь ты знаешь, когда толкатель лучше сложного механизма.",
+    "kk": "Енді сен итергіш күрделі механизмнен қашан жақсы екенін білесің.",
+    "en": "Now you know when a pusher beats a complex mechanism."
+  },
+  "steps": [
+    {
+      "id": "push",
+      "type": "theory",
+      "title": {
+        "ru": "Просто — значит надёжно",
+        "kk": "Қарапайым — сенімді деген сөз",
+        "en": "Simple means reliable"
+      },
+      "body": {
+        "ru": "**Толкатель** — неподвижная или мотором выдвигаемая планка спереди робота. Им двигают предметы, нажимают рычаги и рычажки моделей.\n\n**Упор** — деталь, которая останавливает предмет в нужном месте, например «карман» для кубика.\n\nЧем меньше движущихся частей, тем меньше может сломаться. На соревнованиях простая насадка, которая работает 10 раз из 10, лучше хитрой, которая работает 5 раз из 10.",
+        "kk": "**Итергіш** — роботтың алдындағы қозғалмайтын немесе мотормен шығарылатын тақта. Онымен заттарды жылжытады, модельдердің тұтқаларын басады.\n\n**Тірек** — затты керекті жерде тоқтататын бөлшек, мысалы текшеге арналған «қалта».\n\nҚозғалатын бөліктер неғұрлым аз болса, соғұрлым аз сынады. Жарыстарда 10-нан 10 рет жұмыс істейтін қарапайым саптама 10-нан 5 рет жұмыс істейтін айлалысынан жақсы.",
+        "en": "A **pusher** is a fixed or motor-driven bar at the front of the robot. It moves objects and presses levers on models.\n\nA **stop** is a part that holds an object in the right place, like a “pocket” for a cube.\n\nThe fewer moving parts, the less can break. In competitions a simple attachment that works 10 times out of 10 beats a clever one that works 5 out of 10."
+      },
+      "illustration": "r-pusher"
+    },
+    {
+      "id": "which",
+      "type": "quiz",
+      "kind": "choice",
+      "question": {
+        "ru": "Нужно сдвинуть ящик в зону. Что выбрать?",
+        "kk": "Жәшікті аймаққа жылжыту керек. Нені таңдайсың?",
+        "en": "You need to push a box into a zone. What do you choose?"
+      },
+      "options": [
+        {
+          "ru": "Простой толкатель спереди",
+          "kk": "Алдыңғы қарапайым итергіш",
+          "en": "A simple front pusher"
+        },
+        {
+          "ru": "Захват на двух моторах",
+          "kk": "Екі мотордағы қармауыш",
+          "en": "A two-motor gripper"
+        },
+        {
+          "ru": "Подъёмник с червяком",
+          "kk": "Бұрамалы көтергіш",
+          "en": "A worm-drive lift"
+        }
+      ],
+      "correct": [
+        0
+      ],
+      "explanation": {
+        "ru": "Чтобы толкать, не нужно хватать. Простое решение — надёжное решение.",
+        "kk": "Итеру үшін қармаудың қажеті жоқ. Қарапайым шешім — сенімді шешім.",
+        "en": "You do not need to grab to push. Simple is reliable."
+      },
+      "skill": "mechanisms"
+    },
+    {
+      "id": "jobs",
+      "type": "quiz",
+      "kind": "match",
+      "question": {
+        "ru": "Подбери насадку к задаче",
+        "kk": "Саптаманы тапсырмаға сәйкестендір",
+        "en": "Match the attachment to the task"
+      },
+      "pairs": [
+        {
+          "left": {
+            "ru": "Сдвинуть ящик",
+            "kk": "Жәшікті жылжыту",
+            "en": "Push a box"
+          },
+          "right": {
+            "ru": "Толкатель",
+            "kk": "Итергіш",
+            "en": "Pusher"
+          }
+        },
+        {
+          "left": {
+            "ru": "Поднять кольцо на крючок",
+            "kk": "Сақинаны ілмекке көтеру",
+            "en": "Lift a ring onto a hook"
+          },
+          "right": {
+            "ru": "Подъёмник",
+            "kk": "Көтергіш",
+            "en": "Lift"
+          }
+        },
+        {
+          "left": {
+            "ru": "Унести мячик",
+            "kk": "Допты алып кету",
+            "en": "Carry a ball away"
+          },
+          "right": {
+            "ru": "Захват",
+            "kk": "Қармауыш",
+            "en": "Gripper"
+          }
+        }
+      ],
+      "explanation": {
+        "ru": "Выбирай самую простую насадку, которая решает задачу.",
+        "kk": "Тапсырманы шешетін ең қарапайым саптаманы таңда.",
+        "en": "Choose the simplest attachment that does the job."
+      },
+      "skill": "mechanisms"
+    },
+    {
+      "id": "pocket",
+      "type": "quiz",
+      "kind": "choice",
+      "question": {
+        "ru": "Кубик всё время соскальзывает с толкателя в сторону. Что поможет?",
+        "kk": "Текше үнемі итергіштен бүйірге сырғып кетеді. Не көмектеседі?",
+        "en": "The cube keeps sliding off the pusher sideways. What helps?"
+      },
+      "options": [
+        {
+          "ru": "Упоры по краям — «карман»",
+          "kk": "Шеттеріндегі тіректер — «қалта»",
+          "en": "Side stops — a “pocket”"
+        },
+        {
+          "ru": "Ехать быстрее",
+          "kk": "Жылдамырақ жүру",
+          "en": "Drive faster"
+        },
+        {
+          "ru": "Убрать толкатель",
+          "kk": "Итергішті алып тастау",
+          "en": "Remove the pusher"
+        }
+      ],
+      "correct": [
+        0
+      ],
+      "explanation": {
+        "ru": "Упоры направляют предмет и держат его на месте.",
+        "kk": "Тіректер затты бағыттап, орнында ұстайды.",
+        "en": "Stops guide the object and keep it in place."
+      },
+      "skill": "mechanisms"
+    }
+  ]
+}

@@ -1,0 +1,142 @@
+{
+  "id": "mech-05",
+  "track": "mechanisms",
+  "unit": "mech-lift",
+  "minutes": 12,
+  "skills": [
+    "mechanisms",
+    "gears"
+  ],
+  "title": {
+    "ru": "Собери подъёмник",
+    "kk": "Көтергішті құрастыр",
+    "en": "Build a lift"
+  },
+  "goal": {
+    "ru": "Сегодня ты соберёшь руку-подъёмник для робота.",
+    "kk": "Бүгін сен роботқа көтергіш-қол құрастырасың.",
+    "en": "Today you will build a lifting arm for the robot."
+  },
+  "summary": {
+    "ru": "Теперь у робота есть подъёмник, который держит груз.",
+    "kk": "Енді роботтың жүкті ұстайтын көтергіші бар.",
+    "en": "Now the robot has a lift that holds a load."
+  },
+  "steps": [
+    {
+      "id": "arm",
+      "type": "theory",
+      "title": {
+        "ru": "Рука на шестернях",
+        "kk": "Тісті доңғалақтардағы қол",
+        "en": "An arm on gears"
+      },
+      "body": {
+        "ru": "Рука-подъёмник — балка, которая поворачивается вверх на оси. Мотор крутит маленькую шестерню, она — большую на оси руки.\n\nПередача 8 → 24 делает руку в 3 раза сильнее. А если поставить червяк, рука будет держать груз даже с выключенным мотором.",
+        "kk": "Көтергіш-қол — оське бекітіліп, жоғары бұрылатын арқалық. Мотор кішкентай тісті доңғалақты, ал ол қол осіндегі үлкенін айналдырады.\n\n8 → 24 берілісі қолды 3 есе күшті етеді. Ал бұрама қойсаң, қол мотор өшірулі болса да жүкті ұстайды.",
+        "en": "A lifting arm is a beam that pivots up on an axle. The motor turns a small gear, which turns a big one on the arm’s axle.\n\nAn 8 → 24 gearing makes the arm 3 times stronger. Use a worm and the arm holds its load even with the motor off."
+      },
+      "illustration": "r-lift"
+    },
+    {
+      "id": "build",
+      "type": "build",
+      "title": {
+        "ru": "Сборка подъёмника",
+        "kk": "Көтергішті құрастыру",
+        "en": "Building the lift"
+      },
+      "intro": {
+        "ru": "Собери из деталей своего набора.",
+        "kk": "Жиынтығыңның бөлшектерінен құрастыр.",
+        "en": "Build it from your set."
+      },
+      "instructions": [
+        {
+          "text": {
+            "ru": "Закрепи мотор D на роботе.",
+            "kk": "D моторын роботқа бекіт.",
+            "en": "Mount motor D on the robot."
+          },
+          "illustration": "r-chassis"
+        },
+        {
+          "text": {
+            "ru": "На ось мотора — маленькую шестерню 8, рядом — ось с большой шестернёй 24.",
+            "kk": "Мотор осіне — 8 кішкентай тісті доңғалақ, жанына — 24 үлкен тісті доңғалағы бар ось.",
+            "en": "Put an 8-tooth gear on the motor axle and an axle with a 24-tooth gear next to it."
+          },
+          "illustration": "r-ratio"
+        },
+        {
+          "text": {
+            "ru": "На ось большой шестерни прикрепи руку из двух балок.",
+            "kk": "Үлкен тісті доңғалақтың осіне екі арқалықтан жасалған қолды бекіт.",
+            "en": "Attach a two-beam arm to the big gear’s axle."
+          },
+          "illustration": "r-double-beam"
+        },
+        {
+          "text": {
+            "ru": "Поставь втулки, чтобы оси не выезжали.",
+            "kk": "Осьтер шығып кетпеуі үшін төлкелер қой.",
+            "en": "Add bushes so the axles do not slide out."
+          },
+          "illustration": "r-connectors"
+        }
+      ]
+    },
+    {
+      "id": "test",
+      "type": "real_robot",
+      "title": {
+        "ru": "Проверь подъёмник",
+        "kk": "Көтергішті тексер",
+        "en": "Test the lift"
+      },
+      "task": {
+        "ru": "Скачай программу: мотор D поворачивается на 180° (рука поднимается на 60°), ждёт 2 секунды и опускает руку.",
+        "kk": "Бағдарламаны жүкте: D моторы 180° бұрылады (қол 60° көтеріледі), 2 секунд күтеді және қолды түсіреді.",
+        "en": "Download the program: motor D turns 180° (the arm rises 60°), waits 2 seconds and lowers the arm."
+      },
+      "checklist": [
+        {
+          "ru": "Рука поднимается плавно",
+          "kk": "Қол біркелкі көтеріледі",
+          "en": "The arm rises smoothly"
+        },
+        {
+          "ru": "Рука держит лёгкий груз",
+          "kk": "Қол жеңіл жүкті ұстайды",
+          "en": "The arm holds a light load"
+        },
+        {
+          "ru": "Шестерни не проскакивают",
+          "kk": "Тісті доңғалақтар секірмейді",
+          "en": "The gears do not skip"
+        }
+      ],
+      "program": [
+        {
+          "op": "motor_run",
+          "port": "D",
+          "direction": "clockwise",
+          "value": 180,
+          "unit": "degrees"
+        },
+        {
+          "op": "wait",
+          "seconds": 2
+        },
+        {
+          "op": "motor_run",
+          "port": "D",
+          "direction": "counterclockwise",
+          "value": 180,
+          "unit": "degrees"
+        }
+      ]
+    }
+  ],
+  "kit": true
+}

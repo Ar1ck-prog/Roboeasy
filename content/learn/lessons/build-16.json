@@ -1,0 +1,167 @@
+{
+  "id": "build-16",
+  "track": "build",
+  "unit": "build-base",
+  "minutes": 10,
+  "skills": [
+    "structures",
+    "parts"
+  ],
+  "title": {
+    "ru": "Собери и проверь",
+    "kk": "Құрастырып, тексер",
+    "en": "Build and test"
+  },
+  "goal": {
+    "ru": "Сегодня ты проверишь собранную тележку настоящей программой.",
+    "kk": "Бүгін сен құрастырылған арбашаны нағыз бағдарламамен тексересің.",
+    "en": "Today you will test your cart with a real program."
+  },
+  "summary": {
+    "ru": "Теперь у тебя проверенная тележка — основа для всех следующих роботов.",
+    "kk": "Енді сенің тексерілген арбашаң бар — келесі барлық роботтардың негізі.",
+    "en": "Now you have a tested cart — the base for every robot that follows."
+  },
+  "steps": [
+    {
+      "id": "test",
+      "type": "theory",
+      "title": {
+        "ru": "Приёмка робота",
+        "kk": "Роботты қабылдау",
+        "en": "Robot acceptance test"
+      },
+      "body": {
+        "ru": "Перед соревнованием инженеры проводят **приёмочные испытания**: простые программы, которые сразу показывают проблемы.\n\nПроверь три вещи: едет ли робот прямо, точно ли поворачивает и не разваливается ли от толчка. Квадрат 30 см проверяет сразу и прямое движение, и повороты.",
+        "kk": "Жарыс алдында инженерлер **қабылдау сынақтарын** өткізеді: мәселелерді бірден көрсететін қарапайым бағдарламалар.\n\nҮш нәрсені тексер: робот тура жүре ме, дәл бұрыла ма және итергенде құлап қалмай ма. 30 см шаршы түзу қозғалысты да, бұрылыстарды да бірден тексереді.",
+        "en": "Before competitions engineers run **acceptance tests**: simple programs that reveal problems at once.\n\nCheck three things: does the robot drive straight, turn precisely and survive a push? A 30 cm square tests straight driving and turns together."
+      },
+      "illustration": "square"
+    },
+    {
+      "id": "square-test",
+      "type": "real_robot",
+      "title": {
+        "ru": "Квадрат на столе",
+        "kk": "Үстелдегі шаршы",
+        "en": "A square on the table"
+      },
+      "task": {
+        "ru": "Скачай программу квадрата 30 см и запусти тележку на столе или полу. Отметь старт скотчем и посмотри, вернётся ли робот на место.",
+        "kk": "30 см шаршы бағдарламасын жүктеп, арбашаны үстелде немесе еденде іске қос. Стартты скотчпен белгілеп, робот орнына орала ма, соған қара.",
+        "en": "Download the 30 cm square program and run the cart on a table or floor. Mark the start with tape and see whether the robot returns."
+      },
+      "checklist": [
+        {
+          "ru": "Робот проехал все 4 стороны",
+          "kk": "Робот 4 қабырғаның бәрін жүрді",
+          "en": "The robot drove all 4 sides"
+        },
+        {
+          "ru": "Вернулся близко к метке старта",
+          "kk": "Старт белгісіне жақын оралды",
+          "en": "It returned close to the start mark"
+        },
+        {
+          "ru": "Ничего не отвалилось и не тёрлось",
+          "kk": "Ештеңе түсіп қалмады және үйкелмеді",
+          "en": "Nothing fell off or rubbed"
+        }
+      ],
+      "program": [
+        {
+          "op": "repeat",
+          "times": 4,
+          "steps": [
+            {
+              "op": "move",
+              "direction": "forward",
+              "value": 30,
+              "unit": "cm"
+            },
+            {
+              "op": "turn",
+              "direction": "left",
+              "degrees": 90
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "off",
+      "type": "quiz",
+      "kind": "choice",
+      "question": {
+        "ru": "Робот вернулся на 5 см левее старта. Что делать дальше?",
+        "kk": "Робот стартқа 5 см солға қарай оралды. Әрі қарай не істеу керек?",
+        "en": "The robot came back 5 cm left of the start. What next?"
+      },
+      "options": [
+        {
+          "ru": "Проверить колёса и провести калибровку",
+          "kk": "Дөңгелектерді тексеріп, калибрлеу жасау",
+          "en": "Check the wheels and calibrate"
+        },
+        {
+          "ru": "Разобрать всё и собрать заново",
+          "kk": "Бәрін бөлшектеп, қайта құрастыру",
+          "en": "Take it all apart and rebuild"
+        },
+        {
+          "ru": "Ничего, так и задумано",
+          "kk": "Ештеңе, солай ойластырылған",
+          "en": "Nothing, that is intended"
+        }
+      ],
+      "correct": [
+        0
+      ],
+      "explanation": {
+        "ru": "Небольшую ошибку исправляют настройкой, а не перестройкой. Калибровка — в треке «Навигация».",
+        "kk": "Кішкене қатені қайта құрумен емес, баптаумен түзетеді. Калибрлеу — «Навигация» трегінде.",
+        "en": "Fix a small error by tuning, not rebuilding. Calibration is in the Navigation track."
+      },
+      "skill": "structures"
+    },
+    {
+      "id": "checklist",
+      "type": "quiz",
+      "kind": "order",
+      "question": {
+        "ru": "Расставь приёмку по порядку",
+        "kk": "Қабылдауды ретімен қой",
+        "en": "Put the acceptance test in order"
+      },
+      "items": [
+        {
+          "ru": "Зарядить хаб",
+          "kk": "Хабты зарядтау",
+          "en": "Charge the hub"
+        },
+        {
+          "ru": "Проверить провода и порты A и B",
+          "kk": "Сымдарды және A мен B порттарын тексеру",
+          "en": "Check the cables and ports A and B"
+        },
+        {
+          "ru": "Запустить квадрат",
+          "kk": "Шаршыны іске қосу",
+          "en": "Run the square"
+        },
+        {
+          "ru": "Записать, что получилось",
+          "kk": "Не шыққанын жазу",
+          "en": "Write down the result"
+        }
+      ],
+      "explanation": {
+        "ru": "Порядок и записи помогают находить причину проблем.",
+        "kk": "Рет пен жазбалар мәселелердің себебін табуға көмектеседі.",
+        "en": "Order and notes help find the cause of problems."
+      },
+      "skill": "parts"
+    }
+  ],
+  "kit": true
+}
