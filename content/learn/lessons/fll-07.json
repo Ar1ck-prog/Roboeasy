@@ -1,0 +1,175 @@
+{
+  "id": "fll-07",
+  "track": "fll",
+  "unit": "fll-robot",
+  "minutes": 7,
+  "skills": [
+    "mechanisms",
+    "strategy"
+  ],
+  "title": {
+    "ru": "Журнал заездов",
+    "kk": "Жүрістер журналы",
+    "en": "The run log"
+  },
+  "goal": {
+    "ru": "Сегодня ты научишься вести журнал испытаний.",
+    "kk": "Бүгін сен сынақтар журналын жүргізуді үйренесің.",
+    "en": "Today you will learn to keep a test log."
+  },
+  "summary": {
+    "ru": "Теперь ты записываешь каждый заезд и находишь причины ошибок по записям.",
+    "kk": "Енді сен әр жүрісті жазып, жазбалар бойынша қателердің себептерін табасың.",
+    "en": "Now you log every run and find the causes of failures from your notes."
+  },
+  "steps": [
+    {
+      "id": "log",
+      "type": "theory",
+      "title": {
+        "ru": "Память команды",
+        "kk": "Команданың жады",
+        "en": "The team’s memory"
+      },
+      "body": {
+        "ru": "После десятка запусков уже не вспомнить, что и когда ломалось. Поэтому команды ведут **журнал заездов**.\n\nЗаписывай: дату, программу, заряд батареи, получилась ли каждая миссия, что пошло не так и что изменили.\n\nЧерез неделю журнал покажет: миссия срывается всегда на слабой батарее или когда робота ставят криво. А это уже подсказка, что чинить.",
+        "kk": "Ондаған іске қосудан кейін не және қашан сынғанын есте сақтау мүмкін емес. Сондықтан командалар **жүрістер журналын** жүргізеді.\n\nЖаз: күнін, бағдарламаны, батарея зарядын, әр миссия шықты ма, не дұрыс болмады және не өзгертілді.\n\nБір аптадан кейін журнал көрсетеді: миссия әлсіз батареяда немесе роботты қисық қойғанда әрқашан бұзылады. Бұл — нені жөндеу керегінің белгісі.",
+        "en": "After a dozen runs nobody remembers what broke and when. So teams keep a **run log**.\n\nWrite down: the date, the program, battery charge, whether each mission worked, what went wrong and what you changed.\n\nAfter a week the log shows: the mission always fails on a weak battery or when the robot is placed crooked. That tells you what to fix."
+      },
+      "illustration": "r-notebook"
+    },
+    {
+      "id": "notes",
+      "type": "quiz",
+      "kind": "match",
+      "question": {
+        "ru": "Что записать в журнал?",
+        "kk": "Журналға не жазу керек?",
+        "en": "What goes into the log?"
+      },
+      "pairs": [
+        {
+          "left": {
+            "ru": "Робот не доехал до модели",
+            "kk": "Робот модельге жетпеді",
+            "en": "The robot did not reach the model"
+          },
+          "right": {
+            "ru": "Расстояние недоезда и заряд батареи",
+            "kk": "Жетпеген қашықтық пен батарея заряды",
+            "en": "How far short and the battery charge"
+          }
+        },
+        {
+          "left": {
+            "ru": "Насадка слетела",
+            "kk": "Саптама түсіп қалды",
+            "en": "The attachment fell off"
+          },
+          "right": {
+            "ru": "В какой момент и что зацепило",
+            "kk": "Қай сәтте және не ілді",
+            "en": "When and what it caught on"
+          }
+        },
+        {
+          "left": {
+            "ru": "Поменяли программу",
+            "kk": "Бағдарламаны өзгерттік",
+            "en": "We changed the program"
+          },
+          "right": {
+            "ru": "Что именно изменили и номер версии",
+            "kk": "Нақты не өзгертілді және нұсқа нөмірі",
+            "en": "What exactly changed and the version number"
+          }
+        }
+      ],
+      "explanation": {
+        "ru": "Хорошая запись отвечает: что случилось, когда и почему мы так думаем.",
+        "kk": "Жақсы жазба жауап береді: не болды, қашан және біз неге олай ойлаймыз.",
+        "en": "A good note answers: what happened, when, and why we think so."
+      },
+      "skill": "strategy"
+    },
+    {
+      "id": "pattern",
+      "type": "quiz",
+      "kind": "choice",
+      "question": {
+        "ru": "В журнале видно: миссия срывается только в последних заездах дня. Что проверить?",
+        "kk": "Журналда көрінеді: миссия күннің соңғы жүрістерінде ғана бұзылады. Нені тексеру керек?",
+        "en": "The log shows the mission fails only in the day’s last runs. What do you check?"
+      },
+      "options": [
+        {
+          "ru": "Заряд батареи",
+          "kk": "Батарея заряды",
+          "en": "The battery charge"
+        },
+        {
+          "ru": "Цвет насадки",
+          "kk": "Саптаманың түсі",
+          "en": "The attachment colour"
+        },
+        {
+          "ru": "Название программы",
+          "kk": "Бағдарлама атауы",
+          "en": "The program name"
+        }
+      ],
+      "correct": [
+        0
+      ],
+      "explanation": {
+        "ru": "Под конец дня батарея садится — моторы слабеют, и робот недоезжает.",
+        "kk": "Күн соңында батарея отырады — моторлар әлсіреп, робот жетпей қалады.",
+        "en": "By the end of the day the battery runs down — the motors weaken and the robot falls short."
+      },
+      "skill": "strategy"
+    },
+    {
+      "id": "cycle",
+      "type": "quiz",
+      "kind": "order",
+      "question": {
+        "ru": "Расставь цикл улучшения",
+        "kk": "Жақсарту циклін реттей қой",
+        "en": "Order the improvement cycle"
+      },
+      "items": [
+        {
+          "ru": "Запустить заезд",
+          "kk": "Жүрісті іске қосу",
+          "en": "Do a run"
+        },
+        {
+          "ru": "Записать результат",
+          "kk": "Нәтижені жазу",
+          "en": "Log the result"
+        },
+        {
+          "ru": "Найти причину ошибки",
+          "kk": "Қатенің себебін табу",
+          "en": "Find the cause"
+        },
+        {
+          "ru": "Изменить одну вещь",
+          "kk": "Бір нәрсені өзгерту",
+          "en": "Change one thing"
+        },
+        {
+          "ru": "Проверить снова",
+          "kk": "Қайта тексеру",
+          "en": "Test again"
+        }
+      ],
+      "explanation": {
+        "ru": "Меняй по одной вещи — иначе не поймёшь, что помогло.",
+        "kk": "Бір-бір нәрседен өзгерт — әйтпесе не көмектескенін түсінбейсің.",
+        "en": "Change one thing at a time — or you will not know what helped."
+      },
+      "skill": "strategy"
+    }
+  ]
+}

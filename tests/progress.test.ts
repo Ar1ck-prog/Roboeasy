@@ -50,8 +50,22 @@ describe('unlocking', () => {
   })
 
   it('shows planned lessons as "soon" without blocking', () => {
-    const states = lessonStates(done(), track('build'), COURSE)
-    expect([...states.values()].every((s) => s === 'soon')).toBe(true)
+    // Every lesson is written now; a copy of the course with a planned unit checks the rule.
+    const planned = structuredClone(COURSE)
+    const build = planned.tracks.find((t) => t.id === 'build')!
+    build.units[0].lessons.forEach((l) => (l.status = 'todo'))
+    const states = lessonStates(done(...track('start').units.flatMap((u) => u.lessons.map((l) => l.id))), build, planned)
+    expect(build.units[0].lessons.every((l) => states.get(l.id) === 'soon')).toBe(true)
+    expect(states.get(build.units[1].lessons[0].id)).toBe('current')
+  })
+
+  it('suggests the virtual main path (Blocks) right after Start, before the kit-heavy Build track', () => {
+    const ids = COURSE.tracks.map((t) => t.id)
+    expect(ids.indexOf('blocks')).toBeLessThan(ids.indexOf('build'))
+  })
+
+  it('has content for every planned lesson', () => {
+    expect(COURSE.tracks.flatMap((t) => t.units.flatMap((u) => u.lessons)).filter((l) => l.status !== 'ready')).toEqual([])
   })
 
   it('counts "known" lessons as done', () => {

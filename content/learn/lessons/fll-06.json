@@ -1,0 +1,139 @@
+{
+  "id": "fll-06",
+  "track": "fll",
+  "unit": "fll-robot",
+  "minutes": 7,
+  "skills": [
+    "mechanisms",
+    "strategy"
+  ],
+  "title": {
+    "ru": "Смена насадок за секунды",
+    "kk": "Саптамаларды секундтарда ауыстыру",
+    "en": "Swapping attachments in seconds"
+  },
+  "goal": {
+    "ru": "Сегодня ты научишься экономить время между заездами.",
+    "kk": "Бүгін сен жүрістер арасындағы уақытты үнемдеуді үйренесің.",
+    "en": "Today you will learn to save time between runs."
+  },
+  "summary": {
+    "ru": "Теперь ты знаешь, как тренировать смену насадок и считать сэкономленное время.",
+    "kk": "Енді сен саптамаларды ауыстыруды қалай жаттықтыру керегін және үнемделген уақытты есептеуді білесің.",
+    "en": "Now you know how to practise swaps and count the time saved."
+  },
+  "steps": [
+    {
+      "id": "pit",
+      "type": "theory",
+      "title": {
+        "ru": "Как пит-стоп",
+        "kk": "Пит-стоп сияқты",
+        "en": "Like a pit stop"
+      },
+      "body": {
+        "ru": "В гонках механики меняют колёса за секунды, потому что каждый тренировался. В FLL так же: смена насадки — это командный номер.\n\nЗаранее реши, **кто** меняет насадку, а **кто** ставит робота и запускает. Положи насадки в порядке заездов. Тренируйся с секундомером — и время смены сократится в несколько раз.",
+        "kk": "Жарыстарда механиктер дөңгелектерді секундтарда ауыстырады, өйткені әрқайсысы жаттыққан. FLL-де де солай: саптаманы ауыстыру — командалық нөмір.\n\nСаптаманы **кім** ауыстыратынын, ал роботты **кім** қойып, іске қосатынын алдын ала шеш. Саптамаларды жүрістер ретімен қой. Секундомермен жаттық — сонда ауыстыру уақыты бірнеше есе қысқарады.",
+        "en": "In racing, mechanics change wheels in seconds because everyone has practised. FLL is the same: an attachment swap is a team routine.\n\nDecide in advance **who** swaps the attachment and **who** places and starts the robot. Lay the attachments out in run order. Practise with a stopwatch and the swap time drops several times over."
+      },
+      "illustration": "r-swap"
+    },
+    {
+      "id": "saved",
+      "type": "quiz",
+      "kind": "number",
+      "question": {
+        "ru": "Смена занимала 15 с, после тренировок — 5 с. За матч 4 смены. Сколько секунд сэкономили?",
+        "kk": "Ауыстыру 15 с алатын, жаттығулардан кейін — 5 с. Матчта 4 ауыстыру. Неше секунд үнемделді?",
+        "en": "A swap took 15 s, after practice 5 s. There are 4 swaps per match. How many seconds were saved?"
+      },
+      "answer": 40,
+      "tolerance": 0,
+      "explanation": {
+        "ru": "(15 − 5) × 4 = 40 секунд — это время на ещё одну-две миссии.",
+        "kk": "(15 − 5) × 4 = 40 секунд — бұл тағы бір-екі миссияға уақыт.",
+        "en": "(15 − 5) × 4 = 40 seconds — time for another mission or two."
+      },
+      "unit": {
+        "ru": "с",
+        "kk": "с",
+        "en": "s"
+      },
+      "skill": "strategy"
+    },
+    {
+      "id": "roles",
+      "type": "quiz",
+      "kind": "choice",
+      "question": {
+        "ru": "Как лучше распределить смену насадки?",
+        "kk": "Саптама ауыстыруды қалай бөлген жақсы?",
+        "en": "How should a swap be split up?"
+      },
+      "options": [
+        {
+          "ru": "Один меняет насадку, другой ставит робота и запускает",
+          "kk": "Біреуі саптаманы ауыстырады, екіншісі роботты қойып, іске қосады",
+          "en": "One swaps the attachment, another places and starts the robot"
+        },
+        {
+          "ru": "Все хватают робота одновременно",
+          "kk": "Бәрі роботты бір мезгілде ұстайды",
+          "en": "Everyone grabs the robot at once"
+        },
+        {
+          "ru": "Кто ближе — тот и меняет",
+          "kk": "Кім жақын болса — сол ауыстырады",
+          "en": "Whoever is closest swaps"
+        }
+      ],
+      "correct": [
+        0
+      ],
+      "explanation": {
+        "ru": "Чёткие роли убирают суету и ошибки.",
+        "kk": "Нақты рөлдер абыржу мен қателерді жояды.",
+        "en": "Clear roles remove the fuss and the mistakes."
+      },
+      "skill": "strategy"
+    },
+    {
+      "id": "table",
+      "type": "quiz",
+      "kind": "order",
+      "question": {
+        "ru": "Как разложить насадки перед матчем?",
+        "kk": "Матч алдында саптамаларды қалай орналастыру керек?",
+        "en": "How do you lay out attachments before a match?"
+      },
+      "items": [
+        {
+          "ru": "Насадка первого заезда — на роботе",
+          "kk": "Бірінші жүрістің саптамасы — роботта",
+          "en": "The first run’s attachment — on the robot"
+        },
+        {
+          "ru": "Насадка второго заезда — ближе всех",
+          "kk": "Екінші жүрістің саптамасы — бәрінен жақын",
+          "en": "The second run’s — closest at hand"
+        },
+        {
+          "ru": "Насадка третьего заезда — следом",
+          "kk": "Үшінші жүрістің саптамасы — одан кейін",
+          "en": "The third run’s — next"
+        },
+        {
+          "ru": "Запасные детали — отдельно",
+          "kk": "Қосалқы бөлшектер — бөлек",
+          "en": "Spare parts — set apart"
+        }
+      ],
+      "explanation": {
+        "ru": "Порядок на столе = порядок заездов.",
+        "kk": "Үстелдегі тәртіп = жүрістер тәртібі.",
+        "en": "Order on the table = order of runs."
+      },
+      "skill": "strategy"
+    }
+  ]
+}

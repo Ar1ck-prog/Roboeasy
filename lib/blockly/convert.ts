@@ -312,8 +312,11 @@ export function stateToSteps(state: WorkspaceState): ReadResult {
 
   const raw = readChain(start?.next?.block, '')
   const functions = defines.map((d, i) => ({ name: str(d, 'NAME').trim(), steps: readChain(d.inputs?.DO?.block, `fn${i}`) }))
+  // An empty editor is not a mistake (programs from the AI need a step, the editor may start empty).
+  if (!raw.length && !functions.length) return { steps: [], ids, detached, missingConditions, functions: [] }
   // Same validation as any program: values are clamped, structure is checked.
-  const parsed = parseProgram({ title: 'blocks', description: '', steps: raw, ...(functions.length ? { functions } : {}) })
-  if (parsed.ok) return { steps: parsed.value.steps, ids, detached, missingConditions, functions: parsed.value.functions ?? [] }
+  const placeholder = raw.length ? raw : [{ op: 'wait', seconds: 0 } as Step]
+  const parsed = parseProgram({ title: 'blocks', description: '', steps: placeholder, ...(functions.length ? { functions } : {}) })
+  if (parsed.ok) return { steps: raw.length ? parsed.value.steps : [], ids, detached, missingConditions, functions: parsed.value.functions ?? [] }
   return { steps: raw, ids, detached, missingConditions, functions, problem: parsed.error }
 }

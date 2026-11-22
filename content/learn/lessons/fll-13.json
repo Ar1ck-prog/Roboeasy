@@ -1,0 +1,202 @@
+{
+  "id": "fll-13",
+  "track": "fll",
+  "unit": "fll-judging",
+  "minutes": 12,
+  "skills": [
+    "teamwork"
+  ],
+  "title": {
+    "ru": "Проект «План сезона»",
+    "kk": "«Маусым жоспары» жобасы",
+    "en": "Project: Season plan"
+  },
+  "goal": {
+    "ru": "Сегодня ты составишь план сезона для своей команды.",
+    "kk": "Бүгін сен командаңа маусым жоспарын құрасың.",
+    "en": "Today you will draw up a season plan for your team."
+  },
+  "summary": {
+    "ru": "Трек «FLL» пройден! Ты умеешь планировать сезон: миссии, заезды, роли и подготовку к защите.",
+    "kk": "«FLL» тректі өттің! Сен маусымды жоспарлай аласың: миссиялар, жүрістер, рөлдер және қорғауға дайындық.",
+    "en": "The FLL track is done! You can plan a season: missions, runs, roles and judging prep."
+  },
+  "steps": [
+    {
+      "id": "season",
+      "type": "theory",
+      "title": {
+        "ru": "Сезон за несколько месяцев",
+        "kk": "Бірнеше айдағы маусым",
+        "en": "A season in a few months"
+      },
+      "body": {
+        "ru": "Сезон FLL длится несколько месяцев. Хороший план делит его на этапы:\n\n1. **Изучить** тему, поле и правила сезона.\n2. **Выбрать** миссии и собрать базового робота.\n3. **Разработать** насадки и программы, вести журнал.\n4. **Отладить** надёжность — серии запусков.\n5. **Подготовить** проект и защиту, провести репетиции.\n\nВ RoboEasy для этого есть FLL-тренер и симулятор поля.",
+        "kk": "FLL маусымы бірнеше айға созылады. Жақсы жоспар оны кезеңдерге бөледі:\n\n1. Маусымның тақырыбын, алаңын және ережелерін **зерттеу**.\n2. Миссияларды **таңдап**, базалық роботты құрастыру.\n3. Саптамалар мен бағдарламаларды **әзірлеу**, журнал жүргізу.\n4. Сенімділікті **жөндеу** — іске қосу сериялары.\n5. Жоба мен қорғауды **дайындау**, репетициялар өткізу.\n\nRoboEasy-де бұған FLL-жаттықтырушы мен алаң симуляторы бар.",
+        "en": "An FLL season lasts a few months. A good plan splits it into stages:\n\n1. **Study** the season theme, field and rules.\n2. **Choose** missions and build a base robot.\n3. **Develop** attachments and programs, keep the log.\n4. **Tune** reliability — series of runs.\n5. **Prepare** the project and judging, hold rehearsals.\n\nRoboEasy has an FLL trainer and a field simulator for this."
+      },
+      "illustration": "r-strategy"
+    },
+    {
+      "id": "stages",
+      "type": "quiz",
+      "kind": "order",
+      "question": {
+        "ru": "Расставь этапы сезона",
+        "kk": "Маусым кезеңдерін реттей қой",
+        "en": "Order the season stages"
+      },
+      "items": [
+        {
+          "ru": "Изучить тему, поле и правила",
+          "kk": "Тақырыпты, алаңды және ережелерді зерттеу",
+          "en": "Study the theme, field and rules"
+        },
+        {
+          "ru": "Выбрать миссии и собрать базового робота",
+          "kk": "Миссияларды таңдап, базалық роботты құрастыру",
+          "en": "Choose missions and build the base robot"
+        },
+        {
+          "ru": "Разработать насадки и программы",
+          "kk": "Саптамалар мен бағдарламаларды әзірлеу",
+          "en": "Develop attachments and programs"
+        },
+        {
+          "ru": "Добиться надёжности сериями запусков",
+          "kk": "Іске қосу серияларымен сенімділікке қол жеткізу",
+          "en": "Reach reliability with run series"
+        },
+        {
+          "ru": "Подготовить проект и защиту",
+          "kk": "Жоба мен қорғауды дайындау",
+          "en": "Prepare the project and judging"
+        }
+      ],
+      "explanation": {
+        "ru": "Каждый этап опирается на предыдущий. Не оставляй защиту на последнюю неделю!",
+        "kk": "Әр кезең алдыңғысына сүйенеді. Қорғауды соңғы аптаға қалдырма!",
+        "en": "Each stage builds on the last. Do not leave judging prep for the final week!"
+      },
+      "skill": "teamwork"
+    },
+    {
+      "id": "final-plan",
+      "type": "widget",
+      "widget": "strategy",
+      "title": {
+        "ru": "План матча сезона",
+        "kk": "Маусым матчының жоспары",
+        "en": "The season match plan"
+      },
+      "task": {
+        "ru": "Твоя команда выбирает миссии тренировочного сезона. Уложись в 150 секунд и набери **не меньше 130 очков**.",
+        "kk": "Сенің командаң жаттығу маусымының миссияларын таңдайды. 150 секундқа сыйып, **кемінде 130 ұпай** жина.",
+        "en": "Your team picks the missions of a practice season. Fit into 150 seconds and score **at least 130 points**."
+      },
+      "seconds": 150,
+      "target": 130,
+      "missions": [
+        {
+          "name": {
+            "ru": "Мост",
+            "kk": "Көпір",
+            "en": "The bridge"
+          },
+          "points": 30,
+          "seconds": 35
+        },
+        {
+          "name": {
+            "ru": "Маяк",
+            "kk": "Маяк",
+            "en": "The lighthouse"
+          },
+          "points": 20,
+          "seconds": 20
+        },
+        {
+          "name": {
+            "ru": "Кран",
+            "kk": "Кран",
+            "en": "The crane"
+          },
+          "points": 45,
+          "seconds": 60
+        },
+        {
+          "name": {
+            "ru": "Солнечная панель",
+            "kk": "Күн панелі",
+            "en": "The solar panel"
+          },
+          "points": 25,
+          "seconds": 25
+        },
+        {
+          "name": {
+            "ru": "Посадка дерева",
+            "kk": "Ағаш отырғызу",
+            "en": "Plant a tree"
+          },
+          "points": 35,
+          "seconds": 45
+        },
+        {
+          "name": {
+            "ru": "Сортировка",
+            "kk": "Сұрыптау",
+            "en": "Sorting"
+          },
+          "points": 30,
+          "seconds": 40
+        },
+        {
+          "name": {
+            "ru": "Точность",
+            "kk": "Дәлдік",
+            "en": "Precision"
+          },
+          "points": 15,
+          "seconds": 10
+        }
+      ]
+    },
+    {
+      "id": "first",
+      "type": "quiz",
+      "kind": "choice",
+      "question": {
+        "ru": "С чего начать сезон?",
+        "kk": "Маусымды неден бастау керек?",
+        "en": "Where does the season start?"
+      },
+      "options": [
+        {
+          "ru": "Прочитать правила и посмотреть поле",
+          "kk": "Ережелерді оқып, алаңды қарау",
+          "en": "Read the rules and study the field"
+        },
+        {
+          "ru": "Сразу строить самого сложного робота",
+          "kk": "Бірден ең күрделі роботты құру",
+          "en": "Build the most complex robot right away"
+        },
+        {
+          "ru": "Ждать турнира",
+          "kk": "Турнирді күту",
+          "en": "Wait for the tournament"
+        }
+      ],
+      "correct": [
+        0
+      ],
+      "explanation": {
+        "ru": "Точные правила, миссии и очки каждый сезон публикуются в официальном **Robot Game Rulebook** — сверяйся с ним, а не с памятью.",
+        "kk": "Нақты ережелер, миссиялар мен ұпайлар әр маусымда ресми **Robot Game Rulebook**-та жарияланады — жадыңмен емес, онымен салыстыр.",
+        "en": "Exact rules, missions and points are published each season in the official **Robot Game Rulebook** — check it, not your memory."
+      },
+      "skill": "teamwork"
+    }
+  ]
+}

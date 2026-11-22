@@ -65,3 +65,45 @@ describe('DSL ⇄ blocks', () => {
     expect(stateToSteps({}).steps).toEqual([])
   })
 })
+
+describe('variables, gyro and own blocks in the lesson editor', () => {
+  const program: Step[] = [
+    { op: 'set_var', name: 'size', expr: { num: 20 } },
+    { op: 'call', name: 'square' },
+    { op: 'change_var', name: 'size', expr: { num: 10 } },
+    { op: 'move_expr', direction: 'forward', expr: { var: 'size' }, unit: 'cm' },
+    { op: 'write_var', name: 'size' },
+    { op: 'reset_yaw' },
+    { op: 'while', condition: { sensor: 'gyro', axis: 'yaw', comparator: '<', value: 90 }, steps: [{ op: 'start_move', direction: 'right' }] },
+    { op: 'if', condition: { sensor: 'var', name: 'size', comparator: '>', value: 25 }, then: [{ op: 'arc', direction: 'left', radius: 20, degrees: 90 }] },
+  ]
+  const functions = [{ name: 'square', steps: [{ op: 'repeat', times: 4, steps: [{ op: 'move_expr', direction: 'forward', expr: { var: 'size' }, unit: 'cm' }, { op: 'turn', direction: 'left', degrees: 90 }] }] }] as const
+
+  it('round-trips the program and its own blocks', () => {
+    const back = stateToSteps(stepsToState(program, [...functions] as never))
+    expect(back.steps).toEqual(program)
+    expect(back.functions).toEqual(functions)
+    expect(back.detached).toBe(0)
+    expect(back.problem).toBeUndefined()
+  })
+
+  it('does not complain about an empty editor or one with only an own block', () => {
+    expect(stateToSteps(stepsToState([])).problem).toBeUndefined()
+    const onlyBlock = stateToSteps(stepsToState([], [{ name: 'step', steps: [{ op: 'beep', note: 72, seconds: 0.3 }] }]))
+    expect(onlyBlock.problem).toBeUndefined()
+    expect(onlyBlock.steps).toEqual([])
+  })
+
+  it('reports a call without its block instead of silently dropping it', () => {
+    const back = stateToSteps(stepsToState([{ op: 'call', name: 'nope' }]))
+    expect(back.problem).toBeTruthy()
+  })
+
+  it('shows define/call, gyro and variable conditions only when the lesson offers them', () => {
+    expect(toolboxBlocks(['call', 'move'])).toEqual(expect.arrayContaining([BLOCK_TYPES.define, BLOCK_TYPES.call]))
+    expect(toolboxBlocks(['wait_until', 'reset_yaw'])).toContain(BLOCK_TYPES.cond_gyro)
+    expect(toolboxBlocks(['wait_until'])).not.toContain(BLOCK_TYPES.cond_gyro)
+    expect(toolboxBlocks(['if', 'set_var'])).toContain(BLOCK_TYPES.cond_var)
+    expect(toolboxBlocks(['move_expr'])).toEqual([BLOCK_TYPES.move_expr])
+  })
+})

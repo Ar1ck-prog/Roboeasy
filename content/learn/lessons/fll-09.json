@@ -1,0 +1,143 @@
+{
+  "id": "fll-09",
+  "track": "fll",
+  "unit": "fll-team",
+  "minutes": 6,
+  "skills": [
+    "teamwork"
+  ],
+  "title": {
+    "ru": "Core Values на практике",
+    "kk": "Core Values іс жүзінде",
+    "en": "Core Values in practice"
+  },
+  "goal": {
+    "ru": "Сегодня ты узнаешь ценности FIRST и как они выглядят в жизни команды.",
+    "kk": "Бүгін сен FIRST құндылықтарын және олардың команда өмірінде қалай көрінетінін білесің.",
+    "en": "Today you will learn the FIRST Core Values and what they look like in team life."
+  },
+  "summary": {
+    "ru": "Теперь ты узнаёшь Core Values в поступках, а не только в словах.",
+    "kk": "Енді сен Core Values-ты сөзден ғана емес, іс-әрекеттен танисың.",
+    "en": "Now you recognise the Core Values in actions, not just words."
+  },
+  "steps": [
+    {
+      "id": "values",
+      "type": "theory",
+      "title": {
+        "ru": "Шесть ценностей",
+        "kk": "Алты құндылық",
+        "en": "Six values"
+      },
+      "body": {
+        "ru": "В FIRST LEGO League шесть **Core Values**:\n\n**Discovery** — открывать новое.\n**Innovation** — придумывать и пробовать.\n**Impact** — делать мир лучше тем, чему научились.\n**Inclusion** — уважать всех и слышать каждого.\n**Teamwork** — вместе сильнее.\n**Fun** — радоваться работе.\n\nСудьи смотрят, как команда живёт этими ценностями, — в том числе как вы помогаете соперникам.",
+        "kk": "FIRST LEGO League-те алты **Core Values** бар:\n\n**Discovery** — жаңаны ашу.\n**Innovation** — ойлап тауып, байқап көру.\n**Impact** — үйренгеніңмен әлемді жақсарту.\n**Inclusion** — бәрін құрметтеп, әрқайсысын тыңдау.\n**Teamwork** — бірге күштірек.\n**Fun** — жұмыстан қуану.\n\nТөрешілер команданың осы құндылықтармен қалай өмір сүретініне қарайды, соның ішінде қарсыластарға қалай көмектесетіндеріңе.",
+        "en": "FIRST LEGO League has six **Core Values**:\n\n**Discovery** — explore new things.\n**Innovation** — invent and try.\n**Impact** — use what you learn to improve the world.\n**Inclusion** — respect everyone and hear each voice.\n**Teamwork** — stronger together.\n**Fun** — enjoy the work.\n\nJudges look at how the team lives these values — including how you help rivals."
+      },
+      "illustration": "r-team"
+    },
+    {
+      "id": "scenes",
+      "type": "quiz",
+      "kind": "match",
+      "question": {
+        "ru": "Какая ценность в этом поступке?",
+        "kk": "Бұл іс-әрекетте қай құндылық бар?",
+        "en": "Which value is in this action?"
+      },
+      "pairs": [
+        {
+          "left": {
+            "ru": "Команда одолжила соперникам запасной провод",
+            "kk": "Команда қарсыластарға қосалқы сым берді",
+            "en": "The team lent rivals a spare cable"
+          },
+          "right": {
+            "ru": "Inclusion / Teamwork",
+            "kk": "Inclusion / Teamwork",
+            "en": "Inclusion / Teamwork"
+          }
+        },
+        {
+          "left": {
+            "ru": "Новичка попросили высказать свою идею первым",
+            "kk": "Жаңа келгеннен идеясын бірінші айтуды сұрады",
+            "en": "The newcomer was asked to share their idea first"
+          },
+          "right": {
+            "ru": "Inclusion",
+            "kk": "Inclusion",
+            "en": "Inclusion"
+          }
+        },
+        {
+          "left": {
+            "ru": "Команда попробовала три разных захвата",
+            "kk": "Команда үш түрлі қармауышты байқап көрді",
+            "en": "The team tried three different grippers"
+          },
+          "right": {
+            "ru": "Innovation",
+            "kk": "Innovation",
+            "en": "Innovation"
+          }
+        },
+        {
+          "left": {
+            "ru": "Решение проекта показали в местной школе",
+            "kk": "Жоба шешімін жергілікті мектепте көрсетті",
+            "en": "The project solution was shown at a local school"
+          },
+          "right": {
+            "ru": "Impact",
+            "kk": "Impact",
+            "en": "Impact"
+          }
+        }
+      ],
+      "explanation": {
+        "ru": "Ценности видны в маленьких поступках каждый день.",
+        "kk": "Құндылықтар күн сайын кішкене іс-әрекеттерде көрінеді.",
+        "en": "Values show in small actions every day."
+      },
+      "skill": "teamwork"
+    },
+    {
+      "id": "conflict",
+      "type": "quiz",
+      "kind": "choice",
+      "question": {
+        "ru": "Двое в команде спорят, чей захват лучше. Что сделать?",
+        "kk": "Командадағы екеуі кімнің қармауышы жақсы екені туралы дауласады. Не істеу керек?",
+        "en": "Two teammates argue whose gripper is better. What do you do?"
+      },
+      "options": [
+        {
+          "ru": "Испытать оба одинаковой серией запусков и решить по результатам",
+          "kk": "Екеуін бірдей іске қосу сериясымен сынап, нәтижелер бойынша шешу",
+          "en": "Test both with the same series of runs and decide by results"
+        },
+        {
+          "ru": "Выбрать захват капитана",
+          "kk": "Капитанның қармауышын таңдау",
+          "en": "Go with the captain’s gripper"
+        },
+        {
+          "ru": "Перестать разговаривать",
+          "kk": "Сөйлесуді доғару",
+          "en": "Stop talking to each other"
+        }
+      ],
+      "correct": [
+        0
+      ],
+      "explanation": {
+        "ru": "Честное испытание уважает обоих и даёт лучший результат команде.",
+        "kk": "Әділ сынақ екеуін де құрметтейді және командаға ең жақсы нәтиже береді.",
+        "en": "A fair test respects both and gives the team the best result."
+      },
+      "skill": "teamwork"
+    }
+  ]
+}

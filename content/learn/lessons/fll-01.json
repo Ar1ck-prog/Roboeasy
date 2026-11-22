@@ -1,0 +1,143 @@
+{
+  "id": "fll-01",
+  "track": "fll",
+  "unit": "fll-intro",
+  "minutes": 6,
+  "skills": [
+    "strategy"
+  ],
+  "title": {
+    "ru": "Четыре части FLL",
+    "kk": "FLL-дің төрт бөлігі",
+    "en": "The four parts of FLL"
+  },
+  "goal": {
+    "ru": "Сегодня ты узнаешь, из чего состоит соревнование FIRST LEGO League.",
+    "kk": "Бүгін сен FIRST LEGO League жарысы неден тұратынын білесің.",
+    "en": "Today you will learn what a FIRST LEGO League event is made of."
+  },
+  "summary": {
+    "ru": "Теперь ты знаешь, что FLL — это не только робот, но и проект, команда и ценности.",
+    "kk": "Енді сен FLL — тек робот емес, сонымен қатар жоба, команда және құндылықтар екенін білесің.",
+    "en": "Now you know FLL is not just a robot but also a project, a team and values."
+  },
+  "steps": [
+    {
+      "id": "parts",
+      "type": "theory",
+      "title": {
+        "ru": "Больше, чем робот",
+        "kk": "Роботтан да көп",
+        "en": "More than a robot"
+      },
+      "body": {
+        "ru": "На FLL команда показывает четыре вещи:\n\n1. **Robot Game** — матчи робота на поле с миссиями.\n2. **Robot Design** — рассказ судьям, как вы спроектировали и запрограммировали робота.\n3. **Innovation Project** — исследование настоящей проблемы по теме сезона и ваше решение.\n4. **Core Values** — как команда работает вместе.\n\nНаграды дают за все части, а не только за очки на поле.",
+        "kk": "FLL-де команда төрт нәрсені көрсетеді:\n\n1. **Robot Game** — миссиялары бар алаңдағы робот матчтары.\n2. **Robot Design** — роботты қалай жобалап, бағдарламалағандарың туралы төрешілерге әңгіме.\n3. **Innovation Project** — маусым тақырыбы бойынша нақты мәселені зерттеу және сендердің шешімдерің.\n4. **Core Values** — команда бірге қалай жұмыс істейді.\n\nМарапаттар тек алаңдағы ұпайлар үшін емес, барлық бөлік үшін беріледі.",
+        "en": "At FLL a team shows four things:\n\n1. **Robot Game** — robot matches on a field full of missions.\n2. **Robot Design** — telling judges how you designed and programmed the robot.\n3. **Innovation Project** — researching a real problem on the season theme and your solution.\n4. **Core Values** — how the team works together.\n\nAwards cover all parts, not just points on the field."
+      },
+      "illustration": "r-fll-parts"
+    },
+    {
+      "id": "which",
+      "type": "quiz",
+      "kind": "match",
+      "question": {
+        "ru": "К какой части это относится?",
+        "kk": "Бұл қай бөлікке жатады?",
+        "en": "Which part is it?"
+      },
+      "pairs": [
+        {
+          "left": {
+            "ru": "Робот за 2:30 выполняет миссии",
+            "kk": "Робот 2:30-да миссияларды орындайды",
+            "en": "The robot does missions in 2:30"
+          },
+          "right": {
+            "ru": "Robot Game",
+            "kk": "Robot Game",
+            "en": "Robot Game"
+          }
+        },
+        {
+          "left": {
+            "ru": "Команда объясняет, почему выбрала такой захват",
+            "kk": "Команда неге мұндай қармауышты таңдағанын түсіндіреді",
+            "en": "The team explains why it chose that gripper"
+          },
+          "right": {
+            "ru": "Robot Design",
+            "kk": "Robot Design",
+            "en": "Robot Design"
+          }
+        },
+        {
+          "left": {
+            "ru": "Команда придумала решение реальной проблемы",
+            "kk": "Команда нақты мәселенің шешімін ойлап тапты",
+            "en": "The team invented a fix for a real problem"
+          },
+          "right": {
+            "ru": "Innovation Project",
+            "kk": "Innovation Project",
+            "en": "Innovation Project"
+          }
+        },
+        {
+          "left": {
+            "ru": "Все в команде слышат друг друга",
+            "kk": "Командадағы бәрі бір-бірін естиді",
+            "en": "Everyone on the team listens to each other"
+          },
+          "right": {
+            "ru": "Core Values",
+            "kk": "Core Values",
+            "en": "Core Values"
+          }
+        }
+      ],
+      "explanation": {
+        "ru": "Четыре части — четыре разных умения команды.",
+        "kk": "Төрт бөлік — команданың төрт түрлі шеберлігі.",
+        "en": "Four parts — four different team skills."
+      },
+      "skill": "strategy"
+    },
+    {
+      "id": "only-robot",
+      "type": "quiz",
+      "kind": "choice",
+      "question": {
+        "ru": "Команда набрала больше всех очков на поле, но не подготовила проект. Это хорошая стратегия?",
+        "kk": "Команда алаңда бәрінен көп ұпай жинады, бірақ жобаны дайындамады. Бұл жақсы стратегия ма?",
+        "en": "A team scored the most field points but did not prepare a project. Good strategy?"
+      },
+      "options": [
+        {
+          "ru": "Нет: судят все четыре части",
+          "kk": "Жоқ: төрт бөліктің бәрі бағаланады",
+          "en": "No: all four parts are judged"
+        },
+        {
+          "ru": "Да, важны только очки",
+          "kk": "Иә, тек ұпайлар маңызды",
+          "en": "Yes, only points matter"
+        },
+        {
+          "ru": "Да, если робот красивый",
+          "kk": "Иә, егер робот әдемі болса",
+          "en": "Yes, if the robot looks nice"
+        }
+      ],
+      "correct": [
+        0
+      ],
+      "explanation": {
+        "ru": "FLL ценит команду целиком. Сильный робот — только часть успеха.",
+        "kk": "FLL команданы толығымен бағалайды. Күшті робот — табыстың бір бөлігі ғана.",
+        "en": "FLL values the whole team. A strong robot is only part of success."
+      },
+      "skill": "strategy"
+    }
+  ]
+}

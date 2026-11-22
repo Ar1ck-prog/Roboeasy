@@ -104,6 +104,10 @@ const T = {
     wobbles: 'Рама шатается: прямоугольник легко перекосить.',
     holds: 'Рама держится: диагональ сделала треугольники.',
     solved: 'Получилось!',
+    cm: 'см',
+    mm: 'мм',
+    sec: 'с',
+    pts: 'очк.',
   },
   kk: {
     driver: 'Жетекші тісті доңғалақ (моторда)',
@@ -155,6 +159,10 @@ const T = {
     wobbles: 'Жақтау шайқалады: тіктөртбұрышты қисайту оңай.',
     holds: 'Жақтау берік: диагональ үшбұрыштар жасады.',
     solved: 'Шықты!',
+    cm: 'см',
+    mm: 'мм',
+    sec: 'с',
+    pts: 'ұп.',
   },
   en: {
     driver: 'Driving gear (on the motor)',
@@ -206,6 +214,10 @@ const T = {
     wobbles: 'The frame wobbles: a rectangle is easy to skew.',
     holds: 'The frame holds: the diagonal made triangles.',
     solved: 'You did it!',
+    cm: 'cm',
+    mm: 'mm',
+    sec: 's',
+    pts: 'pts',
   },
 } satisfies Record<Lang, Record<string, string>>
 
@@ -263,7 +275,7 @@ function Status({ ok, children }: { ok: boolean; children: ReactNode }) {
 
 function Stage({ children, height = 200 }: { children: ReactNode; height?: number }) {
   return (
-    <svg viewBox={`0 0 360 ${height}`} className="ill-anim w-full rounded-(--radius-md) border-(length:--stroke-thin) border-outline" aria-hidden="true">
+    <svg viewBox={`0 0 360 ${height}`} className="ill-anim mx-auto w-full max-w-2xl rounded-(--radius-md) border-(length:--stroke-thin) border-outline" aria-hidden="true">
       <rect width="360" height={height} fill={PAPER} />
       {children}
     </svg>
@@ -362,7 +374,7 @@ export function WheelWidget({ step, lang, done, onDone }: Props<'wheel'>) {
         ))}
         <path d={`M${20 + step.targetCm * scale} 40 V122`} stroke={GREEN} strokeWidth="3" strokeDasharray="6 4" />
         <text x={20 + step.targetCm * scale} y={34} textAnchor="middle" fontSize="12" fontWeight="800" fill={INK}>
-          {step.targetCm} cm
+          {step.targetCm} {t.cm}
         </text>
         <g key={shot?.key ?? 0} style={shot ? ({ animation: 'r-go 1.6s ease-in-out', '--r-d': `${dist}px`, transform: `translateX(${dist}px)` } as CSSProperties) : undefined}>
           <g transform={`translate(20 ${112 - rWheel})`}>
@@ -381,7 +393,7 @@ export function WheelWidget({ step, lang, done, onDone }: Props<'wheel'>) {
         </g>
       </Stage>
       <div className="grid gap-3 sm:grid-cols-2">
-        <Chips label={t.wheel} values={WHEELS} value={wheel} onChange={(v) => (setWheel(v), setShot(null))} render={(d) => `${d} mm`} />
+        <Chips label={t.wheel} values={WHEELS} value={wheel} onChange={(v) => (setWheel(v), setShot(null))} render={(d) => `${d} ${t.mm}`} />
         <Slider label={t.rotations} value={rotations} min={0} max={10} step={0.05} onChange={(v) => (setRotations(v), setShot(null))} />
       </div>
       <div className="flex flex-wrap items-center gap-3">
@@ -431,8 +443,8 @@ export function PidWidget({ step, lang, done, onDone }: Props<'pid'>) {
       </p>
       <Stage height={H}>
         <path d={`M10 ${mid} H${W + 10}`} stroke={INK} strokeWidth="10" opacity="0.85" />
-        <text x={W} y={mid - 10} textAnchor="end" fontSize="11" fontWeight="800" fill={INK}>
-          {t.line}
+        <text x={W} y={H - 10} textAnchor="end" fontSize="11" fontWeight="800" fill={INK}>
+          ▬ {t.line}
         </text>
         {run && (
           <path
@@ -569,7 +581,7 @@ export function StrategyWidget({ step, lang, done, onDone }: Props<'strategy'>) 
               <span className="size-3 shrink-0 rounded-full border-2 border-outline" style={{ background: colors[i % colors.length] }} />
               <span className="flex-1">{m.name[lang]}</span>
               <span className="font-mono text-sm">
-                {m.points} · {m.seconds} s
+                {m.points} {t.pts} · {m.seconds} {t.sec}
               </span>
             </label>
           </li>

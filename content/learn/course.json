@@ -158,334 +158,6 @@
       ]
     },
     {
-      "id": "build",
-      "title": {
-        "ru": "Сборка",
-        "kk": "Құрастыру",
-        "en": "Building"
-      },
-      "description": {
-        "ru": "Детали и их названия, прочные конструкции, шестерни. Базовая тележка.",
-        "kk": "Бөлшектер мен олардың атаулары, берік құрылымдар, тісті доңғалақтар. Негізгі арба.",
-        "en": "Parts and their names, strong structures, gears. A basic driving base."
-      },
-      "icon": "Hammer",
-      "color": "var(--blk-control)",
-      "prerequisites": [
-        "start"
-      ],
-      "units": [
-        {
-          "id": "build-parts",
-          "title": {
-            "ru": "Детали и их названия",
-            "kk": "Бөлшектер мен атаулары",
-            "en": "Parts and their names"
-          },
-          "lessons": [
-            {
-              "id": "build-01",
-              "title": {
-                "ru": "Балки и рамы",
-                "kk": "Арқалықтар және жақтаулар",
-                "en": "Beams and frames"
-              },
-              "skills": [
-                "parts"
-              ],
-              "status": "ready",
-              "project": false,
-              "kit": false
-            },
-            {
-              "id": "build-02",
-              "title": {
-                "ru": "Оси и штифты",
-                "kk": "Осьтер және штифттер",
-                "en": "Axles and pins"
-              },
-              "skills": [
-                "parts"
-              ],
-              "status": "ready",
-              "project": false,
-              "kit": false
-            },
-            {
-              "id": "build-03",
-              "title": {
-                "ru": "Втулки и соединители",
-                "kk": "Төлкелер және қосқыштар",
-                "en": "Bushes and connectors"
-              },
-              "skills": [
-                "parts"
-              ],
-              "status": "ready",
-              "project": false,
-              "kit": false
-            },
-            {
-              "id": "build-04",
-              "title": {
-                "ru": "Колёса и шины",
-                "kk": "Дөңгелектер және шиналар",
-                "en": "Wheels and tyres"
-              },
-              "skills": [
-                "parts"
-              ],
-              "status": "ready",
-              "project": false,
-              "kit": false
-            },
-            {
-              "id": "build-05",
-              "title": {
-                "ru": "Найди деталь",
-                "kk": "Бөлшекті тап",
-                "en": "Find the part"
-              },
-              "skills": [
-                "parts"
-              ],
-              "status": "ready",
-              "project": false,
-              "kit": false
-            }
-          ]
-        },
-        {
-          "id": "build-structures",
-          "title": {
-            "ru": "Прочные конструкции",
-            "kk": "Берік құрылымдар",
-            "en": "Strong structures"
-          },
-          "lessons": [
-            {
-              "id": "build-06",
-              "title": {
-                "ru": "Почему треугольник прочный",
-                "kk": "Үшбұрыш неге берік",
-                "en": "Why triangles are strong"
-              },
-              "skills": [
-                "structures"
-              ],
-              "status": "ready",
-              "project": false,
-              "kit": false
-            },
-            {
-              "id": "build-07",
-              "title": {
-                "ru": "Двойные балки и упоры",
-                "kk": "Қос арқалықтар және тіректер",
-                "en": "Double beams and braces"
-              },
-              "skills": [
-                "structures"
-              ],
-              "status": "ready",
-              "project": false,
-              "kit": false
-            },
-            {
-              "id": "build-08",
-              "title": {
-                "ru": "Найди слабое место",
-                "kk": "Әлсіз жерді тап",
-                "en": "Find the weak spot"
-              },
-              "skills": [
-                "structures"
-              ],
-              "status": "ready",
-              "project": false,
-              "kit": false
-            }
-          ]
-        },
-        {
-          "id": "build-gears",
-          "title": {
-            "ru": "Шестерни",
-            "kk": "Тісті доңғалақтар",
-            "en": "Gears"
-          },
-          "lessons": [
-            {
-              "id": "build-09",
-              "title": {
-                "ru": "Как шестерни передают вращение",
-                "kk": "Тісті доңғалақтар айналуды қалай береді",
-                "en": "How gears pass on rotation"
-              },
-              "skills": [
-                "gears"
-              ],
-              "status": "ready",
-              "project": false,
-              "kit": false
-            },
-            {
-              "id": "build-10",
-              "title": {
-                "ru": "Передаточное число",
-                "kk": "Беріліс саны",
-                "en": "Gear ratio"
-              },
-              "skills": [
-                "gears"
-              ],
-              "status": "ready",
-              "project": false,
-              "kit": false
-            },
-            {
-              "id": "build-11",
-              "title": {
-                "ru": "Червячная передача",
-                "kk": "Бұрамалы беріліс",
-                "en": "Worm gear"
-              },
-              "skills": [
-                "gears"
-              ],
-              "status": "ready",
-              "project": false,
-              "kit": false
-            },
-            {
-              "id": "build-12",
-              "title": {
-                "ru": "Куда и как быстро?",
-                "kk": "Қайда және қаншалықты жылдам?",
-                "en": "Which way and how fast?"
-              },
-              "skills": [
-                "gears"
-              ],
-              "status": "ready",
-              "project": false,
-              "kit": false
-            }
-          ]
-        },
-        {
-          "id": "build-base",
-          "title": {
-            "ru": "Базовая тележка",
-            "kk": "Негізгі арба",
-            "en": "The driving base"
-          },
-          "lessons": [
-            {
-              "id": "build-13",
-              "title": {
-                "ru": "Шасси",
-                "kk": "Шасси",
-                "en": "Chassis"
-              },
-              "skills": [
-                "structures",
-                "parts"
-              ],
-              "status": "ready",
-              "project": false,
-              "kit": true
-            },
-            {
-              "id": "build-14",
-              "title": {
-                "ru": "Моторы и колёса",
-                "kk": "Моторлар және дөңгелектер",
-                "en": "Motors and wheels"
-              },
-              "skills": [
-                "structures",
-                "parts"
-              ],
-              "status": "ready",
-              "project": false,
-              "kit": true
-            },
-            {
-              "id": "build-15",
-              "title": {
-                "ru": "Хаб и провода",
-                "kk": "Хаб және сымдар",
-                "en": "Hub and cables"
-              },
-              "skills": [
-                "structures",
-                "parts"
-              ],
-              "status": "ready",
-              "project": false,
-              "kit": true
-            },
-            {
-              "id": "build-16",
-              "title": {
-                "ru": "Собери и проверь",
-                "kk": "Құрастырып, тексер",
-                "en": "Build and test"
-              },
-              "skills": [
-                "structures",
-                "parts"
-              ],
-              "status": "ready",
-              "project": false,
-              "kit": true
-            }
-          ]
-        },
-        {
-          "id": "build-wheels",
-          "title": {
-            "ru": "Колёса и точность",
-            "kk": "Доңғалақтар және дәлдік",
-            "en": "Wheels and accuracy"
-          },
-          "lessons": [
-            {
-              "id": "build-17",
-              "title": {
-                "ru": "Диаметр колеса и расстояние",
-                "kk": "Дөңгелек диаметрі және қашықтық",
-                "en": "Wheel diameter and distance"
-              },
-              "skills": [
-                "mechanisms",
-                "motion"
-              ],
-              "status": "ready",
-              "project": false,
-              "kit": false
-            },
-            {
-              "id": "build-18",
-              "title": {
-                "ru": "Итоговый проект",
-                "kk": "Қорытынды жоба",
-                "en": "Final project"
-              },
-              "skills": [
-                "mechanisms",
-                "motion"
-              ],
-              "status": "ready",
-              "project": true,
-              "kit": true
-            }
-          ]
-        }
-      ]
-    },
-    {
       "id": "blocks",
       "title": {
         "ru": "Программирование блоками",
@@ -904,6 +576,334 @@
               "status": "ready",
               "project": true,
               "kit": false
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "build",
+      "title": {
+        "ru": "Сборка",
+        "kk": "Құрастыру",
+        "en": "Building"
+      },
+      "description": {
+        "ru": "Детали и их названия, прочные конструкции, шестерни. Базовая тележка.",
+        "kk": "Бөлшектер мен олардың атаулары, берік құрылымдар, тісті доңғалақтар. Негізгі арба.",
+        "en": "Parts and their names, strong structures, gears. A basic driving base."
+      },
+      "icon": "Hammer",
+      "color": "var(--blk-control)",
+      "prerequisites": [
+        "start"
+      ],
+      "units": [
+        {
+          "id": "build-parts",
+          "title": {
+            "ru": "Детали и их названия",
+            "kk": "Бөлшектер мен атаулары",
+            "en": "Parts and their names"
+          },
+          "lessons": [
+            {
+              "id": "build-01",
+              "title": {
+                "ru": "Балки и рамы",
+                "kk": "Арқалықтар және жақтаулар",
+                "en": "Beams and frames"
+              },
+              "skills": [
+                "parts"
+              ],
+              "status": "ready",
+              "project": false,
+              "kit": false
+            },
+            {
+              "id": "build-02",
+              "title": {
+                "ru": "Оси и штифты",
+                "kk": "Осьтер және штифттер",
+                "en": "Axles and pins"
+              },
+              "skills": [
+                "parts"
+              ],
+              "status": "ready",
+              "project": false,
+              "kit": false
+            },
+            {
+              "id": "build-03",
+              "title": {
+                "ru": "Втулки и соединители",
+                "kk": "Төлкелер және қосқыштар",
+                "en": "Bushes and connectors"
+              },
+              "skills": [
+                "parts"
+              ],
+              "status": "ready",
+              "project": false,
+              "kit": false
+            },
+            {
+              "id": "build-04",
+              "title": {
+                "ru": "Колёса и шины",
+                "kk": "Дөңгелектер және шиналар",
+                "en": "Wheels and tyres"
+              },
+              "skills": [
+                "parts"
+              ],
+              "status": "ready",
+              "project": false,
+              "kit": false
+            },
+            {
+              "id": "build-05",
+              "title": {
+                "ru": "Найди деталь",
+                "kk": "Бөлшекті тап",
+                "en": "Find the part"
+              },
+              "skills": [
+                "parts"
+              ],
+              "status": "ready",
+              "project": false,
+              "kit": false
+            }
+          ]
+        },
+        {
+          "id": "build-structures",
+          "title": {
+            "ru": "Прочные конструкции",
+            "kk": "Берік құрылымдар",
+            "en": "Strong structures"
+          },
+          "lessons": [
+            {
+              "id": "build-06",
+              "title": {
+                "ru": "Почему треугольник прочный",
+                "kk": "Үшбұрыш неге берік",
+                "en": "Why triangles are strong"
+              },
+              "skills": [
+                "structures"
+              ],
+              "status": "ready",
+              "project": false,
+              "kit": false
+            },
+            {
+              "id": "build-07",
+              "title": {
+                "ru": "Двойные балки и упоры",
+                "kk": "Қос арқалықтар және тіректер",
+                "en": "Double beams and braces"
+              },
+              "skills": [
+                "structures"
+              ],
+              "status": "ready",
+              "project": false,
+              "kit": false
+            },
+            {
+              "id": "build-08",
+              "title": {
+                "ru": "Найди слабое место",
+                "kk": "Әлсіз жерді тап",
+                "en": "Find the weak spot"
+              },
+              "skills": [
+                "structures"
+              ],
+              "status": "ready",
+              "project": false,
+              "kit": false
+            }
+          ]
+        },
+        {
+          "id": "build-gears",
+          "title": {
+            "ru": "Шестерни",
+            "kk": "Тісті доңғалақтар",
+            "en": "Gears"
+          },
+          "lessons": [
+            {
+              "id": "build-09",
+              "title": {
+                "ru": "Как шестерни передают вращение",
+                "kk": "Тісті доңғалақтар айналуды қалай береді",
+                "en": "How gears pass on rotation"
+              },
+              "skills": [
+                "gears"
+              ],
+              "status": "ready",
+              "project": false,
+              "kit": false
+            },
+            {
+              "id": "build-10",
+              "title": {
+                "ru": "Передаточное число",
+                "kk": "Беріліс саны",
+                "en": "Gear ratio"
+              },
+              "skills": [
+                "gears"
+              ],
+              "status": "ready",
+              "project": false,
+              "kit": false
+            },
+            {
+              "id": "build-11",
+              "title": {
+                "ru": "Червячная передача",
+                "kk": "Бұрамалы беріліс",
+                "en": "Worm gear"
+              },
+              "skills": [
+                "gears"
+              ],
+              "status": "ready",
+              "project": false,
+              "kit": false
+            },
+            {
+              "id": "build-12",
+              "title": {
+                "ru": "Куда и как быстро?",
+                "kk": "Қайда және қаншалықты жылдам?",
+                "en": "Which way and how fast?"
+              },
+              "skills": [
+                "gears"
+              ],
+              "status": "ready",
+              "project": false,
+              "kit": false
+            }
+          ]
+        },
+        {
+          "id": "build-base",
+          "title": {
+            "ru": "Базовая тележка",
+            "kk": "Негізгі арба",
+            "en": "The driving base"
+          },
+          "lessons": [
+            {
+              "id": "build-13",
+              "title": {
+                "ru": "Шасси",
+                "kk": "Шасси",
+                "en": "Chassis"
+              },
+              "skills": [
+                "structures",
+                "parts"
+              ],
+              "status": "ready",
+              "project": false,
+              "kit": true
+            },
+            {
+              "id": "build-14",
+              "title": {
+                "ru": "Моторы и колёса",
+                "kk": "Моторлар және дөңгелектер",
+                "en": "Motors and wheels"
+              },
+              "skills": [
+                "structures",
+                "parts"
+              ],
+              "status": "ready",
+              "project": false,
+              "kit": true
+            },
+            {
+              "id": "build-15",
+              "title": {
+                "ru": "Хаб и провода",
+                "kk": "Хаб және сымдар",
+                "en": "Hub and cables"
+              },
+              "skills": [
+                "structures",
+                "parts"
+              ],
+              "status": "ready",
+              "project": false,
+              "kit": true
+            },
+            {
+              "id": "build-16",
+              "title": {
+                "ru": "Собери и проверь",
+                "kk": "Құрастырып, тексер",
+                "en": "Build and test"
+              },
+              "skills": [
+                "structures",
+                "parts"
+              ],
+              "status": "ready",
+              "project": false,
+              "kit": true
+            }
+          ]
+        },
+        {
+          "id": "build-wheels",
+          "title": {
+            "ru": "Колёса и точность",
+            "kk": "Доңғалақтар және дәлдік",
+            "en": "Wheels and accuracy"
+          },
+          "lessons": [
+            {
+              "id": "build-17",
+              "title": {
+                "ru": "Диаметр колеса и расстояние",
+                "kk": "Дөңгелек диаметрі және қашықтық",
+                "en": "Wheel diameter and distance"
+              },
+              "skills": [
+                "mechanisms",
+                "motion"
+              ],
+              "status": "ready",
+              "project": false,
+              "kit": false
+            },
+            {
+              "id": "build-18",
+              "title": {
+                "ru": "Итоговый проект",
+                "kk": "Қорытынды жоба",
+                "en": "Final project"
+              },
+              "skills": [
+                "mechanisms",
+                "motion"
+              ],
+              "status": "ready",
+              "project": true,
+              "kit": true
             }
           ]
         }
@@ -2058,7 +2058,7 @@
               "skills": [
                 "strategy"
               ],
-              "status": "todo",
+              "status": "ready",
               "project": false,
               "kit": false
             },
@@ -2072,7 +2072,7 @@
               "skills": [
                 "strategy"
               ],
-              "status": "todo",
+              "status": "ready",
               "project": false,
               "kit": false
             }
@@ -2090,13 +2090,13 @@
               "id": "fll-03",
               "title": {
                 "ru": "Очки за время",
-                "kk": "Уақытқа шаққандағы ұпай",
-                "en": "Points for time"
+                "kk": "Уақытқа ұпай",
+                "en": "Points per time"
               },
               "skills": [
                 "strategy"
               ],
-              "status": "todo",
+              "status": "ready",
               "project": false,
               "kit": false
             },
@@ -2104,13 +2104,13 @@
               "id": "fll-04",
               "title": {
                 "ru": "Заезды с FLL-тренером",
-                "kk": "FLL-жаттықтырушымен заездер",
-                "en": "Runs with the FLL coach"
+                "kk": "FLL-жаттықтырушымен жүрістер",
+                "en": "Runs with the FLL trainer"
               },
               "skills": [
                 "strategy"
               ],
-              "status": "todo",
+              "status": "ready",
               "project": false,
               "kit": false
             },
@@ -2124,7 +2124,7 @@
               "skills": [
                 "strategy"
               ],
-              "status": "todo",
+              "status": "ready",
               "project": false,
               "kit": false
             }
@@ -2142,14 +2142,14 @@
               "id": "fll-06",
               "title": {
                 "ru": "Смена насадок за секунды",
-                "kk": "Саптамаларды секундта ауыстыру",
-                "en": "Attachment swaps in seconds"
+                "kk": "Саптамаларды секундтарда ауыстыру",
+                "en": "Swapping attachments in seconds"
               },
               "skills": [
                 "mechanisms",
                 "strategy"
               ],
-              "status": "todo",
+              "status": "ready",
               "project": false,
               "kit": false
             },
@@ -2157,14 +2157,14 @@
               "id": "fll-07",
               "title": {
                 "ru": "Журнал заездов",
-                "kk": "Заездер журналы",
+                "kk": "Жүрістер журналы",
                 "en": "The run log"
               },
               "skills": [
                 "mechanisms",
                 "strategy"
               ],
-              "status": "todo",
+              "status": "ready",
               "project": false,
               "kit": false
             }
@@ -2188,7 +2188,7 @@
               "skills": [
                 "teamwork"
               ],
-              "status": "todo",
+              "status": "ready",
               "project": false,
               "kit": false
             },
@@ -2196,13 +2196,13 @@
               "id": "fll-09",
               "title": {
                 "ru": "Core Values на практике",
-                "kk": "Core Values тәжірибеде",
+                "kk": "Core Values іс жүзінде",
                 "en": "Core Values in practice"
               },
               "skills": [
                 "teamwork"
               ],
-              "status": "todo",
+              "status": "ready",
               "project": false,
               "kit": false
             },
@@ -2216,7 +2216,7 @@
               "skills": [
                 "teamwork"
               ],
-              "status": "todo",
+              "status": "ready",
               "project": false,
               "kit": false
             }
@@ -2235,12 +2235,12 @@
               "title": {
                 "ru": "Как рассказать о роботе",
                 "kk": "Робот туралы қалай айту керек",
-                "en": "How to present your robot"
+                "en": "How to present the robot"
               },
               "skills": [
                 "teamwork"
               ],
-              "status": "todo",
+              "status": "ready",
               "project": false,
               "kit": false
             },
@@ -2249,12 +2249,12 @@
               "title": {
                 "ru": "Пробная защита",
                 "kk": "Сынақ қорғау",
-                "en": "A practice judging session"
+                "en": "Practice judging"
               },
               "skills": [
                 "teamwork"
               ],
-              "status": "todo",
+              "status": "ready",
               "project": false,
               "kit": false
             },
@@ -2263,12 +2263,12 @@
               "title": {
                 "ru": "Проект «План сезона»",
                 "kk": "«Маусым жоспары» жобасы",
-                "en": "Project “Season plan”"
+                "en": "Project: Season plan"
               },
               "skills": [
                 "teamwork"
               ],
-              "status": "todo",
+              "status": "ready",
               "project": true,
               "kit": false
             }

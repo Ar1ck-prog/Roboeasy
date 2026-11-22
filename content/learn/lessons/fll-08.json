@@ -1,0 +1,143 @@
+{
+  "id": "fll-08",
+  "track": "fll",
+  "unit": "fll-team",
+  "minutes": 6,
+  "skills": [
+    "teamwork"
+  ],
+  "title": {
+    "ru": "Роли в команде",
+    "kk": "Командадағы рөлдер",
+    "en": "Team roles"
+  },
+  "goal": {
+    "ru": "Сегодня ты узнаешь, какие роли бывают в команде FLL.",
+    "kk": "Бүгін сен FLL командасында қандай рөлдер болатынын білесің.",
+    "en": "Today you will learn the roles in an FLL team."
+  },
+  "summary": {
+    "ru": "Теперь ты знаешь роли в команде и почему их полезно менять.",
+    "kk": "Енді сен командадағы рөлдерді және оларды неге ауыстырған пайдалы екенін білесің.",
+    "en": "Now you know the team roles and why it helps to rotate them."
+  },
+  "steps": [
+    {
+      "id": "roles",
+      "type": "theory",
+      "title": {
+        "ru": "Каждый важен",
+        "kk": "Әрқайсысы маңызды",
+        "en": "Everyone matters"
+      },
+      "body": {
+        "ru": "В команде FLL обычно есть:\n\n**Сборщики** — строят робота и насадки.\n**Программисты** — пишут и проверяют программы.\n**Пилоты** — ставят и запускают робота на матчах.\n**Исследователи** — ведут Innovation Project.\n**Капитан** — следит, чтобы все знали план.\n\nРоли — не клетки. Хорошо, когда каждый пробует разное и может подменить товарища.",
+        "kk": "FLL командасында әдетте мыналар болады:\n\n**Құрастырушылар** — роботты және саптамаларды жасайды.\n**Бағдарламашылар** — бағдарламаларды жазып, тексереді.\n**Ұшқыштар** — матчтарда роботты қойып, іске қосады.\n**Зерттеушілер** — Innovation Project-ті жүргізеді.\n**Капитан** — бәрі жоспарды білуін қадағалайды.\n\nРөлдер — тор емес. Әрқайсысы әр түрлі нәрсені байқап, жолдасының орнын баса алса — жақсы.",
+        "en": "An FLL team usually has:\n\n**Builders** — build the robot and attachments.\n**Programmers** — write and test programs.\n**Drivers** — place and launch the robot in matches.\n**Researchers** — lead the Innovation Project.\n**A captain** — makes sure everyone knows the plan.\n\nRoles are not cages. It is good when everyone tries different things and can cover for a teammate."
+      },
+      "illustration": "r-team"
+    },
+    {
+      "id": "who",
+      "type": "quiz",
+      "kind": "match",
+      "question": {
+        "ru": "Кто это делает?",
+        "kk": "Мұны кім істейді?",
+        "en": "Who does this?"
+      },
+      "pairs": [
+        {
+          "left": {
+            "ru": "Собирает новую насадку",
+            "kk": "Жаңа саптама құрастырады",
+            "en": "Builds a new attachment"
+          },
+          "right": {
+            "ru": "Сборщик",
+            "kk": "Құрастырушы",
+            "en": "Builder"
+          }
+        },
+        {
+          "left": {
+            "ru": "Ищет ошибку в программе поворота",
+            "kk": "Бұрылыс бағдарламасындағы қатені іздейді",
+            "en": "Hunts a bug in the turn program"
+          },
+          "right": {
+            "ru": "Программист",
+            "kk": "Бағдарламашы",
+            "en": "Programmer"
+          }
+        },
+        {
+          "left": {
+            "ru": "Запускает робота на матче",
+            "kk": "Матчта роботты іске қосады",
+            "en": "Launches the robot in a match"
+          },
+          "right": {
+            "ru": "Пилот",
+            "kk": "Ұшқыш",
+            "en": "Driver"
+          }
+        },
+        {
+          "left": {
+            "ru": "Беседует с экспертом о проблеме сезона",
+            "kk": "Маусым мәселесі туралы сарапшымен сөйлеседі",
+            "en": "Interviews an expert about the season problem"
+          },
+          "right": {
+            "ru": "Исследователь",
+            "kk": "Зерттеуші",
+            "en": "Researcher"
+          }
+        }
+      ],
+      "explanation": {
+        "ru": "У каждого своя зона ответственности — и общая цель.",
+        "kk": "Әрқайсысының өз жауапкершілік аймағы бар — және ортақ мақсат.",
+        "en": "Everyone has their own area — and a shared goal."
+      },
+      "skill": "teamwork"
+    },
+    {
+      "id": "rotate",
+      "type": "quiz",
+      "kind": "choice",
+      "question": {
+        "ru": "Единственный программист заболел за день до турнира. Как этого избежать?",
+        "kk": "Жалғыз бағдарламашы турнирден бір күн бұрын ауырып қалды. Мұны қалай болдырмауға болады?",
+        "en": "The only programmer fell ill the day before the tournament. How do you avoid this?"
+      },
+      "options": [
+        {
+          "ru": "Заранее учить друг друга и меняться ролями",
+          "kk": "Бір-біріңді алдын ала үйретіп, рөлдермен алмасу",
+          "en": "Teach each other in advance and rotate roles"
+        },
+        {
+          "ru": "Никогда не болеть",
+          "kk": "Ешқашан ауырмау",
+          "en": "Never get ill"
+        },
+        {
+          "ru": "Не программировать вообще",
+          "kk": "Мүлдем бағдарламаламау",
+          "en": "Not program at all"
+        }
+      ],
+      "correct": [
+        0
+      ],
+      "explanation": {
+        "ru": "Команда сильна, когда знания не сидят в одной голове.",
+        "kk": "Білім бір басқа ғана сыйып қалмағанда команда күшті.",
+        "en": "A team is strong when knowledge is not stuck in one head."
+      },
+      "skill": "teamwork"
+    }
+  ]
+}

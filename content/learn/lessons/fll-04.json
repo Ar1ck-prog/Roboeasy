@@ -1,0 +1,197 @@
+{
+  "id": "fll-04",
+  "track": "fll",
+  "unit": "fll-strategy",
+  "minutes": 8,
+  "skills": [
+    "strategy"
+  ],
+  "title": {
+    "ru": "Заезды с FLL-тренером",
+    "kk": "FLL-жаттықтырушымен жүрістер",
+    "en": "Runs with the FLL trainer"
+  },
+  "goal": {
+    "ru": "Сегодня ты научишься делить миссии на заезды.",
+    "kk": "Бүгін сен миссияларды жүрістерге бөлуді үйренесің.",
+    "en": "Today you will learn to group missions into runs."
+  },
+  "summary": {
+    "ru": "Теперь ты умеешь группировать миссии в заезды и планировать сезон в FLL-тренере.",
+    "kk": "Енді сен миссияларды жүрістерге топтап, маусымды FLL-жаттықтырушыда жоспарлай аласың.",
+    "en": "Now you can group missions into runs and plan a season in the FLL trainer."
+  },
+  "steps": [
+    {
+      "id": "runs",
+      "type": "theory",
+      "title": {
+        "ru": "Группируем миссии",
+        "kk": "Миссияларды топтаймыз",
+        "en": "Grouping missions"
+      },
+      "body": {
+        "ru": "Каждый выезд из базы — это **заезд**. Хороший заезд объединяет миссии, которые **рядом** на поле и делаются **одной насадкой**.\n\nМеньше заездов — меньше времени на возвраты и смены насадок. Но слишком длинный заезд рискованный: одна ошибка — и пропадают все его миссии.\n\nВ разделе **«Соревнования»** на RoboEasy есть FLL-тренер: там можно разложить миссии сезона по заездам и посчитать время.",
+        "kk": "Базадан әр шығу — **жүріс**. Жақсы жүріс алаңда **жақын** тұрған және **бір саптамамен** орындалатын миссияларды біріктіреді.\n\nЖүрістер неғұрлым аз болса, қайтуға және саптама ауыстыруға соғұрлым аз уақыт кетеді. Бірақ тым ұзын жүріс қауіпті: бір қате — және оның барлық миссиясы жоғалады.\n\nRoboEasy-дегі **«Жарыстар»** бөлімінде FLL-жаттықтырушы бар: онда маусым миссияларын жүрістерге бөліп, уақытты есептеуге болады.",
+        "en": "Every trip out of base is a **run**. A good run combines missions that are **close together** and use **one attachment**.\n\nFewer runs mean less time on returns and swaps. But an overly long run is risky: one mistake and all its missions are lost.\n\nThe **Competitions** section of RoboEasy has an FLL trainer where you can split the season’s missions into runs and add up the time."
+      },
+      "illustration": "r-fll-table"
+    },
+    {
+      "id": "group",
+      "type": "quiz",
+      "kind": "choice",
+      "question": {
+        "ru": "Какие две миссии лучше поставить в один заезд?",
+        "kk": "Қай екі миссияны бір жүріске қойған жақсы?",
+        "en": "Which two missions best share a run?"
+      },
+      "options": [
+        {
+          "ru": "Рядом на поле и одной насадкой",
+          "kk": "Алаңда жақын және бір саптамамен",
+          "en": "Close together and one attachment"
+        },
+        {
+          "ru": "В разных углах поля",
+          "kk": "Алаңның әр бұрышында",
+          "en": "In opposite corners"
+        },
+        {
+          "ru": "С разными насадками",
+          "kk": "Әр түрлі саптамалармен",
+          "en": "With different attachments"
+        }
+      ],
+      "correct": [
+        0
+      ],
+      "explanation": {
+        "ru": "Близко и одной насадкой — меньше езды и никаких смен.",
+        "kk": "Жақын және бір саптамамен — жүру аз және ауыстыру жоқ.",
+        "en": "Close and one attachment — less driving and no swaps."
+      },
+      "skill": "strategy"
+    },
+    {
+      "id": "plan",
+      "type": "quiz",
+      "kind": "order",
+      "question": {
+        "ru": "Как планировать заезды?",
+        "kk": "Жүрістерді қалай жоспарлау керек?",
+        "en": "How do you plan runs?"
+      },
+      "items": [
+        {
+          "ru": "Отметить миссии на карте поля",
+          "kk": "Миссияларды алаң картасында белгілеу",
+          "en": "Mark the missions on the field map"
+        },
+        {
+          "ru": "Сгруппировать соседние миссии",
+          "kk": "Көрші миссияларды топтау",
+          "en": "Group neighbouring missions"
+        },
+        {
+          "ru": "Подобрать насадку для каждой группы",
+          "kk": "Әр топқа саптама таңдау",
+          "en": "Pick an attachment for each group"
+        },
+        {
+          "ru": "Посчитать время всех заездов",
+          "kk": "Барлық жүрістің уақытын есептеу",
+          "en": "Add up the time of all runs"
+        }
+      ],
+      "explanation": {
+        "ru": "Карта → группы → насадки → время. Если не укладываешься — убирай самые «дешёвые» миссии.",
+        "kk": "Карта → топтар → саптамалар → уақыт. Сыймасаң — ең «арзан» миссияларды алып таста.",
+        "en": "Map → groups → attachments → time. If it does not fit, drop the cheapest missions."
+      },
+      "skill": "strategy"
+    },
+    {
+      "id": "season-plan",
+      "type": "widget",
+      "widget": "strategy",
+      "title": {
+        "ru": "Уложись в матч",
+        "kk": "Матчқа сый",
+        "en": "Fit the match"
+      },
+      "task": {
+        "ru": "Тренировочные миссии: выбери набор, который помещается в 150 секунд (с учётом заездов) и даёт **не меньше 120 очков**.",
+        "kk": "Жаттығу миссиялары: 150 секундқа сыятын (жүрістерді ескере отырып) және **кемінде 120 ұпай** беретін жиынтықты таңда.",
+        "en": "Practice missions: choose a set that fits in 150 seconds (including runs) and scores **at least 120 points**."
+      },
+      "seconds": 150,
+      "target": 120,
+      "missions": [
+        {
+          "name": {
+            "ru": "Мост",
+            "kk": "Көпір",
+            "en": "The bridge"
+          },
+          "points": 30,
+          "seconds": 35
+        },
+        {
+          "name": {
+            "ru": "Маяк",
+            "kk": "Маяк",
+            "en": "The lighthouse"
+          },
+          "points": 20,
+          "seconds": 20
+        },
+        {
+          "name": {
+            "ru": "Кран",
+            "kk": "Кран",
+            "en": "The crane"
+          },
+          "points": 45,
+          "seconds": 60
+        },
+        {
+          "name": {
+            "ru": "Солнечная панель",
+            "kk": "Күн панелі",
+            "en": "The solar panel"
+          },
+          "points": 25,
+          "seconds": 25
+        },
+        {
+          "name": {
+            "ru": "Посадка дерева",
+            "kk": "Ағаш отырғызу",
+            "en": "Plant a tree"
+          },
+          "points": 35,
+          "seconds": 45
+        },
+        {
+          "name": {
+            "ru": "Сортировка",
+            "kk": "Сұрыптау",
+            "en": "Sorting"
+          },
+          "points": 30,
+          "seconds": 40
+        },
+        {
+          "name": {
+            "ru": "Точность",
+            "kk": "Дәлдік",
+            "en": "Precision"
+          },
+          "points": 15,
+          "seconds": 10
+        }
+      ]
+    }
+  ]
+}

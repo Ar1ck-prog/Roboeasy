@@ -320,8 +320,12 @@ export const lessonSchema = z
           if (b.correct >= b.options.length) ctx.addIssue({ code: 'custom', path: ['steps', i, 'blanks', j], message: 'correct option out of range' })
           if (!s.code.includes(`[[${j}]]`)) ctx.addIssue({ code: 'custom', path: ['steps', i, 'code'], message: `gap [[${j}]] missing from the code` })
         })
-      if (s.type === 'widget' && s.widget === 'strategy' && s.missions.reduce((sum, m) => sum + m.points, 0) < s.target)
-        ctx.addIssue({ code: 'custom', path: ['steps', i], message: 'strategy target is unreachable' })
+      if (s.type === 'widget' && s.widget === 'strategy') {
+        // Best points within the time limit (0/1 knapsack over seconds).
+        const best = new Array<number>(s.seconds + 1).fill(0)
+        for (const m of s.missions) for (let t = s.seconds; t >= m.seconds; t--) best[t] = Math.max(best[t], best[t - m.seconds] + m.points)
+        if (best[s.seconds] < s.target) ctx.addIssue({ code: 'custom', path: ['steps', i], message: 'strategy target is unreachable in time' })
+      }
       if (s.type === 'code' || s.type === 'debug' || s.type === 'project') {
         for (const [what, steps, fns] of [
           ['start', s.start, s.startFunctions],

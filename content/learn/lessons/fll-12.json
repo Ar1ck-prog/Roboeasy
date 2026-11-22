@@ -1,0 +1,131 @@
+{
+  "id": "fll-12",
+  "track": "fll",
+  "unit": "fll-judging",
+  "minutes": 7,
+  "skills": [
+    "teamwork"
+  ],
+  "title": {
+    "ru": "Пробная защита",
+    "kk": "Сынақ қорғау",
+    "en": "Practice judging"
+  },
+  "goal": {
+    "ru": "Сегодня ты подготовишься к вопросам судей.",
+    "kk": "Бүгін сен төрешілердің сұрақтарына дайындаласың.",
+    "en": "Today you will prepare for the judges’ questions."
+  },
+  "summary": {
+    "ru": "Теперь ты знаешь, как готовиться к вопросам и отвечать спокойно и по делу.",
+    "kk": "Енді сен сұрақтарға қалай дайындалу керегін және сабырлы әрі нақты жауап беруді білесің.",
+    "en": "Now you know how to prepare for questions and answer calmly and to the point."
+  },
+  "steps": [
+    {
+      "id": "practice",
+      "type": "theory",
+      "title": {
+        "ru": "Репетиция",
+        "kk": "Репетиция",
+        "en": "Rehearsal"
+      },
+      "body": {
+        "ru": "Судьи задают вопросы, чтобы понять, **как думала команда**. Правильного «заученного» ответа нет — важно, чтобы ответ был честным и понятным.\n\nУстрой пробную защиту: пусть родители, тренер или другая команда побудут судьями. Составь список возможных вопросов и потренируйся отвечать.\n\nНе знаешь ответа — честно скажи и объясни, как бы вы это выяснили.",
+        "kk": "Төрешілер **команданың қалай ойлағанын** түсіну үшін сұрақтар қояды. Дұрыс «жатталған» жауап жоқ — жауаптың адал әрі түсінікті болуы маңызды.\n\nСынақ қорғау өткіз: ата-аналар, жаттықтырушы немесе басқа команда төреші болсын. Ықтимал сұрақтар тізімін жасап, жауап беруге жаттық.\n\nЖауабын білмесең — адал айт және мұны қалай анықтайтындарыңды түсіндір.",
+        "en": "Judges ask questions to understand **how the team thought**. There is no “memorised” right answer — what matters is an honest, clear answer.\n\nHold a practice session: let parents, a coach or another team be the judges. List likely questions and practise answering.\n\nIf you do not know, say so honestly and explain how you would find out."
+      },
+      "illustration": "r-judging"
+    },
+    {
+      "id": "answers",
+      "type": "quiz",
+      "kind": "match",
+      "question": {
+        "ru": "Подбери хороший ответ",
+        "kk": "Жақсы жауапты таңда",
+        "en": "Match a good answer"
+      },
+      "pairs": [
+        {
+          "left": {
+            "ru": "Почему выбрали такое шасси?",
+            "kk": "Неге мұндай шассиді таңдадыңдар?",
+            "en": "Why this chassis?"
+          },
+          "right": {
+            "ru": "Сравнили два варианта: этот точнее поворачивал в испытаниях",
+            "kk": "Екі нұсқаны салыстырдық: бұл сынақтарда дәлірек бұрылды",
+            "en": "We compared two; this one turned more precisely in tests"
+          }
+        },
+        {
+          "left": {
+            "ru": "Что было самым трудным?",
+            "kk": "Ең қиыны не болды?",
+            "en": "What was hardest?"
+          },
+          "right": {
+            "ru": "Точный поворот — помог гироскоп и калибровка",
+            "kk": "Дәл бұрылыс — гироскоп пен калибрлеу көмектесті",
+            "en": "Precise turns — the gyro and calibration helped"
+          }
+        },
+        {
+          "left": {
+            "ru": "Как вы делили работу?",
+            "kk": "Жұмысты қалай бөлдіңдер?",
+            "en": "How did you split the work?"
+          },
+          "right": {
+            "ru": "По ролям, но все пробовали программировать и собирать",
+            "kk": "Рөлдер бойынша, бірақ бәрі бағдарламалауды және құрастыруды байқап көрді",
+            "en": "By roles, but everyone tried programming and building"
+          }
+        }
+      ],
+      "explanation": {
+        "ru": "Хороший ответ короткий, честный и с примером.",
+        "kk": "Жақсы жауап қысқа, адал және мысалмен.",
+        "en": "A good answer is short, honest and has an example."
+      },
+      "skill": "teamwork"
+    },
+    {
+      "id": "unknown",
+      "type": "quiz",
+      "kind": "choice",
+      "question": {
+        "ru": "Судья спросил то, чего ты не знаешь. Что ответить?",
+        "kk": "Төреші сен білмейтін нәрсені сұрады. Не жауап бересің?",
+        "en": "A judge asks something you do not know. What do you say?"
+      },
+      "options": [
+        {
+          "ru": "Честно сказать и объяснить, как бы вы это проверили",
+          "kk": "Адал айтып, мұны қалай тексеретіндеріңді түсіндіру",
+          "en": "Say so honestly and explain how you would check"
+        },
+        {
+          "ru": "Придумать что-нибудь уверенным голосом",
+          "kk": "Сенімді дауыспен бір нәрсе ойлап шығару",
+          "en": "Make something up confidently"
+        },
+        {
+          "ru": "Промолчать",
+          "kk": "Үндемеу",
+          "en": "Stay silent"
+        }
+      ],
+      "correct": [
+        0
+      ],
+      "explanation": {
+        "ru": "Честность и умение искать ответ ценятся выше выдуманных фактов.",
+        "kk": "Адалдық пен жауап іздей білу ойдан шығарылған фактілерден жоғары бағаланады.",
+        "en": "Honesty and knowing how to find out beat made-up facts."
+      },
+      "skill": "teamwork"
+    }
+  ]
+}

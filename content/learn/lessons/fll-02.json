@@ -1,0 +1,138 @@
+{
+  "id": "fll-02",
+  "track": "fll",
+  "unit": "fll-intro",
+  "minutes": 7,
+  "skills": [
+    "strategy"
+  ],
+  "title": {
+    "ru": "Правила Robot Game",
+    "kk": "Robot Game ережелері",
+    "en": "Robot Game rules"
+  },
+  "goal": {
+    "ru": "Сегодня ты узнаешь, как проходит матч робота.",
+    "kk": "Бүгін сен робот матчы қалай өтетінін білесің.",
+    "en": "Today you will learn how a robot match works."
+  },
+  "summary": {
+    "ru": "Теперь ты знаешь основу матча: 2:30, зона запуска и заезды.",
+    "kk": "Енді сен матчтың негізін білесің: 2:30, іске қосу аймағы және жүрістер.",
+    "en": "Now you know the basics of a match: 2:30, the launch area and runs."
+  },
+  "steps": [
+    {
+      "id": "match",
+      "type": "theory",
+      "title": {
+        "ru": "Как идёт матч",
+        "kk": "Матч қалай өтеді",
+        "en": "How a match goes"
+      },
+      "body": {
+        "ru": "Матч длится **2 минуты 30 секунд**. Робот стартует из **зоны запуска** (базы), выезжает на поле, выполняет миссии и возвращается.\n\nЗа матч робот делает несколько **заездов**. Между ними, пока робот в базе, команда может менять насадки и ставить его заново. Касаться робота на поле нельзя — за это бывают штрафы.\n\nТочные правила, миссии и очки каждый сезон публикуются в официальном **Robot Game Rulebook** — сверяйся с ним, а не с памятью.",
+        "kk": "Матч **2 минут 30 секунд** созылады. Робот **іске қосу аймағынан** (базадан) басталып, алаңға шығады, миссияларды орындап, қайтып оралады.\n\nМатч ішінде робот бірнеше **жүріс** жасайды. Олардың арасында, робот базада тұрғанда, команда саптамаларды ауыстырып, оны қайта қоя алады. Алаңда роботқа тиюге болмайды — бұл үшін айыппұлдар болады.\n\nНақты ережелер, миссиялар мен ұпайлар әр маусымда ресми **Robot Game Rulebook**-та жарияланады — жадыңмен емес, онымен салыстыр.",
+        "en": "A match lasts **2 minutes 30 seconds**. The robot starts from the **launch area** (base), drives onto the field, does missions and comes back.\n\nIn one match the robot makes several **runs**. Between them, while the robot is in base, the team may swap attachments and relaunch it. Touching the robot out on the field is not allowed — it can cost penalties.\n\nExact rules, missions and points are published each season in the official **Robot Game Rulebook** — check it, not your memory."
+      },
+      "illustration": "r-fll-table"
+    },
+    {
+      "id": "seconds",
+      "type": "quiz",
+      "kind": "number",
+      "question": {
+        "ru": "Сколько секунд длится матч Robot Game?",
+        "kk": "Robot Game матчы неше секунд созылады?",
+        "en": "How many seconds does a Robot Game match last?"
+      },
+      "answer": 150,
+      "tolerance": 0,
+      "explanation": {
+        "ru": "2 минуты 30 секунд = 120 + 30 = 150 секунд.",
+        "kk": "2 минут 30 секунд = 120 + 30 = 150 секунд.",
+        "en": "2 minutes 30 seconds = 120 + 30 = 150 seconds."
+      },
+      "unit": {
+        "ru": "с",
+        "kk": "с",
+        "en": "s"
+      },
+      "skill": "strategy"
+    },
+    {
+      "id": "run",
+      "type": "quiz",
+      "kind": "order",
+      "question": {
+        "ru": "Расставь, как проходит один заезд",
+        "kk": "Бір жүріс қалай өтетінін реттей қой",
+        "en": "Order how one run goes"
+      },
+      "items": [
+        {
+          "ru": "Поставить робота в зону запуска",
+          "kk": "Роботты іске қосу аймағына қою",
+          "en": "Place the robot in the launch area"
+        },
+        {
+          "ru": "Запустить программу",
+          "kk": "Бағдарламаны іске қосу",
+          "en": "Start the program"
+        },
+        {
+          "ru": "Робот выполняет миссии на поле",
+          "kk": "Робот алаңда миссияларды орындайды",
+          "en": "The robot does missions on the field"
+        },
+        {
+          "ru": "Робот возвращается в базу",
+          "kk": "Робот базаға оралады",
+          "en": "The robot returns to base"
+        }
+      ],
+      "explanation": {
+        "ru": "Каждый заезд начинается и заканчивается в базе.",
+        "kk": "Әр жүріс базада басталып, базада аяқталады.",
+        "en": "Every run starts and ends in base."
+      },
+      "skill": "strategy"
+    },
+    {
+      "id": "touch",
+      "type": "quiz",
+      "kind": "choice",
+      "question": {
+        "ru": "Робот застрял посреди поля. Что можно сделать по правилам?",
+        "kk": "Робот алаңның ортасында тұрып қалды. Ереже бойынша не істеуге болады?",
+        "en": "The robot got stuck mid-field. What do the rules allow?"
+      },
+      "options": [
+        {
+          "ru": "Забрать его в базу, обычно с потерей части очков, — точнее в правилах сезона",
+          "kk": "Оны базаға алып кету, әдетте ұпайдың бір бөлігін жоғалтумен, — нақтырақ маусым ережелерінде",
+          "en": "Take it back to base, usually losing some points — see the season rules"
+        },
+        {
+          "ru": "Подтолкнуть рукой и не говорить судье",
+          "kk": "Қолмен итеріп, төрешіге айтпау",
+          "en": "Nudge it by hand and not tell the referee"
+        },
+        {
+          "ru": "Попросить остановить время",
+          "kk": "Уақытты тоқтатуды сұрау",
+          "en": "Ask to stop the clock"
+        }
+      ],
+      "correct": [
+        0
+      ],
+      "explanation": {
+        "ru": "Точные правила, миссии и очки каждый сезон публикуются в официальном **Robot Game Rulebook** — сверяйся с ним, а не с памятью.",
+        "kk": "Нақты ережелер, миссиялар мен ұпайлар әр маусымда ресми **Robot Game Rulebook**-та жарияланады — жадыңмен емес, онымен салыстыр.",
+        "en": "Exact rules, missions and points are published each season in the official **Robot Game Rulebook** — check it, not your memory."
+      },
+      "skill": "strategy"
+    }
+  ]
+}

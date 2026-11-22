@@ -1,0 +1,149 @@
+{
+  "id": "fll-05",
+  "track": "fll",
+  "unit": "fll-strategy",
+  "minutes": 7,
+  "skills": [
+    "strategy"
+  ],
+  "title": {
+    "ru": "Надёжность важнее рекорда",
+    "kk": "Сенімділік рекордтан маңызды",
+    "en": "Reliability beats records"
+  },
+  "goal": {
+    "ru": "Сегодня ты узнаешь, почему надёжная миссия ценнее рискованной.",
+    "kk": "Бүгін сен сенімді миссия неге қауіптісінен құнды екенін білесің.",
+    "en": "Today you will learn why a reliable mission is worth more than a risky one."
+  },
+  "summary": {
+    "ru": "Теперь ты оцениваешь миссии по ожидаемым очкам, а не по максимальным.",
+    "kk": "Енді сен миссияларды ең жоғары емес, күтілетін ұпайлар бойынша бағалайсың.",
+    "en": "Now you rate missions by expected points, not maximum points."
+  },
+  "steps": [
+    {
+      "id": "expected",
+      "type": "theory",
+      "title": {
+        "ru": "Ожидаемые очки",
+        "kk": "Күтілетін ұпайлар",
+        "en": "Expected points"
+      },
+      "body": {
+        "ru": "Миссия на 40 очков, которая получается в половине попыток, в среднем даёт **20** очков. Миссия на 25 очков, которая получается всегда, даёт **25**.\n\n**Ожидаемые очки = очки × доля удачных попыток.**\n\nНа турнире у тебя всего несколько матчей. Ставь в план миссии, которые получаются почти всегда, а рискованные — в конец, если останется время.",
+        "kk": "Әрекеттердің жартысында шығатын 40 ұпайлық миссия орташа **20** ұпай береді. Әрқашан шығатын 25 ұпайлық миссия **25** береді.\n\n**Күтілетін ұпайлар = ұпай × сәтті әрекеттер үлесі.**\n\nТурнирде бірнеше-ақ матч бар. Жоспарға әрқашан дерлік шығатын миссияларды қой, ал қауіптілерін — уақыт қалса, соңына.",
+        "en": "A 40-point mission that works half the time gives **20** points on average. A 25-point mission that always works gives **25**.\n\n**Expected points = points × share of successful tries.**\n\nAt a tournament you get only a few matches. Plan missions that almost always work, and put risky ones at the end if time is left."
+      },
+      "illustration": "r-scatter"
+    },
+    {
+      "id": "exp",
+      "type": "quiz",
+      "kind": "number",
+      "question": {
+        "ru": "Миссия 60 очков, получается в 3 попытках из 4. Сколько ожидаемых очков?",
+        "kk": "60 ұпайлық миссия 4 әрекеттің 3-інде шығады. Күтілетін ұпай қанша?",
+        "en": "A 60-point mission works 3 times out of 4. How many expected points?"
+      },
+      "answer": 45,
+      "tolerance": 0,
+      "explanation": {
+        "ru": "60 × 3/4 = 45.",
+        "kk": "60 × 3/4 = 45.",
+        "en": "60 × 3/4 = 45."
+      },
+      "skill": "strategy"
+    },
+    {
+      "id": "pick",
+      "type": "quiz",
+      "kind": "choice",
+      "question": {
+        "ru": "Что выбрать в начало плана?",
+        "kk": "Жоспардың басына нені таңдайсың?",
+        "en": "What goes first in the plan?"
+      },
+      "options": [
+        {
+          "ru": "30 очков, получается 10 из 10",
+          "kk": "30 ұпай, 10-нан 10 рет шығады",
+          "en": "30 points, works 10 out of 10"
+        },
+        {
+          "ru": "50 очков, получается 4 из 10",
+          "kk": "50 ұпай, 10-нан 4 рет шығады",
+          "en": "50 points, works 4 out of 10"
+        },
+        {
+          "ru": "70 очков, получается 2 из 10",
+          "kk": "70 ұпай, 10-нан 2 рет шығады",
+          "en": "70 points, works 2 out of 10"
+        }
+      ],
+      "correct": [
+        0
+      ],
+      "explanation": {
+        "ru": "30 × 1 = 30, 50 × 0,4 = 20, 70 × 0,2 = 14. Надёжная миссия выигрывает.",
+        "kk": "30 × 1 = 30, 50 × 0,4 = 20, 70 × 0,2 = 14. Сенімді миссия ұтады.",
+        "en": "30 × 1 = 30, 50 × 0.4 = 20, 70 × 0.2 = 14. The reliable mission wins."
+      },
+      "skill": "strategy"
+    },
+    {
+      "id": "fix",
+      "type": "quiz",
+      "kind": "match",
+      "question": {
+        "ru": "Как сделать миссию надёжнее?",
+        "kk": "Миссияны қалай сенімдірек етуге болады?",
+        "en": "How do you make a mission more reliable?"
+      },
+      "pairs": [
+        {
+          "left": {
+            "ru": "Робот промахивается мимо модели",
+            "kk": "Робот модельден жаңылады",
+            "en": "The robot misses the model"
+          },
+          "right": {
+            "ru": "Выровняться по линии или стене перед ней",
+            "kk": "Оның алдында сызық немесе қабырға бойынша түзелу",
+            "en": "Line up on a line or wall before it"
+          }
+        },
+        {
+          "left": {
+            "ru": "Насадка иногда соскакивает",
+            "kk": "Саптама кейде түсіп қалады",
+            "en": "The attachment sometimes falls off"
+          },
+          "right": {
+            "ru": "Сделать крепление надёжнее",
+            "kk": "Бекітуді сенімдірек ету",
+            "en": "Make the mount sturdier"
+          }
+        },
+        {
+          "left": {
+            "ru": "Каждый запуск разный",
+            "kk": "Әр іске қосу әр түрлі",
+            "en": "Every run is different"
+          },
+          "right": {
+            "ru": "Ставить робота по упору в базе",
+            "kk": "Роботты базадағы тірек бойынша қою",
+            "en": "Place the robot against a jig in base"
+          }
+        }
+      ],
+      "explanation": {
+        "ru": "Надёжность строят маленькими улучшениями, проверяя серией запусков.",
+        "kk": "Сенімділікті бірнеше іске қосумен тексеріп, кішкене жақсартулармен құрады.",
+        "en": "Reliability is built from small improvements, checked with a series of runs."
+      },
+      "skill": "strategy"
+    }
+  ]
+}

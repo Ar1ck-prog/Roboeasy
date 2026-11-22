@@ -89,9 +89,10 @@ export function LearnMap({ lang, app }: { lang: Lang; app: LearnAppText }) {
           return (
             <li key={track.id}>
               <Card className={cn('relative h-full gap-3', (state === 'locked' || state === 'soon') && 'shadow-none')}>
-                <div className="flex items-start gap-3">
+                {/* Wraps on a phone: a long "first: …" badge moves under the title instead of pushing the page wider. */}
+                <div className="flex flex-wrap items-start gap-3">
                   <TrackIcon icon={track.icon} color={track.color} className={cn((state === 'locked' || state === 'soon') && 'opacity-60')} />
-                  <div className="min-w-0 flex-1">
+                  <div className="min-w-[9rem] flex-1">
                     <p className="m-0 text-xs font-extrabold tracking-wide text-muted-foreground uppercase">{String(i + 1).padStart(2, '0')}</p>
                     <h2 className="m-0 text-2xl">
                       <Link href={href} className="after:absolute after:inset-0 hover:underline">
@@ -112,7 +113,7 @@ export function LearnMap({ lang, app }: { lang: Lang; app: LearnAppText }) {
                     </Badge>
                   )}
                   {state === 'locked' && (
-                    <Badge variant="outline">
+                    <Badge variant="outline" className="max-w-full whitespace-normal leading-tight">
                       <Lock aria-hidden="true" />
                       {fill(app.map.locked, { tracks: prereqs })}
                     </Badge>

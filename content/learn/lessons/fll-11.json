@@ -1,0 +1,115 @@
+{
+  "id": "fll-11",
+  "track": "fll",
+  "unit": "fll-judging",
+  "minutes": 7,
+  "skills": [
+    "teamwork"
+  ],
+  "title": {
+    "ru": "Как рассказать о роботе",
+    "kk": "Робот туралы қалай айту керек",
+    "en": "How to present the robot"
+  },
+  "goal": {
+    "ru": "Сегодня ты научишься рассказывать о роботе так, чтобы судьям было интересно.",
+    "kk": "Бүгін сен робот туралы төрешілерге қызықты болатындай айтуды үйренесің.",
+    "en": "Today you will learn to present your robot in a way judges enjoy."
+  },
+  "summary": {
+    "ru": "Теперь у тебя есть план рассказа о роботе: от задачи до улучшений.",
+    "kk": "Енді сенде робот туралы әңгіменің жоспары бар: тапсырмадан жақсартуларға дейін.",
+    "en": "Now you have a plan for presenting the robot: from task to improvements."
+  },
+  "steps": [
+    {
+      "id": "story",
+      "type": "theory",
+      "title": {
+        "ru": "Расскажи историю",
+        "kk": "Тарих айт",
+        "en": "Tell a story"
+      },
+      "body": {
+        "ru": "Рассказ о роботе (Robot Design) лучше строить как историю:\n\n1. **Задача**: какие миссии выбрали и почему.\n2. **Идеи**: какие варианты рассматривали.\n3. **Конструкция**: шасси, насадки, почему так.\n4. **Программы**: как сделали движения точными.\n5. **Испытания и улучшения**: что не работало и как исправили.\n\nПусть говорят несколько человек — каждый о своей части. Покажи робота в деле.",
+        "kk": "Робот туралы әңгімені (Robot Design) тарих ретінде құрған жақсы:\n\n1. **Тапсырма**: қандай миссиялар таңдалды және неге.\n2. **Идеялар**: қандай нұсқалар қарастырылды.\n3. **Құрылым**: шасси, саптамалар, неге солай.\n4. **Бағдарламалар**: қозғалыстарды қалай дәл еттік.\n5. **Сынақтар мен жақсартулар**: не жұмыс істемеді және қалай түзеттік.\n\nБірнеше адам сөйлесін — әрқайсысы өз бөлігі туралы. Роботты іс жүзінде көрсет.",
+        "en": "A Robot Design presentation works best as a story:\n\n1. **Task**: which missions you chose and why.\n2. **Ideas**: which options you considered.\n3. **Build**: chassis, attachments, why that way.\n4. **Programs**: how you made moves precise.\n5. **Tests and improvements**: what failed and how you fixed it.\n\nLet several people speak — each about their part. Show the robot in action."
+      },
+      "illustration": "r-judging"
+    },
+    {
+      "id": "plan",
+      "type": "quiz",
+      "kind": "order",
+      "question": {
+        "ru": "Расставь части рассказа о роботе",
+        "kk": "Робот туралы әңгіме бөліктерін реттей қой",
+        "en": "Order the parts of the robot presentation"
+      },
+      "items": [
+        {
+          "ru": "Какие миссии выбрали и почему",
+          "kk": "Қандай миссиялар таңдалды және неге",
+          "en": "Which missions and why"
+        },
+        {
+          "ru": "Какие идеи рассматривали",
+          "kk": "Қандай идеялар қарастырылды",
+          "en": "Which ideas we considered"
+        },
+        {
+          "ru": "Как устроены робот и насадки",
+          "kk": "Робот пен саптамалар қалай құрылған",
+          "en": "How the robot and attachments work"
+        },
+        {
+          "ru": "Как испытывали и улучшали",
+          "kk": "Қалай сынап, жақсарттық",
+          "en": "How we tested and improved"
+        }
+      ],
+      "explanation": {
+        "ru": "От «зачем» к «как», а в конце — доказательства.",
+        "kk": "«Не үшіннен» «қалайға», ал соңында — дәлелдер.",
+        "en": "From “why” to “how”, with evidence at the end."
+      },
+      "skill": "teamwork"
+    },
+    {
+      "id": "best",
+      "type": "quiz",
+      "kind": "choice",
+      "question": {
+        "ru": "Какая фраза лучше для судей?",
+        "kk": "Төрешілерге қай сөйлем жақсы?",
+        "en": "Which line works better for judges?"
+      },
+      "options": [
+        {
+          "ru": "«Робот промахивался, мы добавили выравнивание по стене — теперь 9 из 10»",
+          "kk": "«Робот жаңылатын, біз қабырға бойынша түзелуді қостық — енді 10-нан 9»",
+          "en": "“The robot missed, so we added wall alignment — now 9 out of 10”"
+        },
+        {
+          "ru": "«Робот просто работает»",
+          "kk": "«Робот жай жұмыс істейді»",
+          "en": "“The robot just works”"
+        },
+        {
+          "ru": "«Мы скопировали робота из интернета»",
+          "kk": "«Біз роботты интернеттен көшірдік»",
+          "en": "“We copied a robot from the internet”"
+        }
+      ],
+      "correct": [
+        0
+      ],
+      "explanation": {
+        "ru": "Проблема → решение → результат в цифрах. Это и есть инженерное мышление.",
+        "kk": "Мәселе → шешім → сандардағы нәтиже. Бұл — инженерлік ойлау.",
+        "en": "Problem → solution → result in numbers. That is engineering thinking."
+      },
+      "skill": "teamwork"
+    }
+  ]
+}

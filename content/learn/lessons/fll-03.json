@@ -1,0 +1,168 @@
+{
+  "id": "fll-03",
+  "track": "fll",
+  "unit": "fll-strategy",
+  "minutes": 8,
+  "skills": [
+    "strategy"
+  ],
+  "title": {
+    "ru": "Очки за время",
+    "kk": "Уақытқа ұпай",
+    "en": "Points per time"
+  },
+  "goal": {
+    "ru": "Сегодня ты научишься выбирать миссии, которые выгоднее всего.",
+    "kk": "Бүгін сен ең тиімді миссияларды таңдауды үйренесің.",
+    "en": "Today you will learn to pick the missions that pay off most."
+  },
+  "summary": {
+    "ru": "Теперь ты считаешь «очки за секунду» и собираешь план матча.",
+    "kk": "Енді сен «секундына ұпайды» есептеп, матч жоспарын құрасың.",
+    "en": "Now you work out points per second and build a match plan."
+  },
+  "steps": [
+    {
+      "id": "rate",
+      "type": "theory",
+      "title": {
+        "ru": "Очки за секунду",
+        "kk": "Секундына ұпай",
+        "en": "Points per second"
+      },
+      "body": {
+        "ru": "Времени на все миссии не хватит. Значит, надо выбирать.\n\nПосчитай для каждой миссии **очки : секунды**. Миссия 30 очков за 30 секунд даёт 1 очко в секунду, миссия 20 очков за 10 секунд — 2 очка в секунду. Вторая выгоднее, хотя очков меньше!\n\nСначала берут самые «дорогие» миссии, потом добавляют остальные, пока хватает времени.",
+        "kk": "Барлық миссияға уақыт жетпейді. Демек, таңдау керек.\n\nӘр миссия үшін **ұпай : секунд** есепте. 30 секундта 30 ұпай беретін миссия секундына 1 ұпай береді, 10 секундта 20 ұпай беретін миссия — секундына 2 ұпай. Екіншісі тиімдірек, ұпайы аз болса да!\n\nАлдымен ең «қымбат» миссияларды алып, содан кейін уақыт жеткенше қалғандарын қосады.",
+        "en": "There is not enough time for every mission. So you choose.\n\nFor each mission work out **points ÷ seconds**. A mission worth 30 points in 30 seconds gives 1 point per second; 20 points in 10 seconds gives 2 per second. The second pays better despite fewer points!\n\nTake the “richest” missions first, then add others while time remains."
+      },
+      "illustration": "r-strategy"
+    },
+    {
+      "id": "per-second",
+      "type": "quiz",
+      "kind": "number",
+      "question": {
+        "ru": "Миссия: 45 очков за 15 секунд. Сколько очков в секунду?",
+        "kk": "Миссия: 15 секундта 45 ұпай. Секундына неше ұпай?",
+        "en": "A mission: 45 points in 15 seconds. How many points per second?"
+      },
+      "answer": 3,
+      "tolerance": 0,
+      "explanation": {
+        "ru": "45 : 15 = 3 очка в секунду.",
+        "kk": "45 : 15 = 3 ұпай секундына.",
+        "en": "45 ÷ 15 = 3 points per second."
+      },
+      "skill": "strategy"
+    },
+    {
+      "id": "plan",
+      "type": "widget",
+      "widget": "strategy",
+      "title": {
+        "ru": "План матча",
+        "kk": "Матч жоспары",
+        "en": "Match plan"
+      },
+      "task": {
+        "ru": "Это тренировочные миссии (не из настоящего сезона). Выбери такие, чтобы уложиться в 150 секунд и набрать **не меньше 95 очков**.",
+        "kk": "Бұл жаттығу миссиялары (нағыз маусымнан емес). 150 секундқа сыйып, **кемінде 95 ұпай** жинайтындай таңда.",
+        "en": "These are practice missions (not from a real season). Pick missions that fit in 150 seconds and score **at least 95 points**."
+      },
+      "seconds": 150,
+      "target": 95,
+      "missions": [
+        {
+          "name": {
+            "ru": "Поднять флаг",
+            "kk": "Жалаушаны көтеру",
+            "en": "Raise the flag"
+          },
+          "points": 20,
+          "seconds": 25
+        },
+        {
+          "name": {
+            "ru": "Доставить ящик",
+            "kk": "Жәшікті жеткізу",
+            "en": "Deliver the box"
+          },
+          "points": 30,
+          "seconds": 45
+        },
+        {
+          "name": {
+            "ru": "Повернуть мельницу",
+            "kk": "Диірменді бұру",
+            "en": "Turn the windmill"
+          },
+          "points": 15,
+          "seconds": 15
+        },
+        {
+          "name": {
+            "ru": "Открыть ворота",
+            "kk": "Қақпаны ашу",
+            "en": "Open the gate"
+          },
+          "points": 25,
+          "seconds": 40
+        },
+        {
+          "name": {
+            "ru": "Собрать урожай",
+            "kk": "Егін жинау",
+            "en": "Harvest the crop"
+          },
+          "points": 40,
+          "seconds": 70
+        },
+        {
+          "name": {
+            "ru": "Запустить лифт",
+            "kk": "Лифтті іске қосу",
+            "en": "Start the lift"
+          },
+          "points": 20,
+          "seconds": 30
+        }
+      ]
+    },
+    {
+      "id": "rich",
+      "type": "quiz",
+      "kind": "choice",
+      "question": {
+        "ru": "Какая миссия выгоднее: «40 очков за 80 с» или «25 очков за 25 с»?",
+        "kk": "Қай миссия тиімді: «80 с-та 40 ұпай» ма, әлде «25 с-та 25 ұпай» ма?",
+        "en": "Which pays better: “40 points in 80 s” or “25 points in 25 s”?"
+      },
+      "options": [
+        {
+          "ru": "25 за 25 с — 1 очко в секунду против 0,5",
+          "kk": "25 с-та 25 — секундына 1 ұпай, 0,5-ке қарсы",
+          "en": "25 in 25 s — 1 point per second versus 0.5"
+        },
+        {
+          "ru": "40 за 80 с — там больше очков",
+          "kk": "80 с-та 40 — онда ұпай көп",
+          "en": "40 in 80 s — more points"
+        },
+        {
+          "ru": "Одинаково",
+          "kk": "Бірдей",
+          "en": "The same"
+        }
+      ],
+      "correct": [
+        0
+      ],
+      "explanation": {
+        "ru": "Сравнивай очки за секунду, а не только очки.",
+        "kk": "Тек ұпайды емес, секундына ұпайды салыстыр.",
+        "en": "Compare points per second, not just points."
+      },
+      "skill": "strategy"
+    }
+  ]
+}

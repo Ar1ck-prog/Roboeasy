@@ -1,0 +1,151 @@
+{
+  "id": "fll-10",
+  "track": "fll",
+  "unit": "fll-team",
+  "minutes": 7,
+  "skills": [
+    "teamwork"
+  ],
+  "title": {
+    "ru": "Инженерная книга",
+    "kk": "Инженерлік кітап",
+    "en": "The engineering notebook"
+  },
+  "goal": {
+    "ru": "Сегодня ты научишься вести инженерную книгу команды.",
+    "kk": "Бүгін сен команданың инженерлік кітабын жүргізуді үйренесің.",
+    "en": "Today you will learn to keep the team’s engineering notebook."
+  },
+  "summary": {
+    "ru": "Теперь ты знаешь, что писать в инженерной книге и как она помогает на защите.",
+    "kk": "Енді сен инженерлік кітапқа не жазу керегін және оның қорғауда қалай көмектесетінін білесің.",
+    "en": "Now you know what to write in the engineering notebook and how it helps in judging."
+  },
+  "steps": [
+    {
+      "id": "notebook",
+      "type": "theory",
+      "title": {
+        "ru": "История вашего робота",
+        "kk": "Роботтарыңның тарихы",
+        "en": "Your robot’s story"
+      },
+      "body": {
+        "ru": "**Инженерная книга** — дневник проекта. В ней видно, как команда думала: идеи, эскизы, испытания, неудачи и улучшения.\n\nПиши каждую встречу: дату, цель, что сделали, что получилось, что дальше. Добавляй фотографии и рисунки.\n\nНа защите Robot Design книга помогает рассказать путь робота с доказательствами, а не по памяти.",
+        "kk": "**Инженерлік кітап** — жобаның күнделігі. Онда команданың қалай ойлағаны көрінеді: идеялар, эскиздер, сынақтар, сәтсіздіктер және жақсартулар.\n\nӘр кездесуді жаз: күнін, мақсатын, не істелгенін, не шыққанын, әрі қарай не. Фотосуреттер мен суреттер қос.\n\nRobot Design қорғауында кітап роботтың жолын жадымен емес, дәлелдермен айтуға көмектеседі.",
+        "en": "The **engineering notebook** is the project diary. It shows how the team thought: ideas, sketches, tests, failures and improvements.\n\nWrite at every meeting: the date, the goal, what you did, what worked, what is next. Add photos and drawings.\n\nIn Robot Design judging, the notebook helps tell the robot’s journey with evidence, not from memory."
+      },
+      "illustration": "r-notebook"
+    },
+    {
+      "id": "entry",
+      "type": "quiz",
+      "kind": "order",
+      "question": {
+        "ru": "Расставь части записи о встрече",
+        "kk": "Кездесу туралы жазбаның бөліктерін реттей қой",
+        "en": "Order the parts of a meeting entry"
+      },
+      "items": [
+        {
+          "ru": "Дата и цель встречи",
+          "kk": "Кездесудің күні мен мақсаты",
+          "en": "Date and goal of the meeting"
+        },
+        {
+          "ru": "Что сделали",
+          "kk": "Не істелді",
+          "en": "What we did"
+        },
+        {
+          "ru": "Результат испытаний",
+          "kk": "Сынақтар нәтижесі",
+          "en": "Test results"
+        },
+        {
+          "ru": "Что делаем дальше",
+          "kk": "Әрі қарай не істейміз",
+          "en": "Next steps"
+        }
+      ],
+      "explanation": {
+        "ru": "Цель → дело → результат → план. Так запись легко читать через месяц.",
+        "kk": "Мақсат → іс → нәтиже → жоспар. Осылай жазбаны бір айдан кейін оқу оңай.",
+        "en": "Goal → work → result → plan. Easy to read a month later."
+      },
+      "skill": "teamwork"
+    },
+    {
+      "id": "failures",
+      "type": "quiz",
+      "kind": "choice",
+      "question": {
+        "ru": "Записывать ли неудачные идеи?",
+        "kk": "Сәтсіз идеяларды жазу керек пе?",
+        "en": "Should failed ideas be written down?"
+      },
+      "options": [
+        {
+          "ru": "Да: они показывают, как команда училась",
+          "kk": "Иә: олар команданың қалай үйренгенін көрсетеді",
+          "en": "Yes: they show how the team learned"
+        },
+        {
+          "ru": "Нет, только удачные",
+          "kk": "Жоқ, тек сәттілерін",
+          "en": "No, only the successes"
+        },
+        {
+          "ru": "Только если судьи попросят",
+          "kk": "Төрешілер сұраса ғана",
+          "en": "Only if the judges ask"
+        }
+      ],
+      "correct": [
+        0
+      ],
+      "explanation": {
+        "ru": "Неудача + вывод = инженерный опыт. Судьи ценят такой путь.",
+        "kk": "Сәтсіздік + қорытынды = инженерлік тәжірибе. Төрешілер мұндай жолды бағалайды.",
+        "en": "Failure + lesson = engineering experience. Judges value that journey."
+      },
+      "skill": "teamwork"
+    },
+    {
+      "id": "evidence",
+      "type": "quiz",
+      "kind": "choice",
+      "question": {
+        "ru": "Что убедительнее на защите?",
+        "kk": "Қорғауда не сенімдірек?",
+        "en": "What is more convincing in judging?"
+      },
+      "options": [
+        {
+          "ru": "«Из 10 запусков 9 удачных — вот таблица»",
+          "kk": "«10 іске қосудың 9-ы сәтті — міне кесте»",
+          "en": "“9 of 10 runs worked — here is the table”"
+        },
+        {
+          "ru": "«Наш робот очень хороший»",
+          "kk": "«Біздің робот өте жақсы»",
+          "en": "“Our robot is very good”"
+        },
+        {
+          "ru": "«Мы много работали»",
+          "kk": "«Біз көп жұмыс істедік»",
+          "en": "“We worked hard”"
+        }
+      ],
+      "correct": [
+        0
+      ],
+      "explanation": {
+        "ru": "Цифры из книги — лучшее доказательство.",
+        "kk": "Кітаптағы сандар — ең жақсы дәлел.",
+        "en": "Numbers from the notebook are the best proof."
+      },
+      "skill": "teamwork"
+    }
+  ]
+}
