@@ -4,7 +4,7 @@
  * worked, what did not, and a hint — never a penalty.
  */
 
-import { type Step, countSteps, imagePixels } from '../dsl/types'
+import { type ProgramFunction, type Step, countSteps, imagePixels } from '../dsl/types'
 import type { SimField } from '../sim/field'
 import { DISTANCE_RANGE_MM, type SimResult, simulate } from '../sim/interpreter'
 import { fill } from '../i18n/config'
@@ -39,7 +39,7 @@ const TEXT: Record<Lang, Texts> = {
     usesOp: { ok: 'Использован нужный блок.', fail: 'В программе нет нужного блока: «{op}».', hint: 'Загляни в палитру блоков: какой блок подходит для этого?' },
     maxBlocks: { ok: 'Коротко: {n} блоков.', fail: 'Слишком много блоков: {n}, нужно не больше {max}.', hint: 'Какие блоки повторяются? Их можно объединить.' },
     usesSensor: { ok: 'Робот использует датчик.', fail: 'Робот не использует датчик.', hint: 'Нужен блок, который ждёт сигнала от датчика.' },
-    displayed: { ok: 'На экране хаба есть картинка.', fail: 'На экране хаба нет нужной картинки.', hint: 'Добавь блок «показать».' },
+    displayed: { ok: 'На экране хаба есть картинка.', fail: 'На экране хаба нет нужной картинки или числа.', hint: 'Добавь блок «показать».' },
     beeped: { ok: 'Робот подал сигнал.', fail: 'Робот не подал сигнал.', hint: 'Добавь блок «сигнал».' },
     motorTurned: { ok: 'Мотор {port} повернулся на {deg}°.', fail: 'Мотор {port} повернулся на {deg}°, а нужно {target}°.', hint: 'Один оборот — это 360°.' },
     heading: { ok: 'Робот смотрит в нужную сторону.', fail: 'Робот смотрит не туда: {deg}° вместо {target}°.', hint: 'Проверь направление и угол поворота.' },
@@ -55,7 +55,7 @@ const TEXT: Record<Lang, Texts> = {
     usesOp: { ok: 'Керекті блок қолданылды.', fail: 'Бағдарламада керекті блок жоқ: «{op}».', hint: 'Блоктар палитрасына қара: бұған қай блок сай келеді?' },
     maxBlocks: { ok: 'Қысқа: {n} блок.', fail: 'Блоктар тым көп: {n}, {max}-тан аспауы керек.', hint: 'Қай блоктар қайталанады? Оларды біріктіруге болады.' },
     usesSensor: { ok: 'Робот датчикті қолданады.', fail: 'Робот датчикті қолданбайды.', hint: 'Датчиктің белгісін күтетін блок керек.' },
-    displayed: { ok: 'Хаб экранында сурет бар.', fail: 'Хаб экранында керекті сурет жоқ.', hint: '«Көрсету» блогын қос.' },
+    displayed: { ok: 'Хаб экранында сурет бар.', fail: 'Хаб экранында керекті сурет немесе сан жоқ.', hint: '«Көрсету» блогын қос.' },
     beeped: { ok: 'Робот дыбыс берді.', fail: 'Робот дыбыс бермеді.', hint: '«Дыбыс» блогын қос.' },
     motorTurned: { ok: '{port} моторы {deg}° бұрылды.', fail: '{port} моторы {deg}° бұрылды, ал {target}° керек.', hint: 'Бір айналым — 360°.' },
     heading: { ok: 'Робот керекті жаққа қарап тұр.', fail: 'Робот басқа жаққа қарап тұр: {target}° орнына {deg}°.', hint: 'Бұрылыс бағыты мен бұрышын тексер.' },
@@ -71,7 +71,7 @@ const TEXT: Record<Lang, Texts> = {
     usesOp: { ok: 'The right block is used.', fail: 'The program is missing a block: “{op}”.', hint: 'Look through the block palette: which block fits here?' },
     maxBlocks: { ok: 'Short: {n} blocks.', fail: 'Too many blocks: {n}, use at most {max}.', hint: 'Which blocks repeat? They can be combined.' },
     usesSensor: { ok: 'The robot uses a sensor.', fail: 'The robot does not use a sensor.', hint: 'You need a block that waits for a sensor.' },
-    displayed: { ok: 'The hub shows a picture.', fail: 'The hub does not show the right picture.', hint: 'Add a “show” block.' },
+    displayed: { ok: 'The hub shows a picture.', fail: 'The hub does not show the right picture or number.', hint: 'Add a “show” block.' },
     beeped: { ok: 'The robot beeped.', fail: 'The robot did not beep.', hint: 'Add a “beep” block.' },
     motorTurned: { ok: 'Motor {port} turned {deg}°.', fail: 'Motor {port} turned {deg}°, but it should be {target}°.', hint: 'One rotation is 360°.' },
     heading: { ok: 'The robot faces the right way.', fail: 'The robot faces {deg}° instead of {target}°.', hint: 'Check the turn direction and angle.' },
@@ -83,9 +83,9 @@ const TEXT: Record<Lang, Texts> = {
 
 /** Block names for messages ("missing a … block"). */
 const OP_NAMES: Record<Lang, Partial<Record<Step['op'], string>>> = {
-  ru: { repeat: 'повторить', forever: 'повторять всегда', repeat_until: 'повторять, пока не', if: 'если', wait_until: 'ждать, пока', move: 'ехать', turn: 'развернуться', wait: 'ждать', beep: 'сигнал', show_image: 'показать', set_speed: 'скорость движения', start_move: 'начать движение', stop_move: 'остановить движение', motor_run: 'мотор' },
-  kk: { repeat: 'қайталау', forever: 'әрдайым қайталау', repeat_until: 'дейін қайталау', if: 'егер', wait_until: 'күту, дейін', move: 'жүру', turn: 'бұрылу', wait: 'күту', beep: 'дыбыс', show_image: 'көрсету', set_speed: 'қозғалыс жылдамдығы', start_move: 'қозғалысты бастау', stop_move: 'қозғалысты тоқтату', motor_run: 'мотор' },
-  en: { repeat: 'repeat', forever: 'forever', repeat_until: 'repeat until', if: 'if', wait_until: 'wait until', move: 'move', turn: 'turn', wait: 'wait', beep: 'beep', show_image: 'show', set_speed: 'set movement speed', start_move: 'start moving', stop_move: 'stop moving', motor_run: 'motor' },
+  ru: { repeat: 'повторить', forever: 'повторять всегда', repeat_until: 'повторять, пока не', if: 'если', wait_until: 'ждать, пока', move: 'ехать', turn: 'развернуться', wait: 'ждать', beep: 'сигнал', show_image: 'показать', set_speed: 'скорость движения', start_move: 'начать движение', stop_move: 'остановить движение', motor_run: 'мотор', call: 'выполнить блок', set_var: 'задать переменную', change_var: 'изменить переменную', write_var: 'показать переменную', while: 'повторять, пока', reset_yaw: 'сбросить угол', motor_to_position: 'мотор в позицию', arc: 'ехать по дуге' },
+  kk: { repeat: 'қайталау', forever: 'әрдайым қайталау', repeat_until: 'дейін қайталау', if: 'егер', wait_until: 'күту, дейін', move: 'жүру', turn: 'бұрылу', wait: 'күту', beep: 'дыбыс', show_image: 'көрсету', set_speed: 'қозғалыс жылдамдығы', start_move: 'қозғалысты бастау', stop_move: 'қозғалысты тоқтату', motor_run: 'мотор', call: 'блокты орындау', set_var: 'айнымалыны орнату', change_var: 'айнымалыны өзгерту', write_var: 'айнымалыны көрсету', while: 'әзірге қайталау', reset_yaw: 'бұрышты нөлдеу', motor_to_position: 'мотор позицияға', arc: 'доғамен жүру' },
+  en: { repeat: 'repeat', forever: 'forever', repeat_until: 'repeat until', if: 'if', wait_until: 'wait until', move: 'move', turn: 'turn', wait: 'wait', beep: 'beep', show_image: 'show', set_speed: 'set movement speed', start_move: 'start moving', stop_move: 'stop moving', motor_run: 'motor', call: 'run block', set_var: 'set variable', change_var: 'change variable', write_var: 'show variable', while: 'repeat while', reset_yaw: 'reset yaw', motor_to_position: 'motor to position', arc: 'drive an arc' },
 }
 
 const inRect = (p: { x: number; y: number }, r: { x: number; y: number; w: number; h: number }) => p.x >= r.x && p.x <= r.x + r.w && p.y >= r.y && p.y <= r.y + r.h
@@ -118,11 +118,23 @@ function frontGap(sim: SimResult, field: SimField): number | null {
   return best <= DISTANCE_RANGE_MM ? best : null
 }
 
-/** Runs the program and evaluates every check. */
-export function runChecks(steps: Step[], field: SimField, checks: Check[], lang: Lang, zoneLabel: (id: string) => string = (id) => id): CheckReport {
-  const sim = simulate(steps, field)
+/** Blocks in the program, own blocks included (their hat counts as one). */
+export function programBlocks(steps: Step[], functions: ProgramFunction[] = []): number {
+  return countSteps(steps) + functions.reduce((n, f) => n + 1 + countSteps(f.steps), 0)
+}
+
+/** Runs the program (with its own blocks, if any) and evaluates every check. */
+export function runChecks(
+  steps: Step[],
+  field: SimField,
+  checks: Check[],
+  lang: Lang,
+  zoneLabel: (id: string) => string = (id) => id,
+  functions: ProgramFunction[] = [],
+): CheckReport {
+  const sim = simulate(steps, field, { functions })
   const T = TEXT[lang]
-  const blocks = countSteps(steps)
+  const blocks = programBlocks(steps, functions)
   const results = checks.map((c): CheckResult => {
     const say = (ok: boolean, vars: Record<string, string | number> = {}): CheckResult => ({
       type: c.type,
@@ -166,6 +178,7 @@ export function runChecks(steps: Step[], field: SimField, checks: Check[], lang:
           }
         }
         walk(steps)
+        for (const f of functions) walk(f.steps)
         return say(n >= c.min, { op: OP_NAMES[lang][c.op] ?? c.op })
       }
       case 'maxBlocks':
@@ -174,8 +187,10 @@ export function runChecks(steps: Step[], field: SimField, checks: Check[], lang:
         return say(sim.sensorsUsed.includes(c.sensor))
       case 'displayed': {
         const want = c.image ? imagePixels(c.image) : null
-        const shown = sim.events.some((e) => e.kind === 'display' && (want ? e.pixels === want : e.pixels !== null || !!e.text))
-        return say(shown)
+        const shown = sim.events.some(
+          (e) => e.kind === 'display' && (c.text !== undefined ? e.text === c.text : want ? e.pixels === want : e.pixels !== null || !!e.text),
+        )
+        return say(shown, { text: c.text ?? '' })
       }
       case 'beeped':
         return say(sim.events.filter((e) => e.kind === 'beep').length >= c.min)

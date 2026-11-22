@@ -5,7 +5,7 @@
  */
 
 import { parseProgram } from '../dsl/schema'
-import type { Condition, Step } from '../dsl/types'
+import type { Condition, Expr, ProgramFunction, Step } from '../dsl/types'
 import { BLOCK_TYPES } from './defs'
 
 export interface BlockState {
@@ -38,12 +38,15 @@ function conditionBlock(c: Condition): BlockState {
       return { type: T.cond_force, fields: { PORT: c.port, STATE: c.state } }
     case 'button':
       return { type: T.cond_button, fields: { BUTTON: c.button, STATE: c.state } }
-    // The lesson editor has no blocks for these: only generated programs use them.
     case 'gyro':
+      return { type: T.cond_gyro, fields: { AXIS: c.axis, CMP: c.comparator, VALUE: c.value } }
     case 'var':
-      return { type: T.cond_button, fields: { BUTTON: 'left', STATE: 'pressed' } }
+      return { type: T.cond_var, fields: { NAME: c.name, CMP: c.comparator, VALUE: c.value } }
   }
 }
+
+/** The editor's variable blocks take a plain number; other expressions stay as text (generated programs). */
+const exprNumber = (e: Expr): number => ('num' in e ? e.num : 0)
 
 function chain(steps: Step[]): BlockState | undefined {
   let head: BlockState | undefined
@@ -117,18 +120,36 @@ function stepBlock(s: Step): BlockState | null {
       return s.else
         ? { type: T.if_else, inputs: { COND: { block: conditionBlock(s.condition) }, THEN: body(s.then), ELSE: body(s.else) } }
         : { type: T.if, inputs: { COND: { block: conditionBlock(s.condition) }, THEN: body(s.then) } }
+    case 'while':
+      return { type: T.while, inputs: { COND: { block: conditionBlock(s.condition) }, DO: body(s.steps) } }
+    case 'arc':
+      return { type: T.arc, fields: { DIR: s.direction, RADIUS: s.radius, VALUE: s.degrees } }
+    case 'set_var':
+      return { type: T.set_var, fields: { NAME: s.name, VALUE: exprNumber(s.expr) } }
+    case 'change_var':
+      return { type: T.change_var, fields: { NAME: s.name, VALUE: exprNumber(s.expr) } }
+    case 'write_var':
+      return { type: T.write_var, fields: { NAME: s.name } }
+    case 'move_expr':
+      return 'var' in s.expr ? { type: T.move_expr, fields: { DIR: s.direction, NAME: s.expr.var, UNIT: s.unit } } : null
+    case 'call':
+      return { type: T.call, fields: { NAME: s.name } }
     // Generated programs only; lessons do not offer these blocks.
     default:
       return null
   }
 }
 
-/** Workspace with a start block followed by the program. */
-export function stepsToState(steps: Step[]): WorkspaceState {
+/** Workspace with a start block followed by the program; own blocks stand to the right. */
+export function stepsToState(steps: Step[], functions: ProgramFunction[] = []): WorkspaceState {
   const start: BlockState = { type: T.start, x: 24, y: 24 }
   const next = chain(steps)
   if (next) start.next = { block: next }
-  return { blocks: { languageVersion: 0, blocks: [start] } }
+  const defines = functions.map((f, i): BlockState => {
+    const inner = chain(f.steps)
+    return { type: T.define, x: 340, y: 24 + i * 200, fields: { NAME: f.name }, inputs: inner ? { DO: { block: inner } } : {} }
+  })
+  return { blocks: { languageVersion: 0, blocks: [start, ...defines] } }
 }
 
 // ── Blocks → DSL ────────────────────────────────────────────────────────
@@ -149,6 +170,10 @@ function readCondition(b: BlockState | undefined): Condition | null {
       return { sensor: 'force', port: str(b, 'PORT'), state: str(b, 'STATE') } as Condition
     case T.cond_button:
       return { sensor: 'button', button: str(b, 'BUTTON'), state: str(b, 'STATE') } as Condition
+    case T.cond_gyro:
+      return { sensor: 'gyro', axis: str(b, 'AXIS'), comparator: str(b, 'CMP'), value: n(b, 'VALUE') } as Condition
+    case T.cond_var:
+      return { sensor: 'var', name: str(b, 'NAME').trim(), comparator: str(b, 'CMP'), value: n(b, 'VALUE') } as Condition
     default:
       return null
   }
@@ -162,6 +187,10 @@ export interface ReadResult {
   detached: number
   /** Blocks with an empty condition slot. */
   missingConditions: number
+  /** Own blocks ("My Blocks"): each "define" hat with its steps. */
+  functions?: ProgramFunction[]
+  /** Why the program is not valid as a whole (e.g. a call of a block nobody defined). */
+  problem?: string
 }
 
 /** Reads the program under the start block. Unknown or incomplete blocks are skipped. */
@@ -176,7 +205,8 @@ export function stateToSteps(state: WorkspaceState): ReadResult {
     for (const input of Object.values(b.inputs ?? {})) c += countTree(input.block)
     return c
   }
-  const detached = top.filter((b) => b !== start).reduce((sum, b) => sum + countTree(b), 0)
+  const defines = top.filter((b) => b.type === T.define)
+  const detached = top.filter((b) => b !== start && b.type !== T.define).reduce((sum, b) => sum + countTree(b), 0)
 
   const readChain = (first: BlockState | undefined, path: string): Step[] => {
     const out: Step[] = []
@@ -259,13 +289,31 @@ export function stateToSteps(state: WorkspaceState): ReadResult {
         const then = readChain(b.inputs?.THEN?.block, `${path}.then`)
         return b.type === T.if_else ? { op: 'if', condition: c, then, else: readChain(b.inputs?.ELSE?.block, `${path}.else`) } : { op: 'if', condition: c, then }
       }
+      case T.while: {
+        const c = needCondition(b)
+        return c ? { op: 'while', condition: c, steps: readChain(b.inputs?.DO?.block, path) } : null
+      }
+      case T.arc:
+        return { op: 'arc', direction: str(b, 'DIR'), radius: n(b, 'RADIUS'), degrees: n(b, 'VALUE') } as Step
+      case T.set_var:
+        return { op: 'set_var', name: str(b, 'NAME').trim(), expr: { num: n(b, 'VALUE') } }
+      case T.change_var:
+        return { op: 'change_var', name: str(b, 'NAME').trim(), expr: { num: n(b, 'VALUE') } }
+      case T.write_var:
+        return { op: 'write_var', name: str(b, 'NAME').trim() }
+      case T.move_expr:
+        return { op: 'move_expr', direction: str(b, 'DIR'), expr: { var: str(b, 'NAME').trim() }, unit: str(b, 'UNIT') } as Step
+      case T.call:
+        return { op: 'call', name: str(b, 'NAME').trim() }
       default:
         return null
     }
   }
 
   const raw = readChain(start?.next?.block, '')
+  const functions = defines.map((d, i) => ({ name: str(d, 'NAME').trim(), steps: readChain(d.inputs?.DO?.block, `fn${i}`) }))
   // Same validation as any program: values are clamped, structure is checked.
-  const parsed = parseProgram({ title: 'blocks', description: '', steps: raw })
-  return { steps: parsed.ok ? parsed.value.steps : raw, ids, detached, missingConditions }
+  const parsed = parseProgram({ title: 'blocks', description: '', steps: raw, ...(functions.length ? { functions } : {}) })
+  if (parsed.ok) return { steps: parsed.value.steps, ids, detached, missingConditions, functions: parsed.value.functions ?? [] }
+  return { steps: raw, ids, detached, missingConditions, functions, problem: parsed.error }
 }

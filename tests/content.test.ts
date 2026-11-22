@@ -3,6 +3,8 @@ import path from 'node:path'
 import { describe, expect, it } from 'vitest'
 
 import { COURSE, readLesson, readyLessonIds, toClientLesson } from '../lib/learn/content'
+import { BLOCK_TYPES } from '../lib/blockly/defs'
+import type { Step } from '../lib/dsl/types'
 import { runChecks } from '../lib/learn/checks'
 import { simulate } from '../lib/sim/interpreter'
 
@@ -56,15 +58,24 @@ describe.each(files)('lesson %s', (file) => {
     for (const step of lesson.steps) {
       if (step.type !== 'code' && step.type !== 'debug' && step.type !== 'project') continue
       expect(step.reference, `${step.id} needs a reference`).toBeDefined()
-      const report = runChecks(step.reference!, step.field, step.checks, 'ru')
+      const report = runChecks(step.reference!, step.field, step.checks, 'ru', undefined, step.referenceFunctions)
       expect(report.results.filter((r) => !r.ok).map((r) => `${step.id}: ${r.message}`)).toEqual([])
-      if (step.type === 'debug') expect(runChecks(step.start, step.field, step.checks, 'ru').ok, `${step.id} starter must fail`).toBe(false)
-      if (step.type === 'code' && step.start.length) expect(runChecks(step.start, step.field, step.checks, 'ru').ok, `${step.id} starter already passes`).toBe(false)
-      // Toolbox covers the reference solution.
+      const starter = () => runChecks(step.start, step.field, step.checks, 'ru', undefined, step.startFunctions).ok
+      if (step.type === 'debug') expect(starter(), `${step.id} starter must fail`).toBe(false)
+      if (step.type === 'code' && (step.start.length || step.startFunctions)) expect(starter(), `${step.id} starter already passes`).toBe(false)
+      // Toolbox covers the reference solution, own blocks included.
       const ops = new Set<string>()
-      const walk = (l: typeof step.reference) => l!.forEach((s) => (ops.add(s.op), 'steps' in s && walk(s.steps)))
-      walk(step.reference)
+      const walk = (l: Step[]): void =>
+        l.forEach((s) => {
+          ops.add(s.op)
+          if ('steps' in s) walk(s.steps)
+          if (s.op === 'if') walk([...s.then, ...(s.else ?? [])])
+        })
+      walk(step.reference!)
+      for (const f of step.referenceFunctions ?? []) walk(f.steps)
       for (const op of ops) expect(step.toolbox, `${step.id}: ${op} missing from toolbox`).toContain(op)
+      // Every block in the toolbox has a block in the lesson editor.
+      for (const op of step.toolbox) expect(Object.keys(BLOCK_TYPES), `${step.id}: no editor block for ${op}`).toContain(op)
     }
   })
 

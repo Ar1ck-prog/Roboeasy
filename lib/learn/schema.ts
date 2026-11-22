@@ -7,8 +7,9 @@
 import { z } from 'zod'
 
 import { STEP_OPS, parseProgram } from '../dsl/schema'
-import type { Step } from '../dsl/types'
+import type { ProgramFunction, Step } from '../dsl/types'
 import { fieldSchema } from '../sim/field'
+import { ROBO_ILLUSTRATIONS } from './illustration-names'
 import { SKILLS } from './skills'
 
 export const LANGS = ['ru', 'kk', 'en'] as const
@@ -49,19 +50,47 @@ export const ILLUSTRATIONS = [
   'ai-gesture',
   'ai-color',
   'ai-few',
+  // Robotics tracks (components/learn/robo-illustrations.tsx)
+  ...ROBO_ILLUSTRATIONS,
 ] as const
 
-/** DSL steps validated exactly like programs from the AI. */
+/** Names used by "call" anywhere in raw (not yet validated) steps. */
+function rawCalls(raw: unknown): string[] {
+  if (Array.isArray(raw)) return raw.flatMap(rawCalls)
+  if (typeof raw !== 'object' || raw === null) return []
+  const o = raw as Record<string, unknown>
+  const own = o.op === 'call' && typeof o.name === 'string' ? [o.name] : []
+  return [...own, ...rawCalls(o.steps), ...rawCalls(o.then), ...rawCalls(o.else)]
+}
+
+/**
+ * DSL steps validated exactly like programs from the AI. Calls of "My Blocks"
+ * are checked against the step's own functions in the lesson refinement below.
+ */
 export const dslSteps = z.array(z.unknown()).transform((raw, ctx): Step[] => {
   // An empty editor is a valid start; programs from the AI need at least one step, lessons do not.
   if (raw.length === 0) return []
-  const r = parseProgram({ title: 'lesson', description: '', steps: raw })
+  const stubs = [...new Set(rawCalls(raw))].map((name) => ({ name, steps: [{ op: 'wait', seconds: 0 }] }))
+  const r = parseProgram({ title: 'lesson', description: '', steps: raw, ...(stubs.length ? { functions: stubs } : {}) })
   if (!r.ok) {
     ctx.addIssue({ code: 'custom', message: `invalid DSL steps: ${r.error}` })
     return z.NEVER
   }
   return r.value.steps
 })
+
+/** "My Blocks" of a program: a name and its steps. */
+export const dslFunctions = z
+  .array(z.object({ name: z.string().regex(/^[A-Za-z_][A-Za-z0-9_]{0,19}$/), steps: dslSteps }))
+  .min(1)
+  .max(6)
+
+/** Steps and own blocks must be valid together: every call has its block, no recursion. */
+function programIssue(steps: Step[], functions: ProgramFunction[] | undefined): string | null {
+  if (!steps.length && !functions?.length) return null
+  const r = parseProgram({ title: 'lesson', description: '', steps: steps.length ? steps : [{ op: 'wait', seconds: 0 }], functions })
+  return r.ok ? null : r.error
+}
 
 const op = z.enum(STEP_OPS)
 const sensor = z.enum(['distance', 'color', 'reflection', 'force', 'button'])
@@ -79,7 +108,8 @@ export const checkSchema = z.discriminatedUnion('type', [
   z.object({ type: z.literal('usesOp'), op, min: z.number().int().positive().default(1) }),
   z.object({ type: z.literal('maxBlocks'), max: z.number().int().positive() }),
   z.object({ type: z.literal('usesSensor'), sensor }),
-  z.object({ type: z.literal('displayed'), image: z.string().optional() }),
+  /** Something on the hub screen: a named image, or this exact text (e.g. a counter). */
+  z.object({ type: z.literal('displayed'), image: z.string().optional(), text: z.string().optional() }),
   z.object({ type: z.literal('beeped'), min: z.number().int().positive().default(1) }),
   z.object({ type: z.literal('motorTurned'), port: z.enum(['A', 'B', 'C', 'D', 'E', 'F']), degrees: z.number(), tolerance: z.number().positive().default(5) }),
   z.object({ type: z.literal('heading'), degrees: z.number(), tolerance: z.number().positive().default(5) }),
@@ -104,6 +134,8 @@ const theory = z.object({
   illustration: z.enum(ILLUSTRATIONS).optional(),
   /** An example program shown as blocks. */
   example: dslSteps.optional(),
+  /** An example in Python (the Python track), shown highlighted next to the text. */
+  code: z.string().min(1).max(1200).optional(),
 })
 
 const quizBase = { ...base, type: z.literal('quiz'), question: localized, explanation: localized, skill: z.enum(SKILLS).optional() }
@@ -120,6 +152,16 @@ const quiz = z.discriminatedUnion('kind', [
       .max(5),
   }),
   z.object({ ...quizBase, kind: z.literal('number'), answer: z.number(), tolerance: z.number().nonnegative().default(0), unit: localized.optional() }),
+  /** Fill the gaps in code: `code` marks gap i as [[i]]; each gap takes one of its options. */
+  z.object({
+    ...quizBase,
+    kind: z.literal('fill'),
+    code: z.string().min(1).max(800),
+    blanks: z
+      .array(z.object({ options: z.array(z.string().min(1)).min(2).max(5), correct: z.number().int().nonnegative() }))
+      .min(1)
+      .max(4),
+  }),
 ])
 
 const codeBase = {
@@ -131,11 +173,15 @@ const codeBase = {
   toolbox: z.array(op).min(1),
   /** Program the editor starts with (for "debug": the program with the mistake). */
   start: dslSteps.default([]),
+  /** "My Blocks" the starting program already has. */
+  startFunctions: dslFunctions.optional(),
   checks: z.array(checkSchema).min(1),
   /** Hints from gentle to concrete (the AI mentor adds its own on top). */
   hints: z.array(localized).min(1).max(3),
   /** A correct solution: used by tests and for "fewer blocks than us" achievements. Never sent to the browser. */
   reference: dslSteps.optional(),
+  /** "My Blocks" of the reference solution (never sent to the browser either). */
+  referenceFunctions: dslFunctions.optional(),
   skill: z.enum(SKILLS).optional(),
 }
 
@@ -184,14 +230,36 @@ const build = z.object({
   instructions: z.array(z.object({ text: localized, illustration: z.enum(ILLUSTRATIONS).optional() })).min(1),
 })
 
-/** An interactive task with its own automatic check (components/learn/steps/widget-step.tsx). */
-const widget = z.object({
-  ...base,
-  type: z.literal('widget'),
-  widget: z.enum(['vibe', 'gesture', 'color', 'few-examples']),
-  title: localized,
-  task: localized,
-})
+/**
+ * An interactive task with its own automatic check (components/learn/steps/widget-step.tsx,
+ * robotics ones in robo-widgets.tsx). Robotics widgets take their numbers from the lesson.
+ */
+const widgetBase = { ...base, type: z.literal('widget'), title: localized, task: localized }
+const mission = z.object({ name: localized, points: z.number().int().positive(), seconds: z.number().int().positive() })
+const widget = z.discriminatedUnion('widget', [
+  z.object({ ...widgetBase, widget: z.enum(['vibe', 'gesture', 'color', 'few-examples']) }),
+  /** Pick the driving and the driven gear so the output turns `ratio` times slower or faster. */
+  z.object({ ...widgetBase, widget: z.literal('gears'), goal: z.enum(['slower', 'faster']), ratio: z.number().positive() }),
+  /** Pick a wheel and a number of rotations so the robot drives `targetCm`. */
+  z.object({ ...widgetBase, widget: z.literal('wheel'), targetCm: z.number().positive(), toleranceCm: z.number().positive().default(1) }),
+  /** Tune a regulator until the robot settles on the line smoothly. */
+  z.object({ ...widgetBase, widget: z.literal('pid'), mode: z.enum(['onoff', 'p', 'pd', 'pid']) }),
+  /** Five runs with real-world error: choose speed and gyro so every run lands in the target. */
+  z.object({ ...widgetBase, widget: z.literal('scatter'), distanceCm: z.number().positive() }),
+  /** Choose missions for one match: at least `target` points within `seconds`. */
+  z.object({
+    ...widgetBase,
+    widget: z.literal('strategy'),
+    seconds: z.number().int().positive(),
+    target: z.number().int().positive(),
+    missions: z.array(mission).min(3).max(8),
+  }),
+  /** Move the fulcrum so the motor can lift the load. */
+  z.object({ ...widgetBase, widget: z.literal('lever') }),
+  /** Brace a frame with beams so it stops wobbling when pushed. */
+  z.object({ ...widgetBase, widget: z.literal('brace') }),
+])
+export type WidgetKind = z.infer<typeof widget>['widget']
 
 export const stepSchema = z.union([theory, quiz, code, debug, project, predict, realRobot, build, widget])
 export type LessonStep = z.infer<typeof stepSchema>
@@ -225,7 +293,21 @@ export const lessonSchema = z
         ctx.addIssue({ code: 'custom', path: ['steps', i, 'correct'], message: 'correct option out of range' })
       if (s.type === 'quiz' && s.kind === 'choice' && s.correct.some((c) => c >= s.options.length))
         ctx.addIssue({ code: 'custom', path: ['steps', i, 'correct'], message: 'correct option out of range' })
+      if (s.type === 'quiz' && s.kind === 'fill')
+        s.blanks.forEach((b, j) => {
+          if (b.correct >= b.options.length) ctx.addIssue({ code: 'custom', path: ['steps', i, 'blanks', j], message: 'correct option out of range' })
+          if (!s.code.includes(`[[${j}]]`)) ctx.addIssue({ code: 'custom', path: ['steps', i, 'code'], message: `gap [[${j}]] missing from the code` })
+        })
+      if (s.type === 'widget' && s.widget === 'strategy' && s.missions.reduce((sum, m) => sum + m.points, 0) < s.target)
+        ctx.addIssue({ code: 'custom', path: ['steps', i], message: 'strategy target is unreachable' })
       if (s.type === 'code' || s.type === 'debug' || s.type === 'project') {
+        for (const [what, steps, fns] of [
+          ['start', s.start, s.startFunctions],
+          ['reference', s.reference ?? [], s.referenceFunctions],
+        ] as const) {
+          const problem = programIssue(steps, fns)
+          if (problem) ctx.addIssue({ code: 'custom', path: ['steps', i, what], message: problem })
+        }
         const zoneIds = new Set(s.field.zones.map((z) => z.id))
         const pointIds = new Set(s.field.points.map((p) => p.id))
         for (const c of s.checks) {

@@ -18,7 +18,14 @@ export const CATEGORY_COLOURS = {
   sound: '#f06fb4',
   control: '#ff9f1c',
   sensors: '#2bb673',
+  variables: '#f2994a',
+  myblocks: '#e5689b',
 } as const
+
+/** A block that starts its own stack (no notch on top or bottom). */
+function hat({ previousStatement: _p, nextStatement: _n, ...def }: BlockDef): BlockDef {
+  return def
+}
 
 /** Block type of each DSL op (ops with two shapes get two block types). */
 export const BLOCK_TYPES = {
@@ -55,7 +62,23 @@ export const BLOCK_TYPES = {
   cond_reflection: 're_cond_reflection',
   cond_force: 're_cond_force',
   cond_button: 're_cond_button',
+  while: 're_while',
+  arc: 're_arc',
+  set_var: 're_set_var',
+  change_var: 're_change_var',
+  write_var: 're_write_var',
+  /** "move" by a variable (DSL move_expr with {var}). */
+  move_expr: 're_move_var',
+  call: 're_call',
+  /** Hat block of an own block ("My Blocks"); not a DSL op, it becomes `functions`. */
+  define: 're_define',
+  cond_gyro: 're_cond_gyro',
+  cond_var: 're_cond_var',
 } as const
+
+/** Default names in new variable and own-block blocks (Latin: they become Python names). */
+export const DEFAULT_VAR = 'count'
+export const DEFAULT_BLOCK = 'my_block'
 
 const IMAGE_NAMES: Record<Lang, Record<keyof typeof IMAGES, string>> = {
   ru: { smile: 'улыбку', sad: 'грусть', heart: 'сердце', heart_small: 'сердечко', surprised: 'удивление', arrow_up: 'стрелку вверх', arrow_down: 'стрелку вниз', arrow_left: 'стрелку влево', arrow_right: 'стрелку вправо', yes: 'галочку', no: 'крестик', square: 'квадрат', diamond: 'ромб' },
@@ -118,6 +141,8 @@ export function blockDefs(t: BlocksT, lang: Lang): BlockDef[] {
     ['=', '='],
   ])
   const cond: Arg = { type: 'input_value', name: 'COND', check: 'Boolean' }
+  /** A variable or own-block name, typed by the learner (checked when the program is read). */
+  const name = (text: string): Arg => ({ type: 'field_input', name: 'NAME', text })
   const statement = (name: string): Arg => ({ type: 'input_statement', name })
 
   const stmt = (type: string, colour: string, template: string, specs: Record<string, Arg | Arg[]> = {}, opts: { next?: boolean } = {}): BlockDef => {
@@ -180,6 +205,16 @@ export function blockDefs(t: BlocksT, lang: Lang): BlockDef[] {
     condition(BLOCK_TYPES.cond_reflection, t.cond.reflection, { PORT: port('D'), CMP: cmp, VALUE: num('VALUE', 50, 0, 100, 1) }),
     condition(BLOCK_TYPES.cond_force, t.cond.force, { PORT: port('E'), STATE: drop('STATE', (['pressed', 'released', 'hardpressed'] as const).map((k) => [t.state[k], k])) }),
     condition(BLOCK_TYPES.cond_button, t.cond.button, { BUTTON: drop('BUTTON', (['left', 'right'] as const).map((k) => [t.button[k], k])), STATE: drop('STATE', (['pressed', 'released'] as const).map((k) => [t.state[k], k])) }),
+    withBody(stmt(BLOCK_TYPES.while, C.control, t.while, { COND: cond }), { name: 'DO' }),
+    stmt(BLOCK_TYPES.arc, C.move, t.arc, { DIR: dir(['right', 'left']), RADIUS: num('RADIUS', 20, 5, 200, 1), VALUE: num('VALUE', 90, 1, 360, 1) }),
+    stmt(BLOCK_TYPES.set_var, C.variables, t.set_var, { NAME: name(DEFAULT_VAR), VALUE: num('VALUE', 0, -1000, 1000) }),
+    stmt(BLOCK_TYPES.change_var, C.variables, t.change_var, { NAME: name(DEFAULT_VAR), VALUE: num('VALUE', 1, -1000, 1000) }),
+    stmt(BLOCK_TYPES.write_var, C.light, t.write, { TEXT: name(DEFAULT_VAR) }),
+    stmt(BLOCK_TYPES.move_expr, C.move, t.move, { DIR: dir(['forward', 'back']), VALUE: name(DEFAULT_VAR), UNIT: units(['cm', 'rotations', 'degrees', 'seconds', 'inches']) }),
+    stmt(BLOCK_TYPES.call, C.myblocks, t.call, { NAME: name(DEFAULT_BLOCK) }),
+    withBody(hat(stmt(BLOCK_TYPES.define, C.myblocks, t.define, { NAME: name(DEFAULT_BLOCK) })), { name: 'DO' }),
+    condition(BLOCK_TYPES.cond_gyro, t.cond.gyro, { AXIS: drop('AXIS', (['yaw', 'pitch', 'roll'] as const).map((k) => [t.axis[k], k])), CMP: cmp, VALUE: num('VALUE', 90, -180, 180, 1) }),
+    condition(BLOCK_TYPES.cond_var, t.cond.var, { NAME: name(DEFAULT_VAR), CMP: cmp, VALUE: num('VALUE', 3, -1000, 1000) }),
   ]
 }
 
@@ -194,13 +229,18 @@ export function toolboxBlocks(ops: readonly StepOp[]): string[] {
     } else if (op === 'if') {
       add(BLOCK_TYPES.if)
       add(BLOCK_TYPES.if_else)
+    } else if (op === 'call') {
+      add(BLOCK_TYPES.define)
+      add(BLOCK_TYPES.call)
     } else if (op in BLOCK_TYPES) add(BLOCK_TYPES[op as keyof typeof BLOCK_TYPES])
   }
-  if (ops.some((o) => o === 'wait_until' || o === 'repeat_until' || o === 'if')) {
+  if (ops.some((o) => o === 'wait_until' || o === 'repeat_until' || o === 'if' || o === 'while')) {
     add(BLOCK_TYPES.cond_distance)
     add(BLOCK_TYPES.cond_color)
     add(BLOCK_TYPES.cond_reflection)
     add(BLOCK_TYPES.cond_force)
+    if (ops.includes('reset_yaw')) add(BLOCK_TYPES.cond_gyro)
+    if (ops.includes('set_var')) add(BLOCK_TYPES.cond_var)
   }
   return out
 }

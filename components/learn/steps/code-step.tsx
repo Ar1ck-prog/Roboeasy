@@ -16,11 +16,11 @@ import { tabTriggerClass } from '@/components/ui/tabs'
 import type { ReadResult } from '@/lib/blockly/convert'
 import { variantFor } from '@/lib/flags'
 import { programToPython } from '@/lib/dsl/compile-python'
-import { DEFAULT_ROBOT, countSteps } from '@/lib/dsl/types'
+import { DEFAULT_ROBOT } from '@/lib/dsl/types'
 import { fill } from '@/lib/i18n/config'
 import type { LearnText } from '@/lib/i18n/learn'
 import type { Dictionary } from '@/lib/i18n/ru'
-import { type CheckReport, runChecks } from '@/lib/learn/checks'
+import { type CheckReport, programBlocks, runChecks } from '@/lib/learn/checks'
 import type { ClientStep } from '@/lib/learn/content'
 import { useLearn } from '@/lib/learn/store'
 import { type SimResult, simulate } from '@/lib/sim/interpreter'
@@ -53,7 +53,7 @@ interface CodeStepProps {
 }
 
 export function CodeStep({ lessonId, step, lang, t, blocksT, robotColor, sticker, wheels, mentor = true, done, onDone, onMistake }: CodeStepProps) {
-  const [program, setProgram] = useState<ReadResult>({ steps: step.start, ids: {}, detached: 0, missingConditions: 0 })
+  const [program, setProgram] = useState<ReadResult>({ steps: step.start, functions: step.startFunctions ?? [], ids: {}, detached: 0, missingConditions: 0 })
   const [resetKey, setResetKey] = useState(0)
   const [view, setView] = useState<'blocks' | 'python'>('blocks')
   const [result, setResult] = useState<SimResult | null>(null)
@@ -67,18 +67,18 @@ export function CodeStep({ lessonId, step, lang, t, blocksT, robotColor, sticker
 
   const zoneLabel = useCallback((id: string) => step.field.zones.find((z) => z.id === id)?.label?.[lang] ?? id, [step.field.zones, lang])
   const python = useMemo(
-    () => (view === 'python' ? programToPython({ title: step.title[lang], description: '', steps: program.steps }, DEFAULT_ROBOT) : ''),
-    [view, program.steps],
+    () => (view === 'python' ? programToPython({ title: step.title[lang], description: '', steps: program.steps, functions: program.functions }, DEFAULT_ROBOT) : ''),
+    [view, program.steps, program.functions],
   )
 
   const run = () => {
     setReport(null)
-    setResult(simulate(program.steps, step.field))
+    setResult(simulate(program.steps, step.field, { functions: program.functions }))
     setPanel('robot')
   }
 
   const check = () => {
-    const r = runChecks(program.steps, step.field, step.checks, lang, zoneLabel)
+    const r = runChecks(program.steps, step.field, step.checks, lang, zoneLabel, program.functions)
     setReport(r)
     setResult(r.sim)
     setPanel('robot')
@@ -173,6 +173,11 @@ export function CodeStep({ lessonId, step, lang, t, blocksT, robotColor, sticker
               {program.detached > 0 ? fill(t.lesson.detached, { n: program.detached }) : t.lesson.emptyCondition}
             </p>
           )}
+          {program.problem && program.detached === 0 && program.missingConditions === 0 && (
+            <p className="alert alert-warn m-0 text-sm" role="note">
+              {t.lesson.badProgram}
+            </p>
+          )}
 
           <div className="max-lg:hidden">{reportBox}</div>
 
@@ -199,7 +204,7 @@ export function CodeStep({ lessonId, step, lang, t, blocksT, robotColor, sticker
                   </button>
                 ))}
               </div>
-              <Badge>{fill(t.lesson.blocksCount, { n: countSteps(program.steps) })}</Badge>
+              <Badge>{fill(t.lesson.blocksCount, { n: programBlocks(program.steps, program.functions) })}</Badge>
             </div>
             <div
               className={cn(
@@ -212,6 +217,7 @@ export function CodeStep({ lessonId, step, lang, t, blocksT, robotColor, sticker
                 t={blocksT}
                 toolbox={step.toolbox}
                 initial={step.start}
+                initialFunctions={step.startFunctions}
                 resetKey={resetKey}
                 highlight={highlight}
                 onChange={setProgram}
@@ -268,7 +274,7 @@ export function CodeStep({ lessonId, step, lang, t, blocksT, robotColor, sticker
             <button
               type="button"
               className={buttonVariants({ variant: 'ghost', className: 'ml-auto' })}
-              onClick={() => void downloadProgram(step.title[lang], program.steps)}
+              onClick={() => void downloadProgram(step.title[lang], program.steps, program.functions)}
               disabled={program.steps.length === 0}
             >
               <FileDown aria-hidden="true" />

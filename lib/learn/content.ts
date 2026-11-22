@@ -7,7 +7,7 @@
 import fs from 'node:fs'
 import path from 'node:path'
 
-import { countSteps } from '../dsl/types'
+import { programBlocks } from './checks'
 import { COURSE, findLessonRef } from './course'
 import { type Lesson, lessonSchema } from './schema'
 
@@ -35,15 +35,19 @@ export function readLesson(id: string): Lesson | null {
 
 /** What the browser gets: no reference solutions, only their size. */
 export type ClientLesson = Omit<Lesson, 'steps'> & { steps: ClientStep[] }
-export type ClientStep = Lesson['steps'][number] extends infer S ? (S extends { reference?: unknown } ? Omit<S, 'reference'> & { referenceBlocks?: number } : S) : never
+export type ClientStep = Lesson['steps'][number] extends infer S
+  ? S extends { reference?: unknown }
+    ? Omit<S, 'reference' | 'referenceFunctions'> & { referenceBlocks?: number }
+    : S
+  : never
 
 export function toClientLesson(lesson: Lesson): ClientLesson {
   return {
     ...lesson,
     steps: lesson.steps.map((s) => {
-      if ('reference' in s) {
-        const { reference, ...rest } = s
-        return { ...rest, referenceBlocks: reference ? countSteps(reference) : undefined }
+      if (s.type === 'code' || s.type === 'debug' || s.type === 'project') {
+        const { reference, referenceFunctions, ...rest } = s
+        return { ...rest, referenceBlocks: reference ? programBlocks(reference, referenceFunctions) : undefined }
       }
       return s
     }) as ClientStep[],

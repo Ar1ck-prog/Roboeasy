@@ -321,6 +321,23 @@
   .anim-icon [data-a] { animation: none; }
 }
 @keyframes ai-spin { to { transform: rotate(360deg); } }
+/* Robotics lesson drawings (components/learn/robo-illustrations.tsx) and widgets. */
+@keyframes r-spin-rev { to { transform: rotate(-360deg); } }
+@keyframes r-drive { 0%, 10% { transform: translateX(0); } 55%, 65% { transform: translateX(var(--r-d, 120px)); } 100% { transform: translateX(0); } }
+@keyframes r-ping { 0% { transform: scale(0.3); opacity: 1; } 100% { transform: scale(1.5); opacity: 0; } }
+@keyframes r-zig { 0%, 100% { transform: translateY(-9px) rotate(-10deg); } 50% { transform: translateY(9px) rotate(10deg); } }
+@keyframes r-climb { 0%, 15%, 100% { transform: translateY(0); } 50%, 65% { transform: translateY(var(--r-d, -40px)); } }
+@keyframes r-wobble { 0%, 100% { transform: skewX(0); } 25% { transform: skewX(14deg); } 75% { transform: skewX(-14deg); } }
+@keyframes r-dash { to { stroke-dashoffset: -40; } }
+@keyframes r-grip { 0%, 15%, 100% { transform: rotate(0); } 45%, 70% { transform: rotate(var(--r-a, 22deg)); } }
+@keyframes r-fill { 0% { transform: scaleX(0); } 60%, 100% { transform: scaleX(1); } }
+@keyframes r-tilt { 0%, 100% { transform: rotate(-12deg); } 50% { transform: rotate(12deg); } }
+@keyframes r-step-1 { 0%, 33% { opacity: 1; } 34%, 100% { opacity: 0.2; } }
+@keyframes r-step-2 { 0%, 33% { opacity: 0.2; } 34%, 66% { opacity: 1; } 67%, 100% { opacity: 0.2; } }
+@keyframes r-go { from { transform: translateX(0); } to { transform: translateX(var(--r-d, 100px)); } }
+@keyframes r-turn { from { transform: rotate(0); } to { transform: rotate(var(--r-a, 360deg)); } }
+@keyframes r-draw { from { stroke-dashoffset: 2000; } to { stroke-dashoffset: 0; } }
+@keyframes r-step-3 { 0%, 66% { opacity: 0.2; } 67%, 100% { opacity: 1; } }
 @keyframes ai-pulse { 0%, 60%, 100% { transform: scale(1); } 30% { transform: scale(1.14); } }
 @keyframes ai-beat { 0%, 45%, 100% { transform: scale(1); } 15% { transform: scale(1.16); } 30% { transform: scale(1.04); } 38% { transform: scale(1.12); } }
 @keyframes ai-bob { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-7%); } }

@@ -40,6 +40,7 @@ export function QuizStep({ step, lang, t, done, once = false, onDone, onMistake 
   const rights = useMemo(() => (step.kind === 'match' ? shuffled(step.pairs.map((_, i) => i), step.id) : []), [step])
   const [matches, setMatches] = useState<(number | null)[]>(() => (step.kind === 'match' ? step.pairs.map(() => null) : []))
   const [numberText, setNumberText] = useState('')
+  const [gaps, setGaps] = useState<(number | null)[]>(() => (step.kind === 'fill' ? step.blanks.map(() => null) : []))
   // Options are authored with the right answer anywhere; shown in a stable mixed order.
   const choiceOrder = useMemo(() => (step.kind === 'choice' ? shuffled(step.options.map((_, i) => i), `${step.id}:options`, true) : []), [step])
 
@@ -57,6 +58,8 @@ export function QuizStep({ step, lang, t, done, once = false, onDone, onMistake 
         const n = Number(numberText.replace(',', '.'))
         return numberText.trim() !== '' && Number.isFinite(n) && Math.abs(n - step.answer) <= step.tolerance
       }
+      case 'fill':
+        return step.blanks.every((b, i) => gaps[i] === b.correct)
     }
   }
 
@@ -81,6 +84,7 @@ export function QuizStep({ step, lang, t, done, once = false, onDone, onMistake 
     if (step.kind === 'order') setOrder(step.items.map((_, i) => i))
     if (step.kind === 'match') setMatches(step.pairs.map((_, i) => i))
     if (step.kind === 'number') setNumberText(String(step.answer))
+    if (step.kind === 'fill') setGaps(step.blanks.map((b) => b.correct))
   }
 
   const reveal = () => {
@@ -90,7 +94,16 @@ export function QuizStep({ step, lang, t, done, once = false, onDone, onMistake 
   }
 
   const multi = step.kind === 'choice' && step.correct.length > 1
-  const ready = step.kind === 'choice' ? picked.length > 0 : step.kind === 'match' ? matches.every((m) => m !== null) : step.kind === 'number' ? numberText.trim() !== '' : true
+  const ready =
+    step.kind === 'choice'
+      ? picked.length > 0
+      : step.kind === 'match'
+        ? matches.every((m) => m !== null)
+        : step.kind === 'number'
+          ? numberText.trim() !== ''
+          : step.kind === 'fill'
+            ? gaps.every((g) => g !== null)
+            : true
 
   return (
     <div className="mx-auto grid w-full max-w-2xl gap-4">
@@ -197,6 +210,41 @@ export function QuizStep({ step, lang, t, done, once = false, onDone, onMistake 
           />
           {step.unit && <span>{step.unit[lang]}</span>}
         </label>
+      )}
+
+      {step.kind === 'fill' && (
+        <pre className="code m-0 whitespace-pre-wrap" aria-label={t.lesson.codeGaps}>
+          <code>
+            {step.code.split(/(\[\[\d\]\])/g).map((part, k) => {
+              const m = /^\[\[(\d)\]\]$/.exec(part)
+              if (!m) return <span key={k}>{part}</span>
+              const i = Number(m[1])
+              const blank = step.blanks[i]
+              const right = finished && gaps[i] === blank.correct
+              return (
+                <select
+                  key={k}
+                  className={cn(
+                    'mx-0.5 inline-block cursor-pointer rounded-md border-2 border-dashed border-[#ffd76a] bg-[#2a3042] px-1.5 py-0.5 font-mono text-[#ffd76a]',
+                    gaps[i] !== null && 'border-solid',
+                    right && 'border-[#2bb673] text-[#a8e6c4]',
+                  )}
+                  aria-label={fill(t.lesson.gap, { n: i + 1 })}
+                  value={gaps[i] ?? ''}
+                  disabled={finished}
+                  onChange={(e) => (setStatus('idle'), setGaps((g) => g.map((v, j) => (j === i ? (e.target.value === '' ? null : Number(e.target.value)) : v))))}
+                >
+                  <option value="">___</option>
+                  {blank.options.map((o, j) => (
+                    <option key={j} value={j}>
+                      {o}
+                    </option>
+                  ))}
+                </select>
+              )
+            })}
+          </code>
+        </pre>
       )}
 
       <div aria-live="polite" className="grid gap-3">

@@ -18,6 +18,7 @@ import type { ClientStep } from '@/lib/learn/content'
 import { runOnHub, stopHub, useBluetoothAvailable, useHub } from '@/lib/spike/ble'
 import type { DeviceUpdate } from '@/lib/spike/ble-protocol'
 
+import { RoboWidget, isRoboWidget } from './robo-widgets'
 import type { StepDone } from './simple-steps'
 
 type WidgetData = Extract<ClientStep, { type: 'widget' }>
@@ -47,6 +48,7 @@ export default function WidgetStep({ step, lang, done, onDone }: { step: WidgetD
       {step.widget === 'gesture' && <GestureWidget lang={lang} t={t} done={done} onDone={onDone} target={20} />}
       {step.widget === 'few-examples' && <GestureWidget lang={lang} t={t} done={done} onDone={onDone} target={3} few />}
       {step.widget === 'color' && <ColorWidget lang={lang} t={t} done={done} onDone={onDone} />}
+      {isRoboWidget(step) && <RoboWidget step={step} lang={lang} done={done} onDone={onDone} />}
       {done && (
         <p className="alert alert-ok m-0 flex items-center gap-2" role="status">
           <Check className="size-5" aria-hidden="true" />

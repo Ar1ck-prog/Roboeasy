@@ -4,6 +4,7 @@ import { type ReactNode, useEffect, useState } from 'react'
 import { Check, FileDown, Hammer, SkipForward } from 'lucide-react'
 
 import { BlockStack } from '@/components/block-stack'
+import { CodeView } from '@/components/code-view'
 import { Illustration } from '@/components/learn/illustrations'
 import { RichText } from '@/components/learn/rich-text'
 import { RobotPanel, SendToRobot } from '@/components/robot-link'
@@ -11,7 +12,7 @@ import { AnimIcon } from '@/components/ui/anim-icon'
 import { buttonVariants } from '@/components/ui/button'
 import { compilerFor } from '@/lib/compilers'
 import { programToPython } from '@/lib/dsl/compile-python'
-import { DEFAULT_ROBOT, type Step } from '@/lib/dsl/types'
+import { DEFAULT_ROBOT, type ProgramFunction, type Step } from '@/lib/dsl/types'
 import type { Dictionary } from '@/lib/i18n/ru'
 import { fill } from '@/lib/i18n/config'
 import type { LearnText } from '@/lib/i18n/learn'
@@ -29,10 +30,10 @@ export interface StepDone {
   program?: Step[]
 }
 
-export async function downloadProgram(name: string, steps: Step[]) {
+export async function downloadProgram(name: string, steps: Step[], functions?: ProgramFunction[]) {
   const spike = compilerFor('spike')
   if (!spike) return
-  const blob = await spike.pack(name, { title: name, description: '', steps }, DEFAULT_ROBOT, 'blocks')
+  const blob = await spike.pack(name, { title: name, description: '', steps, ...(functions?.length ? { functions } : {}) }, DEFAULT_ROBOT, 'blocks')
   const url = URL.createObjectURL(blob)
   const a = document.createElement('a')
   a.href = url
@@ -66,9 +67,10 @@ export function TheoryStep({
         <h2 className="m-0 text-2xl">{step.title[lang]}</h2>
         <RichText text={step.body[lang]} className="text-lg" />
       </div>
-      {(step.illustration || step.example) && (
-        <div className="grid gap-3 rounded-(--radius-md) border-(length:--stroke-thin) border-outline bg-surface-2 p-4">
+      {(step.illustration || step.example || step.code) && (
+        <div className="grid min-w-0 gap-3 rounded-(--radius-md) border-(length:--stroke-thin) border-outline bg-surface-2 p-4">
           {step.illustration && <Illustration name={step.illustration} lang={lang} />}
+          {step.code && <CodeView code={step.code} label="Python" className="m-0 overflow-x-auto text-sm" />}
           {step.example && (
             <div className="canvas">
               <BlockStack program={{ steps: step.example }} labels={blocksT} robot={DEFAULT_ROBOT} />

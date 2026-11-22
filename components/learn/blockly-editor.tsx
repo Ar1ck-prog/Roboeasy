@@ -13,7 +13,7 @@ import * as Ru from 'blockly/msg/ru'
 
 import { type ReadResult, stateToSteps, stepsToState } from '@/lib/blockly/convert'
 import { blockDefs, toolboxBlocks } from '@/lib/blockly/defs'
-import type { Step, StepOp } from '@/lib/dsl/types'
+import type { ProgramFunction, Step, StepOp } from '@/lib/dsl/types'
 import type { Dictionary } from '@/lib/i18n/ru'
 
 interface BlocklyEditorProps {
@@ -21,6 +21,8 @@ interface BlocklyEditorProps {
   t: Dictionary['blocks']
   toolbox: readonly StepOp[]
   initial: Step[]
+  /** Own blocks of the starting program. */
+  initialFunctions?: ProgramFunction[]
   /** Changing it reloads `initial` (the "Reset" button). */
   resetKey: number
   /** Step path to highlight while the simulator runs. */
@@ -31,7 +33,7 @@ interface BlocklyEditorProps {
 
 declare global {
   interface Window {
-    __roboeasyBlockly?: { load: (steps: Step[]) => void; steps: () => Step[] }
+    __roboeasyBlockly?: { load: (steps: Step[], functions?: ProgramFunction[]) => void; steps: () => Step[] }
   }
 }
 
@@ -43,7 +45,7 @@ const THEME = Blockly.Theme.defineTheme('roboeasy', {
   startHats: true,
 })
 
-export default function BlocklyEditor({ lang, t, toolbox, initial, resetKey, highlight, onChange, label }: BlocklyEditorProps) {
+export default function BlocklyEditor({ lang, t, toolbox, initial, initialFunctions, resetKey, highlight, onChange, label }: BlocklyEditorProps) {
   const host = useRef<HTMLDivElement>(null)
   const ws = useRef<Blockly.WorkspaceSvg | null>(null)
   const ids = useRef<Record<string, string>>({})
@@ -84,7 +86,7 @@ export default function BlocklyEditor({ lang, t, toolbox, initial, resetKey, hig
     // Test hook (development only): E2E tests load a program into the editor like a learner would build it.
     if (process.env.NODE_ENV !== 'production')
       window.__roboeasyBlockly = {
-        load: (steps: Step[]) => Blockly.serialization.workspaces.load(stepsToState(steps), workspace),
+        load: (steps: Step[], functions?: ProgramFunction[]) => Blockly.serialization.workspaces.load(stepsToState(steps, functions), workspace),
         steps: () => stateToSteps(Blockly.serialization.workspaces.save(workspace)).steps,
       }
     const ro = new ResizeObserver(() => Blockly.svgResize(workspace))
@@ -106,7 +108,7 @@ export default function BlocklyEditor({ lang, t, toolbox, initial, resetKey, hig
     Blockly.Events.disable()
     try {
       workspace.clear()
-      Blockly.serialization.workspaces.load(stepsToState(initial), workspace)
+      Blockly.serialization.workspaces.load(stepsToState(initial, initialFunctions), workspace)
     } finally {
       Blockly.Events.enable()
     }
@@ -120,7 +122,8 @@ export default function BlocklyEditor({ lang, t, toolbox, initial, resetKey, hig
   useEffect(() => {
     const workspace = ws.current
     if (!workspace) return
-    workspace.highlightBlock(highlight ? (ids.current[highlight] ?? null) : null)
+    // Inside an own block the simulator reports "<call path>.call.<n>": the call block lights up.
+    workspace.highlightBlock(highlight ? (ids.current[highlight] ?? ids.current[highlight.split('.call')[0]] ?? null) : null)
   }, [highlight])
 
   return <div ref={host} className="re-blockly h-full min-h-[320px] w-full" role="application" aria-label={label} />
