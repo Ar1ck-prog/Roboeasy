@@ -37,9 +37,9 @@ Sign-in emails land in the local Mailpit: http://127.0.0.1:56324.
 
 Open `/ru/controller` from **Ещё → Контроллер робота**. Use Chrome on a desktop or Android, with the site served over HTTPS (`localhost` also works for development on the same computer).
 
-1. Turn on the LEGO SPIKE Prime hub with the stock SPIKE App 3 firmware and disconnect it from the SPIKE app or RoboEasy Studio.
+1. Choose two distinct A–F ports for the drive motors. Turn on the LEGO SPIKE Prime hub with the stock SPIKE App 3 firmware and disconnect it from the SPIKE app or RoboEasy Studio.
 2. Select an empty program slot (0–19), then choose the hub in the browser's Bluetooth picker. The controller replaces the contents of that slot with its MicroPython program.
-3. Assign two distinct drive ports and, optionally, ports for attachments. Flip a motor's **Reverse** setting if needed. Drive with WASD or the joystick and hold the attachment buttons to run their motors.
+3. Optionally choose ports for attachments. Flip a motor's **Reverse** setting if needed. Drive with WASD or the joystick and hold the attachment buttons to run their motors.
 
 The controller uses the [LEGO SPIKE Prime protocol](https://lego.github.io/spike-prime-docs/) and exchanges motor states and acknowledgements through its `TunnelMessage` channel. On the hub, the controller program brakes its active motors after 350 ms without a valid command. Test a real hub with the drive wheels lifted before driving on the floor.
 

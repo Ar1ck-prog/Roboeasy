@@ -177,10 +177,10 @@ export function RobotController({ t }: { t: ControllerText }) {
   }
 
   function assign(role: Role, change: Partial<Motor>) {
-    if (!canInput.current) return
+    if (attempt.current || (link.current && !canInput.current)) return
     const previous = currentMotors.current
     if (change.port && ROLES.some((other) => role !== other && previous[other].port === change.port)) return
-    reset()
+    if (canInput.current) reset()
     const next = { ...previous, [role]: { ...previous[role], ...change } }
     currentMotors.current = next
     setMotors(next)
@@ -221,6 +221,8 @@ export function RobotController({ t }: { t: ControllerText }) {
 
   const ready = status === 'ready'
   const connected = ready || status === 'closing'
+  const setupLocked = !hydrated || status === 'connecting' || status === 'closing'
+  const editableRoles = connected ? ROLES : ROLES.slice(0, 2)
   const aux = AUX_ROLES.filter((role) => !!motors[role].port)
 
   return (
@@ -229,6 +231,29 @@ export function RobotController({ t }: { t: ControllerText }) {
         <h1 className="font-display text-3xl font-extrabold sm:text-5xl">{t.title}</h1>
         <p className="text-muted-foreground">{t.intro}</p>
       </div>
+
+      <Card className="gap-3 p-4 sm:p-6" aria-labelledby="motor-heading">
+        <h2 id="motor-heading" className={sectionTitle}><Wrench className="size-5" aria-hidden="true" />{t.settings}</h2>
+        <p className="text-sm text-muted-foreground">{detected.length ? `${t.found} ${detected.join(', ')}.` : t.manual}</p>
+        <div className="grid grid-cols-2 gap-x-3 gap-y-4 sm:grid-cols-3">
+          {editableRoles.map((role) => (
+            <div key={role} className="min-w-0 space-y-1.5 text-sm font-bold">
+              <label className="grid gap-1">
+                {t.roles[role]}
+                <select className={fieldStyle} value={motors[role].port} disabled={setupLocked} onChange={(event) => assign(role, { port: event.target.value as Motor['port'] })}>
+                  <option value="">{t.none}</option>
+                  {PORTS.map((port) => <option key={port} value={port} disabled={ROLES.some((other) => other !== role && motors[other].port === port)}>{port}</option>)}
+                </select>
+              </label>
+              <label className="flex min-h-9 items-center gap-2">
+                <input type="checkbox" className="size-4 shrink-0 accent-primary" checked={motors[role].reversed}
+                  aria-label={`${t.reverse} · ${t.roles[role]}`} disabled={setupLocked || !motors[role].port} onChange={(event) => assign(role, { reversed: event.target.checked })} />
+                {t.reverse}
+              </label>
+            </div>
+          ))}
+        </div>
+      </Card>
 
       <Card className="gap-4 p-4 sm:p-6" aria-labelledby="hub-heading">
         <h2 id="hub-heading" className={sectionTitle}><Bluetooth className="size-5" aria-hidden="true" />{t.connection}</h2>
@@ -262,29 +287,6 @@ export function RobotController({ t }: { t: ControllerText }) {
 
       {connected && (
         <>
-          <Card className="gap-3 p-4 sm:p-6" aria-labelledby="motor-heading">
-            <h2 id="motor-heading" className={sectionTitle}><Wrench className="size-5" aria-hidden="true" />{t.settings}</h2>
-            <p className="text-sm text-muted-foreground">{detected.length ? `${t.found} ${detected.join(', ')}.` : t.manual}</p>
-            <div className="grid grid-cols-2 gap-x-3 gap-y-4 sm:grid-cols-3">
-              {ROLES.map((role) => (
-                <div key={role} className="min-w-0 space-y-1.5 text-sm font-bold">
-                  <label className="grid gap-1">
-                    {t.roles[role]}
-                    <select className={fieldStyle} value={motors[role].port} disabled={!ready} onChange={(event) => assign(role, { port: event.target.value as Motor['port'] })}>
-                      <option value="">{t.none}</option>
-                      {PORTS.map((port) => <option key={port} value={port} disabled={ROLES.some((other) => other !== role && motors[other].port === port)}>{port}</option>)}
-                    </select>
-                  </label>
-                  <label className="flex min-h-9 items-center gap-2">
-                    <input type="checkbox" className="size-4 shrink-0 accent-primary" checked={motors[role].reversed}
-                      aria-label={`${t.reverse} · ${t.roles[role]}`} disabled={!ready || !motors[role].port} onChange={(event) => assign(role, { reversed: event.target.checked })} />
-                    {t.reverse}
-                  </label>
-                </div>
-              ))}
-            </div>
-          </Card>
-
           <Card className="gap-3 p-4 sm:p-6" aria-labelledby="drive-heading" tabIndex={0}>
             <h2 id="drive-heading" className={sectionTitle}><Gamepad2 className="size-5" aria-hidden="true" />{t.use}</h2>
             {!driveReady && <p className="text-sm text-muted-foreground">{t.setupDrive}</p>}
