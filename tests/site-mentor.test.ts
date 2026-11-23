@@ -29,7 +29,8 @@ describe('site mentor knowledge', () => {
         if ('reference' in step && step.reference) expect(k).not.toContain(JSON.stringify(step.reference))
       }
     }
-  })
+    // Reads and validates every lesson file: slow when the whole suite runs in parallel.
+  }, 30_000)
 
   it('keeps the safety rules in every language', () => {
     for (const lang of ['ru', 'kk', 'en'] as const) {
