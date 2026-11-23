@@ -19,7 +19,12 @@ const ru = {
   viewLabel: 'Вид программы',
   blocks: 'Блоки',
   driveFirst: 'Совет: сначала проедь маршрут в симуляторе — так видно, куда поедет робот.',
-  ports: 'Моторы движения: левый {left}, правый {right}. Другие порты задаются в студии, в настройках робота.',
+  motorsTitle: 'Моторы колёс',
+  leftMotor: 'Левый мотор',
+  rightMotor: 'Правый мотор',
+  motorsNote:
+    'Нажми порт, к которому подключено колесо. Точка — порт другого мотора: выберешь его, и моторы поменяются местами. Настройка сохранится и в студии.',
+  swap: 'Порт другого мотора: моторы поменяются местами',
   programTitle: 'Мой маршрут',
 }
 
@@ -43,7 +48,11 @@ const kk: DrawText = {
   viewLabel: 'Бағдарлама түрі',
   blocks: 'Блоктар',
   driveFirst: 'Кеңес: алдымен маршрутты симуляторда жүріп өт — робот қайда жүретіні көрінеді.',
-  ports: 'Қозғалыс моторлары: сол {left}, оң {right}. Басқа порттар студияда, робот баптауларында беріледі.',
+  motorsTitle: 'Дөңгелек моторлары',
+  leftMotor: 'Сол мотор',
+  rightMotor: 'Оң мотор',
+  motorsNote: 'Дөңгелек қосылған портты бас. Нүкте — екінші мотордың порты: оны таңдасаң, моторлар орын ауыстырады. Баптау студияда да сақталады.',
+  swap: 'Екінші мотордың порты: моторлар орын ауыстырады',
   programTitle: 'Менің маршрутым',
 }
 
@@ -64,7 +73,12 @@ const en: DrawText = {
   viewLabel: 'Program view',
   blocks: 'Blocks',
   driveFirst: 'Tip: drive the route in the simulator first to see where the robot will go.',
-  ports: 'Drive motors: left {left}, right {right}. Other ports are set in the studio, in the robot settings.',
+  motorsTitle: 'Wheel motors',
+  leftMotor: 'Left motor',
+  rightMotor: 'Right motor',
+  motorsNote:
+    'Tap the port each wheel is plugged into. A dot marks the other motor’s port: pick it and the two motors swap. The setting is saved for the studio too.',
+  swap: 'The other motor’s port: the motors will swap',
   programTitle: 'My route',
 }
 

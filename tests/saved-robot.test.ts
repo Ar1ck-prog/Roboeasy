@@ -25,3 +25,16 @@ describe('saved robot for real-hub programs', () => {
     expect(savedRobot()).toMatchObject({ leftMotor: 'A', rightMotor: 'B', wheelDiameterMm: 56 })
   })
 })
+
+describe('choosing drive ports on the draw page', () => {
+  afterEach(() => store.clear())
+
+  it('changes only the two ports and keeps the studio attachments', async () => {
+    const { saveDrivePorts } = await import('../lib/saved-robot')
+    const attachments = [{ port: 'C', kind: 'arm', name: 'Рука' }]
+    store.set('roboeasy.robot', JSON.stringify({ version: 2, profile: { ...DEFAULT_ROBOT, attachments, wheelDiameterMm: 88 } }))
+    expect(saveDrivePorts('E', 'F')).toMatchObject({ leftMotor: 'E', rightMotor: 'F', wheelDiameterMm: 88 })
+    const stored = JSON.parse(store.get('roboeasy.robot')!).profile
+    expect(stored).toMatchObject({ leftMotor: 'E', rightMotor: 'F', wheelDiameterMm: 88, attachments })
+  })
+})

@@ -297,6 +297,49 @@ test('connects from navigation, controls motors and clears input on every reset'
   expect(errors).toEqual([])
 })
 
+test('records a manual drive, replays it, drives it back to the start and gives way to the keys', async ({ page }) => {
+  const hub = await emulateHub(page)
+  const seen = (values: number[]) => expect.poll(() => hub.speeds.some((s) => s.join() === values.join()), { timeout: 5_000 }).toBe(true)
+  await page.goto('/ru/controller')
+  await connect(page)
+  await assignDrive(page)
+  await expect(button(page, 'Повторить')).toBeDisabled()
+  await button(page, 'Запись').click()
+  await page.getByRole('heading', { level: 1 }).click()
+  await page.keyboard.down('KeyW')
+  await page.waitForTimeout(600)
+  await page.keyboard.up('KeyW')
+  await page.keyboard.down('KeyD')
+  await page.waitForTimeout(400)
+  await page.keyboard.up('KeyD')
+  await button(page, 'Готово').click()
+  await expect(page.getByText(/Записан маршрут на \d+\.\d с/)).toBeVisible()
+
+  hub.speeds.length = 0
+  await button(page, 'Повторить').click()
+  await seen([50, -50, 0, 0, 0, 0])
+  await seen([20, 20, 0, 0, 0, 0])
+  await expect(button(page, 'Повторить')).toBeEnabled({ timeout: 5_000 })
+  await expect.poll(() => hub.speeds.at(-1)).toEqual(zero)
+  const forward = hub.speeds.findIndex((s) => s[0] === 50)
+  expect(hub.speeds.findIndex((s) => s[0] === 20)).toBeGreaterThan(forward)
+
+  hub.speeds.length = 0
+  await button(page, 'На старт').click()
+  await seen([-20, -20, 0, 0, 0, 0])
+  await seen([-50, 50, 0, 0, 0, 0])
+  await expect(button(page, 'На старт')).toBeEnabled({ timeout: 5_000 })
+  expect(hub.speeds.findIndex((s) => s[0] === -50)).toBeGreaterThan(hub.speeds.findIndex((s) => s[0] === -20))
+
+  await button(page, 'Повторить').click()
+  await page.getByRole('heading', { level: 1 }).click()
+  await page.keyboard.down('KeyS')
+  await expect.poll(() => hub.speeds.at(-1)).toEqual([-50, 50, 0, 0, 0, 0])
+  await expect(button(page, 'Повторить')).toBeEnabled()
+  await page.keyboard.up('KeyS')
+  await expect.poll(() => hub.speeds.at(-1)).toEqual(zero)
+})
+
 test('rejects another model and stops accepting input when the bridge stops replying', async ({ page }) => {
   const hub = await emulateHub(page, { unsupportedFirst: true })
   await page.goto('/ru/controller')

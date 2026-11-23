@@ -258,19 +258,32 @@ test('draw a route: the commands appear, the simulator goes first, then the robo
 
   await expect(page.getByTestId('route-piece')).toHaveCount(2)
   await expect(page.getByText('Команд в программе:')).toBeVisible()
-  await expect(page.getByText('Сначала проедь маршрут в симуляторе.')).toBeVisible()
-  await expect(page.getByRole('button', { name: 'Подключить и запустить' })).toBeDisabled()
+  // The simulator is a tip, not a lock: the robot can be started right away.
+  const tip = page.getByText(/Совет: сначала проедь маршрут в симуляторе/)
+  await expect(tip).toBeVisible()
+  await expect(page.getByRole('button', { name: 'Подключить и запустить' })).toBeEnabled()
 
   await page.getByRole('button', { name: 'Проехать в симуляторе' }).click()
-  await expect(page.getByText('Сначала проедь маршрут в симуляторе.')).toHaveCount(0)
+  await expect(tip).toHaveCount(0)
+
+  // Wheels on E and F: choosing F for the left motor (it was B) and then E for the right one.
+  await page.getByRole('radio', { name: 'Левый мотор: E' }).click()
+  await page.getByRole('radio', { name: 'Правый мотор: F' }).click()
+  await expect(page.getByRole('radio', { name: 'Левый мотор: E' })).toHaveAttribute('aria-checked', 'true')
+  await page.getByRole('radio', { name: 'Левый мотор: F' }).click() // the right motor's port: the two swap
+  await expect(page.getByRole('radio', { name: 'Правый мотор: E' })).toHaveAttribute('aria-checked', 'true')
 
   await page.getByRole('button', { name: 'Подключить и запустить' }).click()
   await expect(page.getByTestId('robot-console')).toHaveText('Привет с хаба')
-  expect(new TextDecoder().decode(Uint8Array.from(hub.file.bytes))).toContain('motor_pair')
+  const sent = new TextDecoder().decode(Uint8Array.from(hub.file.bytes))
+  expect(sent).toContain('motor_pair.pair(motor_pair.PAIR_1, port.F, port.E)')
 
   // A new line means it has to be driven again.
   await page.getByRole('button', { name: 'Стереть' }).click()
   await expect(page.getByTestId('route-piece')).toHaveCount(0)
+  // The choice is kept for the studio and the next visit.
+  await page.reload()
+  await expect(page.getByRole('radio', { name: 'Левый мотор: F' })).toHaveAttribute('aria-checked', 'true')
   expect(errors).toEqual([])
 })
 

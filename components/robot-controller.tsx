@@ -1,7 +1,7 @@
 'use client'
 
 import { useCallback, useEffect, useRef, useState, type PointerEvent } from 'react'
-import { ArrowDown, ArrowLeft, ArrowRight, ArrowUp, Bluetooth, Check, Gamepad2, Square, Wrench } from 'lucide-react'
+import { ArrowDown, ArrowLeft, ArrowRight, ArrowUp, Bluetooth, Check, Circle, Gamepad2, Play, Square, Undo2, Wrench } from 'lucide-react'
 
 import { Button } from '@/components/ui/button'
 import { Card } from '@/components/ui/card'
@@ -27,6 +27,7 @@ import {
   type Speeds,
 } from '@/lib/spike/controller-input'
 import { connectController, type ControllerLink } from '@/lib/spike/controller-link'
+import { addFrame, finishTake, MAX_TAKE_MS, speedsAt, type Frame, type Take } from '@/lib/spike/controller-recording'
 import { SLOT_COUNT } from '@/lib/spike/ble-protocol'
 import { cn } from '@/lib/utils'
 
@@ -100,6 +101,12 @@ export function RobotController({ t }: { t: ControllerText }) {
   // Only for display: what the hub is told right now (per port) and which drive keys are held.
   const [output, setOutput] = useState<Speeds>(STOPPED)
   const [keysHeld, setKeysHeld] = useState<string[]>([])
+  // A recorded manual drive: played back as it was, or backwards to bring the robot to its start.
+  const [tape, setTape] = useState<'idle' | 'recording' | 'forward' | 'backward'>('idle')
+  const [take, setTake] = useState<Take | null>(null)
+  const [clock, setClock] = useState(0)
+  const recording = useRef<{ start: number; frames: Frame[]; timer: number } | null>(null)
+  const replay = useRef<number | null>(null)
 
   const currentMotors = useRef(motors)
   const currentLimits = useRef(limits)
@@ -112,8 +119,29 @@ export function RobotController({ t }: { t: ControllerText }) {
   const driveReady = motorAvailable(motors.left.port, detected) && motorAvailable(motors.right.port, detected)
   const canInput = useRef(false)
 
+  const endRecording = useCallback(() => {
+    const rec = recording.current
+    if (!rec) return
+    recording.current = null
+    clearInterval(rec.timer)
+    const result = finishTake(rec.frames, performance.now() - rec.start)
+    if (result) setTake(result)
+    setTape('idle')
+  }, [])
+
+  const endReplay = useCallback((sendStop: boolean) => {
+    if (replay.current === null) return
+    clearInterval(replay.current)
+    replay.current = null
+    setTape('idle')
+    setOutput(STOPPED)
+    if (sendStop) void link.current?.stop()
+  }, [])
+
   const update = useCallback(() => {
     if (!canInput.current) return
+    // Any key, the stick or a motor button takes the robot back from a replay.
+    endReplay(false)
     const motors = currentMotors.current
     const ports = detectedRef.current
     const canDrive = motorAvailable(motors.left.port, ports) && motorAvailable(motors.right.port, ports)
@@ -122,9 +150,13 @@ export function RobotController({ t }: { t: ControllerText }) {
     const speeds = motorSpeeds(motors, axes, currentLimits.current, active)
     link.current?.update(speeds)
     setOutput(speeds)
-  }, [])
+    const rec = recording.current
+    if (rec) addFrame(rec.frames, performance.now() - rec.start, speeds)
+  }, [endReplay])
 
   const reset = useCallback((render = true, sendStop = true) => {
+    endRecording()
+    endReplay(false)
     keys.current.clear()
     joystick.current = null
     holds.current.clear()
@@ -135,7 +167,7 @@ export function RobotController({ t }: { t: ControllerText }) {
       setKeysHeld([])
     }
     if (sendStop) void link.current?.stop()
-  }, [])
+  }, [endRecording, endReplay])
 
   useEffect(() => {
     const keyDown = (event: KeyboardEvent) => {
@@ -284,6 +316,8 @@ export function RobotController({ t }: { t: ControllerText }) {
       setDiagnostic('')
     }
     const next = { ...previous, [role]: { ...previous[role], ...change } }
+    // A take sends speeds per port: after the ports change it would drive the wrong motors.
+    if (change.port !== undefined && change.port !== previous[role].port) setTake(null)
     currentMotors.current = next
     setMotors(next)
   }
@@ -295,6 +329,40 @@ export function RobotController({ t }: { t: ControllerText }) {
     const next = { ...previous, [kind]: speed }
     currentLimits.current = next
     setLimits(next)
+  }
+
+  function startRecording() {
+    if (!canInput.current || recording.current) return
+    const start = performance.now()
+    const frames: Frame[] = []
+    addFrame(frames, 0, output)
+    const timer = window.setInterval(() => {
+      const ms = performance.now() - start
+      setClock(ms)
+      if (ms >= MAX_TAKE_MS) endRecording()
+    }, 200)
+    recording.current = { start, frames, timer }
+    setClock(0)
+    setTape('recording')
+  }
+
+  function play(backwards: boolean) {
+    if (!take || !canInput.current || recording.current || replay.current !== null) return
+    reset(true, false)
+    const start = performance.now()
+    const tick = () => {
+      const ms = performance.now() - start
+      if (!canInput.current) return endReplay(false)
+      if (ms >= take.duration) return endReplay(true)
+      const speeds = speedsAt(take, ms, backwards)
+      link.current?.update(speeds)
+      setOutput(speeds)
+      setClock(ms)
+    }
+    replay.current = window.setInterval(tick, 40)
+    setClock(0)
+    setTape(backwards ? 'backward' : 'forward')
+    tick()
   }
 
   function moveJoystick(event: PointerEvent<HTMLDivElement>) {
@@ -336,6 +404,12 @@ export function RobotController({ t }: { t: ControllerText }) {
   const connected = ready || status === 'recovering' || status === 'closing'
   const setupLocked = !hydrated || status === 'connecting' || status === 'recovering' || status === 'closing'
   const aux = AUX_ROLES.filter((role) => !!motors[role].port)
+  const seconds = (ms: number) => `${(ms / 1000).toFixed(1)} ${t.tape.sec}`
+  const playing = tape === 'forward' || tape === 'backward'
+  const tapeNote =
+    tape === 'recording' ? t.tape.recording : playing ? t.tape.playing : take ? t.tape.saved.replace('{time}', seconds(take.duration)) : t.tape.hint
+  const tapeTime = tape === 'recording' ? `${seconds(clock)} / ${seconds(MAX_TAKE_MS)}` : !take ? '' : playing ? `${seconds(clock)} / ${seconds(take.duration)}` : seconds(take.duration)
+  const tapeButton = 'min-h-11 min-w-0 whitespace-normal px-2 text-sm'
   const motorSummary = detected === null ? (connected ? t.checkingMotors : t.manual) : detected.length ? `${t.found} ${detected.join(', ')}.` : t.noMotors
 
   // 1 connect, 2 assign the drive motors, 3 drive.
@@ -621,6 +695,51 @@ export function RobotController({ t }: { t: ControllerText }) {
                 </div>
               </div>
             </div>
+            {/* Record a run once by hand, then let the robot repeat it or drive it back to the start. */}
+            <section aria-labelledby="tape-heading" className="space-y-2 border-t border-outline/20 pt-4">
+              <div className="flex items-center justify-between gap-3">
+                <h3 id="tape-heading" className="flex items-center gap-2 font-bold">
+                  <span
+                    aria-hidden="true"
+                    className={cn('size-2.5 rounded-full', tape === 'recording' ? 'animate-pulse bg-destructive' : playing ? 'animate-pulse bg-primary' : 'bg-outline/30')}
+                  />
+                  {t.tape.title}
+                </h3>
+                {tapeTime && <span className="font-mono text-xs font-bold text-muted-foreground tabular-nums">{tapeTime}</span>}
+              </div>
+              <p aria-live="polite" className="text-sm text-muted-foreground">
+                {tapeNote}
+              </p>
+              {tape !== 'idle' && (
+                <div aria-hidden="true" className="h-1.5 overflow-hidden rounded-full bg-surface-2">
+                  <div
+                    className={cn('h-full rounded-full', tape === 'recording' ? 'bg-destructive' : 'bg-primary')}
+                    style={{ width: `${Math.min(100, (clock / (playing && take ? take.duration : MAX_TAKE_MS)) * 100)}%` }}
+                  />
+                </div>
+              )}
+              <div className="grid grid-cols-3 gap-1.5">
+                <Button
+                  size="sm"
+                  variant={tape === 'recording' ? 'danger' : 'secondary'}
+                  disabled={!ready || !driveReady || playing}
+                  aria-pressed={tape === 'recording'}
+                  className={tapeButton}
+                  onClick={() => (tape === 'recording' ? endRecording() : startRecording())}
+                >
+                  {tape === 'recording' ? <Square aria-hidden="true" fill="currentColor" /> : <Circle aria-hidden="true" className="fill-destructive text-destructive" />}
+                  {tape === 'recording' ? t.tape.finish : t.tape.record}
+                </Button>
+                <Button size="sm" variant={tape === 'forward' ? 'primary' : 'secondary'} disabled={!ready || !take || tape !== 'idle'} className={tapeButton} onClick={() => play(false)}>
+                  <Play aria-hidden="true" />
+                  {t.tape.play}
+                </Button>
+                <Button size="sm" variant={tape === 'backward' ? 'primary' : 'secondary'} disabled={!ready || !take || tape !== 'idle'} className={tapeButton} onClick={() => play(true)}>
+                  <Undo2 aria-hidden="true" />
+                  {t.tape.back}
+                </Button>
+              </div>
+            </section>
           </Card>
         )}
         <div className="grid min-w-0 gap-5">

@@ -60,6 +60,8 @@ export type SimEvent =
   | { t: number; kind: 'bump'; x: number; y: number }
   | { t: number; kind: 'sensor'; sensor: Condition['sensor']; path: string; x: number; y: number }
   | { t: number; kind: 'wait'; seconds: number; x: number; y: number }
+  /** An attachment motor's angle (not the drive wheels), for drawing it turn during playback. */
+  | { t: number; kind: 'motor'; port: Port; angle: number }
 
 export interface SimResult {
   trace: TracePoint[]
@@ -341,6 +343,8 @@ class Engine {
         }
       }
       this.motorAngle[port] = (this.motorAngle[port] ?? 0) + delta
+      // Every 30 ms and when it stops: enough to animate a dial without bloating the events.
+      if (this.tick % 3 === 0 || !this.motorVel[port]) this.events.push({ t: Math.round((this.t + DT) * 1000) / 1000, kind: 'motor', port, angle: this.motorAngle[port] })
     }
 
     this.t += DT
@@ -667,6 +671,20 @@ export function displayAt(events: SimEvent[], t: number): { pixels: string | nul
     if (e.kind === 'display') current = { pixels: e.pixels, text: e.text }
   }
   return current
+}
+
+/** Angles of the attachment motors at time t (only ports that turned during the run). */
+export function motorAnglesAt(events: SimEvent[], t: number): Partial<Record<Port, number>> {
+  const out: Partial<Record<Port, number>> = {}
+  for (const e of events) {
+    if (e.kind !== 'motor') continue
+    if (e.t > t) {
+      out[e.port] ??= 0
+      continue
+    }
+    out[e.port] = e.angle
+  }
+  return out
 }
 
 /** The step running at time t, as a path like "2.0" (for highlighting). */

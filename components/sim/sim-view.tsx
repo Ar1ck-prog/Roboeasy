@@ -11,7 +11,8 @@ import { colorHex, stickerIcon } from '@/lib/learn/shop'
 import type { Point } from '@/lib/fll/season'
 import type { SimField } from '@/lib/sim/field'
 import { ROBOT_SHAPE } from '@/lib/sim/robot'
-import { type SimResult, displayAt, poseAt, stepAt } from '@/lib/sim/interpreter'
+import type { Port } from '@/lib/dsl/types'
+import { type SimResult, displayAt, motorAnglesAt, poseAt, stepAt } from '@/lib/sim/interpreter'
 import { cn } from '@/lib/utils'
 
 const SENSOR_FILL: Record<string, string> = {
@@ -56,6 +57,8 @@ interface SimViewProps {
   /** classic | offroad | racing | gold (lib/learn/shop.ts) */
   wheels?: string
   labels: { play: string; pause: string; restart: string; speed: string; time: string }
+  /** Attachment motors the program uses: drawn as dials even before the run. */
+  motors?: Port[]
   className?: string
 }
 
@@ -72,6 +75,7 @@ export function SimView({
   sticker,
   wheels = 'classic',
   labels,
+  motors = [],
   className,
 }: SimViewProps) {
   const [t, setT] = useState(0)
@@ -122,6 +126,8 @@ export function SimView({
 
   const pose = result ? poseAt(result.trace, t) : field.start
   const shown = result ? displayAt(result.events, t) : { pixels: null }
+  const angles = result ? motorAnglesAt(result.events, t) : {}
+  const dials = [...new Set([...motors, ...(Object.keys(angles) as Port[])])].sort()
   const beeping = !!result?.events.some((e) => e.kind === 'beep' && t >= e.t && t <= e.t + Math.max(0.25, e.seconds))
   const travelled = useMemo(() => (result ? result.trace.filter((p) => p.t <= t) : []), [result, t])
 
@@ -277,6 +283,17 @@ export function SimView({
                   <AnimIcon name={stickerIcon(sticker ?? 'none')!} x={-24} y={-16} width={40} height={40} style={{ color: '#1b1f2a' }} />
                 </g>
               )}
+              {dials.slice(0, 2).map((port, i, all) => (
+                <g key={port} transform={`translate(${-ROBOT_SHAPE.length / 2 + 30} ${all.length > 1 ? (i ? 30 : -30) : 0})`}>
+                  <circle r="21" fill="#4a86f7" stroke="#1b1f2a" strokeWidth="4" />
+                  {/* The field is drawn upside down (y up): minus keeps clockwise looking clockwise; at 0° the arm points forward. */}
+                  <g transform={`rotate(${-(angles[port] ?? 0)})`}>
+                    <rect x="-12" y="-6" width="40" height="12" rx="6" fill="#ffc531" stroke="#1b1f2a" strokeWidth="3.5" />
+                    <circle cx="21" r="2.6" fill="#1b1f2a" />
+                  </g>
+                  <circle r="5" fill="#1b1f2a" />
+                </g>
+              ))}
               <circle cx={ROBOT_SHAPE.colorSensorAhead} cy={0} r="10" fill="#2bb673" stroke="#1b1f2a" strokeWidth="4" />
               <path d={`M${ROBOT_SHAPE.length / 2 - 6} -22 L${ROBOT_SHAPE.length / 2 + 26} 0 L${ROBOT_SHAPE.length / 2 - 6} 22 Z`} fill="#1b1f2a" />
             </g>
@@ -299,6 +316,56 @@ export function SimView({
             })}
           </span>
         </div>
+        {/* Attachment motors: a dial per port. The hand turns with the motor, the shaded part is how far
+            it has turned in this turn, the badge counts full turns. */}
+        {dials.length > 0 && (
+          <div className="pointer-events-none absolute bottom-3 left-3 flex gap-2 sm:bottom-4 sm:left-4" aria-hidden="true">
+            {dials.map((port) => {
+              const angle = angles[port] ?? 0
+              const turns = Math.trunc(Math.abs(angle) / 360)
+              const part = Math.abs(angle) % 360
+              const sweep = part === 0 && turns > 0 ? 360 : part
+              const end = (Math.sign(angle) * sweep * Math.PI) / 180
+              const arc =
+                sweep >= 359.5
+                  ? 'M0 0m-17 0a17 17 0 1 0 34 0a17 17 0 1 0 -34 0'
+                  : `M0 0L0 -17A17 17 0 ${sweep > 180 ? 1 : 0} ${angle >= 0 ? 1 : 0} ${17 * Math.sin(end)} ${-17 * Math.cos(end)}Z`
+              return (
+                <span
+                  key={port}
+                  className="relative grid justify-items-center gap-1 rounded-xl border-2 border-[#1b1f2a] bg-white/95 px-2 pt-2 pb-1.5 shadow-[3px_3px_0_#1b1f2a]"
+                >
+                  <svg viewBox="-24 -24 48 48" className="size-12 sm:size-16">
+                    <circle r="21" fill="#e6efff" stroke="#1b1f2a" strokeWidth="3" />
+                    {sweep > 0 && <path d={arc} fill="#4a86f7" />}
+                    {Array.from({ length: 12 }, (_, i) => (
+                      <path
+                        key={i}
+                        d={i % 3 ? 'M0 -21 V-18.5' : 'M0 -21 V-16'}
+                        stroke="#1b1f2a"
+                        strokeWidth={i % 3 ? 1.5 : 2.5}
+                        transform={`rotate(${i * 30})`}
+                      />
+                    ))}
+                    <g transform={`rotate(${angle})`}>
+                      <path d="M0 4 V-16" stroke="#1b1f2a" strokeWidth="7" strokeLinecap="round" />
+                      <path d="M0 4 V-16" stroke="#ffc531" strokeWidth="4" strokeLinecap="round" />
+                    </g>
+                    <circle r="4.5" fill="#1b1f2a" />
+                  </svg>
+                  <span className="font-mono text-[11px] leading-none font-bold text-[#1b1f2a] tabular-nums sm:text-xs">
+                    {port} · {Math.round(angle)}°
+                  </span>
+                  {turns > 0 && (
+                    <span className="absolute -top-2 -right-2 rounded-full border-2 border-[#1b1f2a] bg-[#ffc531] px-1.5 font-mono text-[11px] leading-4 font-extrabold text-[#1b1f2a]">
+                      ×{turns}
+                    </span>
+                  )}
+                </span>
+              )
+            })}
+          </div>
+        )}
         {shown.text && <span className="absolute top-12 right-2 rounded bg-[#1b1f2a] px-2 py-0.5 font-mono text-xs text-[#ffc531]">{shown.text}</span>}
       </div>
 

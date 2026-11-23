@@ -8,9 +8,10 @@ import { CodeView } from '@/components/code-view'
 import { RobotPanel, SendToRobot } from '@/components/robot-link'
 import { buttonVariants } from '@/components/ui/button'
 import { Card, CardTitle } from '@/components/ui/card'
+import { cn } from '@/lib/utils'
 import { programToPython } from '@/lib/dsl/compile-python'
-import { savedRobot } from '@/lib/saved-robot'
-import { DEFAULT_ROBOT, type Program, countSteps } from '@/lib/dsl/types'
+import { saveDrivePorts, savedRobot } from '@/lib/saved-robot'
+import { DEFAULT_ROBOT, PORTS, type Port, type Program, countSteps } from '@/lib/dsl/types'
 import { type Locale, fill } from '@/lib/i18n/config'
 import type { DrawText } from '@/lib/i18n/draw'
 import type { Dictionary } from '@/lib/i18n/ru'
@@ -107,6 +108,13 @@ export function DrawRoute({ lang, t, labels }: { lang: Locale; t: DrawText; labe
     requestAnimationFrame(tick)
   }
 
+  // Picking the other motor's port swaps the two motors.
+  function pickMotor(side: 'leftMotor' | 'rightMotor', port: Port) {
+    const { leftMotor, rightMotor } = robot
+    if (side === 'leftMotor') setRobot(saveDrivePorts(port, port === rightMotor ? leftMotor : rightMotor))
+    else setRobot(saveDrivePorts(port === leftMotor ? rightMotor : leftMotor, port))
+  }
+
   const pose = sim ? poseAt(sim.trace, time) : { ...FIELD.start }
   const driven = sim ? sim.trace.filter((p) => p.t <= time) : []
   const hitWall = sim !== null && sim.collisions > 0
@@ -180,6 +188,52 @@ export function DrawRoute({ lang, t, labels }: { lang: Locale; t: DrawText; labe
           </span>
         </label>
 
+        {/* Drive motors of this robot: saved with the studio's robot settings, so both use the same ports. */}
+        <div
+          role="group"
+          aria-labelledby="drive-motors"
+          className="grid gap-2.5 rounded-(--radius-md) border-(length:--stroke-thin) border-outline bg-card p-3 sm:p-4"
+        >
+          <p id="drive-motors" className="m-0 font-bold">
+            {t.motorsTitle}
+          </p>
+          {(['leftMotor', 'rightMotor'] as const).map((side) => {
+            const label = side === 'leftMotor' ? t.leftMotor : t.rightMotor
+            const other = side === 'leftMotor' ? robot.rightMotor : robot.leftMotor
+            return (
+              <div key={side} role="radiogroup" aria-label={label} className="grid items-center gap-1.5 sm:grid-cols-[7.5rem_minmax(0,1fr)] sm:gap-3">
+                <span className="text-sm font-bold">{label}</span>
+                <div className="grid grid-cols-6 gap-1 rounded-(--radius-sm) bg-surface-2 p-1">
+                  {PORTS.map((port) => {
+                    const on = robot[side] === port
+                    return (
+                      <button
+                        key={port}
+                        type="button"
+                        role="radio"
+                        aria-checked={on}
+                        aria-label={`${label}: ${port}`}
+                        title={port === other ? t.swap : undefined}
+                        onClick={() => pickMotor(side, port)}
+                        className={cn(
+                          'relative min-h-10 rounded-[10px] border-(length:--stroke-thin) font-display font-extrabold transition-colors',
+                          on
+                            ? 'border-outline bg-primary text-primary-foreground shadow-(--shadow-press)'
+                            : 'border-transparent text-muted-foreground hover:bg-card',
+                        )}
+                      >
+                        {port}
+                        {port === other && <span aria-hidden="true" className="absolute top-1 right-1.5 size-1.5 rounded-full bg-muted-foreground/60" />}
+                      </button>
+                    )
+                  })}
+                </div>
+              </div>
+            )
+          })}
+          <p className="m-0 text-sm text-muted-foreground">{t.motorsNote}</p>
+        </div>
+
         <div className="flex flex-wrap gap-2">
           <button type="button" className={buttonVariants({ variant: 'primary' })} disabled={!program} onClick={drive}>
             <Play aria-hidden="true" />
@@ -226,7 +280,6 @@ export function DrawRoute({ lang, t, labels }: { lang: Locale; t: DrawText; labe
             </Card>
             <RobotPanel lang={lang}>
               {!sim && <p className="m-0 text-sm font-bold text-muted-foreground">{t.driveFirst}</p>}
-              <p className="m-0 text-sm text-muted-foreground">{fill(t.ports, { left: robot.leftMotor, right: robot.rightMotor })}</p>
               <SendToRobot lang={lang} code={code} size="md" />
             </RobotPanel>
           </>

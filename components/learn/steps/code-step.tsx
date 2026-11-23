@@ -16,7 +16,7 @@ import { tabTriggerClass } from '@/components/ui/tabs'
 import type { ReadResult } from '@/lib/blockly/convert'
 import { variantFor } from '@/lib/flags'
 import { programToPython } from '@/lib/dsl/compile-python'
-import { DEFAULT_ROBOT } from '@/lib/dsl/types'
+import { DEFAULT_ROBOT, type Port, type Step } from '@/lib/dsl/types'
 import { fill } from '@/lib/i18n/config'
 import type { LearnText } from '@/lib/i18n/learn'
 import type { Dictionary } from '@/lib/i18n/ru'
@@ -34,6 +34,21 @@ const BlocklyEditor = dynamic(() => import('@/components/learn/blockly-editor'),
 })
 
 type Lang = 'ru' | 'kk' | 'en'
+
+/** Attachment motors to draw as dials: the task's motor checks and the ports the program turns (not the wheels). */
+function attachmentPorts(checks: { type: string; port?: Port }[], steps: Step[]): Port[] {
+  const ports = new Set<Port>(checks.flatMap((c) => (c.type === 'motorTurned' && c.port ? [c.port] : [])))
+  const walk = (list: Step[]) => {
+    for (const s of list) {
+      if ((s.op === 'motor_run' || s.op === 'motor_start' || s.op === 'motor_to_position') && s.port !== DEFAULT_ROBOT.leftMotor && s.port !== DEFAULT_ROBOT.rightMotor) ports.add(s.port)
+      if ('steps' in s) walk(s.steps)
+      if (s.op === 'if') walk([...s.then, ...(s.else ?? [])])
+    }
+  }
+  walk(steps)
+  return [...ports]
+}
+
 type CodeStepData = Extract<ClientStep, { type: 'code' | 'debug' | 'project' }>
 
 interface CodeStepProps {
@@ -242,6 +257,7 @@ export function CodeStep({ lessonId, step, lang, t, blocksT, robotColor, sticker
               wheels={wheels}
               labels={t.sim}
               onStep={setHighlight}
+              motors={attachmentPorts(step.checks, [...program.steps, ...(program.functions ?? []).flatMap((f) => f.steps)])}
             />
           </section>
 

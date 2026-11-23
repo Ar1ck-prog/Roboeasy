@@ -33,3 +33,15 @@ export function savedRobot(): RobotProfile {
     return DEFAULT_ROBOT
   }
 }
+
+/** Saves new drive ports into the studio's profile (other settings stay as they are). */
+export function saveDrivePorts(leftMotor: Port, rightMotor: Port): RobotProfile {
+  const next = { ...savedRobot(), leftMotor, rightMotor }
+  try {
+    // Keep everything else the studio stored (attachments and all), only the two ports change.
+    const saved = JSON.parse(localStorage.getItem(KEY) ?? 'null') as { version?: number; profile?: Record<string, unknown> } | null
+    const base = saved?.version === 2 && saved.profile && typeof saved.profile === 'object' ? saved.profile : DEFAULT_ROBOT
+    localStorage.setItem(KEY, JSON.stringify({ version: 2, profile: { ...base, leftMotor, rightMotor } }))
+  } catch {}
+  return next
+}

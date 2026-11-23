@@ -56,6 +56,18 @@ const ru = {
   roles: { left: 'Левый мотор', right: 'Правый мотор', gripper: 'Захват', lift: 'Подъёмник', extra1: 'Механизм 3', extra2: 'Механизм 4' },
   positive: { gripper: 'Открыть', lift: 'Поднять', extra1: 'По часовой', extra2: 'По часовой' },
   negative: { gripper: 'Закрыть', lift: 'Опустить', extra1: 'Против часовой', extra2: 'Против часовой' },
+  tape: {
+    title: 'Запись маршрута',
+    record: 'Запись',
+    finish: 'Готово',
+    play: 'Повторить',
+    back: 'На старт',
+    sec: 'с',
+    hint: 'Нажми «Запись» и проведи робота джойстиком или клавишами. Потом он повторит маршрут сам.',
+    recording: 'Идёт запись: веди робота. Нажми «Готово» или «Стоп», когда закончишь (до 60 с).',
+    saved: 'Записан маршрут на {time}. «Повторить» — проехать так же, «На старт» — вернуться тем же путём задом.',
+    playing: 'Робот едет сам. Любая клавиша, джойстик или «Стоп» сразу прервут повтор.',
+  },
 }
 
 const kk: typeof ru = {
@@ -113,6 +125,18 @@ const kk: typeof ru = {
   roles: { left: 'Сол мотор', right: 'Оң мотор', gripper: 'Қармауыш', lift: 'Көтергіш', extra1: '3-механизм', extra2: '4-механизм' },
   positive: { gripper: 'Ашу', lift: 'Көтеру', extra1: 'Сағат бағытымен', extra2: 'Сағат бағытымен' },
   negative: { gripper: 'Жабу', lift: 'Түсіру', extra1: 'Кері бағытта', extra2: 'Кері бағытта' },
+  tape: {
+    title: 'Маршрутты жазу',
+    record: 'Жазу',
+    finish: 'Дайын',
+    play: 'Қайталау',
+    back: 'Бастауға',
+    sec: 'с',
+    hint: '«Жазу» түймесін басып, роботты джойстикпен немесе пернелермен жүргіз. Кейін ол маршрутты өзі қайталайды.',
+    recording: 'Жазылып жатыр: роботты жүргіз. Аяқтағанда «Дайын» не «Тоқтату» түймесін бас (60 с дейін).',
+    saved: '{time} маршрут жазылды. «Қайталау» — дәл солай жүру, «Бастауға» — сол жолмен кері қайту.',
+    playing: 'Робот өзі жүріп келеді. Кез келген перне, джойстик немесе «Тоқтату» қайталауды бірден үзеді.',
+  },
 }
 
 const en: typeof ru = {
@@ -171,6 +195,18 @@ const en: typeof ru = {
   roles: { left: 'Left motor', right: 'Right motor', gripper: 'Gripper', lift: 'Lift', extra1: 'Mechanism 3', extra2: 'Mechanism 4' },
   positive: { gripper: 'Open', lift: 'Raise', extra1: 'Clockwise', extra2: 'Clockwise' },
   negative: { gripper: 'Close', lift: 'Lower', extra1: 'Counterclockwise', extra2: 'Counterclockwise' },
+  tape: {
+    title: 'Route recording',
+    record: 'Record',
+    finish: 'Done',
+    play: 'Replay',
+    back: 'To start',
+    sec: 's',
+    hint: 'Press “Record” and drive the robot with the stick or keys. Then it can repeat the route by itself.',
+    recording: 'Recording: drive the robot. Press “Done” or “Stop” when you finish (up to 60 s).',
+    saved: 'Recorded a {time} route. “Replay” drives it again, “To start” backs along the same path.',
+    playing: 'The robot is driving itself. Any key, the stick or “Stop” ends the replay at once.',
+  },
 }
 
 export type ControllerText = typeof ru
