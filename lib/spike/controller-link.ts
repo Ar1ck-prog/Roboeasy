@@ -1,11 +1,11 @@
 import { HubClient, HubConnectionError, HubError, type HubTransport, openTransport, reserveControllerHub } from './ble'
 import { PORTS, STOPPED, type Port, type Speeds } from './controller-input'
-import { CONTROLLER_COMMAND, CONTROLLER_PROGRAM, WATCHDOG_MS } from './controller-program'
+import { CONSOLE_COMMAND, CONTROLLER_COMMAND, CONTROLLER_CONSOLE_PREFIX, CONTROLLER_PROGRAM, WATCHDOG_MS } from './controller-program'
 
 const CHANGE_INTERVAL_MS = 20
 const ACTIVE_HEARTBEAT_MS = 75
 const IDLE_INTERVAL_MS = 500
-const INITIAL_PROBES = 8
+const PROBES_PER_CHANNEL = 4
 const PROBE_ACK_MS = 650
 const encode = new TextEncoder()
 const decode = new TextDecoder()
@@ -27,7 +27,10 @@ export class ControllerLink {
   private closed = false
   private closing = false
   private ready = false
-  private reply: ((error?: Error, payload?: Uint8Array) => void) | undefined
+  private reply: ((error?: Error, message?: string) => void) | undefined
+  private commandMode = CONTROLLER_COMMAND
+  private consoleLine = ''
+  private startupLog = ''
   private stopWaiters: ((sent: boolean) => void)[] = []
 
   constructor(private transport: HubTransport, private slot: number, private listener: Listener, private release: () => void) {
@@ -36,7 +39,21 @@ export class ControllerLink {
     client.onDevices = (updates) => {
       listener.onDevices(PORTS.filter((port) => updates.some((device) => device.kind === 'motor' && device.port === port)))
     }
-    client.onTunnel = (payload) => this.reply?.(undefined, payload)
+    client.onTunnel = (payload) => this.reply?.(undefined, decode.decode(payload))
+  }
+
+  private receiveConsole(text: string) {
+    if (!this.ready) this.startupLog = (this.startupLog + text).slice(-400)
+    const lines = (this.consoleLine + text).split('\n')
+    this.consoleLine = (lines.pop() ?? '').slice(-256)
+    // HubOS may deliver the print's newline in its own notification.
+    const partial = this.consoleLine.trim().match(/RBE:(K[\da-f]{2})$/)?.[1]
+    if (partial) this.consoleLine = ''
+    for (const line of lines) {
+      const candidate = line.trim().match(/RBE:(K[\da-f]{2})$/)?.[1]
+      if (candidate) this.reply?.(undefined, candidate)
+    }
+    if (partial) this.reply?.(undefined, partial)
   }
 
   async initialize() {
@@ -46,18 +63,20 @@ export class ControllerLink {
     // Motor detection is optional. A missing telemetry reply must not prevent driving.
     await this.client.subscribeDevices().catch(() => {})
     await this.atStage('upload', () => this.client.upload(CONTROLLER_PROGRAM, this.slot))
+    this.client.onConsole = (text) => this.receiveConsole(text)
     await this.atStage('start', async () => {
       if (!(await this.client.start(this.slot))) throw new HubError('start refused')
     })
     await this.atStage('control', async () => {
       // Start can be acknowledged before Python enters its loop. A neutral frame
       // can be retried safely and proves both directions of the tunnel work.
-      for (let i = 0; i < INITIAL_PROBES; i++) {
+      for (let i = 0; i < PROBES_PER_CHANNEL * 2; i++) {
+        if (i === PROBES_PER_CHANNEL) this.commandMode = CONSOLE_COMMAND
         try {
           await this.write(STOPPED, PROBE_ACK_MS)
           return
         } catch (error) {
-          if (this.closed || !(error instanceof HubError) || error.message !== 'controller timeout' || i === INITIAL_PROBES - 1) throw error
+          if (this.closed || !(error instanceof HubError) || error.message !== 'controller timeout' || i === PROBES_PER_CHANNEL * 2 - 1) throw error
         }
       }
     })
@@ -73,7 +92,10 @@ export class ControllerLink {
     try {
       return await action()
     } catch (error) {
-      throw new HubConnectionError(stage, error)
+      const diagnostic = stage === 'start' || stage === 'control'
+        ? this.startupLog.replaceAll(CONTROLLER_CONSOLE_PREFIX, '').trim()
+        : ''
+      throw new HubConnectionError(stage, error, diagnostic)
     }
   }
 
@@ -85,9 +107,9 @@ export class ControllerLink {
       timer = setTimeout(() => reject(new HubError(written ? 'controller timeout' : 'write timeout')), timeout)
     })
     const received = new Promise<void>((resolve, reject) => {
-      this.reply = (error, payload) => {
+      this.reply = (error, message) => {
         if (error) reject(error)
-        if (payload && decode.decode(payload) === expected) resolve()
+        if (message === expected) resolve()
       }
     })
     try {
@@ -102,7 +124,7 @@ export class ControllerLink {
     const sequence = this.sequence = (this.sequence + 1) % 256
     this.lastWrite = performance.now()
     // ASCII keeps the hub callback usable with either byte or text payloads.
-    const prefix = CONTROLLER_COMMAND + hexByte(sequence)
+    const prefix = this.commandMode + hexByte(sequence)
     const payload = encode.encode(prefix + speeds.map((speed) => hexByte(speed + 100)).join(''))
     await this.exchange(prefix, timeout, () => this.client.sendTunnel(payload))
     this.sent = speeds

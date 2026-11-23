@@ -2,6 +2,8 @@ export const WATCHDOG_MS = 350
 export const MAX_VELOCITY = 500
 const ACCELERATION = 3500
 export const CONTROLLER_COMMAND = 'M'
+export const CONSOLE_COMMAND = 'K'
+export const CONTROLLER_CONSOLE_PREFIX = 'RBE:'
 
 /** SPIKE App 3 Python. Each command replaces the complete state of the six ports. */
 export const CONTROLLER_PROGRAM = `import hub
@@ -12,20 +14,7 @@ import time
 tunnel = hub.config['module_tunnel']
 ports = (port.A, port.B, port.C, port.D, port.E, port.F)
 speeds = [0] * 6
-pending = None
-
-def receive(data):
-    global pending
-    if isinstance(data, str):
-        data = data.encode()
-    if len(data) != 15 or data[:1] != b'${CONTROLLER_COMMAND}':
-        return
-    try:
-        values = [int(data[i:i+2], 16) - 100 for i in range(3, 15, 2)]
-    except ValueError:
-        return
-    if all(-100 <= v <= 100 for v in values):
-        pending = (data[:3], values, time.ticks_ms())
+last = 0
 
 def apply(values):
     for i in range(6):
@@ -46,22 +35,44 @@ def brake():
                 pass
             speeds[i] = 0
 
+def receive(data):
+    global last
+    if isinstance(data, str):
+        data = data.encode()
+    if len(data) != 15:
+        return
+    mode = chr(data[0])
+    if mode != '${CONTROLLER_COMMAND}' and mode != '${CONSOLE_COMMAND}':
+        return
+    values = []
+    digits = '0123456789abcdef'
+    for i in range(3, 15, 2):
+        high = digits.find(chr(data[i]))
+        low = digits.find(chr(data[i+1]))
+        speed = high * 16 + low - 100
+        if high < 0 or low < 0 or speed < -100 or speed > 100:
+            return
+        values.append(speed)
+    try:
+        apply(values)
+        last = time.ticks_ms()
+        if mode == '${CONSOLE_COMMAND}':
+            print('${CONTROLLER_CONSOLE_PREFIX}' + mode + chr(data[1]) + chr(data[2]))
+        else:
+            tunnel.send(data[:3])
+    except Exception as error:
+        brake()
+        print('${CONTROLLER_CONSOLE_PREFIX}ERR', error)
+
 def main():
-    global pending
+    global last
     last = time.ticks_ms()
     tunnel.callback(receive)
+    print('${CONTROLLER_CONSOLE_PREFIX}READY')
     try:
         while True:
-            now = time.ticks_ms()
-            if time.ticks_diff(now, last) >= ${WATCHDOG_MS}:
+            if time.ticks_diff(time.ticks_ms(), last) >= ${WATCHDOG_MS}:
                 brake()
-            command = pending
-            if command is not None:
-                pending = None
-                reply, values, last = command
-                if time.ticks_diff(now, last) < ${WATCHDOG_MS}:
-                    apply(values)
-                    tunnel.send(reply)
             time.sleep_ms(10)
     finally:
         brake()

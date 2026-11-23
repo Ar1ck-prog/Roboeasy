@@ -45,6 +45,7 @@ export function RobotController({ t }: { t: ControllerText }) {
   const available = useBluetoothAvailable()
   const [status, setStatus] = useState<Status>('idle')
   const [problem, setProblem] = useState<Problem | null>(null)
+  const [diagnostic, setDiagnostic] = useState('')
   const [hub, setHub] = useState({ name: '', firmware: '' })
   const [slot, setSlot] = useState('')
   const [detected, setDetected] = useState<Port[]>([])
@@ -127,6 +128,7 @@ export function RobotController({ t }: { t: ControllerText }) {
     const pending = new AbortController()
     attempt.current = pending
     setProblem(null)
+    setDiagnostic('')
     setHub({ name: '', firmware: '' })
     setDetected([])
     setStatus('connecting')
@@ -155,6 +157,7 @@ export function RobotController({ t }: { t: ControllerText }) {
     } catch (error) {
       if (!pending.signal.aborted) {
         setProblem(connectionProblem(error))
+        if (error instanceof HubConnectionError) setDiagnostic(error.diagnostic)
         setStatus('idle')
       }
     } finally {
@@ -282,7 +285,12 @@ export function RobotController({ t }: { t: ControllerText }) {
           </p>
         </div>
         {hydrated && !available && <p className="text-sm text-muted-foreground">{t.browser}</p>}
-        {problem && <p role="alert" className="text-sm text-foreground">{t[problem]}</p>}
+        {problem && (
+          <div role="alert" className="space-y-2 text-sm text-foreground">
+            <p>{t[problem]}</p>
+            {diagnostic && <pre className="whitespace-pre-wrap break-words text-xs">{diagnostic}</pre>}
+          </div>
+        )}
       </Card>
 
       {connected && (

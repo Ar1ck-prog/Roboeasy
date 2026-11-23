@@ -53,7 +53,7 @@ export interface HubTransport {
 export class HubError extends Error {}
 
 export class HubConnectionError extends HubError {
-  constructor(readonly stage: 'select' | 'gatt' | 'info' | 'upload' | 'start' | 'control', cause: unknown) {
+  constructor(readonly stage: 'select' | 'gatt' | 'info' | 'upload' | 'start' | 'control', cause: unknown, readonly diagnostic = '') {
     super(stage, { cause })
   }
 }

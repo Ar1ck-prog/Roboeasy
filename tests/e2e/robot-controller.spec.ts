@@ -1,7 +1,7 @@
 import { devices, expect, test, type Page } from '@playwright/test'
 
 import { BLE_RX, BLE_SERVICE, BLE_TX, FrameReader, MSG, packFrame, tunnelMessage } from '../../lib/spike/ble-protocol'
-import { CONTROLLER_COMMAND } from '../../lib/spike/controller-program'
+import { CONSOLE_COMMAND, CONTROLLER_COMMAND, CONTROLLER_CONSOLE_PREFIX } from '../../lib/spike/controller-program'
 
 const zero = [0, 0, 0, 0, 0, 0]
 const bytes = (...values: number[]) => Uint8Array.of(...values)
@@ -9,11 +9,12 @@ const encoder = new TextEncoder()
 const decoder = new TextDecoder()
 const url = `http://localhost:${process.env.E2E_PORT ?? 3100}`
 
-async function emulateHub(page: Page, { cancelFirst = false, unsupportedFirst = false, missedBootProbes = 0, gattFails = false } = {}) {
+async function emulateHub(page: Page, { cancelFirst = false, unsupportedFirst = false, missedBootProbes = 0, gattFails = false, consoleOnly = false, bootLog = '' } = {}) {
   const reader = new FrameReader()
   const speeds: number[][] = []
   const events: string[] = []
   const chooser: { active: boolean; service: string }[] = []
+  const modes: string[] = []
   let dropAck = false
   await page.exposeFunction('spikeChooser', (request: { active: boolean; service: string }) => {
     chooser.push(request)
@@ -32,14 +33,23 @@ async function emulateHub(page: Page, { cancelFirst = false, unsupportedFirst = 
         if (message[0] === MSG.clearSlot) events.push(`slot:${message[1]}`)
         if (message[0] === MSG.flow) {
           events.push(message[1] ? 'program stop' : 'program start')
+          if (!message[1] && bootLog) responses.push(bytes(MSG.console, ...encoder.encode(bootLog), 0))
         }
       } else if (message[0] === MSG.tunnel) {
         const command = decoder.decode(message.slice(3))
-        if (command.length !== 15 || !command.startsWith(CONTROLLER_COMMAND)) throw new Error('unexpected motor command')
+        const mode = command[0]
+        if (command.length !== 15 || ![CONTROLLER_COMMAND, CONSOLE_COMMAND].includes(mode)) throw new Error('unexpected motor command')
+        modes.push(mode)
         const values = Array.from({ length: 6 }, (_, i) => parseInt(command.slice(3 + 2 * i, 5 + 2 * i), 16) - 100)
         speeds.push(values)
         events.push(values.some(Boolean) ? 'move' : 'neutral')
-        if (!dropAck && missedBootProbes <= 0) responses.push(tunnelMessage(encoder.encode(command.slice(0, 3))))
+        if (!dropAck && missedBootProbes <= 0) {
+          const reply = command.slice(0, 3)
+          if (mode === CONSOLE_COMMAND) {
+            const print = (line: string) => bytes(MSG.console, ...encoder.encode(line), 0)
+            responses.push(print(CONTROLLER_CONSOLE_PREFIX), print(reply), print('\n'))
+          } else if (!consoleOnly) responses.push(tunnelMessage(encoder.encode(reply)))
+        }
         missedBootProbes = Math.max(0, missedBootProbes - 1)
       }
     }
@@ -100,7 +110,7 @@ async function emulateHub(page: Page, { cancelFirst = false, unsupportedFirst = 
       configurable: true,
     })
   }, { rxId: BLE_RX, txId: BLE_TX, gattFails })
-  return { speeds, events, chooser, dropAck: () => { dropAck = true } }
+  return { speeds, events, chooser, modes, dropAck: () => { dropAck = true } }
 }
 
 const button = (page: Page, name: string) => page.getByRole('button', { name, exact: true })
@@ -287,6 +297,42 @@ test('reports a Bluetooth connection failure before attempting an upload', async
   await expect(page.locator('main').getByRole('alert')).toContainText('BT-GATT')
   await expect(button(page, 'Подключить хаб')).toBeEnabled()
   expect(hub.events).toEqual([])
+})
+
+test('recovers BT-CONTROL with console acknowledgements and drives all directions', async ({ page }) => {
+  const hub = await emulateHub(page, { consoleOnly: true })
+  await page.goto('/ru/controller')
+  await motor(page, 'Левый мотор').selectOption('A')
+  await motor(page, 'Правый мотор').selectOption('B')
+  await connect(page)
+  expect(hub.modes.slice(0, 5)).toEqual([CONTROLLER_COMMAND, CONTROLLER_COMMAND, CONTROLLER_COMMAND, CONTROLLER_COMMAND, CONSOLE_COMMAND])
+  const drive = page.getByRole('heading', { name: 'Управление', exact: true })
+  await drive.click()
+  for (const [key, left, right] of [['KeyW', 100, 100], ['KeyS', -100, -100], ['KeyA', -10, 10], ['KeyD', 10, -10]] as const) {
+    await page.keyboard.down(key)
+    await expect.poll(() => hub.speeds.at(-1)).toEqual([left, right, 0, 0, 0, 0])
+    await page.keyboard.up(key)
+    await expect.poll(() => hub.speeds.at(-1)).toEqual(zero)
+  }
+  await button(page, 'Отключить').click()
+  await expect(status(page)).toHaveText('Не подключён')
+  expect(hub.events.slice(-3)).toEqual(['neutral', 'program stop', 'disconnect'])
+})
+
+test('keeps drive disabled and shows the startup log when neither channel answers', async ({ page }) => {
+  const hub = await emulateHub(page, { bootLog: 'RuntimeError: tunnel callback unavailable\n' })
+  hub.dropAck()
+  await page.goto('/ru/controller')
+  await motor(page, 'Левый мотор').selectOption('A')
+  await motor(page, 'Правый мотор').selectOption('B')
+  await motor(page, 'Слот программы').selectOption('19')
+  await button(page, 'Подключить хаб').click()
+  const alert = page.locator('main').getByRole('alert')
+  await expect(alert).toContainText('BT-CONTROL')
+  await expect(alert).toContainText('RuntimeError: tunnel callback unavailable')
+  await expect(page.getByRole('heading', { name: 'Управление', exact: true })).toBeHidden()
+  expect(hub.speeds).toHaveLength(8)
+  expect(hub.speeds.every((speeds) => speeds.every((speed) => speed === 0))).toBe(true)
 })
 
 test('phone layout supports two independent touch pointers and a visible stop', async ({ browser }, testInfo) => {
