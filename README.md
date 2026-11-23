@@ -45,7 +45,7 @@ The controller uses the [LEGO SPIKE Prime protocol](https://lego.github.io/spike
 
 ## Learning platform
 
-- Content is data: `content/learn/course.json` (8 tracks, 37 units, 123 lessons; `ready` ones have a file) and `content/learn/lessons/*.json`, validated by `lib/learn/schema.ts` (zod). Tests run every reference solution through the simulator and its checks. Weekly challenges: `content/learn/challenges.json`.
+- Content is data: `content/learn/course.json` (10 tracks, 45 units, 153 lessons, all written) and `content/learn/lessons/*.json`, validated by `lib/learn/schema.ts` (zod). Tests run every reference solution through the simulator and its checks. Weekly challenges: `content/learn/challenges.json`.
 - `lib/sim/` — the 2D robot simulator (fixed 10 ms step, mm, sensors); `lib/learn/checks.ts` — autochecks (zone, points, collisions, sensors, blocks…).
 - `lib/learn/state.ts` + `store.ts` — the learner's append-only event log in localStorage; XP (`xp.ts`), unlocking and spaced review (`progress.ts`), streaks in the learner's time zone with freezes (`streak.ts`), achievements, cosmetics, placement test, certificates (signed codes + PDF), analytics and A/B flags (`lib/flags.ts`) are all computed from it.
 - `lib/learn/cloud.ts` — optional Supabase client loaded on demand: email + password accounts (no confirmation email; turn off "Confirm email" in the Supabase project), two-way sync of the same event log (server keyed by event id, so replays change nothing). Schema and row-level security: `supabase/migrations/`.

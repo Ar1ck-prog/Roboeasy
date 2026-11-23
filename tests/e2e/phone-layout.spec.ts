@@ -24,6 +24,7 @@ const PAGES = [
   '/ru/ai',
   '/ru/compete',
   '/ru/compete/simulator',
+  '/ru/controller',
   '/ru/teacher',
   '/ru/class',
   '/ru/parents/consent',
