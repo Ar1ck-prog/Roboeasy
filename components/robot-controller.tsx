@@ -285,7 +285,7 @@ export function RobotController({ t }: { t: ControllerText }) {
             </div>
           </Card>
 
-          <Card className="gap-3 p-4 sm:p-6" aria-labelledby="drive-heading">
+          <Card className="gap-3 p-4 sm:p-6" aria-labelledby="drive-heading" tabIndex={0}>
             <h2 id="drive-heading" className={sectionTitle}><Gamepad2 className="size-5" aria-hidden="true" />{t.use}</h2>
             {!driveReady && <p className="text-sm text-muted-foreground">{t.setupDrive}</p>}
             <div className="grid grid-cols-[minmax(0,2fr)_minmax(0,3fr)] items-start gap-3 sm:gap-6">

@@ -12,10 +12,11 @@ export const DRIVE_KEYS = ['KeyW', 'KeyA', 'KeyS', 'KeyD']
 export type Axes = { x: number; y: number }
 export const CENTER: Axes = { x: 0, y: 0 }
 const DEAD_ZONE = 0.12
+const KEYBOARD_TURN = 0.1
 
 export function keyboardAxes(keys: ReadonlySet<string>): Axes {
   return {
-    x: Number(keys.has('KeyD')) - Number(keys.has('KeyA')),
+    x: (Number(keys.has('KeyD')) - Number(keys.has('KeyA'))) * KEYBOARD_TURN,
     y: Number(keys.has('KeyW')) - Number(keys.has('KeyS')),
   }
 }

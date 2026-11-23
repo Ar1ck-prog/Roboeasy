@@ -1,5 +1,6 @@
 export const WATCHDOG_MS = 350
 export const MAX_VELOCITY = 500
+const ACCELERATION = 3500
 export const CONTROLLER_COMMAND = 'M'
 
 /** SPIKE App 3 Python. Each command replaces the complete state of the six ports. */
@@ -31,7 +32,7 @@ def apply(values):
         speed = values[i]
         if speed != speeds[i]:
             if speed:
-                motor.run(ports[i], speed * ${MAX_VELOCITY / 100})
+                motor.run(ports[i], speed * ${MAX_VELOCITY / 100}, acceleration=${ACCELERATION})
             else:
                 motor.stop(ports[i], stop=motor.BRAKE)
             speeds[i] = speed

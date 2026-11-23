@@ -2,7 +2,8 @@ import { HubClient, HubConnectionError, HubError, type HubTransport, openTranspo
 import { PORTS, STOPPED, type Port, type Speeds } from './controller-input'
 import { CONTROLLER_COMMAND, CONTROLLER_PROGRAM, WATCHDOG_MS } from './controller-program'
 
-const ACTIVE_INTERVAL_MS = 50
+const CHANGE_INTERVAL_MS = 20
+const ACTIVE_HEARTBEAT_MS = 75
 const IDLE_INTERVAL_MS = 500
 const INITIAL_PROBES = 8
 const PROBE_ACK_MS = 650
@@ -131,7 +132,11 @@ export class ControllerLink {
     }
     if (this.closing) return
     const unchanged = this.desired.every((speed, i) => speed === this.sent?.[i])
-    const interval = unchanged && !this.desired.some(Boolean) ? IDLE_INTERVAL_MS : ACTIVE_INTERVAL_MS
+    const moving = this.desired.some(Boolean)
+    // Send changed input ahead of the next heartbeat. A full release brakes immediately.
+    const interval = unchanged
+      ? (moving ? ACTIVE_HEARTBEAT_MS : IDLE_INTERVAL_MS)
+      : (moving ? CHANGE_INTERVAL_MS : 0)
     const delay = this.lastWrite + interval - performance.now()
     if (delay <= 0) void this.flush()
     else this.timer = setTimeout(() => void this.flush(), delay)
