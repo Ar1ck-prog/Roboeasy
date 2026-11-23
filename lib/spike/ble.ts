@@ -52,6 +52,12 @@ export interface HubTransport {
 
 export class HubError extends Error {}
 
+export class HubConnectionError extends HubError {
+  constructor(readonly stage: 'select' | 'gatt' | 'info' | 'upload' | 'start' | 'control', cause: unknown) {
+    super(stage, { cause })
+  }
+}
+
 /** Requests, one at a time, matched to their replies. */
 export class HubClient {
   info: HubInfo | null = null
@@ -143,11 +149,20 @@ export class HubClient {
 
   /** The first exchange: limits of this hub, then sensor updates. */
   async handshake(validate: (info: HubInfo) => void = () => {}): Promise<HubInfo> {
+    const info = await this.readInfo()
+    validate(info)
+    await this.subscribeDevices()
+    return info
+  }
+
+  async readInfo(): Promise<HubInfo> {
     await this.request(infoRequest(), MSG.infoResponse)
     if (!this.info) throw new HubError('no info')
-    validate(this.info)
-    await this.request(deviceSubscribeRequest(DEVICE_INTERVAL_MS), MSG.deviceSubscribeResponse)
     return this.info
+  }
+
+  subscribeDevices() {
+    return this.request(deviceSubscribeRequest(DEVICE_INTERVAL_MS), MSG.deviceSubscribeResponse)
   }
 
   async upload(code: string, slot: number, onProgress: (share: number) => void = () => {}) {
@@ -205,7 +220,12 @@ export function bluetoothAvailable(): boolean {
 }
 
 export async function openTransport(signal?: AbortSignal): Promise<{ transport: HubTransport; name: string }> {
-  const device = await bluetooth()!.requestDevice({ filters: [{ services: [BLE_SERVICE] }], optionalServices: [BLE_SERVICE] })
+  let device: BtDevice
+  try {
+    device = await bluetooth()!.requestDevice({ filters: [{ services: [BLE_SERVICE] }], optionalServices: [BLE_SERVICE] })
+  } catch (error) {
+    throw new HubConnectionError('select', error)
+  }
   signal?.throwIfAborted()
   const gatt = device.gatt
   if (!gatt) throw new HubError('unsupported')
@@ -224,7 +244,7 @@ export async function openTransport(signal?: AbortSignal): Promise<{ transport: 
   } catch (error) {
     disconnect()
     if ((error as Error).name === 'NotFoundError') throw new HubError('unsupported')
-    throw error
+    throw new HubConnectionError('gatt', error)
   } finally {
     signal?.removeEventListener('abort', disconnect)
   }
@@ -360,7 +380,8 @@ export async function connectHub(): Promise<boolean> {
     ;({ transport, name } = await openTransport())
   } catch (e) {
     // Closing the browser's picker is not a problem to report.
-    set({ status: 'idle', problem: (e as Error).name === 'NotFoundError' ? null : 'connect' })
+    const cause = e instanceof HubConnectionError ? e.cause : e
+    set({ status: 'idle', problem: (cause as Error).name === 'NotFoundError' ? null : 'connect' })
     return false
   }
   const c = new HubClient(transport)

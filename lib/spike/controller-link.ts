@@ -1,9 +1,11 @@
-import { HubClient, HubError, type HubTransport, openTransport, reserveControllerHub } from './ble'
+import { HubClient, HubConnectionError, HubError, type HubTransport, openTransport, reserveControllerHub } from './ble'
 import { PORTS, STOPPED, type Port, type Speeds } from './controller-input'
-import { CONTROLLER_COMMAND, CONTROLLER_PROGRAM, CONTROLLER_READY, WATCHDOG_MS } from './controller-program'
+import { CONTROLLER_COMMAND, CONTROLLER_PROGRAM, WATCHDOG_MS } from './controller-program'
 
 const ACTIVE_INTERVAL_MS = 50
 const IDLE_INTERVAL_MS = 500
+const INITIAL_PROBES = 8
+const PROBE_ACK_MS = 650
 const encode = new TextEncoder()
 const decode = new TextDecoder()
 const hexByte = (value: number) => value.toString(16).padStart(2, '0')
@@ -29,7 +31,7 @@ export class ControllerLink {
 
   constructor(private transport: HubTransport, private slot: number, private listener: Listener, private release: () => void) {
     const client = this.client = new HubClient(transport, 4000)
-    transport.onClose = () => this.close(!this.closing)
+    transport.onClose = () => this.close(this.ready && !this.closing)
     client.onDevices = (updates) => {
       listener.onDevices(PORTS.filter((port) => updates.some((device) => device.kind === 'motor' && device.port === port)))
     }
@@ -37,28 +39,49 @@ export class ControllerLink {
   }
 
   async initialize() {
-    const info = await this.client.handshake((info) => {
-      // Product Group Device 0x0000 = SPIKE Prime, per LEGO's specification.
-      if (info.product !== 0) throw new HubError('unsupported')
+    const info = await this.atStage('info', () => this.client.readInfo())
+    // Product Group Device 0x0000 = SPIKE Prime, per LEGO's specification.
+    if (info.product !== 0) throw new HubError('unsupported')
+    // Motor detection is optional. A missing telemetry reply must not prevent driving.
+    await this.client.subscribeDevices().catch(() => {})
+    await this.atStage('upload', () => this.client.upload(CONTROLLER_PROGRAM, this.slot))
+    await this.atStage('start', async () => {
+      if (!(await this.client.start(this.slot))) throw new HubError('start refused')
     })
-    await this.client.upload(CONTROLLER_PROGRAM, this.slot)
+    await this.atStage('control', async () => {
+      // Start can be acknowledged before Python enters its loop. A neutral frame
+      // can be retried safely and proves both directions of the tunnel work.
+      for (let i = 0; i < INITIAL_PROBES; i++) {
+        try {
+          await this.write(STOPPED, PROBE_ACK_MS)
+          return
+        } catch (error) {
+          if (this.closed || !(error instanceof HubError) || error.message !== 'controller timeout' || i === INITIAL_PROBES - 1) throw error
+        }
+      }
+    })
     this.client.onFlow = (stopped) => {
       if (stopped && !this.closing) this.close(this.ready)
     }
-    await this.exchange(CONTROLLER_READY, 5000, async () => {
-      if (!(await this.client.start(this.slot))) throw new HubError('start refused')
-    })
-    await this.write(STOPPED)
     this.ready = true
     this.schedule()
     return info.firmware
   }
 
+  private async atStage<T>(stage: 'info' | 'upload' | 'start' | 'control', action: () => Promise<T>): Promise<T> {
+    try {
+      return await action()
+    } catch (error) {
+      throw new HubConnectionError(stage, error)
+    }
+  }
+
   private async exchange(expected: string, timeout: number, send: () => Promise<unknown>) {
     if (this.closed) throw new HubError('disconnected')
     let timer: ReturnType<typeof setTimeout> | undefined
+    let written = false
     const expired = new Promise<never>((_, reject) => {
-      timer = setTimeout(() => reject(new HubError('controller timeout')), timeout)
+      timer = setTimeout(() => reject(new HubError(written ? 'controller timeout' : 'write timeout')), timeout)
     })
     const received = new Promise<void>((resolve, reject) => {
       this.reply = (error, payload) => {
@@ -67,20 +90,20 @@ export class ControllerLink {
       }
     })
     try {
-      await Promise.race([expired, Promise.all([received, send()])])
+      await Promise.race([expired, Promise.all([received, send().then(() => { written = true })])])
     } finally {
       clearTimeout(timer)
       this.reply = undefined
     }
   }
 
-  private async write(speeds: Speeds) {
+  private async write(speeds: Speeds, timeout = WATCHDOG_MS) {
     const sequence = this.sequence = (this.sequence + 1) % 256
     this.lastWrite = performance.now()
     // ASCII keeps the hub callback usable with either byte or text payloads.
     const prefix = CONTROLLER_COMMAND + hexByte(sequence)
     const payload = encode.encode(prefix + speeds.map((speed) => hexByte(speed + 100)).join(''))
-    await this.exchange(prefix, WATCHDOG_MS, () => this.client.sendTunnel(payload))
+    await this.exchange(prefix, timeout, () => this.client.sendTunnel(payload))
     this.sent = speeds
   }
 

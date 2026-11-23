@@ -1,13 +1,11 @@
 export const WATCHDOG_MS = 350
 export const MAX_VELOCITY = 500
-export const CONTROLLER_READY = 'R1'
 export const CONTROLLER_COMMAND = 'M'
 
 /** SPIKE App 3 Python. Each command replaces the complete state of the six ports. */
 export const CONTROLLER_PROGRAM = `import hub
 from hub import port
 import motor
-import runloop
 import time
 
 tunnel = hub.config['module_tunnel']
@@ -47,11 +45,10 @@ def brake():
                 pass
             speeds[i] = 0
 
-async def main():
+def main():
     global pending
     last = time.ticks_ms()
     tunnel.callback(receive)
-    tunnel.send(b'${CONTROLLER_READY}')
     try:
         while True:
             now = time.ticks_ms()
@@ -64,9 +61,9 @@ async def main():
                 if time.ticks_diff(now, last) < ${WATCHDOG_MS}:
                     apply(values)
                     tunnel.send(reply)
-            await runloop.sleep_ms(10)
+            time.sleep_ms(10)
     finally:
         brake()
 
-runloop.run(main())
+main()
 `

@@ -1,7 +1,7 @@
 import { devices, expect, test, type Page } from '@playwright/test'
 
 import { BLE_RX, BLE_SERVICE, BLE_TX, FrameReader, MSG, packFrame, tunnelMessage } from '../../lib/spike/ble-protocol'
-import { CONTROLLER_COMMAND, CONTROLLER_READY } from '../../lib/spike/controller-program'
+import { CONTROLLER_COMMAND } from '../../lib/spike/controller-program'
 
 const zero = [0, 0, 0, 0, 0, 0]
 const bytes = (...values: number[]) => Uint8Array.of(...values)
@@ -9,7 +9,7 @@ const encoder = new TextEncoder()
 const decoder = new TextDecoder()
 const url = `http://localhost:${process.env.E2E_PORT ?? 3100}`
 
-async function emulateHub(page: Page, { cancelFirst = false, unsupportedFirst = false } = {}) {
+async function emulateHub(page: Page, { cancelFirst = false, unsupportedFirst = false, missedBootProbes = 0, gattFails = false } = {}) {
   const reader = new FrameReader()
   const speeds: number[][] = []
   const events: string[] = []
@@ -32,7 +32,6 @@ async function emulateHub(page: Page, { cancelFirst = false, unsupportedFirst = 
         if (message[0] === MSG.clearSlot) events.push(`slot:${message[1]}`)
         if (message[0] === MSG.flow) {
           events.push(message[1] ? 'program stop' : 'program start')
-          if (!message[1]) responses.push(tunnelMessage(encoder.encode(CONTROLLER_READY)))
         }
       } else if (message[0] === MSG.tunnel) {
         const command = decoder.decode(message.slice(3))
@@ -40,13 +39,14 @@ async function emulateHub(page: Page, { cancelFirst = false, unsupportedFirst = 
         const values = Array.from({ length: 6 }, (_, i) => parseInt(command.slice(3 + 2 * i, 5 + 2 * i), 16) - 100)
         speeds.push(values)
         events.push(values.some(Boolean) ? 'move' : 'neutral')
-        if (!dropAck) responses.push(tunnelMessage(encoder.encode(command.slice(0, 3))))
+        if (!dropAck && missedBootProbes <= 0) responses.push(tunnelMessage(encoder.encode(command.slice(0, 3))))
+        missedBootProbes = Math.max(0, missedBootProbes - 1)
       }
     }
     return responses.map((response) => Array.from(packFrame(response)))
   })
   await page.exposeFunction('spikeClosed', () => events.push('disconnect'))
-  await page.addInitScript(({ rxId, txId }) => {
+  await page.addInitScript(({ rxId, txId, gattFails }) => {
     const fake = window as typeof window & {
       spikeChooser: (request: object) => Promise<boolean>
       spikeWrite: (data: number[]) => Promise<number[][]>
@@ -72,6 +72,7 @@ async function emulateHub(page: Page, { cancelFirst = false, unsupportedFirst = 
           const gatt = {
             connected: false,
             async connect() {
+              if (gattFails) throw new DOMException('Connection attempt failed.', 'NetworkError')
               this.connected = true
               return {
                 async getPrimaryService() {
@@ -98,7 +99,7 @@ async function emulateHub(page: Page, { cancelFirst = false, unsupportedFirst = 
       },
       configurable: true,
     })
-  }, { rxId: BLE_RX, txId: BLE_TX })
+  }, { rxId: BLE_RX, txId: BLE_TX, gattFails })
   return { speeds, events, chooser, dropAck: () => { dropAck = true } }
 }
 
@@ -250,6 +251,25 @@ test('rejects another model and stops accepting input when the bridge stops repl
   hub.dropAck()
   await expect(status(page)).toContainText('Связь потеряна')
   await expect(button(page, 'Подключить хаб')).toBeEnabled()
+})
+
+test('waits for a slow hub program without sending movement or uploading twice', async ({ page }) => {
+  const hub = await emulateHub(page, { missedBootProbes: 2 })
+  await page.goto('/ru/controller')
+  await connect(page)
+  expect(hub.speeds.slice(0, 3)).toEqual([zero, zero, zero])
+  expect(hub.events.filter((event) => event === 'program start')).toEqual(['program start'])
+  expect(hub.events.filter((event) => event === 'slot:19')).toEqual(['slot:19'])
+})
+
+test('reports a Bluetooth connection failure before attempting an upload', async ({ page }) => {
+  const hub = await emulateHub(page, { gattFails: true })
+  await page.goto('/ru/controller')
+  await motor(page, 'Слот программы').selectOption('19')
+  await button(page, 'Подключить хаб').click()
+  await expect(page.locator('main').getByRole('alert')).toContainText('BT-GATT')
+  await expect(button(page, 'Подключить хаб')).toBeEnabled()
+  expect(hub.events).toEqual([])
 })
 
 test('phone layout supports two independent touch pointers and a visible stop', async ({ browser }, testInfo) => {

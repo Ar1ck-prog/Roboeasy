@@ -7,7 +7,7 @@ import { Button } from '@/components/ui/button'
 import { Card } from '@/components/ui/card'
 import type { ControllerText } from '@/lib/i18n/controller'
 import { useHydrated } from '@/lib/learn/store'
-import { HubError, useBluetoothAvailable } from '@/lib/spike/ble'
+import { HubConnectionError, HubError, useBluetoothAvailable } from '@/lib/spike/ble'
 import {
   CENTER, DRIVE_KEYS, INITIAL_MOTORS, PORTS, ROLES, joystickAxes, keyboardAxes, motorSpeeds,
   type Axes, type Motor, type Port, type Role,
@@ -16,7 +16,7 @@ import { connectController, type ControllerLink } from '@/lib/spike/controller-l
 import { SLOT_COUNT } from '@/lib/spike/ble-protocol'
 
 type Status = 'idle' | 'connecting' | 'ready' | 'lost' | 'closing'
-type Problem = 'cancelled' | 'denied' | 'failed' | 'unsupported' | 'busy'
+type Problem = 'cancelled' | 'denied' | 'failed' | 'unsupported' | 'busy' | HubConnectionError['stage']
 type Hold = { role: Role; direction: 1 | -1 }
 const AUX_ROLES = ['gripper', 'lift', 'extra1', 'extra2'] as const
 const editControl = 'input, select, textarea, [contenteditable]:not([contenteditable="false"]), [role="textbox"], [role="combobox"]'
@@ -24,6 +24,14 @@ const fieldStyle = 'min-h-11 min-w-0 rounded-(--radius-sm) border-(length:--stro
 const sectionTitle = 'flex items-center gap-2 font-display text-xl font-extrabold'
 
 function connectionProblem(error: unknown): Problem {
+  if (error instanceof HubConnectionError) {
+    const cause = error.cause
+    if (error.stage === 'select' && cause instanceof Error) {
+      if (cause.name === 'NotFoundError' && /cancel/i.test(cause.message)) return 'cancelled'
+      if (['SecurityError', 'NotAllowedError'].includes(cause.name) || /permission|policy|blocked/i.test(cause.message)) return 'denied'
+    }
+    return error.stage
+  }
   if (error instanceof HubError && (error.message === 'unsupported' || error.message === 'busy')) return error.message
   if (error instanceof Error) {
     if (error.name === 'NotFoundError') return 'cancelled'
