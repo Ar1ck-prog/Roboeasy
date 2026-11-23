@@ -145,6 +145,7 @@ export const MSG = {
   flowResponse: 0x1f,
   flowNotification: 0x20,
   console: 0x21,
+  tunnel: 0x32,
   deviceSubscribe: 0x28,
   deviceSubscribeResponse: 0x29,
   devices: 0x3c,
@@ -159,6 +160,12 @@ function message(size: number, fill: (v: DataView) => void): Uint8Array {
 }
 
 export const infoRequest = () => Uint8Array.of(MSG.infoRequest)
+export const tunnelMessage = (payload: Uint8Array) =>
+  message(3 + payload.length, (v) => {
+    v.setUint8(0, MSG.tunnel)
+    v.setUint16(1, payload.length, true)
+    payload.forEach((byte, i) => v.setUint8(3 + i, byte))
+  })
 export const clearSlotRequest = (slot: number) => Uint8Array.of(MSG.clearSlot, slot)
 export const programFlowRequest = (stop: boolean, slot: number) => Uint8Array.of(MSG.flow, stop ? 1 : 0, slot)
 export const deviceSubscribeRequest = (intervalMs: number) =>
@@ -191,6 +198,7 @@ export interface HubInfo {
   firmware: string
   maxPacket: number
   maxChunk: number
+  product: number
 }
 
 export type DeviceUpdate =
@@ -206,6 +214,7 @@ export type HubMessage =
   | { type: 'status'; id: number; ok: boolean }
   | { type: 'flow'; stopped: boolean }
   | { type: 'console'; text: string }
+  | { type: 'tunnel'; payload: Uint8Array }
   | { type: 'devices'; updates: DeviceUpdate[] }
 
 const STATUS_IDS = new Set<number>([MSG.startUploadResponse, MSG.chunkResponse, MSG.flowResponse, MSG.deviceSubscribeResponse, MSG.clearSlotResponse])
@@ -241,7 +250,7 @@ export function parseMessage(data: Uint8Array): HubMessage | null {
   if (id === MSG.infoResponse && data.length >= 17) {
     return {
       type: 'info',
-      info: { firmware: `${data[5]}.${data[6]}.${v.getUint16(7, true)}`, maxPacket: v.getUint16(9, true), maxChunk: v.getUint16(13, true) },
+      info: { firmware: `${data[5]}.${data[6]}.${v.getUint16(7, true)}`, maxPacket: v.getUint16(9, true), maxChunk: v.getUint16(13, true), product: v.getUint16(15, true) },
     }
   }
   if (id === MSG.flowNotification && data.length >= 2) return { type: 'flow', stopped: data[1] !== 0 }
@@ -249,6 +258,9 @@ export function parseMessage(data: Uint8Array): HubMessage | null {
     let end = data.indexOf(0, 1)
     if (end < 0) end = data.length
     return { type: 'console', text: new TextDecoder().decode(data.subarray(1, end)) }
+  }
+  if (id === MSG.tunnel && data.length >= 3 && v.getUint16(1, true) === data.length - 3) {
+    return { type: 'tunnel', payload: data.subarray(3) }
   }
   if (id === MSG.devices && data.length >= 3) return { type: 'devices', updates: parseDevices(data.subarray(3)) }
   return null

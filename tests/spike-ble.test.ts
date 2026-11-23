@@ -88,7 +88,7 @@ describe('messages', () => {
     v.setUint16(9, 509, true)
     v.setUint16(11, 1024, true)
     v.setUint16(13, 960, true)
-    expect(parseMessage(info)).toEqual({ type: 'info', info: { firmware: '3.4.42', maxPacket: 509, maxChunk: 960 } })
+    expect(parseMessage(info)).toEqual({ type: 'info', info: { firmware: '3.4.42', maxPacket: 509, maxChunk: 960, product: 0 } })
     expect(parseMessage(bytes(0x21, 0x68, 0x69, 0, 0))).toEqual({ type: 'console', text: 'hi' })
 
     const motor = new Uint8Array(12)
@@ -192,7 +192,7 @@ describe('hub client against a simulated hub', () => {
   it('asks for the hub’s limits first, then subscribes to sensors', async () => {
     const { hub, client } = await connected()
     expect(hub.log).toEqual([MSG.infoRequest, MSG.deviceSubscribe])
-    expect(client.info).toEqual({ firmware: '3.2.0', maxPacket: 20, maxChunk: 7 })
+    expect(client.info).toEqual({ firmware: '3.2.0', maxPacket: 20, maxChunk: 7, product: 0 })
   })
 
   it('uploads a program in chunks with correct CRCs, then starts it', async () => {
