@@ -28,6 +28,7 @@ import {
   Route,
   ShieldCheck,
   Sparkles,
+  Smartphone,
   Star,
   Timer,
   Trophy,
@@ -36,6 +37,7 @@ import {
 } from 'lucide-react'
 
 import { HeroScene } from '@/components/landing/hero-scene'
+import { AppDownload } from '@/components/landing/app-download'
 import { WhatsNew } from '@/components/landing/whats-new'
 import { SimDemo } from '@/components/landing/sim-demo'
 import { Buddy } from '@/components/learn/buddy'
@@ -45,6 +47,7 @@ import { buttonVariants } from '@/components/ui/button'
 import { Card } from '@/components/ui/card'
 import type { Locale } from '@/lib/i18n/config'
 import { getLandingNews } from '@/lib/i18n/landing-news'
+import { getAppDownloadText } from '@/lib/i18n/app-download'
 import type { LearnLandingCopy, TrackKey } from '@/lib/i18n/learn-landing'
 
 const TRACKS: { key: TrackKey; icon: typeof Rocket; color: string; kit: 'none' | 'part' }[] = [
@@ -118,6 +121,10 @@ export function LearnLanding({ lang, t }: { lang: Locale; t: LearnLandingCopy })
             <Link className={buttonVariants({ size: 'lg', className: 'max-sm:w-full' })} href={`/${lang}/learn/placement`}>
               {t.hero.ctaTest}
             </Link>
+            <a className={buttonVariants({ variant: 'ghost', size: 'lg', className: 'max-sm:w-full' })} href="#app">
+              <Smartphone aria-hidden="true" />
+              {getAppDownloadText(lang).heroLink}
+            </a>
           </div>
           <ul className="m-0 flex list-none flex-wrap gap-2 p-0">
             {t.hero.chips.map((c) => (
@@ -154,6 +161,8 @@ export function LearnLanding({ lang, t }: { lang: Locale; t: LearnLandingCopy })
       </section>
 
       <WhatsNew lang={lang} t={getLandingNews(lang)} />
+
+      <AppDownload t={getAppDownloadText(lang)} />
 
       {/* How */}
       <section className="section reveal" id="how">

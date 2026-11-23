@@ -3506,3 +3506,101 @@ main h3 {
     opacity: 1;
   }
 }
+
+/* "Get the app" scenes on the home page (components/landing/app-download.tsx). Finished state without motion. */
+.app-progress {
+  transform-box: fill-box;
+  transform-origin: left;
+}
+@media (prefers-reduced-motion: no-preference) {
+  .app-drop {
+    animation: app-drop 4s ease-in-out infinite;
+  }
+  .app-progress {
+    animation: app-progress 4s ease-in-out infinite;
+  }
+  .app-icon {
+    transform-box: fill-box;
+    transform-origin: center;
+    animation: app-icon 4s ease-in-out infinite;
+  }
+  .app-waves {
+    animation: wn-wave 1.4s ease-in-out infinite;
+  }
+  .app-window {
+    transform-box: fill-box;
+    transform-origin: center;
+    animation: app-window 5s ease-in-out infinite;
+  }
+  .app-bot {
+    animation: app-bot 5s ease-in-out infinite;
+  }
+  .app-cursor {
+    animation: app-cursor 5s ease-in-out infinite;
+  }
+}
+@keyframes app-drop {
+  0% {
+    transform: translateY(-14px);
+    opacity: 0;
+  }
+  15%, 35% {
+    transform: translateY(0);
+    opacity: 1;
+  }
+  45%, 100% {
+    transform: translateY(6px);
+    opacity: 0;
+  }
+}
+@keyframes app-progress {
+  0%, 15% {
+    transform: scaleX(0);
+  }
+  45%, 100% {
+    transform: scaleX(1);
+  }
+}
+@keyframes app-icon {
+  0%, 45% {
+    transform: scale(0);
+  }
+  58% {
+    transform: scale(1.15);
+  }
+  66%, 100% {
+    transform: scale(1);
+  }
+}
+@keyframes app-window {
+  0%, 20% {
+    transform: scale(0.6);
+    opacity: 0;
+  }
+  32%, 100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+@keyframes app-bot {
+  0%, 35% {
+    transform: translate(0, 0);
+  }
+  60% {
+    transform: translate(0, -18px);
+  }
+  85%, 100% {
+    transform: translate(16px, -18px);
+  }
+}
+@keyframes app-cursor {
+  0% {
+    transform: translate(30px, 20px);
+  }
+  18%, 30% {
+    transform: translate(0, 0);
+  }
+  100% {
+    transform: translate(10px, 12px);
+  }
+}

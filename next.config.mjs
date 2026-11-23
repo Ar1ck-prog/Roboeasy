@@ -23,6 +23,16 @@ const nextConfig = {
         source: '/fll-sim/:path*',
         headers: [...isolated, { key: 'Cross-Origin-Embedder-Policy', value: 'require-corp' }, { key: 'Cross-Origin-Resource-Policy', value: 'same-origin' }],
       },
+      // The Android app (docs/android-app.md): phones install it only with this type.
+      {
+        source: '/download/:file*.apk',
+        headers: [
+          { key: 'Content-Type', value: 'application/vnd.android.package-archive' },
+          { key: 'Content-Disposition', value: 'attachment; filename="RoboEasy.apk"' },
+        ],
+      },
+      // Android checks this file to open the app full screen; it must be JSON.
+      { source: '/.well-known/assetlinks.json', headers: [{ key: 'Content-Type', value: 'application/json' }] },
       {
         source: '/:lang(ru|kk|en)/compete/simulator',
         headers: [...isolated, { key: 'Cross-Origin-Embedder-Policy', value: 'credentialless' }],
