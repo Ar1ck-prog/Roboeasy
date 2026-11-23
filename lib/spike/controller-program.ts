@@ -15,28 +15,56 @@ tunnel = hub.config['module_tunnel']
 ports = (port.A, port.B, port.C, port.D, port.E, port.F)
 speeds = [0] * 6
 last = 0
+pending = None
+use_acceleration = True
 
-def apply(values):
+def run_motor(p, velocity):
+    global use_acceleration
+    if use_acceleration:
+        try:
+            motor.run(p, velocity, acceleration=${ACCELERATION})
+            return
+        except TypeError:
+            use_acceleration = False
+    motor.run(p, velocity)
+
+def apply(prefix, values):
     for i in range(6):
         speed = values[i]
         if speed != speeds[i]:
-            if speed:
-                motor.run(ports[i], speed * ${MAX_VELOCITY / 100}, acceleration=${ACCELERATION})
-            else:
-                motor.stop(ports[i], stop=motor.BRAKE)
-            speeds[i] = speed
+            try:
+                if speed:
+                    run_motor(ports[i], speed * ${MAX_VELOCITY / 100})
+                else:
+                    motor.stop(ports[i])
+                speeds[i] = speed
+            except Exception as error:
+                brake()
+                print('${CONTROLLER_CONSOLE_PREFIX}ERR ' + prefix.decode() + ' ' + 'ABCDEF'[i] + ' ' + str(error) + '|')
+                return False
+    return True
 
 def brake():
     for i in range(6):
         if speeds[i]:
             try:
-                motor.stop(ports[i], stop=motor.BRAKE)
+                motor.stop(ports[i])
             except Exception:
                 pass
             speeds[i] = 0
 
+def acknowledge(prefix):
+    if chr(prefix[0]) == '${CONSOLE_COMMAND}':
+        print('${CONTROLLER_CONSOLE_PREFIX}' + prefix.decode())
+    else:
+        try:
+            tunnel.send(prefix)
+        except Exception:
+            # A failed notification does not undo a successfully applied command.
+            pass
+
 def receive(data):
-    global last
+    global last, pending
     if isinstance(data, str):
         data = data.encode()
     if len(data) != 15:
@@ -53,26 +81,32 @@ def receive(data):
         if high < 0 or low < 0 or speed < -100 or speed > 100:
             return
         values.append(speed)
-    try:
-        apply(values)
+    prefix = bytes(data[:3])
+    if pending is None and not any(speeds) and not any(values):
+        # Respond to the browser's neutral startup probe from the callback.
         last = time.ticks_ms()
-        if mode == '${CONSOLE_COMMAND}':
-            print('${CONTROLLER_CONSOLE_PREFIX}' + mode + chr(data[1]) + chr(data[2]))
-        else:
-            tunnel.send(data[:3])
-    except Exception as error:
-        brake()
-        print('${CONTROLLER_CONSOLE_PREFIX}ERR', error)
+        acknowledge(prefix)
+    else:
+        pending = (prefix, values, time.ticks_ms())
 
 def main():
-    global last
+    global last, pending
     last = time.ticks_ms()
     tunnel.callback(receive)
     print('${CONTROLLER_CONSOLE_PREFIX}READY')
     try:
         while True:
-            if time.ticks_diff(time.ticks_ms(), last) >= ${WATCHDOG_MS}:
+            now = time.ticks_ms()
+            if time.ticks_diff(now, last) >= ${WATCHDOG_MS}:
                 brake()
+            command = pending
+            if command is not None:
+                pending = None
+                prefix, values, received_at = command
+                if time.ticks_diff(now, received_at) < ${WATCHDOG_MS}:
+                    last = received_at
+                    if apply(prefix, values):
+                        acknowledge(prefix)
             time.sleep_ms(10)
     finally:
         brake()

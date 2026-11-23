@@ -15,8 +15,8 @@ import {
 import { connectController, type ControllerLink } from '@/lib/spike/controller-link'
 import { SLOT_COUNT } from '@/lib/spike/ble-protocol'
 
-type Status = 'idle' | 'connecting' | 'ready' | 'lost' | 'closing'
-type Problem = 'cancelled' | 'denied' | 'failed' | 'unsupported' | 'busy' | HubConnectionError['stage']
+type Status = 'idle' | 'connecting' | 'ready' | 'recovering' | 'lost' | 'closing'
+type Problem = 'cancelled' | 'denied' | 'failed' | 'unsupported' | 'busy' | 'motorError' | 'commandDelay' | HubConnectionError['stage']
 type Hold = { role: Role; direction: 1 | -1 }
 const AUX_ROLES = ['gripper', 'lift', 'extra1', 'extra2'] as const
 const editControl = 'input, select, textarea, [contenteditable]:not([contenteditable="false"]), [role="textbox"], [role="combobox"]'
@@ -137,13 +137,25 @@ export function RobotController({ t }: { t: ControllerText }) {
         onDevices: (ports) => {
           if (!pending.signal.aborted) setDetected((last) => last.join() === ports.join() ? last : ports)
         },
-        onLost: () => {
+        onLost: (reason) => {
           if (pending.signal.aborted) return
           link.current = null
           canInput.current = false
           reset()
           setDetected([])
+          if (reason) setDiagnostic((current) => current ? `${reason} · ${current}` : reason)
           setStatus('lost')
+        },
+        onPaused: (issue, detail) => {
+          canInput.current = false
+          reset(true, false)
+          setProblem(issue)
+          setDiagnostic(detail)
+          setStatus('recovering')
+        },
+        onResumed: () => {
+          canInput.current = true
+          setStatus('ready')
         },
       }, pending.signal)
       if (pending.signal.aborted) {
@@ -167,7 +179,7 @@ export function RobotController({ t }: { t: ControllerText }) {
 
   async function disconnect() {
     const connection = link.current
-    if (!connection || !canInput.current) return
+    if (!connection || status === 'closing') return
     canInput.current = false
     reset(true, false)
     setStatus('closing')
@@ -183,7 +195,11 @@ export function RobotController({ t }: { t: ControllerText }) {
     if (attempt.current || (link.current && !canInput.current)) return
     const previous = currentMotors.current
     if (change.port && ROLES.some((other) => role !== other && previous[other].port === change.port)) return
-    if (canInput.current) reset()
+    if (canInput.current) {
+      reset()
+      setProblem(null)
+      setDiagnostic('')
+    }
     const next = { ...previous, [role]: { ...previous[role], ...change } }
     currentMotors.current = next
     setMotors(next)
@@ -223,8 +239,8 @@ export function RobotController({ t }: { t: ControllerText }) {
   }
 
   const ready = status === 'ready'
-  const connected = ready || status === 'closing'
-  const setupLocked = !hydrated || status === 'connecting' || status === 'closing'
+  const connected = ready || status === 'recovering' || status === 'closing'
+  const setupLocked = !hydrated || status === 'connecting' || status === 'recovering' || status === 'closing'
   const editableRoles = connected ? ROLES : ROLES.slice(0, 2)
   const aux = AUX_ROLES.filter((role) => !!motors[role].port)
 
@@ -274,7 +290,7 @@ export function RobotController({ t }: { t: ControllerText }) {
         )}
         <div className="flex flex-wrap items-center gap-3">
           {connected ? (
-            <Button onClick={() => void disconnect()} disabled={!ready}>{t.disconnect}</Button>
+            <Button onClick={() => void disconnect()} disabled={status === 'closing'}>{t.disconnect}</Button>
           ) : (
             <Button variant="primary" onClick={() => void connect()} disabled={!available || !slot || status === 'connecting'} aria-describedby="controller-slot-note">
               {t.connect}
@@ -285,9 +301,9 @@ export function RobotController({ t }: { t: ControllerText }) {
           </p>
         </div>
         {hydrated && !available && <p className="text-sm text-muted-foreground">{t.browser}</p>}
-        {problem && (
+        {(problem || diagnostic) && (
           <div role="alert" className="space-y-2 text-sm text-foreground">
-            <p>{t[problem]}</p>
+            {problem && <p>{t[problem]}</p>}
             {diagnostic && <pre className="whitespace-pre-wrap break-words text-xs">{diagnostic}</pre>}
           </div>
         )}

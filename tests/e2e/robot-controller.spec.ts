@@ -9,7 +9,7 @@ const encoder = new TextEncoder()
 const decoder = new TextDecoder()
 const url = `http://localhost:${process.env.E2E_PORT ?? 3100}`
 
-async function emulateHub(page: Page, { cancelFirst = false, unsupportedFirst = false, missedBootProbes = 0, gattFails = false, consoleOnly = false, bootLog = '' } = {}) {
+async function emulateHub(page: Page, { cancelFirst = false, unsupportedFirst = false, missedBootProbes = 0, gattFails = false, consoleOnly = false, bootLog = '', firstMotorReply = '' } = {}) {
   const reader = new FrameReader()
   const speeds: number[][] = []
   const events: string[] = []
@@ -43,6 +43,13 @@ async function emulateHub(page: Page, { cancelFirst = false, unsupportedFirst = 
         const values = Array.from({ length: 6 }, (_, i) => parseInt(command.slice(3 + 2 * i, 5 + 2 * i), 16) - 100)
         speeds.push(values)
         events.push(values.some(Boolean) ? 'move' : 'neutral')
+        if (values.some(Boolean) && firstMotorReply) {
+          if (firstMotorReply === 'fault') {
+            responses.push(bytes(MSG.console, ...encoder.encode(`${CONTROLLER_CONSOLE_PREFIX}ERR ${command.slice(0, 3)} B ENODEV|`), 0))
+          }
+          firstMotorReply = ''
+          continue
+        }
         if (!dropAck && missedBootProbes <= 0) {
           const reply = command.slice(0, 3)
           if (mode === CONSOLE_COMMAND) {
@@ -334,6 +341,35 @@ test('keeps drive disabled and shows the startup log when neither channel answer
   expect(hub.speeds).toHaveLength(8)
   expect(hub.speeds.every((speeds) => speeds.every((speed) => speed === 0))).toBe(true)
 })
+
+for (const reply of ['fault', 'timeout'] as const) {
+  test(`recovers from the first movement ${reply} without disconnecting or replaying input`, async ({ page }) => {
+    const hub = await emulateHub(page, { firstMotorReply: reply, consoleOnly: reply === 'fault' })
+    await page.goto('/ru/controller')
+    await motor(page, 'Левый мотор').selectOption('A')
+    await motor(page, 'Правый мотор').selectOption('B')
+    await connect(page)
+    await page.getByRole('heading', { name: 'Управление', exact: true }).click()
+    await page.keyboard.down('KeyW')
+    const alert = page.locator('main').getByRole('alert')
+    await expect(alert).toContainText(reply === 'fault' ? 'B: ENODEV' : 'Хаб не подтвердил команду вовремя')
+    await expect.poll(() => hub.speeds.at(-1)).toEqual(zero)
+    await expect(status(page)).toContainText('Подключён')
+    expect(hub.events.filter((event) => event === 'move')).toHaveLength(1)
+    await page.keyboard.up('KeyW')
+    await page.keyboard.down('KeyA')
+    await expect.poll(() => hub.speeds.at(-1)).toEqual([-10, 10, 0, 0, 0, 0])
+    await page.keyboard.up('KeyA')
+    await expect.poll(() => hub.speeds.at(-1)).toEqual(zero)
+    await page.keyboard.down('KeyD')
+    await expect.poll(() => hub.speeds.at(-1)).toEqual([10, -10, 0, 0, 0, 0])
+    await page.keyboard.up('KeyD')
+    await expect.poll(() => hub.speeds.at(-1)).toEqual(zero)
+    await button(page, 'Отключить').click()
+    await expect(status(page)).toHaveText('Не подключён')
+    expect(hub.chooser).toHaveLength(1)
+  })
+}
 
 test('phone layout supports two independent touch pointers and a visible stop', async ({ browser }, testInfo) => {
   const context = await browser.newContext({ ...devices['Pixel 7'], baseURL: url, reducedMotion: 'reduce' })

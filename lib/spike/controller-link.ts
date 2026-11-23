@@ -13,8 +13,12 @@ const hexByte = (value: number) => value.toString(16).padStart(2, '0')
 
 type Listener = {
   onDevices: (ports: Port[]) => void
-  onLost: () => void
+  onLost: (diagnostic?: string) => void
+  onPaused?: (problem: 'motorError' | 'commandDelay', diagnostic: string) => void
+  onResumed?: () => void
 }
+
+class MotorCommandError extends HubError {}
 
 export class ControllerLink {
   private client: HubClient
@@ -27,6 +31,7 @@ export class ControllerLink {
   private closed = false
   private closing = false
   private ready = false
+  private recovering = false
   private reply: ((error?: Error, message?: string) => void) | undefined
   private commandMode = CONTROLLER_COMMAND
   private consoleLine = ''
@@ -48,12 +53,16 @@ export class ControllerLink {
     this.consoleLine = (lines.pop() ?? '').slice(-256)
     // HubOS may deliver the print's newline in its own notification.
     const partial = this.consoleLine.trim().match(/RBE:(K[\da-f]{2})$/)?.[1]
-    if (partial) this.consoleLine = ''
+    const fault = this.consoleLine.match(/RBE:ERR ([MK][\da-f]{2}) ([A-F]) ([^|\n]*)\|$/)
+    if (partial || fault) this.consoleLine = ''
     for (const line of lines) {
       const candidate = line.trim().match(/RBE:(K[\da-f]{2})$/)?.[1]
       if (candidate) this.reply?.(undefined, candidate)
+      const error = line.match(/RBE:ERR ([MK][\da-f]{2}) ([A-F]) ([^|\n]*)\|$/)
+      if (error) this.reply?.(new MotorCommandError(`${error[2]}: ${error[3]}`), error[1])
     }
     if (partial) this.reply?.(undefined, partial)
+    if (fault) this.reply?.(new MotorCommandError(`${fault[2]}: ${fault[3]}`), fault[1])
   }
 
   async initialize() {
@@ -81,7 +90,7 @@ export class ControllerLink {
       }
     })
     this.client.onFlow = (stopped) => {
-      if (stopped && !this.closing) this.close(this.ready)
+      if (stopped && !this.closing) this.close(this.ready, 'BT-RUNTIME')
     }
     this.ready = true
     this.schedule()
@@ -108,8 +117,9 @@ export class ControllerLink {
     })
     const received = new Promise<void>((resolve, reject) => {
       this.reply = (error, message) => {
-        if (error) reject(error)
-        if (message === expected) resolve()
+        if (error) {
+          if (!(error instanceof MotorCommandError) || message === expected) reject(error)
+        } else if (message === expected) resolve()
       }
     })
     try {
@@ -131,7 +141,7 @@ export class ControllerLink {
   }
 
   update(speeds: Speeds) {
-    if (!this.ready || this.closing || this.closed) return
+    if (!this.ready || this.closing || this.closed || this.recovering) return
     this.desired = speeds
     this.schedule()
   }
@@ -170,12 +180,33 @@ export class ControllerLink {
     try {
       await this.write(stopping.length ? STOPPED : this.desired)
       stopping.forEach((resolve) => resolve(true))
-    } catch {
+    } catch (error) {
       stopping.forEach((resolve) => resolve(false))
-      this.close(!this.closing)
+      if (!this.closed && !this.closing && (error instanceof MotorCommandError || (error instanceof HubError && error.message === 'controller timeout'))) {
+        await this.recover(error)
+      } else {
+        this.close(!this.closing, 'BT-WRITE')
+      }
     } finally {
       this.writing = false
       this.schedule()
+    }
+  }
+
+  private async recover(error: HubError) {
+    this.recovering = true
+    this.desired = STOPPED
+    const motorError = error instanceof MotorCommandError
+    this.listener.onPaused?.(motorError ? 'motorError' : 'commandDelay', motorError ? error.message : '')
+    try {
+      // Never resend an unconfirmed movement command. Verify braking on the
+      // existing connection and require a fresh input before moving again.
+      await this.write(STOPPED, PROBE_ACK_MS)
+      if (!this.closed && !this.closing) this.listener.onResumed?.()
+    } catch {
+      this.close(!this.closing, 'BT-ACK')
+    } finally {
+      this.recovering = false
     }
   }
 
@@ -189,7 +220,7 @@ export class ControllerLink {
     this.close()
   }
 
-  close(lost = false) {
+  close(lost = false, diagnostic?: string) {
     if (this.closed) return
     this.closed = true
     clearTimeout(this.timer)
@@ -198,7 +229,7 @@ export class ControllerLink {
     this.client.abort()
     this.transport.close()
     this.release()
-    if (lost) this.listener.onLost()
+    if (lost) this.listener.onLost(diagnostic)
   }
 }
 
