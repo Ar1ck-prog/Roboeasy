@@ -7,16 +7,18 @@ export const ROLES = ['left', 'right', 'gripper', 'lift', 'extra1', 'extra2'] as
 export type Role = (typeof ROLES)[number]
 export type Motor = { port: Port | ''; reversed: boolean }
 export type Assignments = Record<Role, Motor>
-export const INITIAL_MOTORS = Object.fromEntries(ROLES.map((role) => [role, { port: '', reversed: false }])) as Assignments
+// On a mirrored chassis the right motor must spin the opposite way for straight travel.
+export const INITIAL_MOTORS = Object.fromEntries(ROLES.map((role) => [role, { port: '', reversed: role === 'right' }])) as Assignments
 export const DRIVE_KEYS = ['KeyW', 'KeyA', 'KeyS', 'KeyD']
 export type Axes = { x: number; y: number }
 export const CENTER: Axes = { x: 0, y: 0 }
 const DEAD_ZONE = 0.12
-const KEYBOARD_TURN = 0.1
+const DRIVE_LIMIT = 0.5
+const TURN_LIMIT = 0.2
 
 export function keyboardAxes(keys: ReadonlySet<string>): Axes {
   return {
-    x: (Number(keys.has('KeyD')) - Number(keys.has('KeyA'))) * KEYBOARD_TURN,
+    x: Number(keys.has('KeyD')) - Number(keys.has('KeyA')),
     y: Number(keys.has('KeyW')) - Number(keys.has('KeyS')),
   }
 }
@@ -35,12 +37,14 @@ export function motorSpeeds(motors: Assignments, axes: Axes, held: Iterable<{ ro
     if (port) speeds[PORTS.indexOf(port)] = Math.round(100 * speed) * (reversed ? -1 : 1) || 0
   }
   if (motors.left.port && motors.right.port && motors.left.port !== motors.right.port) {
-    // At full steering while moving, slow the inside wheel. With no throttle, turn in place.
-    const { x, y } = axes
-    const turn = x * (1 - Math.abs(y) / 2)
-    const scale = Math.max(1, Math.abs(y + turn), Math.abs(y - turn))
-    set(motors.left, (y + turn) / scale)
-    set(motors.right, (y - turn) / scale)
+    const drive = axes.y * DRIVE_LIMIT
+    const turn = axes.x * TURN_LIMIT
+    const left = drive + turn
+    const right = drive - turn
+    // Keep the steering ratio on a diagonal without exceeding the drive limit.
+    const scale = Math.max(1, Math.abs(left) / DRIVE_LIMIT, Math.abs(right) / DRIVE_LIMIT)
+    set(motors.left, left / scale)
+    set(motors.right, right / scale)
   }
   const forward = new Set<Role>()
   const reverse = new Set<Role>()
