@@ -18,7 +18,8 @@ const ru = {
   commands: 'Команд в программе: {n}',
   viewLabel: 'Вид программы',
   blocks: 'Блоки',
-  driveFirst: 'Сначала проедь маршрут в симуляторе.',
+  driveFirst: 'Совет: сначала проедь маршрут в симуляторе — так видно, куда поедет робот.',
+  ports: 'Моторы движения: левый {left}, правый {right}. Другие порты задаются в студии, в настройках робота.',
   programTitle: 'Мой маршрут',
 }
 
@@ -41,7 +42,8 @@ const kk: DrawText = {
   commands: 'Бағдарламадағы команда саны: {n}',
   viewLabel: 'Бағдарлама түрі',
   blocks: 'Блоктар',
-  driveFirst: 'Алдымен маршрутты симуляторда жүріп өт.',
+  driveFirst: 'Кеңес: алдымен маршрутты симуляторда жүріп өт — робот қайда жүретіні көрінеді.',
+  ports: 'Қозғалыс моторлары: сол {left}, оң {right}. Басқа порттар студияда, робот баптауларында беріледі.',
   programTitle: 'Менің маршрутым',
 }
 
@@ -61,7 +63,8 @@ const en: DrawText = {
   commands: 'Commands in the program: {n}',
   viewLabel: 'Program view',
   blocks: 'Blocks',
-  driveFirst: 'Drive the route in the simulator first.',
+  driveFirst: 'Tip: drive the route in the simulator first to see where the robot will go.',
+  ports: 'Drive motors: left {left}, right {right}. Other ports are set in the studio, in the robot settings.',
   programTitle: 'My route',
 }
 

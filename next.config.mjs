@@ -32,6 +32,10 @@ const nextConfig = {
   experimental: {
     // The root layout lives in app/[lang], so unmatched URLs need their own 404 page.
     globalNotFound: true,
+    // Render's free plan has 512 MB: ~730 static pages in one worker per reported CPU
+    // ran out of memory now and then (failed deploys). Two workers there, all cores locally.
+    ...(process.env.RENDER ? { cpus: 2 } : {}),
+    staticGenerationRetryCount: 1,
   },
 }
 

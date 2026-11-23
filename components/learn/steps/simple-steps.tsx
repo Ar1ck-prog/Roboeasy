@@ -18,6 +18,7 @@ import { fill } from '@/lib/i18n/config'
 import type { LearnText } from '@/lib/i18n/learn'
 import type { LessonStep } from '@/lib/learn/schema'
 import { XP_RULES } from '@/lib/learn/xp'
+import { savedRobot } from '@/lib/saved-robot'
 
 type Lang = 'ru' | 'kk' | 'en'
 export interface StepDone {
@@ -33,7 +34,7 @@ export interface StepDone {
 export async function downloadProgram(name: string, steps: Step[], functions?: ProgramFunction[]) {
   const spike = compilerFor('spike')
   if (!spike) return
-  const blob = await spike.pack(name, { title: name, description: '', steps, ...(functions?.length ? { functions } : {}) }, DEFAULT_ROBOT, 'blocks')
+  const blob = await spike.pack(name, { title: name, description: '', steps, ...(functions?.length ? { functions } : {}) }, savedRobot(), 'blocks')
   const url = URL.createObjectURL(blob)
   const a = document.createElement('a')
   a.href = url
@@ -160,7 +161,7 @@ export function RealRobotStep({
             <RobotPanel lang={lang} />
             <SendToRobot
               lang={lang}
-              code={() => programToPython({ title: step.title[lang], description: '', steps: step.program! }, DEFAULT_ROBOT)}
+              code={() => programToPython({ title: step.title[lang], description: '', steps: step.program! }, savedRobot())}
               className="justify-self-start"
             />
           </>

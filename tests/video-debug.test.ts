@@ -131,3 +131,14 @@ describe('video debug', () => {
     expect(prompt).toContain('Russian')
   })
 })
+
+describe('video debug without a program', () => {
+  it('accepts a request with only the expectation and tells the model so', async () => {
+    const { videoUserText } = await import('@/lib/video/debug')
+    const parsed = videoRequestSchema.parse({ ...good, program: '' })
+    expect(parsed.program).toBe('')
+    expect(videoUserText(parsed)).toContain('not given')
+    const { program: _omit, ...rest } = good
+    expect(videoRequestSchema.safeParse(rest).success).toBe(true)
+  })
+})

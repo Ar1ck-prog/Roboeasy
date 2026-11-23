@@ -12,7 +12,8 @@ export const VIDEO_LIMITS = { perDay: 3, frames: 30, frameChars: 200_000, bodyCh
 export const videoRequestSchema = z.object({
   lang: z.enum(['ru', 'kk', 'en']),
   expected: z.string().trim().min(3).max(VIDEO_LIMITS.expected),
-  program: z.string().min(2).max(VIDEO_LIMITS.program),
+  /** Optional: the learner may only describe what the robot should have done. */
+  program: z.string().max(VIDEO_LIMITS.program).default(''),
   frames: z
     .array(
       z.object({
@@ -66,7 +67,7 @@ export function videoUserText(req: VideoRequest): string {
   return `Expected result: ${req.expected}
 
 Program:
-${req.program}
+${req.program.trim() || '(not given: judge only by the expected result)'}
 
 Stills, in order, at seconds: ${req.frames.map((f) => f.t).join(', ')}`
 }

@@ -259,3 +259,16 @@ describe('hub client against a simulated hub', () => {
     expect(seen).toEqual(['ok', true, [{ kind: 'battery', percent: 90 }]])
   })
 })
+
+describe('a hub that never answers the sensor subscription', () => {
+  it('still connects and runs a program (sensor updates are optional)', async () => {
+    const hub = new FakeHub()
+    hub.silent.add(MSG.deviceSubscribe)
+    const client = new HubClient(hub)
+    const started = Date.now()
+    await client.handshake()
+    expect(Date.now() - started).toBeLessThan(4_000)
+    await client.upload('import runloop\nrunloop.run()\n', 0)
+    expect(await client.start(0)).toBe(true)
+  }, 10_000)
+})
