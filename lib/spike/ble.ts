@@ -34,6 +34,8 @@ import { type TelemetrySample, isTelemetryLine, parseTelemetryLine } from './tel
 
 const REQUEST_TIMEOUT_MS = 10_000
 const DEVICE_INTERVAL_MS = 500
+/** How long to wait for the optional sensor subscription before driving anyway. */
+const SUBSCRIBE_TIMEOUT_MS = 2_500
 /** Web Bluetooth does not write more than this in one operation. */
 const MAX_WRITE = 512
 const MAX_CONSOLE_LINES = 200
@@ -126,13 +128,13 @@ export class HubClient {
   }
 
   /** Sends a message and waits for the reply of type `responseId`; true when the hub accepted it. */
-  private request(message: Uint8Array, responseId: number): Promise<boolean> {
+  private request(message: Uint8Array, responseId: number, timeoutMs = this.timeoutMs): Promise<boolean> {
     const run = () =>
       new Promise<boolean>((resolve, reject) => {
         const timer = setTimeout(() => {
           this.pending = null
           reject(new HubError('timeout'))
-        }, this.timeoutMs)
+        }, timeoutMs)
         this.pending = { id: responseId, resolve, reject, timer }
         this.send(message).catch((e) => {
           if (this.pending?.timer === timer) {
@@ -147,11 +149,15 @@ export class HubClient {
     return result
   }
 
-  /** The first exchange: limits of this hub, then sensor updates. */
+  /**
+   * The first exchange: limits of this hub, then sensor updates. Some hubs never answer the
+   * sensor subscription (found with the robot controller on a real SPIKE Prime): that must not
+   * stop the robot from driving, so it is optional and waits only briefly.
+   */
   async handshake(validate: (info: HubInfo) => void = () => {}): Promise<HubInfo> {
     const info = await this.readInfo()
     validate(info)
-    await this.subscribeDevices()
+    await this.subscribeDevices(SUBSCRIBE_TIMEOUT_MS).catch(() => {})
     return info
   }
 
@@ -161,8 +167,8 @@ export class HubClient {
     return this.info
   }
 
-  subscribeDevices() {
-    return this.request(deviceSubscribeRequest(DEVICE_INTERVAL_MS), MSG.deviceSubscribeResponse)
+  subscribeDevices(timeoutMs?: number) {
+    return this.request(deviceSubscribeRequest(DEVICE_INTERVAL_MS), MSG.deviceSubscribeResponse, timeoutMs)
   }
 
   async upload(code: string, slot: number, onProgress: (share: number) => void = () => {}) {

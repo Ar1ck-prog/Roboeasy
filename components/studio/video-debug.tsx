@@ -24,6 +24,7 @@ export function VideoDebug({ lang, t }: { lang: Locale; t: VideoText }) {
   const [chosen, setChosen] = useState('')
   const [expected, setExpected] = useState('')
   const [frames, setFrames] = useState<VideoFrame[] | null>(null)
+  const [trimmed, setTrimmed] = useState(false)
   const [preparing, setPreparing] = useState(false)
   const [sending, setSending] = useState(false)
   const [problem, setProblem] = useState('')
@@ -43,9 +44,12 @@ export function VideoDebug({ lang, t }: { lang: Locale; t: VideoText }) {
     setProblem('')
     setAnswer(null)
     setFrames(null)
+    setTrimmed(false)
     setPreparing(true)
     try {
-      setFrames(await extractFrames(file))
+      const result = await extractFrames(file)
+      setFrames(result.frames)
+      setTrimmed(result.trimmed)
     } catch (error) {
       setProblem(error instanceof VideoError ? t.errors[error.code] : t.errors.unreadable)
     }
@@ -53,8 +57,9 @@ export function VideoDebug({ lang, t }: { lang: Locale; t: VideoText }) {
   }
 
   const send = async () => {
+    // The program is optional: without one the mentor compares the video with the expectation only.
     const item = history.find((h) => h.id === chosen)
-    if (!frames || !item) return
+    if (!frames) return
     setSending(true)
     setProblem('')
     setAnswer(null)
@@ -63,7 +68,7 @@ export function VideoDebug({ lang, t }: { lang: Locale; t: VideoText }) {
       const res = await fetch('/api/video-debug', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', ...deviceHeaders() },
-        body: JSON.stringify({ lang, expected, program: programText(item).slice(0, 6000), frames }),
+        body: JSON.stringify({ lang, expected, program: item ? programText(item).slice(0, 6000) : '', frames }),
       })
       const data = (await res.json()) as VideoResponse
       if (data.ok) setAnswer(data)
@@ -74,7 +79,7 @@ export function VideoDebug({ lang, t }: { lang: Locale; t: VideoText }) {
     setSending(false)
   }
 
-  const ready = frames !== null && chosen !== '' && expected.trim().length >= 3 && !sending
+  const ready = frames !== null && expected.trim().length >= 3 && !sending
 
   return (
     <div className="container grid max-w-3xl gap-6 py-6">
@@ -98,11 +103,13 @@ export function VideoDebug({ lang, t }: { lang: Locale; t: VideoText }) {
             {fill(t.ready, { n: frames.length })}
           </p>
         )}
+        {frames && trimmed && <p className="alert alert-warn m-0 text-sm">{t.trimmed}</p>}
 
         <label className="grid gap-1 font-bold">
           {t.program}
           {history.length ? (
             <select className="select" value={chosen} onChange={(e) => setChosen(e.target.value)}>
+              <option value="">{t.noProgram}</option>
               {history.map((h) => (
                 <option key={h.id} value={h.id}>
                   {h.result.title}

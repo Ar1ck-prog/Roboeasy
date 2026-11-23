@@ -9,6 +9,7 @@ import { RobotPanel, SendToRobot } from '@/components/robot-link'
 import { buttonVariants } from '@/components/ui/button'
 import { Card, CardTitle } from '@/components/ui/card'
 import { programToPython } from '@/lib/dsl/compile-python'
+import { savedRobot } from '@/lib/saved-robot'
 import { DEFAULT_ROBOT, type Program, countSteps } from '@/lib/dsl/types'
 import { type Locale, fill } from '@/lib/i18n/config'
 import type { DrawText } from '@/lib/i18n/draw'
@@ -61,7 +62,10 @@ export function DrawRoute({ lang, t, labels }: { lang: Locale; t: DrawText; labe
 
   const route = useMemo(() => (points.length > 1 ? traceRoute(points, FIELD.start, precision) : null), [points, precision])
   const program: Program | null = route && route.steps.length ? { title: t.programTitle, description: '', steps: route.steps } : null
-  const code = useMemo(() => (program ? programToPython(program, DEFAULT_ROBOT) : ''), [program])
+  // The robot's own ports and calibration from the studio (motors on C and D drive too).
+  const [robot, setRobot] = useState(DEFAULT_ROBOT)
+  useEffect(() => setRobot(savedRobot()), [])
+  const code = useMemo(() => (program ? programToPython(program, robot) : ''), [program, robot])
 
   // Any change to the route means it has not been driven yet.
   useEffect(() => {
@@ -193,7 +197,8 @@ export function DrawRoute({ lang, t, labels }: { lang: Locale; t: DrawText; labe
         )}
       </section>
 
-      <section className="grid content-start gap-4" aria-label={t.resultLabel}>
+      {/* minmax(0,1fr): long code lines scroll inside their box instead of widening the page. */}
+      <section className="grid min-w-0 grid-cols-[minmax(0,1fr)] content-start gap-4" aria-label={t.resultLabel}>
         {!program ? (
           <Card className="items-start gap-2">
             <RouteIcon className="size-7" aria-hidden="true" />
@@ -201,7 +206,7 @@ export function DrawRoute({ lang, t, labels }: { lang: Locale; t: DrawText; labe
           </Card>
         ) : (
           <>
-            <Card className="gap-3">
+            <Card className="min-w-0 gap-3">
               <CardTitle>{fill(t.commands, { n: countSteps(program.steps) })}</CardTitle>
               <div className="segmented" role="group" aria-label={t.viewLabel}>
                 <button type="button" aria-pressed={view === 'blocks'} onClick={() => setView('blocks')}>
@@ -221,7 +226,8 @@ export function DrawRoute({ lang, t, labels }: { lang: Locale; t: DrawText; labe
             </Card>
             <RobotPanel lang={lang}>
               {!sim && <p className="m-0 text-sm font-bold text-muted-foreground">{t.driveFirst}</p>}
-              <SendToRobot lang={lang} code={code} size="md" disabled={!sim} />
+              <p className="m-0 text-sm text-muted-foreground">{fill(t.ports, { left: robot.leftMotor, right: robot.rightMotor })}</p>
+              <SendToRobot lang={lang} code={code} size="md" />
             </RobotPanel>
           </>
         )}

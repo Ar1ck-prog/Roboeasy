@@ -54,7 +54,8 @@ async function realDuration(video: HTMLVideoElement): Promise<number> {
   return duration
 }
 
-export async function extractFrames(file: Blob): Promise<VideoFrame[]> {
+/** Stills of the first 15 seconds; `trimmed` when the video was longer (a phone clip often is). */
+export async function extractFrames(file: Blob): Promise<{ frames: VideoFrame[]; trimmed: boolean }> {
   const url = URL.createObjectURL(file)
   const video = document.createElement('video')
   video.muted = true
@@ -63,8 +64,10 @@ export async function extractFrames(file: Blob): Promise<VideoFrame[]> {
   video.src = url
   try {
     await once(video, 'loadedmetadata')
-    const duration = await realDuration(video)
-    if (!duration || duration > MAX_VIDEO_SECONDS + 0.5) throw new VideoError(duration ? 'too_long' : 'unreadable')
+    const full = await realDuration(video)
+    if (!full) throw new VideoError('unreadable')
+    const trimmed = full > MAX_VIDEO_SECONDS + 0.5
+    const duration = Math.min(full, MAX_VIDEO_SECONDS)
     const scale = Math.min(1, MAX_SIDE / Math.max(video.videoWidth, video.videoHeight))
     const canvas = document.createElement('canvas')
     canvas.width = Math.max(1, Math.round(video.videoWidth * scale))
@@ -79,7 +82,7 @@ export async function extractFrames(file: Blob): Promise<VideoFrame[]> {
       context.drawImage(video, 0, 0, canvas.width, canvas.height)
       frames.push({ t: Math.round(t * 10) / 10, data: canvas.toDataURL('image/jpeg', JPEG_QUALITY).split(',')[1] })
     }
-    return frames
+    return { frames, trimmed }
   } catch (error) {
     throw error instanceof VideoError ? error : new VideoError('unreadable')
   } finally {
