@@ -9,8 +9,8 @@ import type { ControllerText } from '@/lib/i18n/controller'
 import { useHydrated } from '@/lib/learn/store'
 import { HubConnectionError, HubError, useBluetoothAvailable } from '@/lib/spike/ble'
 import {
-  CENTER, DRIVE_KEYS, INITIAL_MOTORS, PORTS, ROLES, joystickAxes, keyboardAxes, motorSpeeds,
-  type Axes, type Motor, type Port, type Role,
+  CENTER, DEFAULT_DRIVE_LIMITS, DRIVE_KEYS, INITIAL_MOTORS, PORTS, ROLES, joystickAxes, keyboardAxes, motorSpeeds,
+  type Axes, type DriveLimits, type Motor, type Port, type Role,
 } from '@/lib/spike/controller-input'
 import { connectController, type ControllerLink } from '@/lib/spike/controller-link'
 import { SLOT_COUNT } from '@/lib/spike/ble-protocol'
@@ -43,6 +43,32 @@ function connectionProblem(error: unknown): Problem {
   return 'failed'
 }
 
+function SpeedField({ label, value, disabled, onCommit }: {
+  label: string
+  value: number
+  disabled: boolean
+  onCommit: (speed: number) => void
+}) {
+  const [draft, setDraft] = useState<string | null>(null)
+  return (
+    <label className="grid min-w-0 gap-1 self-start text-sm font-bold">
+      {label}
+      <span className="flex items-center gap-2">
+        <input type="number" min={0} max={100} step={1} inputMode="numeric"
+          className={`${fieldStyle} w-full tabular-nums`} value={draft ?? value} disabled={disabled} aria-describedby="drive-speed-hint"
+          onChange={(event) => setDraft(event.currentTarget.value)}
+          onKeyDown={(event) => { if (event.key === 'Enter') event.currentTarget.blur() }}
+          onBlur={() => {
+            const parsed = Number(draft)
+            if (draft?.trim() && Number.isFinite(parsed)) onCommit(Math.min(100, Math.max(0, Math.round(parsed))))
+            setDraft(null)
+          }} />
+        <span aria-hidden="true">%</span>
+      </span>
+    </label>
+  )
+}
+
 export function RobotController({ t }: { t: ControllerText }) {
   const hydrated = useHydrated()
   const available = useBluetoothAvailable()
@@ -53,10 +79,12 @@ export function RobotController({ t }: { t: ControllerText }) {
   const [slot, setSlot] = useState('')
   const [detected, setDetected] = useState<Port[] | null>(null)
   const [motors, setMotors] = useState(INITIAL_MOTORS)
+  const [limits, setLimits] = useState(DEFAULT_DRIVE_LIMITS)
   const [position, setPosition] = useState<Axes>(CENTER)
   const [pressed, setPressed] = useState<Hold[]>([])
 
   const currentMotors = useRef(motors)
+  const currentLimits = useRef(limits)
   const detectedRef = useRef<Port[] | null>(null)
   const link = useRef<ControllerLink | null>(null)
   const attempt = useRef<AbortController | null>(null)
@@ -73,7 +101,7 @@ export function RobotController({ t }: { t: ControllerText }) {
     const canDrive = motorAvailable(motors.left.port, ports) && motorAvailable(motors.right.port, ports)
     const axes = canDrive ? joystick.current?.axes ?? keyboardAxes(keys.current) : CENTER
     const active = [...holds.current.values()].filter(({ role }) => motorAvailable(motors[role].port, ports))
-    link.current?.update(motorSpeeds(motors, axes, active))
+    link.current?.update(motorSpeeds(motors, axes, currentLimits.current, active))
   }, [])
 
   const reset = useCallback((render = true, sendStop = true) => {
@@ -224,6 +252,15 @@ export function RobotController({ t }: { t: ControllerText }) {
     setMotors(next)
   }
 
+  function changeSpeed(kind: keyof DriveLimits, speed: number) {
+    const previous = currentLimits.current
+    if (attempt.current || (link.current && !canInput.current) || previous[kind] === speed) return
+    if (canInput.current) reset()
+    const next = { ...previous, [kind]: speed }
+    currentLimits.current = next
+    setLimits(next)
+  }
+
   function moveJoystick(event: PointerEvent<HTMLDivElement>) {
     if (joystick.current?.id !== event.pointerId) return
     const { x, y, width, height } = event.currentTarget.getBoundingClientRect()
@@ -261,11 +298,33 @@ export function RobotController({ t }: { t: ControllerText }) {
   const ready = status === 'ready'
   const connected = ready || status === 'recovering' || status === 'closing'
   const setupLocked = !hydrated || status === 'connecting' || status === 'recovering' || status === 'closing'
-  const editableRoles = connected ? ROLES : ROLES.slice(0, 2)
   const aux = AUX_ROLES.filter((role) => !!motors[role].port)
   const motorSummary = detected === null
     ? (connected ? t.checkingMotors : t.manual)
     : detected.length ? `${t.found} ${detected.join(', ')}.` : t.noMotors
+
+  function motorField(role: Role) {
+    const assignedPort = motors[role].port
+    const missing = !!assignedPort && detected !== null && !motorAvailable(assignedPort, detected)
+    return (
+      <div key={role} className="min-w-0 space-y-1.5 text-sm font-bold">
+        <label className="grid gap-1">
+          {t.roles[role]}
+          <select className={fieldStyle} value={assignedPort} disabled={setupLocked} aria-invalid={missing}
+            aria-describedby={missing ? `motor-missing-${role}` : undefined} onChange={(event) => assign(role, { port: event.target.value as Motor['port'] })}>
+            <option value="">{t.none}</option>
+            {PORTS.map((port) => <option key={port} value={port} disabled={(detected !== null && !detected.includes(port)) || ROLES.some((other) => other !== role && motors[other].port === port)}>{port}</option>)}
+          </select>
+        </label>
+        {missing && <p id={`motor-missing-${role}`} className="font-medium text-destructive">{t.missingMotor.replace('{port}', assignedPort)}</p>}
+        <label className="flex min-h-9 items-center gap-2">
+          <input type="checkbox" className="size-4 shrink-0 accent-primary" checked={motors[role].reversed}
+            aria-label={`${t.reverse} · ${t.roles[role]}`} disabled={setupLocked || !assignedPort} onChange={(event) => assign(role, { reversed: event.target.checked })} />
+          {t.reverse}
+        </label>
+      </div>
+    )
+  }
 
   return (
     <div className="container mx-auto max-w-5xl space-y-5 py-6 pb-24 sm:py-10 sm:pb-24">
@@ -277,30 +336,18 @@ export function RobotController({ t }: { t: ControllerText }) {
       <Card className="gap-3 p-4 sm:p-6" aria-labelledby="motor-heading">
         <h2 id="motor-heading" className={sectionTitle}><Wrench className="size-5" aria-hidden="true" />{t.settings}</h2>
         <p aria-live="polite" className="text-sm text-muted-foreground">{motorSummary}</p>
-        <div className="grid grid-cols-2 gap-x-3 gap-y-4 sm:grid-cols-3">
-          {editableRoles.map((role) => {
-            const assignedPort = motors[role].port
-            const missing = !!assignedPort && detected !== null && !motorAvailable(assignedPort, detected)
-            return (
-              <div key={role} className="min-w-0 space-y-1.5 text-sm font-bold">
-                <label className="grid gap-1">
-                  {t.roles[role]}
-                  <select className={fieldStyle} value={assignedPort} disabled={setupLocked} aria-invalid={missing}
-                    aria-describedby={missing ? `motor-missing-${role}` : undefined} onChange={(event) => assign(role, { port: event.target.value as Motor['port'] })}>
-                    <option value="">{t.none}</option>
-                    {PORTS.map((port) => <option key={port} value={port} disabled={(detected !== null && !detected.includes(port)) || ROLES.some((other) => other !== role && motors[other].port === port)}>{port}</option>)}
-                  </select>
-                </label>
-                {missing && <p id={`motor-missing-${role}`} className="font-medium text-destructive">{t.missingMotor.replace('{port}', assignedPort)}</p>}
-                <label className="flex min-h-9 items-center gap-2">
-                  <input type="checkbox" className="size-4 shrink-0 accent-primary" checked={motors[role].reversed}
-                    aria-label={`${t.reverse} · ${t.roles[role]}`} disabled={setupLocked || !motors[role].port} onChange={(event) => assign(role, { reversed: event.target.checked })} />
-                  {t.reverse}
-                </label>
-              </div>
-            )
-          })}
+        <div className="grid grid-cols-2 gap-x-3 gap-y-3 md:grid-cols-4">
+          {motorField('left')}
+          {motorField('right')}
+          <SpeedField label={t.driveSpeed} value={limits.drive} disabled={setupLocked} onCommit={(value) => changeSpeed('drive', value)} />
+          <SpeedField label={t.turnSpeed} value={limits.turn} disabled={setupLocked} onCommit={(value) => changeSpeed('turn', value)} />
         </div>
+        <p id="drive-speed-hint" className="text-sm text-muted-foreground">{t.speedHint}</p>
+        <details className="border-t border-outline/20">
+          <summary className="min-h-11 cursor-pointer rounded py-2.5 font-bold">{t.attachments}</summary>
+          <p className="mb-3 text-sm text-muted-foreground">{t.attachmentsHint}</p>
+          <div className="grid grid-cols-2 gap-x-3 gap-y-4 md:grid-cols-4">{AUX_ROLES.map(motorField)}</div>
+        </details>
       </Card>
 
       <Card className="gap-4 p-4 sm:p-6" aria-labelledby="hub-heading">
@@ -358,7 +405,9 @@ export function RobotController({ t }: { t: ControllerText }) {
                     style={{ left: `${50 + 34 * position.x}%`, top: `${50 - 34 * position.y}%`, transform: 'translate(-50%, -50%)' }}
                   />
                 </div>
-                <p className="hidden text-center text-sm font-bold [@media(pointer:fine)]:block">{t.keys}</p>
+                <p className="hidden text-center text-sm font-bold [@media(pointer:fine)]:block">
+                  {t.keys.replace('{drive}', String(limits.drive)).replace('{turn}', String(limits.turn))}
+                </p>
               </div>
               {aux.length > 0 && (
                 <div className="min-w-0 space-y-2">

@@ -12,9 +12,9 @@ export const INITIAL_MOTORS = Object.fromEntries(ROLES.map((role) => [role, { po
 export const DRIVE_KEYS = ['KeyW', 'KeyA', 'KeyS', 'KeyD']
 export type Axes = { x: number; y: number }
 export const CENTER: Axes = { x: 0, y: 0 }
+export type DriveLimits = { drive: number; turn: number }
+export const DEFAULT_DRIVE_LIMITS: DriveLimits = { drive: 50, turn: 20 }
 const DEAD_ZONE = 0.12
-const DRIVE_LIMIT = 0.5
-const TURN_LIMIT = 0.2
 
 export function keyboardAxes(keys: ReadonlySet<string>): Axes {
   return {
@@ -31,24 +31,25 @@ export function joystickAxes(x: number, y: number) {
   return { position, drive: { x: x * strength / distance, y: y * strength / distance } }
 }
 
-export function motorSpeeds(motors: Assignments, axes: Axes, held: Iterable<{ role: Role; direction: 1 | -1 }>): Speeds {
+export function motorSpeeds(motors: Assignments, axes: Axes, limits: DriveLimits, held: Iterable<{ role: Role; direction: 1 | -1 }>): Speeds {
   const speeds = [...STOPPED]
   const set = ({ port, reversed }: Motor, speed: number) => {
-    if (port) speeds[PORTS.indexOf(port)] = Math.round(100 * speed) * (reversed ? -1 : 1) || 0
+    if (port) speeds[PORTS.indexOf(port)] = Math.round(speed) * (reversed ? -1 : 1) || 0
   }
   if (motors.left.port && motors.right.port && motors.left.port !== motors.right.port) {
-    const drive = axes.y * DRIVE_LIMIT
-    const turn = axes.x * TURN_LIMIT
+    const drive = axes.y * limits.drive
+    const turn = axes.x * limits.turn
     const left = drive + turn
     const right = drive - turn
-    // Keep the steering ratio on a diagonal without exceeding the drive limit.
-    const scale = Math.max(1, Math.abs(left) / DRIVE_LIMIT, Math.abs(right) / DRIVE_LIMIT)
+    // Keep the steering ratio on a diagonal without exceeding the larger speed setting.
+    const limit = Math.max(1, limits.drive, limits.turn)
+    const scale = Math.max(1, Math.abs(left) / limit, Math.abs(right) / limit)
     set(motors.left, left / scale)
     set(motors.right, right / scale)
   }
   const forward = new Set<Role>()
   const reverse = new Set<Role>()
   for (const { role, direction } of held) (direction === 1 ? forward : reverse).add(role)
-  for (const role of ROLES.slice(2)) set(motors[role], Number(forward.has(role)) - Number(reverse.has(role)))
+  for (const role of ROLES.slice(2)) set(motors[role], 100 * (Number(forward.has(role)) - Number(reverse.has(role))))
   return speeds
 }

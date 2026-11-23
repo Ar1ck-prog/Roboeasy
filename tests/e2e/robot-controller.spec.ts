@@ -149,6 +149,7 @@ async function connect(page: Page) {
 async function assignDrive(page: Page) {
   await motor(page, 'Левый мотор').selectOption('A')
   await motor(page, 'Правый мотор').selectOption('B')
+  await page.getByText('Дополнительные моторы', { exact: true }).click()
   await motor(page, 'Захват').selectOption('C')
 }
 
@@ -180,6 +181,7 @@ test('connects from navigation, controls motors and clears input on every reset'
   await expect(main.getByText('Обнаружены моторы на портах A, B, C, D.')).toBeVisible()
   await expect(motor(page, 'Левый мотор')).toHaveValue('A')
   await expect(motor(page, 'Правый мотор')).toHaveValue('B')
+  await page.getByText('Дополнительные моторы', { exact: true }).click()
   await motor(page, 'Захват').selectOption('C')
   await expect(motor(page, 'Правый мотор').locator('option[value="A"]')).toHaveJSProperty('disabled', true)
   await expect(motor(page, 'Подъёмник').locator('option[value="C"]')).toHaveJSProperty('disabled', true)
@@ -202,6 +204,7 @@ test('connects from navigation, controls motors and clears input on every reset'
   await page.keyboard.up('KeyW')
   await expectSpeed(zero)
   await reverseRight.check()
+  await button(page, 'Открыть').scrollIntoViewIfNeeded()
   await expect(button(page, 'Стоп')).toBeInViewport()
   await expect(button(page, 'Открыть')).toBeInViewport()
   expect(await page.evaluate(() => document.documentElement.scrollWidth === innerWidth)).toBe(true)
@@ -445,6 +448,92 @@ test('reacts to an unplugged motor on port D and waits for fresh input after the
   await page.keyboard.down('KeyD')
   await expect.poll(() => hub.speeds.at(-1)).toEqual([20, 0, 0, 20, 0, 0])
   await page.keyboard.up('KeyD')
+  await expect.poll(() => hub.speeds.at(-1)).toEqual(zero)
+})
+
+test('edits drive and turn speeds for keyboard and joystick and requires fresh input after edits', async ({ page }) => {
+  const hub = await emulateHub(page)
+  await page.goto('/ru/controller')
+  await motor(page, 'Левый мотор').selectOption('A')
+  await motor(page, 'Правый мотор').selectOption('B')
+  const driveSpeed = page.getByRole('spinbutton', { name: 'Скорость движения', exact: true })
+  const turnSpeed = page.getByRole('spinbutton', { name: 'Скорость поворота', exact: true })
+  const setSpeed = async (field: typeof driveSpeed, value: string) => {
+    await field.fill(value)
+    await field.press('Enter')
+  }
+  await expect(driveSpeed).toHaveValue('50')
+  await expect(turnSpeed).toHaveValue('20')
+  await setSpeed(driveSpeed, '150')
+  await setSpeed(turnSpeed, '10')
+  await expect(driveSpeed).toHaveValue('100')
+  await connect(page)
+  const heading = page.getByRole('heading', { name: 'Управление', exact: true })
+  const expectSpeed = (a: number, b: number) => expect.poll(() => hub.speeds.at(-1)).toEqual([a, b, 0, 0, 0, 0])
+  await heading.click()
+  await page.keyboard.down('KeyW')
+  await expectSpeed(100, -100)
+  await setSpeed(driveSpeed, '10')
+  await expectSpeed(0, 0)
+  await heading.click()
+  await page.keyboard.down('KeyW')
+  await expectSpeed(0, 0)
+  await page.keyboard.up('KeyW')
+  await page.keyboard.down('KeyS')
+  await expectSpeed(-10, 10)
+  await page.keyboard.up('KeyS')
+  await page.keyboard.down('KeyA')
+  await expectSpeed(-10, -10)
+  await page.keyboard.up('KeyA')
+  await expectSpeed(0, 0)
+  await setSpeed(driveSpeed, '0')
+  await setSpeed(turnSpeed, '100')
+  await setSpeed(turnSpeed, '')
+  await expect(turnSpeed).toHaveValue('100')
+  const stick = page.getByRole('img', { name: 'Джойстик движения' })
+  await stick.scrollIntoViewIfNeeded()
+  const { x, y, width, height } = (await stick.boundingBox())!
+  await page.mouse.move(x + width / 2, y + height * 0.1)
+  await page.mouse.down()
+  await expectSpeed(0, 0)
+  await page.mouse.move(x + width * 0.9, y + height / 2)
+  await expectSpeed(100, 100)
+  await page.mouse.up()
+  await expectSpeed(0, 0)
+})
+
+test('configures four mechanisms before Bluetooth and operates each on its own port', async ({ page }) => {
+  const hub = await emulateHub(page, { programPorts: 'ABCDEF' })
+  await page.goto('/ru/controller')
+  await motor(page, 'Левый мотор').selectOption('A')
+  await motor(page, 'Правый мотор').selectOption('B')
+  await page.getByText('Дополнительные моторы', { exact: true }).click()
+  await expect(motor(page, 'Захват').locator('option[value="A"]')).toHaveJSProperty('disabled', true)
+  const mechanisms = [
+    { label: 'Захват', port: 'C', direction: 'Открыть', reverse: 'Закрыть' },
+    { label: 'Подъёмник', port: 'D', direction: 'Поднять', reverse: 'Опустить' },
+    { label: 'Механизм 3', port: 'E', direction: 'По часовой', reverse: 'Против часовой' },
+    { label: 'Механизм 4', port: 'F', direction: 'По часовой', reverse: 'Против часовой' },
+  ]
+  for (const { label, port } of mechanisms) await motor(page, label).selectOption(port)
+  await expect(motor(page, 'Механизм 4').locator('option[value="E"]')).toHaveJSProperty('disabled', true)
+  await connect(page)
+  await page.getByRole('heading', { name: 'Управление', exact: true }).click()
+  await page.keyboard.down('KeyW')
+  const drive = [50, -50, 0, 0, 0, 0]
+  for (const [index, { label, port, direction, reverse }] of mechanisms.entries()) {
+    const group = page.getByRole('group', { name: `${label} · ${port}`, exact: true })
+    for (const [name, speed] of [[direction, 100], [reverse, -100]] as const) {
+      await group.getByRole('button', { name, exact: true }).hover()
+      await page.mouse.down()
+      const expected = [...drive]
+      expected[index + 2] = speed
+      await expect.poll(() => hub.speeds.at(-1)).toEqual(expected)
+      await page.mouse.up()
+      await expect.poll(() => hub.speeds.at(-1)).toEqual(drive)
+    }
+  }
+  await page.keyboard.up('KeyW')
   await expect.poll(() => hub.speeds.at(-1)).toEqual(zero)
 })
 
