@@ -58,6 +58,10 @@ test('teacher creates a class, a learner joins by code, the report shows before 
   await kid.getByRole('checkbox', { name: /разрешил/ }).check()
   await kid.getByRole('button', { name: 'Войти в класс' }).click()
   await expect(kid.getByRole('heading', { name: /Робик, ты в классе/ })).toBeVisible({ timeout: 20_000 })
+  // The teacher sees that someone has joined without opening the report.
+  await expect(page.getByTestId('class-members')).toHaveText('Учеников в классе: 0')
+  await page.reload()
+  await expect(page.getByTestId('class-members')).toHaveText('Учеников в классе: 1')
 
   await kid.getByRole('button', { name: 'Начать: Входной тест' }).click()
   await answerAll(kid)

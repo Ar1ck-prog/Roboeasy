@@ -59,6 +59,8 @@ interface SimViewProps {
   labels: { play: string; pause: string; restart: string; speed: string; time: string }
   /** Attachment motors the program uses: drawn as dials even before the run. */
   motors?: Port[]
+  /** Playback starts here (seconds): a run that continues an earlier one shows only the new part. */
+  from?: number
   className?: string
 }
 
@@ -76,6 +78,7 @@ export function SimView({
   wheels = 'classic',
   labels,
   motors = [],
+  from = 0,
   className,
 }: SimViewProps) {
   const [t, setT] = useState(0)
@@ -93,8 +96,9 @@ export function SimView({
 
   // New run: rewind and (optionally) play.
   useEffect(() => {
-    setT(0)
+    setT(Math.min(from, result?.final.t ?? 0))
     setPlaying(!!result && autoPlay)
+    // `from` belongs to the run: it changes together with the result.
   }, [result, autoPlay])
 
   useEffect(() => {

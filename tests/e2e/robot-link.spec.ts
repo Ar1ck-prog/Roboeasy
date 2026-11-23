@@ -319,3 +319,69 @@ test('telemetry: off by default, adds readings when on, shows charts and keeps r
   expect((await csv).suggestedFilename()).toMatch(/\.csv$/)
   expect(errors).toEqual([])
 })
+
+/** A stand-in for the browser's speech recogniser: `start()` "hears" the phrase in window.__said. */
+async function fakeSpeech(page: Page) {
+  await page.addInitScript(() => {
+    class FakeRecognition {
+      lang = ''
+      interimResults = false
+      continuous = false
+      maxAlternatives = 1
+      onresult: ((e: unknown) => void) | null = null
+      onerror: ((e: unknown) => void) | null = null
+      onend: (() => void) | null = null
+      start() {
+        const w = window as unknown as { __said: string; __lang: string }
+        w.__lang = this.lang
+        setTimeout(() => {
+          const said = w.__said
+          this.onresult?.({ resultIndex: 0, results: [{ isFinal: false, 0: { transcript: said.split(' ').slice(0, 2).join(' ') } }] })
+          this.onresult?.({ resultIndex: 0, results: [{ isFinal: true, 0: { transcript: said } }] })
+          this.onend?.()
+        }, 300)
+      }
+      stop() {
+        this.onend?.()
+      }
+      abort() {}
+    }
+    const w = window as unknown as { SpeechRecognition: unknown; webkitSpeechRecognition: unknown }
+    w.SpeechRecognition = w.webkitSpeechRecognition = FakeRecognition
+  })
+}
+
+test('voice control: a spoken phrase becomes blocks, drives the simulator and runs on the hub', async ({ page }) => {
+  const errors: string[] = []
+  page.on('pageerror', (e) => errors.push(e.message))
+  const hub = await fakeBluetooth(page)
+  await fakeSpeech(page)
+  await page.goto('/ru/voice')
+  await expect(page.getByRole('heading', { name: 'Голосовое управление', level: 1 })).toBeVisible()
+
+  await page.evaluate(() => ((window as unknown as { __said: string }).__said = 'Проедь вперёд на 30 сантиметров и поверни направо'))
+  await page.getByRole('button', { name: 'Говорить' }).click()
+  await expect(page.getByText('Услышал: «Проедь вперёд на 30 сантиметров и поверни направо»')).toBeVisible()
+  expect(await page.evaluate(() => (window as unknown as { __lang: string }).__lang)).toBe('ru-RU')
+  const understood = page.getByTestId('voice-understood')
+  await expect(understood).toContainText('30')
+  await expect(understood).toContainText('90')
+
+  // Typing works too, and the robot keeps going from where it stopped.
+  await page.getByLabel('Или напиши команду').fill('назад 2 секунды и спой песню')
+  await page.getByRole('button', { name: 'Выполнить' }).click()
+  await expect(understood.getByText('Не понял: «спой песню».', { exact: false })).toBeVisible()
+  await expect(page.getByRole('button', { name: 'Вернуть робота в центр' })).toBeEnabled()
+
+  // Connected: the next command goes to the hub as a program.
+  await page.getByTestId('robot-panel').getByRole('button', { name: 'Подключить робота' }).click()
+  await expect(page.getByTestId('robot-panel').getByRole('status').first()).toContainText('Подключён')
+  await page.getByRole('button', { name: '«налево на 45 градусов»' }).click()
+  await expect.poll(() => new TextDecoder().decode(Uint8Array.from(hub.file.bytes))).toContain('motor_pair')
+  expect(new TextDecoder().decode(Uint8Array.from(hub.file.bytes))).toContain('45')
+
+  await page.getByLabel('Или напиши команду').fill('стоп')
+  await page.getByRole('button', { name: 'Выполнить' }).click()
+  await expect(understood).toContainText('Робот остановлен.')
+  expect(errors).toEqual([])
+})

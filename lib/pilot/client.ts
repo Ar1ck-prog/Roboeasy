@@ -33,6 +33,8 @@ export interface ClassRow {
   name: string
   code: string
   post_open: boolean
+  /** How many learners have joined. */
+  members: number
 }
 
 export interface StudentStatus {
@@ -51,9 +53,13 @@ export interface StudentStatus {
 // ── Teacher ──────────────────────────────────────────────────────────────
 
 export async function myClasses(): Promise<ClassRow[]> {
-  const { data, error } = await need().from('classes').select('id, name, code, post_open').order('created_at', { ascending: false })
+  const { data, error } = await need()
+    .from('classes')
+    .select('id, name, code, post_open, class_members(count)')
+    .order('created_at', { ascending: false })
+    .returns<(Omit<ClassRow, 'members'> & { class_members: { count: number }[] })[]>()
   if (error) throw toError(error.message)
-  return data ?? []
+  return (data ?? []).map(({ class_members, ...c }) => ({ ...c, members: class_members[0]?.count ?? 0 }))
 }
 
 export async function createClass(name: string): Promise<void> {

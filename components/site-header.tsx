@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState } from 'react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import { BookOpen, ChevronDown, Gamepad2, House, LogIn, Menu, Trophy, UserRound, Wand2, X } from 'lucide-react'
+import { BookOpen, ChevronDown, Gamepad2, House, LogIn, Menu, Mic, Trophy, UserRound, Wand2, X } from 'lucide-react'
 
 import { CoinChip } from '@/components/learn/coin-chip'
 import { LogoMark } from '@/components/logo'
@@ -30,11 +30,11 @@ interface SiteHeaderProps {
 export const APP_SECTIONS = ['path', 'learn', 'play', 'garage', 'profile'] as const
 export type AppSection = (typeof APP_SECTIONS)[number]
 /** All header sections; the last ones are in the header and the menu only. */
-const HEADER_SECTIONS = ['path', 'learn', 'play', 'garage', 'library', 'sandbox', 'controller', 'compete'] as const
+const HEADER_SECTIONS = ['path', 'learn', 'play', 'garage', 'library', 'sandbox', 'controller', 'voice', 'compete'] as const
 type HeaderSection = (typeof HEADER_SECTIONS)[number]
 /** Sections behind "More" on wide screens, so that the header fits on a laptop. */
-const MORE_SECTIONS: readonly HeaderSection[] = ['library', 'sandbox', 'controller', 'compete']
-const MORE_ICONS = { library: BookOpen, sandbox: Wand2, controller: Gamepad2, compete: Trophy } as const
+const MORE_SECTIONS: readonly HeaderSection[] = ['library', 'sandbox', 'controller', 'voice', 'compete']
+const MORE_ICONS = { library: BookOpen, sandbox: Wand2, controller: Gamepad2, voice: Mic, compete: Trophy } as const
 
 const AI_SCHOOL_PATH = '/learn/ai-basics'
 
@@ -137,7 +137,7 @@ export function SiteHeader({ lang, t, sections: names, coinsLabel = '', variant 
                     {p.label}
                   </Link>
                 ))}
-            <MoreMenu label={names.more} pages={pages.filter((p) => variant === 'app' ? p.more : p.key === 'controller')} />
+            <MoreMenu label={names.more} pages={pages.filter((p) => (variant === 'app' ? p.more : p.key === 'controller' || p.key === 'voice'))} />
           </nav>
 
           <div className="header-actions">
@@ -294,7 +294,7 @@ function MoreMenu({ label, pages }: { label: string; pages: MorePage[] }) {
   return (
     <div className="more-menu" ref={box}>
       <button type="button" aria-expanded={open} aria-haspopup="true" data-active={active ? 'true' : undefined} onClick={() => setOpen((v) => !v)}>
-        {active?.key === 'controller' ? label : active?.label ?? label}
+        {active?.key === 'controller' || active?.key === 'voice' ? label : (active?.label ?? label)}
         <ChevronDown aria-hidden="true" className="size-4" data-open={open} />
       </button>
       {open && (

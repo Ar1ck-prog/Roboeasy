@@ -6,6 +6,10 @@ export interface LandingNewsCopy {
   eyebrow: string
   title: string
   lead: string
+  voice: { title: string; text: string; cta: string; bubble: string }
+  controller: { title: string; text: string; cta: string }
+  motors: { title: string; text: string; cta: string }
+  autonomy: { title: string; text: string; cta: string }
   gen: { title: string; text: string; cta: string; bubble: string }
   draw: { title: string; text: string; cta: string }
   telemetry: { title: string; text: string; cta: string; label: string }
@@ -17,8 +21,29 @@ export interface LandingNewsCopy {
 
 const ru: LandingNewsCopy = {
   eyebrow: 'Новое в RoboEasy 2.0',
-  title: 'ИИ, рисунки, телеметрия и кабинет учителя',
+  title: 'Голос, пульт, ИИ и кабинет учителя',
   lead: 'Всё работает прямо в браузере, на трёх языках и с настоящим роботом по Bluetooth.',
+  voice: {
+    title: 'Голосовое управление',
+    text: 'Скажи «проедь вперёд на 30 сантиметров и поверни направо», и робот поедет: сначала в симуляторе, а если хаб подключён — по-настоящему. Понимает русский, казахский и английский и работает без ИИ-лимитов.',
+    cta: 'Сказать роботу',
+    bubble: '«вперёд 30 см и направо»',
+  },
+  controller: {
+    title: 'Пульт и запись маршрута',
+    text: 'Управляй SPIKE с клавиатуры или джойстиком на экране. Запиши проезд: робот повторит его сам или вернётся тем же путём на старт.',
+    cta: 'Открыть пульт',
+  },
+  motors: {
+    title: 'Моторы видно в уроках',
+    text: 'В симуляторе крутится каждый мотор: стрелка, угол и счётчик оборотов. Задание «ровно один оборот» теперь видно глазами, а не только по галочке.',
+    cta: 'К уроку «Моторы»',
+  },
+  autonomy: {
+    title: 'Автономные роботы',
+    text: '12 уроков: лабиринт по правилу стены, поиск и спасение, сортировка по цвету и робот-марсоход, который решает сам.',
+    cta: 'К треку',
+  },
   gen: {
     title: 'Генератор понимает круги и дуги',
     text: 'Напиши «езжай по кругу»: ИИ выберет команды, а углы и скорости колёс посчитает наш код. Невыполнимое он честно объяснит.',
@@ -72,8 +97,29 @@ const ru: LandingNewsCopy = {
 // TODO: проверить перевод
 const kk: LandingNewsCopy = {
   eyebrow: 'RoboEasy 2.0-дегі жаңалықтар',
-  title: 'ЖИ, суреттер, телеметрия және мұғалім кабинеті',
+  title: 'Дауыс, пульт, ЖИ және мұғалім кабинеті',
   lead: 'Бәрі браузерде, үш тілде және Bluetooth арқылы нағыз роботпен жұмыс істейді.',
+  voice: {
+    title: 'Дауыспен басқару',
+    text: '«Алға отыз сантиметр жүр, сосын оңға бұрыл» десең, робот жүреді: алдымен симуляторда, хаб қосылса — шынымен. Орыс, қазақ және ағылшын тілдерін түсінеді, ЖИ лимиттерінсіз жұмыс істейді.',
+    cta: 'Роботқа айту',
+    bubble: '«алға 30 см, сосын оңға»',
+  },
+  controller: {
+    title: 'Пульт және маршрут жазу',
+    text: 'SPIKE-ты пернетақтадан немесе экрандағы джойстикпен басқар. Жүрісті жазып ал: робот оны өзі қайталайды немесе сол жолмен бастауға қайтады.',
+    cta: 'Пультті ашу',
+  },
+  motors: {
+    title: 'Сабақтарда моторлар көрінеді',
+    text: 'Симуляторда әр мотор айналады: тіл, бұрыш және айналым санауышы. «Дәл бір айналым» тапсырмасы енді көзге көрінеді.',
+    cta: '«Моторлар» сабағына',
+  },
+  autonomy: {
+    title: 'Автономды роботтар',
+    text: '12 сабақ: қабырға ережесімен лабиринт, іздеу мен құтқару, түс бойынша сұрыптау және өзі шешетін марсоход.',
+    cta: 'Тректі ашу',
+  },
   gen: {
     title: 'Генератор шеңбер мен доғаны түсінеді',
     text: '«Шеңбер бойымен жүр» деп жаз: ЖИ командаларды таңдайды, ал бұрыштар мен доңғалақ жылдамдығын біздің код есептейді. Орындалмайтынын адал түсіндіреді.',
@@ -126,8 +172,29 @@ const kk: LandingNewsCopy = {
 
 const en: LandingNewsCopy = {
   eyebrow: 'New in RoboEasy 2.0',
-  title: 'AI, drawings, telemetry and a teacher’s room',
+  title: 'Voice, remote, AI and a teacher’s room',
   lead: 'It all runs in the browser, in three languages, and with a real robot over Bluetooth.',
+  voice: {
+    title: 'Voice control',
+    text: 'Say “go forward 30 centimeters and turn right” and the robot drives: in the simulator first, and for real when a hub is connected. It understands Russian, Kazakh and English and needs no AI quota.',
+    cta: 'Talk to the robot',
+    bubble: '“forward 30 cm, then right”',
+  },
+  controller: {
+    title: 'Remote and route recording',
+    text: 'Drive SPIKE from the keyboard or an on-screen joystick. Record a run: the robot repeats it by itself or backs along the same path to the start.',
+    cta: 'Open the remote',
+  },
+  motors: {
+    title: 'See the motors in lessons',
+    text: 'Every motor turns in the simulator: a hand, the angle and a rotation counter. “Exactly one rotation” is now something you can see, not just a tick.',
+    cta: 'To the “Motors” lesson',
+  },
+  autonomy: {
+    title: 'Autonomous robots',
+    text: '12 lessons: a maze by the wall rule, search and rescue, sorting by colour and a Mars rover that decides by itself.',
+    cta: 'To the track',
+  },
   gen: {
     title: 'The generator knows circles and arcs',
     text: 'Type “drive in a circle”: the AI picks the commands and our code works out the angles and wheel speeds. It honestly explains what the robot cannot do.',
