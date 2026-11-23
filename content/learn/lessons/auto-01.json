@@ -1,0 +1,273 @@
+{
+  "id": "auto-01",
+  "track": "autonomy",
+  "unit": "auto-maze",
+  "minutes": 8,
+  "skills": [
+    "sensor-distance",
+    "conditions"
+  ],
+  "title": {
+    "ru": "Правило стены",
+    "kk": "Қабырға ережесі",
+    "en": "The wall rule"
+  },
+  "goal": {
+    "ru": "Сегодня робот сам найдёт выход из коридора, не зная его формы.",
+    "kk": "Бүгін робот дәліздің пішінін білмей, шығуды өзі табады.",
+    "en": "Today the robot will find its way out of a corridor without knowing its shape."
+  },
+  "summary": {
+    "ru": "Теперь ты знаешь главный приём автономных роботов: двигаться по датчику, а не по заученным расстояниям.",
+    "kk": "Енді сен автономды роботтардың басты тәсілін білесің: жатталған қашықтықпен емес, датчикпен қозғалу.",
+    "en": "Now you know the key trick of autonomous robots: move by sensor, not by memorised distances."
+  },
+  "steps": [
+    {
+      "id": "auto",
+      "type": "theory",
+      "title": {
+        "ru": "Сам себе водитель",
+        "kk": "Өзіне-өзі жүргізуші",
+        "en": "Its own driver"
+      },
+      "body": {
+        "ru": "**Автономный** робот работает без человека: сам смотрит датчиками и сам решает, куда ехать. Так работают роботы-пылесосы, складские тележки и марсоходы.\n\nВ лабиринте помогает простое правило: **ехать, пока впереди не стена, потом повернуть**. Робот не знает длины коридоров — и ему не нужно.\n\nА если всегда держаться одной рукой за стену, из обычного лабиринта рано или поздно найдётся выход.",
+        "kk": "**Автономды** робот адамсыз жұмыс істейді: датчиктерімен өзі қарап, қайда жүретінін өзі шешеді. Робот-шаңсорғыштар, қойма арбашалары және марсоходтар осылай жұмыс істейді.\n\nЛабиринтте қарапайым ереже көмектеседі: **алда қабырға болғанша жүру, содан кейін бұрылу**. Робот дәліздердің ұзындығын білмейді — және оған керегі де жоқ.\n\nАл әрдайым бір қолмен қабырғаны ұстап жүрсең, қарапайым лабиринттен ерте ме, кеш пе шығу табылады.",
+        "en": "An **autonomous** robot works without a person: it looks with its sensors and decides where to go. Robot vacuums, warehouse carts and Mars rovers work like this.\n\nIn a maze one simple rule helps: **drive until there is a wall ahead, then turn**. The robot does not know the corridor lengths — and does not need to.\n\nAnd if you always keep one hand on the wall, you will eventually find the way out of an ordinary maze."
+      },
+      "illustration": "r-maze"
+    },
+    {
+      "id": "why",
+      "type": "quiz",
+      "kind": "choice",
+      "question": {
+        "ru": "Почему в незнакомом лабиринте лучше датчик, чем «вперёд 60 см»?",
+        "kk": "Неге бейтаныс лабиринтте «60 см алға» емес, датчик жақсы?",
+        "en": "Why is a sensor better than “forward 60 cm” in an unknown maze?"
+      },
+      "options": [
+        {
+          "ru": "Длина коридоров неизвестна, а стену датчик найдёт сам",
+          "kk": "Дәліздердің ұзындығы белгісіз, ал қабырғаны датчик өзі табады",
+          "en": "The corridor lengths are unknown, but the sensor finds the wall itself"
+        },
+        {
+          "ru": "Датчик быстрее мотора",
+          "kk": "Датчик мотордан жылдам",
+          "en": "A sensor is faster than a motor"
+        },
+        {
+          "ru": "Так меньше блоков",
+          "kk": "Осылай блок аз",
+          "en": "It takes fewer blocks"
+        }
+      ],
+      "correct": [
+        0
+      ],
+      "explanation": {
+        "ru": "Автономный робот опирается на то, что видит, а не на заученные числа.",
+        "kk": "Автономды робот жатталған сандарға емес, көргеніне сүйенеді.",
+        "en": "An autonomous robot relies on what it sees, not memorised numbers."
+      },
+      "skill": "sensor-distance"
+    },
+    {
+      "id": "corridor",
+      "type": "code",
+      "title": {
+        "ru": "Коридор с поворотом",
+        "kk": "Бұрылысы бар дәліз",
+        "en": "A corridor with a turn"
+      },
+      "task": {
+        "ru": "Доедь до стены, остановись в 15 см, повернись налево и снова доедь до стены. Окажешься у выхода. Стены не трогай!",
+        "kk": "Қабырғаға дейін жетіп, 15 см жерде тоқта, солға бұрылып, қайтадан қабырғаға дейін жет. Шығу жанында боласың. Қабырғаларға тиме!",
+        "en": "Drive to the wall, stop 15 cm away, turn left and drive to the wall again. You will be at the exit. Do not touch the walls!"
+      },
+      "field": {
+        "width": 1200,
+        "height": 1000,
+        "start": {
+          "x": 200,
+          "y": 200,
+          "heading": 0
+        },
+        "border": true,
+        "zones": [
+          {
+            "id": "exit",
+            "x": 560,
+            "y": 460,
+            "w": 220,
+            "h": 240,
+            "kind": "target",
+            "label": {
+              "ru": "Выход",
+              "kk": "Шығу",
+              "en": "Exit"
+            }
+          }
+        ],
+        "points": [],
+        "walls": [
+          {
+            "x": 900,
+            "y": 0,
+            "w": 40,
+            "h": 1000
+          },
+          {
+            "x": 0,
+            "y": 800,
+            "w": 940,
+            "h": 40
+          },
+          {
+            "x": 0,
+            "y": 400,
+            "w": 540,
+            "h": 40
+          }
+        ],
+        "lines": []
+      },
+      "toolbox": [
+        "start_move",
+        "stop_move",
+        "wait_until",
+        "turn",
+        "move"
+      ],
+      "start": [],
+      "checks": [
+        {
+          "type": "finishInZone",
+          "zone": "exit"
+        },
+        {
+          "type": "usesSensor",
+          "sensor": "distance"
+        },
+        {
+          "type": "noCollision"
+        }
+      ],
+      "hints": [
+        {
+          "ru": "Начать движение → ждать, пока… → остановить.",
+          "kk": "Қозғалысты бастау → әзірге күту… → тоқтату.",
+          "en": "Start moving → wait until… → stop."
+        },
+        {
+          "ru": "Между двумя поездками — «налево 90°».",
+          "kk": "Екі жүрістің арасында — «солға 90°».",
+          "en": "Between the two drives: “left 90°”."
+        },
+        {
+          "ru": "Начать; ждать < 15; стоп; налево 90°; начать; ждать < 15; стоп.",
+          "kk": "Бастау; < 15 күту; тоқта; солға 90°; бастау; < 15 күту; тоқта.",
+          "en": "Start; wait < 15; stop; left 90°; start; wait < 15; stop."
+        }
+      ],
+      "reference": [
+        {
+          "op": "start_move",
+          "direction": "forward"
+        },
+        {
+          "op": "wait_until",
+          "condition": {
+            "sensor": "distance",
+            "port": "C",
+            "comparator": "<",
+            "value": 15,
+            "unit": "cm"
+          }
+        },
+        {
+          "op": "stop_move"
+        },
+        {
+          "op": "turn",
+          "direction": "left",
+          "degrees": 90
+        },
+        {
+          "op": "start_move",
+          "direction": "forward"
+        },
+        {
+          "op": "wait_until",
+          "condition": {
+            "sensor": "distance",
+            "port": "C",
+            "comparator": "<",
+            "value": 15,
+            "unit": "cm"
+          }
+        },
+        {
+          "op": "stop_move"
+        }
+      ],
+      "skill": "sensor-distance"
+    },
+    {
+      "id": "rules",
+      "type": "quiz",
+      "kind": "match",
+      "question": {
+        "ru": "Подбери действие к ситуации",
+        "kk": "Әрекетті жағдайға сәйкестендір",
+        "en": "Match the action to the situation"
+      },
+      "pairs": [
+        {
+          "left": {
+            "ru": "Впереди свободно",
+            "kk": "Алда бос",
+            "en": "The way ahead is clear"
+          },
+          "right": {
+            "ru": "Ехать вперёд",
+            "kk": "Алға жүру",
+            "en": "Drive forward"
+          }
+        },
+        {
+          "left": {
+            "ru": "Впереди стена",
+            "kk": "Алда қабырға",
+            "en": "A wall ahead"
+          },
+          "right": {
+            "ru": "Остановиться и повернуть",
+            "kk": "Тоқтап, бұрылу",
+            "en": "Stop and turn"
+          }
+        },
+        {
+          "left": {
+            "ru": "Тупик со всех сторон",
+            "kk": "Жан-жақтан тұйық",
+            "en": "A dead end on all sides"
+          },
+          "right": {
+            "ru": "Развернуться назад",
+            "kk": "Кері бұрылу",
+            "en": "Turn back"
+          }
+        }
+      ],
+      "explanation": {
+        "ru": "Это и есть «мозг» автономного робота: что вижу → что делаю.",
+        "kk": "Бұл — автономды роботтың «миы»: не көремін → не істеймін.",
+        "en": "That is the autonomous robot’s “brain”: what I see → what I do."
+      },
+      "skill": "conditions"
+    }
+  ]
+}

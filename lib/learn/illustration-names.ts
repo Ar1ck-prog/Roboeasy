@@ -60,5 +60,12 @@ export const ROBO_ILLUSTRATIONS = [
   'r-team',
   'r-notebook',
   'r-judging',
+  // Autonomous robots
+  'r-maze',
+  'r-search',
+  'r-rescue',
+  'r-sort',
+  'r-state',
+  'r-mars',
 ] as const
 export type RoboIllustration = (typeof ROBO_ILLUSTRATIONS)[number]

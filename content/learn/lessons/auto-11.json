@@ -1,0 +1,242 @@
+{
+  "id": "auto-11",
+  "track": "autonomy",
+  "unit": "auto-behavior",
+  "minutes": 9,
+  "skills": [
+    "control",
+    "conditions"
+  ],
+  "title": {
+    "ru": "Робот-охранник",
+    "kk": "Робот-күзетші",
+    "en": "The guard robot"
+  },
+  "goal": {
+    "ru": "Сегодня робот будет патрулировать коридор без конца.",
+    "kk": "Бүгін робот дәлізді шексіз күзетеді.",
+    "en": "Today the robot will patrol a corridor endlessly."
+  },
+  "summary": {
+    "ru": "Теперь ты пишешь поведение «всегда»: робот постоянно смотрит и реагирует.",
+    "kk": "Енді сен «әрдайым» мінез-құлқын жазасың: робот үнемі қарап, әрекет етеді.",
+    "en": "Now you write “forever” behaviour: the robot keeps looking and reacting."
+  },
+  "steps": [
+    {
+      "id": "patrol",
+      "type": "theory",
+      "title": {
+        "ru": "Патруль",
+        "kk": "Күзет",
+        "en": "Patrol"
+      },
+      "body": {
+        "ru": "Охранник ходит от поста к посту. Робот-охранник делает так же: **всегда** проверяет расстояние. **Если** стена ближе 15 см — разворачивается. **Иначе** — едет вперёд.\n\nПрограмма не заканчивается: робот патрулирует, пока его не выключат. Это и есть автономное поведение.",
+        "kk": "Күзетші бекеттен бекетке жүреді. Робот-күзетші де солай істейді: қашықтықты **әрдайым** тексереді. **Егер** қабырға 15 см-ден жақын болса — бұрылады. **Әйтпесе** — алға жүреді.\n\nБағдарлама аяқталмайды: робот оны өшіргенше күзетеді. Бұл — автономды мінез-құлық.",
+        "en": "A guard walks from post to post. The guard robot does the same: it **always** checks the distance. **If** the wall is closer than 15 cm, it turns around. **Else** it drives forward.\n\nThe program never ends: the robot patrols until switched off. That is autonomous behaviour."
+      },
+      "illustration": "r-state",
+      "example": [
+        {
+          "op": "forever",
+          "steps": [
+            {
+              "op": "if",
+              "condition": {
+                "sensor": "distance",
+                "port": "C",
+                "comparator": "<",
+                "value": 15,
+                "unit": "cm"
+              },
+              "then": [
+                {
+                  "op": "turn",
+                  "direction": "right",
+                  "degrees": 180
+                }
+              ],
+              "else": [
+                {
+                  "op": "start_move",
+                  "direction": "forward"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "guard",
+      "type": "code",
+      "title": {
+        "ru": "Патруль между постами",
+        "kk": "Бекеттер арасындағы күзет",
+        "en": "Patrol between posts"
+      },
+      "task": {
+        "ru": "Патрулируй коридор: всегда, если стена ближе 15 см — развернись на 180°, иначе — езжай вперёд. Побывай у обоих постов и ни во что не врежься.",
+        "kk": "Дәлізді күзет: әрдайым, егер қабырға 15 см-ден жақын болса — 180°-қа бұрыл, әйтпесе — алға жүр. Екі бекетте де бол және ештеңеге соғылма.",
+        "en": "Patrol the corridor: forever, if the wall is closer than 15 cm turn 180°, else drive forward. Visit both posts and crash into nothing."
+      },
+      "field": {
+        "width": 1400,
+        "height": 400,
+        "start": {
+          "x": 700,
+          "y": 200,
+          "heading": 0
+        },
+        "border": true,
+        "zones": [],
+        "points": [
+          {
+            "id": "east",
+            "x": 1160,
+            "y": 200,
+            "r": 90,
+            "label": {
+              "ru": "Восточный пост",
+              "kk": "Шығыс бекет",
+              "en": "East post"
+            }
+          },
+          {
+            "id": "west",
+            "x": 240,
+            "y": 200,
+            "r": 90,
+            "label": {
+              "ru": "Западный пост",
+              "kk": "Батыс бекет",
+              "en": "West post"
+            }
+          }
+        ],
+        "walls": [],
+        "lines": []
+      },
+      "toolbox": [
+        "forever",
+        "if",
+        "turn",
+        "start_move",
+        "stop_move"
+      ],
+      "start": [],
+      "checks": [
+        {
+          "type": "passPoints",
+          "points": [
+            "east",
+            "west"
+          ],
+          "ordered": false
+        },
+        {
+          "type": "usesOp",
+          "op": "forever",
+          "min": 1
+        },
+        {
+          "type": "usesOp",
+          "op": "if",
+          "min": 1
+        },
+        {
+          "type": "usesSensor",
+          "sensor": "distance"
+        },
+        {
+          "type": "noCollision"
+        }
+      ],
+      "hints": [
+        {
+          "ru": "Внешний блок — «повторять всегда».",
+          "kk": "Сыртқы блок — «әрдайым қайталау».",
+          "en": "The outer block is “forever”."
+        },
+        {
+          "ru": "Внутри — «если… иначе» с расстоянием < 15 см.",
+          "kk": "Ішінде — қашықтығы < 15 см «егер… әйтпесе».",
+          "en": "Inside: “if… else” with distance < 15 cm."
+        },
+        {
+          "ru": "Если: направо 180°; иначе: начать движение вперёд.",
+          "kk": "Егер: оңға 180°; әйтпесе: алға қозғалысты бастау.",
+          "en": "If: right 180°; else: start moving forward."
+        }
+      ],
+      "reference": [
+        {
+          "op": "forever",
+          "steps": [
+            {
+              "op": "if",
+              "condition": {
+                "sensor": "distance",
+                "port": "C",
+                "comparator": "<",
+                "value": 15,
+                "unit": "cm"
+              },
+              "then": [
+                {
+                  "op": "turn",
+                  "direction": "right",
+                  "degrees": 180
+                }
+              ],
+              "else": [
+                {
+                  "op": "start_move",
+                  "direction": "forward"
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "skill": "control"
+    },
+    {
+      "id": "stop",
+      "type": "quiz",
+      "kind": "choice",
+      "question": {
+        "ru": "Как добавить состояние «тревога», если бампер нажат?",
+        "kk": "Бампер басылса, «дабыл» күйін қалай қосуға болады?",
+        "en": "How would you add an “alarm” state when the bumper is pressed?"
+      },
+      "options": [
+        {
+          "ru": "Ещё одно «если» внутри цикла: нажат — сигнал и картинка",
+          "kk": "Цикл ішінде тағы бір «егер»: басылды — дыбыс және сурет",
+          "en": "Another “if” inside the loop: pressed — beep and a picture"
+        },
+        {
+          "ru": "Убрать цикл",
+          "kk": "Циклды алып тастау",
+          "en": "Remove the loop"
+        },
+        {
+          "ru": "Никак",
+          "kk": "Ешқалай",
+          "en": "You cannot"
+        }
+      ],
+      "correct": [
+        0
+      ],
+      "explanation": {
+        "ru": "Каждое новое состояние — ещё одна проверка в цикле поведения.",
+        "kk": "Әр жаңа күй — мінез-құлық цикліндегі тағы бір тексеру.",
+        "en": "Every new state is one more check in the behaviour loop."
+      },
+      "skill": "conditions"
+    }
+  ]
+}

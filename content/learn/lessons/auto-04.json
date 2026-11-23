@@ -1,0 +1,112 @@
+{
+  "id": "auto-04",
+  "track": "autonomy",
+  "unit": "auto-search",
+  "minutes": 7,
+  "skills": [
+    "loops",
+    "sensor-color"
+  ],
+  "title": {
+    "ru": "Змейка поиска",
+    "kk": "Іздеу жыланы",
+    "en": "The search zigzag"
+  },
+  "goal": {
+    "ru": "Сегодня ты узнаешь, как роботы обыскивают территорию и ничего не пропускают.",
+    "kk": "Бүгін сен роботтардың аумақты ештеңені өткізбей қалай тінтетінін білесің.",
+    "en": "Today you will learn how robots search an area without missing anything."
+  },
+  "summary": {
+    "ru": "Теперь ты знаешь, как выбрать шаг змейки: равным ширине того, что видит датчик.",
+    "kk": "Енді сен жылан қадамын қалай таңдау керегін білесің: датчик көретін енге тең.",
+    "en": "Now you know how to choose the zigzag step: equal to what the sensor can see."
+  },
+  "steps": [
+    {
+      "id": "zigzag",
+      "type": "theory",
+      "title": {
+        "ru": "Как газонокосилка",
+        "kk": "Шөп шапқыш сияқты",
+        "en": "Like a lawnmower"
+      },
+      "body": {
+        "ru": "Чтобы найти потерянную вещь на поле, робот едет **змейкой**: проход туда, сдвиг, проход обратно.\n\nДатчик видит полосу определённой ширины. Если сдвигаться дальше этой ширины, между полосами останутся непроверенные места. Если ближе — полосы перекроются, и путь станет длиннее.\n\nЛучший шаг змейки — **ровно ширина полосы датчика**.",
+        "kk": "Алаңдағы жоғалған затты табу үшін робот **жыланша** жүреді: ары өту, жылжу, кері өту.\n\nДатчик белгілі бір ендегі жолақты көреді. Осы еннен әрі жылжысаң, жолақтар арасында тексерілмеген жерлер қалады. Жақынырақ болса — жолақтар бір-бірін жабады, жол ұзарады.\n\nЖыланның ең жақсы қадамы — **датчик жолағының дәл ені**.",
+        "en": "To find a lost object on a field, the robot drives in a **zigzag**: a pass one way, a shift, a pass back.\n\nThe sensor sees a strip of a certain width. Shift further than that and unchecked gaps remain between strips. Shift less and the strips overlap, making the path longer.\n\nThe best zigzag step is **exactly the width of the sensor’s strip**."
+      },
+      "illustration": "r-search"
+    },
+    {
+      "id": "sweep",
+      "type": "widget",
+      "widget": "sweep",
+      "title": {
+        "ru": "Обыщи поле",
+        "kk": "Алаңды тінт",
+        "en": "Search the field"
+      },
+      "task": {
+        "ru": "Поле 100 × 60 см, датчик видит полосу 15 см. Подбери расстояние между проходами так, чтобы осмотреть всё и не делать лишних проходов. Нажми «Запустить поиск».",
+        "kk": "Алаң 100 × 60 см, датчик 15 см жолақты көреді. Бәрін қарап, артық өтулер жасамайтындай өтулер арасындағы қашықтықты таңда. «Іздеуді бастау» батырмасын бас.",
+        "en": "The field is 100 × 60 cm and the sensor sees a 15 cm strip. Choose the spacing between passes to cover everything with no wasted passes. Press “Start the search”."
+      },
+      "sensorCm": 15
+    },
+    {
+      "id": "wide",
+      "type": "quiz",
+      "kind": "choice",
+      "question": {
+        "ru": "Датчик видит полосу 20 см. Каким сделать шаг змейки?",
+        "kk": "Датчик 20 см жолақты көреді. Жылан қадамын қандай ету керек?",
+        "en": "The sensor sees a 20 cm strip. What zigzag step do you choose?"
+      },
+      "options": [
+        {
+          "ru": "20 см",
+          "kk": "20 см",
+          "en": "20 cm"
+        },
+        {
+          "ru": "40 см",
+          "kk": "40 см",
+          "en": "40 cm"
+        },
+        {
+          "ru": "5 см",
+          "kk": "5 см",
+          "en": "5 cm"
+        }
+      ],
+      "correct": [
+        0
+      ],
+      "explanation": {
+        "ru": "40 см оставит дыры, 5 см — четыре прохода там, где хватило бы одного.",
+        "kk": "40 см тесіктер қалдырады, 5 см — біреуі жеткілікті жерде төрт өту.",
+        "en": "40 cm leaves gaps, 5 cm makes four passes where one would do."
+      },
+      "skill": "loops"
+    },
+    {
+      "id": "lanes",
+      "type": "quiz",
+      "kind": "number",
+      "question": {
+        "ru": "Поле шириной 90 см, шаг змейки 15 см. Сколько проходов понадобится?",
+        "kk": "Ені 90 см алаң, жылан қадамы 15 см. Неше өту керек?",
+        "en": "A field 90 cm wide, a zigzag step of 15 cm. How many passes are needed?"
+      },
+      "answer": 6,
+      "tolerance": 0,
+      "explanation": {
+        "ru": "90 : 15 = 6 проходов.",
+        "kk": "90 : 15 = 6 өту.",
+        "en": "90 ÷ 15 = 6 passes."
+      },
+      "skill": "loops"
+    }
+  ]
+}

@@ -23,6 +23,7 @@ import {
   REGULATOR_GOALS,
   type RegulatorRun,
   SCATTER_TARGET_CM,
+  SWEEP_SPACING,
   WHEELS,
   braceSolved,
   gearRatio,
@@ -34,6 +35,8 @@ import {
   scatterRuns,
   scatterSolved,
   strategySolved,
+  sweepPlan,
+  sweepSolved,
   strategyTotals,
   wheelDistanceCm,
   wheelSolved,
@@ -43,7 +46,7 @@ import { cn } from '@/lib/utils'
 import type { StepDone } from './simple-steps'
 
 type Lang = 'ru' | 'kk' | 'en'
-type Robo = Extract<ClientStep, { type: 'widget'; widget: 'gears' | 'wheel' | 'pid' | 'scatter' | 'strategy' | 'lever' | 'brace' }>
+type Robo = Extract<ClientStep, { type: 'widget'; widget: 'gears' | 'wheel' | 'pid' | 'scatter' | 'strategy' | 'lever' | 'brace' | 'sweep' }>
 type Props<W extends Robo['widget']> = { step: Extract<Robo, { widget: W }>; lang: Lang; done: boolean; onDone: (d: StepDone) => void }
 
 const INK = '#1b1f2a'
@@ -108,6 +111,15 @@ const T = {
     mm: 'мм',
     sec: 'с',
     pts: 'очк.',
+    spacing: 'Расстояние между проходами, см',
+    search: 'Запустить поиск',
+    lanes: 'Проходов: {n}',
+    seen: 'Осмотрено: {p} %',
+    path: 'Путь: {m} м',
+    gaps: 'Остались неосмотренные полосы — предмет мог спрятаться там.',
+    waste: 'Всё осмотрено, но проходы перекрываются: путь длиннее, чем нужно.',
+    found: 'Поле осмотрено целиком и без лишних проходов!',
+    sensorW: 'Датчик видит полосу шириной {w} см',
   },
   kk: {
     driver: 'Жетекші тісті доңғалақ (моторда)',
@@ -163,6 +175,15 @@ const T = {
     mm: 'мм',
     sec: 'с',
     pts: 'ұп.',
+    spacing: 'Өтулер арасындағы қашықтық, см',
+    search: 'Іздеуді бастау',
+    lanes: 'Өтулер: {n}',
+    seen: 'Қаралды: {p} %',
+    path: 'Жол: {m} м',
+    gaps: 'Қаралмаған жолақтар қалды — зат сонда жасырынуы мүмкін.',
+    waste: 'Бәрі қаралды, бірақ өтулер бір-бірін жабады: жол керегінен ұзын.',
+    found: 'Алаң толық және артық өтусіз қаралды!',
+    sensorW: 'Датчик ені {w} см жолақты көреді',
   },
   en: {
     driver: 'Driving gear (on the motor)',
@@ -218,6 +239,15 @@ const T = {
     mm: 'mm',
     sec: 's',
     pts: 'pts',
+    spacing: 'Spacing between passes, cm',
+    search: 'Start the search',
+    lanes: 'Passes: {n}',
+    seen: 'Covered: {p} %',
+    path: 'Path: {m} m',
+    gaps: 'Some strips were never seen — the object could hide there.',
+    waste: 'Everything is covered, but the passes overlap: the path is longer than needed.',
+    found: 'The whole area is covered with no wasted passes!',
+    sensorW: 'The sensor sees a strip {w} cm wide',
   },
 } satisfies Record<Lang, Record<string, string>>
 
@@ -711,7 +741,59 @@ export function BraceWidget({ lang, done, onDone }: Props<'brace'>) {
   )
 }
 
-const ROBO_KINDS: readonly string[] = ['gears', 'wheel', 'pid', 'scatter', 'strategy', 'lever', 'brace'] satisfies Robo['widget'][]
+// ── Search pattern ─────────────────────────────────────────────────────
+
+const AREA = { w: 100, h: 60 }
+
+export function SweepWidget({ step, lang, done, onDone }: Props<'sweep'>) {
+  const t = T[lang]
+  const [spacing, setSpacing] = useState(30)
+  const [run, setRun] = useState<number | null>(null)
+  const [tries, setTries] = useState(0)
+  const plan = sweepPlan(AREA.w, AREA.h, spacing, step.sensorCm)
+  const solved = run !== null && sweepSolved(spacing, step.sensorCm)
+  useSolved(solved, done, tries, onDone)
+  const k = 3.2
+  const x0 = 20
+  const y0 = 18
+  const lanesY = Array.from({ length: plan.lanes }, (_, i) => Math.min(AREA.h - step.sensorCm / 2, spacing / 2 + i * spacing))
+  const pathD = lanesY.map((y, i) => (i % 2 === 0 ? `${i ? 'L' : 'M'}${x0} ${y0 + y * k} L${x0 + AREA.w * k} ${y0 + y * k}` : `L${x0 + AREA.w * k} ${y0 + y * k} L${x0} ${y0 + y * k}`)).join(' ')
+  const message = plan.coverage < 0.999 ? t.gaps : spacing < step.sensorCm ? t.waste : t.found
+  return (
+    <div className="grid gap-4">
+      <p className="m-0 font-extrabold">{fill(t.sensorW, { w: step.sensorCm })}</p>
+      <Stage height={230}>
+        <rect x={x0} y={y0} width={AREA.w * k} height={AREA.h * k} rx="6" fill="#fdecec" stroke={INK} strokeWidth="2.5" />
+        {lanesY.map((y, i) => (
+          <rect
+            key={`${spacing}-${i}`}
+            x={x0}
+            y={y0 + Math.max(0, y - step.sensorCm / 2) * k}
+            width={AREA.w * k}
+            height={(Math.min(AREA.h, y + step.sensorCm / 2) - Math.max(0, y - step.sensorCm / 2)) * k}
+            fill={GREEN}
+            opacity={run !== null ? 0.35 : 0.12}
+          />
+        ))}
+        {run !== null && <path key={run} d={pathD} fill="none" stroke={YELLOW} strokeWidth="4" strokeLinejoin="round" strokeDasharray="2000" style={{ animation: 'r-draw 2.4s ease-out' }} />}
+        <rect x={x0 - 12} y={y0 + lanesY[0] * k - 9} width={22} height={18} rx="4" fill={YELLOW} stroke={INK} strokeWidth="2" />
+      </Stage>
+      <Slider label={t.spacing} value={spacing} min={SWEEP_SPACING[0]} max={SWEEP_SPACING[1]} step={SWEEP_SPACING[2]} onChange={(v) => (setSpacing(v), setRun(null))} />
+      <div className="flex flex-wrap items-center gap-3">
+        <button type="button" className={buttonVariants({ variant: 'primary' })} onClick={() => (setRun(Date.now()), setTries((n) => n + 1))}>
+          <Play aria-hidden="true" />
+          {t.search}
+        </button>
+        <span className="text-sm font-bold">
+          {fill(t.lanes, { n: plan.lanes })} · {fill(t.seen, { p: Math.round(plan.coverage * 100) })} · {fill(t.path, { m: round(plan.pathCm / 100, 1) })}
+        </span>
+      </div>
+      {run !== null && <Status ok={solved}>{message}</Status>}
+    </div>
+  )
+}
+
+const ROBO_KINDS: readonly string[] = ['gears', 'wheel', 'pid', 'scatter', 'strategy', 'lever', 'brace', 'sweep'] satisfies Robo['widget'][]
 
 export function isRoboWidget(step: Extract<ClientStep, { type: 'widget' }>): step is Robo {
   return ROBO_KINDS.includes(step.widget)
@@ -733,5 +815,7 @@ export function RoboWidget({ step, lang, done, onDone }: { step: Robo; lang: Lan
       return <LeverWidget step={step} lang={lang} done={done} onDone={onDone} />
     case 'brace':
       return <BraceWidget step={step} lang={lang} done={done} onDone={onDone} />
+    case 'sweep':
+      return <SweepWidget step={step} lang={lang} done={done} onDone={onDone} />
   }
 }

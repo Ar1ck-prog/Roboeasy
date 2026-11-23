@@ -115,6 +115,16 @@ const W = {
   captain: { ru: 'капитан', kk: 'капитан', en: 'captain' },
   notebook: { ru: 'инженерная книга', kk: 'инженерлік кітап', en: 'engineering notebook' },
   judges: { ru: 'судьи', kk: 'төрешілер', en: 'judges' },
+  exit: { ru: 'выход', kk: 'шығу', en: 'exit' },
+  lanes: { ru: 'проход за проходом', kk: 'өтуден кейін өту', en: 'pass after pass' },
+  base: { ru: 'база', kk: 'база', en: 'base' },
+  help: { ru: 'помощь!', kk: 'көмек!', en: 'help!' },
+  sortL: { ru: 'красные', kk: 'қызылдар', en: 'red' },
+  sortR: { ru: 'остальные', kk: 'қалғандары', en: 'others' },
+  patrol: { ru: 'патруль', kk: 'күзет', en: 'patrol' },
+  alarm: { ru: 'тревога', kk: 'дабыл', en: 'alarm' },
+  back: { ru: 'домой', kk: 'үйге', en: 'home' },
+  sample: { ru: 'образец', kk: 'үлгі', en: 'sample' },
 } satisfies Record<string, Words>
 
 function Svg({ children }: { children: ReactNode }) {
@@ -1144,6 +1154,109 @@ export function RoboIllustration({ name, lang }: { name: string; lang: Lang }) {
               </Label>
             </Card>
           </g>
+        </Svg>
+      )
+    // ── Autonomous robots ────────────────────────────────────────────
+    case 'r-maze':
+      return (
+        <Svg>
+          <path d="M30 30 H330 V170 H30 Z M30 100 H220 M140 30 V70 M260 100 V170" fill="none" stroke={INK} strokeWidth="8" strokeLinecap="round" />
+          <path d="M60 65 H110 V135 H240 V65 H300" fill="none" stroke={GREEN} strokeWidth="3" strokeDasharray="6 6" style={anim('r-dash', 1, { linear: true })} />
+          <g style={anim('ai-pulse', 1.6)}>
+            <circle cx={300} cy={65} r="10" fill={YELLOW} stroke={INK} strokeWidth="2.5" />
+          </g>
+          <Bot x={60} y={65} scale={0.55} />
+          <Label x={300} y={95} size={11}>
+            {w('exit')}
+          </Label>
+        </Svg>
+      )
+    case 'r-search':
+      return (
+        <Svg>
+          <rect x={30} y={25} width={300} height={150} rx="10" fill={SOFT} stroke={INK} strokeWidth="3" />
+          {[0, 1, 2, 3].map((i) => (
+            <rect key={i} x={30} y={25 + i * 37.5} width={300} height={37.5} fill={GREEN} opacity="0.25" style={anim(`r-step-${(i % 3) + 1}`, 3)} />
+          ))}
+          <path d="M45 44 H315 V81 H45 V119 H315 V156 H45" fill="none" stroke={INK} strokeWidth="3" strokeDasharray="8 6" style={anim('r-dash', 1.2, { linear: true })} />
+          <path d="M250 125 l6 12 13 2 -10 9 3 13 -12 -7 -12 7 3 -13 -10 -9 13 -2 Z" fill={RED} stroke={INK} strokeWidth="2" style={anim('ai-twinkle', 1.8)} />
+          <Label x={180} y={194} size={12}>
+            {w('lanes')}
+          </Label>
+        </Svg>
+      )
+    case 'r-rescue':
+      return (
+        <Svg>
+          <rect x={20} y={70} width={70} height={60} rx="8" fill={SOFT} stroke={INK} strokeWidth="2.5" />
+          <Label x={55} y={150} size={11}>
+            {w('base')}
+          </Label>
+          <g style={anim('r-drive', 3.2, { vars: { '--r-d': '170px' } })}>
+            <Bot x={110} y={100} scale={0.7} />
+          </g>
+          <Person x={310} y={115} color={BLUE} label="" />
+          <g style={anim('ai-wig', 1.4)}>
+            <Card x={270} y={30} w={80} h={30} fill={CARD}>
+              <Label x={310} y={51} size={12}>
+                {w('help')}
+              </Label>
+            </Card>
+          </g>
+        </Svg>
+      )
+    case 'r-sort':
+      return (
+        <Svg>
+          <path d="M30 100 H170" stroke={INK} strokeWidth="10" />
+          <path d="M170 100 L250 50 M170 100 L250 150" stroke={INK} strokeWidth="6" strokeLinecap="round" />
+          <rect x={250} y={25} width={90} height={50} rx="8" fill="#fdecec" stroke={RED} strokeWidth="3" />
+          <rect x={250} y={125} width={90} height={50} rx="8" fill="#e8f0fe" stroke={BLUE} strokeWidth="3" />
+          <Label x={295} y={55} size={11}>
+            {w('sortL')}
+          </Label>
+          <Label x={295} y={155} size={11}>
+            {w('sortR')}
+          </Label>
+          {[RED, BLUE, RED].map((c, i) => (
+            <rect key={i} x={40} y={86} width={26} height={26} rx="4" fill={c} stroke={INK} strokeWidth="2" style={anim('r-drive', 3, { delay: i, linear: true, vars: { '--r-d': '120px' } })} />
+          ))}
+        </Svg>
+      )
+    case 'r-state':
+      return (
+        <Svg>
+          {[
+            [70, w('patrol'), YELLOW],
+            [180, w('alarm'), RED],
+            [290, w('back'), GREEN],
+          ].map(([x, label, color], i) => (
+            <g key={i}>
+              <circle cx={Number(x)} cy={100} r="38" fill={String(color)} stroke={INK} strokeWidth="3" style={anim(`r-step-${i + 1}`, 3)} />
+              <Label x={Number(x)} y={105} size={11}>
+                {label}
+              </Label>
+            </g>
+          ))}
+          <Arrow x1={110} y1={100} x2={140} y2={100} />
+          <Arrow x1={220} y1={100} x2={250} y2={100} />
+          <path d="M290 140 Q180 195 70 140" fill="none" stroke={INK} strokeWidth="3" strokeDasharray="6 5" />
+          <path d="M64 150 L70 138 L80 148" fill="none" stroke={INK} strokeWidth="3" />
+        </Svg>
+      )
+    case 'r-mars':
+      return (
+        <Svg>
+          <rect width="360" height="200" rx="16" fill="#f6d2b8" />
+          <ellipse cx={270} cy={140} rx={70} ry={26} fill="#d99a76" stroke={INK} strokeWidth="2.5" />
+          <circle cx={60} cy={40} r="16" fill={YELLOW} stroke={INK} strokeWidth="2.5" style={anim('ai-pulse', 2.4)} />
+          <g style={anim('r-drive', 4, { vars: { '--r-d': '120px' } })}>
+            <Bot x={80} y={130} color="#ffffff" scale={0.8} />
+          </g>
+          <circle cx={240} cy={132} r="6" fill={VIOLET} stroke={INK} strokeWidth="2" style={anim('ai-twinkle', 1.6)} />
+          <Label x={240} y={110} size={11}>
+            {w('sample')}
+          </Label>
         </Svg>
       )
     default:

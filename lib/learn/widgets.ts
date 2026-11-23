@@ -192,3 +192,20 @@ export type Brace = 'diag1' | 'diag2' | 'middle'
 export function braceSolved(braces: Brace[]): boolean {
   return braces.includes('diag1') || braces.includes('diag2')
 }
+
+// ── Search pattern ("lawnmower") ────────────────────────────────────────
+
+/** Lane spacing offered by the slider, cm. */
+export const SWEEP_SPACING = [5, 40, 5] as const
+
+/** A zigzag search over an area: how many lanes, how much of the area the sensor sees, path length. */
+export function sweepPlan(areaW: number, areaH: number, spacing: number, sensorCm: number): { lanes: number; coverage: number; pathCm: number } {
+  const lanes = Math.max(1, Math.ceil(areaH / spacing))
+  const coverage = Math.min(1, (lanes * Math.min(sensorCm, spacing)) / areaH, sensorCm / spacing)
+  return { lanes, coverage, pathCm: lanes * areaW + (lanes - 1) * spacing }
+}
+
+/** Solved: the whole area is seen and no lane is wasted (spacing equals the sensor width). */
+export function sweepSolved(spacing: number, sensorCm: number): boolean {
+  return spacing <= sensorCm && spacing > sensorCm - SWEEP_SPACING[2]
+}

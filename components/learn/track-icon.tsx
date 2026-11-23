@@ -1,8 +1,8 @@
-import { Blocks, Brain, Code2, Cog, Compass, Hammer, Radar, Rocket, Trophy } from 'lucide-react'
+import { Blocks, Bot, Brain, Code2, Cog, Compass, Hammer, Radar, Rocket, Trophy } from 'lucide-react'
 
 import { cn } from '@/lib/utils'
 
-const ICONS = { Rocket, Hammer, Blocks, Radar, Compass, Code2, Cog, Trophy, Brain }
+const ICONS = { Rocket, Hammer, Blocks, Radar, Compass, Code2, Cog, Trophy, Brain, Bot }
 
 /** The track's icon on its colour (course.json: icon, color). */
 export function TrackIcon({ icon, color, className }: { icon: string; color: string; className?: string }) {

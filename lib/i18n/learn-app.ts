@@ -18,7 +18,7 @@ const ru = {
   },
   map: {
     title: 'Обучение',
-    lead: '8 треков: от первого урока до соревнований FLL. Проходи по порядку или сдай тест и начни с нужного места.',
+    lead: '10 треков: от первого урока до соревнований FLL, автономных роботов и ИИ. Проходи по порядку или сдай тест и начни с нужного места.',
     placementTitle: 'Уже кое-что знаешь?',
     placementText: 'Ответь на 11 вопросов — откроем уроки, которые ты уже знаешь.',
     placementCta: 'Тест на уровень',
@@ -300,7 +300,7 @@ const kk: LearnAppText = {
   },
   map: {
     title: 'Оқу',
-    lead: '8 трек: алғашқы сабақтан FLL жарыстарына дейін. Ретімен өт немесе тест тапсырып, қажетті жерден баста.',
+    lead: '10 трек: алғашқы сабақтан FLL жарыстарына, автономды роботтар мен ЖИ-ге дейін. Ретімен өт немесе тест тапсырып, қажетті жерден баста.',
     placementTitle: 'Бірдеңе білесің бе?',
     placementText: '11 сұраққа жауап бер — өзің білетін сабақтарды ашамыз.',
     placementCta: 'Деңгей тесті',
@@ -577,7 +577,7 @@ const en: LearnAppText = {
   },
   map: {
     title: 'Learn',
-    lead: '8 tracks: from the very first lesson to FLL competitions. Go in order, or take a test and start where you belong.',
+    lead: '10 tracks: from the very first lesson to FLL competitions, autonomous robots and AI. Go in order, or take a test and start where you belong.',
     placementTitle: 'Know some already?',
     placementText: 'Answer 11 questions and we will open the lessons you already know.',
     placementCta: 'Placement test',

@@ -11,6 +11,7 @@ const ru = {
     library: 'Справочник',
     sandbox: 'Песочница',
     compete: 'Соревнования',
+    controller: 'Контроллер робота',
     profile: 'Профиль',
     signIn: 'Войти',
     more: 'Ещё',
@@ -112,6 +113,7 @@ const kk: LearnText = {
     library: 'Анықтамалық',
     sandbox: 'Құмсалғыш',
     compete: 'Жарыстар',
+    controller: 'Робот контроллері',
     profile: 'Профиль',
     signIn: 'Кіру',
     // TODO: проверить перевод
@@ -207,6 +209,7 @@ const en: LearnText = {
     library: 'Library',
     sandbox: 'Sandbox',
     compete: 'Competitions',
+    controller: 'Robot controller',
     profile: 'Profile',
     signIn: 'Sign in',
     more: 'More',

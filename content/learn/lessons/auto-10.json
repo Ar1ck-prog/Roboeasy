@@ -1,0 +1,170 @@
+{
+  "id": "auto-10",
+  "track": "autonomy",
+  "unit": "auto-behavior",
+  "minutes": 7,
+  "skills": [
+    "control",
+    "conditions"
+  ],
+  "title": {
+    "ru": "Состояния робота",
+    "kk": "Робот күйлері",
+    "en": "Robot states"
+  },
+  "goal": {
+    "ru": "Сегодня ты узнаешь, как инженеры описывают поведение роботов.",
+    "kk": "Бүгін сен инженерлердің роботтардың мінез-құлқын қалай сипаттайтынын білесің.",
+    "en": "Today you will learn how engineers describe robot behaviour."
+  },
+  "summary": {
+    "ru": "Теперь ты описываешь поведение робота как смену состояний.",
+    "kk": "Енді сен робот мінез-құлқын күйлердің ауысуы ретінде сипаттайсың.",
+    "en": "Now you describe robot behaviour as a change of states."
+  },
+  "steps": [
+    {
+      "id": "states",
+      "type": "theory",
+      "title": {
+        "ru": "Режимы работы",
+        "kk": "Жұмыс режимдері",
+        "en": "Modes of work"
+      },
+      "body": {
+        "ru": "Робот-охранник бывает в разных **состояниях**: «патруль», «тревога», «домой». В каждом состоянии он ведёт себя по-своему.\n\nПереходы между состояниями вызывают события: увидел нарушителя — из патруля в тревогу; разрядилась батарея — домой.\n\nТакую схему называют **конечным автоматом**. Её рисуют кружками и стрелками ещё до программы — так проще ничего не забыть.",
+        "kk": "Робот-күзетші әр түрлі **күйлерде** болады: «күзет», «дабыл», «үйге». Әр күйде ол өзінше әрекет етеді.\n\nКүйлер арасындағы ауысуларды оқиғалар тудырады: бұзушыны көрді — күзеттен дабылға; батарея отырды — үйге.\n\nМұндай сызба **ақырлы автомат** деп аталады. Оны бағдарламадан бұрын шеңберлер мен нұсқарлармен салады — сонда ештеңені ұмытпау оңай.",
+        "en": "A guard robot can be in different **states**: “patrol”, “alarm”, “go home”. In each state it behaves in its own way.\n\nEvents trigger transitions between states: spotted an intruder — from patrol to alarm; battery low — go home.\n\nSuch a scheme is called a **state machine**. You draw it with circles and arrows before programming — it makes it easy not to forget anything."
+      },
+      "illustration": "r-state"
+    },
+    {
+      "id": "events",
+      "type": "quiz",
+      "kind": "match",
+      "question": {
+        "ru": "Что вызывает переход?",
+        "kk": "Ауысуды не тудырады?",
+        "en": "What triggers the transition?"
+      },
+      "pairs": [
+        {
+          "left": {
+            "ru": "Патруль → тревога",
+            "kk": "Күзет → дабыл",
+            "en": "Patrol → alarm"
+          },
+          "right": {
+            "ru": "Датчик увидел нарушителя",
+            "kk": "Датчик бұзушыны көрді",
+            "en": "The sensor spotted an intruder"
+          }
+        },
+        {
+          "left": {
+            "ru": "Тревога → патруль",
+            "kk": "Дабыл → күзет",
+            "en": "Alarm → patrol"
+          },
+          "right": {
+            "ru": "Нарушитель ушёл",
+            "kk": "Бұзушы кетті",
+            "en": "The intruder left"
+          }
+        },
+        {
+          "left": {
+            "ru": "Патруль → домой",
+            "kk": "Күзет → үйге",
+            "en": "Patrol → home"
+          },
+          "right": {
+            "ru": "Батарея разрядилась",
+            "kk": "Батарея отырды",
+            "en": "The battery is low"
+          }
+        }
+      ],
+      "explanation": {
+        "ru": "Каждая стрелка схемы — это условие, которое проверяет программа.",
+        "kk": "Сызбаның әр нұсқары — бағдарлама тексеретін шарт.",
+        "en": "Every arrow in the scheme is a condition the program checks."
+      },
+      "skill": "control"
+    },
+    {
+      "id": "design",
+      "type": "quiz",
+      "kind": "order",
+      "question": {
+        "ru": "Расставь шаги проектирования поведения",
+        "kk": "Мінез-құлықты жобалау қадамдарын реттей қой",
+        "en": "Order the steps of designing behaviour"
+      },
+      "items": [
+        {
+          "ru": "Перечислить состояния робота",
+          "kk": "Робот күйлерін тізіп шығу",
+          "en": "List the robot’s states"
+        },
+        {
+          "ru": "Нарисовать стрелки-переходы",
+          "kk": "Ауысу нұсқарларын салу",
+          "en": "Draw the transition arrows"
+        },
+        {
+          "ru": "Подписать события на стрелках",
+          "kk": "Нұсқарларға оқиғаларды жазу",
+          "en": "Label the arrows with events"
+        },
+        {
+          "ru": "Написать программу по схеме",
+          "kk": "Сызба бойынша бағдарлама жазу",
+          "en": "Write the program from the scheme"
+        }
+      ],
+      "explanation": {
+        "ru": "Сначала схема, потом код — так поведение получается предсказуемым.",
+        "kk": "Алдымен сызба, содан кейін код — сонда мінез-құлық болжамды болады.",
+        "en": "Scheme first, code second — that keeps behaviour predictable."
+      },
+      "skill": "control"
+    },
+    {
+      "id": "vacuum",
+      "type": "quiz",
+      "kind": "choice",
+      "question": {
+        "ru": "Робот-пылесос убирает, а когда батарея слабая, едет на зарядку. Сколько у него состояний в этом описании?",
+        "kk": "Робот-шаңсорғыш тазалайды, ал батарея әлсіз болғанда зарядтауға барады. Бұл сипаттамада оның неше күйі бар?",
+        "en": "A robot vacuum cleans, and when the battery is low it goes to charge. How many states are in this description?"
+      },
+      "options": [
+        {
+          "ru": "Два: «уборка» и «на зарядку»",
+          "kk": "Екеу: «тазалау» және «зарядтауға»",
+          "en": "Two: “cleaning” and “to the charger”"
+        },
+        {
+          "ru": "Одно",
+          "kk": "Біреу",
+          "en": "One"
+        },
+        {
+          "ru": "Десять",
+          "kk": "Он",
+          "en": "Ten"
+        }
+      ],
+      "correct": [
+        0
+      ],
+      "explanation": {
+        "ru": "Состояние — это режим, в котором робот делает что-то своё. Здесь их два.",
+        "kk": "Күй — робот өз ісін істейтін режим. Мұнда екеуі бар.",
+        "en": "A state is a mode in which the robot does its own thing. There are two here."
+      },
+      "skill": "control"
+    }
+  ]
+}

@@ -49,13 +49,14 @@ import type { LearnLandingCopy, TrackKey } from '@/lib/i18n/learn-landing'
 
 const TRACKS: { key: TrackKey; icon: typeof Rocket; color: string; kit: 'none' | 'part' }[] = [
   { key: 'start', icon: Rocket, color: 'var(--blk-events)', kit: 'none' },
-  { key: 'build', icon: Hammer, color: 'var(--blk-control)', kit: 'part' },
   { key: 'blocks', icon: Blocks, color: 'var(--blk-move)', kit: 'none' },
+  { key: 'build', icon: Hammer, color: 'var(--blk-control)', kit: 'part' },
   { key: 'sensors', icon: Radar, color: 'var(--blk-sensors)', kit: 'none' },
   { key: 'navigation', icon: Compass, color: 'var(--blk-motor)', kit: 'none' },
   { key: 'python', icon: Code2, color: 'var(--blk-light)', kit: 'none' },
   { key: 'mechanisms', icon: Cog, color: 'var(--blk-sound)', kit: 'part' },
   { key: 'fll', icon: Trophy, color: 'var(--blk-events)', kit: 'part' },
+  { key: 'autonomy', icon: Bot, color: 'var(--blk-control)', kit: 'none' },
   { key: 'ai', icon: Brain, color: 'var(--blk-sensors)', kit: 'none' },
 ]
 

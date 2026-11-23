@@ -27,6 +27,7 @@ import {
   parseMessage,
   programFlowRequest,
   startUploadRequest,
+  tunnelMessage,
 } from './ble-protocol'
 
 import { type TelemetrySample, isTelemetryLine, parseTelemetryLine } from './telemetry'
@@ -51,16 +52,24 @@ export interface HubTransport {
 
 export class HubError extends Error {}
 
+export class HubConnectionError extends HubError {
+  constructor(readonly stage: 'select' | 'gatt' | 'info' | 'upload' | 'start' | 'control', cause: unknown, readonly diagnostic = '') {
+    super(stage, { cause })
+  }
+}
+
 /** Requests, one at a time, matched to their replies. */
 export class HubClient {
   info: HubInfo | null = null
   onFlow: (stopped: boolean) => void = () => {}
   onConsole: (text: string) => void = () => {}
   onDevices: (updates: DeviceUpdate[]) => void = () => {}
+  onTunnel: (payload: Uint8Array) => void = () => {}
 
   private reader = new FrameReader()
   private pending: { id: number; resolve: (ok: boolean) => void; reject: (e: Error) => void; timer: ReturnType<typeof setTimeout> } | null = null
   private queue: Promise<unknown> = Promise.resolve()
+  private aborted = false
 
   constructor(
     private transport: HubTransport,
@@ -84,6 +93,7 @@ export class HubClient {
       } else if (m.type === 'status') this.settle(m.id, m.ok)
       else if (m.type === 'flow') this.onFlow(m.stopped)
       else if (m.type === 'console') this.onConsole(m.text)
+      else if (m.type === 'tunnel') this.onTunnel(m.payload)
       else this.onDevices(m.updates)
     }
   }
@@ -98,6 +108,7 @@ export class HubClient {
 
   /** Fails the request in progress (the connection is gone). */
   abort() {
+    this.aborted = true
     const p = this.pending
     if (!p) return
     clearTimeout(p.timer)
@@ -108,7 +119,10 @@ export class HubClient {
   private async send(message: Uint8Array) {
     const frame = packFrame(message)
     const size = this.info ? Math.max(1, Math.min(this.info.maxPacket, MAX_WRITE)) : frame.length
-    for (let i = 0; i < frame.length; i += size) await this.transport.write(frame.subarray(i, i + size))
+    for (let i = 0; i < frame.length; i += size) {
+      if (this.aborted) throw new HubError('disconnected')
+      await this.transport.write(frame.subarray(i, i + size))
+    }
   }
 
   /** Sends a message and waits for the reply of type `responseId`; true when the hub accepted it. */
@@ -121,8 +135,10 @@ export class HubClient {
         }, this.timeoutMs)
         this.pending = { id: responseId, resolve, reject, timer }
         this.send(message).catch((e) => {
-          clearTimeout(timer)
-          this.pending = null
+          if (this.pending?.timer === timer) {
+            clearTimeout(timer)
+            this.pending = null
+          }
           reject(e)
         })
       })
@@ -132,11 +148,21 @@ export class HubClient {
   }
 
   /** The first exchange: limits of this hub, then sensor updates. */
-  async handshake(): Promise<HubInfo> {
+  async handshake(validate: (info: HubInfo) => void = () => {}): Promise<HubInfo> {
+    const info = await this.readInfo()
+    validate(info)
+    await this.subscribeDevices()
+    return info
+  }
+
+  async readInfo(): Promise<HubInfo> {
     await this.request(infoRequest(), MSG.infoResponse)
     if (!this.info) throw new HubError('no info')
-    await this.request(deviceSubscribeRequest(DEVICE_INTERVAL_MS), MSG.deviceSubscribeResponse)
     return this.info
+  }
+
+  subscribeDevices() {
+    return this.request(deviceSubscribeRequest(DEVICE_INTERVAL_MS), MSG.deviceSubscribeResponse)
   }
 
   async upload(code: string, slot: number, onProgress: (share: number) => void = () => {}) {
@@ -162,6 +188,10 @@ export class HubClient {
 
   stop(slot: number) {
     return this.request(programFlowRequest(true, slot), MSG.flowResponse)
+  }
+
+  sendTunnel(payload: Uint8Array) {
+    return this.send(tunnelMessage(payload))
   }
 }
 
@@ -189,15 +219,38 @@ export function bluetoothAvailable(): boolean {
   return !!bluetooth() && typeof window !== 'undefined' && window.isSecureContext
 }
 
-async function openTransport(): Promise<{ transport: HubTransport; name: string }> {
-  const device = await bluetooth()!.requestDevice({ filters: [{ services: [BLE_SERVICE] }], optionalServices: [BLE_SERVICE] })
-  const server = await device.gatt!.connect()
-  const service = await server.getPrimaryService(BLE_SERVICE)
-  const rx = await service.getCharacteristic(BLE_RX)
-  const tx = await service.getCharacteristic(BLE_TX)
+export async function openTransport(signal?: AbortSignal): Promise<{ transport: HubTransport; name: string }> {
+  let device: BtDevice
+  try {
+    device = await bluetooth()!.requestDevice({ filters: [{ services: [BLE_SERVICE] }], optionalServices: [BLE_SERVICE] })
+  } catch (error) {
+    throw new HubConnectionError('select', error)
+  }
+  signal?.throwIfAborted()
+  const gatt = device.gatt
+  if (!gatt) throw new HubError('unsupported')
+  let rx: BtCharacteristic
+  let tx: BtCharacteristic
+  const disconnect = () => gatt.disconnect()
+  signal?.addEventListener('abort', disconnect, { once: true })
+  try {
+    const server = await gatt.connect()
+    const service = await server.getPrimaryService(BLE_SERVICE)
+    rx = await service.getCharacteristic(BLE_RX)
+    tx = await service.getCharacteristic(BLE_TX)
+    await tx.startNotifications()
+    signal?.throwIfAborted()
+    if (!gatt.connected) throw new HubError('disconnected')
+  } catch (error) {
+    disconnect()
+    if ((error as Error).name === 'NotFoundError') throw new HubError('unsupported')
+    throw new HubConnectionError('gatt', error)
+  } finally {
+    signal?.removeEventListener('abort', disconnect)
+  }
   const transport: HubTransport = {
     write: (data) => rx.writeValueWithoutResponse(data as BufferSource),
-    close: () => device.gatt?.disconnect(),
+    close: disconnect,
     onData: () => {},
     onClose: () => {},
   }
@@ -206,7 +259,6 @@ async function openTransport(): Promise<{ transport: HubTransport; name: string 
     if (v) transport.onData(new Uint8Array(v.buffer.slice(v.byteOffset, v.byteOffset + v.byteLength)))
   })
   device.addEventListener('gattserverdisconnected', () => transport.onClose())
-  await tx.startNotifications()
   return { transport, name: device.name || 'SPIKE Prime' }
 }
 
@@ -235,6 +287,14 @@ const INITIAL: HubState = { status: 'idle', name: '', firmware: '', battery: nul
 let state = INITIAL
 let client: HubClient | null = null
 let closing: (() => void) | null = null
+let controllerOwnsHub = false
+
+/** Studio and the live controller both start programs on the same hub. */
+export function reserveControllerHub() {
+  if (controllerOwnsHub || client || closing || state.status === 'connecting') throw new HubError('busy')
+  controllerOwnsHub = true
+  return () => { controllerOwnsHub = false }
+}
 let partialLine = ''
 const listeners = new Set<() => void>()
 
@@ -310,6 +370,7 @@ function applyDevices(updates: DeviceUpdate[]) {
 
 /** Connects (asks the browser for the hub). Must run from a click. True when connected. */
 export async function connectHub(): Promise<boolean> {
+  if (controllerOwnsHub) return false
   if (client) return true
   if (!bluetoothAvailable() || state.status === 'connecting') return false
   set({ status: 'connecting', problem: null })
@@ -319,7 +380,8 @@ export async function connectHub(): Promise<boolean> {
     ;({ transport, name } = await openTransport())
   } catch (e) {
     // Closing the browser's picker is not a problem to report.
-    set({ status: 'idle', problem: (e as Error).name === 'NotFoundError' ? null : 'connect' })
+    const cause = e instanceof HubConnectionError ? e.cause : e
+    set({ status: 'idle', problem: (cause as Error).name === 'NotFoundError' ? null : 'connect' })
     return false
   }
   const c = new HubClient(transport)

@@ -16,6 +16,9 @@ import {
   runRegulator,
   scatterSolved,
   strategySolved,
+  SWEEP_SPACING,
+  sweepPlan,
+  sweepSolved,
   wheelSolved,
 } from '../lib/learn/widgets'
 
@@ -101,6 +104,14 @@ describe.each(widgetSteps.map(({ lesson, step }) => [`${lesson} ${step.id}`, ste
         const subsets = Array.from({ length: 2 ** n }, (_, mask) => step.missions.map((_, i) => i).filter((i) => mask & (1 << i)))
         expect(subsets.some((p) => strategySolved(step.missions, p, step.seconds, step.target))).toBe(true)
         expect(strategySolved(step.missions, step.missions.map((_, i) => i), step.seconds, step.target)).toBe(false)
+        break
+      }
+      case 'sweep': {
+        const spacings = range(SWEEP_SPACING)
+        expect(spacings.filter((sp) => sweepSolved(sp, step.sensorCm))).toEqual([step.sensorCm])
+        expect(sweepSolved(30, step.sensorCm)).toBe(false)
+        expect(sweepPlan(100, 60, step.sensorCm * 2, step.sensorCm).coverage).toBeLessThan(1)
+        expect(sweepPlan(100, 60, step.sensorCm, step.sensorCm).coverage).toBe(1)
         break
       }
       default:
