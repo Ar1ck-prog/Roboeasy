@@ -18,7 +18,11 @@ type Listener = {
   onResumed?: () => void
 }
 
-class MotorCommandError extends HubError {}
+class MotorCommandError extends HubError {
+  constructor(readonly port: Port, detail: string) {
+    super(`${port}: ${detail}`)
+  }
+}
 
 export class ControllerLink {
   private client: HubClient
@@ -36,15 +40,52 @@ export class ControllerLink {
   private commandMode = CONTROLLER_COMMAND
   private consoleLine = ''
   private startupLog = ''
+  private inventory: Port[] | null = null
+  private hasProgramInventory = false
+  private readonly unavailable = new Set<Port>()
   private stopWaiters: ((sent: boolean) => void)[] = []
 
   constructor(private transport: HubTransport, private slot: number, private listener: Listener, private release: () => void) {
     const client = this.client = new HubClient(transport, 4000)
     transport.onClose = () => this.close(this.ready && !this.closing)
     client.onDevices = (updates) => {
-      listener.onDevices(PORTS.filter((port) => updates.some((device) => device.kind === 'motor' && device.port === port)))
+      if (!this.hasProgramInventory) {
+        this.receiveInventory(PORTS.filter((port) => updates.some((device) => device.kind === 'motor' && device.port === port)))
+      }
     }
     client.onTunnel = (payload) => this.reply?.(undefined, decode.decode(payload))
+  }
+
+  private receiveInventory(ports: Port[]) {
+    this.inventory = ports
+    // Require evidence that the device was removed before accepting it again.
+    for (const port of this.unavailable) {
+      if (!ports.includes(port)) this.unavailable.delete(port)
+    }
+    this.publishInventory()
+  }
+
+  private publishInventory() {
+    if (this.inventory) this.listener.onDevices(this.inventory.filter((port) => !this.unavailable.has(port)))
+  }
+
+  private handleConsoleLine(line: string): boolean {
+    const value = line.trimEnd()
+    const ports = value.match(/RBE:PORTS ([A-F]*)\|$/)?.[1]
+    if (ports !== undefined) {
+      this.hasProgramInventory = true
+      this.receiveInventory(PORTS.filter((port) => ports.includes(port)))
+      return true
+    }
+    const error = value.match(/RBE:ERR ([MK][\da-f]{2}) ([A-F]) ([^|\n]*)\|$/)
+    if (error) {
+      this.reply?.(new MotorCommandError(error[2] as Port, error[3]), error[1])
+      return true
+    }
+    const ack = value.match(/RBE:(K[\da-f]{2})$/)?.[1]
+    if (!ack) return false
+    this.reply?.(undefined, ack)
+    return true
   }
 
   private receiveConsole(text: string) {
@@ -52,17 +93,8 @@ export class ControllerLink {
     const lines = (this.consoleLine + text).split('\n')
     this.consoleLine = (lines.pop() ?? '').slice(-256)
     // HubOS may deliver the print's newline in its own notification.
-    const partial = this.consoleLine.trim().match(/RBE:(K[\da-f]{2})$/)?.[1]
-    const fault = this.consoleLine.match(/RBE:ERR ([MK][\da-f]{2}) ([A-F]) ([^|\n]*)\|$/)
-    if (partial || fault) this.consoleLine = ''
-    for (const line of lines) {
-      const candidate = line.trim().match(/RBE:(K[\da-f]{2})$/)?.[1]
-      if (candidate) this.reply?.(undefined, candidate)
-      const error = line.match(/RBE:ERR ([MK][\da-f]{2}) ([A-F]) ([^|\n]*)\|$/)
-      if (error) this.reply?.(new MotorCommandError(`${error[2]}: ${error[3]}`), error[1])
-    }
-    if (partial) this.reply?.(undefined, partial)
-    if (fault) this.reply?.(new MotorCommandError(`${fault[2]}: ${fault[3]}`), fault[1])
+    for (const line of lines) this.handleConsoleLine(line)
+    if (this.handleConsoleLine(this.consoleLine)) this.consoleLine = ''
   }
 
   async initialize() {
@@ -198,6 +230,10 @@ export class ControllerLink {
     this.desired = STOPPED
     const motorError = error instanceof MotorCommandError
     this.listener.onPaused?.(motorError ? 'motorError' : 'commandDelay', motorError ? error.message : '')
+    if (motorError && /\bENODEV\b|\[Errno 19\]/i.test(error.message)) {
+      this.unavailable.add(error.port)
+      this.publishInventory()
+    }
     try {
       // Never resend an unconfirmed movement command. Verify braking on the
       // existing connection and require a fresh input before moving again.

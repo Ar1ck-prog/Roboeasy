@@ -18,6 +18,9 @@ import { SLOT_COUNT } from '@/lib/spike/ble-protocol'
 type Status = 'idle' | 'connecting' | 'ready' | 'recovering' | 'lost' | 'closing'
 type Problem = 'cancelled' | 'denied' | 'failed' | 'unsupported' | 'busy' | 'motorError' | 'commandDelay' | HubConnectionError['stage']
 type Hold = { role: Role; direction: 1 | -1 }
+function motorAvailable(port: Motor['port'], ports: readonly Port[] | null) {
+  return !!port && !!ports?.includes(port)
+}
 const AUX_ROLES = ['gripper', 'lift', 'extra1', 'extra2'] as const
 const editControl = 'input, select, textarea, [contenteditable]:not([contenteditable="false"]), [role="textbox"], [role="combobox"]'
 const fieldStyle = 'min-h-11 min-w-0 rounded-(--radius-sm) border-(length:--stroke-thin) border-outline bg-background px-2.5 font-bold text-foreground'
@@ -48,24 +51,29 @@ export function RobotController({ t }: { t: ControllerText }) {
   const [diagnostic, setDiagnostic] = useState('')
   const [hub, setHub] = useState({ name: '', firmware: '' })
   const [slot, setSlot] = useState('')
-  const [detected, setDetected] = useState<Port[]>([])
+  const [detected, setDetected] = useState<Port[] | null>(null)
   const [motors, setMotors] = useState(INITIAL_MOTORS)
   const [position, setPosition] = useState<Axes>(CENTER)
   const [pressed, setPressed] = useState<Hold[]>([])
 
   const currentMotors = useRef(motors)
+  const detectedRef = useRef<Port[] | null>(null)
   const link = useRef<ControllerLink | null>(null)
   const attempt = useRef<AbortController | null>(null)
   const keys = useRef(new Set<string>())
   const joystick = useRef<{ id: number; axes: Axes } | null>(null)
   const holds = useRef(new Map<number | string, Hold>())
-  const driveReady = !!motors.left.port && !!motors.right.port
+  const driveReady = motorAvailable(motors.left.port, detected) && motorAvailable(motors.right.port, detected)
   const canInput = useRef(false)
 
   const update = useCallback(() => {
     if (!canInput.current) return
-    const axes = joystick.current?.axes ?? keyboardAxes(keys.current)
-    link.current?.update(motorSpeeds(currentMotors.current, axes, holds.current.values()))
+    const motors = currentMotors.current
+    const ports = detectedRef.current
+    const canDrive = motorAvailable(motors.left.port, ports) && motorAvailable(motors.right.port, ports)
+    const axes = canDrive ? joystick.current?.axes ?? keyboardAxes(keys.current) : CENTER
+    const active = [...holds.current.values()].filter(({ role }) => motorAvailable(motors[role].port, ports))
+    link.current?.update(motorSpeeds(motors, axes, active))
   }, [])
 
   const reset = useCallback((render = true, sendStop = true) => {
@@ -84,7 +92,7 @@ export function RobotController({ t }: { t: ControllerText }) {
       if (!canInput.current || joystick.current || !DRIVE_KEYS.includes(event.code) || event.ctrlKey || event.metaKey || event.altKey) return
       if (event.target instanceof Element && event.target.closest(editControl)) return
       const { left, right } = currentMotors.current
-      if (!left.port || !right.port) return
+      if (!motorAvailable(left.port, detectedRef.current) || !motorAvailable(right.port, detectedRef.current)) return
       event.preventDefault()
       if (event.repeat || keys.current.has(event.code)) return
       keys.current.add(event.code)
@@ -130,19 +138,28 @@ export function RobotController({ t }: { t: ControllerText }) {
     setProblem(null)
     setDiagnostic('')
     setHub({ name: '', firmware: '' })
-    setDetected([])
+    detectedRef.current = null
+    setDetected(null)
     setStatus('connecting')
     try {
       const result = await connectController(Number(slot), {
         onDevices: (ports) => {
-          if (!pending.signal.aborted) setDetected((last) => last.join() === ports.join() ? last : ports)
+          if (pending.signal.aborted || detectedRef.current?.join() === ports.join()) return
+          const previous = detectedRef.current
+          detectedRef.current = ports
+          if (canInput.current && ROLES.some((role) => {
+            const port = currentMotors.current[role].port
+            return motorAvailable(port, previous) && !motorAvailable(port, ports)
+          })) reset()
+          setDetected(ports)
         },
         onLost: (reason) => {
           if (pending.signal.aborted) return
           link.current = null
           canInput.current = false
           reset()
-          setDetected([])
+          detectedRef.current = null
+          setDetected(null)
           if (reason) setDiagnostic((current) => current ? `${reason} · ${current}` : reason)
           setStatus('lost')
         },
@@ -187,13 +204,15 @@ export function RobotController({ t }: { t: ControllerText }) {
     if (link.current !== connection) return
     link.current = null
     setHub({ name: '', firmware: '' })
-    setDetected([])
+    detectedRef.current = null
+    setDetected(null)
     setStatus('idle')
   }
 
   function assign(role: Role, change: Partial<Motor>) {
     if (attempt.current || (link.current && !canInput.current)) return
     const previous = currentMotors.current
+    if (change.port && detectedRef.current && !motorAvailable(change.port, detectedRef.current)) return
     if (change.port && ROLES.some((other) => role !== other && previous[other].port === change.port)) return
     if (canInput.current) {
       reset()
@@ -232,6 +251,7 @@ export function RobotController({ t }: { t: ControllerText }) {
 
   function hold(id: number | string, motor?: Hold) {
     if (!canInput.current) return
+    if (motor && !motorAvailable(currentMotors.current[motor.role].port, detectedRef.current)) return
     if (motor) holds.current.set(id, motor)
     else if (!holds.current.delete(id)) return
     setPressed([...holds.current.values()])
@@ -243,6 +263,9 @@ export function RobotController({ t }: { t: ControllerText }) {
   const setupLocked = !hydrated || status === 'connecting' || status === 'recovering' || status === 'closing'
   const editableRoles = connected ? ROLES : ROLES.slice(0, 2)
   const aux = AUX_ROLES.filter((role) => !!motors[role].port)
+  const motorSummary = detected === null
+    ? (connected ? t.checkingMotors : t.manual)
+    : detected.length ? `${t.found} ${detected.join(', ')}.` : t.noMotors
 
   return (
     <div className="container mx-auto max-w-5xl space-y-5 py-6 pb-24 sm:py-10 sm:pb-24">
@@ -253,24 +276,30 @@ export function RobotController({ t }: { t: ControllerText }) {
 
       <Card className="gap-3 p-4 sm:p-6" aria-labelledby="motor-heading">
         <h2 id="motor-heading" className={sectionTitle}><Wrench className="size-5" aria-hidden="true" />{t.settings}</h2>
-        <p className="text-sm text-muted-foreground">{detected.length ? `${t.found} ${detected.join(', ')}.` : t.manual}</p>
+        <p aria-live="polite" className="text-sm text-muted-foreground">{motorSummary}</p>
         <div className="grid grid-cols-2 gap-x-3 gap-y-4 sm:grid-cols-3">
-          {editableRoles.map((role) => (
-            <div key={role} className="min-w-0 space-y-1.5 text-sm font-bold">
-              <label className="grid gap-1">
-                {t.roles[role]}
-                <select className={fieldStyle} value={motors[role].port} disabled={setupLocked} onChange={(event) => assign(role, { port: event.target.value as Motor['port'] })}>
-                  <option value="">{t.none}</option>
-                  {PORTS.map((port) => <option key={port} value={port} disabled={ROLES.some((other) => other !== role && motors[other].port === port)}>{port}</option>)}
-                </select>
-              </label>
-              <label className="flex min-h-9 items-center gap-2">
-                <input type="checkbox" className="size-4 shrink-0 accent-primary" checked={motors[role].reversed}
-                  aria-label={`${t.reverse} · ${t.roles[role]}`} disabled={setupLocked || !motors[role].port} onChange={(event) => assign(role, { reversed: event.target.checked })} />
-                {t.reverse}
-              </label>
-            </div>
-          ))}
+          {editableRoles.map((role) => {
+            const assignedPort = motors[role].port
+            const missing = !!assignedPort && detected !== null && !motorAvailable(assignedPort, detected)
+            return (
+              <div key={role} className="min-w-0 space-y-1.5 text-sm font-bold">
+                <label className="grid gap-1">
+                  {t.roles[role]}
+                  <select className={fieldStyle} value={assignedPort} disabled={setupLocked} aria-invalid={missing}
+                    aria-describedby={missing ? `motor-missing-${role}` : undefined} onChange={(event) => assign(role, { port: event.target.value as Motor['port'] })}>
+                    <option value="">{t.none}</option>
+                    {PORTS.map((port) => <option key={port} value={port} disabled={(detected !== null && !detected.includes(port)) || ROLES.some((other) => other !== role && motors[other].port === port)}>{port}</option>)}
+                  </select>
+                </label>
+                {missing && <p id={`motor-missing-${role}`} className="font-medium text-destructive">{t.missingMotor.replace('{port}', assignedPort)}</p>}
+                <label className="flex min-h-9 items-center gap-2">
+                  <input type="checkbox" className="size-4 shrink-0 accent-primary" checked={motors[role].reversed}
+                    aria-label={`${t.reverse} · ${t.roles[role]}`} disabled={setupLocked || !motors[role].port} onChange={(event) => assign(role, { reversed: event.target.checked })} />
+                  {t.reverse}
+                </label>
+              </div>
+            )
+          })}
         </div>
       </Card>
 
@@ -344,7 +373,7 @@ export function RobotController({ t }: { t: ControllerText }) {
                             const active = pressed.some((value) => value.role === role && value.direction === direction)
                             return (
                               <Button
-                                key={direction} size="sm" variant={active ? 'primary' : 'secondary'} disabled={!ready}
+                                key={direction} size="sm" variant={active ? 'primary' : 'secondary'} disabled={!ready || !motorAvailable(motors[role].port, detected)}
                                 className="min-h-11 min-w-0 touch-none whitespace-normal px-2 text-sm"
                                 onPointerDown={(event) => {
                                   if (event.button !== 0) return

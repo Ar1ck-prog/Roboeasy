@@ -10,6 +10,10 @@ export const CONTROLLER_PROGRAM = `import hub
 from hub import port
 import motor
 import time
+try:
+    import device
+except ImportError:
+    device = None
 
 tunnel = hub.config['module_tunnel']
 ports = (port.A, port.B, port.C, port.D, port.E, port.F)
@@ -17,6 +21,20 @@ speeds = [0] * 6
 last = 0
 pending = None
 use_acceleration = True
+
+def motor_present(p):
+    try:
+        if device is not None and hasattr(device, 'id'):
+            return device.id(p) in (48, 49, 65) and (not hasattr(device, 'ready') or device.ready(p))
+        motor.relative_position(p)
+        return True
+    except (OSError, RuntimeError, ValueError, AttributeError, TypeError):
+        return False
+
+def motor_fault(prefix, index, error):
+    brake()
+    print('${CONTROLLER_CONSOLE_PREFIX}ERR ' + prefix.decode() + ' ' + 'ABCDEF'[index] + ' ' + str(error) + '|')
+    return False
 
 def run_motor(p, velocity):
     global use_acceleration
@@ -29,6 +47,10 @@ def run_motor(p, velocity):
     motor.run(p, velocity)
 
 def apply(prefix, values):
+    # Verify each newly commanded motor before changing any output.
+    for i in range(6):
+        if values[i] and values[i] != speeds[i] and not motor_present(ports[i]):
+            return motor_fault(prefix, i, 'ENODEV')
     for i in range(6):
         speed = values[i]
         if speed != speeds[i]:
@@ -39,9 +61,7 @@ def apply(prefix, values):
                     motor.stop(ports[i])
                 speeds[i] = speed
             except Exception as error:
-                brake()
-                print('${CONTROLLER_CONSOLE_PREFIX}ERR ' + prefix.decode() + ' ' + 'ABCDEF'[i] + ' ' + str(error) + '|')
-                return False
+                return motor_fault(prefix, i, error)
     return True
 
 def brake():
@@ -92,6 +112,8 @@ def receive(data):
 def main():
     global last, pending
     last = time.ticks_ms()
+    next_scan = None
+    previous = None
     tunnel.callback(receive)
     print('${CONTROLLER_CONSOLE_PREFIX}READY')
     try:
@@ -107,6 +129,14 @@ def main():
                     last = received_at
                     if apply(prefix, values):
                         acknowledge(prefix)
+            if next_scan is None or time.ticks_diff(now, next_scan) >= 0:
+                snapshot = ''.join('ABCDEF'[i] for i in range(6) if motor_present(ports[i]))
+                if any(speeds[i] and 'ABCDEF'[i] not in snapshot for i in range(6)):
+                    brake()
+                if snapshot != previous:
+                    print('${CONTROLLER_CONSOLE_PREFIX}PORTS ' + snapshot + '|')
+                    previous = snapshot
+                next_scan = time.ticks_add(now, 500)
             time.sleep_ms(10)
     finally:
         brake()

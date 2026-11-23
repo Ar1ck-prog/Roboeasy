@@ -9,13 +9,18 @@ const encoder = new TextEncoder()
 const decoder = new TextDecoder()
 const url = `http://localhost:${process.env.E2E_PORT ?? 3100}`
 
-async function emulateHub(page: Page, { cancelFirst = false, unsupportedFirst = false, missedBootProbes = 0, gattFails = false, consoleOnly = false, bootLog = '', firstMotorReply = '' } = {}) {
+async function emulateHub(page: Page, { cancelFirst = false, unsupportedFirst = false, missedBootProbes = 0, gattFails = false, consoleOnly = false, bootLog = '', firstMotorReply = '', programPorts }: {
+  cancelFirst?: boolean; unsupportedFirst?: boolean; missedBootProbes?: number; gattFails?: boolean
+  consoleOnly?: boolean; bootLog?: string; firstMotorReply?: string; programPorts?: string
+} = {}) {
   const reader = new FrameReader()
   const speeds: number[][] = []
   const events: string[] = []
   const chooser: { active: boolean; service: string }[] = []
   const modes: string[] = []
   let dropAck = false
+  const portReport = (ports: string) => bytes(MSG.console, ...encoder.encode(`${CONTROLLER_CONSOLE_PREFIX}PORTS ${ports}|\n`), 0)
+  await page.exposeFunction('spikePortReport', (ports: string) => Array.from(packFrame(portReport(ports))))
   await page.exposeFunction('spikeChooser', (request: { active: boolean; service: string }) => {
     chooser.push(request)
     return cancelFirst && chooser.length === 1
@@ -34,6 +39,7 @@ async function emulateHub(page: Page, { cancelFirst = false, unsupportedFirst = 
         if (message[0] === MSG.flow) {
           events.push(message[1] ? 'program stop' : 'program start')
           if (!message[1] && bootLog) responses.push(bytes(MSG.console, ...encoder.encode(bootLog), 0))
+          if (!message[1] && programPorts !== undefined) responses.push(portReport(programPorts))
         }
       } else if (message[0] === MSG.tunnel) {
         const command = decoder.decode(message.slice(3))
@@ -69,6 +75,8 @@ async function emulateHub(page: Page, { cancelFirst = false, unsupportedFirst = 
       spikeWrite: (data: number[]) => Promise<number[][]>
       spikeClosed: () => void
       spikeDisconnect: () => void
+      spikePortReport: (ports: string) => Promise<number[]>
+      spikeReportPorts: (ports: string) => Promise<void>
     }
     Object.defineProperty(navigator, 'bluetooth', {
       value: {
@@ -78,11 +86,15 @@ async function emulateHub(page: Page, { cancelFirst = false, unsupportedFirst = 
           }
           const device = Object.assign(new EventTarget(), { name: 'Test SPIKE Prime' })
           const tx = Object.assign(new EventTarget(), { value: new DataView(new ArrayBuffer(0)), async startNotifications() {} })
+          const deliver = (response: number[]) => {
+            tx.value = new DataView(Uint8Array.from(response).buffer)
+            tx.dispatchEvent(new Event('characteristicvaluechanged'))
+          }
+          fake.spikeReportPorts = async (ports) => deliver(await fake.spikePortReport(ports))
           const rx = {
             async writeValueWithoutResponse(data: Uint8Array) {
               for (const response of await fake.spikeWrite(Array.from(data))) {
-                tx.value = new DataView(Uint8Array.from(response).buffer)
-                tx.dispatchEvent(new Event('characteristicvaluechanged'))
+                deliver(response)
               }
             },
           }
@@ -117,7 +129,11 @@ async function emulateHub(page: Page, { cancelFirst = false, unsupportedFirst = 
       configurable: true,
     })
   }, { rxId: BLE_RX, txId: BLE_TX, gattFails })
-  return { speeds, events, chooser, modes, dropAck: () => { dropAck = true } }
+  return {
+    speeds, events, chooser, modes,
+    dropAck: () => { dropAck = true },
+    reportPorts: (ports: string) => page.evaluate((value) => (window as unknown as { spikeReportPorts(ports: string): Promise<void> }).spikeReportPorts(value), ports),
+  }
 }
 
 const button = (page: Page, name: string) => page.getByRole('button', { name, exact: true })
@@ -357,12 +373,17 @@ for (const reply of ['fault', 'timeout'] as const) {
     await expect(status(page)).toContainText('Подключён')
     expect(hub.events.filter((event) => event === 'move')).toHaveLength(1)
     await page.keyboard.up('KeyW')
+    if (reply === 'fault') {
+      await expect(motor(page, 'Правый мотор')).toHaveAttribute('aria-invalid', 'true')
+      await motor(page, 'Правый мотор').selectOption('D')
+      await page.getByRole('heading', { name: 'Управление', exact: true }).click()
+    }
     await page.keyboard.down('KeyA')
-    await expect.poll(() => hub.speeds.at(-1)).toEqual([-10, 10, 0, 0, 0, 0])
+    await expect.poll(() => hub.speeds.at(-1)).toEqual(reply === 'fault' ? [-10, 0, 0, 10, 0, 0] : [-10, 10, 0, 0, 0, 0])
     await page.keyboard.up('KeyA')
     await expect.poll(() => hub.speeds.at(-1)).toEqual(zero)
     await page.keyboard.down('KeyD')
-    await expect.poll(() => hub.speeds.at(-1)).toEqual([10, -10, 0, 0, 0, 0])
+    await expect.poll(() => hub.speeds.at(-1)).toEqual(reply === 'fault' ? [10, 0, 0, -10, 0, 0] : [10, -10, 0, 0, 0, 0])
     await page.keyboard.up('KeyD')
     await expect.poll(() => hub.speeds.at(-1)).toEqual(zero)
     await button(page, 'Отключить').click()
@@ -370,6 +391,54 @@ for (const reply of ['fault', 'timeout'] as const) {
     expect(hub.chooser).toHaveLength(1)
   })
 }
+
+test('blocks a missing motor on port D before motion and drives after choosing a detected port', async ({ page }) => {
+  const hub = await emulateHub(page, { programPorts: 'AB' })
+  await page.goto('/ru/controller')
+  await motor(page, 'Левый мотор').selectOption('A')
+  await motor(page, 'Правый мотор').selectOption('D')
+  await connect(page)
+  await expect(page.getByText('Обнаружены моторы на портах A, B.')).toBeVisible()
+  await expect(page.getByText('В порту D мотор не обнаружен.', { exact: false })).toBeVisible()
+  await expect(motor(page, 'Правый мотор').locator('option[value="D"]')).toHaveJSProperty('disabled', true)
+  await page.getByRole('heading', { name: 'Управление', exact: true }).click()
+  await page.keyboard.down('KeyW')
+  await expect(page.getByRole('img', { name: 'Джойстик движения' })).toHaveAttribute('aria-disabled', 'true')
+  await expect.poll(() => hub.speeds.length).toBeGreaterThan(1)
+  expect(hub.events).not.toContain('move')
+  await page.keyboard.up('KeyW')
+  await motor(page, 'Правый мотор').selectOption('B')
+  await page.getByRole('heading', { name: 'Управление', exact: true }).click()
+  await page.keyboard.down('KeyW')
+  await expect.poll(() => hub.speeds.at(-1)).toEqual([100, 100, 0, 0, 0, 0])
+  await page.keyboard.up('KeyW')
+  await expect.poll(() => hub.speeds.at(-1)).toEqual(zero)
+  expect(hub.chooser).toHaveLength(1)
+})
+
+test('reacts to an unplugged motor on port D and waits for fresh input after the cable is restored', async ({ page }) => {
+  const hub = await emulateHub(page, { programPorts: 'AD' })
+  await page.goto('/ru/controller')
+  await motor(page, 'Левый мотор').selectOption('A')
+  await motor(page, 'Правый мотор').selectOption('D')
+  await connect(page)
+  await page.getByRole('heading', { name: 'Управление', exact: true }).click()
+  await page.keyboard.down('KeyW')
+  await expect.poll(() => hub.speeds.at(-1)).toEqual([100, 0, 0, 100, 0, 0])
+  await hub.reportPorts('A')
+  await expect.poll(() => hub.speeds.at(-1)).toEqual(zero)
+  await expect(motor(page, 'Правый мотор')).toHaveAttribute('aria-invalid', 'true')
+  const afterStop = hub.speeds.length
+  await hub.reportPorts('AD')
+  await expect(motor(page, 'Правый мотор')).toHaveAttribute('aria-invalid', 'false')
+  await expect.poll(() => hub.speeds.length).toBeGreaterThan(afterStop)
+  expect(hub.speeds.slice(afterStop).every((speeds) => speeds.every((speed) => speed === 0))).toBe(true)
+  await page.keyboard.up('KeyW')
+  await page.keyboard.down('KeyD')
+  await expect.poll(() => hub.speeds.at(-1)).toEqual([10, 0, 0, -10, 0, 0])
+  await page.keyboard.up('KeyD')
+  await expect.poll(() => hub.speeds.at(-1)).toEqual(zero)
+})
 
 test('phone layout supports two independent touch pointers and a visible stop', async ({ browser }, testInfo) => {
   const context = await browser.newContext({ ...devices['Pixel 7'], baseURL: url, reducedMotion: 'reduce' })
