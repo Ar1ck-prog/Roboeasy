@@ -1,6 +1,6 @@
 'use client'
 
-import { useCallback, useEffect, useRef, useState } from 'react'
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import {
   AlertTriangle,
   Blocks,
@@ -283,7 +283,10 @@ export function Studio({ lang, t, labels }: StudioProps) {
     }
   }
 
-  const code = result ? (result.format === 'blocks' ? result.python : result.code) : ''
+  const code = useMemo(() => {
+    if (!result) return ''
+    return result.format === 'blocks' ? programToPython(result.program, result.robot) : result.code
+  }, [result])
 
   useEffect(() => {
     setMentorProgram(code || null)
@@ -711,6 +714,7 @@ export function Studio({ lang, t, labels }: StudioProps) {
           <ResultView
             lang={lang}
             result={result}
+            code={code}
             t={t}
             labels={labels}
             view={view}
@@ -754,6 +758,7 @@ function pluralForm(lang: Locale, n: number, forms: Dictionary['studio']['result
 interface ResultViewProps {
   lang: Locale
   result: StudioResult
+  code: string
   t: Dictionary['studio']
   labels: Dictionary['blocks']
   view: 'blocks' | 'python'
@@ -772,12 +777,11 @@ interface ResultViewProps {
 }
 
 function ResultView(p: ResultViewProps) {
-  const { result, t } = p
+  const { result, t, code } = p
   const isBlocks = result.format === 'blocks'
   const program = result.program
   const hasProgram = program !== undefined
   const tab = hasProgram ? p.view : 'python'
-  const code = result.format === 'blocks' ? result.python : result.code
   const tabs = (['blocks', 'python'] as const).filter(() => hasProgram)
   const ordered = isBlocks ? tabs : [...tabs].reverse()
 
@@ -869,8 +873,7 @@ function ResultView(p: ResultViewProps) {
           <Link2 size={17} aria-hidden="true" />
           {t.result.share}
         </button>
-        <OpenPythonInFll lang={p.lang} name={p.projectName.trim() || result.title}
-          code={isBlocks ? programToPython(result.program, result.robot) : result.code} />
+        <OpenPythonInFll lang={p.lang} name={p.projectName.trim() || result.title} code={code} />
       </div>
 
       <form

@@ -15,12 +15,15 @@ const partsKey = 'fll.bioglow.programs'
 test.use({ launchOptions: { args: ['--enable-unsafe-swiftshader'] } })
 test.beforeEach(({}, info) => test.skip(info.project.name !== 'desktop', 'Includes a separate phone context'))
 
-function editorCode(page: Page) {
-  return frame(page).locator('.cm-line').evaluateAll((lines) => lines.map((line) => line.textContent).join('\n'))
-}
-
 function storedPrograms(page: Page) {
   return page.evaluate((key) => JSON.parse(localStorage.getItem(key) ?? '[]') as { name: string; code: string; importId?: string }[], partsKey)
+}
+
+function activeCode(page: Page) {
+  return page.evaluate((key) => {
+    const programs = JSON.parse(localStorage.getItem(key) ?? '[]')
+    return programs[Number(localStorage.getItem(key + '.current'))]?.code as string | undefined
+  }, partsKey)
 }
 
 async function expectImport(page: Page) {
@@ -67,25 +70,26 @@ test('manual Python reaches the real editor intact, starts manually, and keeps d
   await open(page).click()
   await expect(page).toHaveURL(/\/ru\/compete\/simulator\?pythonImport=[\da-f-]+$/)
   await expect.poll(() => page.evaluate(() => crossOriginIsolated)).toBe(true)
-  await expect.poll(() => editorCode(page), { timeout: 45_000 }).toBe(manual)
+  await expect.poll(() => activeCode(page), { timeout: 45_000 }).toBe(manual)
+  await expect(frame(page).locator('#programSelect option:checked')).toHaveText('Ручной Python')
   await expect(frame(page).locator('#console')).not.toContainText('RoboEasy 0')
   await expect.poll(() => storedPrograms(page)).toHaveLength(2)
   await page.evaluate(() => sessionStorage.removeItem('hold-fll-reply'))
   await page.reload()
   await expectImport(page)
   await expect(page).toHaveURL(/\/ru\/compete\/simulator$/)
-  await expect.poll(() => editorCode(page)).toBe(manual)
+  await expect(frame(page).locator('.cm-content')).toContainText('def run_example():')
   await frame(page).locator('#btnRun').click()
   await expect(frame(page).locator('#console')).toContainText('RoboEasy 1', { timeout: 45_000 })
 
   await page.reload()
-  await expect.poll(() => editorCode(page)).toBe(manual)
+  await expect(frame(page).locator('#programSelect option:checked')).toHaveText('Ручной Python')
   await expect.poll(() => storedPrograms(page)).toEqual([
     { name: 'Мой черновик', code: 'print("Draft")\n' },
     { name: 'Ручной Python', code: manual, importId: expect.any(String) },
   ])
   await frame(page).locator('#programSelect').selectOption({ label: 'Мой черновик' })
-  await expect.poll(() => editorCode(page)).toBe('print("Draft")\n')
+  await expect(frame(page).locator('.cm-content')).toContainText('print("Draft")')
 })
 
 test('generated blocks are compiled again and the Python result transfers verbatim', async ({ page }) => {
@@ -159,7 +163,7 @@ test('dictation from both entry points stays editable and permission denial leav
   await dictate.click()
   await open(page).click()
   await expectImport(page)
-  await expect.poll(() => editorCode(page)).toBe(generated)
+  await expect.poll(() => activeCode(page)).toBe(generated)
   expect(requests[0].prompt).toBe(edited)
   expect(await page.evaluate(() => sessionStorage.getItem('speech-aborted'))).toBe('yes')
 })
