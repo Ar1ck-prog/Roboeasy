@@ -47,20 +47,14 @@ async function fakeGenerator(page: Page) {
 }
 
 test('manual Python reaches the real editor intact, starts manually, and keeps drafts through reload', async ({ page }) => {
-  await page.addInitScript(() => {
-    window.addEventListener('message', (event) => {
-      if (event.data?.type === 'roboeasy:fll-python-import-result' && sessionStorage.getItem('hold-fll-reply')) event.stopImmediatePropagation()
-    })
-  })
   await page.route(/\/fll-sim\/index\.html(?:\?|$)/, async (route) => {
     await new Promise((resolve) => setTimeout(resolve, 900))
     await route.continue()
-  })
+  }, { times: 1 })
   await page.goto('/ru/sandbox')
   await expect(page.locator('.ai-pill')).toBeVisible()
   await page.evaluate((key) => {
     localStorage.setItem(key, JSON.stringify([{ name: 'Мой черновик', code: 'print("Draft")\n' }]))
-    sessionStorage.setItem('hold-fll-reply', 'yes')
   }, partsKey)
   await page.getByRole('button', { name: 'Написать Python вручную' }).click()
   const input = page.getByRole('textbox', { name: 'Код Python', exact: true })
@@ -69,16 +63,13 @@ test('manual Python reaches the real editor intact, starts manually, and keeps d
   await expect(open(page)).toBeDisabled()
   await input.fill(manual)
   await open(page).click()
-  await expect(page).toHaveURL(/\/ru\/compete\/simulator\?pythonImport=[\da-f-]+$/)
+  await expectImport(page)
+  await expect(page).toHaveURL(/\/ru\/compete\/simulator$/)
   await expect.poll(() => page.evaluate(() => crossOriginIsolated)).toBe(true)
   await expect.poll(() => activeCode(page), { timeout: 45_000 }).toBe(manual)
   await expect(frame(page).locator('#programSelect option:checked')).toHaveText('Ручной Python')
   await expect(frame(page).locator('#console')).not.toContainText('RoboEasy 0')
   await expect.poll(() => storedPrograms(page)).toHaveLength(2)
-  await page.evaluate(() => sessionStorage.removeItem('hold-fll-reply'))
-  await page.reload()
-  await expectImport(page)
-  await expect(page).toHaveURL(/\/ru\/compete\/simulator$/)
   await expect(frame(page).locator('.cm-content')).toContainText('def run_example():')
   await expect(frame(page).locator('#runStatus')).toHaveText('Поле готово', { timeout: 45_000 })
   await frame(page).locator('#btnRun').click()
@@ -86,6 +77,14 @@ test('manual Python reaches the real editor intact, starts manually, and keeps d
 
   await page.reload()
   await expect(frame(page).locator('#programSelect option:checked')).toHaveText('Ручной Python')
+  // Resend the handoff after a reload as if the first reply had been lost.
+  const imported = (await storedPrograms(page))[1]
+  const id = imported.importId!
+  await page.evaluate(({ draft, id }) => {
+    sessionStorage.setItem('roboeasy:fll-python-import:' + id, JSON.stringify({ ...draft, id }))
+  }, { draft: imported, id })
+  await page.goto(`/ru/compete/simulator?pythonImport=${id}`)
+  await expectImport(page)
   await expect.poll(() => storedPrograms(page)).toEqual([
     { name: 'Мой черновик', code: 'print("Draft")\n' },
     { name: 'Ручной Python', code: manual, importId: expect.any(String) },

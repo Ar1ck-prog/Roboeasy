@@ -304,7 +304,7 @@ test('connects from navigation, controls motors and clears input on every reset'
   await expectSpeed([0, -50, 0, 50])
   await button(page, 'Отключить').click()
   await expect(status(page)).toHaveText('Не подключён')
-  expect(hub.events.slice(-3)).toEqual(['neutral', 'program stop', 'disconnect'])
+  expect(hub.events.slice(-4)).toEqual(['neutral', 'neutral ack', 'program stop', 'disconnect'])
   const start = hub.speeds.length
   await connect(page)
   await expectSpeed(zero)
@@ -322,7 +322,7 @@ test('connects from navigation, controls motors and clears input on every reset'
   await expectSpeed([0, -50, 0, 50])
   await page.getByRole('link', { name: 'Мой путь', exact: true }).first().click()
   await expect(page).toHaveURL(/\/ru\/path$/)
-  await expect.poll(() => hub.events.slice(-3)).toEqual(['neutral', 'program stop', 'disconnect'])
+  await expect.poll(() => hub.events.slice(-4)).toEqual(['neutral', 'neutral ack', 'program stop', 'disconnect'])
   expect(errors).toEqual([])
 })
 
@@ -489,7 +489,7 @@ test('recovers BT-CONTROL with console acknowledgements and drives all direction
   }
   await button(page, 'Отключить').click()
   await expect(status(page)).toHaveText('Не подключён')
-  expect(hub.events.slice(-3)).toEqual(['neutral', 'program stop', 'disconnect'])
+  expect(hub.events.slice(-4)).toEqual(['neutral', 'neutral ack', 'program stop', 'disconnect'])
 })
 
 test('keeps drive disabled and shows the startup log when neither channel answers', async ({ page }) => {
