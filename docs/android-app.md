@@ -7,6 +7,9 @@ microphone and the learner's progress work as on the site. Every site deploy upd
 app's content; the APK only needs rebuilding when its name, icon, colours or package change.
 
 - Package: `kz.roboeasy.app`
+- Start URL: `/app` — a loading screen (`components/app-splash.tsx`) that opens the app's
+  home (`/[lang]/path`), not the site's landing. The landing also sends the app there
+  (`components/app-redirect.tsx`), which covers the 1.0.0 APK that still starts at `/`.
 - Signing key: `roboeasy.keystore`, alias `roboeasy`. It is kept **outside the repository**
   (on the author's machine, with its password file). Without it an update cannot be
   installed over the existing app: keep a backup.

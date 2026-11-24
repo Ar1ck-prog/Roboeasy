@@ -2,6 +2,7 @@ import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 
 import { AppTabBar } from '@/components/app-tab-bar'
+import { AppRedirect } from '@/components/app-redirect'
 import { LearnLanding } from '@/components/learn-landing'
 import { SiteFooter } from '@/components/site-footer'
 import { SiteHeader } from '@/components/site-header'
@@ -27,6 +28,7 @@ export default async function HomePage({ params }: Params) {
   const nav = getLearnText(lang).nav
   return (
     <>
+      <AppRedirect lang={lang} />
       <SiteHeader lang={lang} t={dict.nav} sections={nav} coinsLabel={getPlayText(lang).coinsLabel} variant="app" />
       <main id="main">
         <LearnLanding lang={lang} t={getLearnLanding(lang)} />

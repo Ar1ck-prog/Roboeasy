@@ -490,7 +490,7 @@ export function LearnLanding({ lang, t }: { lang: Locale; t: LearnLandingCopy })
       {/* Final CTA */}
       <section className="section">
         <div className="container">
-          <div className="cta-band grid items-center gap-6 md:grid-cols-[1fr_auto]">
+          <div className="cta-band grid grid-cols-[minmax(0,1fr)] items-center gap-6 md:grid-cols-[1fr_auto]">
             <div>
               <h2>{t.final.title}</h2>
               <p>{t.final.text}</p>
@@ -501,7 +501,7 @@ export function LearnLanding({ lang, t }: { lang: Locale; t: LearnLandingCopy })
             </div>
             <div className="relative z-10 flex items-end justify-center gap-2" aria-hidden="true">
               {SAMPLE_ROBOTS.slice(0, 3).map((r, i) => (
-                <div key={r.model} className={i === 1 ? 'w-32 md:w-36' : 'w-24 md:w-28'}>
+                <div key={r.model} className={i === 1 ? 'w-24 sm:w-32 md:w-36' : 'w-20 sm:w-24 md:w-28'}>
                   <div className="float-y" style={{ ['--delay' as string]: `${i * 0.4}s` }}>
                     <Buddy {...r} />
                   </div>

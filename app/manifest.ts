@@ -6,7 +6,7 @@ export default function manifest(): MetadataRoute.Manifest {
     name: 'RoboEasy',
     short_name: 'RoboEasy',
     description: 'Robotics from scratch for LEGO SPIKE Prime: lessons, games and a robot buddy.',
-    start_url: '/',
+    start_url: '/app',
     display: 'standalone',
     background_color: '#fff9ee',
     theme_color: '#FFD23F',

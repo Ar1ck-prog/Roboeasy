@@ -18,7 +18,7 @@ const MAX_QUESTION = 300
 const MAX_HISTORY = 8
 const MAX_PROGRAM = 6000
 /** Lessons have their own mentor and a footer in this corner, the robot controller its Stop button; the others are not for learners. */
-const HIDDEN = /^\/[a-z]{2}\/(learn\/[^/]+\/[^/]+|preview|design|admin|cert|class|controller)(\/|$)/
+const HIDDEN = /^\/[a-z]{2}\/(learn\/[^/]+\/[^/]+|preview|design|admin|cert|class|controller|app)(\/|$)/
 
 interface Message {
   from: 'me' | 'mentor'

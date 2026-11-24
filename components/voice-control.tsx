@@ -272,11 +272,11 @@ export function VoiceControl({ lang, t, blocks, sim: simText }: { lang: Locale; 
           <details id="voice-assignment" ref={assignmentDetails}
             className="scroll-mt-[calc(var(--header-h)+1rem)] rounded-(--radius-md) border-(length:--stroke-thin) border-outline bg-card p-4">
             <summary className="cursor-pointer font-bold">{workflow.generator}</summary>
-            <form onSubmit={sendAssignment} className="mt-3 grid gap-3">
+            <form onSubmit={sendAssignment} className="mt-3 grid grid-cols-[minmax(0,1fr)] gap-3">
               <DictateAssignment lang={lang} onText={(text) => setAssignment((previous) => [previous.trimEnd(), text].filter(Boolean).join(' ').slice(0, PROMPT_MAX))} />
               <textarea className="textarea" aria-label={workflow.voiceToStudio} value={assignment}
                 maxLength={PROMPT_MAX} onChange={(e) => setAssignment(e.target.value)} />
-              <button type="submit" className={buttonVariants()} disabled={!assignment.trim()}>{workflow.voiceToStudio}</button>
+              <button type="submit" className={buttonVariants({ className: 'whitespace-normal' })} disabled={!assignment.trim()}>{workflow.voiceToStudio}</button>
               {transferError && <p role="alert" className="alert alert-warn m-0 text-sm">{workflow.voiceTransferError}</p>}
             </form>
           </details>

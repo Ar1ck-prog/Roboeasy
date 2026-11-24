@@ -1,7 +1,7 @@
 import type { Locale } from './config'
 
 /** The Android package served from public/download (built from the site with Bubblewrap, see docs/android-app.md). */
-export const APK = { href: '/download/roboeasy.apk', version: '1.0.0', sizeMb: 1.1 }
+export const APK = { href: '/download/roboeasy.apk', version: '1.0.1', sizeMb: 1.1 }
 
 const ru = {
   eyebrow: 'Приложение',

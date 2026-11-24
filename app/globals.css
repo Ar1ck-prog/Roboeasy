@@ -215,6 +215,18 @@
 
 /* ───────────────────────── Base ───────────────────────── */
 
+/* Phones (and the Android app, where the system font size also zooms the page): a calmer type
+   scale, so cards keep their titles on one or two lines and lead text does not crowd the screen. */
+@media (max-width: 480px) {
+  :root {
+    --text-lg: 1.0625rem;
+    --text-xl: 1.25rem;
+    --text-2xl: 1.3125rem;
+    --text-3xl: 1.625rem;
+    --text-4xl: 1.875rem;
+  }
+}
+
 /* Element defaults live in the base layer, so Tailwind utilities (components/ui) can override them. */
 @layer base {
   html {
@@ -222,6 +234,7 @@
     scroll-behavior: smooth;
     scroll-padding-top: calc(var(--header-h) + 16px);
     -webkit-text-size-adjust: 100%;
+    text-size-adjust: 100%;
   }
 
   body {
@@ -3602,5 +3615,44 @@ main h3 {
   }
   100% {
     transform: translate(10px, 12px);
+  }
+}
+
+/* App start screen (components/app-splash.tsx): the hub's smile lights up while the app loads. */
+.app-splash-dim {
+  opacity: 0.1;
+}
+.app-splash-lit {
+  opacity: 0.1;
+  animation: splash-px 0.35s ease-out forwards;
+}
+.app-splash-hub {
+  animation: splash-pop 0.5s cubic-bezier(0.2, 0.8, 0.2, 1.2) both;
+}
+.app-splash-bar span {
+  animation: splash-bar 1.4s cubic-bezier(0.4, 0, 0.2, 1) both;
+}
+@keyframes splash-px {
+  to {
+    opacity: 1;
+  }
+}
+@keyframes splash-pop {
+  from {
+    opacity: 0;
+    transform: scale(0.8);
+  }
+}
+@keyframes splash-bar {
+  from {
+    transform: scaleX(0);
+  }
+  to {
+    transform: scaleX(1);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .app-splash-lit {
+    opacity: 1;
   }
 }

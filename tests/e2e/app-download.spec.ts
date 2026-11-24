@@ -29,3 +29,15 @@ test('the app and the site are linked for Android (full screen, no address bar)'
   expect(links[0].target).toMatchObject({ namespace: 'android_app', package_name: 'kz.roboeasy.app' })
   expect(links[0].target.sha256_cert_fingerprints[0]).toMatch(/^([0-9A-F]{2}:){31}[0-9A-F]{2}$/)
 })
+
+test('the installed app starts on a loading screen and skips the landing', async ({ page }) => {
+  // The APK and the desktop install open /app: a loading screen, then the learner's home.
+  await page.goto('/app')
+  await expect(page).toHaveURL(/\/ru\/app$/)
+  await expect(page.getByText('Загружаем приложение…')).toBeVisible()
+  await expect(page).toHaveURL(/\/ru\/path$/)
+
+  // Back on the site's landing in the same app session (the header logo), the app returns home.
+  await page.goto('/ru')
+  await expect(page).toHaveURL(/\/ru\/path$/)
+})
