@@ -19,7 +19,7 @@ export default async function VideoDebugPage({ params }: Params) {
   const { lang } = await params
   if (!isLocale(lang)) notFound()
   return (
-    <AppShell lang={lang}>
+    <AppShell lang={lang} practice="sandbox">
       <SandboxTabs lang={lang} current="video" />
       <VideoDebug lang={lang} t={getVideoText(lang)} />
     </AppShell>

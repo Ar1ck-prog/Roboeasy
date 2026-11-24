@@ -31,7 +31,7 @@ const ru: LandingNewsCopy = {
   },
   controller: {
     title: 'Пульт и запись маршрута',
-    text: 'Управляй SPIKE с клавиатуры или джойстиком на экране. Запиши проезд: робот повторит его сам или вернётся тем же путём на старт.',
+    text: 'Управляй SPIKE с клавиатуры или джойстиком на экране. Запиши проезд, сохрани программу в слот хаба и проверь тот же код в FLL.',
     cta: 'Открыть пульт',
   },
   motors: {
@@ -107,7 +107,7 @@ const kk: LandingNewsCopy = {
   },
   controller: {
     title: 'Пульт және маршрут жазу',
-    text: 'SPIKE-ты пернетақтадан немесе экрандағы джойстикпен басқар. Жүрісті жазып ал: робот оны өзі қайталайды немесе сол жолмен бастауға қайтады.',
+    text: 'SPIKE-ты пернетақтадан немесе экрандағы джойстикпен басқар. Жүрісті жазып, бағдарламаны хаб ұясына сақта да, сол кодты FLL-де тексер.',
     cta: 'Пультті ашу',
   },
   motors: {
@@ -182,7 +182,7 @@ const en: LandingNewsCopy = {
   },
   controller: {
     title: 'Remote and route recording',
-    text: 'Drive SPIKE from the keyboard or an on-screen joystick. Record a run: the robot repeats it by itself or backs along the same path to the start.',
+    text: 'Drive SPIKE with the keyboard or an on-screen joystick. Record a run, save it to a hub slot, and try the same code in FLL.',
     cta: 'Open the remote',
   },
   motors: {

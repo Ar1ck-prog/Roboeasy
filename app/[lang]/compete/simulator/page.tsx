@@ -20,7 +20,7 @@ export default async function SimulatorPage({ params }: Params) {
   if (!isLocale(lang)) notFound()
   const t = getSimulatorText(lang)
   return (
-    <AppShell lang={lang}>
+    <AppShell lang={lang} practice="simulator">
       <div className="container py-6 md:py-8">
         <FieldSimulator lang={lang} t={t.three} toPlanner={t.toPlanner} />
       </div>

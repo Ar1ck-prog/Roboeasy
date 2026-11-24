@@ -133,6 +133,7 @@ export function Studio({ lang, t, labels }: StudioProps) {
     setHistory(loadHistory())
 
     const params = new URLSearchParams(window.location.search)
+    if (params.get('mode') === 'manual') setManual(true)
     const qp = params.get('prompt')
     if (qp) setPrompt(qp.slice(0, PROMPT_MAX))
     if (params.has('voiceAssignment')) {
@@ -178,6 +179,14 @@ export function Studio({ lang, t, labels }: StudioProps) {
   const chooseFormat = (f: Format) => {
     setFormat(f)
     saveFormat(f)
+  }
+
+  function chooseManual(enabled: boolean) {
+    setManual(enabled)
+    const url = new URL(window.location.href)
+    if (enabled) url.searchParams.set('mode', 'manual')
+    else url.searchParams.delete('mode')
+    window.history.replaceState(null, '', url)
   }
 
   const updateRobot = (patch: Partial<RobotProfile>) => {
@@ -367,10 +376,10 @@ export function Studio({ lang, t, labels }: StudioProps) {
     <>
       <div className="container pt-4">
         <div className="flex flex-wrap gap-2" role="group">
-          <button type="button" aria-pressed={!manual} className={buttonVariants({ variant: manual ? 'secondary' : 'primary' })} onClick={() => setManual(false)}>
+          <button type="button" aria-pressed={!manual} className={buttonVariants({ variant: manual ? 'secondary' : 'primary' })} onClick={() => chooseManual(false)}>
             {workflow.generator}
           </button>
-          <button type="button" aria-pressed={manual} className={buttonVariants({ variant: manual ? 'primary' : 'secondary' })} onClick={() => setManual(true)}>
+          <button type="button" aria-pressed={manual} className={buttonVariants({ variant: manual ? 'primary' : 'secondary' })} onClick={() => chooseManual(true)}>
             {workflow.manual}
           </button>
         </div>

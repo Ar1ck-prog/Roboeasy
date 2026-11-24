@@ -40,6 +40,7 @@ import { HeroScene } from '@/components/landing/hero-scene'
 import { AppDownload } from '@/components/landing/app-download'
 import { WhatsNew } from '@/components/landing/whats-new'
 import { SimDemo } from '@/components/landing/sim-demo'
+import { RobotPractice } from '@/components/robot-practice'
 import { Buddy } from '@/components/learn/buddy'
 import { CoinIcon } from '@/components/learn/coin'
 import { Badge } from '@/components/ui/badge'
@@ -48,6 +49,7 @@ import { Card } from '@/components/ui/card'
 import type { Locale } from '@/lib/i18n/config'
 import { getLandingNews } from '@/lib/i18n/landing-news'
 import { getAppDownloadText } from '@/lib/i18n/app-download'
+import { getRobotPracticeText } from '@/lib/i18n/robot-practice'
 import type { LearnLandingCopy, TrackKey } from '@/lib/i18n/learn-landing'
 
 const TRACKS: { key: TrackKey; icon: typeof Rocket; color: string; kit: 'none' | 'part' }[] = [
@@ -126,6 +128,11 @@ export function LearnLanding({ lang, t }: { lang: Locale; t: LearnLandingCopy })
               {getAppDownloadText(lang).heroLink}
             </a>
           </div>
+          <a href="#robot-practice" className="inline-flex w-fit items-center gap-2 font-extrabold text-link">
+            <Gamepad2 className="size-5" aria-hidden="true" />
+            {getRobotPracticeText(lang).title}
+            <ArrowRight className="size-4" aria-hidden="true" />
+          </a>
           <ul className="m-0 flex list-none flex-wrap gap-2 p-0">
             {t.hero.chips.map((c) => (
               <li key={c}>
@@ -160,6 +167,7 @@ export function LearnLanding({ lang, t }: { lang: Locale; t: LearnLandingCopy })
         </ul>
       </section>
 
+      <RobotPractice lang={lang} />
       <WhatsNew lang={lang} t={getLandingNews(lang)} />
 
       <AppDownload t={getAppDownloadText(lang)} />

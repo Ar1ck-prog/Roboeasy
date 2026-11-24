@@ -66,12 +66,25 @@ export function VoiceControl({ lang, t, blocks, sim: simText }: { lang: Locale; 
   const [auto, setAuto] = useState(true)
   const [robot, setRobot] = useState(DEFAULT_ROBOT)
   const recognition = useRef<ReturnType<typeof createSpeechRecognition>>(null)
+  const assignmentDetails = useRef<HTMLDetailsElement>(null)
   const simBox = useRef<HTMLElement>(null)
   const nextId = useRef(1)
   const supported = hydrated && canListen()
   const linked = hub.status !== 'idle' && hub.status !== 'connecting'
 
   useEffect(() => setRobot(savedRobot()), [])
+  useEffect(() => {
+    const openAssignment = () => {
+      const details = assignmentDetails.current
+      if (details && window.location.hash === '#voice-assignment') {
+        details.open = true
+        details.scrollIntoView({ block: 'start' })
+      }
+    }
+    openAssignment()
+    window.addEventListener('hashchange', openAssignment)
+    return () => window.removeEventListener('hashchange', openAssignment)
+  }, [])
   useEffect(() => {
     const cancel = () => {
       const rec = recognition.current
@@ -256,7 +269,8 @@ export function VoiceControl({ lang, t, blocks, sim: simText }: { lang: Locale; 
             </div>
           </form>
 
-          <details className="rounded-(--radius-md) border-(length:--stroke-thin) border-outline bg-card p-4">
+          <details id="voice-assignment" ref={assignmentDetails}
+            className="scroll-mt-[calc(var(--header-h)+1rem)] rounded-(--radius-md) border-(length:--stroke-thin) border-outline bg-card p-4">
             <summary className="cursor-pointer font-bold">{workflow.generator}</summary>
             <form onSubmit={sendAssignment} className="mt-3 grid gap-3">
               <DictateAssignment lang={lang} onText={(text) => setAssignment((previous) => [previous.trimEnd(), text].filter(Boolean).join(' ').slice(0, PROMPT_MAX))} />

@@ -19,7 +19,7 @@ export default async function VoicePage({ params }: Params) {
   const { lang } = await params
   if (!isLocale(lang)) notFound()
   return (
-    <AppShell lang={lang}>
+    <AppShell lang={lang} practice="voice">
       <VoiceControl lang={lang} t={getVoiceText(lang)} blocks={getDictionary(lang).blocks} sim={getLearnText(lang).sim} />
     </AppShell>
   )
