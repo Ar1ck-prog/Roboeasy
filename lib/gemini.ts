@@ -37,13 +37,21 @@ const usable = (key: string | undefined): key is string => Boolean(key && key !=
  * spends the site's quota. The mentor may have its own key in production.
  */
 export function geminiKey(purpose: KeyPurpose = 'default'): string | null {
-  const dev = process.env.GEMINI_API_KEY_DEV
-  if (process.env.NODE_ENV !== 'production' && usable(dev)) return dev
-  const mentor = process.env.GEMINI_MENTOR_API_KEY
-  if (purpose === 'mentor' && usable(mentor)) return mentor
-  const key = process.env.GEMINI_API_KEY
-  return usable(key) ? key : null
+  return pickKey(purpose)?.key ?? null
 }
+
+/** The key and the name of its variable (never the key itself in logs or maps). */
+function pickKey(purpose: KeyPurpose): { key: string; name: string } | null {
+  const dev = process.env.GEMINI_API_KEY_DEV
+  if (process.env.NODE_ENV !== 'production' && usable(dev)) return { key: dev, name: 'dev' }
+  const mentor = process.env.GEMINI_MENTOR_API_KEY
+  if (purpose === 'mentor' && usable(mentor)) return { key: mentor, name: 'mentor' }
+  const key = process.env.GEMINI_API_KEY
+  return usable(key) ? { key, name: 'site' } : null
+}
+
+/** Which key a client was made with: quotas belong to a key, not to the whole server. */
+const clientKeys = new WeakMap<object, string>()
 
 const fromEnv = (name: string) => process.env[name]?.trim() || null
 
@@ -65,8 +73,11 @@ export function geminiConfigured(): boolean {
 }
 
 export function createGemini(purpose: KeyPurpose = 'default'): GoogleGenAI | null {
-  const key = geminiKey(purpose)
-  return key && mainModel() ? new GoogleGenAI({ apiKey: key }) : null
+  const picked = pickKey(purpose)
+  if (!picked || !mainModel()) return null
+  const ai = new GoogleGenAI({ apiKey: picked.key })
+  clientKeys.set(ai, picked.name)
+  return ai
 }
 
 function parseJsonObject(text: string): Record<string, unknown> | null {
@@ -98,7 +109,10 @@ export function quotaWait(message: string, now = new Date()): number {
   return delay ? Math.max(1, Math.ceil(Number(delay[1]))) : DEFAULT_RETRY_S
 }
 
-/** Models that are out of quota, until when (ms). Asking them again would only waste time. */
+/**
+ * Models that are out of quota, until when (ms), per key ("site:model").
+ * Asking them again would only waste time; another key still has its own quota.
+ */
 const cooldowns = new Map<string, number>()
 
 export function resetGeminiCooldowns() {
@@ -132,8 +146,10 @@ export async function askGemini(ai: GoogleGenAI, options: AskOptions): Promise<R
   let wait: number | undefined
   const noteWait = (seconds: number) => (wait = wait === undefined ? seconds : Math.min(wait, seconds))
 
+  const keyName = clientKeys.get(ai) ?? 'site'
   for (const model of models) {
-    const until = cooldowns.get(model) ?? 0
+    const slot = `${keyName}:${model}`
+    const until = cooldowns.get(slot) ?? 0
     if (until > Date.now()) {
       busy = true
       noteWait(Math.ceil((until - Date.now()) / 1000))
@@ -171,7 +187,7 @@ export async function askGemini(ai: GoogleGenAI, options: AskOptions): Promise<R
       }
       if (error instanceof ApiError && error.status === 429) {
         const seconds = quotaWait(message)
-        cooldowns.set(model, Date.now() + seconds * 1000)
+        cooldowns.set(slot, Date.now() + seconds * 1000)
         noteWait(seconds)
         busy = true
         void recordUsage({ kind: task, model, ok: false, error: 'quota' })

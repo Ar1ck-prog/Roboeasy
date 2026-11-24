@@ -173,6 +173,20 @@ describe('when Gemini says no', () => {
     expect(sdk.generate).toHaveBeenCalledTimes(1)
   })
 
+  it("keeps the mentor's quota apart from the generator's when they have different keys", async () => {
+    vi.stubEnv('NODE_ENV', 'production')
+    vi.stubEnv('GEMINI_MENTOR_API_KEY', 'mentor-key')
+    const { createGemini } = await import('@/lib/gemini')
+    const run = (purpose: 'mentor' | 'default') =>
+      askGemini(createGemini(purpose)!, { task: 'generate', system: 's', contents: 'c', schema: {}, signal: signal() })
+    sdk.generate.mockRejectedValueOnce(quota('{"retryDelay":"50s"}')).mockResolvedValueOnce(json({ ok: 1 }))
+    await expect(run('mentor')).rejects.toMatchObject({ kind: 'busy' })
+    await expect(run('default')).resolves.toEqual({ ok: 1 })
+    // The mentor's own key is still resting.
+    await expect(run('mentor')).rejects.toMatchObject({ kind: 'busy' })
+    expect(sdk.generate).toHaveBeenCalledTimes(2)
+  })
+
   it('moves on to a model that still has quota', async () => {
     vi.stubEnv('GEMINI_MODEL_FALLBACKS', 'model-spare')
     sdk.generate.mockRejectedValueOnce(quota()).mockResolvedValueOnce(json({ ok: 1 }))
