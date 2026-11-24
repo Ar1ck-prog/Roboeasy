@@ -368,6 +368,7 @@ test('records a drive with a pause and concurrent mechanism, then saves and runs
     const programs = JSON.parse(localStorage.getItem('fll.bioglow.programs') ?? '[]')
     return programs[Number(localStorage.getItem('fll.bioglow.programs.current'))]?.code
   })).toBe(code)
+  await expect(frame.locator('#runStatus')).toHaveText('Поле готово', { timeout: 45_000 })
   await frame.locator('#btnRun').click({ timeout: 45_000 })
   await expect(frame.locator('#console')).toContainText('Программа завершена', { timeout: 45_000 })
   await expect(frame.locator('#console .err')).toHaveCount(0)

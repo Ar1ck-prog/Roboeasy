@@ -80,6 +80,7 @@ test('manual Python reaches the real editor intact, starts manually, and keeps d
   await expectImport(page)
   await expect(page).toHaveURL(/\/ru\/compete\/simulator$/)
   await expect(frame(page).locator('.cm-content')).toContainText('def run_example():')
+  await expect(frame(page).locator('#runStatus')).toHaveText('Поле готово', { timeout: 45_000 })
   await frame(page).locator('#btnRun').click()
   await expect(frame(page).locator('#console')).toContainText('RoboEasy 1', { timeout: 45_000 })
 
