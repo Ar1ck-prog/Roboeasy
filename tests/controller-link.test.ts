@@ -57,3 +57,58 @@ it('sends fresh input between heartbeats and brakes on release without waiting f
     vi.useRealTimers()
   }
 })
+
+for (const fault of [null, 'stop', 'upload'] as const) {
+  it(`keeps the brake and slot-write order with ${fault ?? 'a successful upload'}`, async () => {
+    const reader = new FrameReader()
+    const events: string[] = []
+    const transport: HubTransport = {
+      close: () => { events.push('disconnect') },
+      onData() {},
+      onClose() {},
+      async write(data) {
+        for (const message of reader.push(data)) {
+          const [type, action, slot] = message
+          let response: Uint8Array = Uint8Array.of(type + 1, 0)
+          if (type === MSG.infoRequest) {
+            response = Uint8Array.of(MSG.infoResponse, 1, 0, 0, 0, 1, 8, 149, 0, 20, 0, 255, 0, 64, 0, 0, 0)
+          } else if (type === MSG.tunnel) {
+            expect(new TextDecoder().decode(message.subarray(6))).toBe('646464646464')
+            events.push('brake ack')
+            response = tunnelMessage(message.subarray(3, 6))
+          } else if (type === MSG.flow) {
+            expect(slot).toBe(19)
+            events.push(action ? 'stop service' : 'start service')
+            if (action && fault === 'stop') response[1] = 1
+          } else if (type === MSG.clearSlot) {
+            events.push(`clear slot ${action}`)
+          } else if (type === MSG.startUpload && events.includes('stop service') && fault === 'upload') {
+            response[1] = 1
+          } else if (type === MSG.chunk) {
+            events.push('chunk accepted')
+          }
+          transport.onData(packFrame(response))
+        }
+      },
+    }
+    const link = new ControllerLink(transport, 19, { onDevices() {}, onLost() {} }, () => {})
+    try {
+      await link.initialize()
+      events.length = 0
+      const saved = link.saveRoute(() => {
+        events.push('route complete')
+        return 'print("route")\n'
+      }, () => events.push('uploading'), () => {})
+      if (fault) await expect(saved).rejects.toThrow(fault === 'stop' ? 'stop refused' : 'upload refused')
+      else await expect(saved).resolves.toBe(true)
+      expect(events).toEqual([
+        'brake ack', 'route complete', 'stop service',
+        ...(fault === 'stop' ? [] : ['uploading', 'clear slot 19']),
+        ...(fault ? [] : ['chunk accepted']),
+        'disconnect',
+      ])
+    } finally {
+      link.close()
+    }
+  })
+}
