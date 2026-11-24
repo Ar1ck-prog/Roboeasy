@@ -29,6 +29,8 @@ export class CodeEditor {
       ],
       parent: el,
     });
+    window.addEventListener('pagehide', () => this.save());
+    window.addEventListener('blur', () => { if (this.t) this.save(); });
   }
   load() {
     try {
@@ -42,11 +44,14 @@ export class CodeEditor {
     this.t = setTimeout(() => this.save(), 400);
   }
   save() {
+    clearTimeout(this.t);
+    this.t = undefined;
     this.programs[this.current].code = this.view.state.doc.toString();
     try {
       localStorage.setItem(KEY, JSON.stringify(this.programs));
       localStorage.setItem(CUR_KEY, String(this.current));
-    } catch { /* storage unavailable */ }
+      return true;
+    } catch { return false; }
   }
   get code() { return this.view.state.doc.toString(); }
   get name() { return this.programs[this.current].name; }
@@ -57,13 +62,20 @@ export class CodeEditor {
     this.save();
     this.current = i;
     this.setCode(this.programs[i].code);
-  }
-  add(name, code = DEFAULT_PROGRAM) {
     this.save();
-    this.programs.push({ name, code });
+  }
+  add(name, code = DEFAULT_PROGRAM, importId) {
+    this.save();
+    this.programs.push(importId ? { name, code, importId } : { name, code });
     this.current = this.programs.length - 1;
     this.setCode(code);
-    this.save();
+    return this.save();
+  }
+  importProgram({ id, name, code }) {
+    const existing = this.programs.findIndex((p) => p.importId === id);
+    if (existing === -1) return this.add(name, code, id);
+    if (this.current !== existing) this.select(existing);
+    return this.save();
   }
   rename(name) { this.programs[this.current].name = name; this.save(); }
   remove() {

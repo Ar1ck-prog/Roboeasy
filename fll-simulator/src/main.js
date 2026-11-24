@@ -313,11 +313,27 @@ function hardRestart() {
 const editor = new CodeEditor($('#editor'), { onRun: () => runProgram() });
 const progSel = $('#programSelect');
 function refreshPrograms() {
-  progSel.innerHTML = editor.programs.map((p, i) => `<option value="${i}" ${i === editor.current ? 'selected' : ''}>${p.name}</option>`).join('');
+  progSel.replaceChildren(...editor.programs.map((p, i) => new Option(p.name, String(i), false, i === editor.current)));
   if ($('#attPanel').classList.contains('show')) renderAttPanel();
 }
 refreshPrograms();
 progSel.addEventListener('change', () => { editor.select(+progSel.value); });
+if (window.parent !== window) {
+  window.addEventListener('message', (event) => {
+    if (event.origin !== window.location.origin || event.source !== window.parent ||
+      event.data?.type !== 'roboeasy:fll-python-import') return;
+    const program = event.data.program;
+    if (typeof program?.id !== 'string' || !/^[\da-f-]{36}$/.test(program.id) ||
+      typeof program.name !== 'string' || typeof program.code !== 'string' || !program.code.trim()) return;
+    let ok = false;
+    try {
+      ok = editor.importProgram(program);
+      refreshPrograms();
+    } finally {
+      window.parent.postMessage({ type: 'roboeasy:fll-python-import-result', id: program.id, ok }, event.origin);
+    }
+  });
+}
 $('#btnNewProg').onclick = () => { const n = prompt('Название программы (запуска):', `Запуск ${editor.programs.length + 1}`); if (n) { editor.add(n); refreshPrograms(); } };
 $('#btnRenameProg').onclick = () => { const n = prompt('Новое название:', editor.name); if (n) { editor.rename(n); refreshPrograms(); } };
 $('#btnDelProg').onclick = () => { if (confirm('Удалить программу «' + editor.name + '»?')) { editor.remove(); refreshPrograms(); } };

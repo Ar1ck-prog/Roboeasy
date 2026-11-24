@@ -299,6 +299,3 @@ export function parseVoice(text: string): VoiceResult {
   result.steps = result.parts.flatMap((p) => p.steps)
   return result
 }
-
-/** Language of the browser's speech recogniser for the page language. */
-export const SPEECH_LANG = { ru: 'ru-RU', kk: 'kk-KZ', en: 'en-US' } as const

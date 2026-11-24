@@ -16,9 +16,11 @@ async function emulateHub(page: Page, { cancelFirst = false, unsupportedFirst = 
   const reader = new FrameReader()
   const speeds: number[][] = []
   const events: string[] = []
+  const uploads: number[][] = []
   const chooser: { active: boolean; service: string }[] = []
   const modes: string[] = []
   let dropAck = false
+  let fault: 'refuse-upload' | 'lose-upload' | 'refuse-stop' | undefined
   const portReport = (ports: string) => bytes(MSG.console, ...encoder.encode(`${CONTROLLER_CONSOLE_PREFIX}PORTS ${ports}|\n`), 0)
   await page.exposeFunction('spikePortReport', (ports: string) => Array.from(packFrame(portReport(ports))))
   await page.exposeFunction('spikeChooser', (request: { active: boolean; service: string }) => {
@@ -34,6 +36,28 @@ async function emulateHub(page: Page, { cancelFirst = false, unsupportedFirst = 
         const motor = (port: number) => [0x0a, port, 0x30, 0, 0, 0, 0, 0, 0, 0, 0, 0]
         responses.push(bytes(MSG.deviceSubscribeResponse, 0), bytes(MSG.devices, 48, 0, ...motor(0), ...motor(1), ...motor(2), ...motor(3)))
       } else if ([MSG.clearSlot, MSG.startUpload, MSG.chunk, MSG.flow].some((id) => id === message[0])) {
+        if (message[0] === MSG.startUpload) {
+          uploads.push([])
+          if (fault === 'refuse-upload') {
+            fault = undefined
+            responses.push(bytes(MSG.startUploadResponse, 1))
+            continue
+          }
+        }
+        if (message[0] === MSG.chunk) {
+          if (fault === 'lose-upload') {
+            fault = undefined
+            events.push('chunk withheld')
+            continue
+          }
+          uploads.at(-1)?.push(...message.subarray(7))
+        }
+        if (message[0] === MSG.flow && message[1] && fault === 'refuse-stop') {
+          fault = undefined
+          events.push('program stop refused')
+          responses.push(bytes(MSG.flowResponse, 1))
+          continue
+        }
         responses.push(bytes(message[0] + 1, 0))
         if (message[0] === MSG.clearSlot) events.push(`slot:${message[1]}`)
         if (message[0] === MSG.flow) {
@@ -57,6 +81,7 @@ async function emulateHub(page: Page, { cancelFirst = false, unsupportedFirst = 
           continue
         }
         if (!dropAck && missedBootProbes <= 0) {
+          if (!values.some(Boolean) && (mode === CONSOLE_COMMAND || !consoleOnly)) events.push('neutral ack')
           const reply = command.slice(0, 3)
           if (mode === CONSOLE_COMMAND) {
             const print = (line: string) => bytes(MSG.console, ...encoder.encode(line), 0)
@@ -131,6 +156,8 @@ async function emulateHub(page: Page, { cancelFirst = false, unsupportedFirst = 
   }, { rxId: BLE_RX, txId: BLE_TX, gattFails })
   return {
     speeds, events, chooser, modes,
+    lastUpload: () => decoder.decode(Uint8Array.from(uploads.at(-1) ?? [])),
+    failNext: (failure: typeof fault) => { fault = failure },
     dropAck: () => { dropAck = true },
     reportPorts: (ports: string) => page.evaluate((value) => (window as unknown as { spikeReportPorts(ports: string): Promise<void> }).spikeReportPorts(value), ports),
   }
@@ -138,7 +165,7 @@ async function emulateHub(page: Page, { cancelFirst = false, unsupportedFirst = 
 
 const button = (page: Page, name: string) => page.getByRole('button', { name, exact: true })
 const motor = (page: Page, name: string) => page.getByRole('combobox', { name, exact: true })
-const status = (page: Page) => page.locator('main').getByRole('status')
+const status = (page: Page) => page.locator('[aria-labelledby="hub-heading"]').getByRole('status')
 
 async function connect(page: Page) {
   await motor(page, 'Слот программы').selectOption('19')
@@ -297,47 +324,113 @@ test('connects from navigation, controls motors and clears input on every reset'
   expect(errors).toEqual([])
 })
 
-test('records a manual drive, replays it, drives it back to the start and gives way to the keys', async ({ page }) => {
+test('records a drive with a pause and concurrent mechanism, then saves and runs the same Python in FLL', async ({ page }) => {
   const hub = await emulateHub(page)
-  const seen = (values: number[]) => expect.poll(() => hub.speeds.some((s) => s.join() === values.join()), { timeout: 5_000 }).toBe(true)
+  await page.goto('/ru/controller')
+  await expect(page.getByText(/Подключение заменяет его содержимое/)).toBeVisible()
+  await connect(page)
+  await assignDrive(page)
+  await button(page, 'Начать запись').click()
+  await page.getByRole('heading', { level: 1 }).click()
+  await page.keyboard.down('KeyW')
+  await expect.poll(() => hub.speeds.at(-1)).toEqual([50, -50, 0, 0, 0, 0])
+  await page.waitForTimeout(130)
+  await page.keyboard.up('KeyW')
+  await expect.poll(() => hub.speeds.at(-1)).toEqual(zero)
+  await page.waitForTimeout(140)
+  await page.keyboard.down('KeyD')
+  await expect.poll(() => hub.speeds.at(-1)).toEqual([20, 20, 0, 0, 0, 0])
+  const mechanism = await button(page, 'Открыть').boundingBox()
+  expect(mechanism).not.toBeNull()
+  await page.mouse.move(mechanism!.x + mechanism!.width / 2, mechanism!.y + mechanism!.height / 2)
+  await page.mouse.down()
+  await expect.poll(() => hub.speeds.at(-1)).toEqual([20, 20, 100, 0, 0, 0])
+  const startOfSave = hub.events.length
+  await button(page, 'Завершить и сохранить в слот').dispatchEvent('click')
+  await page.mouse.up()
+  await page.keyboard.up('KeyD')
+  await expect(page.getByText('Хаб подтвердил сохранение в слот 19.')).toBeVisible()
+  expect(hub.events.slice(startOfSave)).toContain('neutral ack')
+  expect(hub.events.indexOf('program stop')).toBeGreaterThan(hub.events.lastIndexOf('neutral ack'))
+  expect(hub.events.lastIndexOf('slot:19')).toBeGreaterThan(hub.events.indexOf('program stop'))
+  expect(hub.events.filter((event) => event === 'program start')).toHaveLength(1)
+  expect(hub.events.filter((event) => event === 'slot:19')).toHaveLength(2)
+  const code = hub.lastUpload()
+  expect(code).toMatch(/drive\(port.A, 250\)\n +drive\(port.B, -250\)\n +await runloop.sleep_ms\(\d+\)\n +motor.stop\(port.A\)\n +motor.stop\(port.B\)\n +await runloop.sleep_ms\(\d+\)\n +drive\(port.A, 100\)/)
+  expect(code).toContain('drive(port.C, 500)')
+  await button(page, 'Открыть в FLL').click()
+  await expect(page.getByText('Код Python открыт в новой программе FLL.', { exact: false })).toBeVisible({ timeout: 45_000 })
+  await expect(page.getByText(/Левый мотор — A, Правый мотор — B, Захват — C/)).toBeVisible()
+  const frame = page.frameLocator('iframe[src^="/fll-sim/index.html"]')
+  await expect.poll(() => page.evaluate(() => {
+    const programs = JSON.parse(localStorage.getItem('fll.bioglow.programs') ?? '[]')
+    return programs[Number(localStorage.getItem('fll.bioglow.programs.current'))]?.code
+  })).toBe(code)
+  await frame.locator('#btnRun').click({ timeout: 45_000 })
+  await expect(frame.locator('#console')).toContainText('Программа завершена', { timeout: 45_000 })
+  await expect(frame.locator('#console .err')).toHaveCount(0)
+})
+
+for (const failure of ['refuse-upload', 'lose-upload', 'refuse-stop'] as const) {
+  test(`keeps a completed route after ${failure} and retries without reinstalling the controller`, async ({ page }) => {
+    const hub = await emulateHub(page)
+    await page.goto('/ru/controller')
+    await connect(page)
+    await assignDrive(page)
+    await button(page, 'Начать запись').click()
+    await page.keyboard.down('KeyW')
+    await expect.poll(() => hub.speeds.at(-1)).toEqual([50, -50, 0, 0, 0, 0])
+    await page.waitForTimeout(120)
+    await page.keyboard.up('KeyW')
+    await expect.poll(() => hub.speeds.at(-1)).toEqual(zero)
+    hub.failNext(failure)
+    await button(page, 'Завершить и сохранить в слот').click()
+    if (failure === 'lose-upload') {
+      await expect.poll(() => hub.events.includes('chunk withheld')).toBe(true)
+      await expect(button(page, 'Начать запись')).toBeDisabled()
+      await page.evaluate(() => (window as unknown as { spikeDisconnect(): void }).spikeDisconnect())
+    }
+    await expect(page.getByText(failure === 'refuse-stop' ? /Хаб не подтвердил остановку/ : /Хаб не подтвердил сохранение/)).toBeVisible()
+    await expect(page.getByText(/Хаб подтвердил сохранение/)).toHaveCount(0)
+    await expect(button(page, 'Открыть в FLL')).toBeEnabled()
+    if (failure === 'refuse-stop') expect(hub.events.filter((event) => event === 'slot:19')).toHaveLength(1)
+    if (failure === 'lose-upload') {
+      await button(page, 'Открыть в FLL').click()
+      await expect(page.getByText(/Код Python открыт в новой программе FLL/)).toBeVisible({ timeout: 45_000 })
+      await page.goBack()
+    }
+    await button(page, 'Повторить сохранение в слот 19').click()
+    await expect(page.getByText('Хаб подтвердил сохранение в слот 19.')).toBeVisible()
+    expect(hub.chooser).toHaveLength(2)
+    expect(hub.events.filter((event) => event === 'program start')).toHaveLength(1)
+    expect(hub.lastUpload()).toContain('runloop.run(main())')
+  })
+}
+
+test('does not upload an empty or interrupted route and brakes during focus loss', async ({ page }) => {
+  const hub = await emulateHub(page)
   await page.goto('/ru/controller')
   await connect(page)
   await assignDrive(page)
-  await expect(button(page, 'Повторить')).toBeDisabled()
-  await button(page, 'Запись').click()
-  await page.getByRole('heading', { level: 1 }).click()
+  await button(page, 'Начать запись').click()
+  await button(page, 'Завершить и сохранить в слот').click()
+  await expect(page.getByText(/В записи нет подтверждённого движения/)).toBeVisible()
+  await button(page, 'Начать запись').click()
   await page.keyboard.down('KeyW')
-  await page.waitForTimeout(600)
+  await expect.poll(() => hub.speeds.at(-1)).toEqual([50, -50, 0, 0, 0, 0])
+  await page.evaluate(() => window.dispatchEvent(new Event('blur')))
+  await expect.poll(() => hub.speeds.at(-1)).toEqual(zero)
   await page.keyboard.up('KeyW')
-  await page.keyboard.down('KeyD')
-  await page.waitForTimeout(400)
-  await page.keyboard.up('KeyD')
-  await button(page, 'Готово').click()
-  await expect(page.getByText(/Записан маршрут на \d+\.\d с/)).toBeVisible()
-
-  hub.speeds.length = 0
-  await button(page, 'Повторить').click()
-  await seen([50, -50, 0, 0, 0, 0])
-  await seen([20, 20, 0, 0, 0, 0])
-  await expect(button(page, 'Повторить')).toBeEnabled({ timeout: 5_000 })
-  await expect.poll(() => hub.speeds.at(-1)).toEqual(zero)
-  const forward = hub.speeds.findIndex((s) => s[0] === 50)
-  expect(hub.speeds.findIndex((s) => s[0] === 20)).toBeGreaterThan(forward)
-
-  hub.speeds.length = 0
-  await button(page, 'На старт').click()
-  await seen([-20, -20, 0, 0, 0, 0])
-  await seen([-50, 50, 0, 0, 0, 0])
-  await expect(button(page, 'На старт')).toBeEnabled({ timeout: 5_000 })
-  expect(hub.speeds.findIndex((s) => s[0] === -50)).toBeGreaterThan(hub.speeds.findIndex((s) => s[0] === -20))
-
-  await button(page, 'Повторить').click()
-  await page.getByRole('heading', { level: 1 }).click()
-  await page.keyboard.down('KeyS')
-  await expect.poll(() => hub.speeds.at(-1)).toEqual([-50, 50, 0, 0, 0, 0])
-  await expect(button(page, 'Повторить')).toBeEnabled()
-  await page.keyboard.up('KeyS')
-  await expect.poll(() => hub.speeds.at(-1)).toEqual(zero)
+  await expect(button(page, 'Завершить и сохранить в слот')).toBeEnabled()
+  await button(page, 'Стоп').dispatchEvent('click')
+  await expect(page.getByText(/Запись прервана/)).toBeVisible()
+  await button(page, 'Начать запись').click()
+  hub.dropAck()
+  await page.keyboard.down('KeyW')
+  await expect(page.getByText(/Запись прервана/)).toBeVisible()
+  await page.keyboard.up('KeyW')
+  expect(hub.events.filter((event) => event === 'slot:19')).toHaveLength(1)
+  await expect(button(page, 'Открыть в FLL')).toHaveCount(0)
 })
 
 test('rejects another model and stops accepting input when the bridge stops replying', async ({ page }) => {

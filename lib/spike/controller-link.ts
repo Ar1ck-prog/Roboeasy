@@ -16,6 +16,8 @@ type Listener = {
   onLost: (diagnostic?: string) => void
   onPaused?: (problem: 'motorError' | 'commandDelay', diagnostic: string) => void
   onResumed?: () => void
+  onApplied?: (speeds: Speeds, at: number) => void
+  onControllerUpload?: () => void
 }
 
 class MotorCommandError extends HubError {
@@ -103,7 +105,10 @@ export class ControllerLink {
     if (info.product !== 0) throw new HubError('unsupported')
     // Motor detection is optional. A missing telemetry reply must not prevent driving.
     await this.client.subscribeDevices().catch(() => {})
-    await this.atStage('upload', () => this.client.upload(CONTROLLER_PROGRAM, this.slot))
+    await this.atStage('upload', () => {
+      this.listener.onControllerUpload?.()
+      return this.client.upload(CONTROLLER_PROGRAM, this.slot)
+    })
     this.client.onConsole = (text) => this.receiveConsole(text)
     await this.atStage('start', async () => {
       if (!(await this.client.start(this.slot))) throw new HubError('start refused')
@@ -147,15 +152,16 @@ export class ControllerLink {
     const expired = new Promise<never>((_, reject) => {
       timer = setTimeout(() => reject(new HubError(written ? 'controller timeout' : 'write timeout')), timeout)
     })
-    const received = new Promise<void>((resolve, reject) => {
+    const received = new Promise<number>((resolve, reject) => {
       this.reply = (error, message) => {
         if (error) {
           if (!(error instanceof MotorCommandError) || message === expected) reject(error)
-        } else if (message === expected) resolve()
+        } else if (message === expected) resolve(performance.now())
       }
     })
     try {
-      await Promise.race([expired, Promise.all([received, send().then(() => { written = true })])])
+      const [at] = await Promise.race([expired, Promise.all([received, send().then(() => { written = true })])])
+      return at
     } finally {
       clearTimeout(timer)
       this.reply = undefined
@@ -168,8 +174,9 @@ export class ControllerLink {
     // ASCII keeps the hub callback usable with either byte or text payloads.
     const prefix = this.commandMode + hexByte(sequence)
     const payload = encode.encode(prefix + speeds.map((speed) => hexByte(speed + 100)).join(''))
-    await this.exchange(prefix, timeout, () => this.client.sendTunnel(payload))
+    const appliedAt = await this.exchange(prefix, timeout, () => this.client.sendTunnel(payload))
     this.sent = speeds
+    this.listener.onApplied?.(speeds, appliedAt)
   }
 
   update(speeds: Speeds) {
@@ -178,7 +185,15 @@ export class ControllerLink {
     this.schedule()
   }
 
+  get confirmedSpeeds(): Speeds {
+    return this.sent ?? STOPPED
+  }
+
   stop(): Promise<boolean> {
+    return this.closing ? Promise.resolve(false) : this.requestStop()
+  }
+
+  private requestStop(): Promise<boolean> {
     if (this.closed || !this.ready) return Promise.resolve(false)
     this.desired = STOPPED
     const stopped = new Promise<boolean>((resolve) => this.stopWaiters.push(resolve))
@@ -249,11 +264,38 @@ export class ControllerLink {
   async disconnect() {
     if (this.closed || this.closing) return
     this.closing = true
-    if (await this.stop()) {
+    if (await this.requestStop()) {
       // The neutral frame was applied before stopping the program and dropping GATT.
       await this.client.stop(this.slot).catch(() => {})
     }
     this.close()
+  }
+
+  /** Freeze input, verify braking, then replace the service program without starting the route. */
+  async saveRoute(complete: () => string | null, onUpload: () => void, onProgress: (share: number) => void): Promise<boolean> {
+    if (!this.ready || this.closed || this.closing || this.recovering) throw new HubError('controller unavailable')
+    this.closing = true
+    let keepController = false
+    try {
+      if (!(await this.requestStop())) throw new HubError('brake unconfirmed')
+      const code = complete()
+      if (!code) {
+        keepController = true
+        return false
+      }
+      if (!(await this.client.stop(this.slot))) throw new HubError('stop refused')
+      onUpload()
+      await this.client.upload(code, this.slot, onProgress)
+      if (this.closed) throw new HubError('disconnected')
+      return true
+    } finally {
+      if (keepController) {
+        this.closing = false
+        this.schedule()
+      } else {
+        this.close()
+      }
+    }
   }
 
   close(lost = false, diagnostic?: string) {
@@ -287,5 +329,42 @@ export async function connectController(slot: number, listener: Listener, signal
     throw error
   } finally {
     signal.removeEventListener('abort', abort)
+  }
+}
+
+/** Retry a finished recording without installing or starting the live controller. */
+export async function uploadRecordedRoute(
+  code: string, slot: number, needsStop: boolean, signal: AbortSignal,
+  onUpload: () => void, onProgress: (share: number) => void,
+) {
+  if (!code.trim()) throw new HubError('empty program')
+  const release = reserveControllerHub()
+  try {
+    const { transport } = await openTransport(signal)
+    const client = new HubClient(transport, 4000)
+    let disconnected = false
+    const abort = () => {
+      disconnected = true
+      client.abort()
+      transport.close()
+    }
+    transport.onClose = () => {
+      disconnected = true
+      client.abort()
+    }
+    signal.addEventListener('abort', abort, { once: true })
+    try {
+      signal.throwIfAborted()
+      if ((await client.readInfo()).product !== 0) throw new HubError('unsupported')
+      if (needsStop && !(await client.stop(slot))) throw new HubError('stop refused')
+      onUpload()
+      await client.upload(code, slot, onProgress)
+      if (disconnected) throw new HubError('disconnected')
+    } finally {
+      signal.removeEventListener('abort', abort)
+      abort()
+    }
+  } finally {
+    release()
   }
 }

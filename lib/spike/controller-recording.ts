@@ -1,15 +1,10 @@
-/**
- * A manual drive recorded in the controller: what every port was told and when. It can be
- * replayed as it was, or backwards with every speed reversed — the robot then retraces the
- * path to where the recording started (as far as wheel slip allows).
- */
-
-import { STOPPED, type Speeds } from './controller-input'
+import { PORTS, STOPPED, type Port, type Speeds } from './controller-input'
+import { ACCELERATION, MAX_VELOCITY } from './controller-program'
 
 export type Frame = { t: number; speeds: Speeds }
 export type Take = { frames: Frame[]; duration: number }
 
-/** Recordings stop by themselves after a minute: a replay longer than that is never wanted. */
+/** The controller requests a final neutral frame when this time elapses. */
 export const MAX_TAKE_MS = 60_000
 
 const same = (a: Speeds, b: Speeds) => a.length === b.length && a.every((v, i) => v === b[i])
@@ -18,41 +13,50 @@ const same = (a: Speeds, b: Speeds) => a.length === b.length && a.every((v, i) =
 export function addFrame(frames: Frame[], t: number, speeds: Speeds) {
   const last = frames.at(-1)
   if (last && same(last.speeds, speeds)) return
-  const at = Math.max(0, Math.min(MAX_TAKE_MS, Math.round(t)))
+  const at = Math.max(0, Math.round(t))
   if (last && last.t === at) last.speeds = [...speeds]
   else frames.push({ t: at, speeds: [...speeds] })
 }
 
-/** Closes a recording at `t` ms. Null when nothing ever moved (no point keeping it). */
-export function finishTake(frames: Frame[], t: number): Take | null {
-  if (!frames.some((f) => f.speeds.some(Boolean))) return null
-  // Leading idle time is cut: the replay starts with the first move.
-  const start = frames.find((f) => f.speeds.some(Boolean))!.t
-  const moved = frames.filter((f) => f.t >= start).map((f) => ({ t: f.t - start, speeds: f.speeds }))
-  const end = Math.min(MAX_TAKE_MS, Math.round(t)) - start
-  const last = moved.at(-1)!
-  const duration = Math.max(end, last.t + (last.speeds.some(Boolean) ? 1 : 0))
-  if (last.speeds.some(Boolean)) moved.push({ t: duration, speeds: STOPPED })
-  return { frames: moved, duration: moved.at(-1)!.t }
+/** Only export a complete route from its first movement to its last confirmed stop. */
+export function finishTake(frames: Frame[]): Take | null {
+  const first = frames.findIndex((frame) => frame.speeds.some(Boolean))
+  const last = frames.at(-1)
+  if (first === -1 || !last || last.speeds.some(Boolean)) return null
+  const start = frames[first].t
+  if (last.t <= start) return null
+  return { frames: frames.slice(first).map(({ t, speeds }) => ({ t: t - start, speeds })), duration: last.t - start }
 }
 
-/** Speeds at `t` ms into the replay; backwards plays the take from its end with reversed speeds. */
-export function speedsAt(take: Take, t: number, backwards = false): Speeds {
-  if (t >= take.duration || t < 0) return STOPPED
-  if (!backwards) {
-    let current: Speeds = STOPPED
-    for (const f of take.frames) {
-      if (f.t > t) break
-      current = f.speeds
-    }
-    return current
+export function recordedPorts(take: Take): Port[] {
+  return PORTS.filter((_, index) => take.frames.some(({ speeds }) => speeds[index]))
+}
+
+/** SPIKE App 3 and FLL both provide motor.run, motor.stop and runloop.sleep_ms. */
+export function routeToPython(take: Take): string {
+  const lines = [
+    'from hub import port', 'import motor', 'import runloop', '',
+    'def drive(p, velocity):',
+    '    try:',
+    `        motor.run(p, velocity, acceleration=${ACCELERATION})`,
+    '    except TypeError:',
+    '        motor.run(p, velocity)',
+    '', 'async def main():', '    try:',
+  ]
+  let previous: Frame = { t: 0, speeds: STOPPED }
+  for (const frame of take.frames) {
+    const ms = frame.t - previous.t
+    if (ms > 0) lines.push(`        await runloop.sleep_ms(${ms})`)
+    PORTS.forEach((port, index) => {
+      const speed = frame.speeds[index]
+      if (speed === previous.speeds[index]) return
+      lines.push(speed ? `        drive(port.${port}, ${speed * MAX_VELOCITY / 100})` : `        motor.stop(port.${port})`)
+    })
+    previous = frame
   }
-  // Moment `t` backwards is the interval just before `duration - t` forwards.
-  const at = take.duration - t
-  let current: Speeds = STOPPED
-  for (const f of take.frames) {
-    if (f.t >= at) break
-    current = f.speeds
+  lines.push('    finally:')
+  for (const port of recordedPorts(take)) {
+    lines.push('        try:', `            motor.stop(port.${port})`, '        except Exception:', '            pass')
   }
-  return current.map((v) => (v ? -v : 0))
+  return [...lines, '', 'runloop.run(main())', ''].join('\n')
 }

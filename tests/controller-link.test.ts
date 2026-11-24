@@ -11,6 +11,7 @@ it('sends fresh input between heartbeats and brakes on release without waiting f
   const decoder = new TextDecoder()
   const reader = new FrameReader()
   const motors: { at: number; speeds: number[] }[] = []
+  const acknowledged: typeof motors = []
   const transport: HubTransport = {
     close() {},
     onClose() {},
@@ -31,7 +32,11 @@ it('sends fresh input between heartbeats and brakes on release without waiting f
       }
     },
   }
-  const link = new ControllerLink(transport, 19, { onDevices() {}, onLost() {} }, () => {})
+  const link = new ControllerLink(transport, 19, {
+    onDevices() {},
+    onLost() {},
+    onApplied: (speeds, at) => acknowledged.push({ speeds: [...speeds], at }),
+  }, () => {})
   try {
     await link.initialize()
     const left = [-10, 10, 0, 0, 0, 0]
@@ -46,6 +51,7 @@ it('sends fresh input between heartbeats and brakes on release without waiting f
     link.update(STOPPED)
     await vi.advanceTimersByTimeAsync(0)
     expect(motors.at(-1)).toEqual({ at: 21, speeds: STOPPED })
+    expect(acknowledged).toEqual(motors)
   } finally {
     link.close()
     vi.useRealTimers()

@@ -1,27 +1,33 @@
 'use client'
 
 import { type FormEvent, useEffect, useMemo, useRef, useState } from 'react'
+import { useRouter } from 'next/navigation'
 import { CircleHelp, Mic, MicOff, RotateCcw, Send } from 'lucide-react'
 
 import { BlockStack } from '@/components/block-stack'
+import { OpenPythonInFll } from '@/components/fll/open-python'
+import { DictateAssignment } from '@/components/studio/dictate-assignment'
 import { RobotPanel } from '@/components/robot-link'
 import { SimView } from '@/components/sim/sim-view'
 import { buttonVariants } from '@/components/ui/button'
 import { Card, CardTitle } from '@/components/ui/card'
+import { PROMPT_MAX } from '@/lib/api-types'
 import { programToPython } from '@/lib/dsl/compile-python'
 import { DEFAULT_ROBOT, type Program, type Step } from '@/lib/dsl/types'
 import { type Locale, fill } from '@/lib/i18n/config'
 import type { LearnText } from '@/lib/i18n/learn'
+import { getPythonWorkflowText } from '@/lib/i18n/python-workflow'
 import type { Dictionary } from '@/lib/i18n/ru'
 import type { VoiceText } from '@/lib/i18n/voice'
 import { useHydrated } from '@/lib/learn/store'
 import { savedRobot } from '@/lib/saved-robot'
+import { canListen, createSpeechRecognition, VOICE_ASSIGNMENT_KEY } from '@/lib/speech'
 import type { SimField } from '@/lib/sim/field'
 import { simulate } from '@/lib/sim/interpreter'
 import { runOnHub, stopHub, useHub } from '@/lib/spike/ble'
 import { programForHub } from '@/lib/spike/telemetry'
 import { cn } from '@/lib/utils'
-import { SPEECH_LANG, parseVoice } from '@/lib/voice/parse'
+import { parseVoice } from '@/lib/voice/parse'
 
 /** An empty 160 × 120 cm mat; the robot starts in the middle, facing up. */
 const FIELD = {
@@ -38,37 +44,20 @@ const FIELD = {
 /** A session keeps adding commands; past this the oldest are dropped (the robot starts over). */
 const MAX_STEPS = 80
 
-// The Web Speech API is not in TypeScript's DOM types: only what is used here.
-type Recognition = {
-  lang: string
-  interimResults: boolean
-  continuous: boolean
-  maxAlternatives: number
-  start(): void
-  stop(): void
-  abort(): void
-  onresult: ((e: { resultIndex: number; results: ArrayLike<{ isFinal: boolean; 0: { transcript: string } }> }) => void) | null
-  onerror: ((e: { error: string }) => void) | null
-  onend: (() => void) | null
-}
-type RecognitionClass = new () => Recognition
-
-function recognitionClass(): RecognitionClass | null {
-  if (typeof window === 'undefined') return null
-  const w = window as unknown as { SpeechRecognition?: RecognitionClass; webkitSpeechRecognition?: RecognitionClass }
-  return w.SpeechRecognition ?? w.webkitSpeechRecognition ?? null
-}
-
 type Said = { id: number; text: string; ok: boolean }
 type ErrorKey = keyof VoiceText['errors']
 
 export function VoiceControl({ lang, t, blocks, sim: simText }: { lang: Locale; t: VoiceText; blocks: Dictionary['blocks']; sim: LearnText['sim'] }) {
+  const router = useRouter()
+  const workflow = getPythonWorkflowText(lang)
   const hydrated = useHydrated()
   const hub = useHub()
   const [listening, setListening] = useState(false)
   const [interim, setInterim] = useState('')
   const [error, setError] = useState<ErrorKey | null>(null)
   const [typed, setTyped] = useState('')
+  const [assignment, setAssignment] = useState('')
+  const [transferError, setTransferError] = useState(false)
   const [last, setLast] = useState<{ text: string; steps: Step[]; unknown: string[]; stop: boolean } | null>(null)
   const [history, setHistory] = useState<Said[]>([])
   // Everything said since the last reset: simulated as one program, played from the new part.
@@ -76,14 +65,30 @@ export function VoiceControl({ lang, t, blocks, sim: simText }: { lang: Locale; 
   const [from, setFrom] = useState(0)
   const [auto, setAuto] = useState(true)
   const [robot, setRobot] = useState(DEFAULT_ROBOT)
-  const recognition = useRef<Recognition | null>(null)
+  const recognition = useRef<ReturnType<typeof createSpeechRecognition>>(null)
   const simBox = useRef<HTMLElement>(null)
   const nextId = useRef(1)
-  const supported = hydrated && recognitionClass() !== null
+  const supported = hydrated && canListen()
   const linked = hub.status !== 'idle' && hub.status !== 'connecting'
 
   useEffect(() => setRobot(savedRobot()), [])
-  useEffect(() => () => recognition.current?.abort(), [])
+  useEffect(() => {
+    const cancel = () => {
+      const rec = recognition.current
+      recognition.current = null
+      rec?.abort()
+    }
+    const onPageHide = () => {
+      cancel()
+      setListening(false)
+      setInterim('')
+    }
+    window.addEventListener('pagehide', onPageHide)
+    return () => {
+      window.removeEventListener('pagehide', onPageHide)
+      cancel()
+    }
+  }, [])
 
   const result = useMemo(() => (session.length ? simulate(session, FIELD, { robot }) : null), [session, robot])
 
@@ -114,18 +119,15 @@ export function VoiceControl({ lang, t, blocks, sim: simText }: { lang: Locale; 
   }
 
   function listen() {
-    const Rec = recognitionClass()
-    if (!Rec) return
     if (listening) {
       recognition.current?.stop()
       return
     }
-    const rec = new Rec()
-    rec.lang = SPEECH_LANG[lang]
+    const rec = createSpeechRecognition(lang)
+    if (!rec) return
     rec.interimResults = true
-    rec.continuous = false
-    rec.maxAlternatives = 1
     rec.onresult = (e) => {
+      if (recognition.current !== rec) return
       let finalText = ''
       let partial = ''
       for (let i = e.resultIndex; i < e.results.length; i++) {
@@ -137,12 +139,13 @@ export function VoiceControl({ lang, t, blocks, sim: simText }: { lang: Locale; 
       if (finalText) execute(finalText)
     }
     rec.onerror = (e) => {
-      if (e.error === 'aborted') return
+      if (recognition.current !== rec || e.error === 'aborted') return
       setError(
         e.error === 'not-allowed' || e.error === 'service-not-allowed' ? 'not-allowed' : e.error === 'no-speech' || e.error === 'network' ? e.error : 'failed',
       )
     }
     rec.onend = () => {
+      if (recognition.current !== rec) return
       setListening(false)
       setInterim('')
       recognition.current = null
@@ -154,6 +157,7 @@ export function VoiceControl({ lang, t, blocks, sim: simText }: { lang: Locale; 
     try {
       rec.start()
     } catch {
+      recognition.current = null
       setListening(false)
       setError('failed')
     }
@@ -169,6 +173,18 @@ export function VoiceControl({ lang, t, blocks, sim: simText }: { lang: Locale; 
     setSession([])
     setFrom(0)
     setLast(null)
+  }
+
+  function sendAssignment(e: FormEvent) {
+    e.preventDefault()
+    if (!assignment.trim()) return
+    try {
+      sessionStorage.setItem(VOICE_ASSIGNMENT_KEY, assignment)
+      router.push(`/${lang}/sandbox?voiceAssignment`)
+      setTransferError(false)
+    } catch {
+      setTransferError(true)
+    }
   }
 
   const lastProgram: Program | null = last?.steps.length ? { title: '', description: '', steps: last.steps } : null
@@ -240,6 +256,17 @@ export function VoiceControl({ lang, t, blocks, sim: simText }: { lang: Locale; 
             </div>
           </form>
 
+          <details className="rounded-(--radius-md) border-(length:--stroke-thin) border-outline bg-card p-4">
+            <summary className="cursor-pointer font-bold">{workflow.generator}</summary>
+            <form onSubmit={sendAssignment} className="mt-3 grid gap-3">
+              <DictateAssignment lang={lang} onText={(text) => setAssignment((previous) => [previous.trimEnd(), text].filter(Boolean).join(' ').slice(0, PROMPT_MAX))} />
+              <textarea className="textarea" aria-label={workflow.voiceToStudio} value={assignment}
+                maxLength={PROMPT_MAX} onChange={(e) => setAssignment(e.target.value)} />
+              <button type="submit" className={buttonVariants()} disabled={!assignment.trim()}>{workflow.voiceToStudio}</button>
+              {transferError && <p role="alert" className="alert alert-warn m-0 text-sm">{workflow.voiceTransferError}</p>}
+            </form>
+          </details>
+
           <div className="grid gap-2">
             <p className="m-0 text-sm font-bold">{t.examples}</p>
             <ul className="m-0 flex list-none flex-wrap gap-2 p-0">
@@ -298,6 +325,10 @@ export function VoiceControl({ lang, t, blocks, sim: simText }: { lang: Locale; 
               </button>
             </div>
             <SimView field={FIELD} result={result} from={from} lang={lang} labels={simText} />
+            {session.length > 0 && (
+              <OpenPythonInFll lang={lang} name={workflow.voiceName}
+                code={programToPython({ title: workflow.voiceName, description: '', steps: session }, robot)} />
+            )}
           </section>
 
           <RobotPanel lang={lang}>

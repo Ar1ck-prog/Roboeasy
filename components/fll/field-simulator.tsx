@@ -7,6 +7,8 @@ import { ArrowRight, ExternalLink, Gamepad2, Keyboard, Maximize, Minimize, Mouse
 import { Buddy } from '@/components/learn/buddy'
 import { buttonVariants } from '@/components/ui/button'
 import { Card } from '@/components/ui/card'
+import { FLL_IMPORT_KEY, FLL_IMPORT_MESSAGE, FLL_IMPORT_PARAM, FLL_IMPORT_RESULT, readFllImport } from '@/lib/fll/python-import'
+import { getPythonWorkflowText } from '@/lib/i18n/python-workflow'
 import { FLL_SIM_SRC, type SimulatorText } from '@/lib/i18n/simulator'
 import { cn } from '@/lib/utils'
 
@@ -51,6 +53,7 @@ function useIsolation(): boolean {
  */
 export function FieldSimulator({ lang, t, toPlanner }: { lang: Lang; t: SimulatorText['three']; toPlanner: string }) {
   const box = useRef<HTMLDivElement>(null)
+  const frame = useRef<HTMLIFrameElement>(null)
   const ready = useIsolation()
   const [loaded, setLoaded] = useState(false)
   /** The loading screen leaves the page once it has faded out, so its endless animations stop. */
@@ -58,6 +61,54 @@ export function FieldSimulator({ lang, t, toPlanner }: { lang: Lang; t: Simulato
   const [slow, setSlow] = useState(false)
   const [full, setFull] = useState(false)
   const [attempt, setAttempt] = useState(0)
+  const [importState, setImportState] = useState<null | 'importing' | 'imported' | 'importError'>(null)
+  const [importHint, setImportHint] = useState('')
+  const workflow = getPythonWorkflowText(lang)
+
+  useEffect(() => {
+    if (!ready) return
+    const url = new URL(window.location.href)
+    const id = url.searchParams.get(FLL_IMPORT_PARAM)
+    if (id === null) return
+    const program = readFllImport(id)
+    if (!program) {
+      setImportState('importError')
+      return
+    }
+
+    setImportState('importing')
+    const origin = window.location.origin
+    const send = () => frame.current?.contentWindow?.postMessage({ type: FLL_IMPORT_MESSAGE, program }, origin)
+    const retry = window.setInterval(send, 350)
+    // Keep sending after the hint appears: a slow iframe can still complete the import.
+    const slowImport = window.setTimeout(() => setImportState('importError'), SLOW_MS)
+    const clearTimers = () => {
+      window.clearInterval(retry)
+      window.clearTimeout(slowImport)
+    }
+    const reply = (event: MessageEvent) => {
+      if (event.origin !== origin || event.source !== frame.current?.contentWindow ||
+        event.data?.type !== FLL_IMPORT_RESULT || event.data.id !== id) return
+      clearTimers()
+      if (event.data.ok !== true) {
+        setImportState('importError')
+        return
+      }
+      setImportState('imported')
+      setImportHint(program.hint ?? '')
+      // The editor has persisted the new program. A reload opens that saved
+      // program without resubmitting the import.
+      url.searchParams.delete(FLL_IMPORT_PARAM)
+      window.history.replaceState(null, '', url)
+      sessionStorage.removeItem(FLL_IMPORT_KEY + id)
+    }
+    window.addEventListener('message', reply)
+    send()
+    return () => {
+      clearTimers()
+      window.removeEventListener('message', reply)
+    }
+  }, [ready, attempt])
 
   useEffect(() => {
     if (loaded) return
@@ -114,6 +165,13 @@ export function FieldSimulator({ lang, t, toPlanner }: { lang: Lang; t: Simulato
       <p className="alert alert-ok m-0 md:hidden" role="note">
         {t.phone}
       </p>
+      {importState && (
+        <div className={cn('alert m-0 grid gap-1', importState === 'importError' ? 'alert-warn' : 'alert-ok')}
+          role={importState === 'importError' ? 'alert' : 'status'}>
+          <p className="m-0">{workflow[importState]}</p>
+          {importHint && <p className="m-0">{importHint}</p>}
+        </div>
+      )}
 
       <div
         ref={box}
@@ -125,6 +183,7 @@ export function FieldSimulator({ lang, t, toPlanner }: { lang: Lang; t: Simulato
         {ready && (
           <iframe
             key={attempt}
+            ref={frame}
             src={FLL_SIM_SRC}
             title={t.frame}
             className="absolute inset-0 size-full border-0"
