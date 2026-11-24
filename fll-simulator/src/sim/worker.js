@@ -55,7 +55,28 @@ let pyBase = '';
 let pyodide = null;
 let pyLoading = null;
 let programRunning = false;
-let manual = { keys: {}, ports: { left: 'A', right: 'B', arm: 'C', arm2: 'D' } };
+let manual = { keys: {}, ports: { left: 'A', right: 'B', arm: 'C', arm2: 'D' }, sign: { left: -1, right: 1 }, chosen: false };
+
+/**
+ * Keyboard driving uses the robot's own wheel motors: the motors with a wheel on the shaft, the
+ * one on the left side (-x) is left. Its forward direction follows the motor's axis (a motor turned
+ * around is mirrored). Other motors are the attachments (R/F and T/G). Without two wheel motors
+ * the old A/B/C/D layout stays.
+ */
+function manualPorts(compiled) {
+  if (manual.chosen) return;
+  const wheels = compiled.motors.filter((m) => m.wheel && m.port).sort((a, b) => a.x - b.x);
+  if (wheels.length < 2) {
+    manual.ports = { left: 'A', right: 'B', arm: 'C', arm2: 'D' };
+    manual.sign = { left: -1, right: 1 };
+    return;
+  }
+  const left = wheels[0];
+  const right = wheels.at(-1);
+  const others = compiled.motors.filter((m) => m !== left && m !== right && m.port).map((m) => m.port).sort();
+  manual.ports = { left: left.port, right: right.port, arm: others[0] ?? null, arm2: others[1] ?? null };
+  manual.sign = { left: Math.sign(left.axisX) || -1, right: Math.sign(right.axisX) || 1 };
+}
 let manualDrive = null;
 let launchInfo = null;
 let costAcc = 0;
@@ -113,6 +134,7 @@ function addRobot(pose) {
   for (const b of compiled.bodies) phys.addBody(b, { pos: [pose.x, 0, pose.z], rot });
   for (const j of compiled.joints) phys.addJoint(j);
   robot = { compiled, rt: new RobotRuntime(phys, compiled, matImage), pose, fits: robotFits(compiled) };
+  manualPorts(compiled);
 }
 
 /** Put on / take off an attachment: rebuild only the robot at its current pose, the field stays as it is. */
@@ -339,12 +361,13 @@ function manualControl() {
   manual.active = any;
   const L = rt.motors[P.left];
   const R = rt.motors[P.right];
-  const v = k.slow ? 260 : 620;
-  const w = k.slow ? 160 : 360;
+  // Calm enough to aim by keyboard: about 25 cm/s ahead, a quarter turn in about a second.
+  const v = k.slow ? 220 : 480;
+  const w = k.slow ? 70 : 150;
   const f = (k.f ? 1 : 0) - (k.b ? 1 : 0);
   const t = (k.r ? 1 : 0) - (k.l ? 1 : 0);
   if (L && R) {
-    if (f || t) { L.run(-(f * v + t * w), 3000); R.run(f * v - t * w, 3000); }
+    if (f || t) { L.run(manual.sign.left * (f * v + t * w), 1500); R.run(manual.sign.right * (f * v - t * w), 1500); }
     else if (L.mode === 'speed' || R.mode === 'speed') { L.hold(); R.hold(); }
   }
   for (const [port, up, down] of [[P.arm, k.au, k.ad], [P.arm2, k.bu, k.bd]]) {
@@ -820,7 +843,7 @@ self.onmessage = async (ev) => {
         break;
       case 'manual':
         manual.keys = msg.keys || {};
-        if (msg.ports) manual.ports = { ...manual.ports, ...msg.ports };
+        if (msg.ports) { manual.ports = { ...manual.ports, ...msg.ports }; manual.chosen = true; }
         break;
       case 'place':
         if (robot && !programRunning) { placeRobot(msg.x, msg.z, msg.yaw); robot.rt.stopAll(); postFrame(true); }

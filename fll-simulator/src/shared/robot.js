@@ -358,7 +358,9 @@ export function compileRobot(design, pose = { x: 0, z: 0, yaw: 0 }) {
       const m = an.motors[j.motor];
       const inst = parts[m.part];
       const def = PARTS[inst.type];
-      motors.push({ port: an.ports.byPart[m.part], joint: id, part: inst.uid, type: inst.type, specs: def.motor, stator: gid(j.ga), rotor: gid(j.gb) });
+      // A wheel on the rotor makes it a drive motor (manual driving finds the wheels by this).
+      const wheel = [...an.groups[j.gb].parts].some((pi) => PARTS[parts[pi].type]?.wheel);
+      motors.push({ port: an.ports.byPart[m.part], joint: id, part: inst.uid, type: inst.type, specs: def.motor, stator: gid(j.ga), rotor: gid(j.gb), wheel, x: m.p[0], axisX: m.axis[0] });
     }
   }
   // gear couplings: driven hinge follows driver group angle

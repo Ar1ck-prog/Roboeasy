@@ -26,7 +26,7 @@ const ru = {
     howTitle: 'Как пользоваться',
     how: [
       { title: 'Двигай робота', text: 'Перетащи робота мышью, колесо мыши или Q/E поворачивают. Кнопка «На старт» вернёт его в базу.' },
-      { title: 'Ручное управление', text: 'Щёлкни по полю: WASD или стрелки — езда, R/F — рука C, T/G — мотор D, Shift — медленно.' },
+      { title: 'Ручное управление', text: 'WASD или стрелки — езда (сразу, щёлкать по полю не нужно), R/F и T/G — моторы насадок, Shift — медленно.' },
       { title: 'Код и матч', text: 'Кнопка «Код» открывает программу на Python, есть примеры. Режим «Матч 2:30» — отсчёт времени и протокол очков.' },
       { title: 'Камера и скорость', text: 'Смотри сверху, из базы или из-за робота; ускоряй и замедляй симуляцию от ¼× до 4×.' },
     ],
@@ -59,7 +59,7 @@ const kk: SimulatorText = {
     howTitle: 'Қалай қолдану керек',
     how: [
       { title: 'Роботты жылжыт', text: 'Роботты тінтуірмен сүйре, тінтуір дөңгелегі не Q/E бұрады. «Стартқа» батырмасы оны базаға қайтарады.' },
-      { title: 'Қолмен басқару', text: 'Алаңды бас: WASD немесе бағыттауыштар — жүру, R/F — C қолы, T/G — D моторы, Shift — баяу.' },
+      { title: 'Қолмен басқару', text: 'WASD немесе бағыттауыштар — жүру (алаңды басудың керегі жоқ), R/F және T/G — қондырма моторлары, Shift — баяу.' },
       { title: 'Код және матч', text: '«Код» батырмасы Python-дағы бағдарламаны ашады, мысалдар бар. «Матч 2:30» режимі — кері санақ және ұпай хаттамасы.' },
       { title: 'Камера және жылдамдық', text: 'Жоғарыдан, базадан немесе роботтың артынан қара; симуляцияны ¼×-тен 4×-ке дейін жылдамдат не баяулат.' },
     ],
@@ -90,7 +90,7 @@ const en: SimulatorText = {
     howTitle: 'How to use it',
     how: [
       { title: 'Move the robot', text: 'Drag the robot with the mouse; the wheel or Q/E turns it. “To start” puts it back in base.' },
-      { title: 'Drive by hand', text: 'Click the field: WASD or arrows drive, R/F move arm C, T/G motor D, Shift is slow.' },
+      { title: 'Drive by hand', text: 'WASD or arrows drive right away (no need to click the field), R/F and T/G turn the attachment motors, Shift is slow.' },
       { title: 'Code and match', text: 'The Code button opens the Python program, with examples. “Match 2:30” runs the clock and the score sheet.' },
       { title: 'Camera and speed', text: 'Watch from above, from base or behind the robot; run the simulation from ¼× to 4×.' },
     ],

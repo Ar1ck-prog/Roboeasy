@@ -18,6 +18,9 @@ const HOW_ICONS = [MousePointer2, Keyboard, Timer, Video]
 const SLOW_MS = 40_000
 /** Set while we reload once to get cross-origin isolation (see useIsolation). */
 const ISOLATION_KEY = 'roboeasy:fll-sim-isolation-reload'
+/** Keys the simulator drives with (fll-simulator/src/main.js keyMap) and its message for them. */
+const FLL_KEY_MESSAGE = 'roboeasy:fll-key'
+const DRIVE_KEYS = new Set(['KeyW', 'KeyA', 'KeyS', 'KeyD', 'ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight', 'KeyR', 'KeyF', 'KeyT', 'KeyG', 'ShiftLeft', 'ShiftRight'])
 
 /**
  * The simulator pauses a running Python program through a SharedArrayBuffer,
@@ -127,6 +130,37 @@ export function FieldSimulator({ lang, t, toPlanner }: { lang: Lang; t: Simulato
     document.addEventListener('fullscreenchange', onChange)
     return () => document.removeEventListener('fullscreenchange', onChange)
   }, [])
+
+  // Driving keys pressed on this page (outside the frame) go to the simulator while its field is on
+  // screen, so the robot drives without clicking into the field first. Typing is left alone.
+  useEffect(() => {
+    if (!loaded) return
+    const origin = window.location.origin
+    const send = (data: object) => frame.current?.contentWindow?.postMessage({ type: FLL_KEY_MESSAGE, ...data }, origin)
+    const onScreen = () => {
+      const r = box.current?.getBoundingClientRect()
+      return !!r && r.top < window.innerHeight * 0.6 && r.bottom > window.innerHeight * 0.4
+    }
+    const typing = (target: EventTarget | null) => target instanceof Element && !!target.closest('input, textarea, select, [contenteditable="true"], [contenteditable=""]')
+    const key = (down: boolean) => (event: KeyboardEvent) => {
+      if (!DRIVE_KEYS.has(event.code) || event.ctrlKey || event.metaKey || event.altKey) return
+      if (down && (typing(event.target) || !onScreen())) return
+      if (down && !event.code.startsWith('Shift')) event.preventDefault()
+      send({ code: event.code, down })
+    }
+    const keyDown = key(true)
+    const keyUp = key(false)
+    const release = () => send({ release: true })
+    window.addEventListener('keydown', keyDown)
+    window.addEventListener('keyup', keyUp)
+    window.addEventListener('blur', release)
+    return () => {
+      window.removeEventListener('keydown', keyDown)
+      window.removeEventListener('keyup', keyUp)
+      window.removeEventListener('blur', release)
+      release()
+    }
+  }, [loaded, attempt])
 
   const toggleFull = () => {
     if (document.fullscreenElement) void document.exitFullscreen()

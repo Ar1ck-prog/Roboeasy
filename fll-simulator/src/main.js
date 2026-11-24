@@ -111,7 +111,6 @@ function logLine(text, kind = 'out') {
 const field = new FieldView($('#field'), {
   onDrag: (d) => state.worker?.postMessage({ type: 'drag', ...d }),
   onAttachment: (id) => toggleAttachment(id),
-  onKey: (e, down) => handleKey(e, down),
 });
 field.dragEnabled = true;
 const scorePanel = new ScorePanel($('#sheet'));
@@ -133,7 +132,19 @@ function handleKey(e, down) {
   keys[k] = down;
   state.worker?.postMessage({ type: 'manual', keys: { ...keys } });
 }
-window.addEventListener('blur', () => { for (const k of Object.keys(keys)) keys[k] = false; state.worker?.postMessage({ type: 'manual', keys: {} }); });
+const releaseKeys = () => { for (const k of Object.keys(keys)) keys[k] = false; state.worker?.postMessage({ type: 'manual', keys: {} }); };
+window.addEventListener('blur', releaseKeys);
+// The keys drive the robot anywhere on the page (no need to click the field first),
+// except while typing: in the code editor, a text field or a list.
+const typing = (target) => target instanceof Element && !!target.closest('input, textarea, select, [contenteditable=""], [contenteditable="true"], .cm-editor');
+window.addEventListener('keydown', (e) => { if (!e.ctrlKey && !e.metaKey && !e.altKey && !typing(e.target)) handleKey(e, true); });
+window.addEventListener('keyup', (e) => handleKey(e, false));
+// RoboEasy's page forwards the keys pressed outside this frame (see components/fll/field-simulator.tsx).
+window.addEventListener('message', (event) => {
+  if (event.origin !== window.location.origin || event.source !== window.parent || event.data?.type !== 'roboeasy:fll-key') return;
+  if (event.data.release) return releaseKeys();
+  if (typeof event.data.code === 'string') handleKey({ code: event.data.code, preventDefault() {} }, !!event.data.down);
+});
 
 // ---------------------------------------------------------------------------------------------
 // HUD
@@ -625,5 +636,5 @@ if (import.meta.env.DEV) {
 
 renderHelp($('#help'));
 logLine('Добро пожаловать в симулятор FLL BIOGLOW! Код робота (Python) и протокол очков находятся в рабочей панели.', 'info');
-logLine('Робот стоит в левой зоне запуска. Нажмите «Запуск» или поуправляйте с клавиатуры (щёлкните по полю).', 'sys');
+logLine('Робот стоит в левой зоне запуска. Нажмите «Запуск» или поуправляйте с клавиатуры: WASD или стрелки.', 'sys');
 createWorker();
