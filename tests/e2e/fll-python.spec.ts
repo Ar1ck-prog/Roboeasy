@@ -57,6 +57,7 @@ test('manual Python reaches the real editor intact, starts manually, and keeps d
     await route.continue()
   })
   await page.goto('/ru/sandbox')
+  await expect(page.locator('.ai-pill')).toBeVisible()
   await page.evaluate((key) => {
     localStorage.setItem(key, JSON.stringify([{ name: 'Мой черновик', code: 'print("Draft")\n' }]))
     sessionStorage.setItem('hold-fll-reply', 'yes')
@@ -181,6 +182,7 @@ test('an unsupported microphone leaves the assignment editable', async ({ page }
     }
   })
   await page.goto('/ru/sandbox')
+  await expect(page.locator('.ai-pill')).toBeVisible()
   await page.getByRole('button', { name: 'Продиктовать задание' }).click()
   await expect(page.getByText(/В этом браузере диктовка недоступна/)).toBeVisible()
   await expect(page.getByLabel('Задача для робота')).toBeEditable()
@@ -193,6 +195,7 @@ test('manual entry is usable by touch on a phone in RU, KK and EN and FLL follow
     for (const lang of ['ru', 'kk', 'en'] as const) {
       const t = getPythonWorkflowText(lang)
       await page.goto(`/${lang}/sandbox`)
+      await expect(page.locator('.ai-pill')).toBeVisible()
       await page.getByRole('button', { name: t.manual }).tap()
       await page.getByRole('textbox', { name: t.manualLabel, exact: true }).fill(manual)
       await expect(page.getByRole('button', { name: t.open, exact: true })).toBeInViewport()

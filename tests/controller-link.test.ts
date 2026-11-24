@@ -58,10 +58,11 @@ it('sends fresh input between heartbeats and brakes on release without waiting f
   }
 })
 
-for (const fault of [null, 'stop', 'upload'] as const) {
+for (const fault of [null, 'brake', 'stop', 'upload'] as const) {
   it(`keeps the brake and slot-write order with ${fault ?? 'a successful upload'}`, async () => {
     const reader = new FrameReader()
     const events: string[] = []
+    let saving = false
     const transport: HubTransport = {
       close: () => { events.push('disconnect') },
       onData() {},
@@ -74,6 +75,7 @@ for (const fault of [null, 'stop', 'upload'] as const) {
             response = Uint8Array.of(MSG.infoResponse, 1, 0, 0, 0, 1, 8, 149, 0, 20, 0, 255, 0, 64, 0, 0, 0)
           } else if (type === MSG.tunnel) {
             expect(new TextDecoder().decode(message.subarray(6))).toBe('646464646464')
+            if (saving && fault === 'brake') continue
             events.push('brake ack')
             response = tunnelMessage(message.subarray(3, 6))
           } else if (type === MSG.flow) {
@@ -95,10 +97,16 @@ for (const fault of [null, 'stop', 'upload'] as const) {
     try {
       await link.initialize()
       events.length = 0
+      saving = true
       const saved = link.saveRoute(() => {
         events.push('route complete')
         return 'print("route")\n'
       }, () => events.push('uploading'), () => {})
+      if (fault === 'brake') {
+        await expect(saved).rejects.toThrow('brake unconfirmed')
+        expect(events).toEqual(['disconnect'])
+        return
+      }
       if (fault) await expect(saved).rejects.toThrow(fault === 'stop' ? 'stop refused' : 'upload refused')
       else await expect(saved).resolves.toBe(true)
       expect(events).toEqual([

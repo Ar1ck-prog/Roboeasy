@@ -416,8 +416,6 @@ export function RobotController({ lang, t }: { lang: Locale; t: ControllerText }
       if (saved && completed) keepRoute({ ...completed, saved: true })
       setRouteStatus(saved ? 'idle' : 'empty')
     } catch {
-      // A route which was already at a confirmed stop is still complete.
-      if (!completed) complete()
       setRouteStatus(uploading ? 'uploadError' : 'stopError')
     } finally {
       clearRecording()
