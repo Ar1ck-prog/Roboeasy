@@ -1,6 +1,6 @@
 export const WATCHDOG_MS = 350
 export const MAX_VELOCITY = 500
-const ACCELERATION = 3500
+export const ACCELERATION = 3500
 export const CONTROLLER_COMMAND = 'M'
 export const CONSOLE_COMMAND = 'K'
 export const CONTROLLER_CONSOLE_PREFIX = 'RBE:'

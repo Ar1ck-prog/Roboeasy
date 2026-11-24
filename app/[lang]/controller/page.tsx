@@ -18,8 +18,8 @@ export default async function ControllerPage({ params }: Params) {
   const { lang } = await params
   if (!isLocale(lang)) notFound()
   return (
-    <AppShell lang={lang}>
-      <RobotController t={getControllerText(lang)} />
+    <AppShell lang={lang} practice="controller">
+      <RobotController lang={lang} t={getControllerText(lang)} />
     </AppShell>
   )
 }

@@ -258,19 +258,32 @@ test('draw a route: the commands appear, the simulator goes first, then the robo
 
   await expect(page.getByTestId('route-piece')).toHaveCount(2)
   await expect(page.getByText('Команд в программе:')).toBeVisible()
-  await expect(page.getByText('Сначала проедь маршрут в симуляторе.')).toBeVisible()
-  await expect(page.getByRole('button', { name: 'Подключить и запустить' })).toBeDisabled()
+  // The simulator is a tip, not a lock: the robot can be started right away.
+  const tip = page.getByText(/Совет: сначала проедь маршрут в симуляторе/)
+  await expect(tip).toBeVisible()
+  await expect(page.getByRole('button', { name: 'Подключить и запустить' })).toBeEnabled()
 
   await page.getByRole('button', { name: 'Проехать в симуляторе' }).click()
-  await expect(page.getByText('Сначала проедь маршрут в симуляторе.')).toHaveCount(0)
+  await expect(tip).toHaveCount(0)
+
+  // Wheels on E and F: choosing F for the left motor (it was B) and then E for the right one.
+  await page.getByRole('radio', { name: 'Левый мотор: E' }).click()
+  await page.getByRole('radio', { name: 'Правый мотор: F' }).click()
+  await expect(page.getByRole('radio', { name: 'Левый мотор: E' })).toHaveAttribute('aria-checked', 'true')
+  await page.getByRole('radio', { name: 'Левый мотор: F' }).click() // the right motor's port: the two swap
+  await expect(page.getByRole('radio', { name: 'Правый мотор: E' })).toHaveAttribute('aria-checked', 'true')
 
   await page.getByRole('button', { name: 'Подключить и запустить' }).click()
   await expect(page.getByTestId('robot-console')).toHaveText('Привет с хаба')
-  expect(new TextDecoder().decode(Uint8Array.from(hub.file.bytes))).toContain('motor_pair')
+  const sent = new TextDecoder().decode(Uint8Array.from(hub.file.bytes))
+  expect(sent).toContain('motor_pair.pair(motor_pair.PAIR_1, port.F, port.E)')
 
   // A new line means it has to be driven again.
   await page.getByRole('button', { name: 'Стереть' }).click()
   await expect(page.getByTestId('route-piece')).toHaveCount(0)
+  // The choice is kept for the studio and the next visit.
+  await page.reload()
+  await expect(page.getByRole('radio', { name: 'Левый мотор: F' })).toHaveAttribute('aria-checked', 'true')
   expect(errors).toEqual([])
 })
 
@@ -304,5 +317,71 @@ test('telemetry: off by default, adds readings when on, shows charts and keeps r
   const csv = page.waitForEvent('download')
   await page.getByTestId('telemetry').getByRole('button', { name: 'CSV' }).click()
   expect((await csv).suggestedFilename()).toMatch(/\.csv$/)
+  expect(errors).toEqual([])
+})
+
+/** A stand-in for the browser's speech recogniser: `start()` "hears" the phrase in window.__said. */
+async function fakeSpeech(page: Page) {
+  await page.addInitScript(() => {
+    class FakeRecognition {
+      lang = ''
+      interimResults = false
+      continuous = false
+      maxAlternatives = 1
+      onresult: ((e: unknown) => void) | null = null
+      onerror: ((e: unknown) => void) | null = null
+      onend: (() => void) | null = null
+      start() {
+        const w = window as unknown as { __said: string; __lang: string }
+        w.__lang = this.lang
+        setTimeout(() => {
+          const said = w.__said
+          this.onresult?.({ resultIndex: 0, results: [{ isFinal: false, 0: { transcript: said.split(' ').slice(0, 2).join(' ') } }] })
+          this.onresult?.({ resultIndex: 0, results: [{ isFinal: true, 0: { transcript: said } }] })
+          this.onend?.()
+        }, 300)
+      }
+      stop() {
+        this.onend?.()
+      }
+      abort() {}
+    }
+    const w = window as unknown as { SpeechRecognition: unknown; webkitSpeechRecognition: unknown }
+    w.SpeechRecognition = w.webkitSpeechRecognition = FakeRecognition
+  })
+}
+
+test('voice control: a spoken phrase becomes blocks, drives the simulator and runs on the hub', async ({ page }) => {
+  const errors: string[] = []
+  page.on('pageerror', (e) => errors.push(e.message))
+  const hub = await fakeBluetooth(page)
+  await fakeSpeech(page)
+  await page.goto('/ru/voice')
+  await expect(page.getByRole('heading', { name: 'Голосовое управление', level: 1 })).toBeVisible()
+
+  await page.evaluate(() => ((window as unknown as { __said: string }).__said = 'Проедь вперёд на 30 сантиметров и поверни направо'))
+  await page.getByRole('button', { name: 'Говорить' }).click()
+  await expect(page.getByText('Услышал: «Проедь вперёд на 30 сантиметров и поверни направо»')).toBeVisible()
+  expect(await page.evaluate(() => (window as unknown as { __lang: string }).__lang)).toBe('ru-RU')
+  const understood = page.getByTestId('voice-understood')
+  await expect(understood).toContainText('30')
+  await expect(understood).toContainText('90')
+
+  // Typing works too, and the robot keeps going from where it stopped.
+  await page.getByLabel('Или напиши команду').fill('назад 2 секунды и спой песню')
+  await page.getByRole('button', { name: 'Выполнить' }).click()
+  await expect(understood.getByText('Не понял: «спой песню».', { exact: false })).toBeVisible()
+  await expect(page.getByRole('button', { name: 'Вернуть робота в центр' })).toBeEnabled()
+
+  // Connected: the next command goes to the hub as a program.
+  await page.getByTestId('robot-panel').getByRole('button', { name: 'Подключить робота' }).click()
+  await expect(page.getByTestId('robot-panel').getByRole('status').first()).toContainText('Подключён')
+  await page.getByRole('button', { name: '«налево на 45 градусов»' }).click()
+  await expect.poll(() => new TextDecoder().decode(Uint8Array.from(hub.file.bytes))).toContain('motor_pair')
+  expect(new TextDecoder().decode(Uint8Array.from(hub.file.bytes))).toContain('45')
+
+  await page.getByLabel('Или напиши команду').fill('стоп')
+  await page.getByRole('button', { name: 'Выполнить' }).click()
+  await expect(understood).toContainText('Робот остановлен.')
   expect(errors).toEqual([])
 })

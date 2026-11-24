@@ -14,7 +14,7 @@ const ru = {
   closing: 'Отключение…',
   firmware: 'Прошивка',
   slot: 'Слот программы',
-  slotNote: 'Выбери свободный слот на хабе (0–19). При подключении RoboEasy запишет в него программу управления с заменой содержимого.',
+  slotNote: 'Выбери свободный слот (0–19). Подключение заменяет его содержимое служебной программой. Сохранение заменяет её маршрутом. Следующее подключение к этому слоту может стереть маршрут.',
   browser:
     'Открой страницу в Chrome на компьютере или Android по HTTPS. Для локального запуска на компьютере подойдёт localhost. Chrome на iPhone и iPad не поддерживает Web Bluetooth.',
   cancelled: 'Выбор хаба отменён. Если окно выбора не появилось, скопируй адрес страницы в отдельное окно Google Chrome.',
@@ -56,6 +56,26 @@ const ru = {
   roles: { left: 'Левый мотор', right: 'Правый мотор', gripper: 'Захват', lift: 'Подъёмник', extra1: 'Механизм 3', extra2: 'Механизм 4' },
   positive: { gripper: 'Открыть', lift: 'Поднять', extra1: 'По часовой', extra2: 'По часовой' },
   negative: { gripper: 'Закрыть', lift: 'Опустить', extra1: 'Против часовой', extra2: 'Против часовой' },
+  tape: {
+    title: 'Запись маршрута',
+    record: 'Начать запись',
+    finish: 'Завершить и сохранить в слот',
+    sec: 'с',
+    hint: 'Начни запись и проведи робота по маршруту. При завершении запись заменит содержимое выбранного слота.',
+    recording: 'Идёт запись маршрута. Закончи и сохрани его или дождись автоматического сохранения через 60 с.',
+    recorded: 'Записан маршрут на {time}.',
+    saved: 'Хаб подтвердил сохранение в слот {slot}.',
+    stopping: 'Ждём подтверждения остановки от хаба…',
+    retrying: 'Подключаемся к хабу для повторного сохранения…',
+    uploading: 'Загрузка маршрута в хаб · {progress}%',
+    empty: 'В записи нет подтверждённого движения. Слот не был изменён.',
+    interrupted: 'Запись прервана. Для нового маршрута начни запись снова.',
+    stopError: 'Хаб не подтвердил остановку. Сохранение остановлено.',
+    uploadError: 'Хаб не подтвердил сохранение. Проверь подключение и повтори попытку.',
+    replaced: 'Подключение к тому же слоту заменяет маршрут служебной программой.',
+    retry: 'Повторить сохранение в слот {slot}',
+    retryNote: 'Повторное сохранение заменит содержимое указанного слота. Выбери нужный хаб в окне Bluetooth.',
+  },
 }
 
 const kk: typeof ru = {
@@ -72,7 +92,7 @@ const kk: typeof ru = {
   closing: 'Ажыратылуда…',
   firmware: 'Микробағдарлама',
   slot: 'Бағдарлама ұясы',
-  slotNote: 'Хабтан бос ұяны (0–19) таңда. Қосылғанда RoboEasy басқару бағдарламасын сол ұяға жазып, оның ішіндегісін ауыстырады.',
+  slotNote: 'Бос ұяны (0–19) таңда. Қосылғанда оның ішіндегісі қызметтік бағдарламамен ауысады. Сақтағанда оның орнына маршрут жазылады. Осы ұяға қайта қосылсаң, маршрут өшірілуі мүмкін.',
   browser:
     'Бетті компьютерде немесе Android құрылғысында Chrome арқылы HTTPS-пен аш. Компьютерде жергілікті іске қосу үшін localhost жарайды. iPhone және iPad құрылғыларындағы Chrome Web Bluetooth-ты қолдамайды.',
   cancelled: 'Хабты таңдау тоқтатылды. Қайталау үшін «Хабты қосу» түймесін бас.',
@@ -113,6 +133,26 @@ const kk: typeof ru = {
   roles: { left: 'Сол мотор', right: 'Оң мотор', gripper: 'Қармауыш', lift: 'Көтергіш', extra1: '3-механизм', extra2: '4-механизм' },
   positive: { gripper: 'Ашу', lift: 'Көтеру', extra1: 'Сағат бағытымен', extra2: 'Сағат бағытымен' },
   negative: { gripper: 'Жабу', lift: 'Түсіру', extra1: 'Кері бағытта', extra2: 'Кері бағытта' },
+  tape: {
+    title: 'Маршрутты жазу',
+    record: 'Жазуды бастау',
+    finish: 'Аяқтау және ұяға сақтау',
+    sec: 'с',
+    hint: 'Жазуды бастап, роботты маршрутпен жүргіз. Аяқтағанда жазба таңдалған ұяның ішіндегісін ауыстырады.',
+    recording: 'Маршрут жазылып жатыр. Аяқтап сақта немесе 60 с өткенде автоматты сақталуын күт.',
+    recorded: 'Маршрут жазылды. Ұзақтығы {time}.',
+    saved: 'Хаб {slot} ұясына сақталғанын растады.',
+    stopping: 'Хабтың тоқтауды растауын күтіп тұрмыз…',
+    retrying: 'Қайта сақтау үшін хабқа қосылып жатырмыз…',
+    uploading: 'Маршрут хабқа жүктеліп жатыр · {progress}%',
+    empty: 'Жазбада расталған қозғалыс жоқ. Ұя өзгертілмеді.',
+    interrupted: 'Жазба үзілді. Жаңа маршрут үшін жазуды қайта баста.',
+    stopError: 'Хаб тоқтауды растамады. Сақтау тоқтатылды.',
+    uploadError: 'Хаб сақтауды растамады. Байланысты тексеріп, қайта көр.',
+    replaced: 'Сол ұяға қосылғанда маршрут қызметтік бағдарламамен ауысады.',
+    retry: '{slot} ұясына қайта сақтау',
+    retryNote: 'Қайта сақтау көрсетілген ұяның ішіндегісін ауыстырады. Bluetooth терезесінде керек хабты таңда.',
+  },
 }
 
 const en: typeof ru = {
@@ -129,7 +169,7 @@ const en: typeof ru = {
   closing: 'Disconnecting…',
   firmware: 'Firmware',
   slot: 'Program slot',
-  slotNote: 'Choose an empty slot on the hub (0–19). When you connect, RoboEasy replaces that slot’s contents with its controller program.',
+  slotNote: 'Choose an empty slot (0–19). Connecting replaces its contents with the controller program. Saving replaces it with the route. Connecting to that slot again can erase the route.',
   browser:
     'Open this page in Chrome on a computer or Android over HTTPS. For local development on a computer, use localhost. Chrome on iPhone and iPad does not support Web Bluetooth.',
   cancelled: 'Hub selection was cancelled. Select “Connect hub” to try again.',
@@ -171,6 +211,26 @@ const en: typeof ru = {
   roles: { left: 'Left motor', right: 'Right motor', gripper: 'Gripper', lift: 'Lift', extra1: 'Mechanism 3', extra2: 'Mechanism 4' },
   positive: { gripper: 'Open', lift: 'Raise', extra1: 'Clockwise', extra2: 'Clockwise' },
   negative: { gripper: 'Close', lift: 'Lower', extra1: 'Counterclockwise', extra2: 'Counterclockwise' },
+  tape: {
+    title: 'Route recording',
+    record: 'Start recording',
+    finish: 'Finish and save to slot',
+    sec: 's',
+    hint: 'Start recording and drive the robot along the route. Finishing replaces the contents of the selected slot.',
+    recording: 'Recording the route. Finish and save it, or wait for it to save automatically at 60 s.',
+    recorded: 'Recorded a {time} route.',
+    saved: 'The hub confirmed the route was saved to slot {slot}.',
+    stopping: 'Waiting for the hub to confirm the motors have stopped…',
+    retrying: 'Connecting to the hub to retry the save…',
+    uploading: 'Uploading route to the hub · {progress}%',
+    empty: 'The recording has no confirmed movement. The slot was left unchanged.',
+    interrupted: 'Recording interrupted. Start recording again for a new route.',
+    stopError: 'The hub did not confirm the stop. Saving was halted.',
+    uploadError: 'The hub did not confirm the save. Check the connection and try again.',
+    replaced: 'Connecting to the same slot replaces the route with the controller program.',
+    retry: 'Retry saving to slot {slot}',
+    retryNote: 'Retrying replaces the contents of the listed slot. Select the intended hub in the Bluetooth picker.',
+  },
 }
 
 export type ControllerText = typeof ru

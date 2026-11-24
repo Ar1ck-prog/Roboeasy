@@ -8,16 +8,19 @@
 import type { Locale } from './i18n/config'
 
 const SPEECH_LOCALE: Record<Locale, string> = { ru: 'ru-RU', kk: 'kk-KZ', en: 'en-US' }
+export const VOICE_ASSIGNMENT_KEY = 'roboeasy:voice-assignment'
 
 interface Recognition {
   lang: string
+  continuous: boolean
   interimResults: boolean
   maxAlternatives: number
-  onresult: ((event: { results: ArrayLike<ArrayLike<{ transcript: string }>> }) => void) | null
-  onerror: (() => void) | null
+  onresult: ((event: { resultIndex: number; results: ArrayLike<{ isFinal: boolean; 0: { transcript: string } }> }) => void) | null
+  onerror: ((event: { error: string }) => void) | null
   onend: (() => void) | null
   start(): void
   stop(): void
+  abort(): void
 }
 
 type RecognitionConstructor = new () => Recognition
@@ -31,18 +34,25 @@ function recognitionClass(): RecognitionConstructor | null {
 export const canListen = () => recognitionClass() !== null
 export const canSpeak = () => typeof window !== 'undefined' && 'speechSynthesis' in window
 
+export function createSpeechRecognition(lang: Locale): Recognition | null {
+  const Recognizer = recognitionClass()
+  if (!Recognizer) return null
+  const recognition = new Recognizer()
+  recognition.lang = SPEECH_LOCALE[lang]
+  recognition.continuous = false
+  recognition.maxAlternatives = 1
+  return recognition
+}
+
 /** Listens for one phrase. Returns a function that stops listening. */
 export function listen(lang: Locale, onText: (text: string) => void, onEnd: (failed: boolean) => void): () => void {
-  const Recognition = recognitionClass()
-  if (!Recognition) {
+  const r = createSpeechRecognition(lang)
+  if (!r) {
     onEnd(true)
     return () => {}
   }
-  const r = new Recognition()
   let failed = false
-  r.lang = SPEECH_LOCALE[lang]
   r.interimResults = false
-  r.maxAlternatives = 1
   r.onresult = (event) => {
     const text = event.results[0]?.[0]?.transcript?.trim()
     if (text) onText(text)

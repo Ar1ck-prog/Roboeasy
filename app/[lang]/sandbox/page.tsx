@@ -23,7 +23,7 @@ export default async function WorkspacePage({ params }: Params) {
   if (!isLocale(lang)) notFound()
   const t = getDictionary(lang)
   return (
-    <AppShell lang={lang}>
+    <AppShell lang={lang} practice="sandbox">
       <SandboxTabs lang={lang} current="ai" />
       <Studio lang={lang} t={t.studio} labels={t.blocks} />
     </AppShell>

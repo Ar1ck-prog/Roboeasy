@@ -16,7 +16,7 @@ export function SandboxTabs({ lang, current }: { lang: Locale; current: 'ai' | '
   ] as const
   return (
     // On phones three equal buttons, with the label under the icon, so all of them stay in view.
-    <nav className="container grid grid-cols-3 gap-2 pt-6 sm:flex" aria-label={t.label}>
+    <nav className="container grid grid-cols-3 gap-2 pt-3 sm:flex" aria-label={t.label}>
       {tabs.map(({ key, href, label, Icon }) => (
         <Link
           key={key}

@@ -1,0 +1,10 @@
+[
+  {
+    "relation": ["delegate_permission/common.handle_all_urls"],
+    "target": {
+      "namespace": "android_app",
+      "package_name": "kz.roboeasy.app",
+      "sha256_cert_fingerprints": ["87:50:DA:5D:C8:21:04:EB:B8:72:22:4A:69:19:51:69:38:0C:52:CF:9B:EB:06:E1:EE:BD:CA:5A:2C:B3:58:D4"]
+    }
+  }
+]

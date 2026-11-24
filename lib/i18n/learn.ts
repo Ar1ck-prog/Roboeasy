@@ -12,6 +12,7 @@ const ru = {
     sandbox: 'Песочница',
     compete: 'Соревнования',
     controller: 'Контроллер робота',
+    voice: 'Голосовое управление',
     profile: 'Профиль',
     signIn: 'Войти',
     more: 'Ещё',
@@ -74,7 +75,8 @@ const ru = {
     emptyCondition: 'В блоке с условием пусто — вставь туда зелёный блок датчика.',
     gap: 'Пропуск {n}',
     codeGaps: 'Код с пропусками',
-    badProgram: 'Программа не запустится: проверь имена. Переменные и свои блоки называются латиницей (например, count или square), и у каждого «выполнить блок» должен быть свой «определить блок».',
+    badProgram:
+      'Программа не запустится: проверь имена. Переменные и свои блоки называются латиницей (например, count или square), и у каждого «выполнить блок» должен быть свой «определить блок».',
     shorter: 'Твоё решение короче нашего!',
     blocksCount: 'Блоков: {n}',
     tabs: { task: 'Задание', code: 'Код', robot: 'Робот' },
@@ -114,6 +116,7 @@ const kk: LearnText = {
     sandbox: 'Құмсалғыш',
     compete: 'Жарыстар',
     controller: 'Робот контроллері',
+    voice: 'Дауыспен басқару',
     profile: 'Профиль',
     signIn: 'Кіру',
     // TODO: проверить перевод
@@ -174,7 +177,8 @@ const kk: LearnText = {
     emptyCondition: 'Шарты бар блокта бос орын бар — оған датчиктің жасыл блогын сал.',
     gap: '{n}-бос орын',
     codeGaps: 'Бос орындары бар код',
-    badProgram: 'Бағдарлама іске қосылмайды: атауларды тексер. Айнымалылар мен өз блоктарың латынша аталады (мысалы, count немесе square), әр «блокты орындау» үшін өз «блокты анықтау» болуы керек.',
+    badProgram:
+      'Бағдарлама іске қосылмайды: атауларды тексер. Айнымалылар мен өз блоктарың латынша аталады (мысалы, count немесе square), әр «блокты орындау» үшін өз «блокты анықтау» болуы керек.',
     shorter: 'Сенің шешімің біздікінен қысқа!',
     blocksCount: 'Блоктар: {n}',
     tabs: { task: 'Тапсырма', code: 'Код', robot: 'Робот' },
@@ -210,6 +214,7 @@ const en: LearnText = {
     sandbox: 'Sandbox',
     compete: 'Competitions',
     controller: 'Robot controller',
+    voice: 'Voice control',
     profile: 'Profile',
     signIn: 'Sign in',
     more: 'More',
@@ -269,7 +274,8 @@ const en: LearnText = {
     emptyCondition: 'A block with a condition has an empty slot — put a green sensor block into it.',
     gap: 'Gap {n}',
     codeGaps: 'Code with gaps',
-    badProgram: 'The program will not run: check the names. Variables and your own blocks use Latin letters (for example count or square), and every “run block” needs its “define block”.',
+    badProgram:
+      'The program will not run: check the names. Variables and your own blocks use Latin letters (for example count or square), and every “run block” needs its “define block”.',
     shorter: 'Your solution is shorter than ours!',
     blocksCount: 'Blocks: {n}',
     tabs: { task: 'Task', code: 'Code', robot: 'Robot' },

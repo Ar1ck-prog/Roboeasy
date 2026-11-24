@@ -19,7 +19,7 @@ export default async function DrawRoutePage({ params }: Params) {
   const { lang } = await params
   if (!isLocale(lang)) notFound()
   return (
-    <AppShell lang={lang}>
+    <AppShell lang={lang} practice="sandbox">
       <SandboxTabs lang={lang} current="draw" />
       <DrawRoute lang={lang} t={getDrawText(lang)} labels={getDictionary(lang).blocks} />
     </AppShell>

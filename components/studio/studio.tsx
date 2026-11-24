@@ -1,6 +1,6 @@
 'use client'
 
-import { useCallback, useEffect, useRef, useState } from 'react'
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import {
   AlertTriangle,
   Blocks,
@@ -25,18 +25,22 @@ import { toast } from 'sonner'
 
 import { BlockStack } from '@/components/block-stack'
 import { CodeView } from '@/components/code-view'
+import { OpenPythonInFll } from '@/components/fll/open-python'
+import { DictateAssignment } from '@/components/studio/dictate-assignment'
 import { Badge } from '@/components/ui/badge'
 import { EmptyState } from '@/components/ui/empty'
 import { Skeleton } from '@/components/ui/skeleton'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { type Format, type GenerateErrorCode, type GenerateResponse, PROMPT_MAX } from '@/lib/api-types'
 import { type Locale, fill } from '@/lib/i18n/config'
+import { getPythonWorkflowText } from '@/lib/i18n/python-workflow'
 import type { Dictionary } from '@/lib/i18n/ru'
 import { DEFAULT_ROBOT, PORTS, type Port, type RobotProfile, countSteps } from '@/lib/dsl/types'
 import { programToPython } from '@/lib/dsl/compile-python'
 import { LOCAL_EXAMPLES, type LocalExample, exampleProgram } from '@/lib/dsl/examples'
 import { parseRobot } from '@/lib/dsl/schema'
 import { deviceHeaders } from '@/lib/device-id'
+import { VOICE_ASSIGNMENT_KEY } from '@/lib/speech'
 import {
   type HistoryItem,
   type StudioResult,
@@ -87,6 +91,8 @@ function saveFile(blob: Blob, filename: string) {
 export function Studio({ lang, t, labels }: StudioProps) {
   const [format, setFormat] = useState<Format>('blocks')
   const [prompt, setPrompt] = useState('')
+  const [manual, setManual] = useState(false)
+  const [manualCode, setManualCode] = useState('')
   const [robot, setRobot] = useState<RobotProfile>(DEFAULT_ROBOT)
   const [status, setStatus] = useState<Status>('idle')
   const [error, setError] = useState<ErrorState | null>(null)
@@ -100,6 +106,7 @@ export function Studio({ lang, t, labels }: StudioProps) {
   const [pendingFormat, setPendingFormat] = useState<Format>('blocks')
   const [announce, setAnnounce] = useState('')
   const [aiReady, setAiReady] = useState<boolean | null>(null)
+  const workflow = getPythonWorkflowText(lang)
 
   const abortRef = useRef<AbortController | null>(null)
   const resultRef = useRef<HTMLElement>(null)
@@ -126,8 +133,17 @@ export function Studio({ lang, t, labels }: StudioProps) {
     setHistory(loadHistory())
 
     const params = new URLSearchParams(window.location.search)
+    if (params.get('mode') === 'manual') setManual(true)
     const qp = params.get('prompt')
     if (qp) setPrompt(qp.slice(0, PROMPT_MAX))
+    if (params.has('voiceAssignment')) {
+      try {
+        const voicePrompt = sessionStorage.getItem(VOICE_ASSIGNMENT_KEY)
+        if (voicePrompt) setPrompt(voicePrompt.slice(0, PROMPT_MAX))
+      } catch {
+        // The assignment can still be entered from the keyboard.
+      }
+    }
     const qf = params.get('format')
     if (qf === 'blocks' || qf === 'python' || qf === 'python-free') setFormat(qf)
 
@@ -163,6 +179,14 @@ export function Studio({ lang, t, labels }: StudioProps) {
   const chooseFormat = (f: Format) => {
     setFormat(f)
     saveFormat(f)
+  }
+
+  function chooseManual(enabled: boolean) {
+    setManual(enabled)
+    const url = new URL(window.location.href)
+    if (enabled) url.searchParams.set('mode', 'manual')
+    else url.searchParams.delete('mode')
+    window.history.replaceState(null, '', url)
   }
 
   const updateRobot = (patch: Partial<RobotProfile>) => {
@@ -268,7 +292,10 @@ export function Studio({ lang, t, labels }: StudioProps) {
     }
   }
 
-  const code = result ? (result.format === 'blocks' ? result.python : result.code) : ''
+  const code = useMemo(() => {
+    if (!result) return ''
+    return result.format === 'blocks' ? programToPython(result.program, result.robot) : result.code
+  }, [result])
 
   useEffect(() => {
     setMentorProgram(code || null)
@@ -346,6 +373,29 @@ export function Studio({ lang, t, labels }: StudioProps) {
   )
 
   return (
+    <>
+      <div className="container pt-4">
+        <div className="flex flex-wrap gap-2" role="group">
+          <button type="button" aria-pressed={!manual} className={buttonVariants({ variant: manual ? 'secondary' : 'primary' })} onClick={() => chooseManual(false)}>
+            {workflow.generator}
+          </button>
+          <button type="button" aria-pressed={manual} className={buttonVariants({ variant: manual ? 'primary' : 'secondary' })} onClick={() => chooseManual(true)}>
+            {workflow.manual}
+          </button>
+        </div>
+      </div>
+      {manual && (
+        <div className="container py-4">
+          <section className="card panel grid gap-3" aria-label={workflow.manual}>
+            <label htmlFor="manual-python" className="field-label">{workflow.manualLabel}</label>
+            <p id="manual-python-hint" className="m-0 text-sm text-muted-foreground">{workflow.manualHint}</p>
+            <textarea id="manual-python" className="textarea min-h-64! font-mono!" value={manualCode} onChange={(e) => setManualCode(e.target.value)}
+              aria-describedby="manual-python-hint" wrap="off" dir="ltr" spellCheck={false} autoCapitalize="off" autoCorrect="off" />
+            <OpenPythonInFll lang={lang} name={workflow.manualName} code={manualCode} />
+          </section>
+        </div>
+      )}
+    <div hidden={manual}>
     <div className="container studio">
       {/* ── Composer ── */}
       <div className="studio-col">
@@ -415,6 +465,13 @@ export function Studio({ lang, t, labels }: StudioProps) {
               </span>
             </div>
           </div>
+
+          {!manual && (
+            <DictateAssignment lang={lang} onText={(text) => {
+              setPrompt((previous) => [previous.trimEnd(), text].filter(Boolean).join(' ').slice(0, PROMPT_MAX))
+              textareaRef.current?.focus()
+            }} />
+          )}
 
           <div className="idea-list" aria-label={t.ideas}>
             {examples.map((ex) => (
@@ -666,6 +723,7 @@ export function Studio({ lang, t, labels }: StudioProps) {
           <ResultView
             lang={lang}
             result={result}
+            code={code}
             t={t}
             labels={labels}
             view={view}
@@ -696,6 +754,8 @@ export function Studio({ lang, t, labels }: StudioProps) {
         )}
       </section>
     </div>
+    </div>
+    </>
   )
 }
 
@@ -707,6 +767,7 @@ function pluralForm(lang: Locale, n: number, forms: Dictionary['studio']['result
 interface ResultViewProps {
   lang: Locale
   result: StudioResult
+  code: string
   t: Dictionary['studio']
   labels: Dictionary['blocks']
   view: 'blocks' | 'python'
@@ -725,12 +786,11 @@ interface ResultViewProps {
 }
 
 function ResultView(p: ResultViewProps) {
-  const { result, t } = p
+  const { result, t, code } = p
   const isBlocks = result.format === 'blocks'
   const program = result.program
   const hasProgram = program !== undefined
   const tab = hasProgram ? p.view : 'python'
-  const code = result.format === 'blocks' ? result.python : result.code
   const tabs = (['blocks', 'python'] as const).filter(() => hasProgram)
   const ordered = isBlocks ? tabs : [...tabs].reverse()
 
@@ -822,6 +882,7 @@ function ResultView(p: ResultViewProps) {
           <Link2 size={17} aria-hidden="true" />
           {t.result.share}
         </button>
+        <OpenPythonInFll lang={p.lang} name={p.projectName.trim() || result.title} code={code} />
       </div>
 
       <form

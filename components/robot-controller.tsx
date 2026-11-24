@@ -1,11 +1,14 @@
 'use client'
 
 import { useCallback, useEffect, useRef, useState, type PointerEvent } from 'react'
-import { ArrowDown, ArrowLeft, ArrowRight, ArrowUp, Bluetooth, Check, Gamepad2, Square, Wrench } from 'lucide-react'
+import { ArrowDown, ArrowLeft, ArrowRight, ArrowUp, Bluetooth, Check, Circle, Gamepad2, Square, Wrench } from 'lucide-react'
 
+import { OpenPythonInFll } from '@/components/fll/open-python'
 import { Button } from '@/components/ui/button'
 import { Card } from '@/components/ui/card'
+import { fill, type Locale } from '@/lib/i18n/config'
 import type { ControllerText } from '@/lib/i18n/controller'
+import { getPythonWorkflowText } from '@/lib/i18n/python-workflow'
 import { useHydrated } from '@/lib/learn/store'
 import { HubConnectionError, HubError, useBluetoothAvailable } from '@/lib/spike/ble'
 import {
@@ -20,19 +23,25 @@ import {
   keyboardAxes,
   motorSpeeds,
   type Axes,
+  type Assignments,
   type DriveLimits,
   type Motor,
   type Port,
   type Role,
   type Speeds,
 } from '@/lib/spike/controller-input'
-import { connectController, type ControllerLink } from '@/lib/spike/controller-link'
+import { connectController, uploadRecordedRoute, type ControllerLink } from '@/lib/spike/controller-link'
+import { addFrame, finishTake, MAX_TAKE_MS, recordedPorts, routeToPython, type Frame } from '@/lib/spike/controller-recording'
 import { SLOT_COUNT } from '@/lib/spike/ble-protocol'
 import { cn } from '@/lib/utils'
 
 type Status = 'idle' | 'connecting' | 'ready' | 'recovering' | 'lost' | 'closing'
 type Problem = 'cancelled' | 'denied' | 'failed' | 'unsupported' | 'busy' | 'motorError' | 'commandDelay' | HubConnectionError['stage']
 type Hold = { role: Role; direction: 1 | -1 }
+type Recording = { start: number; frames: Frame[]; clock: number; deadline: number; motors: Assignments; slot: number }
+type SavedRoute = { code: string; duration: number; ports: Partial<Record<Role, Port>>; slot: number; needsStop: boolean; saved: boolean }
+type RouteStatus = 'idle' | 'stopping' | 'retrying' | 'uploading' | 'empty' | 'interrupted' | 'stopError' | 'uploadError' | 'replaced'
+const ROUTE_KEY = 'roboeasy:controller-route'
 function motorAvailable(port: Motor['port'], ports: readonly Port[] | null) {
   return !!port && !!ports?.includes(port)
 }
@@ -84,7 +93,7 @@ function SpeedField({ label, value, disabled, onCommit }: {
   )
 }
 
-export function RobotController({ t }: { t: ControllerText }) {
+export function RobotController({ lang, t }: { lang: Locale; t: ControllerText }) {
   const hydrated = useHydrated()
   const available = useBluetoothAvailable()
   const [status, setStatus] = useState<Status>('idle')
@@ -100,6 +109,13 @@ export function RobotController({ t }: { t: ControllerText }) {
   // Only for display: what the hub is told right now (per port) and which drive keys are held.
   const [output, setOutput] = useState<Speeds>(STOPPED)
   const [keysHeld, setKeysHeld] = useState<string[]>([])
+  const [isRecording, setIsRecording] = useState(false)
+  const [route, setRoute] = useState<SavedRoute | null>(null)
+  const [routeStatus, setRouteStatus] = useState<RouteStatus>('idle')
+  const [progress, setProgress] = useState(0)
+  const [clock, setClock] = useState(0)
+  const recording = useRef<Recording | null>(null)
+  const saving = useRef(false)
 
   const currentMotors = useRef(motors)
   const currentLimits = useRef(limits)
@@ -111,6 +127,36 @@ export function RobotController({ t }: { t: ControllerText }) {
   const holds = useRef(new Map<number | string, Hold>())
   const driveReady = motorAvailable(motors.left.port, detected) && motorAvailable(motors.right.port, detected)
   const canInput = useRef(false)
+
+  useEffect(() => {
+    try {
+      const draft: SavedRoute | null = JSON.parse(sessionStorage.getItem(ROUTE_KEY) ?? 'null')
+      if (draft && typeof draft.code === 'string' && draft.code.trim() &&
+        Number.isInteger(draft.slot) && draft.slot >= 0 && draft.slot < SLOT_COUNT && draft.ports) setRoute(draft)
+    } catch { /* The current recording still works without storage. */ }
+  }, [])
+
+  function keepRoute(next: SavedRoute) {
+    setRoute(next)
+    try {
+      sessionStorage.setItem(ROUTE_KEY, JSON.stringify(next))
+    } catch { /* The route remains in this page's memory. */ }
+  }
+
+  const clearRecording = useCallback(() => {
+    const rec = recording.current
+    if (!rec) return false
+    recording.current = null
+    clearInterval(rec.clock)
+    clearTimeout(rec.deadline)
+    return true
+  }, [])
+
+  const interruptRecording = useCallback(() => {
+    if (saving.current || !clearRecording()) return
+    setIsRecording(false)
+    setRouteStatus('interrupted')
+  }, [clearRecording])
 
   const update = useCallback(() => {
     if (!canInput.current) return
@@ -182,13 +228,15 @@ export function RobotController({ t }: { t: ControllerText }) {
       attempt.current?.abort()
       const connection = link.current
       link.current = null
+      clearRecording()
       reset(false, false)
-      void connection?.disconnect()
+      if (saving.current) connection?.close()
+      else void connection?.disconnect()
     }
-  }, [reset, update])
+  }, [clearRecording, reset, update])
 
   async function connect() {
-    if (!available || !slot || attempt.current || link.current) return
+    if (!available || !slot || attempt.current || link.current || saving.current) return
     const pending = new AbortController()
     attempt.current = pending
     setProblem(null)
@@ -201,6 +249,16 @@ export function RobotController({ t }: { t: ControllerText }) {
       const result = await connectController(
         Number(slot),
         {
+          onApplied: (speeds, at) => {
+            const rec = recording.current
+            if (rec && at >= rec.start) addFrame(rec.frames, at - rec.start, speeds)
+          },
+          onControllerUpload: () => {
+            if (route && route.slot === Number(slot)) {
+              keepRoute({ ...route, needsStop: true, saved: false })
+              if (route.saved) setRouteStatus('replaced')
+            }
+          },
           onDevices: (ports) => {
             if (pending.signal.aborted || detectedRef.current?.join() === ports.join()) return
             const previous = detectedRef.current
@@ -211,14 +269,17 @@ export function RobotController({ t }: { t: ControllerText }) {
                 const port = currentMotors.current[role].port
                 return motorAvailable(port, previous) && !motorAvailable(port, ports)
               })
-            )
+            ) {
+              interruptRecording()
               reset()
+            }
             setDetected(ports)
           },
           onLost: (reason) => {
             if (pending.signal.aborted) return
             link.current = null
             canInput.current = false
+            interruptRecording()
             reset()
             detectedRef.current = null
             setDetected(null)
@@ -227,6 +288,7 @@ export function RobotController({ t }: { t: ControllerText }) {
           },
           onPaused: (issue, detail) => {
             canInput.current = false
+            interruptRecording()
             reset(true, false)
             setProblem(issue)
             setDiagnostic(detail)
@@ -260,8 +322,9 @@ export function RobotController({ t }: { t: ControllerText }) {
 
   async function disconnect() {
     const connection = link.current
-    if (!connection || status === 'closing') return
+    if (!connection || status === 'closing' || saving.current) return
     canInput.current = false
+    interruptRecording()
     reset(true, false)
     setStatus('closing')
     await connection.disconnect()
@@ -274,7 +337,7 @@ export function RobotController({ t }: { t: ControllerText }) {
   }
 
   function assign(role: Role, change: Partial<Motor>) {
-    if (attempt.current || (link.current && !canInput.current)) return
+    if (attempt.current || recording.current || (link.current && !canInput.current)) return
     const previous = currentMotors.current
     if (change.port && detectedRef.current && !motorAvailable(change.port, detectedRef.current)) return
     if (change.port && ROLES.some((other) => role !== other && previous[other].port === change.port)) return
@@ -295,6 +358,102 @@ export function RobotController({ t }: { t: ControllerText }) {
     const next = { ...previous, [kind]: speed }
     currentLimits.current = next
     setLimits(next)
+  }
+
+  function startRecording() {
+    const connection = link.current
+    if (!canInput.current || !connection || recording.current || saving.current) return
+    const start = performance.now()
+    const frames: Frame[] = []
+    addFrame(frames, 0, connection.confirmedSpeeds)
+    const clock = window.setInterval(() => setClock(Math.min(performance.now() - start, MAX_TAKE_MS)), 200)
+    const deadline = window.setTimeout(() => void finishRecording(), MAX_TAKE_MS)
+    recording.current = { start, frames, clock, deadline, motors: currentMotors.current, slot: Number(slot) }
+    setClock(0)
+    setRouteStatus('idle')
+    setIsRecording(true)
+  }
+
+  async function finishRecording() {
+    const connection = link.current
+    const rec = recording.current
+    if (!connection || !rec || saving.current) return
+    saving.current = true
+    canInput.current = false
+    clearInterval(rec.clock)
+    clearTimeout(rec.deadline)
+    setIsRecording(false)
+    setProgress(0)
+    setRouteStatus('stopping')
+    reset(true, false)
+
+    let completed: SavedRoute | undefined
+    const complete = () => {
+      const take = finishTake(rec.frames)
+      if (!take) return null
+      const activePorts = recordedPorts(take)
+      const ports: SavedRoute['ports'] = {}
+      for (const role of ROLES) {
+        const port = rec.motors[role].port
+        if (port && activePorts.includes(port)) ports[role] = port
+      }
+      completed = { code: routeToPython(take), slot: rec.slot, duration: take.duration, ports, needsStop: true, saved: false }
+      keepRoute(completed)
+      return completed.code
+    }
+    let keepController = false
+    let uploading = false
+    try {
+      const saved = await connection.saveRoute(complete, () => {
+        uploading = true
+        if (completed) {
+          completed = { ...completed, needsStop: false }
+          keepRoute(completed)
+        }
+        setRouteStatus('uploading')
+      }, setProgress)
+      keepController = !saved
+      if (saved && completed) keepRoute({ ...completed, saved: true })
+      setRouteStatus(saved ? 'idle' : 'empty')
+    } catch {
+      setRouteStatus(uploading ? 'uploadError' : 'stopError')
+    } finally {
+      clearRecording()
+      saving.current = false
+      if (keepController) canInput.current = true
+      else {
+        connection.close()
+        if (link.current === connection) link.current = null
+        setHub({ name: '', firmware: '' })
+        detectedRef.current = null
+        setDetected(null)
+        setStatus('idle')
+      }
+    }
+  }
+
+  async function retrySave() {
+    if (!route || route.saved || saving.current || link.current || attempt.current) return
+    const retry = new AbortController()
+    attempt.current = retry
+    saving.current = true
+    setProgress(0)
+    setRouteStatus('retrying')
+    let upload = route
+    try {
+      await uploadRecordedRoute(route.code, route.slot, route.needsStop, retry.signal, () => {
+        upload = { ...route, needsStop: false }
+        keepRoute(upload)
+        setRouteStatus('uploading')
+      }, setProgress)
+      keepRoute({ ...upload, saved: true })
+      setRouteStatus('idle')
+    } catch {
+      if (!retry.signal.aborted) setRouteStatus('uploadError')
+    } finally {
+      saving.current = false
+      if (attempt.current === retry) attempt.current = null
+    }
   }
 
   function moveJoystick(event: PointerEvent<HTMLDivElement>) {
@@ -332,10 +491,15 @@ export function RobotController({ t }: { t: ControllerText }) {
     update()
   }
 
-  const ready = status === 'ready'
-  const connected = ready || status === 'recovering' || status === 'closing'
-  const setupLocked = !hydrated || status === 'connecting' || status === 'recovering' || status === 'closing'
+  const busySaving = routeStatus === 'stopping' || routeStatus === 'retrying' || routeStatus === 'uploading'
+  const ready = status === 'ready' && !busySaving
+  const connected = status === 'ready' || status === 'recovering' || status === 'closing'
+  const setupLocked = !hydrated || status === 'connecting' || status === 'recovering' || status === 'closing' || isRecording || busySaving
   const aux = AUX_ROLES.filter((role) => !!motors[role].port)
+  const seconds = (ms: number) => `${(ms / 1000).toFixed(1)} ${t.tape.sec}`
+  const workflow = getPythonWorkflowText(lang)
+  const ports = route ? ROLES.flatMap((role) => route.ports[role] ? [`${t.roles[role]} — ${route.ports[role]}`] : []).join(', ') : ''
+  const portHint = ports ? fill(workflow.routePorts, { ports }) : undefined
   const motorSummary = detected === null ? (connected ? t.checkingMotors : t.manual) : detected.length ? `${t.found} ${detected.join(', ')}.` : t.noMotors
 
   // 1 connect, 2 assign the drive motors, 3 drive.
@@ -412,7 +576,7 @@ export function RobotController({ t }: { t: ControllerText }) {
             <select
               className={fieldStyle}
               value={slot}
-              disabled={!available || status === 'connecting'}
+              disabled={!available || status === 'connecting' || busySaving}
               aria-describedby="controller-slot-note"
               onChange={(event) => setSlot(event.target.value)}
             >
@@ -431,14 +595,14 @@ export function RobotController({ t }: { t: ControllerText }) {
       )}
       <div className="flex flex-wrap items-center gap-3">
         {connected ? (
-          <Button onClick={() => void disconnect()} disabled={status === 'closing'}>
+          <Button onClick={() => void disconnect()} disabled={status === 'closing' || busySaving}>
             {t.disconnect}
           </Button>
         ) : (
           <Button
             variant="primary"
             onClick={() => void connect()}
-            disabled={!available || !slot || status === 'connecting'}
+            disabled={!available || !slot || status === 'connecting' || busySaving}
             aria-describedby="controller-slot-note"
           >
             {t.connect}
@@ -464,6 +628,54 @@ export function RobotController({ t }: { t: ControllerText }) {
         </div>
       )}
     </Card>
+  )
+
+  const routePanel = (
+    <section aria-labelledby="tape-heading" className="grid gap-3">
+      <h3 id="tape-heading" className="m-0 flex items-center gap-2 font-bold">
+        <span aria-hidden="true" className={cn('size-2.5 rounded-full', isRecording ? 'animate-pulse bg-destructive' : 'bg-outline/30')} />
+        {t.tape.title}
+      </h3>
+      {connected && (
+        <>
+          <p role="status" className="m-0 text-sm text-muted-foreground">{isRecording ? t.tape.recording : t.tape.hint}</p>
+          {isRecording && <span className="font-mono text-xs font-bold tabular-nums">{seconds(clock)} / {seconds(MAX_TAKE_MS)}</span>}
+          <Button size="sm" variant={isRecording ? 'danger' : 'secondary'} aria-pressed={isRecording}
+            className="min-h-11 justify-self-start whitespace-normal" disabled={!ready || (!isRecording && !driveReady)}
+            onClick={() => isRecording ? void finishRecording() : startRecording()}>
+            {isRecording && <Square aria-hidden="true" fill="currentColor" />}
+            {isRecording ? t.tape.finish : t.tape.record}
+          </Button>
+        </>
+      )}
+      {routeStatus !== 'idle' && (
+        <p role={busySaving ? 'status' : 'alert'} className={cn('m-0 text-sm font-bold', !busySaving && 'alert alert-warn')}>
+          {fill(t.tape[routeStatus], { progress: Math.round(progress * 100) })}
+        </p>
+      )}
+      {route && (
+        <>
+          <p role="status" className="m-0 text-sm">{fill(t.tape.recorded, { time: seconds(route.duration) })}</p>
+          {route.saved && !isRecording && routeStatus === 'idle' &&
+            <p role="status" className="alert alert-ok m-0 text-sm">{fill(t.tape.saved, { slot: route.slot })}</p>}
+          {portHint && <p className="m-0 text-sm text-muted-foreground">{portHint}</p>}
+          <div className="flex flex-wrap gap-2">
+            <OpenPythonInFll lang={lang} name={workflow.routeName} code={route.code} hint={portHint} disabled={busySaving || isRecording} />
+            {!route.saved && !connected && (
+              <Button size="sm" disabled={!available || busySaving || status === 'connecting'}
+                onClick={() => void retrySave()} aria-describedby="retry-slot-note">
+                {fill(t.tape.retry, { slot: route.slot })}
+              </Button>
+            )}
+          </div>
+          {!route.saved && !connected && <p id="retry-slot-note" className="m-0 text-sm text-muted-foreground">{t.tape.retryNote}</p>}
+          <details>
+            <summary className="cursor-pointer text-sm font-bold">{workflow.manualLabel}</summary>
+            <pre className="mt-2 max-h-64 max-w-full overflow-auto rounded bg-surface-2 p-3 text-xs">{route.code}</pre>
+          </details>
+        </>
+      )}
+    </section>
   )
 
   return (
@@ -621,10 +833,12 @@ export function RobotController({ t }: { t: ControllerText }) {
                 </div>
               </div>
             </div>
+            <div className="border-t border-outline/20 pt-4">{routePanel}</div>
           </Card>
         )}
         <div className="grid min-w-0 gap-5">
           {connectionCard}
+          {!connected && (route || routeStatus !== 'idle') && <Card className="min-w-0 gap-3 p-4 sm:p-6">{routePanel}</Card>}
           {settingsCard}
         </div>
       </div>
@@ -633,7 +847,10 @@ export function RobotController({ t }: { t: ControllerText }) {
         <Button
           variant="danger"
           size="lg"
-          onClick={() => reset()}
+          onClick={() => {
+            interruptRecording()
+            reset()
+          }}
           className="fixed bottom-[calc(4.75rem+env(safe-area-inset-bottom))] left-4 z-50 bg-danger-bg md:bottom-6 md:left-6"
         >
           <Square aria-hidden="true" fill="currentColor" />

@@ -97,6 +97,9 @@ export function TeacherHome({ lang, t, app }: { lang: Locale; t: PilotText; app:
                       <p className="m-0 font-mono text-lg" data-testid="class-code">
                         {fill(t.teacher.code, { code: c.code })}
                       </p>
+                      <p className="m-0 text-sm font-bold text-muted-foreground" data-testid="class-members">
+                        {fill(t.teacher.members, { n: c.members })}
+                      </p>
                     </div>
                     <div className="flex flex-wrap gap-2">
                       <button type="button" className={buttonVariants({ size: 'sm' })} onClick={() => void copyLink(c.code)}>
