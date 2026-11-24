@@ -196,7 +196,7 @@ test('manual entry is usable by touch on a phone in RU, KK and EN and FLL follow
       await page.getByRole('button', { name: t.manual }).tap()
       await page.getByRole('textbox', { name: t.manualLabel, exact: true }).fill(manual)
       await expect(page.getByRole('button', { name: t.open, exact: true })).toBeInViewport()
-      expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBeLessThanOrEqual(393)
+      expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBeLessThanOrEqual(devices['Pixel 7'].viewport.width)
     }
     const t = getPythonWorkflowText('en')
     await page.getByRole('button', { name: t.open, exact: true }).tap()

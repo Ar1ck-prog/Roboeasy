@@ -9,6 +9,8 @@ const encoder = new TextEncoder()
 const decoder = new TextDecoder()
 const url = `http://localhost:${process.env.E2E_PORT ?? 3100}`
 
+test.use({ launchOptions: { args: ['--enable-unsafe-swiftshader'] } })
+
 async function emulateHub(page: Page, { cancelFirst = false, unsupportedFirst = false, missedBootProbes = 0, gattFails = false, consoleOnly = false, bootLog = '', firstMotorReply = '', programPorts }: {
   cancelFirst?: boolean; unsupportedFirst?: boolean; missedBootProbes?: number; gattFails?: boolean
   consoleOnly?: boolean; bootLog?: string; firstMotorReply?: string; programPorts?: string
