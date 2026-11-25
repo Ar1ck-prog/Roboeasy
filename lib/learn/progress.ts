@@ -91,6 +91,13 @@ export function nextLesson(done: Set<string>, course: Course): { track: Track; i
   return null
 }
 
+/** The lesson to open from a track's card: its first current lesson, or null when there is none. */
+export function trackNextLesson(done: Set<string>, track: Track, course: Course): string | null {
+  const states = lessonStates(done, track, course)
+  for (const { ref } of trackLessons(track)) if (states.get(ref.id) === 'current') return ref.id
+  return null
+}
+
 // ── Skills ──────────────────────────────────────────────────────────────
 
 /** Skill groups for the radar (8 axes are readable on a phone). */

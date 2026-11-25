@@ -161,3 +161,10 @@ test('field simulator: the 3D simulator opens in its frame, in our fonts and wit
   expect(await frame.locator('body').evaluate((b) => getComputedStyle(b).fontFamily)).toContain('Nunito')
   expect(await frame.locator('.brand-title').evaluate((b) => getComputedStyle(b).fontFamily)).toContain('Rubik')
 })
+
+test("a track card's Start button opens the track's first lesson", async ({ page }) => {
+  await page.goto('/ru/learn')
+  const start = page.getByRole('listitem').filter({ has: page.getByRole('heading', { name: 'Старт', exact: true }) })
+  await start.getByRole('link', { name: 'Начать' }).click()
+  await expect(page).toHaveURL(/\/ru\/learn\/start\/start-01$/)
+})

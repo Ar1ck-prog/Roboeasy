@@ -10,7 +10,7 @@ import { Card } from '@/components/ui/card'
 import { fill } from '@/lib/i18n/config'
 import type { LearnAppText } from '@/lib/i18n/learn-app'
 import { COURSE } from '@/lib/learn/course'
-import { nextLesson, trackHasContent, trackProgress } from '@/lib/learn/progress'
+import { nextLesson, trackHasContent, trackNextLesson, trackProgress } from '@/lib/learn/progress'
 import { useHydrated } from '@/lib/learn/store'
 import { useProgress } from '@/lib/learn/use-progress'
 import { cn } from '@/lib/utils'
@@ -86,6 +86,7 @@ export function LearnMap({ lang, app }: { lang: Lang; app: LearnAppText }) {
           const prereqs = track.prerequisites.map((id) => COURSE.tracks.find((t) => t.id === id)?.title[lang] ?? id).join(', ')
           const href = `/${lang}/learn/${track.id}`
           const state = !hasContent ? 'soon' : p.complete ? 'complete' : !p.unlocked ? 'locked' : p.done > 0 ? 'continue' : 'start'
+          const lesson = state === 'start' || state === 'continue' ? trackNextLesson(done, track, COURSE) : null
           return (
             <li key={track.id}>
               <Card className={cn('relative h-full gap-3', (state === 'locked' || state === 'soon') && 'shadow-none')}>
@@ -127,17 +128,26 @@ export function LearnMap({ lang, app }: { lang: Lang; app: LearnAppText }) {
                     {p.ready < p.total && <span className="text-muted-foreground">{fill(app.map.readySoon, { ready: p.ready, total: p.total })}</span>}
                   </div>
                   <ProgressBar value={p.total ? p.done / p.total : 0} label={track.title[lang]} />
-                  <span
-                    className={buttonVariants({
-                      variant: state === 'continue' ? 'primary' : 'secondary',
-                      size: 'sm',
-                      className: cn('relative z-0 mt-1 justify-self-start', state !== 'start' && state !== 'continue' && 'invisible'),
-                    })}
-                    aria-hidden={state !== 'start' && state !== 'continue'}
-                  >
-                    {state === 'continue' ? app.map.continue : app.map.start}
-                    <ArrowRight aria-hidden="true" />
-                  </span>
+                  {state === 'start' || state === 'continue' ? (
+                    // A real link straight into the lesson, above the card's stretched title link.
+                    <Link
+                      href={lesson ? `${href}/${lesson}` : href}
+                      className={buttonVariants({
+                        variant: state === 'continue' ? 'primary' : 'secondary',
+                        size: 'sm',
+                        className: 'relative z-10 mt-1 justify-self-start',
+                      })}
+                    >
+                      {state === 'continue' ? app.map.continue : app.map.start}
+                      <ArrowRight aria-hidden="true" />
+                    </Link>
+                  ) : (
+                    // Keeps every card the same height.
+                    <span className={buttonVariants({ size: 'sm', className: 'invisible mt-1 justify-self-start' })} aria-hidden="true">
+                      {app.map.start}
+                      <ArrowRight aria-hidden="true" />
+                    </span>
+                  )}
                 </div>
               </Card>
             </li>
