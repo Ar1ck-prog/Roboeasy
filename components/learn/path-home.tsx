@@ -77,13 +77,6 @@ export function PathHome({ lang, app, play, wt, challengeTitles }: { lang: Lang;
 
   if (!p.state.profile || joining) return <Onboarding lang={lang} app={app} play={play} wt={wt} onSaved={() => setJoining(true)} onDone={() => setJoining(false)} />
 
-  // A profile from before learning paths, with no SPIKE lesson yet: pick a path first.
-  if (p.path === null)
-    return (
-      <div className="container grid max-w-4xl gap-8 py-8 md:py-12">
-        <PathPicker wt={wt} ageRange={p.state.profile.ageRange} onPick={setLearningPath} />
-      </div>
-    )
 
   const profile = p.state.profile
   const next = nextLesson(p.done, COURSE, p.path)
@@ -145,6 +138,13 @@ export function PathHome({ lang, app, play, wt, challengeTitles }: { lang: Lang;
           </div>
         </div>
       </header>
+
+      {/* A profile from before learning paths (or a new device), with no SPIKE lesson yet: pick a path here. */}
+      {p.path === null && (
+        <Card className="gap-4" data-testid="path-choose">
+          <PathPicker wt={wt} ageRange={profile.ageRange} onPick={setLearningPath} />
+        </Card>
+      )}
 
       {/* Continue */}
       <Card className="flex-col items-start gap-4 bg-primary text-primary-foreground sm:flex-row sm:items-center sm:gap-5">
