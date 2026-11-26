@@ -1,7 +1,8 @@
 'use client'
 
+import { useEffect, useState } from 'react'
 import Link from 'next/link'
-import { ArrowRight, Check, Clock, Gauge, Lock, PlayCircle } from 'lucide-react'
+import { ArrowRight, Blocks, Check, Clock, Cpu, Gauge, Lock, PlayCircle, Sparkles, Wifi } from 'lucide-react'
 
 import { TrackIcon } from '@/components/learn/track-icon'
 import { Badge } from '@/components/ui/badge'
@@ -16,6 +17,14 @@ import { useProgress } from '@/lib/learn/use-progress'
 import { cn } from '@/lib/utils'
 
 type Lang = 'ru' | 'kk' | 'en'
+type Platform = 'spike' | 'arduino' | 'esp32'
+const PLATFORMS: { id: Platform; icon: typeof Blocks }[] = [
+  { id: 'spike', icon: Blocks },
+  { id: 'arduino', icon: Cpu },
+  { id: 'esp32', icon: Wifi },
+]
+const PLATFORM_KEY = 'roboeasy:learn-platform'
+const isPlatform = (v: string | null): v is Platform => v === 'spike' || v === 'arduino' || v === 'esp32'
 
 export function ProgressBar({ value, label, className }: { value: number; label: string; className?: string }) {
   return (
@@ -40,7 +49,36 @@ export function LearnMap({ lang, app }: { lang: Lang; app: LearnAppText }) {
   const hydrated = useHydrated()
   const { done, state: learn } = useProgress()
   const tookPlacement = learn.events.some((e) => e.kind === 'known' && e.source === 'placement')
-  const next = nextLesson(done, COURSE)
+  // The tab comes from ?platform= (the page is static) or the last one chosen in this browser.
+  const [platform, setPlatform] = useState<Platform>('spike')
+  useEffect(() => {
+    const fromUrl = new URLSearchParams(window.location.search).get('platform')
+    let saved: string | null = null
+    try {
+      saved = window.localStorage.getItem(PLATFORM_KEY)
+    } catch {
+      saved = null
+    }
+    const chosen = isPlatform(fromUrl) ? fromUrl : isPlatform(saved) ? saved : 'spike'
+    setPlatform(chosen)
+  }, [])
+  const choose = (id: Platform) => {
+    setPlatform(id)
+    try {
+      window.localStorage.setItem(PLATFORM_KEY, id)
+    } catch {
+      // Remembering the tab is only a convenience.
+    }
+    const url = new URL(window.location.href)
+    if (id === 'spike') url.searchParams.delete('platform')
+    else url.searchParams.set('platform', id)
+    window.history.replaceState(null, '', url)
+  }
+  const tracks = COURSE.tracks.filter((t) => (t.platform ?? 'spike') === platform)
+  const course = { tracks }
+  const next = nextLesson(done, course)
+  const startedHere = tracks.some((t) => trackProgress(done, t, course).done > 0)
+  const firstTrack = tracks[0]
 
   return (
     <div className="container grid gap-8 py-8 md:py-12">
@@ -49,8 +87,51 @@ export function LearnMap({ lang, app }: { lang: Lang; app: LearnAppText }) {
         <p className="m-0 max-w-2xl text-lg text-muted-foreground">{app.map.lead}</p>
       </header>
 
+      <div className="grid gap-3">
+        <div role="tablist" aria-label={app.map.title} className="flex flex-wrap gap-2">
+          {PLATFORMS.map(({ id, icon: Icon }) => (
+            <button
+              key={id}
+              type="button"
+              role="tab"
+              aria-selected={platform === id}
+              onClick={() => choose(id)}
+              data-platform={id}
+              className={cn(
+                'inline-flex cursor-pointer items-center gap-2 rounded-(--radius-pill) border-(length:--stroke) border-outline px-4 py-2 font-display text-base font-extrabold transition-[transform,box-shadow]',
+                platform === id ? 'bg-foreground text-background shadow-(--shadow-hard-sm)' : 'bg-card hover:-translate-y-px hover:shadow-(--shadow-hard-sm)',
+              )}
+            >
+              <Icon className="size-5" aria-hidden="true" />
+              {app.map.platforms[id]}
+            </button>
+          ))}
+        </div>
+        <p className="m-0 max-w-3xl text-muted-foreground">{app.map.platformLead[platform]}</p>
+      </div>
+
       {/* One slot, same size for everyone, so nothing shifts after the progress loads: the test for new learners, the next lesson otherwise. */}
-      {!hydrated || (done.size === 0 && !tookPlacement) ? (
+      {platform !== 'spike' && (!hydrated || !startedHere) && firstTrack ? (
+        <Card className="flex-row flex-wrap items-center gap-4 bg-(--ok-bg)">
+          <Sparkles className="size-8 shrink-0" aria-hidden="true" />
+          <div className="min-w-[min(100%,14rem)] flex-1">
+            <h2 className="m-0 text-xl">{app.map.zeroTitle}</h2>
+            <p className="m-0 text-muted-foreground">{app.map.zeroText}</p>
+          </div>
+          {next ? (
+            <Link className={buttonVariants({ variant: 'primary' })} href={`/${lang}/learn/${next.track.id}/${next.id}`}>
+              {app.map.start}
+              <ArrowRight aria-hidden="true" />
+            </Link>
+          ) : (
+            // ESP32 builds on Arduino: its first track opens after the Arduino one.
+            <button type="button" className={buttonVariants({ variant: 'primary' })} onClick={() => choose('arduino')}>
+              {fill(app.map.locked, { tracks: app.map.platforms.arduino })}
+              <ArrowRight aria-hidden="true" />
+            </button>
+          )}
+        </Card>
+      ) : platform === 'spike' && (!hydrated || (done.size === 0 && !tookPlacement)) ? (
         <Card className="flex-row flex-wrap items-center gap-4 bg-(--ok-bg)">
           <Gauge className="size-8 shrink-0" aria-hidden="true" />
           {/* At least this wide: on a phone the button moves below instead of squeezing the text. */}
@@ -80,7 +161,7 @@ export function LearnMap({ lang, app }: { lang: Lang; app: LearnAppText }) {
       )}
 
       <ol className="m-0 grid list-none gap-4 p-0 md:grid-cols-2">
-        {COURSE.tracks.map((track, i) => {
+        {tracks.map((track, i) => {
           const p = trackProgress(done, track, COURSE)
           const hasContent = trackHasContent(track)
           const prereqs = track.prerequisites.map((id) => COURSE.tracks.find((t) => t.id === id)?.title[lang] ?? id).join(', ')

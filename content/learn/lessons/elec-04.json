@@ -1,0 +1,290 @@
+{
+  "id": "elec-04",
+  "track": "electricity",
+  "unit": "elec-parts",
+  "minutes": 8,
+  "skills": [
+    "electricity"
+  ],
+  "title": {
+    "ru": "Резистор и закон Ома",
+    "kk": "Резистор және Ом заңы",
+    "en": "The resistor and Ohm’s law"
+  },
+  "goal": {
+    "ru": "Сегодня ты узнаешь, зачем светодиоду резистор, и посчитаешь его сам.",
+    "kk": "Бүгін сен жарықдиодқа резистор не үшін керек екенін біліп, оны өзің есептейсің.",
+    "en": "Today you will find out why an LED needs a resistor and work it out yourself."
+  },
+  "summary": {
+    "ru": "Резистор ограничивает ток. R = U ÷ I — и ты сам можешь выбрать нужный.",
+    "kk": "Резистор токты шектейді. R = U ÷ I — және сен керегін өзің таңдай аласың.",
+    "en": "A resistor limits the current. R = U ÷ I, and you can pick the right one yourself."
+  },
+  "kit": false,
+  "steps": [
+    {
+      "id": "why",
+      "type": "theory",
+      "title": {
+        "ru": "Зачем светодиоду резистор",
+        "kk": "Жарықдиодқа резистор не үшін керек",
+        "en": "Why an LED needs a resistor"
+      },
+      "body": {
+        "ru": "Светодиод сам почти не мешает току. Если подключить его прямо к 5 В, ток вырастет больше чем до сотни миллиампер, и светодиод **сгорит** за долю секунды.\n\n**Резистор** ограничивает ток. Обычно со светодиодом ставят резистор **220 Ом** — тогда ток около 12 мА: ярко и безопасно.\n\nНоминал резистора зашифрован цветными полосками.",
+        "kk": "Жарықдиод өзі токқа бөгет болмайды дерлік. Оны тікелей 5 В-қа қосса, ток жүз миллиамперден асып кетеді, ал жарықдиод секундтың бір бөлігінде **күйіп кетеді**.\n\n**Резистор** токты шектейді. Әдетте жарықдиодпен **220 Ом** резистор қояды — сонда ток шамамен 12 мА: жарық әрі қауіпсіз.\n\nРезистордың номиналы түсті жолақтармен белгіленген.",
+        "en": "An LED barely resists current on its own. Connect it straight to 5 V and the current jumps past a hundred milliamperes: the LED **burns out** in a split second.\n\nA **resistor** limits the current. A **220 Ω** resistor is the usual partner of an LED: about 12 mA, bright and safe.\n\nThe value of a resistor is written in coloured bands."
+      },
+      "illustration": "e-resistor"
+    },
+    {
+      "id": "ohm",
+      "type": "theory",
+      "title": {
+        "ru": "Закон Ома",
+        "kk": "Ом заңы",
+        "en": "Ohm’s law"
+      },
+      "body": {
+        "ru": "Напряжение, ток и сопротивление связаны: **U = I × R**.\n\nКакой резистор нужен? **R = U ÷ I**. Светодиод забирает около 2 В, на резистор остаётся 5 − 2 = **3 В**. Нужен ток 15 мА = **0,015 А**.\n\nR = 3 ÷ 0,015 = **200 Ом**. Ближайший стандартный резистор — 220 Ом.",
+        "kk": "Кернеу, ток және кедергі байланысты: **U = I × R**.\n\nҚандай резистор керек? **R = U ÷ I**. Жарықдиод шамамен 2 В алады, резисторға 5 − 2 = **3 В** қалады. 15 мА = **0,015 А** ток керек.\n\nR = 3 ÷ 0,015 = **200 Ом**. Ең жақын стандартты резистор — 220 Ом.",
+        "en": "Voltage, current and resistance are linked: **U = I × R**.\n\nWhich resistor do you need? **R = U ÷ I**. The LED takes about 2 V, leaving 5 − 2 = **3 V** for the resistor. You want 15 mA = **0.015 A**.\n\nR = 3 ÷ 0.015 = **200 Ω**. The nearest standard resistor is 220 Ω."
+      },
+      "illustration": "e-ohm"
+    },
+    {
+      "id": "calc",
+      "type": "quiz",
+      "kind": "number",
+      "question": {
+        "ru": "На резисторе 3 В, нужен ток 0,01 А (10 мА). Какое сопротивление нужно?",
+        "kk": "Резисторда 3 В, 0,01 А (10 мА) ток керек. Қандай кедергі керек?",
+        "en": "The resistor gets 3 V and you want 0.01 A (10 mA). What resistance do you need?"
+      },
+      "answer": 300,
+      "tolerance": 0,
+      "explanation": {
+        "ru": "R = U ÷ I = 3 ÷ 0,01 = 300 Ом.",
+        "kk": "R = U ÷ I = 3 ÷ 0,01 = 300 Ом.",
+        "en": "R = U ÷ I = 3 ÷ 0.01 = 300 Ω."
+      },
+      "unit": {
+        "ru": "Ом",
+        "kk": "Ом",
+        "en": "Ω"
+      }
+    },
+    {
+      "id": "burn",
+      "type": "circuit",
+      "title": {
+        "ru": "Сожги светодиод (понарошку)",
+        "kk": "Жарықдиодты күйдір (жай ғана)",
+        "en": "Burn an LED (just pretend)"
+      },
+      "task": {
+        "ru": "Здесь светодиод подключён к 5V **без резистора**. Нажми «Запустить» и посмотри, что будет. В симуляторе это не страшно — а в жизни светодиод пришлось бы выбросить.",
+        "kk": "Мұнда жарықдиод 5V-ке **резисторсыз** қосылған. «Іске қосу» батырмасын басып, не болатынын көр. Симуляторда бұл қорқынышты емес — ал өмірде жарықдиодты лақтыруға тура келер еді.",
+        "en": "Here the LED is connected to 5V **without a resistor**. Press Run and see what happens. In the simulator it is fine; in real life the LED would go in the bin."
+      },
+      "start": {
+        "doc": {
+          "board": "uno",
+          "parts": [
+            {
+              "id": "l1",
+              "type": "led",
+              "x": 460,
+              "y": 130,
+              "rot": 0,
+              "props": {
+                "color": "red"
+              }
+            }
+          ],
+          "wires": [
+            {
+              "id": "w-uno.5V-bb.a14",
+              "a": "uno.5V",
+              "b": "bb.a14",
+              "color": "#d93025"
+            },
+            {
+              "id": "w-bb.b15-uno.GND.1",
+              "a": "bb.b15",
+              "b": "uno.GND.1",
+              "color": "#202124"
+            }
+          ]
+        },
+        "code": "void setup() {\n}\n\nvoid loop() {\n}\n"
+      },
+      "tray": [],
+      "code": "hidden",
+      "checks": [
+        {
+          "type": "fault",
+          "code": "led_burned"
+        }
+      ],
+      "hints": [
+        {
+          "ru": "Просто нажми «Запустить».",
+          "kk": "Жай ғана «Іске қосу» батырмасын бас.",
+          "en": "Just press Run."
+        }
+      ],
+      "reference": {
+        "actions": [],
+        "doc": {
+          "board": "uno",
+          "parts": [
+            {
+              "id": "l1",
+              "type": "led",
+              "x": 460,
+              "y": 130,
+              "rot": 0,
+              "props": {
+                "color": "red"
+              }
+            }
+          ],
+          "wires": [
+            {
+              "id": "w-uno.5V-bb.a14",
+              "a": "uno.5V",
+              "b": "bb.a14",
+              "color": "#d93025"
+            },
+            {
+              "id": "w-bb.b15-uno.GND.1",
+              "a": "bb.b15",
+              "b": "uno.GND.1",
+              "color": "#202124"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "fix",
+      "type": "circuit",
+      "title": {
+        "ru": "Спаси светодиод",
+        "kk": "Жарықдиодты құтқар",
+        "en": "Save the LED"
+      },
+      "task": {
+        "ru": "Теперь между 5V и светодиодом есть разрыв: от **столбика 10** до **столбика 14**. Возьми резистор в «Деталях» и поставь его так, чтобы левая ножка была в отверстии **a10**, а правая — в **a14**. Проверь, что номинал 220 Ом, и запусти.",
+        "kk": "Енді 5V пен жарықдиод арасында үзіліс бар: **10-бағаннан** **14-бағанға** дейін. «Бөлшектерден» резисторды алып, сол аяғы **a10** тесігінде, ал оң аяғы **a14**-те болатындай етіп қой. Номиналы 220 Ом екенін тексеріп, іске қос.",
+        "en": "Now there is a gap between 5V and the LED: from **column 10** to **column 14**. Take a resistor from Parts and place it with its left leg in hole **a10** and its right leg in **a14**. Check that it is 220 Ω and run."
+      },
+      "start": {
+        "doc": {
+          "board": "uno",
+          "parts": [
+            {
+              "id": "l1",
+              "type": "led",
+              "x": 460,
+              "y": 130,
+              "rot": 0,
+              "props": {
+                "color": "red"
+              }
+            }
+          ],
+          "wires": [
+            {
+              "id": "w-uno.5V-bb.b10",
+              "a": "uno.5V",
+              "b": "bb.b10",
+              "color": "#e8710a"
+            },
+            {
+              "id": "w-bb.b15-uno.GND.1",
+              "a": "bb.b15",
+              "b": "uno.GND.1",
+              "color": "#202124"
+            }
+          ]
+        },
+        "code": "void setup() {\n}\n\nvoid loop() {\n}\n"
+      },
+      "tray": [
+        "resistor"
+      ],
+      "code": "hidden",
+      "checks": [
+        {
+          "type": "ledLit"
+        },
+        {
+          "type": "ledMaxMa",
+          "ma": 20
+        }
+      ],
+      "hints": [
+        {
+          "ru": "Резистор появится под макеткой. Перетащи его за корпус.",
+          "kk": "Резистор макет тақтасының астында пайда болады. Оны корпусынан сүйре.",
+          "en": "The resistor appears below the breadboard. Drag it by its body."
+        },
+        {
+          "ru": "Когда резистор выделен, справа можно выбрать номинал.",
+          "kk": "Резистор белгіленгенде, оң жақта номиналды таңдауға болады.",
+          "en": "With the resistor selected, you can pick its value on the right."
+        },
+        {
+          "ru": "Если ток больше 20 мА — возьми резистор побольше.",
+          "kk": "Ток 20 мА-ден көп болса — үлкенірек резистор ал.",
+          "en": "If the current is above 20 mA, use a bigger resistor."
+        }
+      ],
+      "reference": {
+        "actions": [],
+        "doc": {
+          "board": "uno",
+          "parts": [
+            {
+              "id": "r1",
+              "type": "resistor",
+              "x": 420,
+              "y": 90,
+              "rot": 0,
+              "props": {
+                "ohms": 220
+              }
+            },
+            {
+              "id": "l1",
+              "type": "led",
+              "x": 460,
+              "y": 130,
+              "rot": 0,
+              "props": {
+                "color": "red"
+              }
+            }
+          ],
+          "wires": [
+            {
+              "id": "w-uno.5V-bb.b10",
+              "a": "uno.5V",
+              "b": "bb.b10",
+              "color": "#e8710a"
+            },
+            {
+              "id": "w-bb.b15-uno.GND.1",
+              "a": "bb.b15",
+              "b": "uno.GND.1",
+              "color": "#202124"
+            }
+          ]
+        }
+      }
+    }
+  ]
+}

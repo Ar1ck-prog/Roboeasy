@@ -17,6 +17,7 @@ import { CodeError } from './lang'
 export const LED_VF: Record<LedColor, number> = { red: 1.9, yellow: 2.0, green: 2.1, blue: 2.9, white: 2.9 }
 const LED_FULL_A = 0.01
 const LED_BURN_A = 0.05
+const LED_OHMS = 12
 const SHORT_A = 0.5
 const SERVO_DEG_PER_S = 500
 const PHASES = 8
@@ -189,7 +190,12 @@ export class Board implements Hardware {
           els.push({ t: 'r', a: this.legNet(part, '1'), b: this.legNet(part, '2'), ohms: part.props.ohms ?? 220, id })
           break
         case 'led':
-          if (!this.burned.has(id)) els.push({ t: 'd', a: this.legNet(part, 'a'), k: this.legNet(part, 'k'), id, ...diodeFor(LED_VF[part.props.color ?? 'red']) })
+          // A real LED also has ~12 Ω inside: straight on 5 V it takes a few hundred mA and burns, it is not a short circuit.
+          if (!this.burned.has(id)) {
+            const j = `${id}:junction`
+            els.push({ t: 'r', a: this.legNet(part, 'a'), b: j, ohms: LED_OHMS })
+            els.push({ t: 'd', a: j, k: this.legNet(part, 'k'), id, ...diodeFor(LED_VF[part.props.color ?? 'red']) })
+          }
           break
         case 'button':
           if (part.props.pressed) els.push({ t: 'r', a: this.legNet(part, '1a'), b: this.legNet(part, '2a'), ohms: 0.05 })

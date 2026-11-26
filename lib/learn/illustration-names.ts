@@ -2,6 +2,29 @@
  * Animated drawings of the robotics tracks (components/learn/robo-illustrations.tsx).
  * No zod here: the schema and the browser both import it.
  */
+/** Drawings of the electronics tracks (components/learn/electronics-illustrations.tsx). */
+export const ELECTRONICS_ILLUSTRATIONS = [
+  'e-water',
+  'e-circuit',
+  'e-open',
+  'e-led',
+  'e-resistor',
+  'e-ohm',
+  'e-breadboard',
+  'e-button',
+  'e-uno',
+  'e-sketch',
+  'e-digital',
+  'e-pwm',
+  'e-analog',
+  'e-pullup',
+  'e-serial',
+  'e-servo',
+  'e-sonar',
+  'e-esp32',
+  'e-3v3',
+] as const
+
 export const ROBO_ILLUSTRATIONS = [
   // Build
   'r-beams',

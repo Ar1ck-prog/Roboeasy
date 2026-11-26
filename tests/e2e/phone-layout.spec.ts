@@ -24,6 +24,8 @@ const PAGES = [
   '/ru/ai',
   '/ru/compete',
   '/ru/compete/simulator',
+  '/ru/learn?platform=arduino',
+  '/ru/learn/electricity',
   '/ru/electronics',
   '/ru/electronics/lab',
   '/ru/electronics/lab?mission=traffic',

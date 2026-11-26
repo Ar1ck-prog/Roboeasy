@@ -1,0 +1,239 @@
+{
+  "id": "esp-03",
+  "track": "esp32",
+  "unit": "esp-first",
+  "minutes": 8,
+  "skills": [
+    "microcontrollers",
+    "electricity"
+  ],
+  "title": {
+    "ru": "3,3 вольта",
+    "kk": "3,3 вольт",
+    "en": "3.3 volts"
+  },
+  "goal": {
+    "ru": "Сегодня ты узнаешь главное правило ESP32 и увидишь, что бывает, если его нарушить.",
+    "kk": "Бүгін сен ESP32-нің басты ережесін біліп, оны бұзса не болатынын көресің.",
+    "en": "Today you will learn the main rule of the ESP32 and see what happens if you break it."
+  },
+  "summary": {
+    "ru": "На ESP32 HIGH — это 3,3 В. Никогда не подавай 5 В на его пины, а датчики питай от 3V3.",
+    "kk": "ESP32-де HIGH — бұл 3,3 В. Оның пиндеріне ешқашан 5 В берме, ал датчиктерді 3V3-тен қоректендір.",
+    "en": "On the ESP32 HIGH is 3.3 V. Never put 5 V on its pins, and power sensors from 3V3."
+  },
+  "kit": false,
+  "steps": [
+    {
+      "id": "rule",
+      "type": "theory",
+      "title": {
+        "ru": "Осторожно: не 5 вольт",
+        "kk": "Абайла: 5 вольт емес",
+        "en": "Careful: not 5 volts"
+      },
+      "body": {
+        "ru": "Пины ESP32 работают на **3,3 В**: HIGH — это 3,3 В, а не 5. Поэтому светодиод через тот же резистор светит чуть тусклее.\n\nГлавное правило: **никогда не подавай 5 В на пин ESP32** — он рассчитан на 3,3 В и может испортиться. Датчики питай от пина **3V3**.",
+        "kk": "ESP32 пиндері **3,3 В**-пен жұмыс істейді: HIGH — 5 емес, 3,3 В. Сондықтан сол резистор арқылы жарықдиод сәл күңгірттеу жанады.\n\nБасты ереже: **ESP32 пиніне ешқашан 5 В берме** — ол 3,3 В-қа есептелген және бұзылуы мүмкін. Датчиктерді **3V3** пинінен қоректендір.",
+        "en": "ESP32 pins work at **3.3 V**: HIGH is 3.3 V, not 5. So an LED through the same resistor is a little dimmer.\n\nThe main rule: **never put 5 V on an ESP32 pin**. It is made for 3.3 V and can be damaged. Power sensors from the **3V3** pin."
+      },
+      "illustration": "e-3v3"
+    },
+    {
+      "id": "led",
+      "type": "circuit",
+      "title": {
+        "ru": "Светодиод на GPIO4",
+        "kk": "GPIO4-тегі жарықдиод",
+        "en": "An LED on GPIO4"
+      },
+      "task": {
+        "ru": "Подключи светодиод к ESP32: пин **D4** (нижний ряд) → столбик 10, столбик 15 → **GND**. Напиши мигалку на пине **4**. Посмотри на ток — выдели светодиод, и справа он будет виден.",
+        "kk": "Жарықдиодты ESP32-ге қос: **D4** пині (төменгі қатар) → 10-баған, 15-баған → **GND**. **4**-пинде жыпылықтауық жаз. Токқа қара — жарықдиодты белгілесең, ол оң жақта көрінеді.",
+        "en": "Connect an LED to the ESP32: pin **D4** (bottom row) → column 10, column 15 → **GND**. Write a blinker on pin **4**. Look at the current: select the LED and you will see it on the right."
+      },
+      "start": {
+        "doc": {
+          "board": "esp32",
+          "parts": [
+            {
+              "id": "r1",
+              "type": "resistor",
+              "x": 420,
+              "y": 90,
+              "rot": 0,
+              "props": {
+                "ohms": 220
+              }
+            },
+            {
+              "id": "l1",
+              "type": "led",
+              "x": 460,
+              "y": 130,
+              "rot": 0,
+              "props": {
+                "color": "red"
+              }
+            }
+          ],
+          "wires": []
+        },
+        "code": "void setup() {\n  // runs once\n}\n\nvoid loop() {\n  // runs again and again\n}\n"
+      },
+      "tray": [],
+      "code": "edit",
+      "checks": [
+        {
+          "type": "ledLit"
+        },
+        {
+          "type": "ledMaxMa",
+          "ma": 8
+        }
+      ],
+      "hints": [
+        {
+          "ru": "Пин D4 — в нижнем ряду, пятый слева.",
+          "kk": "D4 пині — төменгі қатарда, солдан бесінші.",
+          "en": "Pin D4 is in the bottom row, fifth from the left."
+        },
+        {
+          "ru": "Код как Blink, только пин 4.",
+          "kk": "Код Blink сияқты, тек 4-пин.",
+          "en": "The code is like Blink, only pin 4."
+        }
+      ],
+      "reference": {
+        "actions": [],
+        "doc": {
+          "board": "esp32",
+          "parts": [
+            {
+              "id": "r1",
+              "type": "resistor",
+              "x": 420,
+              "y": 90,
+              "rot": 0,
+              "props": {
+                "ohms": 220
+              }
+            },
+            {
+              "id": "l1",
+              "type": "led",
+              "x": 460,
+              "y": 130,
+              "rot": 0,
+              "props": {
+                "color": "red"
+              }
+            }
+          ],
+          "wires": [
+            {
+              "id": "w-esp.G4-bb.b10",
+              "a": "esp.G4",
+              "b": "bb.b10",
+              "color": "#e8710a"
+            },
+            {
+              "id": "w-bb.b15-esp.GND.2",
+              "a": "bb.b15",
+              "b": "esp.GND.2",
+              "color": "#202124"
+            }
+          ]
+        },
+        "code": "void setup() {\n  pinMode(4, OUTPUT);\n}\n\nvoid loop() {\n  digitalWrite(4, HIGH);\n  delay(500);\n  digitalWrite(4, LOW);\n  delay(500);\n}\n"
+      }
+    },
+    {
+      "id": "danger",
+      "type": "circuit",
+      "title": {
+        "ru": "Посмотри, что бывает от 5 вольт",
+        "kk": "5 вольттан не болатынын көр",
+        "en": "See what 5 volts does"
+      },
+      "task": {
+        "ru": "Соедини проводом пин **VIN** (там 5 В от USB) с пином **D4** и запусти. В симуляторе ничего не сломается — а на настоящей плате так делать нельзя!",
+        "kk": "**VIN** пинін (онда USB-ден 5 В) **D4** пинімен сыммен жалғап, іске қос. Симуляторда ештеңе бұзылмайды — ал нағыз тақтада олай істеуге болмайды!",
+        "en": "Connect the **VIN** pin (5 V from USB) to pin **D4** with a wire and run. Nothing breaks in the simulator, but never do this on a real board!"
+      },
+      "start": {
+        "doc": {
+          "board": "esp32",
+          "parts": [],
+          "wires": []
+        },
+        "code": "void setup() {\n}\n\nvoid loop() {\n}\n"
+      },
+      "tray": [],
+      "code": "hidden",
+      "checks": [
+        {
+          "type": "fault",
+          "code": "pin_overvoltage"
+        }
+      ],
+      "hints": [
+        {
+          "ru": "VIN — первый пин в верхнем ряду, D4 — пятый в нижнем.",
+          "kk": "VIN — жоғарғы қатардағы бірінші пин, D4 — төменгідегі бесінші.",
+          "en": "VIN is the first pin in the top row, D4 the fifth in the bottom row."
+        }
+      ],
+      "reference": {
+        "actions": [],
+        "doc": {
+          "board": "esp32",
+          "parts": [],
+          "wires": [
+            {
+              "id": "w-esp.VIN-esp.G4",
+              "a": "esp.VIN",
+              "b": "esp.G4",
+              "color": "#d93025"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "power",
+      "type": "quiz",
+      "kind": "choice",
+      "question": {
+        "ru": "Датчику нужно питание. От какого пина ESP32 его лучше питать?",
+        "kk": "Датчикке қорек керек. Оны ESP32-нің қай пинінен қоректендірген дұрыс?",
+        "en": "A sensor needs power. Which ESP32 pin should power it?"
+      },
+      "options": [
+        {
+          "ru": "3V3",
+          "kk": "3V3",
+          "en": "3V3"
+        },
+        {
+          "ru": "VIN, а сигнал — прямо на GPIO",
+          "kk": "VIN, ал сигнал — тікелей GPIO-ға",
+          "en": "VIN, with its signal straight to a GPIO"
+        },
+        {
+          "ru": "От розетки",
+          "kk": "Розеткадан",
+          "en": "A wall socket"
+        }
+      ],
+      "correct": [
+        0
+      ],
+      "explanation": {
+        "ru": "От 3V3 датчик выдаёт сигнал не больше 3,3 В — пины ESP32 в безопасности.",
+        "kk": "3V3-тен датчик 3,3 В-тан аспайтын сигнал береді — ESP32 пиндері қауіпсіз.",
+        "en": "Powered from 3V3, the sensor sends at most 3.3 V: the ESP32 pins are safe."
+      }
+    }
+  ]
+}

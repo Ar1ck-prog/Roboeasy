@@ -1,0 +1,178 @@
+{
+  "id": "ard-08",
+  "track": "arduino",
+  "unit": "ard-inputs",
+  "minutes": 8,
+  "skills": [
+    "microcontrollers",
+    "variables"
+  ],
+  "title": {
+    "ru": "Потенциометр и analogRead",
+    "kk": "Потенциометр және analogRead",
+    "en": "A potentiometer and analogRead"
+  },
+  "goal": {
+    "ru": "Сегодня ты научишь плату мерить не только «да» и «нет», а любое значение.",
+    "kk": "Бүгін сен тақтаны тек «иә» мен «жоқты» емес, кез келген мәнді өлшеуге үйретесің.",
+    "en": "Today you will teach the board to measure any value, not just yes and no."
+  },
+  "summary": {
+    "ru": "analogRead превращает напряжение 0–5 В в число 0–1023. Потенциометр — простой способ это напряжение менять.",
+    "kk": "analogRead 0–5 В кернеуді 0–1023 санға айналдырады. Потенциометр — бұл кернеуді өзгертудің қарапайым тәсілі.",
+    "en": "analogRead turns 0–5 V into a number from 0 to 1023. A potentiometer is a simple way to change that voltage."
+  },
+  "kit": false,
+  "steps": [
+    {
+      "id": "analog",
+      "type": "theory",
+      "title": {
+        "ru": "Не только HIGH и LOW",
+        "kk": "Тек HIGH және LOW емес",
+        "en": "Not just HIGH and LOW"
+      },
+      "body": {
+        "ru": "Цифровой пин знает только два состояния. А **аналоговый** вход A0–A5 измеряет напряжение и выдаёт число от **0** (0 В) до **1023** (5 В).\n\n**Потенциометр** — резистор с ручкой. Крайние ножки — на 5V и GND, а средняя выдаёт напряжение, которое меняется, когда крутишь ручку.",
+        "kk": "Цифрлық пин тек екі күйді біледі. Ал A0–A5 **аналогтық** кірісі кернеуді өлшеп, **0**-ден (0 В) **1023**-ке (5 В) дейінгі сан береді.\n\n**Потенциометр** — тұтқасы бар резистор. Шеткі аяқтары — 5V және GND-де, ал ортаңғысы тұтқаны бұрағанда өзгеретін кернеу береді.",
+        "en": "A digital pin knows only two states. An **analog** input A0–A5 measures voltage and gives a number from **0** (0 V) to **1023** (5 V).\n\nA **potentiometer** is a resistor with a knob. The outer legs go to 5V and GND, and the middle one gives a voltage that changes as you turn the knob."
+      },
+      "illustration": "e-analog"
+    },
+    {
+      "id": "mid",
+      "type": "quiz",
+      "kind": "number",
+      "question": {
+        "ru": "Ручка потенциометра стоит ровно посередине. Примерно какое число вернёт analogRead?",
+        "kk": "Потенциометр тұтқасы дәл ортада тұр. analogRead шамамен қандай сан қайтарады?",
+        "en": "The potentiometer knob is exactly in the middle. Roughly what number does analogRead return?"
+      },
+      "answer": 512,
+      "tolerance": 15,
+      "explanation": {
+        "ru": "Посередине — половина от 5 В, то есть примерно половина от 1023: около 512.",
+        "kk": "Ортасында — 5 В-тың жартысы, яғни 1023-тің шамамен жартысы: 512-дей.",
+        "en": "In the middle you get half of 5 V, so about half of 1023: around 512."
+      }
+    },
+    {
+      "id": "pot",
+      "type": "circuit",
+      "title": {
+        "ru": "Читаем ручку",
+        "kk": "Тұтқаны оқимыз",
+        "en": "Reading the knob"
+      },
+      "task": {
+        "ru": "Подключи потенциометр: левая ножка (столбик 20) → **5V**, правая (столбик 22) → **GND**, средняя (столбик 21) → **A0**. Напиши программу, которая печатает **analogRead(A0)** каждые 100 мс. Запусти и покрути ручку (ползунком справа или колёсиком мыши) до конца.",
+        "kk": "Потенциометрді қос: сол аяғы (20-баған) → **5V**, оң аяғы (22-баған) → **GND**, ортаңғысы (21-баған) → **A0**. Әр 100 мс сайын **analogRead(A0)** басып шығаратын бағдарлама жаз. Іске қосып, тұтқаны (оң жақтағы жүгірткімен немесе тінтуір дөңгелегімен) соңына дейін бұра.",
+        "en": "Connect the potentiometer: left leg (column 20) → **5V**, right leg (column 22) → **GND**, middle leg (column 21) → **A0**. Write a program that prints **analogRead(A0)** every 100 ms. Run it and turn the knob (with the slider on the right or the mouse wheel) all the way."
+      },
+      "start": {
+        "doc": {
+          "board": "uno",
+          "parts": [
+            {
+              "id": "p1",
+              "type": "pot",
+              "x": 520,
+              "y": 90,
+              "rot": 0,
+              "props": {}
+            }
+          ],
+          "wires": []
+        },
+        "code": "void setup() {\n  // runs once\n}\n\nvoid loop() {\n  // runs again and again\n}\n"
+      },
+      "tray": [],
+      "code": "edit",
+      "checks": [
+        {
+          "type": "serialNumbers",
+          "min": 4,
+          "atLeast": 900
+        }
+      ],
+      "hints": [
+        {
+          "ru": "Serial.println(analogRead(A0)); и delay(100); в loop().",
+          "kk": "loop() ішінде Serial.println(analogRead(A0)); және delay(100);",
+          "en": "Serial.println(analogRead(A0)); and delay(100); in loop()."
+        },
+        {
+          "ru": "Выдели потенциометр — справа появится ползунок «Ручка».",
+          "kk": "Потенциометрді белгіле — оң жақта «Тұтқа» жүгірткісі шығады.",
+          "en": "Select the potentiometer: a Knob slider appears on the right."
+        }
+      ],
+      "reference": {
+        "actions": [
+          {
+            "t": 200,
+            "part": "p1",
+            "props": {
+              "pos": 0.1
+            }
+          },
+          {
+            "t": 400,
+            "part": "p1",
+            "props": {
+              "pos": 0.4
+            }
+          },
+          {
+            "t": 600,
+            "part": "p1",
+            "props": {
+              "pos": 0.7
+            }
+          },
+          {
+            "t": 800,
+            "part": "p1",
+            "props": {
+              "pos": 1.0
+            }
+          }
+        ],
+        "doc": {
+          "board": "uno",
+          "parts": [
+            {
+              "id": "p1",
+              "type": "pot",
+              "x": 520,
+              "y": 90,
+              "rot": 0,
+              "props": {}
+            }
+          ],
+          "wires": [
+            {
+              "id": "w-uno.5V-bb.c20",
+              "a": "uno.5V",
+              "b": "bb.c20",
+              "color": "#d93025"
+            },
+            {
+              "id": "w-bb.c22-uno.GND.1",
+              "a": "bb.c22",
+              "b": "uno.GND.1",
+              "color": "#202124"
+            },
+            {
+              "id": "w-bb.c21-uno.A0",
+              "a": "bb.c21",
+              "b": "uno.A0",
+              "color": "#188038"
+            }
+          ]
+        },
+        "code": "void setup() {\n  Serial.begin(9600);\n}\n\nvoid loop() {\n  Serial.println(analogRead(A0));\n  delay(100);\n}\n"
+      }
+    }
+  ]
+}

@@ -15,6 +15,7 @@
       "icon": "Rocket",
       "color": "var(--blk-events)",
       "prerequisites": [],
+      "platform": "spike",
       "units": [
         {
           "id": "start-robot",
@@ -174,6 +175,7 @@
       "prerequisites": [
         "start"
       ],
+      "platform": "spike",
       "units": [
         {
           "id": "blocks-sequence",
@@ -598,6 +600,7 @@
       "prerequisites": [
         "start"
       ],
+      "platform": "spike",
       "units": [
         {
           "id": "build-parts",
@@ -926,6 +929,7 @@
       "prerequisites": [
         "blocks"
       ],
+      "platform": "spike",
       "units": [
         {
           "id": "sensors-color",
@@ -1276,6 +1280,7 @@
       "prerequisites": [
         "sensors"
       ],
+      "platform": "spike",
       "units": [
         {
           "id": "nav-errors",
@@ -1525,6 +1530,7 @@
       "prerequisites": [
         "sensors"
       ],
+      "platform": "spike",
       "units": [
         {
           "id": "python-bridge",
@@ -1818,6 +1824,7 @@
         "build",
         "sensors"
       ],
+      "platform": "spike",
       "units": [
         {
           "id": "mech-gripper",
@@ -2039,6 +2046,7 @@
         "navigation",
         "mechanisms"
       ],
+      "platform": "spike",
       "units": [
         {
           "id": "fll-intro",
@@ -2293,6 +2301,7 @@
       "prerequisites": [
         "sensors"
       ],
+      "platform": "spike",
       "units": [
         {
           "id": "auto-maze",
@@ -2531,6 +2540,7 @@
       "icon": "Brain",
       "color": "var(--blk-sensors)",
       "prerequisites": [],
+      "platform": "spike",
       "units": [
         {
           "id": "ai-what",
@@ -2837,6 +2847,473 @@
               },
               "skills": [
                 "ai-literacy"
+              ],
+              "status": "ready",
+              "project": false,
+              "kit": false
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "electricity",
+      "title": {
+        "ru": "Электричество с нуля",
+        "kk": "Электр нөлден",
+        "en": "Electricity from zero"
+      },
+      "description": {
+        "ru": "Ток, напряжение и сопротивление, первая цепь, светодиод, резистор, макетка и кнопка. Без пайки и без страха.",
+        "kk": "Ток, кернеу және кедергі, алғашқы тізбек, жарықдиод, резистор, макет тақтасы және түйме. Дәнекерлеусіз және қорқынышсыз.",
+        "en": "Current, voltage and resistance, your first circuit, the LED, the resistor, the breadboard and a button. No soldering, no fear."
+      },
+      "icon": "Zap",
+      "color": "#ffd56a",
+      "prerequisites": [],
+      "platform": "arduino",
+      "units": [
+        {
+          "id": "elec-basics",
+          "title": {
+            "ru": "Что такое электричество",
+            "kk": "Электр деген не",
+            "en": "What electricity is"
+          },
+          "lessons": [
+            {
+              "id": "elec-01",
+              "title": {
+                "ru": "Ток, напряжение и сопротивление",
+                "kk": "Ток, кернеу және кедергі",
+                "en": "Current, voltage and resistance"
+              },
+              "skills": [
+                "electricity"
+              ],
+              "status": "ready",
+              "project": false,
+              "kit": false
+            },
+            {
+              "id": "elec-02",
+              "title": {
+                "ru": "Замкнутая цепь",
+                "kk": "Тұйық тізбек",
+                "en": "A closed circuit"
+              },
+              "skills": [
+                "electricity"
+              ],
+              "status": "ready",
+              "project": false,
+              "kit": false
+            },
+            {
+              "id": "elec-03",
+              "title": {
+                "ru": "Светодиод: плюс и минус",
+                "kk": "Жарықдиод: плюс және минус",
+                "en": "The LED: plus and minus"
+              },
+              "skills": [
+                "electricity"
+              ],
+              "status": "ready",
+              "project": false,
+              "kit": false
+            }
+          ]
+        },
+        {
+          "id": "elec-parts",
+          "title": {
+            "ru": "Детали и макетка",
+            "kk": "Бөлшектер және макет тақтасы",
+            "en": "Parts and the breadboard"
+          },
+          "lessons": [
+            {
+              "id": "elec-04",
+              "title": {
+                "ru": "Резистор и закон Ома",
+                "kk": "Резистор және Ом заңы",
+                "en": "The resistor and Ohm’s law"
+              },
+              "skills": [
+                "electricity"
+              ],
+              "status": "ready",
+              "project": false,
+              "kit": false
+            },
+            {
+              "id": "elec-05",
+              "title": {
+                "ru": "Макетная плата",
+                "kk": "Макет тақтасы",
+                "en": "The breadboard"
+              },
+              "skills": [
+                "electricity"
+              ],
+              "status": "ready",
+              "project": false,
+              "kit": false
+            },
+            {
+              "id": "elec-06",
+              "title": {
+                "ru": "Кнопка-выключатель",
+                "kk": "Түйме-ажыратқыш",
+                "en": "A push-button switch"
+              },
+              "skills": [
+                "electricity"
+              ],
+              "status": "ready",
+              "project": false,
+              "kit": false
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "arduino",
+      "title": {
+        "ru": "Arduino: первые программы",
+        "kk": "Arduino: алғашқы бағдарламалар",
+        "en": "Arduino: first programs"
+      },
+      "description": {
+        "ru": "setup() и loop(), светодиоды, кнопки, монитор порта, потенциометр, ШИМ, пищалка, серво и дальномер.",
+        "kk": "setup() және loop(), жарықдиодтар, түймелер, порт мониторы, потенциометр, ШИМ, дыбыстағыш, серво және қашықтық өлшегіш.",
+        "en": "setup() and loop(), LEDs, buttons, the serial monitor, a potentiometer, PWM, a buzzer, a servo and a distance sensor."
+      },
+      "icon": "Cpu",
+      "color": "#5fd3c6",
+      "prerequisites": [
+        "electricity"
+      ],
+      "platform": "arduino",
+      "units": [
+        {
+          "id": "ard-first",
+          "title": {
+            "ru": "Первые программы",
+            "kk": "Алғашқы бағдарламалар",
+            "en": "First programs"
+          },
+          "lessons": [
+            {
+              "id": "ard-01",
+              "title": {
+                "ru": "Что такое Arduino",
+                "kk": "Arduino деген не",
+                "en": "What is an Arduino"
+              },
+              "skills": [
+                "microcontrollers"
+              ],
+              "status": "ready",
+              "project": false,
+              "kit": false
+            },
+            {
+              "id": "ard-02",
+              "title": {
+                "ru": "Первая программа: setup() и loop()",
+                "kk": "Алғашқы бағдарлама: setup() және loop()",
+                "en": "Your first program: setup() and loop()"
+              },
+              "skills": [
+                "microcontrollers",
+                "sequence"
+              ],
+              "status": "ready",
+              "project": false,
+              "kit": false
+            },
+            {
+              "id": "ard-03",
+              "title": {
+                "ru": "Свой светодиод на пине",
+                "kk": "Пиндегі өз жарықдиодың",
+                "en": "Your own LED on a pin"
+              },
+              "skills": [
+                "microcontrollers",
+                "sequence"
+              ],
+              "status": "ready",
+              "project": false,
+              "kit": false
+            },
+            {
+              "id": "ard-04",
+              "title": {
+                "ru": "Переменные и время",
+                "kk": "Айнымалылар және уақыт",
+                "en": "Variables and time"
+              },
+              "skills": [
+                "microcontrollers",
+                "variables"
+              ],
+              "status": "ready",
+              "project": false,
+              "kit": false
+            },
+            {
+              "id": "ard-05",
+              "title": {
+                "ru": "Проект: светофор",
+                "kk": "Жоба: бағдаршам",
+                "en": "Project: a traffic light"
+              },
+              "skills": [
+                "microcontrollers",
+                "functions"
+              ],
+              "status": "ready",
+              "project": true,
+              "kit": false
+            }
+          ]
+        },
+        {
+          "id": "ard-inputs",
+          "title": {
+            "ru": "Кнопки и датчики",
+            "kk": "Түймелер және датчиктер",
+            "en": "Buttons and sensors"
+          },
+          "lessons": [
+            {
+              "id": "ard-06",
+              "title": {
+                "ru": "Кнопка и условие if",
+                "kk": "Түйме және if шарты",
+                "en": "A button and if"
+              },
+              "skills": [
+                "microcontrollers",
+                "conditions"
+              ],
+              "status": "ready",
+              "project": false,
+              "kit": false
+            },
+            {
+              "id": "ard-07",
+              "title": {
+                "ru": "Монитор порта",
+                "kk": "Порт мониторы",
+                "en": "The serial monitor"
+              },
+              "skills": [
+                "microcontrollers",
+                "variables"
+              ],
+              "status": "ready",
+              "project": false,
+              "kit": false
+            },
+            {
+              "id": "ard-08",
+              "title": {
+                "ru": "Потенциометр и analogRead",
+                "kk": "Потенциометр және analogRead",
+                "en": "A potentiometer and analogRead"
+              },
+              "skills": [
+                "microcontrollers",
+                "variables"
+              ],
+              "status": "ready",
+              "project": false,
+              "kit": false
+            },
+            {
+              "id": "ard-09",
+              "title": {
+                "ru": "Яркость и ШИМ",
+                "kk": "Жарықтық және ШИМ",
+                "en": "Brightness and PWM"
+              },
+              "skills": [
+                "microcontrollers",
+                "variables"
+              ],
+              "status": "ready",
+              "project": false,
+              "kit": false
+            }
+          ]
+        },
+        {
+          "id": "ard-motion",
+          "title": {
+            "ru": "Звук и движение",
+            "kk": "Дыбыс және қозғалыс",
+            "en": "Sound and motion"
+          },
+          "lessons": [
+            {
+              "id": "ard-10",
+              "title": {
+                "ru": "Пищалка и мелодия",
+                "kk": "Дыбыстағыш және әуен",
+                "en": "A buzzer and a tune"
+              },
+              "skills": [
+                "microcontrollers",
+                "loops"
+              ],
+              "status": "ready",
+              "project": false,
+              "kit": false
+            },
+            {
+              "id": "ard-11",
+              "title": {
+                "ru": "Сервопривод",
+                "kk": "Сервожетек",
+                "en": "The servo"
+              },
+              "skills": [
+                "microcontrollers",
+                "mechanisms"
+              ],
+              "status": "ready",
+              "project": false,
+              "kit": false
+            },
+            {
+              "id": "ard-12",
+              "title": {
+                "ru": "Проект: парктроник",
+                "kk": "Жоба: парктроник",
+                "en": "Project: a parking sensor"
+              },
+              "skills": [
+                "microcontrollers",
+                "sensor-distance"
+              ],
+              "status": "ready",
+              "project": true,
+              "kit": false
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "esp32",
+      "title": {
+        "ru": "ESP32 с нуля",
+        "kk": "ESP32 нөлден",
+        "en": "ESP32 from zero"
+      },
+      "description": {
+        "ru": "Плата с Wi-Fi: логика 3,3 В, GPIO, 12-битный АЦП и ШИМ на любом пине. Дальше — интернет вещей.",
+        "kk": "Wi-Fi бар тақта: 3,3 В логика, GPIO, 12 биттік АЦП және кез келген пинде ШИМ. Әрі қарай — заттар интернеті.",
+        "en": "A board with Wi-Fi: 3.3 V logic, GPIO, a 12-bit ADC and PWM on any pin. Next: the Internet of Things."
+      },
+      "icon": "Wifi",
+      "color": "#8fb3ff",
+      "prerequisites": [
+        "arduino"
+      ],
+      "platform": "esp32",
+      "units": [
+        {
+          "id": "esp-first",
+          "title": {
+            "ru": "Знакомство с ESP32",
+            "kk": "ESP32-мен танысу",
+            "en": "Meet the ESP32"
+          },
+          "lessons": [
+            {
+              "id": "esp-01",
+              "title": {
+                "ru": "Знакомство с ESP32",
+                "kk": "ESP32-мен танысу",
+                "en": "Meet the ESP32"
+              },
+              "skills": [
+                "microcontrollers"
+              ],
+              "status": "ready",
+              "project": false,
+              "kit": false
+            },
+            {
+              "id": "esp-02",
+              "title": {
+                "ru": "Blink на ESP32",
+                "kk": "ESP32-дегі Blink",
+                "en": "Blink on the ESP32"
+              },
+              "skills": [
+                "microcontrollers"
+              ],
+              "status": "ready",
+              "project": false,
+              "kit": false
+            },
+            {
+              "id": "esp-03",
+              "title": {
+                "ru": "3,3 вольта",
+                "kk": "3,3 вольт",
+                "en": "3.3 volts"
+              },
+              "skills": [
+                "microcontrollers",
+                "electricity"
+              ],
+              "status": "ready",
+              "project": false,
+              "kit": false
+            }
+          ]
+        },
+        {
+          "id": "esp-io",
+          "title": {
+            "ru": "Входы и выходы",
+            "kk": "Кірістер мен шығыстар",
+            "en": "Inputs and outputs"
+          },
+          "lessons": [
+            {
+              "id": "esp-04",
+              "title": {
+                "ru": "АЦП на 12 бит",
+                "kk": "12 биттік АЦП",
+                "en": "A 12-bit ADC"
+              },
+              "skills": [
+                "microcontrollers",
+                "variables"
+              ],
+              "status": "ready",
+              "project": false,
+              "kit": false
+            },
+            {
+              "id": "esp-05",
+              "title": {
+                "ru": "ШИМ на любом пине",
+                "kk": "Кез келген пиндегі ШИМ",
+                "en": "PWM on any pin"
+              },
+              "skills": [
+                "microcontrollers",
+                "loops"
               ],
               "status": "ready",
               "project": false,

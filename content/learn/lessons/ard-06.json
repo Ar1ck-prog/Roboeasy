@@ -1,0 +1,249 @@
+{
+  "id": "ard-06",
+  "track": "arduino",
+  "unit": "ard-inputs",
+  "minutes": 9,
+  "skills": [
+    "microcontrollers",
+    "conditions"
+  ],
+  "title": {
+    "ru": "Кнопка и условие if",
+    "kk": "Түйме және if шарты",
+    "en": "A button and if"
+  },
+  "goal": {
+    "ru": "Сегодня плата научится слушать кнопку и принимать решения.",
+    "kk": "Бүгін тақта түймені тыңдап, шешім қабылдауды үйренеді.",
+    "en": "Today the board learns to listen to a button and make decisions."
+  },
+  "summary": {
+    "ru": "digitalRead читает пин, INPUT_PULLUP избавляет от «плавающего» входа, а if выбирает, что делать.",
+    "kk": "digitalRead пинді оқиды, INPUT_PULLUP «қалқыған» кірістен құтқарады, ал if не істеу керегін таңдайды.",
+    "en": "digitalRead reads a pin, INPUT_PULLUP gets rid of a floating input, and if chooses what to do."
+  },
+  "kit": false,
+  "steps": [
+    {
+      "id": "read",
+      "type": "theory",
+      "title": {
+        "ru": "Читаем кнопку",
+        "kk": "Түймені оқимыз",
+        "en": "Reading a button"
+      },
+      "body": {
+        "ru": "**digitalRead(2)** читает пин: HIGH или LOW. Чтобы кнопка работала надёжно, включают встроенную подтяжку: **pinMode(2, INPUT_PULLUP)**.\n\nТогда без нажатия пин читает HIGH, а нажатая кнопка соединяет его с GND — и пин читает **LOW**.\n\nБез подтяжки вход «висит в воздухе» и читает случайные значения.",
+        "kk": "**digitalRead(2)** пинді оқиды: HIGH немесе LOW. Түйме сенімді жұмыс істеуі үшін кірістірілген тартқышты қосады: **pinMode(2, INPUT_PULLUP)**.\n\nСонда баспағанда пин HIGH оқиды, ал басылған түйме оны GND-мен жалғайды — пин **LOW** оқиды.\n\nТартқышсыз кіріс «ауада ілініп» тұрады және кездейсоқ мәндер оқиды.",
+        "en": "**digitalRead(2)** reads a pin: HIGH or LOW. For a button to work reliably you switch on the built-in pull-up: **pinMode(2, INPUT_PULLUP)**.\n\nThen the pin reads HIGH when released, and the pressed button connects it to GND, so the pin reads **LOW**.\n\nWithout a pull-up the input hangs in the air and reads random values."
+      },
+      "illustration": "e-pullup"
+    },
+    {
+      "id": "if",
+      "type": "theory",
+      "title": {
+        "ru": "Если… иначе…",
+        "kk": "Егер… әйтпесе…",
+        "en": "If… else…"
+      },
+      "body": {
+        "ru": "**if** проверяет условие и выполняет одно из двух. Внимание: сравнение — это два знака равно **==**, а один **=** — это присваивание.",
+        "kk": "**if** шартты тексеріп, екеуінің бірін орындайды. Назар аудар: салыстыру — екі теңдік белгісі **==**, ал біреуі **=** — бұл меншіктеу.",
+        "en": "**if** checks a condition and runs one of two branches. Careful: comparing is two equals signs **==**, while a single **=** assigns a value."
+      },
+      "code": "if (digitalRead(2) == LOW) {\n  digitalWrite(8, HIGH);\n} else {\n  digitalWrite(8, LOW);\n}",
+      "codeLang": "arduino"
+    },
+    {
+      "id": "low",
+      "type": "quiz",
+      "kind": "choice",
+      "question": {
+        "ru": "Кнопка на пине 2 с INPUT_PULLUP нажата. Что прочитает digitalRead(2)?",
+        "kk": "INPUT_PULLUP бар 2-пиндегі түйме басылған. digitalRead(2) не оқиды?",
+        "en": "The button on pin 2 with INPUT_PULLUP is pressed. What does digitalRead(2) read?"
+      },
+      "options": [
+        {
+          "ru": "HIGH",
+          "kk": "HIGH",
+          "en": "HIGH"
+        },
+        {
+          "ru": "LOW",
+          "kk": "LOW",
+          "en": "LOW"
+        },
+        {
+          "ru": "1023",
+          "kk": "1023",
+          "en": "1023"
+        }
+      ],
+      "correct": [
+        1
+      ],
+      "explanation": {
+        "ru": "Нажатая кнопка соединяет пин с GND, поэтому LOW.",
+        "kk": "Басылған түйме пинді GND-мен жалғайды, сондықтан LOW.",
+        "en": "The pressed button connects the pin to GND, so LOW."
+      }
+    },
+    {
+      "id": "button",
+      "type": "circuit",
+      "title": {
+        "ru": "Светодиод по кнопке",
+        "kk": "Түйме бойынша жарықдиод",
+        "en": "An LED on a button"
+      },
+      "task": {
+        "ru": "Собери схему и напиши программу: светодиод на пине **8** горит, только пока нажата кнопка на пине **2**.\n\nПровода: пин 8 → столбик 6, столбик 11 → шина −, пин 2 → столбик 20, столбик 22 → шина −, GND → шина −.",
+        "kk": "Схеманы құрастырып, бағдарлама жаз: **8**-пиндегі жарықдиод **2**-пиндегі түйме басылып тұрғанда ғана жанады.\n\nСымдар: 8-пин → 6-баған, 11-баған → − шина, 2-пин → 20-баған, 22-баған → − шина, GND → − шина.",
+        "en": "Build the circuit and write the program: the LED on pin **8** is on only while the button on pin **2** is held.\n\nWires: pin 8 → column 6, column 11 → − rail, pin 2 → column 20, column 22 → − rail, GND → − rail."
+      },
+      "start": {
+        "doc": {
+          "board": "uno",
+          "parts": [
+            {
+              "id": "r6",
+              "type": "resistor",
+              "x": 380,
+              "y": 90,
+              "rot": 0,
+              "props": {
+                "ohms": 220
+              }
+            },
+            {
+              "id": "l6",
+              "type": "led",
+              "x": 420,
+              "y": 130,
+              "rot": 0,
+              "props": {
+                "color": "red"
+              }
+            },
+            {
+              "id": "b1",
+              "type": "button",
+              "x": 520,
+              "y": 130,
+              "rot": 0,
+              "props": {}
+            }
+          ],
+          "wires": []
+        },
+        "code": "void setup() {\n  // runs once\n}\n\nvoid loop() {\n  // runs again and again\n}\n"
+      },
+      "tray": [],
+      "code": "edit",
+      "checks": [
+        {
+          "type": "mission",
+          "id": "button"
+        }
+      ],
+      "hints": [
+        {
+          "ru": "pinMode(2, INPUT_PULLUP) — и нажатие будет давать LOW.",
+          "kk": "pinMode(2, INPUT_PULLUP) — сонда басу LOW береді.",
+          "en": "pinMode(2, INPUT_PULLUP): pressing then gives LOW."
+        },
+        {
+          "ru": "Пока схема работает, нажимай кнопку прямо на макетке.",
+          "kk": "Схема жұмыс істеп тұрғанда түймені тікелей макет тақтасында бас.",
+          "en": "While it runs, press the button right on the breadboard."
+        }
+      ],
+      "reference": {
+        "actions": [
+          {
+            "t": 300,
+            "part": "b1",
+            "props": {
+              "pressed": true
+            }
+          },
+          {
+            "t": 700,
+            "part": "b1",
+            "props": {
+              "pressed": false
+            }
+          }
+        ],
+        "doc": {
+          "board": "uno",
+          "parts": [
+            {
+              "id": "r6",
+              "type": "resistor",
+              "x": 380,
+              "y": 90,
+              "rot": 0,
+              "props": {
+                "ohms": 220
+              }
+            },
+            {
+              "id": "l6",
+              "type": "led",
+              "x": 420,
+              "y": 130,
+              "rot": 0,
+              "props": {
+                "color": "red"
+              }
+            },
+            {
+              "id": "b1",
+              "type": "button",
+              "x": 520,
+              "y": 130,
+              "rot": 0,
+              "props": {}
+            }
+          ],
+          "wires": [
+            {
+              "id": "w-uno.GND.3-bb.tn1",
+              "a": "uno.GND.3",
+              "b": "bb.tn1",
+              "color": "#202124"
+            },
+            {
+              "id": "w-uno.D8-bb.b6",
+              "a": "uno.D8",
+              "b": "bb.b6",
+              "color": "#e8710a"
+            },
+            {
+              "id": "w-bb.b11-bb.tn11",
+              "a": "bb.b11",
+              "b": "bb.tn11",
+              "color": "#202124"
+            },
+            {
+              "id": "w-uno.D2-bb.a20",
+              "a": "uno.D2",
+              "b": "bb.a20",
+              "color": "#f9ab00"
+            },
+            {
+              "id": "w-bb.a22-bb.tn22",
+              "a": "bb.a22",
+              "b": "bb.tn22",
+              "color": "#202124"
+            }
+          ]
+        },
+        "code": "const int BUTTON = 2;\nconst int LED = 8;\n\nvoid setup() {\n  pinMode(BUTTON, INPUT_PULLUP);\n  pinMode(LED, OUTPUT);\n}\n\nvoid loop() {\n  if (digitalRead(BUTTON) == LOW) {\n    digitalWrite(LED, HIGH);\n  } else {\n    digitalWrite(LED, LOW);\n  }\n}\n"
+      }
+    }
+  ]
+}

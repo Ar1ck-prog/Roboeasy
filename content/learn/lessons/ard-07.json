@@ -1,0 +1,125 @@
+{
+  "id": "ard-07",
+  "track": "arduino",
+  "unit": "ard-inputs",
+  "minutes": 7,
+  "skills": [
+    "microcontrollers",
+    "variables"
+  ],
+  "title": {
+    "ru": "Монитор порта",
+    "kk": "Порт мониторы",
+    "en": "The serial monitor"
+  },
+  "goal": {
+    "ru": "Сегодня плата начнёт писать тебе сообщения.",
+    "kk": "Бүгін тақта саған хабарлама жаза бастайды.",
+    "en": "Today the board starts sending you messages."
+  },
+  "summary": {
+    "ru": "Serial.begin включает связь, Serial.println печатает. Теперь видно всё, что происходит внутри программы.",
+    "kk": "Serial.begin байланысты қосады, Serial.println басып шығарады. Енді бағдарлама ішінде болып жатқанның бәрі көрінеді.",
+    "en": "Serial.begin turns on the link and Serial.println prints. Now you can see everything happening inside the program."
+  },
+  "kit": false,
+  "steps": [
+    {
+      "id": "serial",
+      "type": "theory",
+      "title": {
+        "ru": "Плата пишет сообщения",
+        "kk": "Тақта хабарлама жазады",
+        "en": "The board writes messages"
+      },
+      "body": {
+        "ru": "**Serial** — переписка платы с компьютером по USB. В setup() её включают: **Serial.begin(9600);** (9600 — скорость).\n\nДальше **Serial.println(\"Привет!\")** печатает строку, а **Serial.println(n)** — значение переменной. Монитор порта — лучший помощник: видно, что происходит внутри программы.",
+        "kk": "**Serial** — тақтаның компьютермен USB арқылы хат алмасуы. Оны setup() ішінде қосады: **Serial.begin(9600);** (9600 — жылдамдық).\n\nСосын **Serial.println(\"Сәлем!\")** жолды басып шығарады, ал **Serial.println(n)** — айнымалының мәнін. Порт мониторы — ең жақсы көмекші: бағдарлама ішінде не болып жатқаны көрінеді.",
+        "en": "**Serial** is the board talking to the computer over USB. You turn it on in setup(): **Serial.begin(9600);** (9600 is the speed).\n\nThen **Serial.println(\"Hello!\")** prints a line and **Serial.println(n)** prints the value of a variable. The serial monitor is your best helper: you can see what happens inside the program."
+      },
+      "illustration": "e-serial",
+      "code": "int n = 0;\n\nvoid setup() {\n  Serial.begin(9600);\n}\n\nvoid loop() {\n  n = n + 1;\n  Serial.println(n);\n  delay(500);\n}\n",
+      "codeLang": "arduino"
+    },
+    {
+      "id": "fill",
+      "type": "quiz",
+      "kind": "fill",
+      "question": {
+        "ru": "Заполни пропуски",
+        "kk": "Бос орындарды толтыр",
+        "en": "Fill the gaps"
+      },
+      "code": "void setup() {\n  Serial.[[0]](9600);\n}\n\nvoid loop() {\n  Serial.[[1]](\"Hi\");\n  delay(500);\n}",
+      "blanks": [
+        {
+          "options": [
+            "begin",
+            "start",
+            "open"
+          ],
+          "correct": 0
+        },
+        {
+          "options": [
+            "println",
+            "show",
+            "say"
+          ],
+          "correct": 0
+        }
+      ],
+      "explanation": {
+        "ru": "Serial.begin — включить, Serial.println — напечатать строку.",
+        "kk": "Serial.begin — қосу, Serial.println — жолды басып шығару.",
+        "en": "Serial.begin turns it on, Serial.println prints a line."
+      }
+    },
+    {
+      "id": "counter",
+      "type": "circuit",
+      "title": {
+        "ru": "Счётчик в мониторе порта",
+        "kk": "Порт мониторындағы санағыш",
+        "en": "A counter in the serial monitor"
+      },
+      "task": {
+        "ru": "Напиши программу, которая каждые полсекунды печатает число, каждый раз на 1 больше: 1, 2, 3…",
+        "kk": "Әр жарты секунд сайын санды басып шығаратын бағдарлама жаз, әр жолы 1-ге көп: 1, 2, 3…",
+        "en": "Write a program that prints a number every half second, one more each time: 1, 2, 3…"
+      },
+      "start": {
+        "doc": {
+          "board": "uno",
+          "parts": [],
+          "wires": []
+        },
+        "code": "void setup() {\n  // runs once\n}\n\nvoid loop() {\n  // runs again and again\n}\n"
+      },
+      "tray": [],
+      "code": "edit",
+      "checks": [
+        {
+          "type": "serialNumbers",
+          "min": 3
+        }
+      ],
+      "hints": [
+        {
+          "ru": "Не забудь Serial.begin(9600); в setup().",
+          "kk": "setup() ішінде Serial.begin(9600); ұмытпа.",
+          "en": "Do not forget Serial.begin(9600); in setup()."
+        },
+        {
+          "ru": "Сделай переменную int n = 0; и в loop() пиши n = n + 1;",
+          "kk": "int n = 0; айнымалысын жасап, loop() ішінде n = n + 1; жаз",
+          "en": "Make a variable int n = 0; and write n = n + 1; in loop()"
+        }
+      ],
+      "reference": {
+        "actions": [],
+        "code": "int n = 0;\n\nvoid setup() {\n  Serial.begin(9600);\n}\n\nvoid loop() {\n  n = n + 1;\n  Serial.println(n);\n  delay(500);\n}\n"
+      }
+    }
+  ]
+}

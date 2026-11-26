@@ -1,0 +1,156 @@
+{
+  "id": "esp-01",
+  "track": "esp32",
+  "unit": "esp-first",
+  "minutes": 6,
+  "skills": [
+    "microcontrollers"
+  ],
+  "title": {
+    "ru": "Знакомство с ESP32",
+    "kk": "ESP32-мен танысу",
+    "en": "Meet the ESP32"
+  },
+  "goal": {
+    "ru": "Сегодня ты узнаешь, чем ESP32 отличается от Arduino и почему на нём делают умный дом.",
+    "kk": "Бүгін сен ESP32-нің Arduino-дан айырмашылығын және ақылды үйді неге соның көмегімен жасайтынын білесің.",
+    "en": "Today you will learn how the ESP32 differs from the Arduino and why smart homes are built with it."
+  },
+  "summary": {
+    "ru": "ESP32 программируется как Arduino, но быстрее, с Wi-Fi и Bluetooth, и работает на 3,3 В.",
+    "kk": "ESP32 Arduino сияқты бағдарламаланады, бірақ жылдамырақ, Wi-Fi және Bluetooth бар, әрі 3,3 В-пен жұмыс істейді.",
+    "en": "The ESP32 is programmed like an Arduino, but it is faster, has Wi-Fi and Bluetooth, and runs on 3.3 V."
+  },
+  "kit": false,
+  "steps": [
+    {
+      "id": "what",
+      "type": "theory",
+      "title": {
+        "ru": "Плата с Wi-Fi",
+        "kk": "Wi-Fi бар тақта",
+        "en": "A board with Wi-Fi"
+      },
+      "body": {
+        "ru": "**ESP32** — родственник Arduino, только мощнее: два ядра по 240 МГц (у Uno — одно на 16 МГц), много памяти и встроенные **Wi-Fi** и **Bluetooth**. На нём делают умный дом, метеостанции и пульты для телефона.\n\nПрограммируется ESP32 так же, как Arduino: те же setup(), loop(), digitalWrite и Serial.",
+        "kk": "**ESP32** — Arduino-ның туысы, тек қуаттырақ: 240 МГц-тен екі ядро (Uno-да — 16 МГц-тік біреу), көп жады және кірістірілген **Wi-Fi** мен **Bluetooth**. Онымен ақылды үй, ауа райы станциялары және телефонға арналған пульттер жасайды.\n\nESP32 Arduino сияқты бағдарламаланады: сол setup(), loop(), digitalWrite және Serial.",
+        "en": "The **ESP32** is a relative of the Arduino, only more powerful: two cores at 240 MHz (the Uno has one at 16 MHz), lots of memory and built-in **Wi-Fi** and **Bluetooth**. People build smart homes, weather stations and phone remotes with it.\n\nThe ESP32 is programmed just like an Arduino: the same setup(), loop(), digitalWrite and Serial."
+      },
+      "illustration": "e-esp32"
+    },
+    {
+      "id": "compare",
+      "type": "quiz",
+      "kind": "match",
+      "question": {
+        "ru": "Соедини плату и её особенность",
+        "kk": "Тақтаны оның ерекшелігімен сәйкестендір",
+        "en": "Match each item with its feature"
+      },
+      "pairs": [
+        {
+          "left": {
+            "ru": "Arduino Uno",
+            "kk": "Arduino Uno",
+            "en": "Arduino Uno"
+          },
+          "right": {
+            "ru": "5 В, 16 МГц, без Wi-Fi",
+            "kk": "5 В, 16 МГц, Wi-Fi жоқ",
+            "en": "5 V, 16 MHz, no Wi-Fi"
+          }
+        },
+        {
+          "left": {
+            "ru": "ESP32",
+            "kk": "ESP32",
+            "en": "ESP32"
+          },
+          "right": {
+            "ru": "3,3 В, 240 МГц, есть Wi-Fi",
+            "kk": "3,3 В, 240 МГц, Wi-Fi бар",
+            "en": "3.3 V, 240 MHz, has Wi-Fi"
+          }
+        },
+        {
+          "left": {
+            "ru": "LED_BUILTIN на ESP32",
+            "kk": "ESP32-дегі LED_BUILTIN",
+            "en": "LED_BUILTIN on the ESP32"
+          },
+          "right": {
+            "ru": "GPIO2",
+            "kk": "GPIO2",
+            "en": "GPIO2"
+          }
+        },
+        {
+          "left": {
+            "ru": "Скорость Serial на ESP32",
+            "kk": "ESP32-дегі Serial жылдамдығы",
+            "en": "Serial speed on the ESP32"
+          },
+          "right": {
+            "ru": "Обычно 115200",
+            "kk": "Әдетте 115200",
+            "en": "Usually 115200"
+          }
+        }
+      ],
+      "explanation": {
+        "ru": "Код почти тот же, но напряжение, номера пинов и скорость Serial другие.",
+        "kk": "Код дерлік сол, бірақ кернеу, пин нөмірлері және Serial жылдамдығы басқа.",
+        "en": "The code is almost the same, but the voltage, pin numbers and Serial speed differ."
+      }
+    },
+    {
+      "id": "gpio",
+      "type": "theory",
+      "title": {
+        "ru": "Пины GPIO",
+        "kk": "GPIO пиндері",
+        "en": "GPIO pins"
+      },
+      "body": {
+        "ru": "Пины ESP32 называются **GPIO** с номером: GPIO2, GPIO4… На плате они подписаны как D2, D4. В коде пишут просто номер: **pinMode(2, OUTPUT)**.\n\nВстроенный синий светодиод — на **GPIO2**: это и есть LED_BUILTIN.",
+        "kk": "ESP32 пиндері нөмірі бар **GPIO** деп аталады: GPIO2, GPIO4… Тақтада олар D2, D4 деп жазылған. Кодта жай ғана нөмірін жазады: **pinMode(2, OUTPUT)**.\n\nКірістірілген көк жарықдиод — **GPIO2**-де: бұл LED_BUILTIN.",
+        "en": "ESP32 pins are called **GPIO** with a number: GPIO2, GPIO4… On the board they are labelled D2, D4. In code you just write the number: **pinMode(2, OUTPUT)**.\n\nThe built-in blue LED is on **GPIO2**: that is LED_BUILTIN."
+      }
+    },
+    {
+      "id": "diff",
+      "type": "quiz",
+      "kind": "choice",
+      "question": {
+        "ru": "Чем ESP32 точно отличается от Arduino Uno?",
+        "kk": "ESP32 Arduino Uno-дан немен анық ерекшеленеді?",
+        "en": "What surely sets the ESP32 apart from the Arduino Uno?"
+      },
+      "options": [
+        {
+          "ru": "Есть Wi-Fi и Bluetooth",
+          "kk": "Wi-Fi және Bluetooth бар",
+          "en": "It has Wi-Fi and Bluetooth"
+        },
+        {
+          "ru": "Нет функции loop()",
+          "kk": "loop() функциясы жоқ",
+          "en": "It has no loop() function"
+        },
+        {
+          "ru": "Работает от розетки 220 В",
+          "kk": "220 В розеткадан жұмыс істейді",
+          "en": "It runs on a 230 V socket"
+        }
+      ],
+      "correct": [
+        0
+      ],
+      "explanation": {
+        "ru": "Wi-Fi и Bluetooth — главное отличие. А loop() есть, и питание у ESP32 — 5 В от USB.",
+        "kk": "Wi-Fi мен Bluetooth — басты айырмашылық. Ал loop() бар, ESP32 қорегі — USB-ден 5 В.",
+        "en": "Wi-Fi and Bluetooth are the main difference. loop() is there, and the ESP32 is powered with 5 V from USB."
+      }
+    }
+  ]
+}

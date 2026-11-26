@@ -9,7 +9,7 @@ import { z } from 'zod'
 import { STEP_OPS, parseProgram } from '../dsl/schema'
 import type { ProgramFunction, Step } from '../dsl/types'
 import { fieldSchema } from '../sim/field'
-import { ROBO_ILLUSTRATIONS } from './illustration-names'
+import { ELECTRONICS_ILLUSTRATIONS, ROBO_ILLUSTRATIONS } from './illustration-names'
 import { SKILLS } from './skills'
 
 export const LANGS = ['ru', 'kk', 'en'] as const
@@ -52,6 +52,8 @@ export const ILLUSTRATIONS = [
   'ai-few',
   // Robotics tracks (components/learn/robo-illustrations.tsx)
   ...ROBO_ILLUSTRATIONS,
+  // Electronics tracks (components/learn/electronics-illustrations.tsx)
+  ...ELECTRONICS_ILLUSTRATIONS,
 ] as const
 
 /** Names used by "call" anywhere in raw (not yet validated) steps. */
@@ -158,6 +160,8 @@ const theory = z.object({
   example: dslSteps.optional(),
   /** An example in Python (the Python track), shown highlighted next to the text. */
   code: z.string().min(1).max(1200).optional(),
+  /** Language of `code`: Python (default) or an Arduino sketch. */
+  codeLang: z.enum(['python', 'arduino']).optional(),
 })
 
 const quizBase = { ...base, type: z.literal('quiz'), question: localized, explanation: localized, skill: z.enum(SKILLS).optional() }
@@ -285,7 +289,75 @@ const widget = z.discriminatedUnion('widget', [
 ])
 export type WidgetKind = z.infer<typeof widget>['widget']
 
-export const stepSchema = z.union([theory, quiz, code, debug, project, predict, realRobot, build, widget])
+// ── Electronics: a breadboard task in the lesson (components/learn/steps/circuit-step.tsx) ──
+
+const ledColor = z.enum(['red', 'yellow', 'green', 'blue', 'white'])
+const partType = z.enum(['led', 'resistor', 'button', 'pot', 'ldr', 'buzzer', 'servo', 'ultrasonic'])
+const benchPart = z.object({
+  id: z.string().regex(/^[a-z][a-z0-9]*$/),
+  type: partType,
+  x: z.number(),
+  y: z.number(),
+  rot: z.union([z.literal(0), z.literal(1), z.literal(2), z.literal(3)]).default(0),
+  props: z
+    .object({
+      color: ledColor.optional(),
+      ohms: z.number().positive().optional(),
+      pressed: z.boolean().optional(),
+      pos: z.number().min(0).max(1).optional(),
+      light: z.number().min(0).max(1).optional(),
+      distance: z.number().positive().optional(),
+    })
+    .default({}),
+})
+const benchWire = z.object({ id: z.string(), a: z.string(), b: z.string(), color: z.string() })
+export const benchDocSchema = z.object({ board: z.enum(['uno', 'esp32']).default('uno'), parts: z.array(benchPart).default([]), wires: z.array(benchWire).default([]) })
+
+/** What the circuit checker watches for (lib/electronics/lesson-checks.ts). */
+export const circuitCheckSchema = z.discriminatedUnion('type', [
+  /** An LED (of this colour) lights up. */
+  z.object({ type: z.literal('ledLit'), color: ledColor.optional() }),
+  /** While lit, no LED takes more than `ma`. */
+  z.object({ type: z.literal('ledMaxMa'), ma: z.number().positive() }),
+  z.object({ type: z.literal('noBurned') }),
+  /** An external LED (or the board's own, with `builtin`) turns on and off `min` times. */
+  z.object({ type: z.literal('blinks'), min: z.number().int().positive(), builtin: z.boolean().default(false) }),
+  /** The on and off times are about `ms` each. */
+  z.object({ type: z.literal('blinkPeriod'), ms: z.number().positive(), builtin: z.boolean().default(false) }),
+  /** The LED is on while a button is held and off when it is released. */
+  z.object({ type: z.literal('buttonLed') }),
+  /** The LED shows at least `min` brightness levels. */
+  z.object({ type: z.literal('ledLevels'), min: z.number().int().positive() }),
+  /** The serial monitor shows at least `min` lines (matching `pattern`, a regular expression, when given). */
+  z.object({ type: z.literal('serialLines'), min: z.number().int().positive(), pattern: z.string().optional() }),
+  /** The serial monitor shows at least `min` different numbers, at least one of them `atLeast` or more. */
+  z.object({ type: z.literal('serialNumbers'), min: z.number().int().positive(), atLeast: z.number().optional() }),
+  /** A warning of this kind appeared (to show what goes wrong on purpose). */
+  z.object({ type: z.literal('fault'), code: z.enum(['led_burned', 'led_reversed', 'pin_overcurrent', 'pin_overvoltage', 'input_only', 'short']) }),
+  /** A lab mission's own checker passes completely. */
+  z.object({ type: z.literal('mission'), id: z.enum(['blink', 'led', 'button', 'dimmer', 'traffic', 'melody', 'servo', 'radar', 'night']) }),
+])
+export type CircuitCheck = z.infer<typeof circuitCheckSchema>
+
+const circuit = z.object({
+  ...base,
+  type: z.literal('circuit'),
+  title: localized,
+  task: localized,
+  /** What is on the bench and in the editor at the start. */
+  start: z.object({ doc: benchDocSchema, code: z.string().max(4000).default('void setup() {\n}\n\nvoid loop() {\n}\n') }),
+  /** Parts the learner may add (none: only what is on the bench). */
+  tray: z.array(partType).default([]),
+  /** "edit": the learner writes code; "hidden": the lesson is about the circuit only. */
+  code: z.enum(['edit', 'hidden']).default('edit'),
+  checks: z.array(circuitCheckSchema).min(1),
+  hints: z.array(localized).min(1).max(3),
+  /** A working circuit and sketch: tests run it through the checks. Never sent to the browser. */
+  reference: z.object({ doc: benchDocSchema.optional(), code: z.string().max(4000).optional(), actions: z.array(z.object({ t: z.number(), part: z.string(), props: benchPart.shape.props })).default([]) }),
+  skill: z.enum(SKILLS).optional(),
+})
+
+export const stepSchema = z.union([theory, quiz, code, debug, project, predict, realRobot, build, widget, circuit])
 export type LessonStep = z.infer<typeof stepSchema>
 export type StepType = LessonStep['type']
 export type CodeStep = Extract<LessonStep, { type: 'code' | 'debug' | 'project' }>
@@ -372,6 +444,8 @@ export const courseSchema = z.object({
       color: z.string(),
       /** Recommended earlier tracks (can be skipped with a check test). */
       prerequisites: z.array(z.string()).default([]),
+      /** Which tab of the lessons page the track is on. */
+      platform: z.enum(['spike', 'arduino', 'esp32']).default('spike'),
       units: z.array(z.object({ id: z.string().regex(/^[a-z0-9-]+$/), title: localized, lessons: z.array(lessonRef).min(1) })).min(1),
     }),
   ),

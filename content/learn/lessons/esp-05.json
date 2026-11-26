@@ -1,0 +1,199 @@
+{
+  "id": "esp-05",
+  "track": "esp32",
+  "unit": "esp-io",
+  "minutes": 7,
+  "skills": [
+    "microcontrollers",
+    "loops"
+  ],
+  "title": {
+    "ru": "ШИМ на любом пине",
+    "kk": "Кез келген пиндегі ШИМ",
+    "en": "PWM on any pin"
+  },
+  "goal": {
+    "ru": "Сегодня светодиод на ESP32 будет плавно разгораться и гаснуть.",
+    "kk": "Бүгін ESP32-дегі жарықдиод біртіндеп жанып, сөнеді.",
+    "en": "Today an LED on the ESP32 will fade up and down smoothly."
+  },
+  "summary": {
+    "ru": "На ESP32 ШИМ есть почти на любом выходе, а цикл for делает плавную смену яркости.",
+    "kk": "ESP32-де ШИМ кез келген шығыста дерлік бар, ал for циклі жарықтықты біртіндеп өзгертеді.",
+    "en": "On the ESP32 almost any output has PWM, and a for loop makes the brightness change smoothly."
+  },
+  "kit": false,
+  "steps": [
+    {
+      "id": "pwm",
+      "type": "theory",
+      "title": {
+        "ru": "Не нужно искать значок ~",
+        "kk": "~ белгісін іздеудің қажеті жоқ",
+        "en": "No need to look for the ~ mark"
+      },
+      "body": {
+        "ru": "У ESP32 ШИМ есть почти на **любом** выходе. **analogWrite(4, 128)** — половина яркости.\n\nЦикл **for** может плавно менять яркость: переменная b растёт от 0 до 255, и на каждом шаге мы пишем её в analogWrite.",
+        "kk": "ESP32-де ШИМ **кез келген** шығыста дерлік бар. **analogWrite(4, 128)** — жарықтықтың жартысы.\n\n**for** циклі жарықтықты біртіндеп өзгерте алады: b айнымалысы 0-ден 255-ке дейін өседі, ал әр қадамда біз оны analogWrite-қа жазамыз.",
+        "en": "On the ESP32 almost **any** output has PWM. **analogWrite(4, 128)** is half brightness.\n\nA **for** loop can change the brightness smoothly: the variable b grows from 0 to 255, and at each step we write it with analogWrite."
+      },
+      "illustration": "e-pwm",
+      "code": "void setup() {\n  pinMode(4, OUTPUT);\n}\n\nvoid loop() {\n  for (int b = 0; b <= 255; b++) {\n    analogWrite(4, b);\n    delay(5);\n  }\n  for (int b = 255; b >= 0; b--) {\n    analogWrite(4, b);\n    delay(5);\n  }\n}\n",
+      "codeLang": "arduino"
+    },
+    {
+      "id": "fade",
+      "type": "circuit",
+      "title": {
+        "ru": "Плавный светодиод",
+        "kk": "Біртіндеп жанатын жарықдиод",
+        "en": "A fading LED"
+      },
+      "task": {
+        "ru": "Светодиод уже подключён к **GPIO4**. Напиши программу, которая плавно разжигает и гасит его циклом **for** и **analogWrite**.",
+        "kk": "Жарықдиод **GPIO4**-ке қосылған. Оны **for** циклі мен **analogWrite** арқылы біртіндеп жағып, сөндіретін бағдарлама жаз.",
+        "en": "The LED is already connected to **GPIO4**. Write a program that fades it up and down with a **for** loop and **analogWrite**."
+      },
+      "start": {
+        "doc": {
+          "board": "esp32",
+          "parts": [
+            {
+              "id": "r1",
+              "type": "resistor",
+              "x": 420,
+              "y": 90,
+              "rot": 0,
+              "props": {
+                "ohms": 220
+              }
+            },
+            {
+              "id": "l1",
+              "type": "led",
+              "x": 460,
+              "y": 130,
+              "rot": 0,
+              "props": {
+                "color": "red"
+              }
+            }
+          ],
+          "wires": [
+            {
+              "id": "w-esp.G4-bb.b10",
+              "a": "esp.G4",
+              "b": "bb.b10",
+              "color": "#e8710a"
+            },
+            {
+              "id": "w-bb.b15-esp.GND.2",
+              "a": "bb.b15",
+              "b": "esp.GND.2",
+              "color": "#202124"
+            }
+          ]
+        },
+        "code": "void setup() {\n  // runs once\n}\n\nvoid loop() {\n  // runs again and again\n}\n"
+      },
+      "tray": [],
+      "code": "edit",
+      "checks": [
+        {
+          "type": "ledLevels",
+          "min": 4
+        }
+      ],
+      "hints": [
+        {
+          "ru": "for (int b = 0; b <= 255; b++) { analogWrite(4, b); delay(5); }",
+          "kk": "for (int b = 0; b <= 255; b++) { analogWrite(4, b); delay(5); }",
+          "en": "for (int b = 0; b <= 255; b++) { analogWrite(4, b); delay(5); }"
+        },
+        {
+          "ru": "Второй цикл — обратно, от 255 до 0 с b--.",
+          "kk": "Екінші цикл — кері, b-- арқылы 255-тен 0-ге дейін.",
+          "en": "The second loop goes back from 255 to 0 with b--."
+        }
+      ],
+      "reference": {
+        "actions": [],
+        "doc": {
+          "board": "esp32",
+          "parts": [
+            {
+              "id": "r1",
+              "type": "resistor",
+              "x": 420,
+              "y": 90,
+              "rot": 0,
+              "props": {
+                "ohms": 220
+              }
+            },
+            {
+              "id": "l1",
+              "type": "led",
+              "x": 460,
+              "y": 130,
+              "rot": 0,
+              "props": {
+                "color": "red"
+              }
+            }
+          ],
+          "wires": [
+            {
+              "id": "w-esp.G4-bb.b10",
+              "a": "esp.G4",
+              "b": "bb.b10",
+              "color": "#e8710a"
+            },
+            {
+              "id": "w-bb.b15-esp.GND.2",
+              "a": "bb.b15",
+              "b": "esp.GND.2",
+              "color": "#202124"
+            }
+          ]
+        },
+        "code": "void setup() {\n  pinMode(4, OUTPUT);\n}\n\nvoid loop() {\n  for (int b = 0; b <= 255; b++) {\n    analogWrite(4, b);\n    delay(5);\n  }\n  for (int b = 255; b >= 0; b--) {\n    analogWrite(4, b);\n    delay(5);\n  }\n}\n"
+      }
+    },
+    {
+      "id": "where",
+      "type": "quiz",
+      "kind": "choice",
+      "question": {
+        "ru": "На каких пинах ESP32 есть ШИМ?",
+        "kk": "ESP32-нің қай пиндерінде ШИМ бар?",
+        "en": "Which ESP32 pins have PWM?"
+      },
+      "options": [
+        {
+          "ru": "Почти на любом выходе",
+          "kk": "Кез келген шығыста дерлік",
+          "en": "Almost any output"
+        },
+        {
+          "ru": "Только на 3, 5, 6, 9, 10, 11",
+          "kk": "Тек 3, 5, 6, 9, 10, 11-де",
+          "en": "Only 3, 5, 6, 9, 10, 11"
+        },
+        {
+          "ru": "Ни на каком",
+          "kk": "Ешқайсысында",
+          "en": "None"
+        }
+      ],
+      "correct": [
+        0
+      ],
+      "explanation": {
+        "ru": "Список 3, 5, 6, 9, 10, 11 — это Arduino Uno. У ESP32 ШИМ почти везде.",
+        "kk": "3, 5, 6, 9, 10, 11 тізімі — бұл Arduino Uno. ESP32-де ШИМ барлық жерде дерлік.",
+        "en": "The list 3, 5, 6, 9, 10, 11 is the Arduino Uno. The ESP32 has PWM almost everywhere."
+      }
+    }
+  ]
+}

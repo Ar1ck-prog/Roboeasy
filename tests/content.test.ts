@@ -7,6 +7,31 @@ import { BLOCK_TYPES } from '../lib/blockly/defs'
 import type { Step } from '../lib/dsl/types'
 import { runChecks } from '../lib/learn/checks'
 import { simulate } from '../lib/sim/interpreter'
+import type { CircuitDoc } from '../lib/electronics/board'
+import { createCircuitChecker } from '../lib/electronics/lesson-checks'
+import { Simulation } from '../lib/electronics/sim'
+import { getElectronicsText } from '../lib/i18n/electronics'
+
+const MISSION_TEXT = getElectronicsText('ru').missions
+
+/** Runs a circuit step's bench and sketch (with the learner's actions) until every goal is met, up to 20 s. */
+function runCircuit(checks: Parameters<typeof createCircuitChecker>[0], start: CircuitDoc, code: string, actions: { t: number; part: string; props: object }[], maxMs = 20_000) {
+  let doc: CircuitDoc = structuredClone(start)
+  const sim = new Simulation(code, doc)
+  const checker = createCircuitChecker(checks, (id) => MISSION_TEXT[id].goals.length)
+  const queue = [...actions]
+  let goals: boolean[] = []
+  for (let t = 0; t < maxMs; t += 20) {
+    while (queue.length && queue[0].t <= t) {
+      const a = queue.shift()!
+      doc = { ...doc, parts: doc.parts.map((p) => (p.id === a.part ? { ...p, props: { ...p.props, ...a.props } } : p)) }
+      sim.board.setDoc(doc)
+    }
+    goals = checker.check({ frame: sim.step(20), doc, serial: sim.board.serialOut })
+    if (!queue.length && goals.every(Boolean)) break
+  }
+  return { goals, status: sim.status.kind }
+}
 
 /** 24 points evenly spaced along the path, to compare whole routes. */
 function resample(trace: { x: number; y: number }[], n = 24) {
@@ -27,8 +52,8 @@ const DIR = path.join(__dirname, '..', 'content', 'learn', 'lessons')
 const files = fs.readdirSync(DIR).filter((f) => f.endsWith('.json'))
 
 describe('course map', () => {
-  it('has 10 tracks with unique ids and known prerequisites', () => {
-    expect(COURSE.tracks).toHaveLength(10)
+  it('has 13 tracks with unique ids and known prerequisites', () => {
+    expect(COURSE.tracks).toHaveLength(13)
     const ids = COURSE.tracks.flatMap((t) => [t.id, ...t.units.map((u) => u.id), ...t.units.flatMap((u) => u.lessons.map((l) => l.id))])
     expect(new Set(ids).size).toBe(ids.length)
     const tracks = new Set(COURSE.tracks.map((t) => t.id))
@@ -90,6 +115,21 @@ describe.each(files)('lesson %s', (file) => {
       })
     }
   })
+
+  it('circuit steps: the reference bench and sketch meet every goal; a different start does not', () => {
+    for (const step of lesson.steps) {
+      if (step.type !== 'circuit') continue
+      const doc = (step.reference.doc ?? step.start.doc) as CircuitDoc
+      const code = step.reference.code ?? step.start.code
+      const ok = runCircuit(step.checks, doc, code, step.reference.actions)
+      expect(ok.status, `${step.id}: reference runs`).toBe('running')
+      expect(ok.goals, `${step.id}: reference goals`).toEqual(ok.goals.map(() => true))
+      const same = JSON.stringify(step.start.doc) === JSON.stringify(doc) && step.start.code === code
+      if (same) continue
+      const start = runCircuit(step.checks, step.start.doc as CircuitDoc, step.start.code, step.reference.actions, 6000)
+      expect(start.goals.every(Boolean), `${step.id}: the start alone must not pass`).toBe(false)
+    }
+  }, 120_000)
 
   it('never sends reference solutions to the browser', () => {
     expect(JSON.stringify(toClientLesson(lesson))).not.toContain('"reference"')

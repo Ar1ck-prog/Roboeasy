@@ -564,11 +564,12 @@ export function Bench({ doc, onChange, frame, running, selection, onSelect, t }:
               }}
               data-wire={w.id}
             >
+              {/* Drawn lines do not take clicks: only the middle hit area above does, so pins next to a wire's end stay clickable. */}
+              {selected && <path d={d} stroke="#8ab4f8" strokeWidth={7} fill="none" strokeLinecap="round" opacity={0.8} pointerEvents="none" />}
+              <path d={d} stroke="rgba(0,0,0,.35)" strokeWidth={4.2} fill="none" strokeLinecap="round" pointerEvents="none" />
+              <path d={d} stroke={w.color} strokeWidth={3} fill="none" strokeLinecap="round" pointerEvents="none" />
               {/* Only the middle of a wire is clickable, so a new wire can start where one ends. */}
               <path d={d} stroke="transparent" strokeWidth={9} fill="none" pathLength={100} strokeDasharray="0 12 76 12" />
-              {selected && <path d={d} stroke="#8ab4f8" strokeWidth={7} fill="none" strokeLinecap="round" opacity={0.8} />}
-              <path d={d} stroke="rgba(0,0,0,.35)" strokeWidth={4.2} fill="none" strokeLinecap="round" />
-              <path d={d} stroke={w.color} strokeWidth={3} fill="none" strokeLinecap="round" />
             </g>
           )
         })}

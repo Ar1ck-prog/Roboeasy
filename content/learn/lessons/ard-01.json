@@ -1,0 +1,161 @@
+{
+  "id": "ard-01",
+  "track": "arduino",
+  "unit": "ard-first",
+  "minutes": 6,
+  "skills": [
+    "microcontrollers"
+  ],
+  "title": {
+    "ru": "Что такое Arduino",
+    "kk": "Arduino деген не",
+    "en": "What is an Arduino"
+  },
+  "goal": {
+    "ru": "Сегодня ты узнаешь, что такое Arduino и из чего состоит плата.",
+    "kk": "Бүгін сен Arduino деген не және тақта неден тұратынын білесің.",
+    "en": "Today you will find out what an Arduino is and what the board is made of."
+  },
+  "summary": {
+    "ru": "Arduino — маленький компьютер: программа загружается по USB, а к пинам подключают детали. Плату можно покрутить в 3D в разделе «Электроника».",
+    "kk": "Arduino — кішкентай компьютер: бағдарлама USB арқылы жүктеледі, ал пиндерге бөлшектер қосылады. Тақтаны «Электроника» бөлімінде 3D форматта айналдыруға болады.",
+    "en": "An Arduino is a little computer: the program goes in over USB and parts connect to the pins. You can spin the board in 3D in the Electronics section."
+  },
+  "kit": false,
+  "steps": [
+    {
+      "id": "what",
+      "type": "theory",
+      "title": {
+        "ru": "Маленький компьютер",
+        "kk": "Кішкентай компьютер",
+        "en": "A little computer"
+      },
+      "body": {
+        "ru": "**Arduino** — это плата с микроконтроллером: маленьким компьютером, который выполняет одну программу. Он умеет включать и выключать пины, читать кнопки и датчики.\n\nПрограмму пишут на компьютере на языке C++, а потом загружают в плату по USB. После этого плата работает сама — даже без компьютера, от батарейки.",
+        "kk": "**Arduino** — микроконтроллері бар тақта: бір бағдарламаны орындайтын кішкентай компьютер. Ол пиндерді қосып-өшіре алады, түймелер мен датчиктерді оқиды.\n\nБағдарламаны компьютерде C++ тілінде жазады да, тақтаға USB арқылы жүктейді. Содан кейін тақта өзі жұмыс істейді — компьютерсіз, батареядан да.",
+        "en": "An **Arduino** is a board with a microcontroller: a little computer that runs one program. It can switch pins on and off and read buttons and sensors.\n\nYou write the program on a computer in C++ and upload it to the board over USB. After that the board works on its own, even without the computer, on a battery."
+      },
+      "illustration": "e-uno"
+    },
+    {
+      "id": "parts",
+      "type": "quiz",
+      "kind": "match",
+      "question": {
+        "ru": "Соедини часть платы и её работу",
+        "kk": "Тақтаның бөлігін оның жұмысымен сәйкестендір",
+        "en": "Match each part of the board with its job"
+      },
+      "pairs": [
+        {
+          "left": {
+            "ru": "USB-разъём",
+            "kk": "USB ажыратқышы",
+            "en": "USB socket"
+          },
+          "right": {
+            "ru": "Загрузка программы и питание",
+            "kk": "Бағдарлама жүктеу және қорек",
+            "en": "Uploading programs and power"
+          }
+        },
+        {
+          "left": {
+            "ru": "Микроконтроллер",
+            "kk": "Микроконтроллер",
+            "en": "Microcontroller"
+          },
+          "right": {
+            "ru": "Выполняет программу",
+            "kk": "Бағдарламаны орындайды",
+            "en": "Runs the program"
+          }
+        },
+        {
+          "left": {
+            "ru": "Пины",
+            "kk": "Пиндер",
+            "en": "Pins"
+          },
+          "right": {
+            "ru": "К ним подключают детали",
+            "kk": "Оларға бөлшектер қосылады",
+            "en": "Parts connect to them"
+          }
+        },
+        {
+          "left": {
+            "ru": "Светодиод L",
+            "kk": "L жарықдиоды",
+            "en": "LED L"
+          },
+          "right": {
+            "ru": "Встроенная лампочка на пине 13",
+            "kk": "13-пиндегі кірістірілген шам",
+            "en": "The built-in light on pin 13"
+          }
+        }
+      ],
+      "explanation": {
+        "ru": "Мозг — микроконтроллер, руки — пины, а USB связывает плату с компьютером.",
+        "kk": "Ми — микроконтроллер, қолдар — пиндер, ал USB тақтаны компьютермен байланыстырады.",
+        "en": "The brain is the microcontroller, the hands are the pins, and USB links the board to the computer."
+      }
+    },
+    {
+      "id": "pins",
+      "type": "theory",
+      "title": {
+        "ru": "Пины",
+        "kk": "Пиндер",
+        "en": "Pins"
+      },
+      "body": {
+        "ru": "На краях платы — гнёзда-**пины**. Цифровые пины 0–13 умеют выдавать **HIGH** (5 В) или **LOW** (0 В) и читать кнопки. Аналоговые A0–A5 измеряют напряжение. Ещё есть пины питания: 5V, 3.3V и GND.",
+        "kk": "Тақтаның шеттерінде — ұялар-**пиндер**. 0–13 цифрлық пиндер **HIGH** (5 В) немесе **LOW** (0 В) бере алады және түймелерді оқиды. A0–A5 аналогтық пиндер кернеуді өлшейді. Сондай-ақ қорек пиндері бар: 5V, 3.3V және GND.",
+        "en": "Along the edges are sockets called **pins**. Digital pins 0–13 can output **HIGH** (5 V) or **LOW** (0 V) and read buttons. Analog pins A0–A5 measure voltage. There are power pins too: 5V, 3.3V and GND."
+      }
+    },
+    {
+      "id": "volts",
+      "type": "quiz",
+      "kind": "choice",
+      "question": {
+        "ru": "Сколько вольт на цифровом пине Arduino Uno в состоянии HIGH?",
+        "kk": "Arduino Uno цифрлық пинінде HIGH күйде неше вольт?",
+        "en": "How many volts are on a digital pin of the Arduino Uno set to HIGH?"
+      },
+      "options": [
+        {
+          "ru": "1,5 В",
+          "kk": "1,5 В",
+          "en": "1.5 V"
+        },
+        {
+          "ru": "3,3 В",
+          "kk": "3,3 В",
+          "en": "3.3 V"
+        },
+        {
+          "ru": "5 В",
+          "kk": "5 В",
+          "en": "5 V"
+        },
+        {
+          "ru": "220 В",
+          "kk": "220 В",
+          "en": "230 V"
+        }
+      ],
+      "correct": [
+        2
+      ],
+      "explanation": {
+        "ru": "Uno работает от 5 В, поэтому HIGH — это 5 вольт.",
+        "kk": "Uno 5 В-пен жұмыс істейді, сондықтан HIGH — 5 вольт.",
+        "en": "The Uno runs on 5 V, so HIGH is 5 volts."
+      }
+    }
+  ]
+}

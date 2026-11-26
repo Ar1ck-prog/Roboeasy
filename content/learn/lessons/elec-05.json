@@ -1,0 +1,231 @@
+{
+  "id": "elec-05",
+  "track": "electricity",
+  "unit": "elec-parts",
+  "minutes": 7,
+  "skills": [
+    "electricity"
+  ],
+  "title": {
+    "ru": "Макетная плата",
+    "kk": "Макет тақтасы",
+    "en": "The breadboard"
+  },
+  "goal": {
+    "ru": "Сегодня ты разберёшься, как устроена макетная плата, и подашь питание через шины.",
+    "kk": "Бүгін сен макет тақтасының құрылысын түсініп, қоректі шиналар арқылы бересің.",
+    "en": "Today you will find out how a breadboard works and power a circuit through the rails."
+  },
+  "summary": {
+    "ru": "В столбике из пяти отверстий всё соединено, канавка делит плату пополам, а шины + и − приносят питание куда угодно.",
+    "kk": "Бес тесіктен тұратын бағанда бәрі жалғанған, ойық тақтаны екіге бөледі, ал + және − шиналар қоректі кез келген жерге жеткізеді.",
+    "en": "In a column of five holes everything is connected, the channel splits the board in two, and the + and − rails carry power anywhere."
+  },
+  "kit": false,
+  "steps": [
+    {
+      "id": "inside",
+      "type": "theory",
+      "title": {
+        "ru": "Как устроена макетка",
+        "kk": "Макет тақтасы қалай жасалған",
+        "en": "How a breadboard works"
+      },
+      "body": {
+        "ru": "Макетная плата нужна, чтобы собирать схемы без пайки. Под отверстиями спрятаны металлические полоски.\n\n1. В каждом **столбике** из пяти отверстий (a–e или f–j) всё соединено.\n2. Посередине — канавка: верхняя и нижняя половины **не** соединены.\n3. По краям — длинные **шины**: красная (+) и синяя (−).\n\nУдобно один раз подать на шины 5V и GND и брать питание где угодно.",
+        "kk": "Макет тақтасы схемаларды дәнекерлеусіз құрастыру үшін керек. Тесіктердің астында металл жолақтар жасырылған.\n\n1. Бес тесіктен тұратын әр **бағанда** (a–e немесе f–j) бәрі жалғанған.\n2. Ортасында — ойық: жоғарғы және төменгі жартылары **жалғанбаған**.\n3. Шеттерінде — ұзын **шиналар**: қызыл (+) және көк (−).\n\nШиналарға бір рет 5V және GND беріп, қоректі кез келген жерден алу ыңғайлы.",
+        "en": "A breadboard lets you build circuits without soldering. Metal strips are hidden under the holes.\n\n1. In each **column** of five holes (a–e or f–j) everything is connected.\n2. In the middle there is a channel: the top and bottom halves are **not** connected.\n3. Along the edges run long **rails**: red (+) and blue (−).\n\nIt is handy to feed 5V and GND to the rails once and take power from anywhere."
+      },
+      "illustration": "e-breadboard"
+    },
+    {
+      "id": "which",
+      "type": "quiz",
+      "kind": "choice",
+      "question": {
+        "ru": "Какие отверстия соединены между собой?",
+        "kk": "Қай тесіктер өзара жалғанған?",
+        "en": "Which holes are connected to each other?"
+      },
+      "options": [
+        {
+          "ru": "a10 и e10",
+          "kk": "a10 және e10",
+          "en": "a10 and e10"
+        },
+        {
+          "ru": "a10 и a11",
+          "kk": "a10 және a11",
+          "en": "a10 and a11"
+        },
+        {
+          "ru": "e10 и f10",
+          "kk": "e10 және f10",
+          "en": "e10 and f10"
+        }
+      ],
+      "correct": [
+        0
+      ],
+      "explanation": {
+        "ru": "a10 и e10 — в одном столбике. a11 — уже соседний столбик, а между e и f — канавка.",
+        "kk": "a10 және e10 — бір бағанда. a11 — көрші баған, ал e мен f арасында — ойық.",
+        "en": "a10 and e10 are in the same column. a11 is the next column, and there is a channel between e and f."
+      }
+    },
+    {
+      "id": "rails",
+      "type": "circuit",
+      "title": {
+        "ru": "Питание через шины",
+        "kk": "Шиналар арқылы қорек",
+        "en": "Power through the rails"
+      },
+      "task": {
+        "ru": "Собери цепь, как делают инженеры:\n\n1. Пин **5V** → красная шина **+** вверху макетки.\n2. Пин **GND** → синяя шина **−** над ней.\n3. От шины **+** — короткий провод к **столбику 10**.\n4. От **столбика 15** — короткий провод к шине **−**.",
+        "kk": "Тізбекті инженерлер сияқты құрастыр:\n\n1. **5V** пині → макет тақтасының жоғарғы жағындағы қызыл **+** шина.\n2. **GND** пині → оның үстіндегі көк **−** шина.\n3. **+** шинадан **10-бағанға** қысқа сым.\n4. **15-бағаннан** **−** шинаға қысқа сым.",
+        "en": "Build the circuit the way engineers do:\n\n1. The **5V** pin → the red **+** rail at the top of the breadboard.\n2. A **GND** pin → the blue **−** rail above it.\n3. A short wire from the **+** rail to **column 10**.\n4. A short wire from **column 15** to the **−** rail."
+      },
+      "start": {
+        "doc": {
+          "board": "uno",
+          "parts": [
+            {
+              "id": "r1",
+              "type": "resistor",
+              "x": 420,
+              "y": 90,
+              "rot": 0,
+              "props": {
+                "ohms": 220
+              }
+            },
+            {
+              "id": "l1",
+              "type": "led",
+              "x": 460,
+              "y": 130,
+              "rot": 0,
+              "props": {
+                "color": "red"
+              }
+            }
+          ],
+          "wires": []
+        },
+        "code": "void setup() {\n}\n\nvoid loop() {\n}\n"
+      },
+      "tray": [],
+      "code": "hidden",
+      "checks": [
+        {
+          "type": "ledLit"
+        },
+        {
+          "type": "noBurned"
+        }
+      ],
+      "hints": [
+        {
+          "ru": "Шина + — второй ряд сверху (отмечен красной линией), шина − — самый верхний.",
+          "kk": "+ шина — жоғарыдан екінші қатар (қызыл сызықпен белгіленген), − шина — ең жоғарғысы.",
+          "en": "The + rail is the second row from the top (red line), the − rail is the very top one."
+        },
+        {
+          "ru": "Все отверстия одной шины соединены по всей длине.",
+          "kk": "Бір шинаның барлық тесіктері бүкіл ұзындығы бойымен жалғанған.",
+          "en": "All holes of a rail are connected along its whole length."
+        },
+        {
+          "ru": "Четыре провода: 5V → шина +, GND → шина −, шина + → b10, b15 → шина −.",
+          "kk": "Төрт сым: 5V → + шина, GND → − шина, + шина → b10, b15 → − шина.",
+          "en": "Four wires: 5V → + rail, GND → − rail, + rail → b10, b15 → − rail."
+        }
+      ],
+      "reference": {
+        "actions": [],
+        "doc": {
+          "board": "uno",
+          "parts": [
+            {
+              "id": "r1",
+              "type": "resistor",
+              "x": 420,
+              "y": 90,
+              "rot": 0,
+              "props": {
+                "ohms": 220
+              }
+            },
+            {
+              "id": "l1",
+              "type": "led",
+              "x": 460,
+              "y": 130,
+              "rot": 0,
+              "props": {
+                "color": "red"
+              }
+            }
+          ],
+          "wires": [
+            {
+              "id": "w-uno.5V-bb.tp2",
+              "a": "uno.5V",
+              "b": "bb.tp2",
+              "color": "#d93025"
+            },
+            {
+              "id": "w-uno.GND.3-bb.tn1",
+              "a": "uno.GND.3",
+              "b": "bb.tn1",
+              "color": "#202124"
+            },
+            {
+              "id": "w-bb.tp10-bb.b10",
+              "a": "bb.tp10",
+              "b": "bb.b10",
+              "color": "#d93025"
+            },
+            {
+              "id": "w-bb.b15-bb.tn15",
+              "a": "bb.b15",
+              "b": "bb.tn15",
+              "color": "#202124"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "channel",
+      "type": "quiz",
+      "kind": "choice",
+      "question": {
+        "ru": "Ты воткнул провода в c12 и g12. Они соединены?",
+        "kk": "Сен сымдарды c12 және g12-ге қостың. Олар жалғанған ба?",
+        "en": "You put wires into c12 and g12. Are they connected?"
+      },
+      "options": [
+        {
+          "ru": "Да",
+          "kk": "Иә",
+          "en": "Yes"
+        },
+        {
+          "ru": "Нет, между ними канавка",
+          "kk": "Жоқ, олардың арасында ойық бар",
+          "en": "No, the channel is between them"
+        }
+      ],
+      "correct": [
+        1
+      ],
+      "explanation": {
+        "ru": "c — в верхней половине, g — в нижней. Канавка их разделяет.",
+        "kk": "c — жоғарғы жартысында, g — төменгісінде. Ойық оларды бөледі.",
+        "en": "c is in the top half and g in the bottom half. The channel separates them."
+      }
+    }
+  ]
+}

@@ -1,0 +1,184 @@
+{
+  "id": "elec-01",
+  "track": "electricity",
+  "unit": "elec-basics",
+  "minutes": 6,
+  "skills": [
+    "electricity"
+  ],
+  "title": {
+    "ru": "Ток, напряжение и сопротивление",
+    "kk": "Ток, кернеу және кедергі",
+    "en": "Current, voltage and resistance"
+  },
+  "goal": {
+    "ru": "Сегодня ты поймёшь, что такое электричество — без страшных формул.",
+    "kk": "Бүгін сен электр деген не екенін түсінесің — қорқынышты формулаларсыз.",
+    "en": "Today you will understand what electricity is, with no scary formulas."
+  },
+  "summary": {
+    "ru": "Теперь ты знаешь три главных слова электроники: напряжение толкает, ток течёт, сопротивление мешает.",
+    "kk": "Енді сен электрониканың үш басты сөзін білесің: кернеу итереді, ток ағады, кедергі бөгейді.",
+    "en": "Now you know the three key words of electronics: voltage pushes, current flows, resistance holds it back."
+  },
+  "kit": false,
+  "steps": [
+    {
+      "id": "water",
+      "type": "theory",
+      "title": {
+        "ru": "Электричество — как вода в трубах",
+        "kk": "Электр — құбырдағы су сияқты",
+        "en": "Electricity is like water in pipes"
+      },
+      "body": {
+        "ru": "Внутри проводов бегут крошечные частицы — электроны. Их не видно, но представить легко: это как вода в трубах.\n\n**Напряжение** — это напор, сила, которая толкает воду. Чем выше бак, тем сильнее напор. Его измеряют в **вольтах (В)**.\n\n**Ток** — сколько воды пробегает по трубе. Его измеряют в **амперах (А)**, а маленькие токи — в миллиамперах (мА).\n\n**Сопротивление** — узкое место в трубе, оно мешает потоку. Его измеряют в **омах (Ом)**.",
+        "kk": "Сымдардың ішінде кішкентай бөлшектер — электрондар жүгіреді. Олар көрінбейді, бірақ елестету оңай: бұл құбырдағы су сияқты.\n\n**Кернеу** — арын, суды итеретін күш. Бак неғұрлым биік болса, арын соғұрлым күшті. Оны **вольтпен (В)** өлшейді.\n\n**Ток** — құбыр арқылы қанша су өтеді. Оны **ампермен (А)**, ал кішкентай токтарды миллиампермен (мА) өлшейді.\n\n**Кедергі** — құбырдағы тар жер, ол ағынға бөгет жасайды. Оны **оммен (Ом)** өлшейді.",
+        "en": "Tiny particles called electrons run inside wires. You cannot see them, but they are easy to imagine: like water in pipes.\n\n**Voltage** is the pressure, the force that pushes the water. The higher the tank, the stronger the push. It is measured in **volts (V)**.\n\n**Current** is how much water runs through the pipe. It is measured in **amperes (A)**, and small currents in milliamperes (mA).\n\n**Resistance** is a narrow spot in the pipe that holds the flow back. It is measured in **ohms (Ω)**."
+      },
+      "illustration": "e-water"
+    },
+    {
+      "id": "match",
+      "type": "quiz",
+      "kind": "match",
+      "question": {
+        "ru": "Соедини слово и то, на что оно похоже",
+        "kk": "Сөзді оған ұқсас нәрсемен сәйкестендір",
+        "en": "Match each word with what it is like"
+      },
+      "pairs": [
+        {
+          "left": {
+            "ru": "Напряжение",
+            "kk": "Кернеу",
+            "en": "Voltage"
+          },
+          "right": {
+            "ru": "Напор воды",
+            "kk": "Су арыны",
+            "en": "Water pressure"
+          }
+        },
+        {
+          "left": {
+            "ru": "Ток",
+            "kk": "Ток",
+            "en": "Current"
+          },
+          "right": {
+            "ru": "Поток воды",
+            "kk": "Су ағыны",
+            "en": "Water flow"
+          }
+        },
+        {
+          "left": {
+            "ru": "Сопротивление",
+            "kk": "Кедергі",
+            "en": "Resistance"
+          },
+          "right": {
+            "ru": "Узкая труба",
+            "kk": "Тар құбыр",
+            "en": "A narrow pipe"
+          }
+        }
+      ],
+      "explanation": {
+        "ru": "Напряжение толкает, ток течёт, сопротивление мешает. Запомни эту тройку — она пригодится в каждом уроке.",
+        "kk": "Кернеу итереді, ток ағады, кедергі бөгейді. Осы үштікті есте сақта — ол әр сабақта керек болады.",
+        "en": "Voltage pushes, current flows, resistance holds back. Remember these three: you will need them in every lesson."
+      }
+    },
+    {
+      "id": "numbers",
+      "type": "theory",
+      "title": {
+        "ru": "Сколько это — 5 вольт?",
+        "kk": "5 вольт — бұл қанша?",
+        "en": "How much is 5 volts?"
+      },
+      "body": {
+        "ru": "Пальчиковая батарейка — 1,5 В. Плата Arduino работает от 5 В, а ESP32 — от 3,3 В. Это безопасно: такое напряжение рукой не почувствуешь.\n\nА розетка — 220 В. Это очень опасно. С розеткой мы **никогда** не экспериментируем.\n\nСветодиоду нужно совсем немного тока: 10–20 мА, то есть 0,01–0,02 ампера.",
+        "kk": "Саусақ батарейкасы — 1,5 В. Arduino тақтасы 5 В-пен, ал ESP32 3,3 В-пен жұмыс істейді. Бұл қауіпсіз: мұндай кернеуді қолмен сезбейсің.\n\nАл розетка — 220 В. Бұл өте қауіпті. Розеткамен біз **ешқашан** тәжірибе жасамаймыз.\n\nЖарықдиодқа өте аз ток керек: 10–20 мА, яғни 0,01–0,02 ампер.",
+        "en": "An AA battery is 1.5 V. An Arduino board runs on 5 V and an ESP32 on 3.3 V. That is safe: you cannot even feel such a voltage with your hand.\n\nA wall socket is 230 V. That is very dangerous. We **never** experiment with sockets.\n\nAn LED needs very little current: 10–20 mA, which is 0.01–0.02 amperes."
+      }
+    },
+    {
+      "id": "danger",
+      "type": "quiz",
+      "kind": "choice",
+      "question": {
+        "ru": "Что из этого опасно для опытов?",
+        "kk": "Мыналардың қайсысы тәжірибеге қауіпті?",
+        "en": "Which of these is dangerous to experiment with?"
+      },
+      "options": [
+        {
+          "ru": "Батарейка 1,5 В",
+          "kk": "1,5 В батарейка",
+          "en": "A 1.5 V battery"
+        },
+        {
+          "ru": "Arduino, 5 В",
+          "kk": "Arduino, 5 В",
+          "en": "An Arduino, 5 V"
+        },
+        {
+          "ru": "Розетка 220 В",
+          "kk": "220 В розетка",
+          "en": "A 230 V wall socket"
+        },
+        {
+          "ru": "ESP32, 3,3 В",
+          "kk": "ESP32, 3,3 В",
+          "en": "An ESP32, 3.3 V"
+        }
+      ],
+      "correct": [
+        2
+      ],
+      "explanation": {
+        "ru": "Розетка — единственное, что здесь опасно. Платы и батарейки дают маленькое напряжение.",
+        "kk": "Мұнда тек розетка қауіпті. Тақталар мен батарейкалар аз кернеу береді.",
+        "en": "Only the wall socket is dangerous here. Boards and batteries give a low voltage."
+      }
+    },
+    {
+      "id": "resist",
+      "type": "quiz",
+      "kind": "choice",
+      "question": {
+        "ru": "Что мешает току течь?",
+        "kk": "Токтың ағуына не бөгет болады?",
+        "en": "What holds the current back?"
+      },
+      "options": [
+        {
+          "ru": "Толстый провод",
+          "kk": "Жуан сым",
+          "en": "A thick wire"
+        },
+        {
+          "ru": "Сопротивление — узкое место",
+          "kk": "Кедергі — тар жер",
+          "en": "Resistance: a narrow spot"
+        },
+        {
+          "ru": "Напряжение",
+          "kk": "Кернеу",
+          "en": "Voltage"
+        }
+      ],
+      "correct": [
+        1
+      ],
+      "explanation": {
+        "ru": "Сопротивление — как узкая труба: чем оно больше, тем меньше ток.",
+        "kk": "Кедергі — тар құбыр сияқты: ол неғұрлым үлкен болса, ток соғұрлым аз.",
+        "en": "Resistance is like a narrow pipe: the bigger it is, the smaller the current."
+      }
+    }
+  ]
+}

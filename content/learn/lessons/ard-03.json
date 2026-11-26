@@ -1,0 +1,191 @@
+{
+  "id": "ard-03",
+  "track": "arduino",
+  "unit": "ard-first",
+  "minutes": 8,
+  "skills": [
+    "microcontrollers",
+    "sequence"
+  ],
+  "title": {
+    "ru": "Свой светодиод на пине",
+    "kk": "Пиндегі өз жарықдиодың",
+    "en": "Your own LED on a pin"
+  },
+  "goal": {
+    "ru": "Сегодня плата сама будет решать, когда зажигать твой светодиод.",
+    "kk": "Бүгін тақта сенің жарықдиодыңды қашан жағуды өзі шешеді.",
+    "en": "Today the board decides by itself when to light your LED."
+  },
+  "summary": {
+    "ru": "Цифровой пин — это управляемый «плюс»: HIGH даёт ток в цепь, LOW его выключает.",
+    "kk": "Цифрлық пин — басқарылатын «плюс»: HIGH тізбекке ток береді, LOW оны өшіреді.",
+    "en": "A digital pin is a plus you can control: HIGH sends current into the circuit, LOW stops it."
+  },
+  "kit": false,
+  "steps": [
+    {
+      "id": "pin",
+      "type": "theory",
+      "title": {
+        "ru": "Пин управляет цепью",
+        "kk": "Пин тізбекті басқарады",
+        "en": "A pin controls the circuit"
+      },
+      "body": {
+        "ru": "Раньше светодиод горел от пина 5V постоянно. Теперь подключим его к **цифровому пину** — и программа сама решит, когда ему гореть.\n\nСхема та же: пин → резистор 220 Ом → светодиод → GND. Только вместо 5V — пин 8. HIGH — в цепи 5 В, LOW — 0 В.",
+        "kk": "Бұрын жарықдиод 5V пинінен үнемі жанды. Енді оны **цифрлық пинге** қосамыз — сонда бағдарлама оның қашан жанатынын өзі шешеді.\n\nСхема сол: пин → 220 Ом резистор → жарықдиод → GND. Тек 5V-тің орнына — 8-пин. HIGH — тізбекте 5 В, LOW — 0 В.",
+        "en": "Before, the LED was always on from the 5V pin. Now we connect it to a **digital pin**, and the program decides when it is on.\n\nThe circuit is the same: pin → 220 Ω resistor → LED → GND. Only pin 8 instead of 5V. HIGH puts 5 V into the circuit, LOW puts 0 V."
+      },
+      "illustration": "e-digital"
+    },
+    {
+      "id": "fill",
+      "type": "quiz",
+      "kind": "fill",
+      "question": {
+        "ru": "Заполни пропуски, чтобы светодиод на пине 8 загорелся",
+        "kk": "8-пиндегі жарықдиод жанатындай бос орындарды толтыр",
+        "en": "Fill the gaps so the LED on pin 8 lights up"
+      },
+      "code": "void setup() {\n  pinMode(8, [[0]]);\n}\n\nvoid loop() {\n  digitalWrite(8, [[1]]);\n}",
+      "blanks": [
+        {
+          "options": [
+            "OUTPUT",
+            "INPUT",
+            "HIGH"
+          ],
+          "correct": 0
+        },
+        {
+          "options": [
+            "HIGH",
+            "LOW",
+            "13"
+          ],
+          "correct": 0
+        }
+      ],
+      "explanation": {
+        "ru": "Пин настраиваем как выход (OUTPUT) и подаём на него HIGH.",
+        "kk": "Пинді шығыс (OUTPUT) етіп баптап, оған HIGH береміз.",
+        "en": "Set the pin up as an output (OUTPUT) and write HIGH to it."
+      }
+    },
+    {
+      "id": "pin8",
+      "type": "circuit",
+      "title": {
+        "ru": "Мигалка на пине 8",
+        "kk": "8-пиндегі жыпылықтауық",
+        "en": "A blinker on pin 8"
+      },
+      "task": {
+        "ru": "Соедини пин **8** (верхний ряд пинов) со **столбиком 10**, а **столбик 15** — с **GND**. Потом напиши программу, которая мигает светодиодом на пине 8 раз в полсекунды.",
+        "kk": "**8**-пинді (пиндердің жоғарғы қатары) **10-бағанмен**, ал **15-бағанды** **GND**-мен жалға. Сосын 8-пиндегі жарықдиодты жарты секунд сайын жыпылықтататын бағдарлама жаз.",
+        "en": "Connect pin **8** (top row of pins) to **column 10**, and **column 15** to **GND**. Then write a program that blinks the LED on pin 8 every half second."
+      },
+      "start": {
+        "doc": {
+          "board": "uno",
+          "parts": [
+            {
+              "id": "r1",
+              "type": "resistor",
+              "x": 420,
+              "y": 90,
+              "rot": 0,
+              "props": {
+                "ohms": 220
+              }
+            },
+            {
+              "id": "l1",
+              "type": "led",
+              "x": 460,
+              "y": 130,
+              "rot": 0,
+              "props": {
+                "color": "red"
+              }
+            }
+          ],
+          "wires": []
+        },
+        "code": "void setup() {\n  // runs once\n}\n\nvoid loop() {\n  // runs again and again\n}\n"
+      },
+      "tray": [],
+      "code": "edit",
+      "checks": [
+        {
+          "type": "blinks",
+          "min": 3
+        },
+        {
+          "type": "noBurned"
+        }
+      ],
+      "hints": [
+        {
+          "ru": "Пин 8 — в верхнем ряду, его можно найти по подсказке при наведении.",
+          "kk": "8-пин — жоғарғы қатарда, оны меңзерді апарғанда шығатын кеңес бойынша табуға болады.",
+          "en": "Pin 8 is in the top row; hover to see the names."
+        },
+        {
+          "ru": "Код как у Blink, только вместо 13 — 8.",
+          "kk": "Код Blink сияқты, тек 13-тің орнына — 8.",
+          "en": "The code is like Blink, only 8 instead of 13."
+        },
+        {
+          "ru": "Провода: D8 → b10 и b15 → GND.",
+          "kk": "Сымдар: D8 → b10 және b15 → GND.",
+          "en": "Wires: D8 → b10 and b15 → GND."
+        }
+      ],
+      "reference": {
+        "actions": [],
+        "doc": {
+          "board": "uno",
+          "parts": [
+            {
+              "id": "r1",
+              "type": "resistor",
+              "x": 420,
+              "y": 90,
+              "rot": 0,
+              "props": {
+                "ohms": 220
+              }
+            },
+            {
+              "id": "l1",
+              "type": "led",
+              "x": 460,
+              "y": 130,
+              "rot": 0,
+              "props": {
+                "color": "red"
+              }
+            }
+          ],
+          "wires": [
+            {
+              "id": "w-uno.D8-bb.b10",
+              "a": "uno.D8",
+              "b": "bb.b10",
+              "color": "#e8710a"
+            },
+            {
+              "id": "w-bb.b15-uno.GND.1",
+              "a": "bb.b15",
+              "b": "uno.GND.1",
+              "color": "#202124"
+            }
+          ]
+        },
+        "code": "const int LED = 8;\n\nvoid setup() {\n  pinMode(LED, OUTPUT);\n}\n\nvoid loop() {\n  digitalWrite(LED, HIGH);\n  delay(500);\n  digitalWrite(LED, LOW);\n  delay(500);\n}\n"
+      }
+    }
+  ]
+}

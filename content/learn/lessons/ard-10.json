@@ -1,0 +1,162 @@
+{
+  "id": "ard-10",
+  "track": "arduino",
+  "unit": "ard-motion",
+  "minutes": 8,
+  "skills": [
+    "microcontrollers",
+    "loops"
+  ],
+  "title": {
+    "ru": "Пищалка и мелодия",
+    "kk": "Дыбыстағыш және әуен",
+    "en": "A buzzer and a tune"
+  },
+  "goal": {
+    "ru": "Сегодня плата заиграет мелодию.",
+    "kk": "Бүгін тақта әуен ойнайды.",
+    "en": "Today the board plays a tune."
+  },
+  "summary": {
+    "ru": "Звук — это частота. tone() играет ноту, массив хранит мелодию, а цикл for проходит по нотам.",
+    "kk": "Дыбыс — бұл жиілік. tone() нотаны ойнайды, массив әуенді сақтайды, ал for циклі ноталар бойымен жүреді.",
+    "en": "Sound is frequency. tone() plays a note, an array stores the tune, and a for loop walks through the notes."
+  },
+  "kit": false,
+  "steps": [
+    {
+      "id": "tone",
+      "type": "theory",
+      "title": {
+        "ru": "Звук — это частота",
+        "kk": "Дыбыс — бұл жиілік",
+        "en": "Sound is frequency"
+      },
+      "body": {
+        "ru": "Пьезопищалка звучит, когда на неё быстро подают HIGH и LOW. Чем чаще — тем выше нота. Частоту измеряют в **герцах (Гц)**: 262 Гц — нота до, 440 Гц — ля.\n\n**tone(8, 440)** — играть ля на пине 8, **noTone(8)** — тишина. Ноты удобно хранить в **массиве**, а играть циклом **for**.",
+        "kk": "Пьезо-дыбыстағышқа HIGH пен LOW жылдам берілгенде, ол дыбыс шығарады. Неғұрлым жиі болса, нота соғұрлым жоғары. Жиілікті **герцпен (Гц)** өлшейді: 262 Гц — до нотасы, 440 Гц — ля.\n\n**tone(8, 440)** — 8-пинде ля ойнау, **noTone(8)** — тыныштық. Ноталарды **массивте** сақтап, **for** циклімен ойнаған ыңғайлы.",
+        "en": "A piezo buzzer sounds when it gets HIGH and LOW very fast. The faster, the higher the note. Frequency is measured in **hertz (Hz)**: 262 Hz is C, 440 Hz is A.\n\n**tone(8, 440)** plays an A on pin 8, **noTone(8)** is silence. Notes are handy to keep in an **array** and play with a **for** loop."
+      },
+      "code": "int notes[] = {262, 294, 330, 349, 392, 440, 494, 523};\n\nvoid setup() {\n  for (int i = 0; i < 8; i++) {\n    tone(8, notes[i]);\n    delay(300);\n  }\n  noTone(8);\n}\n\nvoid loop() {\n}\n",
+      "codeLang": "arduino"
+    },
+    {
+      "id": "higher",
+      "type": "quiz",
+      "kind": "choice",
+      "question": {
+        "ru": "Какая нота выше?",
+        "kk": "Қай нота жоғары?",
+        "en": "Which note is higher?"
+      },
+      "options": [
+        {
+          "ru": "262 Гц",
+          "kk": "262 Гц",
+          "en": "262 Hz"
+        },
+        {
+          "ru": "523 Гц",
+          "kk": "523 Гц",
+          "en": "523 Hz"
+        }
+      ],
+      "correct": [
+        1
+      ],
+      "explanation": {
+        "ru": "Больше герц — выше звук. 523 Гц — это до следующей октавы.",
+        "kk": "Герц көп болса — дыбыс жоғары. 523 Гц — келесі октаваның до нотасы.",
+        "en": "More hertz, higher sound. 523 Hz is the C of the next octave."
+      }
+    },
+    {
+      "id": "melody",
+      "type": "circuit",
+      "title": {
+        "ru": "Сыграй мелодию",
+        "kk": "Әуен ойна",
+        "en": "Play a tune"
+      },
+      "task": {
+        "ru": "Подключи пищалку: пин **8** → столбик 12, столбик 15 → шина −, GND → шина −. Напиши программу, которая играет хотя бы три разные ноты.",
+        "kk": "Дыбыстағышты қос: **8**-пин → 12-баған, 15-баған → − шина, GND → − шина. Кемінде үш түрлі нота ойнайтын бағдарлама жаз.",
+        "en": "Connect the buzzer: pin **8** → column 12, column 15 → − rail, GND → − rail. Write a program that plays at least three different notes."
+      },
+      "start": {
+        "doc": {
+          "board": "uno",
+          "parts": [
+            {
+              "id": "z1",
+              "type": "buzzer",
+              "x": 440,
+              "y": 90,
+              "rot": 0,
+              "props": {}
+            }
+          ],
+          "wires": []
+        },
+        "code": "void setup() {\n  // runs once\n}\n\nvoid loop() {\n  // runs again and again\n}\n"
+      },
+      "tray": [],
+      "code": "edit",
+      "checks": [
+        {
+          "type": "mission",
+          "id": "melody"
+        }
+      ],
+      "hints": [
+        {
+          "ru": "tone(8, 262); delay(300); tone(8, 294); delay(300); …",
+          "kk": "tone(8, 262); delay(300); tone(8, 294); delay(300); …",
+          "en": "tone(8, 262); delay(300); tone(8, 294); delay(300); …"
+        },
+        {
+          "ru": "Включи звук кнопкой с динамиком, чтобы услышать мелодию.",
+          "kk": "Әуенді есту үшін динамик батырмасымен дыбысты қос.",
+          "en": "Turn the sound on with the speaker button to hear the tune."
+        }
+      ],
+      "reference": {
+        "actions": [],
+        "doc": {
+          "board": "uno",
+          "parts": [
+            {
+              "id": "z1",
+              "type": "buzzer",
+              "x": 440,
+              "y": 90,
+              "rot": 0,
+              "props": {}
+            }
+          ],
+          "wires": [
+            {
+              "id": "w-uno.GND.3-bb.tn1",
+              "a": "uno.GND.3",
+              "b": "bb.tn1",
+              "color": "#202124"
+            },
+            {
+              "id": "w-uno.D8-bb.b12",
+              "a": "uno.D8",
+              "b": "bb.b12",
+              "color": "#e8710a"
+            },
+            {
+              "id": "w-bb.b15-bb.tn15",
+              "a": "bb.b15",
+              "b": "bb.tn15",
+              "color": "#202124"
+            }
+          ]
+        },
+        "code": "int notes[] = {262, 294, 330, 349, 392, 440, 494, 523};\n\nvoid setup() {\n  for (int i = 0; i < 8; i++) {\n    tone(8, notes[i]);\n    delay(300);\n  }\n  noTone(8);\n}\n\nvoid loop() {\n}\n"
+      }
+    }
+  ]
+}

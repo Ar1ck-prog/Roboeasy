@@ -1,0 +1,152 @@
+{
+  "id": "ard-04",
+  "track": "arduino",
+  "unit": "ard-first",
+  "minutes": 7,
+  "skills": [
+    "microcontrollers",
+    "variables"
+  ],
+  "title": {
+    "ru": "Переменные и время",
+    "kk": "Айнымалылар және уақыт",
+    "en": "Variables and time"
+  },
+  "goal": {
+    "ru": "Сегодня ты научишься хранить числа в переменных и управлять скоростью мигания.",
+    "kk": "Бүгін сен сандарды айнымалыларда сақтауды және жыпылықтау жылдамдығын басқаруды үйренесің.",
+    "en": "Today you will learn to keep numbers in variables and control the blink speed."
+  },
+  "summary": {
+    "ru": "Переменная — коробка с именем. Поменял одно число — изменилась вся программа.",
+    "kk": "Айнымалы — аты бар қорап. Бір санды өзгерттің — бүкіл бағдарлама өзгерді.",
+    "en": "A variable is a box with a name. Change one number and the whole program changes."
+  },
+  "kit": false,
+  "steps": [
+    {
+      "id": "var",
+      "type": "theory",
+      "title": {
+        "ru": "Переменная — коробка с именем",
+        "kk": "Айнымалы — аты бар қорап",
+        "en": "A variable is a box with a name"
+      },
+      "body": {
+        "ru": "Чтобы не писать одно и то же число много раз, его кладут в **переменную**: **int wait = 300;**\n\n**int** — целое число, **wait** — имя, **300** — значение. Теперь можно писать **delay(wait)**.\n\nЕсли число не должно меняться, пишут **const int LED = 8;** — это константа. А **LED_BUILTIN** — готовое имя для пина встроенного светодиода.",
+        "kk": "Бір санды көп рет жазбау үшін оны **айнымалыға** салады: **int wait = 300;**\n\n**int** — бүтін сан, **wait** — аты, **300** — мәні. Енді **delay(wait)** деп жазуға болады.\n\nСан өзгермеуі керек болса, **const int LED = 8;** деп жазады — бұл тұрақты. Ал **LED_BUILTIN** — кірістірілген жарықдиод пинінің дайын аты.",
+        "en": "To avoid writing the same number many times, you put it in a **variable**: **int wait = 300;**\n\n**int** is a whole number, **wait** is the name, **300** is the value. Now you can write **delay(wait)**.\n\nIf the number must not change, write **const int LED = 8;**: a constant. And **LED_BUILTIN** is a ready-made name for the built-in LED pin."
+      },
+      "code": "const int LED = 8;\nint wait = 300;\n\nvoid loop() {\n  digitalWrite(LED, HIGH);\n  delay(wait);\n  digitalWrite(LED, LOW);\n  delay(wait);\n}",
+      "codeLang": "arduino"
+    },
+    {
+      "id": "fill",
+      "type": "quiz",
+      "kind": "fill",
+      "question": {
+        "ru": "Заполни пропуски",
+        "kk": "Бос орындарды толтыр",
+        "en": "Fill the gaps"
+      },
+      "code": "const int LED = 8;\nint wait = 200;\n\nvoid loop() {\n  digitalWrite([[0]], HIGH);\n  delay([[1]]);\n}",
+      "blanks": [
+        {
+          "options": [
+            "LED",
+            "wait",
+            "HIGH"
+          ],
+          "correct": 0
+        },
+        {
+          "options": [
+            "wait",
+            "LED",
+            "int"
+          ],
+          "correct": 0
+        }
+      ],
+      "explanation": {
+        "ru": "Пин хранится в LED, пауза — в wait.",
+        "kk": "Пин LED-те, үзіліс wait-те сақталады.",
+        "en": "The pin is in LED, the pause is in wait."
+      }
+    },
+    {
+      "id": "fast",
+      "type": "circuit",
+      "title": {
+        "ru": "Быстрая мигалка",
+        "kk": "Жылдам жыпылықтауық",
+        "en": "A fast blinker"
+      },
+      "task": {
+        "ru": "Сделай переменную **wait = 200** и помигай встроенным светодиодом: 200 мс горит, 200 мс не горит.",
+        "kk": "**wait = 200** айнымалысын жасап, кірістірілген жарықдиодты жыпылықтат: 200 мс жанады, 200 мс жанбайды.",
+        "en": "Make a variable **wait = 200** and blink the built-in LED: on for 200 ms, off for 200 ms."
+      },
+      "start": {
+        "doc": {
+          "board": "uno",
+          "parts": [],
+          "wires": []
+        },
+        "code": "void setup() {\n  // runs once\n}\n\nvoid loop() {\n  // runs again and again\n}\n"
+      },
+      "tray": [],
+      "code": "edit",
+      "checks": [
+        {
+          "type": "blinks",
+          "min": 6,
+          "builtin": true
+        },
+        {
+          "type": "blinkPeriod",
+          "ms": 200,
+          "builtin": true
+        }
+      ],
+      "hints": [
+        {
+          "ru": "Объяви переменную до setup(): int wait = 200;",
+          "kk": "Айнымалыны setup()-қа дейін жарияла: int wait = 200;",
+          "en": "Declare the variable before setup(): int wait = 200;"
+        },
+        {
+          "ru": "В loop() используй delay(wait); два раза.",
+          "kk": "loop() ішінде delay(wait); екі рет қолдан.",
+          "en": "In loop() use delay(wait); twice."
+        }
+      ],
+      "reference": {
+        "actions": [],
+        "code": "int wait = 200;\n\nvoid setup() {\n  pinMode(LED_BUILTIN, OUTPUT);\n}\n\nvoid loop() {\n  digitalWrite(LED_BUILTIN, HIGH);\n  delay(wait);\n  digitalWrite(LED_BUILTIN, LOW);\n  delay(wait);\n}\n"
+      }
+    },
+    {
+      "id": "ms",
+      "type": "quiz",
+      "kind": "number",
+      "question": {
+        "ru": "Сколько миллисекунд в 2,5 секундах?",
+        "kk": "2,5 секундта неше миллисекунд бар?",
+        "en": "How many milliseconds are in 2.5 seconds?"
+      },
+      "answer": 2500,
+      "tolerance": 0,
+      "explanation": {
+        "ru": "В одной секунде 1000 мс, значит 2,5 × 1000 = 2500.",
+        "kk": "Бір секундта 1000 мс, демек 2,5 × 1000 = 2500.",
+        "en": "A second has 1000 ms, so 2.5 × 1000 = 2500."
+      },
+      "unit": {
+        "ru": "мс",
+        "kk": "мс",
+        "en": "ms"
+      }
+    }
+  ]
+}

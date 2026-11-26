@@ -1,0 +1,133 @@
+{
+  "id": "esp-02",
+  "track": "esp32",
+  "unit": "esp-first",
+  "minutes": 6,
+  "skills": [
+    "microcontrollers"
+  ],
+  "title": {
+    "ru": "Blink на ESP32",
+    "kk": "ESP32-дегі Blink",
+    "en": "Blink on the ESP32"
+  },
+  "goal": {
+    "ru": "Сегодня ты запустишь первую программу на ESP32.",
+    "kk": "Бүгін сен ESP32-де алғашқы бағдарламаны іске қосасың.",
+    "en": "Today you will run your first program on the ESP32."
+  },
+  "summary": {
+    "ru": "LED_BUILTIN — это GPIO2, а Serial на ESP32 обычно работает на 115200.",
+    "kk": "LED_BUILTIN — бұл GPIO2, ал ESP32-де Serial әдетте 115200-де жұмыс істейді.",
+    "en": "LED_BUILTIN is GPIO2, and Serial on the ESP32 usually runs at 115200."
+  },
+  "kit": false,
+  "steps": [
+    {
+      "id": "same",
+      "type": "theory",
+      "title": {
+        "ru": "Всё как у Arduino",
+        "kk": "Бәрі Arduino-дағыдай",
+        "en": "Just like the Arduino"
+      },
+      "body": {
+        "ru": "Мигалка на ESP32 почти не отличается от Arduino: **LED_BUILTIN** — это GPIO2, а монитор порта обычно включают на скорости **115200**. Напечатаем ещё, когда светодиод включается и выключается.",
+        "kk": "ESP32-дегі жыпылықтауық Arduino-дағыдан дерлік айырмашылығы жоқ: **LED_BUILTIN** — бұл GPIO2, ал порт мониторын әдетте **115200** жылдамдықта қосады. Жарықдиодтың қашан қосылып, өшетінін де басып шығарамыз.",
+        "en": "Blink on the ESP32 barely differs from the Arduino: **LED_BUILTIN** is GPIO2, and the serial monitor usually runs at **115200**. We will also print when the LED goes on and off."
+      },
+      "code": "void setup() {\n  Serial.begin(115200);\n  pinMode(LED_BUILTIN, OUTPUT);\n}\n\nvoid loop() {\n  digitalWrite(LED_BUILTIN, HIGH);\n  Serial.println(\"on\");\n  delay(500);\n  digitalWrite(LED_BUILTIN, LOW);\n  Serial.println(\"off\");\n  delay(500);\n}\n",
+      "codeLang": "arduino"
+    },
+    {
+      "id": "blink",
+      "type": "circuit",
+      "title": {
+        "ru": "Помигай синим светодиодом",
+        "kk": "Көк жарықдиодты жыпылықтат",
+        "en": "Blink the blue LED"
+      },
+      "task": {
+        "ru": "Напиши программу для ESP32: синий светодиод на **GPIO2** мигает раз в полсекунды, а в монитор порта печатается «on» и «off».",
+        "kk": "ESP32 үшін бағдарлама жаз: **GPIO2**-дегі көк жарықдиод жарты секунд сайын жыпылықтайды, ал порт мониторына «on» және «off» басылады.",
+        "en": "Write a program for the ESP32: the blue LED on **GPIO2** blinks every half second, and the serial monitor prints \"on\" and \"off\"."
+      },
+      "start": {
+        "doc": {
+          "board": "esp32",
+          "parts": [],
+          "wires": []
+        },
+        "code": "void setup() {\n  // runs once\n}\n\nvoid loop() {\n  // runs again and again\n}\n"
+      },
+      "tray": [],
+      "code": "edit",
+      "checks": [
+        {
+          "type": "blinks",
+          "min": 4,
+          "builtin": true
+        },
+        {
+          "type": "serialLines",
+          "min": 2
+        }
+      ],
+      "hints": [
+        {
+          "ru": "Serial.begin(115200); и pinMode(LED_BUILTIN, OUTPUT); в setup().",
+          "kk": "setup() ішінде Serial.begin(115200); және pinMode(LED_BUILTIN, OUTPUT);",
+          "en": "Serial.begin(115200); and pinMode(LED_BUILTIN, OUTPUT); in setup()."
+        },
+        {
+          "ru": "После digitalWrite добавь Serial.println(\"on\");",
+          "kk": "digitalWrite-тан кейін Serial.println(\"on\"); қос",
+          "en": "After digitalWrite add Serial.println(\"on\");"
+        }
+      ],
+      "reference": {
+        "actions": [],
+        "doc": {
+          "board": "esp32",
+          "parts": [],
+          "wires": []
+        },
+        "code": "void setup() {\n  Serial.begin(115200);\n  pinMode(LED_BUILTIN, OUTPUT);\n}\n\nvoid loop() {\n  digitalWrite(LED_BUILTIN, HIGH);\n  Serial.println(\"on\");\n  delay(500);\n  digitalWrite(LED_BUILTIN, LOW);\n  Serial.println(\"off\");\n  delay(500);\n}\n"
+      }
+    },
+    {
+      "id": "fill",
+      "type": "quiz",
+      "kind": "fill",
+      "question": {
+        "ru": "Заполни пропуски для ESP32",
+        "kk": "ESP32 үшін бос орындарды толтыр",
+        "en": "Fill the gaps for the ESP32"
+      },
+      "code": "void setup() {\n  Serial.begin([[0]]);\n  pinMode([[1]], OUTPUT);\n}",
+      "blanks": [
+        {
+          "options": [
+            "115200",
+            "5",
+            "3.3"
+          ],
+          "correct": 0
+        },
+        {
+          "options": [
+            "2",
+            "13",
+            "A0"
+          ],
+          "correct": 0
+        }
+      ],
+      "explanation": {
+        "ru": "На ESP32 обычно 115200, а встроенный светодиод — GPIO2.",
+        "kk": "ESP32-де әдетте 115200, ал кірістірілген жарықдиод — GPIO2.",
+        "en": "On the ESP32 it is usually 115200, and the built-in LED is GPIO2."
+      }
+    }
+  ]
+}

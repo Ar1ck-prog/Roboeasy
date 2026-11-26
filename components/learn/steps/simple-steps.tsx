@@ -71,7 +71,7 @@ export function TheoryStep({
       {(step.illustration || step.example || step.code) && (
         <div className="grid min-w-0 gap-3 rounded-(--radius-md) border-(length:--stroke-thin) border-outline bg-surface-2 p-4">
           {step.illustration && <Illustration name={step.illustration} lang={lang} />}
-          {step.code && <CodeView code={step.code} label="Python" className="m-0 overflow-x-auto text-sm" />}
+          {step.code && <CodeView code={step.code} label={step.codeLang === 'arduino' ? 'Arduino C++' : 'Python'} lang={step.codeLang} className="m-0 overflow-x-auto text-sm" />}
           {step.example && (
             <div className="canvas">
               <BlockStack program={{ steps: step.example }} labels={blocksT} robot={DEFAULT_ROBOT} />

@@ -593,7 +593,7 @@ export function Lab({ lang, t }: LabProps) {
   )
 }
 
-function SerialOutput({ text, empty }: { text: string; empty: string }) {
+export function SerialOutput({ text, empty }: { text: string; empty: string }) {
   const ref = useRef<HTMLPreElement>(null)
   useEffect(() => {
     const el = ref.current
@@ -611,7 +611,7 @@ function SerialOutput({ text, empty }: { text: string; empty: string }) {
   )
 }
 
-function PartPreview({ type }: { type: PartType }) {
+export function PartPreview({ type }: { type: PartType }) {
   const part: Part = { id: 'preview', type, x: 0, y: 0, rot: 0, props: DEFAULT_PROPS[type] }
   const box: Record<PartType, string> = {
     led: '-6 -30 22 34',
@@ -630,7 +630,7 @@ function PartPreview({ type }: { type: PartType }) {
   )
 }
 
-function PartInspector({ part, frame, t, setProps, running }: { part: Part; frame: FrameState | null; t: ElectronicsText; setProps: (id: string, p: Part['props']) => void; running: boolean }) {
+export function PartInspector({ part, frame, t, setProps, running }: { part: Part; frame: FrameState | null; t: ElectronicsText; setProps: (id: string, p: Part['props']) => void; running: boolean }) {
   const range = (label: string, value: number, min: number, max: number, step: number, onInput: (v: number) => void, shown: string) => (
     <label className="grid gap-1 text-sm font-bold">
       <span className="flex justify-between gap-2">

@@ -44,6 +44,7 @@ const ru = {
       real_robot: 'Настоящий робот',
       widget: 'Практика',
       project: 'Проект',
+      circuit: 'Схема',
     },
     // quiz
     check: 'Проверить',
@@ -150,6 +151,7 @@ const kk: LearnText = {
       real_robot: 'Нағыз робот',
       widget: 'Практика',
       project: 'Жоба',
+      circuit: 'Схема',
     },
     check: 'Тексеру',
     correct: 'Дұрыс!',
@@ -248,6 +250,7 @@ const en: LearnText = {
       real_robot: 'Real robot',
       widget: 'Practice',
       project: 'Project',
+      circuit: 'Circuit',
     },
     check: 'Check',
     correct: 'Correct!',

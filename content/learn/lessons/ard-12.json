@@ -1,0 +1,180 @@
+{
+  "id": "ard-12",
+  "track": "arduino",
+  "unit": "ard-motion",
+  "minutes": 12,
+  "skills": [
+    "microcontrollers",
+    "sensor-distance"
+  ],
+  "title": {
+    "ru": "Проект: парктроник",
+    "kk": "Жоба: парктроник",
+    "en": "Project: a parking sensor"
+  },
+  "goal": {
+    "ru": "Сегодня ты сделаешь парктроник, как у машины: он видит препятствие ушами.",
+    "kk": "Бүгін сен көліктегідей парктроник жасайсың: ол кедергіні құлақпен көреді.",
+    "en": "Today you will make a parking sensor like a car has: it sees obstacles with its ears."
+  },
+  "summary": {
+    "ru": "Ультразвук летит туда и обратно: 58 мкс — это 1 см. Ты прошёл весь курс Arduino — впереди ESP32!",
+    "kk": "Ультрадыбыс барып-қайтады: 58 мкс — бұл 1 см. Сен бүкіл Arduino курсын өттің — алда ESP32!",
+    "en": "Ultrasound flies there and back: 58 µs is 1 cm. You finished the whole Arduino course: ESP32 is next!"
+  },
+  "kit": false,
+  "steps": [
+    {
+      "id": "sonar",
+      "type": "theory",
+      "title": {
+        "ru": "Летучая мышь из пластика",
+        "kk": "Пластиктен жасалған жарқанат",
+        "en": "A plastic bat"
+      },
+      "body": {
+        "ru": "Дальномер **HC-SR04** кричит ультразвуком и слушает эхо. По времени, пока звук летел туда и обратно, можно узнать расстояние: **каждые 58 микросекунд — это 1 см**.\n\nЧтобы «крикнуть», на TRIG подают HIGH на 10 микросекунд. **pulseIn(ECHO, HIGH)** возвращает время эха в микросекундах.",
+        "kk": "**HC-SR04** қашықтық өлшегіші ультрадыбыспен айқайлап, жаңғырықты тыңдайды. Дыбыстың барып-қайтқан уақыты бойынша қашықтықты білуге болады: **әр 58 микросекунд — 1 см**.\n\n«Айқайлау» үшін TRIG-ке 10 микросекундқа HIGH береді. **pulseIn(ECHO, HIGH)** жаңғырық уақытын микросекундпен қайтарады.",
+        "en": "The **HC-SR04** sensor shouts in ultrasound and listens for the echo. From the time the sound took there and back you get the distance: **every 58 microseconds is 1 cm**.\n\nTo shout, TRIG gets HIGH for 10 microseconds. **pulseIn(ECHO, HIGH)** returns the echo time in microseconds."
+      },
+      "illustration": "e-sonar",
+      "code": "digitalWrite(TRIG, HIGH);\ndelayMicroseconds(10);\ndigitalWrite(TRIG, LOW);\nlong cm = pulseIn(ECHO, HIGH) / 58;",
+      "codeLang": "arduino"
+    },
+    {
+      "id": "cm",
+      "type": "quiz",
+      "kind": "number",
+      "question": {
+        "ru": "Эхо вернулось через 1160 мкс. Сколько сантиметров до препятствия?",
+        "kk": "Жаңғырық 1160 мкс-тан кейін қайтты. Кедергіге дейін неше сантиметр?",
+        "en": "The echo came back after 1160 µs. How many centimetres to the obstacle?"
+      },
+      "answer": 20,
+      "tolerance": 0,
+      "explanation": {
+        "ru": "1160 ÷ 58 = 20 см.",
+        "kk": "1160 ÷ 58 = 20 см.",
+        "en": "1160 ÷ 58 = 20 cm."
+      },
+      "unit": {
+        "ru": "см",
+        "kk": "см",
+        "en": "cm"
+      }
+    },
+    {
+      "id": "radar",
+      "type": "circuit",
+      "title": {
+        "ru": "Собери парктроник",
+        "kk": "Парктроник құрастыр",
+        "en": "Build the parking sensor"
+      },
+      "task": {
+        "ru": "Подключи дальномер: VCC → **5V**, TRIG → пин **7**, ECHO → пин **8**, GND → **GND**. Программа печатает расстояние в сантиметрах и зажигает светодиод L, если ближе 20 см. Меняй расстояние ползунком справа.",
+        "kk": "Қашықтық өлшегішті қос: VCC → **5V**, TRIG → **7**-пин, ECHO → **8**-пин, GND → **GND**. Бағдарлама қашықтықты сантиметрмен басып шығарады және 20 см-ден жақын болса, L жарықдиодын жағады. Қашықтықты оң жақтағы жүгірткімен өзгерт.",
+        "en": "Connect the sensor: VCC → **5V**, TRIG → pin **7**, ECHO → pin **8**, GND → **GND**. The program prints the distance in centimetres and lights LED L when closer than 20 cm. Change the distance with the slider on the right."
+      },
+      "start": {
+        "doc": {
+          "board": "uno",
+          "parts": [
+            {
+              "id": "u1",
+              "type": "ultrasonic",
+              "x": 380,
+              "y": 360,
+              "rot": 0,
+              "props": {
+                "distance": 40
+              }
+            }
+          ],
+          "wires": []
+        },
+        "code": "void setup() {\n  // runs once\n}\n\nvoid loop() {\n  // runs again and again\n}\n"
+      },
+      "tray": [],
+      "code": "edit",
+      "checks": [
+        {
+          "type": "mission",
+          "id": "radar"
+        }
+      ],
+      "hints": [
+        {
+          "ru": "Пины дальномера подписаны внизу его платы: VCC, TRIG, ECHO, GND.",
+          "kk": "Қашықтық өлшегіштің пиндері оның тақтасының төменгі жағында жазылған: VCC, TRIG, ECHO, GND.",
+          "en": "The sensor pins are labelled at the bottom of its board: VCC, TRIG, ECHO, GND."
+        },
+        {
+          "ru": "long cm = pulseIn(8, HIGH) / 58; потом Serial.println(cm);",
+          "kk": "long cm = pulseIn(8, HIGH) / 58; сосын Serial.println(cm);",
+          "en": "long cm = pulseIn(8, HIGH) / 58; then Serial.println(cm);"
+        }
+      ],
+      "reference": {
+        "actions": [
+          {
+            "t": 100,
+            "part": "u1",
+            "props": {
+              "distance": 12
+            }
+          },
+          {
+            "t": 1200,
+            "part": "u1",
+            "props": {
+              "distance": 55
+            }
+          }
+        ],
+        "doc": {
+          "board": "uno",
+          "parts": [
+            {
+              "id": "u1",
+              "type": "ultrasonic",
+              "x": 380,
+              "y": 360,
+              "rot": 0,
+              "props": {
+                "distance": 40
+              }
+            }
+          ],
+          "wires": [
+            {
+              "id": "w-u1.vcc-uno.5V",
+              "a": "u1.vcc",
+              "b": "uno.5V",
+              "color": "#d93025"
+            },
+            {
+              "id": "w-u1.trig-uno.D7",
+              "a": "u1.trig",
+              "b": "uno.D7",
+              "color": "#f9ab00"
+            },
+            {
+              "id": "w-u1.echo-uno.D8",
+              "a": "u1.echo",
+              "b": "uno.D8",
+              "color": "#188038"
+            },
+            {
+              "id": "w-u1.gnd-uno.GND.2",
+              "a": "u1.gnd",
+              "b": "uno.GND.2",
+              "color": "#202124"
+            }
+          ]
+        },
+        "code": "const int TRIG = 7;\nconst int ECHO = 8;\n\nvoid setup() {\n  Serial.begin(9600);\n  pinMode(TRIG, OUTPUT);\n  pinMode(ECHO, INPUT);\n  pinMode(LED_BUILTIN, OUTPUT);\n}\n\nvoid loop() {\n  digitalWrite(TRIG, LOW);\n  delayMicroseconds(2);\n  digitalWrite(TRIG, HIGH);\n  delayMicroseconds(10);\n  digitalWrite(TRIG, LOW);\n\n  long cm = pulseIn(ECHO, HIGH) / 58;\n  Serial.println(cm);\n  digitalWrite(LED_BUILTIN, cm < 20 ? HIGH : LOW);\n  delay(200);\n}\n"
+      }
+    }
+  ]
+}

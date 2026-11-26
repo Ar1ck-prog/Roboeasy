@@ -1,0 +1,278 @@
+{
+  "id": "ard-09",
+  "track": "arduino",
+  "unit": "ard-inputs",
+  "minutes": 9,
+  "skills": [
+    "microcontrollers",
+    "variables"
+  ],
+  "title": {
+    "ru": "Яркость и ШИМ",
+    "kk": "Жарықтық және ШИМ",
+    "en": "Brightness and PWM"
+  },
+  "goal": {
+    "ru": "Сегодня ты научишься делать «полсвета» и управлять яркостью ручкой.",
+    "kk": "Бүгін сен «жартылай жарық» жасауды және жарықтықты тұтқамен басқаруды үйренесің.",
+    "en": "Today you will learn to make half-light and control brightness with a knob."
+  },
+  "summary": {
+    "ru": "ШИМ очень быстро включает и выключает пин, и глаз видит среднюю яркость. map() переводит числа из одного диапазона в другой.",
+    "kk": "ШИМ пинді өте жылдам қосып-өшіреді, ал көз орташа жарықтықты көреді. map() сандарды бір ауқымнан басқасына аударады.",
+    "en": "PWM switches a pin on and off very fast and the eye sees the average brightness. map() moves numbers from one range to another."
+  },
+  "kit": false,
+  "steps": [
+    {
+      "id": "pwm",
+      "type": "theory",
+      "title": {
+        "ru": "Как сделать полсвета",
+        "kk": "Жартылай жарықты қалай жасауға болады",
+        "en": "How to make half-light"
+      },
+      "body": {
+        "ru": "Пин умеет только 5 В или 0 В. Но если очень быстро включать и выключать его, глаз увидит **среднюю** яркость. Это **ШИМ** — широтно-импульсная модуляция.\n\n**analogWrite(9, 128)** — горит половину времени. 0 — выключен, 255 — горит всё время. ШИМ есть только на пинах со значком **~**: 3, 5, 6, 9, 10, 11.",
+        "kk": "Пин тек 5 В немесе 0 В бере алады. Бірақ оны өте жылдам қосып-өшірсе, көз **орташа** жарықтықты көреді. Бұл **ШИМ** — ендік-импульстік модуляция.\n\n**analogWrite(9, 128)** — уақыттың жартысында жанады. 0 — өшірулі, 255 — үнемі жанады. ШИМ тек **~** белгісі бар пиндерде: 3, 5, 6, 9, 10, 11.",
+        "en": "A pin can only do 5 V or 0 V. But switch it on and off very fast and the eye sees the **average** brightness. That is **PWM**, pulse-width modulation.\n\n**analogWrite(9, 128)** is on half the time. 0 is off, 255 is always on. Only pins marked **~** have PWM: 3, 5, 6, 9, 10, 11."
+      },
+      "illustration": "e-pwm"
+    },
+    {
+      "id": "quarter",
+      "type": "quiz",
+      "kind": "choice",
+      "question": {
+        "ru": "Какое значение analogWrite даст примерно четверть яркости?",
+        "kk": "analogWrite-тың қай мәні жарықтықтың шамамен төрттен бірін береді?",
+        "en": "Which analogWrite value gives about a quarter of the brightness?"
+      },
+      "options": [
+        {
+          "ru": "64",
+          "kk": "64",
+          "en": "64"
+        },
+        {
+          "ru": "128",
+          "kk": "128",
+          "en": "128"
+        },
+        {
+          "ru": "255",
+          "kk": "255",
+          "en": "255"
+        },
+        {
+          "ru": "1023",
+          "kk": "1023",
+          "en": "1023"
+        }
+      ],
+      "correct": [
+        0
+      ],
+      "explanation": {
+        "ru": "255 ÷ 4 ≈ 64. А 1023 для analogWrite слишком много: его предел — 255.",
+        "kk": "255 ÷ 4 ≈ 64. Ал 1023 analogWrite үшін тым көп: оның шегі — 255.",
+        "en": "255 ÷ 4 ≈ 64. And 1023 is too much for analogWrite: its limit is 255."
+      }
+    },
+    {
+      "id": "dimmer",
+      "type": "circuit",
+      "title": {
+        "ru": "Ручка яркости",
+        "kk": "Жарықтық тұтқасы",
+        "en": "A brightness knob"
+      },
+      "task": {
+        "ru": "Подключи светодиод к пину **9** (столбик 6), а потенциометр — к шинам и к **A0**. Напиши программу: читаешь ручку, переводишь число через **map()** из 0–1023 в 0–255 и пишешь в **analogWrite(9, …)**. Запусти и покрути ручку.",
+        "kk": "Жарықдиодты **9**-пинге (6-баған), ал потенциометрді шиналарға және **A0**-ге қос. Бағдарлама жаз: тұтқаны оқисың, санды **map()** арқылы 0–1023-тен 0–255-ке аударып, **analogWrite(9, …)**-ге жазасың. Іске қосып, тұтқаны бұра.",
+        "en": "Connect the LED to pin **9** (column 6) and the potentiometer to the rails and **A0**. Write the program: read the knob, convert the number with **map()** from 0–1023 to 0–255 and write it with **analogWrite(9, …)**. Run it and turn the knob."
+      },
+      "start": {
+        "doc": {
+          "board": "uno",
+          "parts": [
+            {
+              "id": "r6",
+              "type": "resistor",
+              "x": 380,
+              "y": 90,
+              "rot": 0,
+              "props": {
+                "ohms": 220
+              }
+            },
+            {
+              "id": "l6",
+              "type": "led",
+              "x": 420,
+              "y": 130,
+              "rot": 0,
+              "props": {
+                "color": "red"
+              }
+            },
+            {
+              "id": "p1",
+              "type": "pot",
+              "x": 520,
+              "y": 90,
+              "rot": 0,
+              "props": {}
+            }
+          ],
+          "wires": []
+        },
+        "code": "void setup() {\n  // runs once\n}\n\nvoid loop() {\n  // runs again and again\n}\n"
+      },
+      "tray": [],
+      "code": "edit",
+      "checks": [
+        {
+          "type": "mission",
+          "id": "dimmer"
+        }
+      ],
+      "hints": [
+        {
+          "ru": "Провода: 5V → шина +, GND → шина −, D9 → b6, b11 → шина −, c20 → шина +, c22 → шина −, c21 → A0.",
+          "kk": "Сымдар: 5V → + шина, GND → − шина, D9 → b6, b11 → − шина, c20 → + шина, c22 → − шина, c21 → A0.",
+          "en": "Wires: 5V → + rail, GND → − rail, D9 → b6, b11 → − rail, c20 → + rail, c22 → − rail, c21 → A0."
+        },
+        {
+          "ru": "analogWrite(9, map(analogRead(A0), 0, 1023, 0, 255));",
+          "kk": "analogWrite(9, map(analogRead(A0), 0, 1023, 0, 255));",
+          "en": "analogWrite(9, map(analogRead(A0), 0, 1023, 0, 255));"
+        }
+      ],
+      "reference": {
+        "actions": [
+          {
+            "t": 200,
+            "part": "p1",
+            "props": {
+              "pos": 0
+            }
+          },
+          {
+            "t": 400,
+            "part": "p1",
+            "props": {
+              "pos": 0.2
+            }
+          },
+          {
+            "t": 600,
+            "part": "p1",
+            "props": {
+              "pos": 0.4
+            }
+          },
+          {
+            "t": 800,
+            "part": "p1",
+            "props": {
+              "pos": 0.6
+            }
+          },
+          {
+            "t": 1000,
+            "part": "p1",
+            "props": {
+              "pos": 0.8
+            }
+          },
+          {
+            "t": 1200,
+            "part": "p1",
+            "props": {
+              "pos": 1
+            }
+          }
+        ],
+        "doc": {
+          "board": "uno",
+          "parts": [
+            {
+              "id": "r6",
+              "type": "resistor",
+              "x": 380,
+              "y": 90,
+              "rot": 0,
+              "props": {
+                "ohms": 220
+              }
+            },
+            {
+              "id": "l6",
+              "type": "led",
+              "x": 420,
+              "y": 130,
+              "rot": 0,
+              "props": {
+                "color": "red"
+              }
+            },
+            {
+              "id": "p1",
+              "type": "pot",
+              "x": 520,
+              "y": 90,
+              "rot": 0,
+              "props": {}
+            }
+          ],
+          "wires": [
+            {
+              "id": "w-uno.GND.3-bb.tn1",
+              "a": "uno.GND.3",
+              "b": "bb.tn1",
+              "color": "#202124"
+            },
+            {
+              "id": "w-uno.5V-bb.tp2",
+              "a": "uno.5V",
+              "b": "bb.tp2",
+              "color": "#d93025"
+            },
+            {
+              "id": "w-uno.D9-bb.b6",
+              "a": "uno.D9",
+              "b": "bb.b6",
+              "color": "#e8710a"
+            },
+            {
+              "id": "w-bb.b11-bb.tn11",
+              "a": "bb.b11",
+              "b": "bb.tn11",
+              "color": "#202124"
+            },
+            {
+              "id": "w-bb.c20-bb.tp20",
+              "a": "bb.c20",
+              "b": "bb.tp20",
+              "color": "#d93025"
+            },
+            {
+              "id": "w-bb.c22-bb.tn22",
+              "a": "bb.c22",
+              "b": "bb.tn22",
+              "color": "#202124"
+            },
+            {
+              "id": "w-bb.c21-uno.A0",
+              "a": "bb.c21",
+              "b": "uno.A0",
+              "color": "#188038"
+            }
+          ]
+        },
+        "code": "void setup() {\n  pinMode(9, OUTPUT);\n}\n\nvoid loop() {\n  int value = analogRead(A0);\n  analogWrite(9, map(value, 0, 1023, 0, 255));\n}\n"
+      }
+    }
+  ]
+}

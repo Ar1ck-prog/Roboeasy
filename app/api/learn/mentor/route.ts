@@ -57,7 +57,8 @@ export async function POST(req: NextRequest) {
     ? parseProgram({ title: 'p', description: '', steps: body.program })
     : { ok: true as const, value: { title: 'p', description: '', steps: [] } }
   const steps = program.ok ? program.value.steps : []
-  const reference = 'reference' in step ? step.reference : undefined
+  // Block programs only: a circuit step's reference is a sketch, not blocks.
+  const reference = 'reference' in step && Array.isArray(step.reference) ? step.reference : undefined
   try {
     const signal = AbortSignal.any([req.signal, AbortSignal.timeout(25_000)])
     const answer = await askGemini(ai, {

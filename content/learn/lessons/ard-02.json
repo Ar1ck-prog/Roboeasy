@@ -1,0 +1,150 @@
+{
+  "id": "ard-02",
+  "track": "arduino",
+  "unit": "ard-first",
+  "minutes": 8,
+  "skills": [
+    "microcontrollers",
+    "sequence"
+  ],
+  "title": {
+    "ru": "Первая программа: setup() и loop()",
+    "kk": "Алғашқы бағдарлама: setup() және loop()",
+    "en": "Your first program: setup() and loop()"
+  },
+  "goal": {
+    "ru": "Сегодня ты напишешь свою первую программу и заставишь светодиод мигать.",
+    "kk": "Бүгін сен алғашқы бағдарламаңды жазып, жарықдиодты жыпылықтатасың.",
+    "en": "Today you will write your first program and make an LED blink."
+  },
+  "summary": {
+    "ru": "setup() — один раз, loop() — снова и снова. pinMode, digitalWrite и delay — твои первые команды.",
+    "kk": "setup() — бір рет, loop() — қайта-қайта. pinMode, digitalWrite және delay — сенің алғашқы командаларың.",
+    "en": "setup() runs once, loop() again and again. pinMode, digitalWrite and delay are your first commands."
+  },
+  "kit": false,
+  "steps": [
+    {
+      "id": "skeleton",
+      "type": "theory",
+      "title": {
+        "ru": "Скелет любой программы",
+        "kk": "Кез келген бағдарламаның қаңқасы",
+        "en": "The skeleton of every program"
+      },
+      "body": {
+        "ru": "Программа для Arduino называется **скетч**. В ней всегда две функции:\n\n1. **setup()** выполняется один раз, когда плата включилась. Здесь всё настраивают.\n2. **loop()** повторяется снова и снова, пока есть питание. Здесь основная работа.\n\nКаждая команда заканчивается точкой с запятой **;**, а всё, что внутри функции, стоит в фигурных скобках **{ }**.",
+        "kk": "Arduino бағдарламасы **скетч** деп аталады. Онда әрқашан екі функция болады:\n\n1. **setup()** тақта қосылғанда бір рет орындалады. Мұнда бәрін баптайды.\n2. **loop()** қорек барда қайта-қайта қайталанады. Мұнда негізгі жұмыс.\n\nӘр команда нүктелі үтірмен **;** аяқталады, ал функция ішіндегінің бәрі **{ }** жүйелі жақшада тұрады.",
+        "en": "An Arduino program is called a **sketch**. It always has two functions:\n\n1. **setup()** runs once when the board powers up. This is where you set things up.\n2. **loop()** repeats again and again while there is power. This is where the main work happens.\n\nEvery command ends with a semicolon **;** and everything inside a function sits in curly braces **{ }**."
+      },
+      "illustration": "e-sketch",
+      "code": "void setup() {\n  // once\n}\n\nvoid loop() {\n  // again and again\n}",
+      "codeLang": "arduino"
+    },
+    {
+      "id": "blink",
+      "type": "theory",
+      "title": {
+        "ru": "Blink — мигалка",
+        "kk": "Blink — жыпылықтауық",
+        "en": "Blink"
+      },
+      "body": {
+        "ru": "**pinMode(13, OUTPUT)** говорит: пин 13 будет выходом. **digitalWrite(13, HIGH)** включает его, **LOW** — выключает. **delay(1000)** — подождать 1000 миллисекунд, то есть 1 секунду.\n\nНа пине 13 у Uno есть свой светодиод L — проводов не нужно.",
+        "kk": "**pinMode(13, OUTPUT)** былай дейді: 13-пин шығыс болады. **digitalWrite(13, HIGH)** оны қосады, **LOW** — өшіреді. **delay(1000)** — 1000 миллисекунд, яғни 1 секунд күту.\n\nUno-ның 13-пинінде өз L жарықдиоды бар — сымдар керек емес.",
+        "en": "**pinMode(13, OUTPUT)** says pin 13 will be an output. **digitalWrite(13, HIGH)** switches it on, **LOW** switches it off. **delay(1000)** waits 1000 milliseconds, that is 1 second.\n\nThe Uno has its own LED L on pin 13: no wires needed."
+      },
+      "code": "void setup() {\n  pinMode(13, OUTPUT);\n}\n\nvoid loop() {\n  digitalWrite(13, HIGH);\n  delay(1000);\n  digitalWrite(13, LOW);\n  delay(1000);\n}\n",
+      "codeLang": "arduino"
+    },
+    {
+      "id": "order",
+      "type": "quiz",
+      "kind": "order",
+      "question": {
+        "ru": "Расставь команды внутри loop() так, чтобы светодиод мигал",
+        "kk": "Жарықдиод жыпылықтайтындай етіп loop() ішіндегі командаларды ретімен қой",
+        "en": "Order the commands inside loop() so the LED blinks"
+      },
+      "items": [
+        {
+          "ru": "digitalWrite(13, HIGH);",
+          "kk": "digitalWrite(13, HIGH);",
+          "en": "digitalWrite(13, HIGH);"
+        },
+        {
+          "ru": "delay(1000);",
+          "kk": "delay(1000);",
+          "en": "delay(1000);"
+        },
+        {
+          "ru": "digitalWrite(13, LOW);",
+          "kk": "digitalWrite(13, LOW);",
+          "en": "digitalWrite(13, LOW);"
+        }
+      ],
+      "explanation": {
+        "ru": "Включить, подождать, выключить — а пауза в конце loop() делает «погасшую» половину мигания.",
+        "kk": "Қосу, күту, өшіру — ал loop() соңындағы үзіліс жыпылықтаудың «сөнген» жартысын жасайды.",
+        "en": "On, wait, off: and a pause at the end of loop() makes the dark half of the blink."
+      }
+    },
+    {
+      "id": "try-blink",
+      "type": "circuit",
+      "title": {
+        "ru": "Помигай встроенным светодиодом",
+        "kk": "Кірістірілген жарықдиодты жыпылықтат",
+        "en": "Blink the built-in LED"
+      },
+      "task": {
+        "ru": "Напиши Blink: светодиод L на пине 13 должен гореть секунду и гаснуть на секунду. Проводов не нужно — он уже на плате.",
+        "kk": "Blink жаз: 13-пиндегі L жарықдиоды бір секунд жанып, бір секунд сөнуі керек. Сымдар керек емес — ол тақтада бар.",
+        "en": "Write Blink: LED L on pin 13 must be on for a second and off for a second. No wires needed: it is on the board."
+      },
+      "start": {
+        "doc": {
+          "board": "uno",
+          "parts": [],
+          "wires": []
+        },
+        "code": "void setup() {\n  // runs once\n}\n\nvoid loop() {\n  // runs again and again\n}\n"
+      },
+      "tray": [],
+      "code": "edit",
+      "checks": [
+        {
+          "type": "blinks",
+          "min": 4,
+          "builtin": true
+        },
+        {
+          "type": "blinkPeriod",
+          "ms": 1000,
+          "builtin": true
+        }
+      ],
+      "hints": [
+        {
+          "ru": "В setup() напиши pinMode(13, OUTPUT);",
+          "kk": "setup() ішіне pinMode(13, OUTPUT); жаз",
+          "en": "In setup() write pinMode(13, OUTPUT);"
+        },
+        {
+          "ru": "В loop(): digitalWrite(13, HIGH); delay(1000); digitalWrite(13, LOW); delay(1000);",
+          "kk": "loop() ішінде: digitalWrite(13, HIGH); delay(1000); digitalWrite(13, LOW); delay(1000);",
+          "en": "In loop(): digitalWrite(13, HIGH); delay(1000); digitalWrite(13, LOW); delay(1000);"
+        },
+        {
+          "ru": "Проверь точки с запятой и большие буквы: digitalWrite, а не digitalwrite.",
+          "kk": "Нүктелі үтірлер мен бас әріптерді тексер: digitalwrite емес, digitalWrite.",
+          "en": "Check the semicolons and capitals: digitalWrite, not digitalwrite."
+        }
+      ],
+      "reference": {
+        "actions": [],
+        "code": "void setup() {\n  pinMode(13, OUTPUT);\n}\n\nvoid loop() {\n  digitalWrite(13, HIGH);\n  delay(1000);\n  digitalWrite(13, LOW);\n  delay(1000);\n}\n"
+      }
+    }
+  ]
+}

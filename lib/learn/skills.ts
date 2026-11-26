@@ -24,5 +24,7 @@ export const SKILLS = [
   'strategy',
   'teamwork',
   'ai-literacy',
+  'electricity',
+  'microcontrollers',
 ] as const
 export type Skill = (typeof SKILLS)[number]

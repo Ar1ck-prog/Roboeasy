@@ -1,0 +1,300 @@
+{
+  "id": "ard-05",
+  "track": "arduino",
+  "unit": "ard-first",
+  "minutes": 12,
+  "skills": [
+    "microcontrollers",
+    "functions"
+  ],
+  "title": {
+    "ru": "Проект: светофор",
+    "kk": "Жоба: бағдаршам",
+    "en": "Project: a traffic light"
+  },
+  "goal": {
+    "ru": "Сегодня ты соберёшь настоящий светофор и напишешь для него свою функцию.",
+    "kk": "Бүгін сен нағыз бағдаршам құрастырып, оған өз функцияңды жазасың.",
+    "en": "Today you will build a real traffic light and write your own function for it."
+  },
+  "summary": {
+    "ru": "Своя функция — как новый блок: один раз написал, потом пользуешься. Светофор готов!",
+    "kk": "Өз функцияң — жаңа блок сияқты: бір рет жаздың, сосын қолданасың. Бағдаршам дайын!",
+    "en": "Your own function is like a new block: write it once, use it many times. The traffic light is ready!"
+  },
+  "kit": false,
+  "steps": [
+    {
+      "id": "fn",
+      "type": "theory",
+      "title": {
+        "ru": "Свои функции",
+        "kk": "Өз функцияларың",
+        "en": "Your own functions"
+      },
+      "body": {
+        "ru": "Когда команд много, их собирают в свою **функцию**. Функция **show** получает три уровня (для красного, жёлтого и зелёного) и паузу.\n\nТеперь светофор — это всего четыре строки в loop(). Функция — как новый блок, который ты придумал сам.",
+        "kk": "Командалар көп болса, оларды өз **функцияңа** жинайды. **show** функциясы үш деңгейді (қызыл, сары және жасыл үшін) және үзілісті алады.\n\nЕнді бағдаршам — loop() ішіндегі төрт жол ғана. Функция — өзің ойлап тапқан жаңа блок сияқты.",
+        "en": "When there are many commands, you gather them into your own **function**. The **show** function takes three levels (for red, yellow and green) and a pause.\n\nNow the traffic light is just four lines in loop(). A function is like a new block you invented yourself."
+      },
+      "code": "void show(int r, int y, int g, int ms) {\n  digitalWrite(12, r);\n  digitalWrite(11, y);\n  digitalWrite(10, g);\n  delay(ms);\n}",
+      "codeLang": "arduino"
+    },
+    {
+      "id": "why-fn",
+      "type": "quiz",
+      "kind": "choice",
+      "question": {
+        "ru": "Зачем нужна своя функция show()?",
+        "kk": "Өз show() функцияң не үшін керек?",
+        "en": "Why write your own show() function?"
+      },
+      "options": [
+        {
+          "ru": "Чтобы не повторять одни и те же команды много раз",
+          "kk": "Бір командаларды көп рет қайталамау үшін",
+          "en": "To avoid repeating the same commands many times"
+        },
+        {
+          "ru": "Без неё светодиоды не загорятся",
+          "kk": "Онсыз жарықдиодтар жанбайды",
+          "en": "Without it the LEDs will not light"
+        },
+        {
+          "ru": "Так программа работает быстрее света",
+          "kk": "Сонда бағдарлама жарықтан жылдам жұмыс істейді",
+          "en": "It makes the program faster than light"
+        }
+      ],
+      "correct": [
+        0
+      ],
+      "explanation": {
+        "ru": "Функция собирает повторяющиеся команды в одно имя: код короче и понятнее.",
+        "kk": "Функция қайталанатын командаларды бір атқа жинайды: код қысқа әрі түсінікті.",
+        "en": "A function gathers repeated commands under one name: the code is shorter and clearer."
+      }
+    },
+    {
+      "id": "traffic",
+      "type": "circuit",
+      "title": {
+        "ru": "Собери и запрограммируй светофор",
+        "kk": "Бағдаршамды құрастырып, бағдарламала",
+        "en": "Build and program the traffic light"
+      },
+      "task": {
+        "ru": "Светодиоды уже на макетке. Соедини: пин **12** → столбик 3 (красный), **11** → столбик 11 (жёлтый), **10** → столбик 19 (зелёный). Короткие ножки — к шине **−**, а шину **−** — к GND. Потом напиши программу светофора.",
+        "kk": "Жарықдиодтар макет тақтасында тұр. Жалға: **12**-пин → 3-баған (қызыл), **11** → 11-баған (сары), **10** → 19-баған (жасыл). Қысқа аяқтар — **−** шинаға, ал **−** шина — GND-ге. Сосын бағдаршам бағдарламасын жаз.",
+        "en": "The LEDs are on the breadboard. Connect: pin **12** → column 3 (red), **11** → column 11 (yellow), **10** → column 19 (green). Short legs go to the **−** rail, and the **−** rail to GND. Then write the traffic light program."
+      },
+      "start": {
+        "doc": {
+          "board": "uno",
+          "parts": [
+            {
+              "id": "r3",
+              "type": "resistor",
+              "x": 350,
+              "y": 90,
+              "rot": 0,
+              "props": {
+                "ohms": 220
+              }
+            },
+            {
+              "id": "l3",
+              "type": "led",
+              "x": 390,
+              "y": 130,
+              "rot": 0,
+              "props": {
+                "color": "red"
+              }
+            },
+            {
+              "id": "r11",
+              "type": "resistor",
+              "x": 430,
+              "y": 90,
+              "rot": 0,
+              "props": {
+                "ohms": 220
+              }
+            },
+            {
+              "id": "l11",
+              "type": "led",
+              "x": 470,
+              "y": 130,
+              "rot": 0,
+              "props": {
+                "color": "yellow"
+              }
+            },
+            {
+              "id": "r19",
+              "type": "resistor",
+              "x": 510,
+              "y": 90,
+              "rot": 0,
+              "props": {
+                "ohms": 220
+              }
+            },
+            {
+              "id": "l19",
+              "type": "led",
+              "x": 550,
+              "y": 130,
+              "rot": 0,
+              "props": {
+                "color": "green"
+              }
+            }
+          ],
+          "wires": []
+        },
+        "code": "void setup() {\n  // runs once\n}\n\nvoid loop() {\n  // runs again and again\n}\n"
+      },
+      "tray": [],
+      "code": "edit",
+      "checks": [
+        {
+          "type": "mission",
+          "id": "traffic"
+        }
+      ],
+      "hints": [
+        {
+          "ru": "Короткие ножки — в столбиках 8, 16 и 24. От каждого — провод к верхней синей шине.",
+          "kk": "Қысқа аяқтар — 8, 16 және 24-бағандарда. Әрқайсысынан жоғарғы көк шинаға сым.",
+          "en": "The short legs are in columns 8, 16 and 24. Run a wire from each to the top blue rail."
+        },
+        {
+          "ru": "Функция show(r, y, g, ms) из теории сильно упрощает код.",
+          "kk": "Теориядағы show(r, y, g, ms) функциясы кодты қатты жеңілдетеді.",
+          "en": "The show(r, y, g, ms) function from the theory makes the code much simpler."
+        },
+        {
+          "ru": "Порядок: красный 3 с → жёлтый 1 с → зелёный 3 с → жёлтый 1 с.",
+          "kk": "Рет: қызыл 3 с → сары 1 с → жасыл 3 с → сары 1 с.",
+          "en": "Order: red 3 s → yellow 1 s → green 3 s → yellow 1 s."
+        }
+      ],
+      "reference": {
+        "actions": [],
+        "doc": {
+          "board": "uno",
+          "parts": [
+            {
+              "id": "r3",
+              "type": "resistor",
+              "x": 350,
+              "y": 90,
+              "rot": 0,
+              "props": {
+                "ohms": 220
+              }
+            },
+            {
+              "id": "l3",
+              "type": "led",
+              "x": 390,
+              "y": 130,
+              "rot": 0,
+              "props": {
+                "color": "red"
+              }
+            },
+            {
+              "id": "r11",
+              "type": "resistor",
+              "x": 430,
+              "y": 90,
+              "rot": 0,
+              "props": {
+                "ohms": 220
+              }
+            },
+            {
+              "id": "l11",
+              "type": "led",
+              "x": 470,
+              "y": 130,
+              "rot": 0,
+              "props": {
+                "color": "yellow"
+              }
+            },
+            {
+              "id": "r19",
+              "type": "resistor",
+              "x": 510,
+              "y": 90,
+              "rot": 0,
+              "props": {
+                "ohms": 220
+              }
+            },
+            {
+              "id": "l19",
+              "type": "led",
+              "x": 550,
+              "y": 130,
+              "rot": 0,
+              "props": {
+                "color": "green"
+              }
+            }
+          ],
+          "wires": [
+            {
+              "id": "w-uno.GND.3-bb.tn1",
+              "a": "uno.GND.3",
+              "b": "bb.tn1",
+              "color": "#202124"
+            },
+            {
+              "id": "w-uno.D12-bb.b3",
+              "a": "uno.D12",
+              "b": "bb.b3",
+              "color": "#e8710a"
+            },
+            {
+              "id": "w-bb.b8-bb.tn8",
+              "a": "bb.b8",
+              "b": "bb.tn8",
+              "color": "#202124"
+            },
+            {
+              "id": "w-uno.D11-bb.b11",
+              "a": "uno.D11",
+              "b": "bb.b11",
+              "color": "#e8710a"
+            },
+            {
+              "id": "w-bb.b16-bb.tn16",
+              "a": "bb.b16",
+              "b": "bb.tn16",
+              "color": "#202124"
+            },
+            {
+              "id": "w-uno.D10-bb.b19",
+              "a": "uno.D10",
+              "b": "bb.b19",
+              "color": "#e8710a"
+            },
+            {
+              "id": "w-bb.b24-bb.tn24",
+              "a": "bb.b24",
+              "b": "bb.tn24",
+              "color": "#202124"
+            }
+          ]
+        },
+        "code": "const int RED = 12, YELLOW = 11, GREEN = 10;\n\nvoid show(int r, int y, int g, int ms) {\n  digitalWrite(RED, r);\n  digitalWrite(YELLOW, y);\n  digitalWrite(GREEN, g);\n  delay(ms);\n}\n\nvoid setup() {\n  pinMode(RED, OUTPUT);\n  pinMode(YELLOW, OUTPUT);\n  pinMode(GREEN, OUTPUT);\n}\n\nvoid loop() {\n  show(HIGH, LOW, LOW, 3000);\n  show(LOW, HIGH, LOW, 1000);\n  show(LOW, LOW, HIGH, 3000);\n  show(LOW, HIGH, LOW, 1000);\n}\n"
+      }
+    }
+  ]
+}

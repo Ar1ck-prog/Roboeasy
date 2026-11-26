@@ -5,6 +5,7 @@
 
 import { AiIllustration } from '@/components/learn/ai-illustrations'
 import { RoboIllustration } from '@/components/learn/robo-illustrations'
+import { ElectronicsIllustration } from '@/components/learn/electronics-illustrations'
 import { AnimIcon } from '@/components/ui/anim-icon'
 
 type Lang = 'ru' | 'kk' | 'en'
@@ -52,6 +53,7 @@ export function Illustration({ name, lang }: { name: string; lang: Lang }) {
   const s = (k: keyof typeof T) => T[k][lang]
   if (name.startsWith('ai-')) return <AiIllustration name={name} lang={lang} />
   if (name.startsWith('r-')) return <RoboIllustration name={name} lang={lang} />
+  if (name.startsWith('e-')) return <ElectronicsIllustration name={name} lang={lang} />
   switch (name) {
     case 'robot-parts':
       return (

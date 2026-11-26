@@ -29,6 +29,8 @@ import { cn } from '@/lib/utils'
 
 // Camera and model code load only for the lessons that use them.
 const WidgetStep = dynamic(() => import('@/components/learn/steps/widget-step'), { ssr: false, loading: () => <Skeleton className="h-80" /> })
+// The breadboard simulator loads only for electronics lessons.
+const CircuitStep = dynamic(() => import('@/components/learn/steps/circuit-step').then((m) => m.CircuitStep), { ssr: false, loading: () => <Skeleton className="h-96" /> })
 
 type Lang = 'ru' | 'kk' | 'en'
 
@@ -270,6 +272,7 @@ export function LessonPlayer({ lesson, lang, t, blocksT, trackTitle, unitTitle, 
           {step!.type === 'theory' && <TheoryStep step={step!} lang={lang} blocksT={blocksT} onDone={onDone} />}
           {step!.type === 'build' && <BuildStep step={step!} lang={lang} t={t} onDone={onDone} />}
           {step!.type === 'widget' && <WidgetStep key={step!.id} step={step!} lang={lang} done={stepDone} onDone={onDone} />}
+          {step!.type === 'circuit' && <CircuitStep key={step!.id} step={step!} lang={lang} done={stepDone} onDone={onDone} />}
           {step!.type === 'quiz' && <QuizStep key={step!.id} step={step!} lang={lang} t={t} done={stepDone} onDone={onDone} onMistake={onMistake} />}
           {step!.type === 'predict' && (
             <PredictStep

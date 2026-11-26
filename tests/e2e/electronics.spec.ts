@@ -79,3 +79,37 @@ test('ESP32: the 3D page and the lab with the board switched', async ({ page }) 
   await expect(page.getByTestId('status')).toHaveText('Остановлено')
   expect(errors).toEqual([])
 })
+
+test('lessons: the Arduino tab and a circuit step solved by wiring', async ({ page }) => {
+  const errors: string[] = []
+  page.on('pageerror', (e) => errors.push(e.message))
+  await page.goto('/ru/learn')
+  await page.locator('[data-platform="arduino"]').click()
+  await expect(page).toHaveURL(/platform=arduino/)
+  await expect(page.getByRole('heading', { name: 'Электричество с нуля' })).toBeVisible()
+  await expect(page.getByRole('heading', { name: 'Arduino: первые программы' })).toBeVisible()
+  await expect(page.getByRole('heading', { name: 'Что такое робот' })).toHaveCount(0)
+
+  await page.goto('/ru/learn/electricity/elec-02')
+  await page.getByRole('button', { name: 'Всё равно открыть' }).click()
+  await page.getByRole('button', { name: 'Начать урок' }).click()
+  const next = page.getByRole('button', { name: 'Дальше' })
+  await next.click()
+  await next.click()
+  await page.getByText('Цепь где-то разорвана').click()
+  await page.getByRole('button', { name: 'Проверить' }).click()
+  await next.click()
+  const step = page.getByTestId('circuit-step')
+  await expect(step).toBeVisible()
+  for (const terminal of ['uno.5V', 'bb.b10', 'bb.b15', 'uno.GND.1']) {
+    const el = step.locator(`[data-terminal="${terminal}"]`)
+    await el.evaluate((n) => n.scrollIntoView({ block: 'center' }))
+    const box = (await el.boundingBox())!
+    await page.mouse.click(box.x + box.width / 2, box.y + box.height / 2)
+  }
+  await expect(step.locator('[data-wire]')).toHaveCount(2)
+  await page.getByTestId('circuit-run').click()
+  await expect(page.getByTestId('circuit-done')).toBeVisible({ timeout: 15_000 })
+  await expect(next).toBeEnabled()
+  expect(errors).toEqual([])
+})

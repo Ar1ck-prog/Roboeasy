@@ -18,7 +18,15 @@ const ru = {
   },
   map: {
     title: 'Обучение',
-    lead: '10 треков: от первого урока до соревнований FLL, автономных роботов и ИИ. Проходи по порядку или сдай тест и начни с нужного места.',
+    lead: 'Выбери, на чём учиться: роботы LEGO SPIKE, Arduino или ESP32. Проходи по порядку или сдай тест и начни с нужного места.',
+    platforms: { spike: 'LEGO SPIKE', arduino: 'Arduino', esp32: 'ESP32' },
+    platformLead: {
+      spike: 'Роботы из LEGO SPIKE Prime: от первого урока до соревнований FLL, автономных роботов и ИИ.',
+      arduino: 'Электроника с полного нуля: что такое ток и напряжение, как собрать цепь и как программировать Arduino. Всё в симуляторе — настоящие детали не нужны.',
+      esp32: 'Следующий шаг после Arduino: плата с Wi-Fi и Bluetooth. Логика 3,3 В, 12-битный АЦП и ШИМ на любом пине.',
+    },
+    zeroTitle: 'С полного нуля',
+    zeroText: 'Ничего не знаешь про электронику? Начни отсюда: объясним с самого начала и дадим собрать первую цепь.',
     placementTitle: 'Уже кое-что знаешь?',
     placementText: 'Ответь на 11 вопросов — откроем уроки, которые ты уже знаешь.',
     placementCta: 'Тест на уровень',
@@ -281,6 +289,8 @@ const ru = {
     strategy: 'Стратегия',
     teamwork: 'Командная работа',
     'ai-literacy': 'ИИ-грамотность',
+    electricity: 'Электричество',
+    microcontrollers: 'Микроконтроллеры',
   } satisfies Record<Skill, string>,
 }
 
@@ -300,7 +310,15 @@ const kk: LearnAppText = {
   },
   map: {
     title: 'Оқу',
-    lead: '10 трек: алғашқы сабақтан FLL жарыстарына, автономды роботтар мен ЖИ-ге дейін. Ретімен өт немесе тест тапсырып, қажетті жерден баста.',
+    lead: 'Немен оқитыныңды таңда: LEGO SPIKE роботтары, Arduino немесе ESP32. Ретімен өт немесе тест тапсырып, қажетті жерден баста.',
+    platforms: { spike: 'LEGO SPIKE', arduino: 'Arduino', esp32: 'ESP32' },
+    platformLead: {
+      spike: 'LEGO SPIKE Prime роботтары: алғашқы сабақтан FLL жарыстарына, автономды роботтар мен ЖИ-ге дейін.',
+      arduino: 'Электроника нөлден: ток пен кернеу деген не, тізбекті қалай құрастыру және Arduino-ны қалай бағдарламалау керек. Бәрі симуляторда — нағыз бөлшектер қажет емес.',
+      esp32: 'Arduino-дан кейінгі қадам: Wi-Fi және Bluetooth бар тақта. Логика 3,3 В, 12 биттік АЦП және кез келген пинде ШИМ.',
+    },
+    zeroTitle: 'Мүлде нөлден',
+    zeroText: 'Электроника туралы ештеңе білмейсің бе? Осы жерден баста: бәрін басынан түсіндіріп, алғашқы тізбекті құрастыруға береміз.',
     placementTitle: 'Бірдеңе білесің бе?',
     placementText: '11 сұраққа жауап бер — өзің білетін сабақтарды ашамыз.',
     placementCta: 'Деңгей тесті',
@@ -560,6 +578,8 @@ const kk: LearnAppText = {
     strategy: 'Стратегия',
     teamwork: 'Командалық жұмыс',
     'ai-literacy': 'ЖИ сауаттылығы',
+    electricity: 'Электр',
+    microcontrollers: 'Микроконтроллерлер',
   },
 }
 
@@ -577,7 +597,15 @@ const en: LearnAppText = {
   },
   map: {
     title: 'Learn',
-    lead: '10 tracks: from the very first lesson to FLL competitions, autonomous robots and AI. Go in order, or take a test and start where you belong.',
+    lead: 'Choose what to learn with: LEGO SPIKE robots, Arduino or ESP32. Go in order, or take a test and start where you belong.',
+    platforms: { spike: 'LEGO SPIKE', arduino: 'Arduino', esp32: 'ESP32' },
+    platformLead: {
+      spike: 'LEGO SPIKE Prime robots: from the very first lesson to FLL competitions, autonomous robots and AI.',
+      arduino: 'Electronics from absolute zero: what current and voltage are, how to build a circuit and how to program an Arduino. All in the simulator: no real parts needed.',
+      esp32: 'The next step after Arduino: a board with Wi-Fi and Bluetooth. 3.3 V logic, a 12-bit ADC and PWM on any pin.',
+    },
+    zeroTitle: 'From absolute zero',
+    zeroText: 'Know nothing about electronics? Start here: we explain from the very beginning and let you build your first circuit.',
     placementTitle: 'Know some already?',
     placementText: 'Answer 11 questions and we will open the lessons you already know.',
     placementCta: 'Placement test',
@@ -837,6 +865,8 @@ const en: LearnAppText = {
     strategy: 'Strategy',
     teamwork: 'Teamwork',
     'ai-literacy': 'AI literacy',
+    electricity: 'Electricity',
+    microcontrollers: 'Microcontrollers',
   },
 }
 

@@ -1,0 +1,234 @@
+{
+  "id": "elec-03",
+  "track": "electricity",
+  "unit": "elec-basics",
+  "minutes": 6,
+  "skills": [
+    "electricity"
+  ],
+  "title": {
+    "ru": "Светодиод: плюс и минус",
+    "kk": "Жарықдиод: плюс және минус",
+    "en": "The LED: plus and minus"
+  },
+  "goal": {
+    "ru": "Сегодня ты научишься отличать плюс и минус у светодиода.",
+    "kk": "Бүгін сен жарықдиодтың плюсі мен минусын ажыратуды үйренесің.",
+    "en": "Today you will learn to tell the plus and minus of an LED apart."
+  },
+  "summary": {
+    "ru": "Длинная ножка — плюс, короткая — минус. Перевёрнутый светодиод не горит, но и не ломается.",
+    "kk": "Ұзын аяқ — плюс, қысқасы — минус. Керісінше қойылған жарықдиод жанбайды, бірақ бұзылмайды.",
+    "en": "The long leg is plus, the short one is minus. An LED put in backwards stays dark but does not break."
+  },
+  "kit": false,
+  "steps": [
+    {
+      "id": "legs",
+      "type": "theory",
+      "title": {
+        "ru": "Светодиод пропускает ток в одну сторону",
+        "kk": "Жарықдиод токты бір бағытта өткізеді",
+        "en": "An LED lets current through one way"
+      },
+      "body": {
+        "ru": "Светодиод светит, только если ток идёт в правильную сторону: от **анода** (плюс) к **катоду** (минус).\n\nКак их отличить:\n\n1. **Длинная ножка** — анод, плюс.\n2. **Короткая ножка** — катод, минус.\n3. Со стороны катода у корпуса есть срез.\n\nЕсли вставить наоборот, ничего не сгорит — просто не загорится.",
+        "kk": "Жарықдиод ток дұрыс бағытта жүрсе ғана жанады: **анодтан** (плюс) **катодқа** (минус).\n\nОларды қалай ажыратуға болады:\n\n1. **Ұзын аяқ** — анод, плюс.\n2. **Қысқа аяқ** — катод, минус.\n3. Катод жағында корпус тегіс кесілген.\n\nКерісінше қойсаң, ештеңе күймейді — жай ғана жанбайды.",
+        "en": "An LED lights only when current flows the right way: from the **anode** (plus) to the **cathode** (minus).\n\nHow to tell them apart:\n\n1. The **long leg** is the anode, plus.\n2. The **short leg** is the cathode, minus.\n3. The body has a flat edge on the cathode side.\n\nPut it in backwards and nothing burns: it simply stays dark."
+      },
+      "illustration": "e-led"
+    },
+    {
+      "id": "plus",
+      "type": "quiz",
+      "kind": "choice",
+      "question": {
+        "ru": "Какую ножку светодиода подключают к плюсу?",
+        "kk": "Жарықдиодтың қай аяғын плюске қосады?",
+        "en": "Which leg of the LED goes to plus?"
+      },
+      "options": [
+        {
+          "ru": "Длинную (анод)",
+          "kk": "Ұзынын (анод)",
+          "en": "The long one (anode)"
+        },
+        {
+          "ru": "Короткую (катод)",
+          "kk": "Қысқасын (катод)",
+          "en": "The short one (cathode)"
+        },
+        {
+          "ru": "Любую",
+          "kk": "Кез келгенін",
+          "en": "Either"
+        }
+      ],
+      "correct": [
+        0
+      ],
+      "explanation": {
+        "ru": "Анод — длинная ножка — всегда смотрит к плюсу.",
+        "kk": "Анод — ұзын аяқ — әрқашан плюске қарайды.",
+        "en": "The anode, the long leg, always faces plus."
+      }
+    },
+    {
+      "id": "flip",
+      "type": "circuit",
+      "title": {
+        "ru": "Светодиод перевёрнут",
+        "kk": "Жарықдиод керісінше тұр",
+        "en": "The LED is backwards"
+      },
+      "task": {
+        "ru": "Цепь собрана, но светодиод вставлен наоборот. Запусти — он не горит, а лаборатория предупредит.\n\nОстанови, выдели светодиод и нажми «Повернуть» два раза. Потом перетащи его так, чтобы длинная ножка встала в **столбик 14** (к резистору), а короткая — в **столбик 15**. Запусти снова.",
+        "kk": "Тізбек құрастырылған, бірақ жарықдиод керісінше қойылған. Іске қос — ол жанбайды, ал зертхана ескертеді.\n\nТоқтат, жарықдиодты белгіле де, «Бұру» батырмасын екі рет бас. Сосын ұзын аяғы **14-бағанға** (резисторға), ал қысқасы **15-бағанға** тұратындай етіп сүйре. Қайта іске қос.",
+        "en": "The circuit is built, but the LED is in backwards. Run it: it stays dark and the lab warns you.\n\nStop, select the LED and press Rotate twice. Then drag it so the long leg goes into **column 14** (next to the resistor) and the short leg into **column 15**. Run again."
+      },
+      "start": {
+        "doc": {
+          "board": "uno",
+          "parts": [
+            {
+              "id": "r1",
+              "type": "resistor",
+              "x": 420,
+              "y": 90,
+              "rot": 0,
+              "props": {
+                "ohms": 220
+              }
+            },
+            {
+              "id": "l1",
+              "type": "led",
+              "x": 470,
+              "y": 130,
+              "rot": 2,
+              "props": {
+                "color": "red"
+              }
+            }
+          ],
+          "wires": [
+            {
+              "id": "w-uno.5V-bb.b10",
+              "a": "uno.5V",
+              "b": "bb.b10",
+              "color": "#e8710a"
+            },
+            {
+              "id": "w-bb.b15-uno.GND.1",
+              "a": "bb.b15",
+              "b": "uno.GND.1",
+              "color": "#202124"
+            }
+          ]
+        },
+        "code": "void setup() {\n}\n\nvoid loop() {\n}\n"
+      },
+      "tray": [],
+      "code": "hidden",
+      "checks": [
+        {
+          "type": "ledLit"
+        }
+      ],
+      "hints": [
+        {
+          "ru": "Длинная ножка нарисована с маленьким изгибом — это анод.",
+          "kk": "Ұзын аяқ кішкене иілген болып салынған — бұл анод.",
+          "en": "The long leg is drawn with a small bend: that is the anode."
+        },
+        {
+          "ru": "Поворот крутит деталь вокруг первой ножки, поэтому после поворота её нужно сдвинуть на одно отверстие.",
+          "kk": "Бұру бөлшекті бірінші аяғының айналасында айналдырады, сондықтан бұрғаннан кейін оны бір тесікке жылжыту керек.",
+          "en": "Rotating turns the part around its first leg, so after rotating you need to move it by one hole."
+        },
+        {
+          "ru": "Правильно: анод в e14, катод в e15.",
+          "kk": "Дұрысы: анод e14-те, катод e15-те.",
+          "en": "Correct: the anode in e14, the cathode in e15."
+        }
+      ],
+      "reference": {
+        "actions": [],
+        "doc": {
+          "board": "uno",
+          "parts": [
+            {
+              "id": "r1",
+              "type": "resistor",
+              "x": 420,
+              "y": 90,
+              "rot": 0,
+              "props": {
+                "ohms": 220
+              }
+            },
+            {
+              "id": "l1",
+              "type": "led",
+              "x": 460,
+              "y": 130,
+              "rot": 0,
+              "props": {
+                "color": "red"
+              }
+            }
+          ],
+          "wires": [
+            {
+              "id": "w-uno.5V-bb.b10",
+              "a": "uno.5V",
+              "b": "bb.b10",
+              "color": "#e8710a"
+            },
+            {
+              "id": "w-bb.b15-uno.GND.1",
+              "a": "bb.b15",
+              "b": "uno.GND.1",
+              "color": "#202124"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "what",
+      "type": "quiz",
+      "kind": "choice",
+      "question": {
+        "ru": "Светодиод вставили наоборот. Что случится?",
+        "kk": "Жарықдиодты керісінше қойды. Не болады?",
+        "en": "An LED was put in backwards. What happens?"
+      },
+      "options": [
+        {
+          "ru": "Сгорит",
+          "kk": "Күйіп кетеді",
+          "en": "It burns out"
+        },
+        {
+          "ru": "Не загорится, но и не испортится",
+          "kk": "Жанбайды, бірақ бұзылмайды",
+          "en": "It stays dark but is not damaged"
+        },
+        {
+          "ru": "Будет гореть ярче",
+          "kk": "Жарығырақ жанады",
+          "en": "It shines brighter"
+        }
+      ],
+      "correct": [
+        1
+      ],
+      "explanation": {
+        "ru": "В обратную сторону светодиод ток не пускает — поэтому он просто не горит.",
+        "kk": "Жарықдиод токты кері бағытта өткізбейді — сондықтан ол жай ғана жанбайды.",
+        "en": "An LED does not let current flow backwards, so it simply stays dark."
+      }
+    }
+  ]
+}

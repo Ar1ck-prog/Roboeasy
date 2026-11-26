@@ -1,0 +1,177 @@
+{
+  "id": "esp-04",
+  "track": "esp32",
+  "unit": "esp-io",
+  "minutes": 8,
+  "skills": [
+    "microcontrollers",
+    "variables"
+  ],
+  "title": {
+    "ru": "АЦП на 12 бит",
+    "kk": "12 биттік АЦП",
+    "en": "A 12-bit ADC"
+  },
+  "goal": {
+    "ru": "Сегодня ты измеришь напряжение на ESP32 точнее, чем на Arduino.",
+    "kk": "Бүгін сен ESP32-де кернеуді Arduino-дағыдан дәлірек өлшейсің.",
+    "en": "Today you will measure voltage on the ESP32 more precisely than on the Arduino."
+  },
+  "summary": {
+    "ru": "analogRead на ESP32 даёт 0–4095. GPIO 34–39 умеют только читать — это хорошие входы для датчиков.",
+    "kk": "ESP32-дегі analogRead 0–4095 береді. GPIO 34–39 тек оқи алады — бұл датчиктерге жақсы кірістер.",
+    "en": "analogRead on the ESP32 gives 0–4095. GPIO 34–39 can only read: good inputs for sensors."
+  },
+  "kit": false,
+  "steps": [
+    {
+      "id": "adc",
+      "type": "theory",
+      "title": {
+        "ru": "Точнее, чем у Uno",
+        "kk": "Uno-дан дәлірек",
+        "en": "More precise than the Uno"
+      },
+      "body": {
+        "ru": "Аналоговые входы ESP32 выдают число от **0 до 4095** (у Uno — до 1023). Это 12 бит: шаг меньше, измерение точнее. 4095 — это 3,3 В.\n\nЧитать можно не любой пин: подойдут, например, GPIO 32–39. А GPIO 34–39 умеют **только читать** — выходом они быть не могут.",
+        "kk": "ESP32-нің аналогтық кірістері **0-ден 4095-ке** дейінгі сан береді (Uno-да — 1023-ке дейін). Бұл 12 бит: қадам кішірек, өлшеу дәлірек. 4095 — бұл 3,3 В.\n\nКез келген пинді оқуға болмайды: мысалы, GPIO 32–39 жарайды. Ал GPIO 34–39 **тек оқи алады** — шығыс бола алмайды.",
+        "en": "ESP32 analog inputs give a number from **0 to 4095** (the Uno only goes to 1023). That is 12 bits: smaller steps, more precise measurements. 4095 means 3.3 V.\n\nNot every pin can read: GPIO 32–39 work, for example. And GPIO 34–39 can **only read**: they cannot be outputs."
+      }
+    },
+    {
+      "id": "mid",
+      "type": "quiz",
+      "kind": "number",
+      "question": {
+        "ru": "Ручка посередине. Примерно что вернёт analogRead на ESP32?",
+        "kk": "Тұтқа ортада. ESP32-дегі analogRead шамамен не қайтарады?",
+        "en": "The knob is in the middle. Roughly what does analogRead return on the ESP32?"
+      },
+      "answer": 2048,
+      "tolerance": 60,
+      "explanation": {
+        "ru": "Половина от 4095 — около 2048.",
+        "kk": "4095-тің жартысы — шамамен 2048.",
+        "en": "Half of 4095 is about 2048."
+      }
+    },
+    {
+      "id": "pot",
+      "type": "circuit",
+      "title": {
+        "ru": "Ручка на ESP32",
+        "kk": "ESP32-дегі тұтқа",
+        "en": "A knob on the ESP32"
+      },
+      "task": {
+        "ru": "Подключи потенциометр к ESP32: левая ножка (столбик 20) → **3V3**, правая (столбик 22) → **GND**, средняя (столбик 21) → **D34**. Печатай **analogRead(34)** каждые 100 мс и покрути ручку до конца.",
+        "kk": "Потенциометрді ESP32-ге қос: сол аяғы (20-баған) → **3V3**, оң аяғы (22-баған) → **GND**, ортаңғысы (21-баған) → **D34**. Әр 100 мс сайын **analogRead(34)** басып шығар да, тұтқаны соңына дейін бұра.",
+        "en": "Connect the potentiometer to the ESP32: left leg (column 20) → **3V3**, right leg (column 22) → **GND**, middle leg (column 21) → **D34**. Print **analogRead(34)** every 100 ms and turn the knob all the way."
+      },
+      "start": {
+        "doc": {
+          "board": "esp32",
+          "parts": [
+            {
+              "id": "p1",
+              "type": "pot",
+              "x": 520,
+              "y": 90,
+              "rot": 0,
+              "props": {}
+            }
+          ],
+          "wires": []
+        },
+        "code": "void setup() {\n  // runs once\n}\n\nvoid loop() {\n  // runs again and again\n}\n"
+      },
+      "tray": [],
+      "code": "edit",
+      "checks": [
+        {
+          "type": "serialNumbers",
+          "min": 4,
+          "atLeast": 3500
+        }
+      ],
+      "hints": [
+        {
+          "ru": "Питание — от 3V3, не от VIN: так на D34 никогда не будет больше 3,3 В.",
+          "kk": "Қорек — VIN-нен емес, 3V3-тен: сонда D34-те ешқашан 3,3 В-тан көп болмайды.",
+          "en": "Power from 3V3, not VIN: then D34 never gets more than 3.3 V."
+        },
+        {
+          "ru": "Serial.begin(115200); и Serial.println(analogRead(34));",
+          "kk": "Serial.begin(115200); және Serial.println(analogRead(34));",
+          "en": "Serial.begin(115200); and Serial.println(analogRead(34));"
+        }
+      ],
+      "reference": {
+        "actions": [
+          {
+            "t": 200,
+            "part": "p1",
+            "props": {
+              "pos": 0.1
+            }
+          },
+          {
+            "t": 400,
+            "part": "p1",
+            "props": {
+              "pos": 0.4
+            }
+          },
+          {
+            "t": 600,
+            "part": "p1",
+            "props": {
+              "pos": 0.7
+            }
+          },
+          {
+            "t": 800,
+            "part": "p1",
+            "props": {
+              "pos": 1.0
+            }
+          }
+        ],
+        "doc": {
+          "board": "esp32",
+          "parts": [
+            {
+              "id": "p1",
+              "type": "pot",
+              "x": 520,
+              "y": 90,
+              "rot": 0,
+              "props": {}
+            }
+          ],
+          "wires": [
+            {
+              "id": "w-esp.3V3-bb.c20",
+              "a": "esp.3V3",
+              "b": "bb.c20",
+              "color": "#d93025"
+            },
+            {
+              "id": "w-bb.c22-esp.GND.2",
+              "a": "bb.c22",
+              "b": "esp.GND.2",
+              "color": "#202124"
+            },
+            {
+              "id": "w-bb.c21-esp.G34",
+              "a": "bb.c21",
+              "b": "esp.G34",
+              "color": "#188038"
+            }
+          ]
+        },
+        "code": "void setup() {\n  Serial.begin(115200);\n}\n\nvoid loop() {\n  Serial.println(analogRead(34));\n  delay(100);\n}\n"
+      }
+    }
+  ]
+}

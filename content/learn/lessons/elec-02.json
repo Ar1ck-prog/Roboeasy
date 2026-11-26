@@ -1,0 +1,241 @@
+{
+  "id": "elec-02",
+  "track": "electricity",
+  "unit": "elec-basics",
+  "minutes": 7,
+  "skills": [
+    "electricity"
+  ],
+  "title": {
+    "ru": "Замкнутая цепь",
+    "kk": "Тұйық тізбек",
+    "en": "A closed circuit"
+  },
+  "goal": {
+    "ru": "Сегодня ты соберёшь свою первую электрическую цепь и зажжёшь светодиод.",
+    "kk": "Бүгін сен алғашқы электр тізбегіңді құрастырып, жарықдиодты жағасың.",
+    "en": "Today you will build your first electric circuit and light an LED."
+  },
+  "summary": {
+    "ru": "Ты собрал цепь: ток идёт от плюса через детали к минусу. Если где-то разрыв — всё гаснет.",
+    "kk": "Сен тізбек құрастырдың: ток плюстен бөлшектер арқылы минусқа жүреді. Бір жерде үзіліс болса — бәрі сөнеді.",
+    "en": "You built a circuit: current goes from plus through the parts to minus. If there is a gap anywhere, everything goes dark."
+  },
+  "kit": false,
+  "steps": [
+    {
+      "id": "loop",
+      "type": "theory",
+      "title": {
+        "ru": "Ток идёт по кругу",
+        "kk": "Ток шеңбер бойымен жүреді",
+        "en": "Current goes round in a loop"
+      },
+      "body": {
+        "ru": "Электроны бегут только по замкнутому кругу: от плюса источника через детали обратно к минусу. Такой круг называется **электрической цепью**.\n\nЕсли где-то разрыв, ток останавливается сразу везде, как вода в перекрытой трубе.\n\nВ нашей лаборатории источник — плата Arduino: пин **5V** — это плюс, пин **GND** (земля) — минус.",
+        "kk": "Электрондар тек тұйық шеңбер бойымен жүгіреді: көздің плюсінен бөлшектер арқылы минусқа қайта. Мұндай шеңбер **электр тізбегі** деп аталады.\n\nБір жерде үзіліс болса, ток бірден барлық жерде тоқтайды — жабылған құбырдағы су сияқты.\n\nБіздің зертханада көз — Arduino тақтасы: **5V** пині — плюс, **GND** (жер) пині — минус.",
+        "en": "Electrons only run around a closed loop: from the plus of the source through the parts and back to the minus. Such a loop is called an **electric circuit**.\n\nIf there is a gap anywhere, the current stops everywhere at once, like water in a closed pipe.\n\nIn our lab the source is the Arduino board: the **5V** pin is plus, the **GND** (ground) pin is minus."
+      },
+      "illustration": "e-circuit"
+    },
+    {
+      "id": "gap",
+      "type": "theory",
+      "title": {
+        "ru": "Выключатель — это разрыв",
+        "kk": "Ажыратқыш — бұл үзіліс",
+        "en": "A switch is a gap"
+      },
+      "body": {
+        "ru": "Выключатель на стене — это просто управляемый разрыв цепи. Щёлк — провода разъединились, лампа погасла. Щёлк — соединились, лампа горит.",
+        "kk": "Қабырғадағы ажыратқыш — тізбектің басқарылатын үзілісі ғана. Шырт — сымдар ажырады, шам сөнді. Шырт — жалғанды, шам жанады.",
+        "en": "The switch on the wall is just a gap in the circuit that you control. Click: the wires part and the lamp goes out. Click: they join and the lamp lights up."
+      },
+      "illustration": "e-open"
+    },
+    {
+      "id": "why",
+      "type": "quiz",
+      "kind": "choice",
+      "question": {
+        "ru": "Батарейка новая, а лампочка не горит. Почему так может быть?",
+        "kk": "Батарейка жаңа, ал шам жанбайды. Неге олай болуы мүмкін?",
+        "en": "The battery is new but the lamp is dark. Why could that be?"
+      },
+      "options": [
+        {
+          "ru": "Цепь где-то разорвана",
+          "kk": "Тізбек бір жерде үзілген",
+          "en": "The circuit is broken somewhere"
+        },
+        {
+          "ru": "Батарейка слишком новая",
+          "kk": "Батарейка тым жаңа",
+          "en": "The battery is too new"
+        },
+        {
+          "ru": "Ток идёт только днём",
+          "kk": "Ток тек күндіз жүреді",
+          "en": "Current only flows in the daytime"
+        }
+      ],
+      "correct": [
+        0
+      ],
+      "explanation": {
+        "ru": "Без замкнутого круга ток не идёт. Ищи, где разрыв.",
+        "kk": "Тұйық шеңберсіз ток жүрмейді. Үзілістің қай жерде екенін ізде.",
+        "en": "No closed loop, no current. Look for the gap."
+      }
+    },
+    {
+      "id": "build",
+      "type": "circuit",
+      "title": {
+        "ru": "Собери первую цепь",
+        "kk": "Алғашқы тізбекті құрастыр",
+        "en": "Build your first circuit"
+      },
+      "task": {
+        "ru": "На макетке уже стоят резистор и светодиод. Соедини их с платой двумя проводами:\n\n1. Пин **5V** (внизу платы, в группе POWER) → отверстие в **столбике 10**, рядом с левой ножкой резистора.\n2. Отверстие в **столбике 15**, рядом с короткой ножкой светодиода → пин **GND**.\n\nЧтобы провести провод, щёлкни по пину, потом по отверстию. Затем нажми «Запустить».",
+        "kk": "Макет тақтасында резистор мен жарықдиод тұр. Оларды тақтаға екі сыммен жалға:\n\n1. **5V** пині (тақтаның төменгі жағында, POWER тобында) → резистордың сол аяғының жанындағы **10-бағандағы** тесік.\n2. Жарықдиодтың қысқа аяғының жанындағы **15-бағандағы** тесік → **GND** пині.\n\nСым тарту үшін пинді, содан кейін тесікті бас. Сосын «Іске қосу» батырмасын бас.",
+        "en": "A resistor and an LED are already on the breadboard. Connect them to the board with two wires:\n\n1. The **5V** pin (at the bottom of the board, in the POWER group) → a hole in **column 10**, next to the left leg of the resistor.\n2. A hole in **column 15**, next to the short leg of the LED → a **GND** pin.\n\nTo add a wire, click a pin, then a hole. Then press Run."
+      },
+      "start": {
+        "doc": {
+          "board": "uno",
+          "parts": [
+            {
+              "id": "r1",
+              "type": "resistor",
+              "x": 420,
+              "y": 90,
+              "rot": 0,
+              "props": {
+                "ohms": 220
+              }
+            },
+            {
+              "id": "l1",
+              "type": "led",
+              "x": 460,
+              "y": 130,
+              "rot": 0,
+              "props": {
+                "color": "red"
+              }
+            }
+          ],
+          "wires": []
+        },
+        "code": "void setup() {\n}\n\nvoid loop() {\n}\n"
+      },
+      "tray": [],
+      "code": "hidden",
+      "checks": [
+        {
+          "type": "ledLit"
+        },
+        {
+          "type": "noBurned"
+        }
+      ],
+      "hints": [
+        {
+          "ru": "Пять отверстий в одном столбике соединены: провод можно воткнуть в любое из них.",
+          "kk": "Бір бағандағы бес тесік өзара жалғанған: сымды кез келгеніне қосуға болады.",
+          "en": "The five holes in one column are connected: the wire can go into any of them."
+        },
+        {
+          "ru": "Наведи мышку на пин — появится подсказка с его названием. 5V и GND — внизу платы.",
+          "kk": "Тінтуірді пинге апар — оның атауы шығады. 5V және GND — тақтаның төменгі жағында.",
+          "en": "Hover over a pin to see its name. 5V and GND are at the bottom of the board."
+        },
+        {
+          "ru": "Нужны два провода: 5V → b10 и b15 → GND.",
+          "kk": "Екі сым керек: 5V → b10 және b15 → GND.",
+          "en": "You need two wires: 5V → b10 and b15 → GND."
+        }
+      ],
+      "reference": {
+        "actions": [],
+        "doc": {
+          "board": "uno",
+          "parts": [
+            {
+              "id": "r1",
+              "type": "resistor",
+              "x": 420,
+              "y": 90,
+              "rot": 0,
+              "props": {
+                "ohms": 220
+              }
+            },
+            {
+              "id": "l1",
+              "type": "led",
+              "x": 460,
+              "y": 130,
+              "rot": 0,
+              "props": {
+                "color": "red"
+              }
+            }
+          ],
+          "wires": [
+            {
+              "id": "w-uno.5V-bb.b10",
+              "a": "uno.5V",
+              "b": "bb.b10",
+              "color": "#e8710a"
+            },
+            {
+              "id": "w-bb.b15-uno.GND.1",
+              "a": "bb.b15",
+              "b": "uno.GND.1",
+              "color": "#202124"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "path",
+      "type": "quiz",
+      "kind": "order",
+      "question": {
+        "ru": "Расставь путь тока по порядку",
+        "kk": "Токтың жолын ретімен қой",
+        "en": "Put the path of the current in order"
+      },
+      "items": [
+        {
+          "ru": "Пин 5V (плюс)",
+          "kk": "5V пині (плюс)",
+          "en": "The 5V pin (plus)"
+        },
+        {
+          "ru": "Резистор",
+          "kk": "Резистор",
+          "en": "The resistor"
+        },
+        {
+          "ru": "Светодиод",
+          "kk": "Жарықдиод",
+          "en": "The LED"
+        },
+        {
+          "ru": "Пин GND (минус)",
+          "kk": "GND пині (минус)",
+          "en": "The GND pin (minus)"
+        }
+      ],
+      "explanation": {
+        "ru": "Ток выходит из плюса, проходит через резистор и светодиод и возвращается в минус.",
+        "kk": "Ток плюстен шығып, резистор мен жарықдиод арқылы өтіп, минусқа қайтады.",
+        "en": "The current leaves the plus, goes through the resistor and the LED and returns to the minus."
+      }
+    }
+  ]
+}

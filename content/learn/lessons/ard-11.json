@@ -1,0 +1,168 @@
+{
+  "id": "ard-11",
+  "track": "arduino",
+  "unit": "ard-motion",
+  "minutes": 8,
+  "skills": [
+    "microcontrollers",
+    "mechanisms"
+  ],
+  "title": {
+    "ru": "Сервопривод",
+    "kk": "Сервожетек",
+    "en": "The servo"
+  },
+  "goal": {
+    "ru": "Сегодня ты научишься поворачивать рычаг на точный угол.",
+    "kk": "Бүгін сен тұтқышты нақты бұрышқа бұруды үйренесің.",
+    "en": "Today you will learn to turn an arm to an exact angle."
+  },
+  "summary": {
+    "ru": "Серво знает свой угол: attach() — подключить, write() — повернуть на 0–180°.",
+    "kk": "Серво өз бұрышын біледі: attach() — қосу, write() — 0–180°-қа бұру.",
+    "en": "A servo knows its angle: attach() connects it, write() turns it to 0–180°."
+  },
+  "kit": false,
+  "steps": [
+    {
+      "id": "servo",
+      "type": "theory",
+      "title": {
+        "ru": "Мотор, который знает свой угол",
+        "kk": "Өз бұрышын білетін мотор",
+        "en": "A motor that knows its angle"
+      },
+      "body": {
+        "ru": "**Сервопривод** поворачивает рычаг на заданный угол от 0° до 180° и держит его. Внутри — мотор, шестерёнки и датчик угла.\n\nУ серво три провода: коричневый — GND, красный — 5V, оранжевый — сигнал. В коде подключают библиотеку **Servo**, создают серво и вызывают **attach(9)** и **write(90)**.",
+        "kk": "**Сервожетек** тұтқышты 0°-тан 180°-қа дейінгі берілген бұрышқа бұрып, ұстап тұрады. Ішінде — мотор, тісті дөңгелектер және бұрыш датчигі.\n\nСервоның үш сымы бар: қоңыр — GND, қызыл — 5V, қызғылт сары — сигнал. Кодта **Servo** кітапханасын қосып, серво жасайды да, **attach(9)** және **write(90)** шақырады.",
+        "en": "A **servo** turns its arm to a given angle from 0° to 180° and holds it. Inside are a motor, gears and an angle sensor.\n\nA servo has three wires: brown is GND, red is 5V, orange is the signal. In the code you include the **Servo** library, create a servo and call **attach(9)** and **write(90)**."
+      },
+      "illustration": "e-servo",
+      "code": "#include <Servo.h>\n\nServo barrier;\n\nvoid setup() {\n  barrier.attach(9);\n}\n\nvoid loop() {\n  barrier.write(0);\n  delay(1500);\n  barrier.write(180);\n  delay(1500);\n}\n",
+      "codeLang": "arduino"
+    },
+    {
+      "id": "wire",
+      "type": "quiz",
+      "kind": "choice",
+      "question": {
+        "ru": "Какой провод серво подключают к сигнальному пину?",
+        "kk": "Сервоның қай сымын сигнал пиніне қосады?",
+        "en": "Which servo wire goes to the signal pin?"
+      },
+      "options": [
+        {
+          "ru": "Коричневый",
+          "kk": "Қоңыр",
+          "en": "Brown"
+        },
+        {
+          "ru": "Красный",
+          "kk": "Қызыл",
+          "en": "Red"
+        },
+        {
+          "ru": "Оранжевый",
+          "kk": "Қызғылт сары",
+          "en": "Orange"
+        }
+      ],
+      "correct": [
+        2
+      ],
+      "explanation": {
+        "ru": "Оранжевый — сигнал, красный — питание, коричневый — земля.",
+        "kk": "Қызғылт сары — сигнал, қызыл — қорек, қоңыр — жер.",
+        "en": "Orange is the signal, red is power, brown is ground."
+      }
+    },
+    {
+      "id": "barrier",
+      "type": "circuit",
+      "title": {
+        "ru": "Шлагбаум",
+        "kk": "Шлагбаум",
+        "en": "A barrier"
+      },
+      "task": {
+        "ru": "Подключи серво: коричневый → **GND**, красный → **5V**, оранжевый → пин **9**. Напиши программу, которая опускает шлагбаум на 0° и поднимает на 180°.",
+        "kk": "Сервоны қос: қоңыр → **GND**, қызыл → **5V**, қызғылт сары → **9**-пин. Шлагбаумды 0°-қа түсіріп, 180°-қа көтеретін бағдарлама жаз.",
+        "en": "Connect the servo: brown → **GND**, red → **5V**, orange → pin **9**. Write a program that lowers the barrier to 0° and raises it to 180°."
+      },
+      "start": {
+        "doc": {
+          "board": "uno",
+          "parts": [
+            {
+              "id": "s1",
+              "type": "servo",
+              "x": 360,
+              "y": 320,
+              "rot": 0,
+              "props": {}
+            }
+          ],
+          "wires": []
+        },
+        "code": "#include <Servo.h>\n\nvoid setup() {\n  // runs once\n}\n\nvoid loop() {\n  // runs again and again\n}\n"
+      },
+      "tray": [],
+      "code": "edit",
+      "checks": [
+        {
+          "type": "mission",
+          "id": "servo"
+        }
+      ],
+      "hints": [
+        {
+          "ru": "Провода серво — у его разъёма слева направо: GND, 5V, сигнал.",
+          "kk": "Серво сымдары — оның ажыратқышында солдан оңға: GND, 5V, сигнал.",
+          "en": "The servo wires are at its connector, left to right: GND, 5V, signal."
+        },
+        {
+          "ru": "Не забудь #include <Servo.h> в самом начале.",
+          "kk": "Ең басында #include <Servo.h> ұмытпа.",
+          "en": "Do not forget #include <Servo.h> at the very top."
+        }
+      ],
+      "reference": {
+        "actions": [],
+        "doc": {
+          "board": "uno",
+          "parts": [
+            {
+              "id": "s1",
+              "type": "servo",
+              "x": 360,
+              "y": 320,
+              "rot": 0,
+              "props": {}
+            }
+          ],
+          "wires": [
+            {
+              "id": "w-s1.gnd-uno.GND.2",
+              "a": "s1.gnd",
+              "b": "uno.GND.2",
+              "color": "#202124"
+            },
+            {
+              "id": "w-s1.vcc-uno.5V",
+              "a": "s1.vcc",
+              "b": "uno.5V",
+              "color": "#d93025"
+            },
+            {
+              "id": "w-s1.sig-uno.D9",
+              "a": "s1.sig",
+              "b": "uno.D9",
+              "color": "#e8710a"
+            }
+          ]
+        },
+        "code": "#include <Servo.h>\n\nServo barrier;\n\nvoid setup() {\n  barrier.attach(9);\n}\n\nvoid loop() {\n  barrier.write(0);\n  delay(1500);\n  barrier.write(180);\n  delay(1500);\n}\n"
+      }
+    }
+  ]
+}

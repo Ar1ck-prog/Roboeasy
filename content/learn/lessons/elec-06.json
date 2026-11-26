@@ -1,0 +1,254 @@
+{
+  "id": "elec-06",
+  "track": "electricity",
+  "unit": "elec-parts",
+  "minutes": 7,
+  "skills": [
+    "electricity"
+  ],
+  "title": {
+    "ru": "Кнопка-выключатель",
+    "kk": "Түйме-ажыратқыш",
+    "en": "A push-button switch"
+  },
+  "goal": {
+    "ru": "Сегодня ты соберёшь светильник с кнопкой — пока без всякого кода.",
+    "kk": "Бүгін сен түймесі бар шам құрастырасың — әзірге ешқандай кодсыз.",
+    "en": "Today you will build a lamp with a button, still without any code."
+  },
+  "summary": {
+    "ru": "Кнопка замыкает цепь, пока её держишь. Дальше — научим плату управлять светом сама: курс Arduino.",
+    "kk": "Түйме оны басып тұрғанда тізбекті тұйықтайды. Әрі қарай — тақтаны жарықты өзі басқаруға үйретеміз: Arduino курсы.",
+    "en": "A button closes the circuit while you hold it. Next, we teach the board to control the light itself: the Arduino course."
+  },
+  "kit": false,
+  "steps": [
+    {
+      "id": "button",
+      "type": "theory",
+      "title": {
+        "ru": "Кнопка замыкает цепь",
+        "kk": "Түйме тізбекті тұйықтайды",
+        "en": "A button closes the circuit"
+      },
+      "body": {
+        "ru": "Кнопка — это выключатель, который работает, пока ты его держишь. Отпустил — цепь снова разорвана.\n\nУ кнопки 4 ножки, но они соединены попарно: две ножки с одной стороны — это один контакт. Кнопку ставят поперёк канавки макетки, а нажатие соединяет её левую сторону с правой.",
+        "kk": "Түйме — сен оны басып тұрғанда жұмыс істейтін ажыратқыш. Жібердің — тізбек қайта үзілді.\n\nТүйменің 4 аяғы бар, бірақ олар жұп-жұбымен жалғанған: бір жақтағы екі аяқ — бір контакт. Түймені макет тақтасының ойығына көлденең қояды, ал басу оның сол жағын оң жағымен жалғайды.",
+        "en": "A button is a switch that works while you hold it. Let go and the circuit is broken again.\n\nA button has 4 legs, but they are joined in pairs: the two legs on one side are one contact. The button sits across the breadboard channel, and pressing it connects its left side to its right side."
+      },
+      "illustration": "e-button"
+    },
+    {
+      "id": "lamp",
+      "type": "circuit",
+      "title": {
+        "ru": "Светильник с кнопкой",
+        "kk": "Түймесі бар шам",
+        "en": "A lamp with a button"
+      },
+      "task": {
+        "ru": "На макетке: кнопка (столбики 20 и 22), резистор и зелёный светодиод. Нужны два провода:\n\n1. Пин **5V** → **столбик 20** (левая сторона кнопки).\n2. **Столбик 27** (короткая ножка светодиода) → пин **GND**.\n\nЗапусти, потом **нажми на кнопку мышкой и держи** — светодиод должен гореть, только пока она нажата.",
+        "kk": "Макет тақтасында: түйме (20 және 22-бағандар), резистор және жасыл жарықдиод. Екі сым керек:\n\n1. **5V** пині → **20-баған** (түйменің сол жағы).\n2. **27-баған** (жарықдиодтың қысқа аяғы) → **GND** пині.\n\nІске қос, сосын **түймені тінтуірмен басып, ұстап тұр** — жарықдиод тек ол басылып тұрғанда жануы керек.",
+        "en": "On the breadboard: a button (columns 20 and 22), a resistor and a green LED. You need two wires:\n\n1. The **5V** pin → **column 20** (the left side of the button).\n2. **Column 27** (the short leg of the LED) → a **GND** pin.\n\nRun it, then **press the button with the mouse and hold it**: the LED must be on only while it is pressed."
+      },
+      "start": {
+        "doc": {
+          "board": "uno",
+          "parts": [
+            {
+              "id": "b1",
+              "type": "button",
+              "x": 520,
+              "y": 130,
+              "rot": 0,
+              "props": {}
+            },
+            {
+              "id": "r1",
+              "type": "resistor",
+              "x": 540,
+              "y": 90,
+              "rot": 0,
+              "props": {
+                "ohms": 220
+              }
+            },
+            {
+              "id": "l1",
+              "type": "led",
+              "x": 580,
+              "y": 130,
+              "rot": 0,
+              "props": {
+                "color": "green"
+              }
+            }
+          ],
+          "wires": []
+        },
+        "code": "void setup() {\n}\n\nvoid loop() {\n}\n"
+      },
+      "tray": [],
+      "code": "hidden",
+      "checks": [
+        {
+          "type": "buttonLed"
+        }
+      ],
+      "hints": [
+        {
+          "ru": "Пока схема работает, по кнопке на макетке можно щёлкать мышкой (или нажать «Нажать» в панели справа).",
+          "kk": "Схема жұмыс істеп тұрғанда макет тақтасындағы түймені тінтуірмен басуға болады (немесе оң жақтағы панельде «Басу»).",
+          "en": "While the circuit runs you can click the button on the breadboard (or use Press in the panel on the right)."
+        },
+        {
+          "ru": "Провода: 5V → a20 и b27 → GND.",
+          "kk": "Сымдар: 5V → a20 және b27 → GND.",
+          "en": "Wires: 5V → a20 and b27 → GND."
+        }
+      ],
+      "reference": {
+        "actions": [
+          {
+            "t": 300,
+            "part": "b1",
+            "props": {
+              "pressed": true
+            }
+          },
+          {
+            "t": 700,
+            "part": "b1",
+            "props": {
+              "pressed": false
+            }
+          }
+        ],
+        "doc": {
+          "board": "uno",
+          "parts": [
+            {
+              "id": "b1",
+              "type": "button",
+              "x": 520,
+              "y": 130,
+              "rot": 0,
+              "props": {}
+            },
+            {
+              "id": "r1",
+              "type": "resistor",
+              "x": 540,
+              "y": 90,
+              "rot": 0,
+              "props": {
+                "ohms": 220
+              }
+            },
+            {
+              "id": "l1",
+              "type": "led",
+              "x": 580,
+              "y": 130,
+              "rot": 0,
+              "props": {
+                "color": "green"
+              }
+            }
+          ],
+          "wires": [
+            {
+              "id": "w-uno.5V-bb.a20",
+              "a": "uno.5V",
+              "b": "bb.a20",
+              "color": "#d93025"
+            },
+            {
+              "id": "w-bb.b27-uno.GND.1",
+              "a": "bb.b27",
+              "b": "uno.GND.1",
+              "color": "#202124"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "release",
+      "type": "quiz",
+      "kind": "choice",
+      "question": {
+        "ru": "Ты отпустил кнопку. Что с цепью?",
+        "kk": "Сен түймені жібердің. Тізбекке не болды?",
+        "en": "You let go of the button. What about the circuit?"
+      },
+      "options": [
+        {
+          "ru": "Разорвана — ток не идёт",
+          "kk": "Үзілді — ток жүрмейді",
+          "en": "Broken: no current"
+        },
+        {
+          "ru": "Замкнута",
+          "kk": "Тұйық",
+          "en": "Closed"
+        },
+        {
+          "ru": "Ток идёт в обратную сторону",
+          "kk": "Ток кері бағытта жүреді",
+          "en": "Current flows backwards"
+        }
+      ],
+      "correct": [
+        0
+      ],
+      "explanation": {
+        "ru": "Отпущенная кнопка — это разрыв цепи.",
+        "kk": "Жіберілген түйме — тізбектің үзілісі.",
+        "en": "A released button is a gap in the circuit."
+      }
+    },
+    {
+      "id": "chain",
+      "type": "quiz",
+      "kind": "order",
+      "question": {
+        "ru": "Расставь детали в порядке тока",
+        "kk": "Бөлшектерді ток ретімен қой",
+        "en": "Put the parts in the order of the current"
+      },
+      "items": [
+        {
+          "ru": "5V",
+          "kk": "5V",
+          "en": "5V"
+        },
+        {
+          "ru": "Кнопка",
+          "kk": "Түйме",
+          "en": "Button"
+        },
+        {
+          "ru": "Резистор",
+          "kk": "Резистор",
+          "en": "Resistor"
+        },
+        {
+          "ru": "Светодиод",
+          "kk": "Жарықдиод",
+          "en": "LED"
+        },
+        {
+          "ru": "GND",
+          "kk": "GND",
+          "en": "GND"
+        }
+      ],
+      "explanation": {
+        "ru": "Порядок тот же, что в любой цепи: от плюса через детали к минусу.",
+        "kk": "Рет кез келген тізбектегідей: плюстен бөлшектер арқылы минусқа.",
+        "en": "The same order as in any circuit: from plus through the parts to minus."
+      }
+    }
+  ]
+}
