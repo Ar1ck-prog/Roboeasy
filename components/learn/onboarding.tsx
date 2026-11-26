@@ -12,8 +12,8 @@ import { Card } from '@/components/ui/card'
 import type { LearnAppText } from '@/lib/i18n/learn-app'
 import type { PlayText } from '@/lib/i18n/play'
 import { ROBOTS } from '@/lib/learn/shop'
-import { AGE_RANGES, type AgeRange, DEFAULT_COSMETICS, type Profile, randomId } from '@/lib/learn/state'
-import { setProfile } from '@/lib/learn/store'
+import { AGE_RANGES, type AgeRange, DEFAULT_COSMETICS, type LearningPathChoice, type Profile, randomId } from '@/lib/learn/state'
+import { getGuestPath, setProfile } from '@/lib/learn/store'
 import { deviceTimeZone } from '@/lib/learn/streak'
 import { cn } from '@/lib/utils'
 
@@ -90,6 +90,7 @@ export function Onboarding({ lang, app, play, onSaved, onDone }: { lang: Lang; a
   const [model, setModel] = useState('rover')
   const [botName, setBotName] = useState('')
   const [age, setAge] = useState<AgeRange | null>(null)
+  const [path, setPath] = useState<LearningPathChoice | null>(() => getGuestPath())
   const [goal, setGoal] = useState<keyof typeof GOALS>('l1')
   const [consent, setConsent] = useState(false)
   const [saved, setSaved] = useState(false)
@@ -118,6 +119,7 @@ export function Onboarding({ lang, app, play, onSaved, onDone }: { lang: Lang; a
       createdAt: Date.now(),
       anonId: randomId('anon'),
       tour: false,
+      learningPath: path,
     })
     setSaved(true)
     onSaved()

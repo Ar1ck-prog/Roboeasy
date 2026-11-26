@@ -256,3 +256,88 @@ describe('bundled data without runtime parsing', () => {
     expect(profileSchema.safeParse({ ...p, nickname: 'x'.repeat(30) }).success).toBe(false)
   })
 })
+
+describe('learning paths: WeDo 2.0 before SPIKE Prime', async () => {
+  const { effectiveLearningPath, pathOrder, placementAvailable, spikeLockedByWedo, wedoComplete, wedoProgress } = await import('@/lib/learn/progress')
+  type C = typeof COURSE
+  const ref = (id: string) => ({ id, title: { ru: id, kk: id, en: id }, skills: ['motion' as const], status: 'ready' as const, project: false, kit: false })
+  const wedoTrack = (id: string, lessons: string[], prerequisites: string[]): C['tracks'][number] => ({
+    id,
+    title: { ru: id, kk: id, en: id },
+    description: { ru: id, kk: id, en: id },
+    icon: 'Smile',
+    color: 'var(--wedo-accent)',
+    family: 'wedo',
+    prerequisites,
+    units: [{ id: `${id}-u`, title: { ru: id, kk: id, en: id }, lessons: lessons.map(ref) }],
+  })
+  // A course with two small WeDo tracks in front, whatever WeDo content the real course has.
+  const course: C = {
+    tracks: [wedoTrack('tw-a', ['tw-1', 'tw-2'], []), wedoTrack('tw-b', ['tw-3'], ['tw-a']), ...COURSE.tracks.filter((t) => t.family !== 'wedo')],
+  }
+  const t = (id: string) => course.tracks.find((x) => x.id === id)!
+  const allWedo = ['tw-1', 'tw-2', 'tw-3']
+
+  it('gives every track a family; WeDo prerequisites stay inside WeDo', () => {
+    for (const tr of COURSE.tracks) expect(['spike', 'wedo', 'general'], tr.id).toContain(tr.family)
+    expect(COURSE.tracks.find((x) => x.id === 'ai-basics')!.family).toBe('general')
+    const wedo = new Set(COURSE.tracks.filter((x) => x.family === 'wedo').map((x) => x.id))
+    for (const tr of COURSE.tracks.filter((x) => x.family === 'wedo')) for (const p of tr.prerequisites) expect(wedo.has(p), `${tr.id} → ${p}`).toBe(true)
+  })
+
+  it('WeDo path: WeDo opens along its own prerequisites, SPIKE stays closed', () => {
+    expect(trackUnlocked(done(), t('tw-a'), course, 'wedo')).toBe(true)
+    expect(trackUnlocked(done(), t('tw-b'), course, 'wedo')).toBe(false)
+    expect(trackUnlocked(done('tw-1', 'tw-2'), t('tw-b'), course, 'wedo')).toBe(true)
+    for (const id of ['start', 'blocks', 'build']) expect(trackUnlocked(done('tw-1', 'tw-2'), t(id), course, 'wedo'), id).toBe(false)
+    expect(lessonStates(done(), t('start'), course, 'wedo').get('start-01')).toBe('locked')
+    expect(nextLesson(done(), course, 'wedo')?.id).toBe('tw-1')
+    expect(nextLesson(done('tw-1'), course, 'wedo')?.id).toBe('tw-2')
+    expect(placementAvailable(done(), course, 'wedo')).toBe(false)
+    expect(wedoProgress(done('tw-1'), course)).toEqual({ done: 1, ready: 3 })
+  })
+
+  it('WeDo path: SPIKE lessons done earlier stay done, but nothing new opens until WeDo is finished', () => {
+    const states = lessonStates(done('start-01'), t('start'), course, 'wedo')
+    expect(states.get('start-01')).toBe('done')
+    expect(states.get('start-02')).toBe('locked')
+    expect(spikeLockedByWedo(done('start-01'), t('start'), course, 'wedo')).toBe(true)
+  })
+
+  it('WeDo path: finishing every WeDo lesson opens Start and then SPIKE as usual', () => {
+    expect(wedoComplete(done(...allWedo), course)).toBe(true)
+    expect(trackUnlocked(done(...allWedo), t('start'), course, 'wedo')).toBe(true)
+    expect(trackUnlocked(done(...allWedo), t('blocks'), course, 'wedo')).toBe(false)
+    expect(nextLesson(done(...allWedo), course, 'wedo')?.id).toBe('start-01')
+    expect(placementAvailable(done(...allWedo), course, 'wedo')).toBe(true)
+  })
+
+  it('SPIKE path (and no path yet) works exactly as before; WeDo is open and optional', () => {
+    for (const path of ['spike', null] as const) {
+      expect(nextLesson(done(), course, path)?.id).toBe('start-01')
+      expect(trackUnlocked(done(), t('blocks'), course, path)).toBe(false)
+      expect(trackUnlocked(done(), t('tw-b'), course, path)).toBe(true)
+      expect(lessonStates(done(), t('start'), course, path).get('start-01')).toBe('current')
+      expect(placementAvailable(done(), course, path)).toBe(true)
+    }
+    expect(pathOrder(course, 'spike').at(-1)!.family).toBe('wedo')
+    expect(pathOrder(course, 'wedo')[0].family).toBe('wedo')
+  })
+
+  it('AI from zero is open on every path', () => {
+    for (const path of ['wedo', 'spike', null] as const) expect(trackUnlocked(done(), t('ai-basics'), course, path), String(path)).toBe(true)
+  })
+
+  it('effective path: the choice wins; SPIKE progress without a choice means "spike"; otherwise nothing yet', () => {
+    const profile = { learningPath: null } as unknown as NonNullable<typeof EMPTY_STATE.profile>
+    expect(effectiveLearningPath(EMPTY_STATE, course)).toBe(null)
+    const old = appendEvents({ ...EMPTY_STATE, profile }, [lessonDone('start-01', 1)])
+    expect(effectiveLearningPath(old, course)).toBe('spike')
+    const known = appendEvents({ ...EMPTY_STATE, profile }, [{ kind: 'known', lessons: ['blocks-01'], skills: ['sequence'], source: 'placement' }])
+    expect(effectiveLearningPath(known, course)).toBe('spike')
+    const wedoOnly = appendEvents({ ...EMPTY_STATE, profile }, [lessonDone('tw-1', 1, 'tw-a')])
+    expect(effectiveLearningPath(wedoOnly, course)).toBe(null)
+    const chosen = { ...old, profile: { ...profile, learningPath: 'wedo' as const } }
+    expect(effectiveLearningPath(chosen, course)).toBe('wedo')
+  })
+})

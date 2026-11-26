@@ -14,6 +14,7 @@
       },
       "icon": "Rocket",
       "color": "var(--blk-events)",
+      "family": "spike",
       "prerequisites": [],
       "units": [
         {
@@ -171,6 +172,7 @@
       },
       "icon": "Blocks",
       "color": "var(--blk-move)",
+      "family": "spike",
       "prerequisites": [
         "start"
       ],
@@ -595,6 +597,7 @@
       },
       "icon": "Hammer",
       "color": "var(--blk-control)",
+      "family": "spike",
       "prerequisites": [
         "start"
       ],
@@ -923,6 +926,7 @@
       },
       "icon": "Radar",
       "color": "var(--blk-sensors)",
+      "family": "spike",
       "prerequisites": [
         "blocks"
       ],
@@ -1273,6 +1277,7 @@
       },
       "icon": "Compass",
       "color": "var(--blk-motor)",
+      "family": "spike",
       "prerequisites": [
         "sensors"
       ],
@@ -1522,6 +1527,7 @@
       },
       "icon": "Code2",
       "color": "var(--blk-light)",
+      "family": "spike",
       "prerequisites": [
         "sensors"
       ],
@@ -1814,6 +1820,7 @@
       },
       "icon": "Cog",
       "color": "var(--blk-sound)",
+      "family": "spike",
       "prerequisites": [
         "build",
         "sensors"
@@ -2035,6 +2042,7 @@
       },
       "icon": "Trophy",
       "color": "var(--blk-events)",
+      "family": "spike",
       "prerequisites": [
         "navigation",
         "mechanisms"
@@ -2290,6 +2298,7 @@
       },
       "icon": "Bot",
       "color": "var(--blk-control)",
+      "family": "spike",
       "prerequisites": [
         "sensors"
       ],
@@ -2530,6 +2539,7 @@
       },
       "icon": "Brain",
       "color": "var(--blk-sensors)",
+      "family": "general",
       "prerequisites": [],
       "units": [
         {

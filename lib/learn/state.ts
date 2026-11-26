@@ -11,6 +11,8 @@ import * as z from 'zod/mini'
 import { SKILLS } from './skills'
 
 export const AGE_RANGES = ['under-10', '10-12', '13-15', '16-plus'] as const
+export const LEARNING_PATHS = ['wedo', 'spike'] as const
+export type LearningPathChoice = (typeof LEARNING_PATHS)[number]
 export const GAMES = ['maze', 'puzzle', 'memory', 'blitz'] as const
 export type GameId = (typeof GAMES)[number]
 
@@ -50,6 +52,8 @@ export const profileSchema = z.object({
   /** Anonymous id for A/B buckets and, later, linking to an account. */
   anonId: z.string().check(z.minLength(8)),
   tour: z._default(z.boolean(), false),
+  /** The chosen path: LEGO WeDo 2.0 first (then SPIKE Prime), or straight to SPIKE Prime; null until chosen. */
+  learningPath: z._default(z.nullable(z.enum(LEARNING_PATHS)), null),
 })
 export type Profile = z.infer<typeof profileSchema>
 

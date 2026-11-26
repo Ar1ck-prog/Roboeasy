@@ -351,6 +351,9 @@ export type Lesson = z.infer<typeof lessonSchema>
 
 // ── Course map (content/learn/course.json) ──────────────────────────────
 
+export const TRACK_FAMILIES = ['spike', 'wedo', 'general'] as const
+export type TrackFamily = (typeof TRACK_FAMILIES)[number]
+
 const lessonRef = z.object({
   id: z.string().regex(/^[a-z0-9-]+$/),
   title: localized,
@@ -370,6 +373,8 @@ export const courseSchema = z.object({
       description: localized,
       icon: z.string(),
       color: z.string(),
+      /** Which kit the track teaches: LEGO SPIKE Prime, LEGO WeDo 2.0, or none (e.g. "AI from zero"). */
+      family: z.enum(TRACK_FAMILIES).default('spike'),
       /** Recommended earlier tracks (can be skipped with a check test). */
       prerequisites: z.array(z.string()).default([]),
       units: z.array(z.object({ id: z.string().regex(/^[a-z0-9-]+$/), title: localized, lessons: z.array(lessonRef).min(1) })).min(1),

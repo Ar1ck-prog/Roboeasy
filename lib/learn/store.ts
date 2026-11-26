@@ -8,7 +8,7 @@
 
 import { useSyncExternalStore } from 'react'
 
-import { EMPTY_STATE, type LearnState, type NewEvent, type Profile, appendEvents, parseState } from './state'
+import { EMPTY_STATE, type LearnState, type LearningPathChoice, type NewEvent, type Profile, appendEvents, parseState } from './state'
 
 const KEY = 'roboeasy.learn.v1'
 
@@ -81,6 +81,43 @@ export function updateProfile(patch: Partial<Profile>) {
   const current = load()
   if (!current.profile) return
   save({ ...current, profile: { ...current.profile, ...patch } })
+}
+
+// ── Learning path (WeDo 2.0 or SPIKE Prime) ──────────────────────────────
+
+const PATH_KEY = 'roboeasy.learn.path'
+let guestPath: LearningPathChoice | null | undefined
+
+function readGuestPath(): LearningPathChoice | null {
+  if (guestPath !== undefined) return guestPath
+  try {
+    const raw = localStorage.getItem(PATH_KEY)
+    guestPath = raw === 'wedo' || raw === 'spike' ? raw : null
+  } catch {
+    guestPath = null
+  }
+  return guestPath
+}
+
+/**
+ * The path picked before a profile exists (on /learn without onboarding);
+ * onboarding starts from it and the profile then keeps the choice.
+ */
+export function getGuestPath(): LearningPathChoice | null {
+  return typeof window === 'undefined' ? null : readGuestPath()
+}
+
+/** Saves the chosen path in the profile (progress is never touched), or for a guest until onboarding. */
+export function setLearningPath(path: LearningPathChoice) {
+  if (load().profile) {
+    updateProfile({ learningPath: path })
+    return
+  }
+  guestPath = path
+  try {
+    localStorage.setItem(PATH_KEY, path)
+  } catch {}
+  listeners.forEach((l) => l())
 }
 
 /** Replaces everything (import from a file). */
