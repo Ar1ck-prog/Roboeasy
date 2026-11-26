@@ -10,6 +10,7 @@ import path from 'node:path'
 import { programBlocks } from './checks'
 import { COURSE, findLessonRef } from './course'
 import { type Lesson, lessonSchema } from './schema'
+import { wedoBlocks } from '../wedo/types'
 
 export { COURSE, findLessonRef }
 
@@ -48,6 +49,10 @@ export function toClientLesson(lesson: Lesson): ClientLesson {
       if (s.type === 'code' || s.type === 'debug' || s.type === 'project') {
         const { reference, referenceFunctions, ...rest } = s
         return { ...rest, referenceBlocks: reference ? programBlocks(reference, referenceFunctions) : undefined }
+      }
+      if (s.type === 'wedo_code') {
+        const { reference, ...rest } = s
+        return { ...rest, referenceBlocks: wedoBlocks(reference) }
       }
       return s
     }) as ClientStep[],

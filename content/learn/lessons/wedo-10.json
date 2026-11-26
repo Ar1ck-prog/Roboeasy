@@ -1,0 +1,122 @@
+{
+  "id": "wedo-10",
+  "track": "wedo-motion",
+  "unit": "wedo-gears",
+  "minutes": 5,
+  "skills": [
+    "gears",
+    "wedo-mechanics"
+  ],
+  "kit": false,
+  "title": {
+    "ru": "Шестерёнки: быстрее или сильнее",
+    "kk": "Тісті доңғалақтар: жылдамырақ па, күштірек пе",
+    "en": "Gears: faster or stronger"
+  },
+  "goal": {
+    "ru": "Сегодня ты научишь вертушку крутиться быстрее с шестерёнками.",
+    "kk": "Бүгін сен айналғышты тісті доңғалақтармен жылдамырақ айналдыруды үйренесің.",
+    "en": "Today you will make the spinner faster with gears."
+  },
+  "summary": {
+    "ru": "Теперь ты знаешь: большая шестерёнка крутит маленькую быстро.",
+    "kk": "Енді сен білесің: үлкен тісті доңғалақ кішісін жылдам айналдырады.",
+    "en": "Now you know: a big gear turns a small one fast."
+  },
+  "steps": [
+    {
+      "id": "gears",
+      "type": "theory",
+      "title": {
+        "ru": "Зубчики",
+        "kk": "Тістер",
+        "en": "Teeth"
+      },
+      "body": {
+        "ru": "Шестерёнки цепляются **зубчиками**.\n\nБольшая крутит маленькую — маленькая крутится **быстрее**.\n\nМаленькая крутит большую — большая крутится **медленнее**, но **сильнее**.",
+        "kk": "Тісті доңғалақтар **тістерімен** ілініседі.\n\nҮлкені кішісін айналдырса, кішісі **жылдамырақ** айналады.\n\nКішісі үлкенін айналдырса, үлкені **баяуырақ**, бірақ **күштірек** айналады.",
+        "en": "Gears hold on to each other by their **teeth**.\n\nA big gear turning a small one makes it spin **faster**.\n\nA small gear turning a big one makes it **slower** but **stronger**."
+      },
+      "illustration": "r-gears"
+    },
+    {
+      "id": "gears-faster",
+      "type": "widget",
+      "widget": "gears",
+      "title": {
+        "ru": "В 3 раза быстрее",
+        "kk": "3 есе жылдамырақ",
+        "en": "3 times faster"
+      },
+      "task": {
+        "ru": "Подбери две шестерёнки, чтобы выход крутился **в 3 раза быстрее** мотора.",
+        "kk": "Шығыс мотордан **3 есе жылдам** айналатындай екі тісті доңғалақты таңда.",
+        "en": "Pick two gears so the output turns **3 times faster** than the motor."
+      },
+      "goal": "faster",
+      "ratio": 3
+    },
+    {
+      "id": "five-turns",
+      "type": "wedo_code",
+      "mode": "code",
+      "title": {
+        "ru": "Пять оборотов",
+        "kk": "Бес айналым",
+        "en": "Five turns"
+      },
+      "task": {
+        "ru": "Шестерёнки ускоряют вертушку в 3 раза. Сделай так, чтобы она сделала **хотя бы 5 оборотов**.",
+        "kk": "Тісті доңғалақтар айналғышты 3 есе жылдамдатады. Оны **кем дегенде 5 айналым** жасататындай ет.",
+        "en": "The gears make the spinner 3 times faster. Make it do **at least 5 turns**."
+      },
+      "scene": {
+        "model": "spinner",
+        "ratio": 3
+      },
+      "palette": [
+        "motor_on_for",
+        "motor_power"
+      ],
+      "start": [
+        {
+          "op": "motor_power",
+          "power": 1
+        },
+        {
+          "op": "motor_on_for",
+          "seconds": 1
+        }
+      ],
+      "checks": [
+        {
+          "type": "spinnerTurns",
+          "minTurns": 5
+        }
+      ],
+      "hints": [
+        {
+          "ru": "Мощность 1 — это очень слабо.",
+          "kk": "1 қуат — өте әлсіз.",
+          "en": "Power 1 is very weak."
+        },
+        {
+          "ru": "Поставь мощность 8.",
+          "kk": "Қуатты 8-ге қой.",
+          "en": "Set the power to 8."
+        }
+      ],
+      "reference": [
+        {
+          "op": "motor_power",
+          "power": 8
+        },
+        {
+          "op": "motor_on_for",
+          "seconds": 1
+        }
+      ],
+      "skill": "wedo-mechanics"
+    }
+  ]
+}

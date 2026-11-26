@@ -1,0 +1,133 @@
+{
+  "id": "wedo-11",
+  "track": "wedo-motion",
+  "unit": "wedo-gears",
+  "minutes": 5,
+  "skills": [
+    "wedo-mechanics"
+  ],
+  "kit": false,
+  "title": {
+    "ru": "Ремень и шкив",
+    "kk": "Белдік пен шкив",
+    "en": "Belt and pulley"
+  },
+  "goal": {
+    "ru": "Сегодня ты узнаешь, как ремень передаёт вращение.",
+    "kk": "Бүгін сен белдіктің айналуды қалай беретінін білесің.",
+    "en": "Today you will find out how a belt passes on a turn."
+  },
+  "summary": {
+    "ru": "Теперь ты знаешь, как работают шкивы.",
+    "kk": "Енді сен шкивтердің қалай жұмыс істейтінін білесің.",
+    "en": "Now you know how pulleys work."
+  },
+  "steps": [
+    {
+      "id": "pulley",
+      "type": "theory",
+      "title": {
+        "ru": "Колёсики и резинка",
+        "kk": "Дөңгелекшелер мен резеңке",
+        "en": "Wheels and a rubber band"
+      },
+      "body": {
+        "ru": "**Шкив** — колёсико с желобком. На шкивы надевают **ремень**, как резинку.\n\nОдин шкив крутится — и ремень крутит другой.\n\nЕсли ведомый шкив больше, он крутится **медленнее**.",
+        "kk": "**Шкив** — ойығы бар дөңгелекше. Шкивтерге резеңке сияқты **белдік** кигізеді.\n\nБір шкив айналса, белдік екіншісін айналдырады.\n\nЕкінші шкив үлкен болса, ол **баяуырақ** айналады.",
+        "en": "A **pulley** is a little wheel with a groove. A **belt** goes round two pulleys like a rubber band.\n\nOne pulley turns and the belt turns the other.\n\nIf the driven pulley is bigger, it turns **slower**."
+      },
+      "illustration": "r-ratio"
+    },
+    {
+      "id": "small-pulley",
+      "type": "quiz",
+      "kind": "choice",
+      "question": {
+        "ru": "Большой шкив крутит маленький. Как крутится маленький?",
+        "kk": "Үлкен шкив кішісін айналдырады. Кішісі қалай айналады?",
+        "en": "A big pulley turns a small one. How does the small one turn?"
+      },
+      "options": [
+        {
+          "ru": "Быстрее",
+          "kk": "Жылдамырақ",
+          "en": "Faster"
+        },
+        {
+          "ru": "Медленнее",
+          "kk": "Баяуырақ",
+          "en": "Slower"
+        },
+        {
+          "ru": "Совсем не крутится",
+          "kk": "Мүлде айналмайды",
+          "en": "It does not turn"
+        }
+      ],
+      "correct": [
+        0
+      ],
+      "explanation": {
+        "ru": "Маленький шкив делает много оборотов, пока большой делает один.",
+        "kk": "Үлкені бір айналғанша, кішісі көп айналады.",
+        "en": "The small pulley turns many times while the big one turns once."
+      },
+      "skill": "wedo-mechanics",
+      "illustration": "r-ratio"
+    },
+    {
+      "id": "slow-belt",
+      "type": "wedo_code",
+      "mode": "code",
+      "title": {
+        "ru": "Медленный ремень",
+        "kk": "Баяу белдік",
+        "en": "A slow belt"
+      },
+      "task": {
+        "ru": "Ремень замедляет вертушку в 2 раза. Сделай **4 оборота**.",
+        "kk": "Белдік айналғышты 2 есе баяулатады. **4 айналым** жаса.",
+        "en": "The belt makes the spinner 2 times slower. Make **4 turns**."
+      },
+      "scene": {
+        "model": "spinner",
+        "ratio": 0.5
+      },
+      "palette": [
+        "motor_on_for",
+        "motor_power"
+      ],
+      "start": [
+        {
+          "op": "motor_on_for",
+          "seconds": 1
+        }
+      ],
+      "checks": [
+        {
+          "type": "spinnerTurns",
+          "minTurns": 4
+        }
+      ],
+      "hints": [
+        {
+          "ru": "Сейчас вертушка делает только 2 оборота.",
+          "kk": "Қазір айналғыш тек 2 айналым жасайды.",
+          "en": "Right now the spinner only makes 2 turns."
+        },
+        {
+          "ru": "Дай мотору больше секунд: в 2 раза больше.",
+          "kk": "Моторға көбірек секунд бер: 2 есе көп.",
+          "en": "Give the motor more seconds: twice as many."
+        }
+      ],
+      "reference": [
+        {
+          "op": "motor_on_for",
+          "seconds": 2
+        }
+      ],
+      "skill": "wedo-mechanics"
+    }
+  ]
+}

@@ -1,0 +1,218 @@
+{
+  "id": "wedo-15",
+  "track": "wedo-motion",
+  "unit": "wedo-rover",
+  "minutes": 5,
+  "skills": [
+    "motion",
+    "sequence"
+  ],
+  "kit": false,
+  "title": {
+    "ru": "Остановись вовремя",
+    "kk": "Уақытында тоқта",
+    "en": "Stop in time"
+  },
+  "goal": {
+    "ru": "Сегодня ты научишь Вжика останавливаться на мосту.",
+    "kk": "Бүгін сен Вжикті көпірде тоқтауға үйретесің.",
+    "en": "Today you will teach Zip to stop on the bridge."
+  },
+  "summary": {
+    "ru": "Теперь ты умеешь включать мотор, ждать и выключать его.",
+    "kk": "Енді сен моторды қосып, күтіп, өшіре аласың.",
+    "en": "Now you can switch the motor on, wait and switch it off."
+  },
+  "steps": [
+    {
+      "id": "on-wait-off",
+      "type": "theory",
+      "title": {
+        "ru": "Включить, ждать, выключить",
+        "kk": "Қосу, күту, өшіру",
+        "en": "On, wait, off"
+      },
+      "body": {
+        "ru": "Можно сказать мотору: **«Включись»**.\n\nПотом **ждать** несколько секунд.\n\nПотом сказать: **«Выключись»**.\n\nВжик едет, пока мотор включён.",
+        "kk": "Моторға **«Қосыл»** деуге болады.\n\nСодан кейін бірнеше секунд **күту**.\n\nСодан кейін **«Өшір»** деу.\n\nМотор қосулы тұрғанда Вжик жүреді.",
+        "en": "You can tell the motor: **“On!”**\n\nThen **wait** a few seconds.\n\nThen say: **“Off!”**\n\nZip drives while the motor is on."
+      },
+      "illustration": "sequence"
+    },
+    {
+      "id": "stop-where",
+      "type": "wedo_predict",
+      "title": {
+        "ru": "Где остановится?",
+        "kk": "Қайда тоқтайды?",
+        "en": "Where will it stop?"
+      },
+      "question": {
+        "ru": "Мотор включить, ждать 2 секунды, выключить. Где будет Вжик?",
+        "kk": "Моторды қосу, 2 секунд күту, өшіру. Вжик қайда болады?",
+        "en": "Motor on, wait 2 seconds, motor off. Where will Zip be?"
+      },
+      "scene": {
+        "model": "rover",
+        "length": 1200,
+        "start": 100,
+        "zones": [
+          {
+            "id": "pond",
+            "from": 400,
+            "to": 600,
+            "label": {
+              "ru": "Пруд",
+              "kk": "Тоған",
+              "en": "Pond"
+            }
+          },
+          {
+            "id": "fence",
+            "from": 950,
+            "to": 1140,
+            "label": {
+              "ru": "Забор",
+              "kk": "Қоршау",
+              "en": "Fence"
+            }
+          }
+        ],
+        "obstacles": []
+      },
+      "program": [
+        {
+          "op": "motor_on"
+        },
+        {
+          "op": "wait",
+          "seconds": 2
+        },
+        {
+          "op": "motor_off"
+        }
+      ],
+      "options": [
+        {
+          "label": {
+            "ru": "У пруда",
+            "kk": "Тоғанның жанында",
+            "en": "At the pond"
+          },
+          "expect": [
+            {
+              "type": "roverInZone",
+              "zone": "pond"
+            }
+          ]
+        },
+        {
+          "label": {
+            "ru": "У забора в конце",
+            "kk": "Соңындағы қоршаудың жанында",
+            "en": "At the fence at the end"
+          },
+          "expect": [
+            {
+              "type": "roverInZone",
+              "zone": "fence"
+            }
+          ]
+        }
+      ],
+      "correct": 0,
+      "explanation": {
+        "ru": "Мотор работал 2 секунды. Вжик проехал 40 см и встал у пруда.",
+        "kk": "Мотор 2 секунд жұмыс істеді. Вжик 40 см жүріп, тоғанның жанында тоқтады.",
+        "en": "The motor ran for 2 seconds. Zip drove 40 cm and stopped at the pond."
+      },
+      "skill": "motion"
+    },
+    {
+      "id": "stop-bridge",
+      "type": "wedo_code",
+      "mode": "code",
+      "title": {
+        "ru": "Стоп на мосту",
+        "kk": "Көпірде тоқта",
+        "en": "Stop on the bridge"
+      },
+      "task": {
+        "ru": "Включи мотор, подожди и выключи его, чтобы Вжик встал **на мосту**.",
+        "kk": "Вжик **көпірде** тоқтауы үшін моторды қосып, күтіп, өшір.",
+        "en": "Switch the motor on, wait and switch it off so Zip stops **on the bridge**."
+      },
+      "scene": {
+        "model": "rover",
+        "length": 1200,
+        "start": 100,
+        "zones": [
+          {
+            "id": "bridge",
+            "from": 600,
+            "to": 800,
+            "label": {
+              "ru": "Мост",
+              "kk": "Көпір",
+              "en": "Bridge"
+            }
+          }
+        ],
+        "obstacles": []
+      },
+      "palette": [
+        "motor_on",
+        "motor_off",
+        "wait"
+      ],
+      "start": [
+        {
+          "op": "motor_on"
+        },
+        {
+          "op": "wait",
+          "seconds": 1
+        },
+        {
+          "op": "motor_off"
+        }
+      ],
+      "checks": [
+        {
+          "type": "roverInZone",
+          "zone": "bridge"
+        },
+        {
+          "type": "usesBlock",
+          "op": "motor_off",
+          "min": 1
+        }
+      ],
+      "hints": [
+        {
+          "ru": "Вжик встал рано. Ждать нужно дольше.",
+          "kk": "Вжик ерте тоқтады. Ұзағырақ күту керек.",
+          "en": "Zip stopped too soon. Wait longer."
+        },
+        {
+          "ru": "Нажми на блок «Ждать» и поставь 3 секунды.",
+          "kk": "«Күту» блогын басып, 3 секунд қой.",
+          "en": "Tap the Wait block and set 3 seconds."
+        }
+      ],
+      "reference": [
+        {
+          "op": "motor_on"
+        },
+        {
+          "op": "wait",
+          "seconds": 3
+        },
+        {
+          "op": "motor_off"
+        }
+      ],
+      "skill": "sequence"
+    }
+  ]
+}

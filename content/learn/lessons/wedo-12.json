@@ -1,0 +1,135 @@
+{
+  "id": "wedo-12",
+  "track": "wedo-motion",
+  "unit": "wedo-gears",
+  "minutes": 5,
+  "skills": [
+    "gears",
+    "mechanisms"
+  ],
+  "kit": false,
+  "title": {
+    "ru": "Червячная передача",
+    "kk": "Бұрамалы беріліс",
+    "en": "The worm gear"
+  },
+  "goal": {
+    "ru": "Сегодня ты научишь кран поднимать груз медленно и надёжно.",
+    "kk": "Бүгін сен кранды жүкті баяу әрі сенімді көтеруге үйретесің.",
+    "en": "Today you will teach a crane to lift a load slowly and safely."
+  },
+  "summary": {
+    "ru": "Теперь ты знаешь, зачем нужен червяк.",
+    "kk": "Енді сен бұраманың не үшін керек екенін білесің.",
+    "en": "Now you know what a worm gear is for."
+  },
+  "steps": [
+    {
+      "id": "worm",
+      "type": "theory",
+      "title": {
+        "ru": "Червяк",
+        "kk": "Бұрама",
+        "en": "The worm"
+      },
+      "body": {
+        "ru": "**Червяк** похож на винтик. Он крутит шестерёнку очень **медленно**.\n\nЗато он **сильный** и держит груз.\n\nГруз не упадёт, даже если мотор остановится.",
+        "kk": "**Бұрама** бұрандаға ұқсайды. Ол тісті доңғалақты өте **баяу** айналдырады.\n\nЕсесіне ол **күшті** және жүкті ұстап тұрады.\n\nМотор тоқтаса да, жүк құламайды.",
+        "en": "A **worm** looks like a little screw. It turns a gear very **slowly**.\n\nBut it is **strong** and holds the load.\n\nThe load does not fall, even when the motor stops."
+      },
+      "illustration": "r-worm"
+    },
+    {
+      "id": "why-worm",
+      "type": "quiz",
+      "kind": "choice",
+      "question": {
+        "ru": "Зачем крану червячная передача?",
+        "kk": "Кранға бұрамалы беріліс не үшін керек?",
+        "en": "Why does a crane use a worm gear?"
+      },
+      "options": [
+        {
+          "ru": "Чтобы поднимать медленно и держать груз",
+          "kk": "Баяу көтеріп, жүкті ұстау үшін",
+          "en": "To lift slowly and hold the load"
+        },
+        {
+          "ru": "Чтобы ехать быстрее",
+          "kk": "Жылдамырақ жүру үшін",
+          "en": "To drive faster"
+        },
+        {
+          "ru": "Чтобы светиться",
+          "kk": "Жарқырау үшін",
+          "en": "To light up"
+        }
+      ],
+      "correct": [
+        0
+      ],
+      "explanation": {
+        "ru": "Червяк медленный, но сильный. Он держит груз.",
+        "kk": "Бұрама баяу, бірақ күшті. Ол жүкті ұстайды.",
+        "en": "The worm is slow but strong. It holds the load."
+      },
+      "skill": "gears"
+    },
+    {
+      "id": "lift-one",
+      "type": "wedo_code",
+      "mode": "code",
+      "title": {
+        "ru": "Подними груз",
+        "kk": "Жүкті көтер",
+        "en": "Lift the load"
+      },
+      "task": {
+        "ru": "Подними груз на **уровень 1**.",
+        "kk": "Жүкті **1-деңгейге** көтер.",
+        "en": "Lift the load to **level 1**."
+      },
+      "scene": {
+        "model": "lift",
+        "levels": 2,
+        "mmPerTurn": 5
+      },
+      "palette": [
+        "motor_on_for",
+        "motor_direction",
+        "motor_power"
+      ],
+      "start": [
+        {
+          "op": "motor_on_for",
+          "seconds": 2
+        }
+      ],
+      "checks": [
+        {
+          "type": "liftAt",
+          "level": 1
+        }
+      ],
+      "hints": [
+        {
+          "ru": "Червяк медленный. Нужно больше секунд.",
+          "kk": "Бұрама баяу. Көбірек секунд керек.",
+          "en": "The worm is slow. You need more seconds."
+        },
+        {
+          "ru": "Попробуй 5 секунд.",
+          "kk": "5 секунд байқап көр.",
+          "en": "Try 5 seconds."
+        }
+      ],
+      "reference": [
+        {
+          "op": "motor_on_for",
+          "seconds": 5
+        }
+      ],
+      "skill": "mechanisms"
+    }
+  ]
+}

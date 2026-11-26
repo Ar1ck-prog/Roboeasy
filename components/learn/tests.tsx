@@ -14,10 +14,11 @@ import type { Dictionary } from '@/lib/i18n/ru'
 import type { PracticeItem } from '@/lib/learn/content'
 import { COURSE, findLessonRef } from '@/lib/learn/course'
 import { PLACEMENT, UNIT_TEST_PASS, placementResult } from '@/lib/learn/placement'
-import { nextLesson } from '@/lib/learn/progress'
+import { nextLesson, placementAvailable } from '@/lib/learn/progress'
 import type { Skill } from '@/lib/learn/schema'
 import { completedLessons } from '@/lib/learn/state'
 import { record, useLearn } from '@/lib/learn/store'
+import { useLearningPath } from '@/lib/learn/use-progress'
 
 type Lang = 'ru' | 'kk' | 'en'
 
@@ -117,6 +118,9 @@ export function PlacementTest({ lang, t, app, blocksT, items }: Common) {
   const [answers, setAnswers] = useState<PracticeAnswer[]>([])
   const [known, setKnown] = useState<string[]>([])
   const already = learn.events.some((e) => e.kind === 'known' && e.source === 'placement')
+  const path = useLearningPath()
+  // On the WeDo path the SPIKE placement test waits until every WeDo lesson is done.
+  const blocked = !placementAvailable(completedLessons(learn), COURSE, path)
 
   const finish = (a: PracticeAnswer[]) => {
     const result = placementResult(new Set(a.filter((x) => x.correct).map((x) => x.key)))
@@ -127,7 +131,7 @@ export function PlacementTest({ lang, t, app, blocksT, items }: Common) {
     setPhase('result')
   }
 
-  const next = phase === 'result' ? nextLesson(completedLessons(learn), COURSE) : null
+  const next = phase === 'result' ? nextLesson(completedLessons(learn), COURSE, path) : null
   const nextRef = next ? findLessonRef(next.id) : null
 
   return (
@@ -136,7 +140,15 @@ export function PlacementTest({ lang, t, app, blocksT, items }: Common) {
         <Gauge className="size-9" aria-hidden="true" />
         {app.placement.title}
       </h1>
-      {phase === 'intro' ? (
+      {blocked && phase === 'intro' ? (
+        <Card className="gap-4" data-testid="placement-later">
+          <p className="m-0 text-lg">{app.wedo.placementLater}</p>
+          <Link className={buttonVariants({ variant: 'primary', className: 'justify-self-start' })} href={`/${lang}/learn?family=wedo`}>
+            {app.wedo.toWedo}
+            <ArrowRight aria-hidden="true" />
+          </Link>
+        </Card>
+      ) : phase === 'intro' ? (
         <Card className="gap-4">
           <p className="m-0 text-lg">{app.placement.lead}</p>
           <ol className="m-0 grid gap-1 pl-5 text-muted-foreground">

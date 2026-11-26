@@ -1,0 +1,142 @@
+{
+  "id": "wedo-22",
+  "track": "wedo-sensors",
+  "unit": "wedo-motion-sensor",
+  "minutes": 5,
+  "skills": [
+    "sensor-motion"
+  ],
+  "kit": false,
+  "title": {
+    "ru": "Жди, пока подъедут",
+    "kk": "Келгенше күт",
+    "en": "Wait until it arrives"
+  },
+  "goal": {
+    "ru": "Сегодня шлагбаум научится открываться для машинки.",
+    "kk": "Бүгін шлагбаум машинаға ашылуды үйренеді.",
+    "en": "Today the barrier will learn to open for a toy car."
+  },
+  "summary": {
+    "ru": "Теперь ты умеешь ждать датчик движения.",
+    "kk": "Енді сен қозғалыс датчигін күте аласың.",
+    "en": "Now you can wait for the motion sensor."
+  },
+  "steps": [
+    {
+      "id": "waiting",
+      "type": "theory",
+      "title": {
+        "ru": "Блок «Ждать датчик»",
+        "kk": "«Датчикті күту» блогы",
+        "en": "The “wait for sensor” block"
+      },
+      "body": {
+        "ru": "Блок **«Ждать датчик движения»** останавливает программу.\n\nПрограмма стоит и ждёт, пока датчик не скажет **«близко»**.\n\nПотом робот делает следующий блок.",
+        "kk": "**«Қозғалыс датчигін күту»** блогы бағдарламаны тоқтатады.\n\nБағдарлама датчик **«жақын»** дегенше тұрып күтеді.\n\nСодан кейін робот келесі блокты орындайды.",
+        "en": "The **Wait for motion sensor** block pauses the program.\n\nIt waits until the sensor says **“near”**.\n\nThen the robot runs the next block."
+      },
+      "illustration": "r-wait-until"
+    },
+    {
+      "id": "what-wait",
+      "type": "quiz",
+      "kind": "choice",
+      "question": {
+        "ru": "Что делает блок «Ждать датчик движения: близко»?",
+        "kk": "«Қозғалыс датчигін күту: жақын» блогы не істейді?",
+        "en": "What does “Wait for motion sensor: near” do?"
+      },
+      "options": [
+        {
+          "ru": "Ждёт, пока предмет подойдёт близко",
+          "kk": "Зат жақындағанша күтеді",
+          "en": "Waits until something comes close"
+        },
+        {
+          "ru": "Сразу едет",
+          "kk": "Бірден жүреді",
+          "en": "Drives right away"
+        },
+        {
+          "ru": "Зажигает лампу",
+          "kk": "Шамды жағады",
+          "en": "Switches on the light"
+        }
+      ],
+      "correct": [
+        0
+      ],
+      "explanation": {
+        "ru": "Он ждёт сигнала от датчика.",
+        "kk": "Ол датчиктің белгісін күтеді.",
+        "en": "It waits for a signal from the sensor."
+      },
+      "skill": "sensor-motion"
+    },
+    {
+      "id": "open-gate",
+      "type": "wedo_code",
+      "mode": "code",
+      "title": {
+        "ru": "Открой шлагбаум",
+        "kk": "Шлагбаумды аш",
+        "en": "Open the barrier"
+      },
+      "task": {
+        "ru": "Когда машинка подъедет **близко**, открой шлагбаум. Мотор на 1,5 секунды открывает его.",
+        "kk": "Машина **жақын** келгенде, шлагбаумды аш. Мотор оны 1,5 секундта ашады.",
+        "en": "When the car comes **near**, open the barrier. The motor opens it in 1.5 seconds."
+      },
+      "scene": {
+        "model": "gate",
+        "sensor": "motion"
+      },
+      "scenario": [
+        {
+          "at": 2,
+          "motion": "near"
+        }
+      ],
+      "palette": [
+        "wait_motion",
+        "motor_on_for",
+        "motor_direction"
+      ],
+      "start": [],
+      "checks": [
+        {
+          "type": "reactsTo",
+          "sensor": "motion",
+          "state": "near",
+          "action": "motorStart",
+          "withinSeconds": 1,
+          "times": 1
+        }
+      ],
+      "hints": [
+        {
+          "ru": "Сначала нужно ждать машинку.",
+          "kk": "Алдымен машинаны күту керек.",
+          "en": "First wait for the car."
+        },
+        {
+          "ru": "Поставь «Ждать датчик движения: близко», потом мотор.",
+          "kk": "«Қозғалыс датчигін күту: жақын», содан кейін мотор қой.",
+          "en": "Put “Wait for motion sensor: near”, then the motor."
+        }
+      ],
+      "reference": [
+        {
+          "op": "wait_motion",
+          "event": "near"
+        },
+        {
+          "op": "motor_on_for",
+          "seconds": 1.5
+        }
+      ],
+      "skill": "sensor-motion"
+    }
+  ]
+}

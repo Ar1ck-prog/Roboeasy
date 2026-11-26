@@ -1,0 +1,160 @@
+{
+  "id": "wedo-28",
+  "track": "wedo-sensors",
+  "unit": "wedo-light-sound",
+  "minutes": 4,
+  "skills": [
+    "wedo-hub",
+    "sequence"
+  ],
+  "kit": false,
+  "title": {
+    "ru": "Лампа и звуки",
+    "kk": "Шам және дыбыстар",
+    "en": "Light and sounds"
+  },
+  "goal": {
+    "ru": "Сегодня ты устроишь маленький концерт света и звука.",
+    "kk": "Бүгін сен жарық пен дыбыстың шағын концертін ұйымдастырасың.",
+    "en": "Today you will put on a little show of lights and sounds."
+  },
+  "summary": {
+    "ru": "Теперь ты умеешь менять цвета и звуки по очереди.",
+    "kk": "Енді сен түстер мен дыбыстарды кезекпен ауыстыра аласың.",
+    "en": "Now you can change colours and sounds one after another."
+  },
+  "steps": [
+    {
+      "id": "show",
+      "type": "theory",
+      "title": {
+        "ru": "Свет и звук",
+        "kk": "Жарық пен дыбыс",
+        "en": "Light and sound"
+      },
+      "body": {
+        "ru": "Лампа Смартхаба горит **разными цветами**.\n\nПланшет играет **звуки**. У каждого звука свой номер.\n\nСтавь их по очереди — получится концерт!",
+        "kk": "Смартхаб шамы **әртүрлі түспен** жанады.\n\nПланшет **дыбыстар** ойнайды. Әр дыбыстың өз нөмірі бар.\n\nОларды кезекпен қойсаң — концерт шығады!",
+        "en": "The Smarthub light glows in **different colours**.\n\nThe tablet plays **sounds**. Each sound has its own number.\n\nPut them one after another and you have a show!"
+      }
+    },
+    {
+      "id": "colours",
+      "type": "quiz",
+      "kind": "choice",
+      "question": {
+        "ru": "Сколько цветов у лампы Смартхаба?",
+        "kk": "Смартхаб шамында неше түс бар?",
+        "en": "How many colours does the Smarthub light have?"
+      },
+      "options": [
+        {
+          "ru": "Только один",
+          "kk": "Тек біреу",
+          "en": "Just one"
+        },
+        {
+          "ru": "Два",
+          "kk": "Екеу",
+          "en": "Two"
+        },
+        {
+          "ru": "Много разных",
+          "kk": "Көп әртүрлі",
+          "en": "Lots of different ones"
+        }
+      ],
+      "correct": [
+        2
+      ],
+      "explanation": {
+        "ru": "Лампа умеет много цветов: красный, жёлтый, зелёный, синий и другие.",
+        "kk": "Шам көп түс біледі: қызыл, сары, жасыл, көк және басқалар.",
+        "en": "The light knows many colours: red, yellow, green, blue and more."
+      },
+      "skill": "wedo-hub"
+    },
+    {
+      "id": "concert",
+      "type": "wedo_code",
+      "mode": "code",
+      "title": {
+        "ru": "Концерт",
+        "kk": "Концерт",
+        "en": "The show"
+      },
+      "task": {
+        "ru": "Зажги **красный**, **жёлтый** и **зелёный** по очереди. После каждого цвета включи **звук**.",
+        "kk": "**Қызыл**, **сары** және **жасылды** кезекпен жақ. Әр түстен кейін **дыбысты** қос.",
+        "en": "Show **red**, **yellow** and **green** one after another. Play a **sound** after each colour."
+      },
+      "scene": {
+        "model": "spinner",
+        "ratio": 1
+      },
+      "palette": [
+        "light",
+        "sound",
+        "wait"
+      ],
+      "start": [],
+      "checks": [
+        {
+          "type": "light",
+          "color": "red"
+        },
+        {
+          "type": "light",
+          "color": "yellow"
+        },
+        {
+          "type": "light",
+          "color": "green"
+        },
+        {
+          "type": "sound",
+          "min": 3
+        }
+      ],
+      "hints": [
+        {
+          "ru": "Нужно 6 блоков: лампа, звук, лампа, звук, лампа, звук.",
+          "kk": "6 блок керек: шам, дыбыс, шам, дыбыс, шам, дыбыс.",
+          "en": "You need 6 blocks: light, sound, light, sound, light, sound."
+        },
+        {
+          "ru": "В каждой лампе выбери свой цвет.",
+          "kk": "Әр шамда өз түсін таңда.",
+          "en": "Pick a different colour in each light."
+        }
+      ],
+      "reference": [
+        {
+          "op": "light",
+          "color": "red"
+        },
+        {
+          "op": "sound",
+          "sound": 1
+        },
+        {
+          "op": "light",
+          "color": "yellow"
+        },
+        {
+          "op": "sound",
+          "sound": 2
+        },
+        {
+          "op": "light",
+          "color": "green"
+        },
+        {
+          "op": "sound",
+          "sound": 3
+        }
+      ],
+      "skill": "sequence"
+    }
+  ]
+}

@@ -1,0 +1,155 @@
+{
+  "id": "wedo-13",
+  "track": "wedo-motion",
+  "unit": "wedo-gears",
+  "minutes": 6,
+  "skills": [
+    "wedo-mechanics"
+  ],
+  "kit": false,
+  "title": {
+    "ru": "Проект «Вертушка»",
+    "kk": "«Айналғыш» жобасы",
+    "en": "Project “Spinner”"
+  },
+  "goal": {
+    "ru": "Сегодня ты устроишь танец вертушки.",
+    "kk": "Бүгін сен айналғыштың биін ұйымдастырасың.",
+    "en": "Today you will make the spinner dance."
+  },
+  "summary": {
+    "ru": "Теперь ты умеешь менять направление и мощность в одной программе.",
+    "kk": "Енді сен бір бағдарламада бағыт пен қуатты өзгерте аласың.",
+    "en": "Now you can change direction and power in one program."
+  },
+  "steps": [
+    {
+      "id": "dance",
+      "type": "theory",
+      "title": {
+        "ru": "Танец вертушки",
+        "kk": "Айналғыш биі",
+        "en": "The spinner dance"
+      },
+      "body": {
+        "ru": "Вертушка танцует.\n\nСначала она крутится **медленно в эту сторону**.\n\nПотом **быстро в ту сторону**.",
+        "kk": "Айналғыш билейді.\n\nАлдымен ол **осы жаққа баяу** айналады.\n\nСодан кейін **ана жаққа жылдам** айналады.",
+        "en": "The spinner dances.\n\nFirst it turns **slowly this way**.\n\nThen **fast that way**."
+      }
+    },
+    {
+      "id": "faster-block",
+      "type": "quiz",
+      "kind": "choice",
+      "question": {
+        "ru": "Какой блок делает вертушку быстрее?",
+        "kk": "Қай блок айналғышты жылдамырақ етеді?",
+        "en": "Which block makes the spinner faster?"
+      },
+      "options": [
+        {
+          "ru": "Мощность",
+          "kk": "Қуат",
+          "en": "Power"
+        },
+        {
+          "ru": "Ждать",
+          "kk": "Күту",
+          "en": "Wait"
+        },
+        {
+          "ru": "Лампа",
+          "kk": "Шам",
+          "en": "Light"
+        }
+      ],
+      "correct": [
+        0
+      ],
+      "explanation": {
+        "ru": "Больше мощность — быстрее вертушка.",
+        "kk": "Қуат көп болса, айналғыш жылдамырақ.",
+        "en": "More power, faster spinner."
+      },
+      "skill": "wedo-mechanics"
+    },
+    {
+      "id": "spinner-dance",
+      "type": "wedo_code",
+      "mode": "project",
+      "title": {
+        "ru": "Танец",
+        "kk": "Би",
+        "en": "The dance"
+      },
+      "task": {
+        "ru": "**3 секунды** медленно (мощность 4) в эту сторону. Потом **3 секунды** быстро (мощность 8) в ту сторону.",
+        "kk": "Осы жаққа **3 секунд** баяу (4 қуат). Содан кейін ана жаққа **3 секунд** жылдам (8 қуат).",
+        "en": "**3 seconds** slowly (power 4) this way. Then **3 seconds** fast (power 8) that way."
+      },
+      "scene": {
+        "model": "spinner",
+        "ratio": 1
+      },
+      "palette": [
+        "motor_on_for",
+        "motor_direction",
+        "motor_power",
+        "wait"
+      ],
+      "start": [],
+      "checks": [
+        {
+          "type": "spinnerTurns",
+          "minTurns": 6,
+          "direction": "this"
+        },
+        {
+          "type": "spinnerTurns",
+          "minTurns": 6,
+          "direction": "that"
+        },
+        {
+          "type": "usesBlock",
+          "op": "motor_power",
+          "min": 1
+        }
+      ],
+      "hints": [
+        {
+          "ru": "Начни с мощности 4 и мотора на 3 секунды.",
+          "kk": "4 қуат пен 3 секундтық мотордан баста.",
+          "en": "Start with power 4 and the motor for 3 seconds."
+        },
+        {
+          "ru": "Потом поставь направление «в ту сторону», мощность 8 и снова мотор на 3 секунды.",
+          "kk": "Содан кейін «ана жаққа» бағытын, 8 қуатты қойып, моторды тағы 3 секундқа қос.",
+          "en": "Then set direction “that way”, power 8 and the motor for 3 seconds again."
+        }
+      ],
+      "reference": [
+        {
+          "op": "motor_power",
+          "power": 4
+        },
+        {
+          "op": "motor_on_for",
+          "seconds": 3
+        },
+        {
+          "op": "motor_direction",
+          "dir": "that"
+        },
+        {
+          "op": "motor_power",
+          "power": 8
+        },
+        {
+          "op": "motor_on_for",
+          "seconds": 3
+        }
+      ],
+      "skill": "wedo-mechanics"
+    }
+  ]
+}

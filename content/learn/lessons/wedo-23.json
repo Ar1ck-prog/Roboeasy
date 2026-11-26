@@ -1,0 +1,151 @@
+{
+  "id": "wedo-23",
+  "track": "wedo-sensors",
+  "unit": "wedo-motion-sensor",
+  "minutes": 5,
+  "skills": [
+    "sensor-motion"
+  ],
+  "kit": false,
+  "title": {
+    "ru": "Стоп перед стеной",
+    "kk": "Қабырға алдында тоқта",
+    "en": "Stop before the wall"
+  },
+  "goal": {
+    "ru": "Сегодня Вжик научится сам останавливаться перед стеной.",
+    "kk": "Бүгін Вжик қабырғаның алдында өзі тоқтауды үйренеді.",
+    "en": "Today Zip will learn to stop by itself before a wall."
+  },
+  "summary": {
+    "ru": "Теперь ты умеешь останавливать робота по датчику.",
+    "kk": "Енді сен роботты датчик бойынша тоқтата аласың.",
+    "en": "Now you can stop the robot with the sensor."
+  },
+  "steps": [
+    {
+      "id": "eyes",
+      "type": "theory",
+      "title": {
+        "ru": "Глазки Вжика",
+        "kk": "Вжиктің көздері",
+        "en": "Zip’s eyes"
+      },
+      "body": {
+        "ru": "Спереди у Вжика стоит **датчик движения**.\n\nВжик едет и смотрит вперёд.\n\nУвидел стену **близко** — выключает мотор. Без секунд и без угадывания!",
+        "kk": "Вжиктің алдында **қозғалыс датчигі** тұр.\n\nВжик жүріп, алға қарайды.\n\nҚабырғаны **жақын** көрсе, моторды өшіреді. Секундсыз және болжамсыз!",
+        "en": "Zip has a **motion sensor** at the front.\n\nZip drives and looks ahead.\n\nIt sees the wall **near** and switches the motor off. No seconds, no guessing!"
+      }
+    },
+    {
+      "id": "no-sensor",
+      "type": "quiz",
+      "kind": "choice",
+      "question": {
+        "ru": "Без датчика Вжик едет 10 секунд. Что будет у стены?",
+        "kk": "Датчиксіз Вжик 10 секунд жүреді. Қабырғаның жанында не болады?",
+        "en": "Without the sensor Zip drives for 10 seconds. What happens at the wall?"
+      },
+      "options": [
+        {
+          "ru": "Врежется в стену",
+          "kk": "Қабырғаға соғылады",
+          "en": "It bumps into the wall"
+        },
+        {
+          "ru": "Остановится сам",
+          "kk": "Өзі тоқтайды",
+          "en": "It stops by itself"
+        },
+        {
+          "ru": "Подпрыгнет",
+          "kk": "Секіреді",
+          "en": "It jumps"
+        }
+      ],
+      "correct": [
+        0
+      ],
+      "explanation": {
+        "ru": "Без датчика Вжик не видит стену.",
+        "kk": "Датчиксіз Вжик қабырғаны көрмейді.",
+        "en": "Without the sensor Zip cannot see the wall."
+      },
+      "skill": "sensor-motion"
+    },
+    {
+      "id": "stop-wall",
+      "type": "wedo_code",
+      "mode": "code",
+      "title": {
+        "ru": "Стоп у стены",
+        "kk": "Қабырғада тоқта",
+        "en": "Stop at the wall"
+      },
+      "task": {
+        "ru": "Пусть Вжик едет и **остановится перед стеной**, не врезаясь.",
+        "kk": "Вжик жүріп, соғылмай **қабырғаның алдында тоқтасын**.",
+        "en": "Let Zip drive and **stop before the wall** without bumping into it."
+      },
+      "scene": {
+        "model": "rover",
+        "length": 1400,
+        "start": 100,
+        "sensor": "motion",
+        "zones": [],
+        "obstacles": [
+          {
+            "id": "wall",
+            "at": 1100,
+            "label": {
+              "ru": "Стена",
+              "kk": "Қабырға",
+              "en": "Wall"
+            }
+          }
+        ]
+      },
+      "palette": [
+        "motor_on",
+        "motor_off",
+        "wait_motion",
+        "motor_on_for"
+      ],
+      "start": [],
+      "checks": [
+        {
+          "type": "stopBeforeObstacle",
+          "maxMm": 110
+        },
+        {
+          "type": "noCrash"
+        }
+      ],
+      "hints": [
+        {
+          "ru": "Мотор включить, потом ждать датчик.",
+          "kk": "Моторды қосып, содан кейін датчикті күт.",
+          "en": "Motor on, then wait for the sensor."
+        },
+        {
+          "ru": "Мотор включить → Ждать «близко» → Мотор выключить.",
+          "kk": "Моторды қосу → «Жақынды» күту → Моторды өшіру.",
+          "en": "Motor on → Wait for “near” → Motor off."
+        }
+      ],
+      "reference": [
+        {
+          "op": "motor_on"
+        },
+        {
+          "op": "wait_motion",
+          "event": "near"
+        },
+        {
+          "op": "motor_off"
+        }
+      ],
+      "skill": "sensor-motion"
+    }
+  ]
+}

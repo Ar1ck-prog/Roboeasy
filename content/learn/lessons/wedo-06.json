@@ -1,0 +1,141 @@
+{
+  "id": "wedo-06",
+  "track": "wedo-start",
+  "unit": "wedo-first",
+  "minutes": 4,
+  "skills": [
+    "sequence"
+  ],
+  "kit": false,
+  "title": {
+    "ru": "Порядок блоков",
+    "kk": "Блоктардың реті",
+    "en": "Block order"
+  },
+  "goal": {
+    "ru": "Сегодня ты научишь робота делать дела по очереди.",
+    "kk": "Бүгін сен роботты істерді кезекпен істеуге үйретесің.",
+    "en": "Today you will teach the robot to do things one after another."
+  },
+  "summary": {
+    "ru": "Теперь ты знаешь: робот делает блоки слева направо.",
+    "kk": "Енді сен білесің: робот блоктарды солдан оңға қарай орындайды.",
+    "en": "Now you know: the robot runs blocks from left to right."
+  },
+  "steps": [
+    {
+      "id": "left-right",
+      "type": "theory",
+      "title": {
+        "ru": "Слева направо",
+        "kk": "Солдан оңға",
+        "en": "Left to right"
+      },
+      "body": {
+        "ru": "Программа начинается с **«Старта»**.\n\nПотом робот делает блоки по одному, **слева направо**.\n\nПоменяешь блоки местами — поменяется и порядок дел.",
+        "kk": "Бағдарлама **«Бастаудан»** басталады.\n\nСодан кейін робот блоктарды бір-бірден, **солдан оңға** қарай орындайды.\n\nБлоктардың орнын ауыстырсаң, істердің реті де өзгереді.",
+        "en": "A program begins with **Start**.\n\nThen the robot runs the blocks one by one, **from left to right**.\n\nSwap two blocks and the order of actions changes too."
+      },
+      "illustration": "sequence"
+    },
+    {
+      "id": "what-first",
+      "type": "quiz",
+      "kind": "order",
+      "question": {
+        "ru": "Программа: Старт → Лампа → Мотор → Звук. Что будет по порядку?",
+        "kk": "Бағдарлама: Бастау → Шам → Мотор → Дыбыс. Ретімен не болады?",
+        "en": "Program: Start → Light → Motor → Sound. What happens, in order?"
+      },
+      "items": [
+        {
+          "ru": "Загорится лампа",
+          "kk": "Шам жанады",
+          "en": "The light comes on"
+        },
+        {
+          "ru": "Закрутится мотор",
+          "kk": "Мотор айналады",
+          "en": "The motor turns"
+        },
+        {
+          "ru": "Прозвучит звук",
+          "kk": "Дыбыс шығады",
+          "en": "A sound plays"
+        }
+      ],
+      "explanation": {
+        "ru": "Робот читает блоки слева направо.",
+        "kk": "Робот блоктарды солдан оңға қарай оқиды.",
+        "en": "The robot reads blocks from left to right."
+      },
+      "skill": "sequence"
+    },
+    {
+      "id": "three-things",
+      "type": "wedo_code",
+      "mode": "code",
+      "title": {
+        "ru": "Три дела",
+        "kk": "Үш іс",
+        "en": "Three things"
+      },
+      "task": {
+        "ru": "Сначала зажги **жёлтую** лампу. Потом покрути мотор **1 секунду**. В конце включи **звук**.",
+        "kk": "Алдымен **сары** шамды жақ. Содан кейін моторды **1 секунд** айналдыр. Соңында **дыбысты** қос.",
+        "en": "First switch the light **yellow**. Then turn the motor for **1 second**. Last, play a **sound**."
+      },
+      "scene": {
+        "model": "spinner",
+        "ratio": 1
+      },
+      "palette": [
+        "light",
+        "motor_on_for",
+        "sound"
+      ],
+      "start": [],
+      "checks": [
+        {
+          "type": "light",
+          "color": "yellow"
+        },
+        {
+          "type": "motorRan",
+          "minSeconds": 1
+        },
+        {
+          "type": "sound",
+          "min": 1
+        }
+      ],
+      "hints": [
+        {
+          "ru": "Нужно три блока: лампа, мотор, звук.",
+          "kk": "Үш блок керек: шам, мотор, дыбыс.",
+          "en": "You need three blocks: light, motor, sound."
+        },
+        {
+          "ru": "Нажми на лампу в программе и выбери жёлтый кружок.",
+          "kk": "Бағдарламадағы шамды басып, сары дөңгелекті таңда.",
+          "en": "Tap the light in the program and pick the yellow circle."
+        }
+      ],
+      "reference": [
+        {
+          "op": "light",
+          "color": "yellow"
+        },
+        {
+          "op": "motor_on_for",
+          "seconds": 1
+        },
+        {
+          "op": "sound",
+          "sound": 1
+        }
+      ],
+      "skill": "sequence"
+    }
+  ]
+}

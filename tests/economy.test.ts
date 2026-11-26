@@ -27,6 +27,7 @@ const profile: Profile = {
   createdAt: T0 - HOUR,
   anonId: 'anon-12345678',
   tour: false,
+  learningPath: null,
 }
 const withProfile = (events: NewEvent[]): LearnState => appendEvents({ ...EMPTY_STATE, profile }, events)
 let n = 0

@@ -16,6 +16,7 @@ const profile = (over: Partial<Profile> = {}): Profile => ({
   createdAt: 0,
   anonId: 'anon-12345678',
   tour: false,
+  learningPath: null,
   ...over,
 })
 

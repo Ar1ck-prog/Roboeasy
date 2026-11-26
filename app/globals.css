@@ -95,6 +95,9 @@
   --blk-sound: var(--rose-500);
   --blk-control: #ff9f1c;
   --blk-sensors: var(--leaf-500);
+
+  /* LEGO WeDo 2.0 part: its own accent (dark text on it 8.7:1, like the --blk-* hues) */
+  --wedo-accent: #2ec4b6;
 }
 
 /* Dark (also the fallback before the theme script runs) */
@@ -129,6 +132,9 @@
   --code-border: var(--ink-950);
   --chart-before: #5a84dc;
   --chart-after: #b98a14;
+  /* WeDo: soft panel background and accent text (fff7e8 on it 13:1; ink 9:1 on it) */
+  --wedo-accent-soft: #13312e;
+  --wedo-ink: #6fe3d6;
 }
 
 [data-theme='light'] {
@@ -158,6 +164,9 @@
   --warn-bg: #fff4cc;
   --warn-text: #7a4b00;
   --ok-bg: #e3f6ea;
+  /* WeDo: text 14.6:1 on the soft panel, accent text 5.4:1 on it and 5.9:1 on the page */
+  --wedo-accent-soft: #e0f6f3;
+  --wedo-ink: #0b6e64;
   --dots: rgba(27, 31, 42, 0.09);
   --code-bg: var(--ink-900);
   --code-border: var(--ink-900);
@@ -3655,4 +3664,27 @@ main h3 {
   .app-splash-lit {
     opacity: 1;
   }
+}
+
+/* WeDo lessons for learners under 10 ("kid mode", components/learn/lesson-player.tsx):
+   bigger text, bigger buttons and more room, only inside WeDo lessons. */
+.kid-mode {
+  font-size: var(--text-lg);
+  line-height: 1.6;
+}
+.kid-mode h2 {
+  font-size: clamp(1.625rem, 2.8vw, 2.125rem);
+}
+.kid-mode .text-lg {
+  font-size: var(--text-xl);
+}
+.kid-mode .text-sm {
+  font-size: var(--text-base);
+}
+.kid-mode button,
+.kid-mode a[data-slot='button'] {
+  min-height: 3.25rem;
+}
+.kid-mode > * + * {
+  margin-top: var(--space-2, 0.5rem);
 }

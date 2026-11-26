@@ -24,5 +24,10 @@ export const SKILLS = [
   'strategy',
   'teamwork',
   'ai-literacy',
+  // LEGO WeDo 2.0 (learners under 10)
+  'wedo-hub',
+  'sensor-motion',
+  'sensor-tilt',
+  'wedo-mechanics',
 ] as const
 export type Skill = (typeof SKILLS)[number]
