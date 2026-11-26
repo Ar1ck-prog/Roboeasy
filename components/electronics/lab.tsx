@@ -53,11 +53,15 @@ interface LabProps {
   t: ElectronicsText
 }
 
-const start = (id: MissionId | 'free'): Workspace => (id === 'free' ? FREE_START : structuredClone(getMission(id).starter))
+const start = (id: MissionId | 'free', setup: 'starter' | 'solution' = 'starter'): Workspace =>
+  id === 'free' ? FREE_START : structuredClone(getMission(id)[setup])
 const isMission = (id: string | null): id is MissionId => (MISSION_IDS as readonly string[]).includes(id ?? '')
+// A worked example has its own draft so opening it cannot overwrite the mission draft.
+const workKey = (id: MissionId | 'free', example: boolean) => (example ? `${id}:example` : id)
 
 export function Lab({ lang, t }: LabProps) {
   const [mission, setMission] = useState<MissionId | 'free'>('free')
+  const [example, setExample] = useState(false)
   const [work, setWork] = useState<Workspace>(FREE_START)
   const [done, setDone] = useState<Set<string>>(new Set())
   const [selection, setSelection] = useState<Selection>(null)
@@ -85,20 +89,24 @@ export function Lab({ lang, t }: LabProps) {
 
   // The mission comes from ?mission= (the page itself is static); saved work and finished missions live in this browser.
   useEffect(() => {
-    const param = new URLSearchParams(window.location.search).get('mission')
+    const params = new URLSearchParams(window.location.search)
+    const param = params.get('mission')
     const id = isMission(param) ? param : 'free'
+    const withExample = id !== 'free' && params.get('setup') === 'example'
     const saved = loadProgress()
     setDone(new Set(saved.done))
     setMission(id)
-    setWork(saved.work[id] ?? start(id))
+    setExample(withExample)
+    setWork(saved.work[workKey(id, withExample)] ?? start(id, withExample ? 'solution' : 'starter'))
     setLoaded(true)
   }, [])
 
   useEffect(() => {
     if (!loaded) return
-    const id = window.setTimeout(() => saveProgress((p) => ({ ...p, work: { ...p.work, [mission]: work } })), 400)
+    const key = workKey(mission, example)
+    const id = window.setTimeout(() => saveProgress((p) => ({ ...p, work: { ...p.work, [key]: work } })), 400)
     return () => window.clearTimeout(id)
-  }, [work, mission, loaded])
+  }, [work, mission, example, loaded])
 
   const silence = useCallback(() => {
     const a = audio.current
@@ -225,9 +233,11 @@ export function Lab({ lang, t }: LabProps) {
     setSelection(null)
     setGoals([])
     setMission(id)
+    setExample(false)
     const saved = loadProgress().work[id]
     setWork(saved ?? start(id))
     const url = new URL(window.location.href)
+    url.searchParams.delete('setup')
     if (id === 'free') url.searchParams.delete('mission')
     else url.searchParams.set('mission', id)
     window.history.replaceState(null, '', url)

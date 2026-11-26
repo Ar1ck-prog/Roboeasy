@@ -2,6 +2,7 @@
 
 import Link from 'next/link'
 import { ArrowRight, Check, Clock, Gauge, Lock, PlayCircle } from 'lucide-react'
+import type { ReactNode } from 'react'
 
 import { TrackIcon } from '@/components/learn/track-icon'
 import { Badge } from '@/components/ui/badge'
@@ -36,7 +37,7 @@ export function ProgressBar({ value, label, className }: { value: number; label:
 }
 
 /** /learn: every track with its progress and lock state. */
-export function LearnMap({ lang, app }: { lang: Lang; app: LearnAppText }) {
+export function LearnMap({ lang, app, children }: { lang: Lang; app: LearnAppText; children?: ReactNode }) {
   const hydrated = useHydrated()
   const { done, state: learn } = useProgress()
   const tookPlacement = learn.events.some((e) => e.kind === 'known' && e.source === 'placement')
@@ -154,6 +155,7 @@ export function LearnMap({ lang, app }: { lang: Lang; app: LearnAppText }) {
           )
         })}
       </ol>
+      {children}
     </div>
   )
 }
