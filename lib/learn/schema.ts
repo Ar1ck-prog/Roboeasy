@@ -9,6 +9,8 @@ import { z } from 'zod'
 import { STEP_OPS, parseProgram } from '../dsl/schema'
 import type { ProgramFunction, Step } from '../dsl/types'
 import { fieldSchema } from '../sim/field'
+import { scenarioSchema, wedoCheckIssues, wedoCheckSchema, wedoProgramSchema, wedoSceneSchema } from '../wedo/schema'
+import { WEDO_OPS } from '../wedo/types'
 import { ROBO_ILLUSTRATIONS } from './illustration-names'
 import { SKILLS } from './skills'
 
@@ -160,7 +162,15 @@ const theory = z.object({
   code: z.string().min(1).max(1200).optional(),
 })
 
-const quizBase = { ...base, type: z.literal('quiz'), question: localized, explanation: localized, skill: z.enum(SKILLS).optional() }
+const quizBase = {
+  ...base,
+  type: z.literal('quiz'),
+  question: localized,
+  explanation: localized,
+  skill: z.enum(SKILLS).optional(),
+  /** A picture for the question (younger learners, WeDo lessons). */
+  illustration: z.enum(ILLUSTRATIONS).optional(),
+}
 const quiz = z.discriminatedUnion('kind', [
   z.object({ ...quizBase, kind: z.literal('choice'), options: z.array(localized).min(2).max(6), correct: z.array(z.number().int().nonnegative()).min(1) }),
   /** Put in order: `items` are listed in the correct order and shuffled on screen. */
@@ -285,12 +295,65 @@ const widget = z.discriminatedUnion('widget', [
 ])
 export type WidgetKind = z.infer<typeof widget>['widget']
 
-export const stepSchema = z.union([theory, quiz, code, debug, project, predict, realRobot, build, widget])
+// ── WeDo 2.0 steps (lib/wedo, components/wedo) ──────────────────────────
+
+/** A task in the WeDo icon-block editor with its own simulator scene and automatic checks. */
+const wedoCode = z.object({
+  ...base,
+  type: z.literal('wedo_code'),
+  /** "debug": the start program has a mistake to find; "project": a bigger task at the end of a unit. */
+  mode: z.enum(['code', 'debug', 'project']).default('code'),
+  title: localized,
+  task: localized,
+  scene: wedoSceneSchema,
+  /** Sensor events for the automatic check (the live run lets the child press the sensor buttons). */
+  scenario: scenarioSchema.optional(),
+  /** Blocks available under the editor. */
+  palette: z.array(z.enum(WEDO_OPS)).min(1),
+  start: wedoProgramSchema.default([]),
+  checks: z.array(wedoCheckSchema).min(1),
+  /** Ready hints from gentle to concrete; WeDo steps have no AI mentor (learners under 10). */
+  hints: z.array(localized).min(1).max(3),
+  /** A correct solution for tests and the "fewer blocks than us" achievement. Never sent to the browser. */
+  reference: wedoProgramSchema,
+  skill: z.enum(SKILLS).optional(),
+})
+
+/** "What will the robot do?": a read-only program, 2–3 answers; each answer says what it claims as checks. */
+const wedoPredict = z.object({
+  ...base,
+  type: z.literal('wedo_predict'),
+  title: localized,
+  question: localized,
+  scene: wedoSceneSchema,
+  scenario: scenarioSchema.optional(),
+  program: wedoProgramSchema,
+  options: z
+    .array(
+      z.object({
+        label: localized,
+        illustration: z.enum(ILLUSTRATIONS).optional(),
+        /** What this answer says happens, as WeDo checks: the simulation confirms the correct one (tests). */
+        expect: z.array(wedoCheckSchema).min(1),
+      }),
+    )
+    .min(2)
+    .max(3),
+  correct: z.number().int().nonnegative(),
+  explanation: localized,
+  skill: z.enum(SKILLS).optional(),
+})
+
+export const stepSchema = z.union([theory, quiz, code, debug, project, predict, realRobot, build, widget, wedoCode, wedoPredict])
 export type LessonStep = z.infer<typeof stepSchema>
 export type StepType = LessonStep['type']
 export type CodeStep = Extract<LessonStep, { type: 'code' | 'debug' | 'project' }>
 export type QuizStep = Extract<LessonStep, { type: 'quiz' }>
 export type PredictStep = Extract<LessonStep, { type: 'predict' }>
+export type WedoCodeStep = Extract<LessonStep, { type: 'wedo_code' }>
+export type WedoPredictStep = Extract<LessonStep, { type: 'wedo_predict' }>
+/** Step types of WeDo lessons (tests keep them apart from SPIKE lessons). */
+export const WEDO_STEP_TYPES = ['theory', 'quiz', 'build', 'real_robot', 'widget', 'wedo_code', 'wedo_predict'] as const
 
 export const lessonSchema = z
   .object({
@@ -313,8 +376,14 @@ export const lessonSchema = z
     const dupe = ids.find((id, i) => ids.indexOf(id) !== i)
     if (dupe) ctx.addIssue({ code: 'custom', message: `duplicate step id ${dupe}` })
     lesson.steps.forEach((s, i) => {
-      if (s.type === 'predict' && s.correct >= s.options.length)
+      if ((s.type === 'predict' || s.type === 'wedo_predict') && s.correct >= s.options.length)
         ctx.addIssue({ code: 'custom', path: ['steps', i, 'correct'], message: 'correct option out of range' })
+      if (s.type === 'wedo_code')
+        for (const message of wedoCheckIssues(s.scene, s.checks, s.scenario)) ctx.addIssue({ code: 'custom', path: ['steps', i, 'checks'], message })
+      if (s.type === 'wedo_predict')
+        s.options.forEach((o, j) => {
+          for (const message of wedoCheckIssues(s.scene, o.expect, s.scenario)) ctx.addIssue({ code: 'custom', path: ['steps', i, 'options', j], message })
+        })
       if (s.type === 'quiz' && s.kind === 'choice' && s.correct.some((c) => c >= s.options.length))
         ctx.addIssue({ code: 'custom', path: ['steps', i, 'correct'], message: 'correct option out of range' })
       if (s.type === 'quiz' && s.kind === 'fill')

@@ -165,12 +165,12 @@ export function placementAvailable(done: Set<string>, course: Course, path: Lear
 
 /** Skill groups for the radar (8 axes are readable on a phone). */
 export const SKILL_GROUPS = [
-  { id: 'basics', skills: ['robot-basics'], title: { ru: 'Основы', kk: 'Негіздер', en: 'Basics' } },
+  { id: 'basics', skills: ['robot-basics', 'wedo-hub'], title: { ru: 'Основы', kk: 'Негіздер', en: 'Basics' } },
   { id: 'motion', skills: ['motion', 'turns'], title: { ru: 'Движение', kk: 'Қозғалыс', en: 'Motion' } },
   { id: 'algorithms', skills: ['sequence', 'loops', 'conditions', 'variables', 'functions'], title: { ru: 'Алгоритмы', kk: 'Алгоритмдер', en: 'Algorithms' } },
-  { id: 'sensors', skills: ['sensor-color', 'sensor-distance', 'sensor-force', 'gyro', 'line-follow'], title: { ru: 'Датчики', kk: 'Датчиктер', en: 'Sensors' } },
+  { id: 'sensors', skills: ['sensor-color', 'sensor-distance', 'sensor-force', 'gyro', 'line-follow', 'sensor-motion', 'sensor-tilt'], title: { ru: 'Датчики', kk: 'Датчиктер', en: 'Sensors' } },
   { id: 'precision', skills: ['control', 'calibration'], title: { ru: 'Точность', kk: 'Дәлдік', en: 'Precision' } },
-  { id: 'building', skills: ['parts', 'structures', 'gears', 'mechanisms'], title: { ru: 'Конструирование', kk: 'Құрастыру', en: 'Building' } },
+  { id: 'building', skills: ['parts', 'structures', 'gears', 'mechanisms', 'wedo-mechanics'], title: { ru: 'Конструирование', kk: 'Құрастыру', en: 'Building' } },
   { id: 'code', skills: ['python'], title: { ru: 'Код', kk: 'Код', en: 'Code' } },
   { id: 'team', skills: ['strategy', 'teamwork'], title: { ru: 'Команда', kk: 'Команда', en: 'Team' } },
 ] as const satisfies readonly { id: string; skills: readonly Skill[]; title: Record<'ru' | 'kk' | 'en', string> }[]

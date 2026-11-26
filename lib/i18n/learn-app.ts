@@ -281,6 +281,10 @@ const ru = {
     strategy: 'Стратегия',
     teamwork: 'Командная работа',
     'ai-literacy': 'ИИ-грамотность',
+    'wedo-hub': 'Смартхаб WeDo',
+    'sensor-motion': 'Датчик движения',
+    'sensor-tilt': 'Датчик наклона',
+    'wedo-mechanics': 'Механизмы WeDo',
   } satisfies Record<Skill, string>,
 }
 
@@ -560,6 +564,10 @@ const kk: LearnAppText = {
     strategy: 'Стратегия',
     teamwork: 'Командалық жұмыс',
     'ai-literacy': 'ЖИ сауаттылығы',
+    'wedo-hub': 'WeDo смартхабы',
+    'sensor-motion': 'Қозғалыс датчигі',
+    'sensor-tilt': 'Еңкею датчигі',
+    'wedo-mechanics': 'WeDo механизмдері',
   },
 }
 
@@ -837,6 +845,10 @@ const en: LearnAppText = {
     strategy: 'Strategy',
     teamwork: 'Teamwork',
     'ai-literacy': 'AI literacy',
+    'wedo-hub': 'WeDo Smarthub',
+    'sensor-motion': 'Motion sensor',
+    'sensor-tilt': 'Tilt sensor',
+    'wedo-mechanics': 'WeDo mechanisms',
   },
 }
 
