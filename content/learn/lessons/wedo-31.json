@@ -1,0 +1,172 @@
+{
+  "id": "wedo-31",
+  "track": "wedo-projects",
+  "unit": "wedo-loops",
+  "minutes": 5,
+  "skills": [
+    "loops",
+    "sensor-motion"
+  ],
+  "kit": false,
+  "title": {
+    "ru": "Повторять всегда",
+    "kk": "Әрдайым қайталау",
+    "en": "Repeat forever"
+  },
+  "goal": {
+    "ru": "Сегодня робот будет здороваться с каждой рукой.",
+    "kk": "Бүгін робот әр қолмен амандасады.",
+    "en": "Today the robot will greet every hand."
+  },
+  "summary": {
+    "ru": "Теперь ты умеешь делать программу, которая работает без конца.",
+    "kk": "Енді сен шексіз жұмыс істейтін бағдарлама жасай аласың.",
+    "en": "Now you can make a program that runs without end."
+  },
+  "steps": [
+    {
+      "id": "forever",
+      "type": "theory",
+      "title": {
+        "ru": "Всегда",
+        "kk": "Әрдайым",
+        "en": "Forever"
+      },
+      "body": {
+        "ru": "Если в блоке «Повторять» выбрать **«всегда»**, повтор не закончится.\n\nРобот будет работать, пока ты не нажмёшь **«Стоп»**.\n\nТак робот может ждать гостей весь день.",
+        "kk": "«Қайталау» блогында **«әрдайым»** таңдасаң, қайталау бітпейді.\n\nСен **«Тоқтату»** батырмасын баспайынша робот жұмыс істей береді.\n\nОсылай робот қонақтарды күні бойы күте алады.",
+        "en": "Pick **forever** in the Repeat block and the repeat never ends.\n\nThe robot keeps going until you press **Stop**.\n\nThat way a robot can wait for guests all day."
+      },
+      "illustration": "r-forever"
+    },
+    {
+      "id": "how-long",
+      "type": "quiz",
+      "kind": "choice",
+      "question": {
+        "ru": "Сколько работает «Повторять всегда»?",
+        "kk": "«Әрдайым қайталау» қанша жұмыс істейді?",
+        "en": "How long does “Repeat forever” run?"
+      },
+      "options": [
+        {
+          "ru": "Пока не нажмёшь «Стоп»",
+          "kk": "«Тоқтату» батырмасын басқанша",
+          "en": "Until you press Stop"
+        },
+        {
+          "ru": "Один раз",
+          "kk": "Бір рет",
+          "en": "Once"
+        },
+        {
+          "ru": "Два раза",
+          "kk": "Екі рет",
+          "en": "Twice"
+        }
+      ],
+      "correct": [
+        0
+      ],
+      "explanation": {
+        "ru": "«Всегда» значит без конца.",
+        "kk": "«Әрдайым» шексіз дегенді білдіреді.",
+        "en": "Forever means without end."
+      },
+      "skill": "loops"
+    },
+    {
+      "id": "greet-hands",
+      "type": "wedo_code",
+      "mode": "code",
+      "title": {
+        "ru": "Привет, рука!",
+        "kk": "Сәлем, қол!",
+        "en": "Hello, hand!"
+      },
+      "task": {
+        "ru": "Каждый раз, когда рука подходит **близко**, включай **звук**. Пусть это работает **всегда**.",
+        "kk": "Қол **жақындаған** сайын **дыбысты** қос. Бұл **әрдайым** жұмыс істесін.",
+        "en": "Every time a hand comes **near**, play a **sound**. Make it work **forever**."
+      },
+      "scene": {
+        "model": "spinner",
+        "ratio": 1,
+        "sensor": "motion"
+      },
+      "scenario": [
+        {
+          "at": 1,
+          "motion": "near"
+        },
+        {
+          "at": 2.5,
+          "motion": "far"
+        },
+        {
+          "at": 4,
+          "motion": "near"
+        },
+        {
+          "at": 5.5,
+          "motion": "far"
+        }
+      ],
+      "palette": [
+        "repeat",
+        "wait_motion",
+        "sound",
+        "light"
+      ],
+      "start": [],
+      "checks": [
+        {
+          "type": "usesBlock",
+          "op": "repeat",
+          "min": 1
+        },
+        {
+          "type": "reactsTo",
+          "sensor": "motion",
+          "state": "near",
+          "action": "sound",
+          "withinSeconds": 1,
+          "times": 2
+        }
+      ],
+      "hints": [
+        {
+          "ru": "Без повтора робот поздоровается только один раз.",
+          "kk": "Қайталаусыз робот тек бір рет амандасады.",
+          "en": "Without a repeat the robot greets only once."
+        },
+        {
+          "ru": "Повторять всегда: ждать «близко» → звук → ждать «далеко».",
+          "kk": "Әрдайым қайталау: «жақынды» күту → дыбыс → «алысты» күту.",
+          "en": "Repeat forever: wait “near” → sound → wait “far”."
+        }
+      ],
+      "reference": [
+        {
+          "op": "repeat",
+          "times": "forever",
+          "steps": [
+            {
+              "op": "wait_motion",
+              "event": "near"
+            },
+            {
+              "op": "sound",
+              "sound": 1
+            },
+            {
+              "op": "wait_motion",
+              "event": "far"
+            }
+          ]
+        }
+      ],
+      "skill": "loops"
+    }
+  ]
+}

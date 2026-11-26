@@ -1,0 +1,149 @@
+{
+  "id": "wedo-02",
+  "track": "wedo-start",
+  "unit": "wedo-meet",
+  "minutes": 4,
+  "skills": [
+    "wedo-hub"
+  ],
+  "kit": false,
+  "title": {
+    "ru": "Смартхаб: мозг робота",
+    "kk": "Смартхаб: роботтың миы",
+    "en": "The Smarthub: the robot’s brain"
+  },
+  "goal": {
+    "ru": "Сегодня ты научишь Смартхаб светиться.",
+    "kk": "Бүгін сен Смартхабты жарқырауға үйретесің.",
+    "en": "Today you will teach the Smarthub to light up."
+  },
+  "summary": {
+    "ru": "Теперь ты знаешь, что умеет Смартхаб, и умеешь зажигать лампу.",
+    "kk": "Енді сен Смартхаб не істей алатынын білесің және шамды жаға аласың.",
+    "en": "Now you know what the Smarthub does and can switch on its light."
+  },
+  "steps": [
+    {
+      "id": "hub",
+      "type": "theory",
+      "title": {
+        "ru": "Что есть у Смартхаба",
+        "kk": "Смартхабта не бар",
+        "en": "What the Smarthub has"
+      },
+      "body": {
+        "ru": "У Смартхаба есть **кнопка**: она его включает.\n\nЕсть **два порта**, A и B. Туда вставляют мотор и датчик.\n\nЕсть **лампочка**. Она светится разными цветами.",
+        "kk": "Смартхабта **түйме** бар: ол оны қосады.\n\n**Екі порт** бар, A және B. Оларға мотор мен датчик қосылады.\n\n**Шам** бар. Ол әртүрлі түспен жанады.",
+        "en": "The Smarthub has a **button** that switches it on.\n\nIt has **two ports**, A and B. A motor and a sensor plug in there.\n\nIt has a **light** that glows in different colours."
+      }
+    },
+    {
+      "id": "hub-parts",
+      "type": "quiz",
+      "kind": "match",
+      "question": {
+        "ru": "Соедини часть Смартхаба и что она делает.",
+        "kk": "Смартхаб бөлігін және оның не істейтінін сәйкестендір.",
+        "en": "Match each Smarthub part with what it does."
+      },
+      "pairs": [
+        {
+          "left": {
+            "ru": "Кнопка",
+            "kk": "Түйме",
+            "en": "Button"
+          },
+          "right": {
+            "ru": "Включает Смартхаб",
+            "kk": "Смартхабты қосады",
+            "en": "Switches the Smarthub on"
+          }
+        },
+        {
+          "left": {
+            "ru": "Порт",
+            "kk": "Порт",
+            "en": "Port"
+          },
+          "right": {
+            "ru": "Сюда вставляют мотор",
+            "kk": "Мұнда мотор қосылады",
+            "en": "A motor plugs in here"
+          }
+        },
+        {
+          "left": {
+            "ru": "Лампочка",
+            "kk": "Шам",
+            "en": "Light"
+          },
+          "right": {
+            "ru": "Светится цветом",
+            "kk": "Түспен жанады",
+            "en": "Glows in a colour"
+          }
+        }
+      ],
+      "explanation": {
+        "ru": "Кнопка включает, порт соединяет, лампочка светится.",
+        "kk": "Түйме қосады, порт жалғайды, шам жанады.",
+        "en": "The button switches on, the port connects, the light glows."
+      },
+      "skill": "wedo-hub"
+    },
+    {
+      "id": "green-light",
+      "type": "wedo_code",
+      "mode": "code",
+      "title": {
+        "ru": "Зелёный свет",
+        "kk": "Жасыл жарық",
+        "en": "Green light"
+      },
+      "task": {
+        "ru": "Зажги лампочку Смартхаба **зелёным** цветом.",
+        "kk": "Смартхаб шамын **жасыл** түспен жақ.",
+        "en": "Make the Smarthub light **green**."
+      },
+      "scene": {
+        "model": "spinner",
+        "ratio": 1
+      },
+      "palette": [
+        "light",
+        "motor_on_for"
+      ],
+      "start": [
+        {
+          "op": "light",
+          "color": "red"
+        }
+      ],
+      "checks": [
+        {
+          "type": "light",
+          "color": "green"
+        }
+      ],
+      "hints": [
+        {
+          "ru": "Нажми на блок лампы в программе.",
+          "kk": "Бағдарламадағы шам блогын бас.",
+          "en": "Tap the light block in the program."
+        },
+        {
+          "ru": "Выбери зелёный кружок.",
+          "kk": "Жасыл дөңгелекті таңда.",
+          "en": "Pick the green circle."
+        }
+      ],
+      "reference": [
+        {
+          "op": "light",
+          "color": "green"
+        }
+      ],
+      "skill": "wedo-hub"
+    }
+  ]
+}

@@ -1,0 +1,178 @@
+{
+  "id": "wedo-34",
+  "track": "wedo-projects",
+  "unit": "wedo-final",
+  "minutes": 7,
+  "skills": [
+    "motion",
+    "sensor-tilt"
+  ],
+  "kit": false,
+  "title": {
+    "ru": "Проект «Спасатель»",
+    "kk": "«Құтқарушы» жобасы",
+    "en": "Project “Rescuer”"
+  },
+  "goal": {
+    "ru": "Сегодня Вжик-спасатель привезёт помощь в лагерь.",
+    "kk": "Бүгін құтқарушы Вжик лагерьге көмек жеткізеді.",
+    "en": "Today Zip the rescuer will bring help to the camp."
+  },
+  "summary": {
+    "ru": "Теперь ты умеешь соединять езду, ожидание сигнала и возвращение.",
+    "kk": "Енді сен жүруді, белгіні күтуді және қайтуды біріктіре аласың.",
+    "en": "Now you can combine driving, waiting for a signal and coming back."
+  },
+  "steps": [
+    {
+      "id": "rescue-story",
+      "type": "theory",
+      "title": {
+        "ru": "Спасатель",
+        "kk": "Құтқарушы",
+        "en": "The rescuer"
+      },
+      "body": {
+        "ru": "Вжик везёт помощь в **лагерь**.\n\nТам он ждёт, пока его разгрузят. Сигнал — **наклон вверх**.\n\nПотом Вжик едет **домой, на старт**.",
+        "kk": "Вжик **лагерьге** көмек апарады.\n\nОнда оны түсіргенше күтеді. Белгі — **жоғары еңкею**.\n\nСодан кейін Вжик **үйге, бастауға** қайтады.",
+        "en": "Zip carries help to the **camp**.\n\nThere it waits to be unloaded. The signal is a **tilt up**.\n\nThen Zip drives **home to the start**."
+      }
+    },
+    {
+      "id": "when-home",
+      "type": "quiz",
+      "kind": "choice",
+      "question": {
+        "ru": "Когда спасатель поедет домой?",
+        "kk": "Құтқарушы үйге қашан қайтады?",
+        "en": "When does the rescuer drive home?"
+      },
+      "options": [
+        {
+          "ru": "Когда датчик наклона скажет «вверх»",
+          "kk": "Еңкею датчигі «жоғары» дегенде",
+          "en": "When the tilt sensor says “up”"
+        },
+        {
+          "ru": "Сразу, не останавливаясь",
+          "kk": "Бірден, тоқтамай",
+          "en": "Right away, without stopping"
+        },
+        {
+          "ru": "Никогда",
+          "kk": "Ешқашан",
+          "en": "Never"
+        }
+      ],
+      "correct": [
+        0
+      ],
+      "explanation": {
+        "ru": "Вжик ждёт сигнал, чтобы помощь успели забрать.",
+        "kk": "Көмекті алып үлгеру үшін Вжик белгіні күтеді.",
+        "en": "Zip waits for the signal so the help can be unloaded."
+      },
+      "skill": "sensor-tilt"
+    },
+    {
+      "id": "rescue",
+      "type": "wedo_code",
+      "mode": "project",
+      "title": {
+        "ru": "Помощь в лагерь",
+        "kk": "Лагерьге көмек",
+        "en": "Help for the camp"
+      },
+      "task": {
+        "ru": "Доедь до **лагеря**, жди **наклон вверх** и вернись **на старт**.",
+        "kk": "**Лагерьге** дейін жүр, **жоғары еңкеюді** күт және **бастауға** қайт.",
+        "en": "Drive to the **camp**, wait for **tilt up** and come back **to the start**."
+      },
+      "scene": {
+        "model": "rover",
+        "length": 1400,
+        "start": 100,
+        "sensor": "tilt",
+        "zones": [
+          {
+            "id": "camp",
+            "from": 600,
+            "to": 800,
+            "label": {
+              "ru": "Лагерь",
+              "kk": "Лагерь",
+              "en": "Camp"
+            }
+          }
+        ],
+        "obstacles": []
+      },
+      "scenario": [
+        {
+          "at": 4,
+          "tilt": "up"
+        }
+      ],
+      "palette": [
+        "motor_on_for",
+        "motor_direction",
+        "wait_tilt",
+        "light",
+        "sound"
+      ],
+      "start": [],
+      "checks": [
+        {
+          "type": "passZones",
+          "zones": [
+            "camp"
+          ],
+          "ordered": true
+        },
+        {
+          "type": "reactsTo",
+          "sensor": "tilt",
+          "state": "up",
+          "action": "motorStart",
+          "withinSeconds": 1,
+          "times": 1
+        },
+        {
+          "type": "returnedToStart",
+          "toleranceMm": 50
+        }
+      ],
+      "hints": [
+        {
+          "ru": "До лагеря 3 секунды.",
+          "kk": "Лагерьге дейін 3 секунд.",
+          "en": "The camp is 3 seconds away."
+        },
+        {
+          "ru": "Мотор 3 с → ждать наклон вверх → в ту сторону → мотор 3 с.",
+          "kk": "Мотор 3 с → жоғары еңкеюді күту → ана жаққа → мотор 3 с.",
+          "en": "Motor 3 s → wait for tilt up → that way → motor 3 s."
+        }
+      ],
+      "reference": [
+        {
+          "op": "motor_on_for",
+          "seconds": 3
+        },
+        {
+          "op": "wait_tilt",
+          "state": "up"
+        },
+        {
+          "op": "motor_direction",
+          "dir": "that"
+        },
+        {
+          "op": "motor_on_for",
+          "seconds": 3
+        }
+      ],
+      "skill": "motion"
+    }
+  ]
+}

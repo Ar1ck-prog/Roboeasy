@@ -1,0 +1,163 @@
+{
+  "id": "wedo-27",
+  "track": "wedo-sensors",
+  "unit": "wedo-tilt",
+  "minutes": 5,
+  "skills": [
+    "sensor-tilt"
+  ],
+  "kit": false,
+  "title": {
+    "ru": "Светофор на наклоне",
+    "kk": "Еңкеюдегі бағдаршам",
+    "en": "A tilt traffic light"
+  },
+  "goal": {
+    "ru": "Сегодня ты сделаешь светофор, который слушается наклона.",
+    "kk": "Бүгін сен еңкеюге бағынатын бағдаршам жасайсың.",
+    "en": "Today you will make a traffic light that follows a tilt."
+  },
+  "summary": {
+    "ru": "Теперь ты умеешь отвечать на разные наклоны разным светом.",
+    "kk": "Енді сен әртүрлі еңкеюге әртүрлі жарықпен жауап бере аласың.",
+    "en": "Now you can answer different tilts with different lights."
+  },
+  "steps": [
+    {
+      "id": "traffic",
+      "type": "theory",
+      "title": {
+        "ru": "Светофор",
+        "kk": "Бағдаршам",
+        "en": "Traffic light"
+      },
+      "body": {
+        "ru": "**Красный** свет — стой.\n\n**Зелёный** свет — можно идти.\n\nНаш светофор слушается датчика: **влево** — красный, **вправо** — зелёный.",
+        "kk": "**Қызыл** жарық — тоқта.\n\n**Жасыл** жарық — жүруге болады.\n\nБіздің бағдаршам датчикке бағынады: **солға** — қызыл, **оңға** — жасыл.",
+        "en": "A **red** light means stop.\n\nA **green** light means go.\n\nOur traffic light follows the sensor: **left** is red, **right** is green."
+      }
+    },
+    {
+      "id": "go-light",
+      "type": "quiz",
+      "kind": "choice",
+      "question": {
+        "ru": "Какой свет значит «иди»?",
+        "kk": "Қай жарық «жүр» дегенді білдіреді?",
+        "en": "Which light means “go”?"
+      },
+      "options": [
+        {
+          "ru": "Красный",
+          "kk": "Қызыл",
+          "en": "Red"
+        },
+        {
+          "ru": "Зелёный",
+          "kk": "Жасыл",
+          "en": "Green"
+        },
+        {
+          "ru": "Синий",
+          "kk": "Көк",
+          "en": "Blue"
+        }
+      ],
+      "correct": [
+        1
+      ],
+      "explanation": {
+        "ru": "Зелёный — можно идти.",
+        "kk": "Жасыл — жүруге болады.",
+        "en": "Green means go."
+      },
+      "skill": "sensor-tilt"
+    },
+    {
+      "id": "tilt-lights",
+      "type": "wedo_code",
+      "mode": "code",
+      "title": {
+        "ru": "Наклонный светофор",
+        "kk": "Еңкею бағдаршамы",
+        "en": "The tilt traffic light"
+      },
+      "task": {
+        "ru": "Наклон **влево** — **красный** свет. Потом наклон **вправо** — **зелёный**.",
+        "kk": "**Солға** еңкею — **қызыл** жарық. Содан кейін **оңға** еңкею — **жасыл**.",
+        "en": "Tilt **left**: **red** light. Then tilt **right**: **green**."
+      },
+      "scene": {
+        "model": "spinner",
+        "ratio": 1,
+        "sensor": "tilt"
+      },
+      "scenario": [
+        {
+          "at": 1,
+          "tilt": "left"
+        },
+        {
+          "at": 3,
+          "tilt": "right"
+        }
+      ],
+      "palette": [
+        "wait_tilt",
+        "light"
+      ],
+      "start": [],
+      "checks": [
+        {
+          "type": "reactsTo",
+          "sensor": "tilt",
+          "state": "left",
+          "action": "light",
+          "color": "red",
+          "withinSeconds": 1,
+          "times": 1
+        },
+        {
+          "type": "reactsTo",
+          "sensor": "tilt",
+          "state": "right",
+          "action": "light",
+          "color": "green",
+          "withinSeconds": 1,
+          "times": 1
+        }
+      ],
+      "hints": [
+        {
+          "ru": "Нужно 4 блока: ждать, лампа, ждать, лампа.",
+          "kk": "4 блок керек: күту, шам, күту, шам.",
+          "en": "You need 4 blocks: wait, light, wait, light."
+        },
+        {
+          "ru": "Ждать влево → красный → ждать вправо → зелёный.",
+          "kk": "Солға күту → қызыл → оңға күту → жасыл.",
+          "en": "Wait left → red → wait right → green."
+        }
+      ],
+      "reference": [
+        {
+          "op": "wait_tilt",
+          "state": "left"
+        },
+        {
+          "op": "light",
+          "color": "red"
+        },
+        {
+          "op": "wait_tilt",
+          "state": "right"
+        },
+        {
+          "op": "light",
+          "color": "green"
+        }
+      ],
+      "skill": "sensor-tilt"
+    }
+  ]
+}

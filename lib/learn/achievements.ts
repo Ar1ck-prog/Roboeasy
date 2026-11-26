@@ -7,7 +7,7 @@
 import type { IconName } from '@/components/ui/anim-icon'
 import type { Course } from './schema'
 import { type LearnState, completedLessons } from './state'
-import { trackComplete } from './progress'
+import { trackComplete, trackHasContent, wedoComplete } from './progress'
 import { streakInfo } from './streak'
 import { credits, ledger, totalXp } from './economy'
 import { bestStarsOf, MAZE_LEVELS } from './games/maze'
@@ -58,7 +58,7 @@ const DEFS: (Achievement & { earned: (c: Ctx) => boolean })[] = [
       en: 'Solve 5 coding tasks on the first try without hints.',
     },
     earned: (c) =>
-      c.state.events.filter((e) => e.kind === 'step_done' && e.firstTry && e.hints === 0 && ['code', 'debug', 'project'].includes(e.stepType)).length >= 5,
+      c.state.events.filter((e) => e.kind === 'step_done' && e.firstTry && e.hints === 0 && ['code', 'debug', 'project', 'wedo_code'].includes(e.stepType)).length >= 5,
   },
   {
     id: 'first-project',
@@ -239,7 +239,44 @@ const DEFS: (Achievement & { earned: (c: Ctx) => boolean })[] = [
     },
     earned: (c) => c.state.events.some((e) => e.kind === 'known' && e.lessons.length > 0),
   },
+  // LEGO WeDo 2.0
+  {
+    id: 'wedo-first',
+    icon: 'smile',
+    hidden: false,
+    title: { ru: 'Первый робот WeDo', kk: 'Алғашқы WeDo роботы', en: 'First WeDo robot' },
+    description: { ru: 'Пройди первый урок WeDo 2.0.', kk: 'WeDo 2.0-дің алғашқы сабағын өт.', en: 'Finish your first WeDo 2.0 lesson.' },
+    earned: (c) => {
+      const wedo = new Set(c.course.tracks.filter((t) => t.family === 'wedo').map((t) => t.id))
+      return c.state.events.some((e) => e.kind === 'lesson_done' && wedo.has(e.track))
+    },
+  },
+  {
+    id: 'wedo-done',
+    icon: 'star',
+    hidden: false,
+    title: { ru: 'WeDo пройден', kk: 'WeDo өтілді', en: 'WeDo complete' },
+    description: { ru: 'Пройди все уроки WeDo 2.0.', kk: 'WeDo 2.0-дің барлық сабағын өт.', en: 'Finish every WeDo 2.0 lesson.' },
+    earned: (c) => wedoFinished(c),
+  },
+  {
+    id: 'spike-ready',
+    icon: 'rocket',
+    hidden: false,
+    title: { ru: 'Готов к SPIKE', kk: 'SPIKE-қа дайын', en: 'Ready for SPIKE' },
+    description: { ru: 'Пройди весь WeDo 2.0 и первый урок SPIKE Prime.', kk: 'Бүкіл WeDo 2.0 мен SPIKE Prime-дың алғашқы сабағын өт.', en: 'Finish all of WeDo 2.0 and your first SPIKE Prime lesson.' },
+    earned: (c) => {
+      if (!wedoFinished(c)) return false
+      const spike = new Set(c.course.tracks.filter((t) => (t.family ?? 'spike') === 'spike').flatMap((t) => t.units.flatMap((u) => u.lessons.map((l) => l.id))))
+      return [...c.done].some((id) => spike.has(id))
+    },
+  },
 ]
+
+/** Every ready WeDo lesson done (false while the course has no WeDo lessons). */
+function wedoFinished(c: Ctx): boolean {
+  return c.course.tracks.some((t) => t.family === 'wedo' && trackHasContent(t)) && wedoComplete(c.done, c.course)
+}
 
 export const ACHIEVEMENTS: Achievement[] = DEFS.map((d) => ({ id: d.id, icon: d.icon, hidden: d.hidden, title: d.title, description: d.description }))
 

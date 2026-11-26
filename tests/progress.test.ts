@@ -341,3 +341,34 @@ describe('learning paths: WeDo 2.0 before SPIKE Prime', async () => {
     expect(effectiveLearningPath(chosen, course)).toBe('wedo')
   })
 })
+
+describe('WeDo achievements', () => {
+  const wedoIds = COURSE.tracks.filter((t) => t.family === 'wedo').flatMap((t) => t.units.flatMap((u) => u.lessons.map((l) => ({ id: l.id, track: t.id }))))
+
+  it('first WeDo lesson, all of WeDo, then ready for SPIKE', () => {
+    expect(wedoIds.length).toBe(35)
+    let s = appendEvents(EMPTY_STATE, [lessonDone('wedo-01', 1, 'wedo-start')])
+    expect(earnedAchievements(s, COURSE)).toContain('wedo-first')
+    expect(earnedAchievements(s, COURSE)).not.toContain('wedo-done')
+    s = appendEvents(s, wedoIds.map((l, i) => lessonDone(l.id, 2 + i, l.track)))
+    expect(earnedAchievements(s, COURSE)).toEqual(expect.arrayContaining(['wedo-first', 'wedo-done']))
+    expect(earnedAchievements(s, COURSE)).not.toContain('spike-ready')
+    s = appendEvents(s, [lessonDone('start-01', 100)])
+    expect(earnedAchievements(s, COURSE)).toContain('spike-ready')
+  })
+
+  it('a SPIKE-only learner earns none of them', () => {
+    const s = appendEvents(EMPTY_STATE, [lessonDone('start-01', 1)])
+    expect(earnedAchievements(s, COURSE).filter((a) => a.startsWith('wedo') || a === 'spike-ready')).toEqual([])
+  })
+
+  it('the real course: on the WeDo path SPIKE opens after all 35 WeDo lessons', () => {
+    const all = new Set(wedoIds.map((l) => l.id))
+    const start = COURSE.tracks.find((t) => t.id === 'start')!
+    expect(trackUnlocked(new Set(), start, COURSE, 'wedo')).toBe(false)
+    expect(nextLesson(new Set(), COURSE, 'wedo')?.id).toBe('wedo-01')
+    expect(nextLesson(new Set(), COURSE, 'spike')?.id).toBe('start-01')
+    expect(trackUnlocked(all, start, COURSE, 'wedo')).toBe(true)
+    expect(nextLesson(all, COURSE, 'wedo')?.id).toBe('start-01')
+  })
+})

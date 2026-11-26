@@ -1,6 +1,6 @@
 /**
  * The robotics glossary: the library page, "Term pairs" and Blitz use it.
- * General terms only; facts about SPIKE Prime hardware stay in the lessons.
+ * General terms, plus a few LEGO WeDo 2.0 terms marked "(WeDo)"; facts about SPIKE Prime hardware stay in the lessons.
  * Kazakh needs a review by a native speaker before launch.
  */
 
@@ -281,6 +281,62 @@ export const GLOSSARY: Term[] = [
       ru: 'Часть программы, которая всё время сравнивает «как есть» и «как надо» и подруливает. Так робот плавно едет по линии.',
       kk: 'Бағдарламаның «қалай бар» мен «қалай керекті» үнемі салыстырып, түзететін бөлігі. Солай робот сызықпен бір қалыпты жүреді.',
       en: 'Part of a program that keeps comparing “what is” with “what should be” and steers. It makes line following smooth.',
+    },
+  },
+  // LEGO WeDo 2.0 terms (the WeDo lessons for learners under 10)
+  {
+    id: 'smarthub',
+    icon: 'brain',
+    term: { ru: 'Смартхаб (WeDo)', kk: 'Смартхаб (WeDo)', en: 'Smarthub (WeDo)' },
+    short: { ru: 'Мозг робота WeDo с двумя портами', kk: 'WeDo робот миы, екі порты бар', en: 'WeDo brain with two ports' },
+    text: {
+      ru: 'Главный блок набора WeDo 2.0: кнопка, цветная лампочка и порты A и B для мотора и датчиков. С планшетом говорит по Bluetooth.',
+      kk: 'WeDo 2.0 жинағының басты блогы: түйме, түрлі түсті шам және мотор мен датчиктерге арналған A және B порттары. Планшетпен Bluetooth арқылы сөйлеседі.',
+      en: 'The main brick of WeDo 2.0: a button, a colour light and ports A and B for the motor and sensors. It talks to a tablet over Bluetooth.',
+    },
+  },
+  {
+    id: 'motion-sensor',
+    icon: 'eye',
+    term: { ru: 'Датчик движения (WeDo)', kk: 'Қозғалыс датчигі (WeDo)', en: 'Motion sensor (WeDo)' },
+    short: { ru: 'Видит предмет рядом', kk: 'Жақын затты көреді', en: 'Sees something close' },
+    text: {
+      ru: 'Датчик WeDo 2.0, который замечает предмет примерно до 15 см и говорит «близко», «далеко» или «изменилось».',
+      kk: 'Шамамен 15 см-ге дейінгі затты байқап, «жақын», «алыс» немесе «өзгерді» дейтін WeDo 2.0 датчигі.',
+      en: 'A WeDo 2.0 sensor that notices things up to about 15 cm away and says near, far or changed.',
+    },
+  },
+  {
+    id: 'tilt-sensor',
+    icon: 'compass',
+    term: { ru: 'Датчик наклона (WeDo)', kk: 'Еңкею датчигі (WeDo)', en: 'Tilt sensor (WeDo)' },
+    short: { ru: 'Знает, куда его наклонили', kk: 'Қай жаққа еңкейгенін біледі', en: 'Knows which way it is tipped' },
+    text: {
+      ru: 'Датчик WeDo 2.0: вверх, вниз, влево, вправо, ровно или потрясти. Его можно держать как пульт.',
+      kk: 'WeDo 2.0 датчигі: жоғары, төмен, солға, оңға, түзу немесе сілку. Оны пульт сияқты ұстауға болады.',
+      en: 'A WeDo 2.0 sensor: up, down, left, right, flat or shake. You can hold it like a remote.',
+    },
+  },
+  {
+    id: 'pulley',
+    icon: 'loop',
+    term: { ru: 'Шкив (WeDo)', kk: 'Шкив (WeDo)', en: 'Pulley (WeDo)' },
+    short: { ru: 'Колёсико с желобком для ремня', kk: 'Белдікке арналған ойықты дөңгелекше', en: 'A grooved wheel for a belt' },
+    text: {
+      ru: 'Ремень соединяет два шкива и передаёт вращение. Большой ведомый шкив крутится медленнее.',
+      kk: 'Белдік екі шкивті жалғап, айналуды береді. Үлкен шкив баяуырақ айналады.',
+      en: 'A belt joins two pulleys and passes on the turn. A big driven pulley turns slower.',
+    },
+  },
+  {
+    id: 'worm-gear',
+    icon: 'gear',
+    term: { ru: 'Червячная передача (WeDo)', kk: 'Бұрамалы беріліс (WeDo)', en: 'Worm gear (WeDo)' },
+    short: { ru: 'Медленно, но сильно', kk: 'Баяу, бірақ күшті', en: 'Slow but strong' },
+    text: {
+      ru: 'Винтик-червяк крутит шестерёнку очень медленно и держит груз, даже когда мотор стоит.',
+      kk: 'Бұрама тісті доңғалақты өте баяу айналдырып, мотор тоқтаса да жүкті ұстайды.',
+      en: 'A screw-like worm turns a gear very slowly and holds the load even when the motor stops.',
     },
   },
 ]
