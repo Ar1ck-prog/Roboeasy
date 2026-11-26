@@ -10,7 +10,7 @@ import { CodeEditor } from '@/components/electronics/code-editor'
 import { PartArt, formatOhms } from '@/components/electronics/part-art'
 import { Button, buttonVariants } from '@/components/ui/button'
 import { Card } from '@/components/ui/card'
-import { type CircuitDoc, DEFAULT_PROPS, LED_COLORS, type LedColor, type Part, type PartType, RESISTOR_VALUES } from '@/lib/electronics/board'
+import { BOARD_IDS, type BoardId, type CircuitDoc, DEFAULT_PROPS, LED_COLORS, type LedColor, type Part, type PartType, RESISTOR_VALUES } from '@/lib/electronics/board'
 import { MISSION_IDS, type MissionId, createChecker, getMission } from '@/lib/electronics/missions'
 import { type Fault, type FrameState, Simulation } from '@/lib/electronics/sim'
 import { CodeError } from '@/lib/electronics/lang'
@@ -23,15 +23,35 @@ type Workspace = { code: string; doc: CircuitDoc }
 type Status = 'stopped' | 'running' | 'error' | 'shorted'
 
 const PART_TYPES: PartType[] = ['led', 'resistor', 'button', 'pot', 'ldr', 'buzzer', 'servo', 'ultrasonic']
-const FREE_START: Workspace = { code: getMission('blink').starter.code, doc: { parts: [], wires: [] } }
+const ESP32_START = `void setup() {
+  Serial.begin(115200);
+  pinMode(LED_BUILTIN, OUTPUT); // GPIO2
+}
+
+void loop() {
+  digitalWrite(LED_BUILTIN, HIGH);
+  delay(500);
+  digitalWrite(LED_BUILTIN, LOW);
+  delay(500);
+}
+`
+const FREE_START: Record<BoardId, Workspace> = {
+  uno: { code: getMission('blink').starter.code, doc: { board: 'uno', parts: [], wires: [] } },
+  esp32: { code: ESP32_START, doc: { board: 'esp32', parts: [], wires: [] } },
+}
+/** Where a workspace is saved: each mission, and the free build of each board. */
+const workKey = (mission: MissionId | 'free', board: BoardId) => (mission === 'free' ? (board === 'uno' ? 'free' : `free:${board}`) : mission)
 
 const fill = (text: string, params: Record<string, string | number>) => text.replace(/\{(\w+)\}/g, (_, k: string) => String(params[k] ?? ''))
 
 export function errorText(e: CodeError, t: ElectronicsText): string {
   const params = { ...e.params }
   if (params.what === 'name') params.what = t.errors.name
-  const key = e.code === 'expected' && !params.got ? 'expectedEnd' : e.code
-  return fill((t.errors as Record<string, string>)[key] ?? e.code, params)
+  const errors = t.errors as Record<string, string>
+  // Pin errors have a version for each board.
+  const boardKey = params.board && params.board !== 'uno' ? `${e.code}_${params.board}` : null
+  const key = e.code === 'expected' && !params.got ? 'expectedEnd' : boardKey && errors[boardKey] ? boardKey : e.code
+  return fill(errors[key] ?? e.code, params)
 }
 
 export function faultText(f: Fault, t: ElectronicsText): string {
@@ -53,12 +73,14 @@ interface LabProps {
   t: ElectronicsText
 }
 
-const start = (id: MissionId | 'free'): Workspace => (id === 'free' ? FREE_START : structuredClone(getMission(id).starter))
+const start = (id: MissionId | 'free', board: BoardId = 'uno'): Workspace => structuredClone(id === 'free' ? FREE_START[board] : getMission(id).starter)
 const isMission = (id: string | null): id is MissionId => (MISSION_IDS as readonly string[]).includes(id ?? '')
+const isBoard = (id: string | null): id is BoardId => (BOARD_IDS as readonly string[]).includes(id ?? '')
 
 export function Lab({ lang, t }: LabProps) {
   const [mission, setMission] = useState<MissionId | 'free'>('free')
-  const [work, setWork] = useState<Workspace>(FREE_START)
+  const [work, setWork] = useState<Workspace>(FREE_START.uno)
+  const board: BoardId = work.doc.board ?? 'uno'
   const [done, setDone] = useState<Set<string>>(new Set())
   const [selection, setSelection] = useState<Selection>(null)
   const [status, setStatus] = useState<Status>('stopped')
@@ -79,26 +101,31 @@ export function Lab({ lang, t }: LabProps) {
   const audio = useRef<{ ctx: AudioContext; osc: OscillatorNode | null; gain: GainNode } | null>(null)
   const soundRef = useRef(sound)
   const missionRef = useRef(mission)
+  const boardRef = useRef(board)
+  boardRef.current = board
   docRef.current = work.doc
   soundRef.current = sound
   missionRef.current = mission
 
   // The mission comes from ?mission= (the page itself is static); saved work and finished missions live in this browser.
   useEffect(() => {
-    const param = new URLSearchParams(window.location.search).get('mission')
+    const query = new URLSearchParams(window.location.search)
+    const param = query.get('mission')
     const id = isMission(param) ? param : 'free'
+    const b = id === 'free' && isBoard(query.get('board')) ? (query.get('board') as BoardId) : 'uno'
     const saved = loadProgress()
     setDone(new Set(saved.done))
     setMission(id)
-    setWork(saved.work[id] ?? start(id))
+    setWork(saved.work[workKey(id, b)] ?? start(id, b))
     setLoaded(true)
   }, [])
 
   useEffect(() => {
     if (!loaded) return
-    const id = window.setTimeout(() => saveProgress((p) => ({ ...p, work: { ...p.work, [mission]: work } })), 400)
+    const key = workKey(mission, board)
+    const id = window.setTimeout(() => saveProgress((p) => ({ ...p, work: { ...p.work, [key]: work } })), 400)
     return () => window.clearTimeout(id)
-  }, [work, mission, loaded])
+  }, [work, mission, board, loaded])
 
   const silence = useCallback(() => {
     const a = audio.current
@@ -225,11 +252,27 @@ export function Lab({ lang, t }: LabProps) {
     setSelection(null)
     setGoals([])
     setMission(id)
-    const saved = loadProgress().work[id]
+    const saved = loadProgress().work[workKey(id, 'uno')]
     setWork(saved ?? start(id))
     const url = new URL(window.location.href)
+    url.searchParams.delete('board')
     if (id === 'free') url.searchParams.delete('mission')
     else url.searchParams.set('mission', id)
+    window.history.replaceState(null, '', url)
+  }
+
+  /** The free build has its own bench for each board. */
+  const chooseBoard = (b: BoardId) => {
+    if (b === board) return
+    stop()
+    setStatus('stopped')
+    setError(null)
+    setSelection(null)
+    saveProgress((p) => ({ ...p, work: { ...p.work, [workKey('free', board)]: work } }))
+    setWork(loadProgress().work[workKey('free', b)] ?? start('free', b))
+    const url = new URL(window.location.href)
+    if (b === 'uno') url.searchParams.delete('board')
+    else url.searchParams.set('board', b)
     window.history.replaceState(null, '', url)
   }
 
@@ -322,7 +365,15 @@ export function Lab({ lang, t }: LabProps) {
             </div>
           </div>
           <div>
-            <h3 className="m-0 mb-1.5 text-sm font-extrabold tracking-wide text-muted-foreground uppercase">{t.lab.goals}</h3>
+            <div className="mb-2 flex items-center gap-3">
+              <h3 className="m-0 text-sm font-extrabold tracking-wide text-muted-foreground uppercase">{t.lab.goals}</h3>
+              <div className="h-2 max-w-48 flex-1 overflow-hidden rounded-full bg-surface-2" aria-hidden="true">
+                <div className="h-full rounded-full bg-success transition-[width] duration-500" style={{ width: `${(goals.filter(Boolean).length / missionText.goals.length) * 100}%` }} />
+              </div>
+              <span className="font-mono text-sm font-bold tabular-nums">
+                {goals.filter(Boolean).length}/{missionText.goals.length}
+              </span>
+            </div>
             <ul className="m-0 grid list-none gap-1.5 p-0">
               {missionText.goals.map((g, i) => (
                 <li key={g} className="flex items-start gap-2" data-goal={i} data-met={goals[i] ? 'true' : 'false'}>
@@ -342,8 +393,30 @@ export function Lab({ lang, t }: LabProps) {
         </Card>
       )}
 
-      <div className="grid items-start gap-5 xl:grid-cols-[minmax(0,1.6fr)_minmax(0,1fr)]">
-        <section className="grid min-w-0 gap-3" aria-label={t.lab.bench}>
+      <div className="grid grid-cols-[minmax(0,1fr)] items-start gap-5 xl:grid-cols-[minmax(0,1.6fr)_minmax(0,1fr)]">
+        <section className="grid min-w-0 grid-cols-[minmax(0,1fr)] gap-3" aria-label={t.lab.bench}>
+          {mission === 'free' && (
+            <div className="flex flex-wrap items-center gap-2" role="group" aria-label={t.lab.board}>
+              <span className="text-sm font-extrabold text-muted-foreground">{t.lab.board}:</span>
+              <div className="inline-flex rounded-(--radius-pill) border-(length:--stroke-thin) border-outline bg-card p-1">
+                {BOARD_IDS.map((b) => (
+                  <button
+                    key={b}
+                    type="button"
+                    onClick={() => chooseBoard(b)}
+                    aria-pressed={board === b}
+                    className={cn(
+                      'cursor-pointer rounded-(--radius-pill) px-3 py-1 text-sm font-bold transition-colors',
+                      board === b ? 'bg-foreground text-background' : 'hover:bg-surface-2',
+                    )}
+                    data-board={b}
+                  >
+                    {t.lab.boards[b]}
+                  </button>
+                ))}
+              </div>
+            </div>
+          )}
           <div className="flex flex-wrap items-center gap-2">
             {status === 'running' ? (
               <Button variant="primary" onClick={() => (stop(), setStatus('stopped'))}>
@@ -474,7 +547,7 @@ export function Lab({ lang, t }: LabProps) {
           </div>
         </section>
 
-        <section className="grid min-w-0 gap-3" aria-label={t.lab.code}>
+        <section className="grid min-w-0 grid-cols-[minmax(0,1fr)] gap-3" aria-label={t.lab.code}>
           <h2 className="m-0 text-base">{t.lab.code}</h2>
           <div className="h-[420px]">
             <CodeEditor value={work.code} onChange={(code) => setWork((w) => ({ ...w, code }))} errorLine={error?.line ?? null} label={t.lab.code} loading={t.lab.loadingEditor} />

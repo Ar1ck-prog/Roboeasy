@@ -15,8 +15,11 @@ function fakeBoard() {
   const hw: Hardware & { writes: typeof writes; modes: typeof modes; serial: () => string; send: (s: string) => void; inputs: typeof inputs; analog: typeof analog; servo: typeof servo } = {
     now: 0,
     deadline: 0,
-    pinCount: 20,
-    analogBase: 14,
+    boardId: 'uno',
+    intBits: 16,
+    constants: { LED_BUILTIN: 13, A0: 14, A1: 15, A2: 16, A3: 17, A4: 18, A5: 19 },
+    validPin: (n) => n >= 0 && n < 20,
+    analogPin: (n) => (n >= 0 && n < 6 ? 14 + n : n >= 14 && n < 20 ? n : null),
     writes,
     modes,
     inputs,

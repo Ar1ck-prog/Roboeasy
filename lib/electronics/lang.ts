@@ -41,6 +41,7 @@ export type ErrorCode =
   | 'break_outside'
   | 'too_deep'
   | 'bad_pin'
+  | 'bad_analog_pin'
   | 'servo_not_attached'
 
 // ── Lexer ───────────────────────────────────────────────────────────────

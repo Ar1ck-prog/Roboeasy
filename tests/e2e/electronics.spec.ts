@@ -56,3 +56,26 @@ test('the Uno page: parts, pinout and specifications', async ({ page }) => {
   await page.getByRole('tab', { name: 'Specifications' }).click()
   await expect(page.getByRole('row', { name: /Clock speed/ })).toContainText('16 MHz')
 })
+
+test('ESP32: the 3D page and the lab with the board switched', async ({ page }) => {
+  const errors: string[] = []
+  page.on('pageerror', (e) => errors.push(e.message))
+  await page.goto('/ru/electronics/esp32')
+  await expect(page.getByRole('heading', { name: 'ESP32 DevKit в 3D' })).toBeVisible()
+  await page.getByRole('button', { name: 'Антенна на плате' }).click()
+  await expect(page.getByText('дорожка-змейка')).toBeVisible()
+  await page.getByRole('tab', { name: 'Распиновка' }).click()
+  await expect(page.getByText('Только вход: нет выхода и подтяжки')).toBeVisible()
+
+  await page.getByRole('link', { name: 'В лаборатории' }).first().click()
+  await expect(page).toHaveURL(/\/ru\/electronics\/lab\?board=esp32$/)
+  await expect(page.locator('[data-board="esp32"]')).toHaveAttribute('aria-pressed', 'true')
+  await expect(page.locator('[data-terminal="esp.G2"]')).toHaveCount(1)
+  await page.getByTestId('run').click()
+  await expect(page.getByTestId('status')).toHaveText('Работает')
+  // Back to the Uno: its own bench and pins.
+  await page.locator('[data-board="uno"]').click()
+  await expect(page.locator('[data-terminal="uno.D13"]')).toHaveCount(1)
+  await expect(page.getByTestId('status')).toHaveText('Остановлено')
+  expect(errors).toEqual([])
+})

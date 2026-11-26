@@ -174,3 +174,50 @@ describe('circuit physics', () => {
     expect(state.tones).toEqual([{ part: 'z1', freq: 440 }])
   })
 })
+
+describe('ESP32 DevKit', () => {
+  const esp = (doc: Omit<CircuitDoc, 'board'>): CircuitDoc => ({ board: 'esp32', ...doc })
+  const ledOn2 = esp({
+    parts: [part('r1', 'resistor', 'a', 10), part('l1', 'led', 'e', 14)],
+    wires: [wire('esp.G2', 'bb.c10'), wire('bb.c15', 'esp.GND.1')],
+  })
+
+  it('drives an LED at 3.3 V: dimmer than on the Uno, and the blue on-board LED follows GPIO2', () => {
+    const { state } = runFor(`void setup() { pinMode(LED_BUILTIN, OUTPUT); digitalWrite(LED_BUILTIN, HIGH); } void loop() {}`, ledOn2, 60)
+    expect(state.ledMa.l1).toBeGreaterThan(4.5)
+    expect(state.ledMa.l1).toBeLessThan(6.5)
+    expect(state.builtin).toBe(1)
+  })
+
+  it('has a 32-bit int and a 12-bit ADC', () => {
+    const doc = esp({
+      parts: [part('p1', 'pot', 'a', 10, { pos: 0.5 })],
+      wires: [wire('esp.3V3', 'bb.c10'), wire('bb.c12', 'esp.GND.1'), wire('bb.c11', 'esp.G34')],
+    })
+    const out = runFor(`void setup() { Serial.begin(115200); int x = 200; Serial.println(x * x); Serial.println(analogRead(34)); } void loop() {}`, doc, 40).sim.board.serialOut.split('\r\n')
+    expect(out[0]).toBe('40000')
+    expect(Number(out[1])).toBeGreaterThan(2000)
+    expect(Number(out[1])).toBeLessThan(2100)
+  })
+
+  it('5 V on a GPIO is a warning: ESP32 pins are not 5 V tolerant', () => {
+    const doc = esp({ parts: [], wires: [wire('esp.VIN', 'esp.G4')] })
+    const s = new Simulation(`void setup() { pinMode(4, INPUT); } void loop() {}`, doc).step(20)
+    expect(s.faults.map((f) => f.code)).toContain('pin_overvoltage')
+    expect(s.faults.find((f) => f.code === 'pin_overvoltage')?.pin).toBe('D4')
+  })
+
+  it('GPIO 34–39 cannot be outputs', () => {
+    const s = new Simulation(`void setup() { pinMode(34, OUTPUT); } void loop() {}`, esp({ parts: [], wires: [] })).step(20)
+    expect(s.faults).toEqual([{ code: 'input_only', pin: 'D34' }])
+  })
+
+  it('pins that do not exist or cannot read voltage are code errors', () => {
+    const bad = new Simulation(`void setup() { pinMode(24, OUTPUT); } void loop() {}`, esp({ parts: [], wires: [] }))
+    bad.step(20)
+    expect(bad.status).toMatchObject({ kind: 'error', error: { code: 'bad_pin', params: { pin: 24, board: 'esp32' } } })
+    const adc = new Simulation(`void setup() { analogRead(5); } void loop() {}`, esp({ parts: [], wires: [] }))
+    adc.step(20)
+    expect(adc.status).toMatchObject({ kind: 'error', error: { code: 'bad_analog_pin' } })
+  })
+})

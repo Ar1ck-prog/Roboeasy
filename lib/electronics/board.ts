@@ -43,6 +43,8 @@ export interface Wire {
 }
 
 export interface CircuitDoc {
+  /** Which board is on the bench (Arduino Uno when missing). */
+  board?: BoardId
   parts: Part[]
   wires: Wire[]
 }
@@ -128,10 +130,10 @@ export function legPoints(part: Part): { id: string; terminal: string; x: number
   })
 }
 
-// ── Arduino Uno ─────────────────────────────────────────────────────────
+// ── Boards ──────────────────────────────────────────────────────────────
 
-/** Where the Uno sits on the bench. Its size is that of the real board (68.6 × 53.3 mm). */
-export const UNO = { x: 20, y: 50, w: 270, h: 210 }
+export type BoardId = 'uno' | 'esp32'
+export const BOARD_IDS: BoardId[] = ['uno', 'esp32']
 
 export interface Header {
   terminal: string
@@ -139,6 +141,47 @@ export interface Header {
   x: number
   y: number
 }
+
+/** Everything the bench and the simulator need to know about a board. */
+export interface BoardProfile {
+  id: BoardId
+  /** Terminal prefix: `uno.D13`, `esp.G2`. */
+  prefix: string
+  /** Where the board is drawn on the bench. */
+  rect: { x: number; y: number; w: number; h: number }
+  headers: Header[]
+  /** Terminals that are one conductor on the board itself. */
+  bonds: [string, string][]
+  /** Pin number → terminal name without the prefix; null where there is no such pin. */
+  pinNames: (string | null)[]
+  pwm: (pin: number) => boolean
+  /** Pins that can only read (ESP32 GPIO 34–39). */
+  inputOnly: Set<number>
+  /** Logic level, volts: 5 on the Uno, 3.3 on the ESP32. */
+  logicV: number
+  /** Inputs read HIGH above `vih` and LOW below `vil`. */
+  vih: number
+  vil: number
+  pinOhms: number
+  pullupOhms: number
+  maxPinA: number
+  /** Supply terminals (without prefix) with their voltage and internal resistance. */
+  supplies: { name: string; volts: number; ohms: number }[]
+  /** One of the ground terminals (without prefix). */
+  ground: string
+  intBits: 16 | 32
+  /** analogRead() range: 1023 on the Uno, 4095 on the ESP32. */
+  adcMax: number
+  builtinLed: number
+  /** Names the sketch can use for pins: LED_BUILTIN, A0… */
+  constants: Record<string, number>
+  /** The pin analogRead(n) reads, or null when n is not an analog input. */
+  analogPin: (n: number) => number | null
+  defaultBaud: number
+}
+
+/** Where the Uno sits on the bench. Its size is that of the real board (68.6 × 53.3 mm). */
+export const UNO = { x: 20, y: 50, w: 270, h: 210 }
 
 /** Uno pins: D0–D13 are 0–13, A0–A5 are 14–19. */
 export const UNO_PINS = [...Array.from({ length: 14 }, (_, i) => `D${i}`), ...Array.from({ length: 6 }, (_, i) => `A${i}`)]
@@ -167,7 +210,6 @@ export const UNO_HEADERS: Header[] = (() => {
   return list
 })()
 
-/** Terminals that are one wire on the board itself. */
 export const UNO_BONDS: [string, string][] = [
   ['uno.GND.1', 'uno.GND.2'],
   ['uno.GND.1', 'uno.GND.3'],
@@ -175,6 +217,97 @@ export const UNO_BONDS: [string, string][] = [
   ['uno.SCL', 'uno.A5'],
   ['uno.IOREF', 'uno.5V'],
 ]
+
+/** ESP32 DevKit V1 (30 pins), lying with the USB jack on the left and the antenna on the right. */
+export const ESP32 = { x: 30, y: 110, w: 240, h: 120 }
+
+/** Header pins of the DevKit: [terminal name, silkscreen label]. */
+const ESP_TOP: [string, string][] = [
+  ['VIN', 'VIN'], ['GND.1', 'GND'], ['G13', 'D13'], ['G12', 'D12'], ['G14', 'D14'], ['G27', 'D27'], ['G26', 'D26'], ['G25', 'D25'],
+  ['G33', 'D33'], ['G32', 'D32'], ['G35', 'D35'], ['G34', 'D34'], ['G39', 'VN'], ['G36', 'VP'], ['EN', 'EN'],
+]
+const ESP_BOTTOM: [string, string][] = [
+  ['3V3', '3V3'], ['GND.2', 'GND'], ['G15', 'D15'], ['G2', 'D2'], ['G4', 'D4'], ['G16', 'RX2'], ['G17', 'TX2'], ['G5', 'D5'],
+  ['G18', 'D18'], ['G19', 'D19'], ['G21', 'D21'], ['G3', 'RX0'], ['G1', 'TX0'], ['G22', 'D22'], ['G23', 'D23'],
+]
+
+export const ESP32_HEADERS: Header[] = [
+  ...ESP_TOP.map(([name, label], i) => ({ terminal: `esp.${name}`, label, x: ESP32.x + 50 + i * P, y: ESP32.y + 10 })),
+  ...ESP_BOTTOM.map(([name, label], i) => ({ terminal: `esp.${name}`, label, x: ESP32.x + 50 + i * P, y: ESP32.y + ESP32.h - 10 })),
+]
+
+/** ESP32 pins the analog-to-digital converter can read. */
+const ESP_ADC = new Set([0, 2, 4, 12, 13, 14, 15, 25, 26, 27, 32, 33, 34, 35, 36, 39])
+const ESP_GPIO = new Set([...ESP_TOP, ...ESP_BOTTOM].map(([name]) => name).filter((n) => n.startsWith('G')))
+
+export const BOARDS: Record<BoardId, BoardProfile> = {
+  uno: {
+    id: 'uno',
+    prefix: 'uno',
+    rect: UNO,
+    headers: UNO_HEADERS,
+    bonds: UNO_BONDS,
+    pinNames: UNO_PINS,
+    pwm: (p) => PWM_PINS.has(p),
+    inputOnly: new Set(),
+    logicV: 5,
+    vih: 3,
+    vil: 1.5,
+    pinOhms: 25,
+    pullupOhms: 35_000,
+    maxPinA: 0.04,
+    supplies: [
+      { name: '5V', volts: 5, ohms: 0.05 },
+      { name: '3V3', volts: 3.3, ohms: 1 },
+    ],
+    ground: 'GND.1',
+    intBits: 16,
+    adcMax: 1023,
+    builtinLed: 13,
+    constants: { LED_BUILTIN: 13, A0: 14, A1: 15, A2: 16, A3: 17, A4: 18, A5: 19 },
+    analogPin: (n) => (n >= 0 && n < 6 ? 14 + n : n >= 14 && n < 20 ? n : null),
+    defaultBaud: 9600,
+  },
+  esp32: {
+    id: 'esp32',
+    prefix: 'esp',
+    rect: ESP32,
+    headers: ESP32_HEADERS,
+    bonds: [['esp.GND.1', 'esp.GND.2']],
+    pinNames: Array.from({ length: 40 }, (_, g) => (ESP_GPIO.has(`G${g}`) ? `G${g}` : null)),
+    pwm: () => true,
+    inputOnly: new Set([34, 35, 36, 39]),
+    logicV: 3.3,
+    vih: 2.475,
+    vil: 0.825,
+    pinOhms: 30,
+    pullupOhms: 45_000,
+    maxPinA: 0.04,
+    supplies: [
+      { name: 'VIN', volts: 5, ohms: 0.05 },
+      { name: '3V3', volts: 3.3, ohms: 0.5 },
+    ],
+    ground: 'GND.1',
+    intBits: 32,
+    adcMax: 4095,
+    builtinLed: 2,
+    constants: {
+      LED_BUILTIN: 2, BUILTIN_LED: 2,
+      A0: 36, A3: 39, A4: 32, A5: 33, A6: 34, A7: 35, A10: 4, A11: 0, A12: 2, A13: 15, A14: 13, A15: 12, A16: 14, A17: 27, A18: 25, A19: 26,
+    },
+    analogPin: (n) => (ESP_ADC.has(n) ? n : null),
+    defaultBaud: 115200,
+  },
+}
+
+export const boardOf = (doc: Pick<CircuitDoc, 'board'>): BoardProfile => BOARDS[doc.board ?? 'uno']
+
+/** The board pin a header terminal is, or null for power pins. */
+export function boardPin(board: BoardProfile, terminal: string): number | null {
+  const name = terminal.slice(board.prefix.length + 1)
+  const i = board.pinNames.indexOf(name)
+  return i >= 0 ? i : null
+}
 
 // ── Breadboard ──────────────────────────────────────────────────────────
 
@@ -223,16 +356,25 @@ export const BB_HOLES: Hole[] = (() => {
   return holes
 })()
 
-/** Everything a leg can be pushed into: breadboard holes and the Uno's header sockets. */
-export const SOCKETS: { terminal: string; x: number; y: number }[] = [...BB_HOLES, ...UNO_HEADERS]
-const socketAt = new Map(SOCKETS.map((s) => [`${s.x},${s.y}`, s.terminal]))
-export const socketAtPoint = (x: number, y: number) => socketAt.get(`${x},${y}`) ?? null
+/** Everything a leg can be pushed into: breadboard holes and the board's header sockets. */
+const socketCache = new Map<BoardId, { list: { terminal: string; x: number; y: number }[]; at: Map<string, string> }>()
+function sockets(board: BoardId) {
+  let c = socketCache.get(board)
+  if (!c) {
+    const list = [...BB_HOLES, ...BOARDS[board].headers]
+    c = { list, at: new Map(list.map((h) => [`${h.x},${h.y}`, h.terminal])) }
+    socketCache.set(board, c)
+  }
+  return c
+}
+export const socketsFor = (board: BoardId = 'uno') => sockets(board).list
+export const socketAtPoint = (x: number, y: number, board: BoardId = 'uno') => sockets(board).at.get(`${x},${y}`) ?? null
 
 export const BENCH = { w: 680, h: 420 }
 
 /** Where a terminal is drawn, for wires. */
-export function terminalPoint(terminal: string, parts: Part[]): Point | null {
-  const s = SOCKETS.find((x) => x.terminal === terminal)
+export function terminalPoint(terminal: string, parts: Part[], board: BoardId = 'uno'): Point | null {
+  const s = socketsFor(board).find((x) => x.terminal === terminal)
   if (s) return { x: s.x, y: s.y }
   const dot = terminal.indexOf('.')
   const part = parts.find((p) => p.id === terminal.slice(0, dot))
@@ -259,12 +401,13 @@ export function buildNets(doc: CircuitDoc): Map<string, string> {
     const rb = find(b)
     if (ra !== rb) parent.set(ra, rb)
   }
+  const board = boardOf(doc)
   for (const h of BB_HOLES) union(h.terminal, h.strip)
-  for (const h of UNO_HEADERS) find(h.terminal)
-  for (const [a, b] of UNO_BONDS) union(a, b)
+  for (const h of board.headers) find(h.terminal)
+  for (const [a, b] of board.bonds) union(a, b)
   for (const part of doc.parts) {
     for (const leg of legPoints(part)) {
-      const socket = socketAtPoint(leg.x, leg.y)
+      const socket = socketAtPoint(leg.x, leg.y, board.id)
       if (socket) union(leg.terminal, socket)
       else find(leg.terminal)
     }

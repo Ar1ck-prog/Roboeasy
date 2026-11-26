@@ -22,9 +22,15 @@ export interface Hardware {
   now: number
   /** The interpreter pauses (yields) once `now` reaches this. */
   deadline: number
-  pinCount: number
-  /** Number of the first analog pin (A0). */
-  analogBase: number
+  /** Board id, for messages (`uno`, `esp32`). */
+  boardId: string
+  /** Width of `int`: 16 on the Uno, 32 on the ESP32. */
+  intBits: 16 | 32
+  /** Names of pins the sketch may use: LED_BUILTIN, A0… */
+  constants: Record<string, number>
+  validPin(pin: number): boolean
+  /** The pin analogRead(n) reads, or null. */
+  analogPin(n: number): number | null
   pinMode(pin: number, mode: PinMode): void
   digitalWrite(pin: number, value: number): void
   digitalRead(pin: number): number
@@ -215,7 +221,7 @@ export class Interpreter {
     private readonly hw: Hardware,
     options: InterpreterOptions = {},
   ) {
-    this.intBits = options.intBits ?? 16
+    this.intBits = options.intBits ?? hw.intBits ?? 16
     this.intT = this.intBits === 16 ? 'i16' : 'i32'
     this.program = typeof source === 'string' ? parse(source, this.intBits) : source
     this.check()
@@ -225,10 +231,10 @@ export class Interpreter {
 
   private constants(): Record<string, T> {
     const names: Record<string, T> = {
-      HIGH: this.intT, LOW: this.intT, INPUT: this.intT, OUTPUT: this.intT, INPUT_PULLUP: this.intT, LED_BUILTIN: this.intT,
+      HIGH: this.intT, LOW: this.intT, INPUT: this.intT, OUTPUT: this.intT, INPUT_PULLUP: this.intT, INPUT_PULLDOWN: this.intT,
       DEC: this.intT, HEX: this.intT, BIN: this.intT, OCT: this.intT, PI: 'f', HALF_PI: 'f', TWO_PI: 'f', true: this.intT, false: this.intT,
     }
-    for (let i = 0; i < this.hw.pinCount - this.hw.analogBase; i++) names[`A${i}`] = this.intT
+    for (const name of Object.keys(this.hw.constants)) names[name] = this.intT
     return names
   }
 
@@ -244,8 +250,8 @@ export class Interpreter {
         return 1
       case 'INPUT_PULLUP':
         return 2
-      case 'LED_BUILTIN':
-        return 13
+      case 'INPUT_PULLDOWN':
+        return 0
       case 'DEC':
         return 10
       case 'HEX':
@@ -261,9 +267,7 @@ export class Interpreter {
       case 'TWO_PI':
         return Math.PI * 2
     }
-    const analog = /^A(\d+)$/.exec(name)
-    if (analog && Number(analog[1]) < this.hw.pinCount - this.hw.analogBase) return this.hw.analogBase + Number(analog[1])
-    return undefined
+    return this.hw.constants[name]
   }
 
   /** Finds unknown names, wrong argument counts and a missing setup/loop before running. */
@@ -1074,7 +1078,7 @@ export class Interpreter {
   // ── Builtins ──────────────────────────────────────────────────────────
 
   private pin(n: number, line: number): number {
-    if (!Number.isInteger(n) || n < 0 || n >= this.hw.pinCount) throw new CodeError('bad_pin', line, { pin: n })
+    if (!Number.isInteger(n) || !this.hw.validPin(n)) throw new CodeError('bad_pin', line, { pin: n, board: this.hw.boardId })
     return n
   }
 
@@ -1092,9 +1096,8 @@ export class Interpreter {
       case 'digitalRead':
         return this.hw.digitalRead(this.pin(a[0], line))
       case 'analogRead': {
-        const analogs = this.hw.pinCount - this.hw.analogBase
-        const p = a[0] < analogs ? this.hw.analogBase + a[0] : a[0]
-        if (p < this.hw.analogBase || p >= this.hw.pinCount) throw new CodeError('bad_pin', line, { pin: a[0] })
+        const p = Number.isInteger(a[0]) ? this.hw.analogPin(a[0]) : null
+        if (p === null) throw new CodeError('bad_analog_pin', line, { pin: a[0], board: this.hw.boardId })
         return this.hw.analogRead(p)
       }
       case 'analogWrite':

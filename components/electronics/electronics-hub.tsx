@@ -2,9 +2,9 @@
 
 import { useEffect, useState } from 'react'
 import Link from 'next/link'
-import { ArrowRight, Box, Check, Clock, Cpu, FlaskConical, Zap } from 'lucide-react'
+import { ArrowRight, Box, Check, Cpu, FlaskConical, Sparkles, Zap } from 'lucide-react'
 
-import { UnoBoard } from '@/components/electronics/bench'
+import { Esp32Board, UnoBoard } from '@/components/electronics/bench'
 import { PartArt } from '@/components/electronics/part-art'
 import { Badge } from '@/components/ui/badge'
 import { buttonVariants } from '@/components/ui/button'
@@ -35,13 +35,46 @@ export function ElectronicsHub({ lang, t }: { lang: Locale; t: ElectronicsText }
 
   return (
     <div className="container grid gap-10 py-8 md:py-12">
-      <header className="grid gap-3">
-        <p className="m-0 inline-flex items-center gap-2 text-sm font-extrabold tracking-wide text-muted-foreground uppercase">
+      <header className="relative grid gap-3 overflow-hidden rounded-(--radius-xl) border-(length:--stroke) border-outline bg-[#0f2a33] p-6 text-white shadow-(--shadow-hard) sm:p-8 md:p-10">
+        {/* A faint circuit behind the title */}
+        <svg className="pointer-events-none absolute inset-0 h-full w-full opacity-30" aria-hidden="true" preserveAspectRatio="xMidYMid slice" viewBox="0 0 800 300">
+          <defs>
+            <pattern id="hub-dots" width="20" height="20" patternUnits="userSpaceOnUse">
+              <circle cx="2" cy="2" r="1.2" fill="#5fd3c6" />
+            </pattern>
+          </defs>
+          <rect width="800" height="300" fill="url(#hub-dots)" opacity="0.35" />
+          <g fill="none" stroke="#5fd3c6" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+            <path d="M420 40 h120 l30 30 h120" />
+            <path d="M450 260 h90 l40 -40 h140" />
+            <path d="M520 150 h60 l20 -20 h90 l20 20 h60" />
+            <path d="M640 40 v60 l-30 30" />
+          </g>
+          <g fill="#ffd56a">
+            <circle cx="420" cy="40" r="5" />
+            <circle cx="690" cy="70" r="5" />
+            <circle cx="450" cy="260" r="5" />
+            <circle cx="720" cy="220" r="5" />
+            <circle cx="520" cy="150" r="5" />
+            <circle cx="770" cy="150" r="5" />
+          </g>
+        </svg>
+        <p className="relative m-0 inline-flex w-fit items-center gap-2 rounded-(--radius-pill) bg-white/10 px-3 py-1 text-sm font-extrabold tracking-wide uppercase">
           <Cpu className="size-4" aria-hidden="true" />
           Arduino · ESP32
         </p>
-        <h1 className="m-0 text-4xl md:text-5xl">{h.title}</h1>
-        <p className="m-0 max-w-3xl text-lg text-muted-foreground">{h.lead}</p>
+        <h1 className="relative m-0 text-4xl text-white md:text-6xl">{h.title}</h1>
+        <p className="relative m-0 max-w-2xl text-lg text-white/80">{h.lead}</p>
+        <div className="relative mt-2 flex flex-wrap gap-2">
+          <Link className={buttonVariants({ variant: 'primary' })} href={`/${lang}/electronics/lab`}>
+            <FlaskConical aria-hidden="true" />
+            {h.labCta}
+          </Link>
+          <Link className={buttonVariants({ variant: 'secondary' })} href={`/${lang}/electronics/uno`}>
+            <Box aria-hidden="true" />
+            {h.boardCta}
+          </Link>
+        </div>
       </header>
 
       <div className="grid gap-5 md:grid-cols-2">
@@ -81,9 +114,21 @@ export function ElectronicsHub({ lang, t }: { lang: Locale; t: ElectronicsText }
             <h2 className="m-0 text-2xl">{h.boardTitle}</h2>
             <p className="m-0 text-muted-foreground">{h.boardText}</p>
           </div>
-          <svg viewBox="2 34 306 242" className="h-36 w-full [--bench-bg:var(--color-card)]" aria-hidden="true">
-            <UnoBoard builtin={1} tx={false} on />
-          </svg>
+          <div className="grid grid-cols-2 items-center gap-3">
+            <svg viewBox="2 34 306 242" className="h-32 w-full [--bench-bg:var(--color-card)]" aria-hidden="true">
+              <UnoBoard builtin={1} tx={false} on />
+            </svg>
+            <svg viewBox="16 96 268 148" className="h-28 w-full" aria-hidden="true">
+              <defs>
+                <linearGradient id="shield" x1="0" y1="0" x2="1" y2="1">
+                  <stop offset="0" stopColor="#ffffff" stopOpacity={0.9} />
+                  <stop offset="0.5" stopColor="#ffffff" stopOpacity={0} />
+                  <stop offset="1" stopColor="#5f6368" stopOpacity={0.5} />
+                </linearGradient>
+              </defs>
+              <Esp32Board builtin={1} tx={false} on />
+            </svg>
+          </div>
           <Link className={buttonVariants({ variant: 'primary', className: 'w-fit' })} href={`/${lang}/electronics/uno`}>
             {h.boardCta}
             <ArrowRight aria-hidden="true" />
@@ -135,20 +180,30 @@ export function ElectronicsHub({ lang, t }: { lang: Locale; t: ElectronicsText }
           <h2 id="boards-title" className="m-0 text-2xl">
             {h.boardsTitle}
           </h2>
-          <Card flat className="gap-1.5 p-4 sm:p-4">
-            <h3 className="m-0 text-lg">{h.uno.name}</h3>
-            <p className="m-0 text-sm text-muted-foreground">{h.uno.text}</p>
-          </Card>
-          <Card flat className="gap-1.5 p-4 opacity-80 sm:p-4">
-            <div className="flex flex-wrap items-center gap-2">
-              <h3 className="m-0 text-lg">{h.esp32.name}</h3>
-              <Badge>
-                <Clock aria-hidden="true" />
-                {h.soon}
-              </Badge>
-            </div>
-            <p className="m-0 text-sm text-muted-foreground">{h.esp32.text}</p>
-          </Card>
+          {(['uno', 'esp32'] as const).map((id) => (
+            <Card key={id} flat className="gap-2 p-4 sm:p-4">
+              <div className="flex flex-wrap items-center gap-2">
+                <h3 className="m-0 text-lg">{h[id].name}</h3>
+                {id === 'esp32' && (
+                  <Badge variant="success">
+                    <Sparkles aria-hidden="true" />
+                    Wi-Fi
+                  </Badge>
+                )}
+              </div>
+              <p className="m-0 text-sm text-muted-foreground">{h[id].text}</p>
+              <div className="flex flex-wrap gap-2 pt-1">
+                <Link className={buttonVariants({ size: 'sm' })} href={`/${lang}/electronics/${id}`}>
+                  <Box aria-hidden="true" />
+                  {h.open3d}
+                </Link>
+                <Link className={buttonVariants({ size: 'sm', variant: 'ghost' })} href={`/${lang}/electronics/lab${id === 'esp32' ? '?board=esp32' : ''}`}>
+                  <FlaskConical aria-hidden="true" />
+                  {h.openLab}
+                </Link>
+              </div>
+            </Card>
+          ))}
         </section>
         <section className="grid content-start gap-3" aria-labelledby="physics-title">
           <h2 id="physics-title" className="m-0 text-2xl">

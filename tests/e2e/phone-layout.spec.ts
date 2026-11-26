@@ -28,6 +28,8 @@ const PAGES = [
   '/ru/electronics/lab',
   '/ru/electronics/lab?mission=traffic',
   '/ru/electronics/uno',
+  '/ru/electronics/esp32',
+  '/ru/electronics/lab?board=esp32',
   '/ru/controller',
   '/ru/teacher',
   '/ru/class',

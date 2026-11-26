@@ -8,7 +8,10 @@ import {
   BB_HOLES,
   BB_ROW_Y,
   BENCH,
+  type BoardProfile,
   type CircuitDoc,
+  ESP32,
+  ESP32_HEADERS,
   P,
   type Part,
   PWM_PINS,
@@ -16,6 +19,8 @@ import {
   UNO_HEADERS,
   type Wire,
   bbColX,
+  boardOf,
+  boardPin,
   legPoints,
   pinNumber,
   socketAtPoint,
@@ -32,8 +37,8 @@ const BLACK = '#202124'
 
 /** A sensible colour for a new wire: red for power, black for ground, otherwise the next colour. */
 export function wireColorFor(a: string, b: string, count: number): string {
-  const power = (t: string) => /uno\.(5V|3V3|VIN)$|bb\.(tp|bp)\d+$/.test(t)
-  const ground = (t: string) => /uno\.GND|bb\.(tn|bn)\d+$/.test(t)
+  const power = (t: string) => /(uno|esp)\.(5V|3V3|VIN)$|bb\.(tp|bp)\d+$/.test(t)
+  const ground = (t: string) => /(uno|esp)\.GND|bb\.(tn|bn)\d+$/.test(t)
   if (power(a) || power(b)) return RED
   if (ground(a) || ground(b)) return BLACK
   return WIRE_COLORS[count % WIRE_COLORS.length]
@@ -142,6 +147,91 @@ export const UnoBoard = memo(function UnoBoard({ builtin, tx, on }: { builtin: n
   )
 })
 
+
+/** ESP32 DevKit V1 from above: USB on the left, the WROOM module with its antenna on the right. */
+export const Esp32Board = memo(function Esp32Board({ builtin, tx, on }: { builtin: number; tx: boolean; on: boolean }) {
+  const { x, y, w, h } = ESP32
+  const cy = y + h / 2
+  return (
+    <g>
+      <rect x={x} y={y} width={w} height={h} rx={6} fill="#1b1e24" stroke="#0b0d10" strokeWidth={1.5} />
+      <rect x={x + 3} y={y + 3} width={w - 6} height={h - 6} rx={4} fill="none" stroke="#2b3038" strokeWidth={1} />
+      {/* micro-USB */}
+      <rect x={x - 8} y={cy - 12} width={24} height={24} rx={2} fill="#c4c8cc" stroke="#80868b" />
+      <rect x={x - 8} y={cy - 6} width={6} height={12} rx={1} fill="#5f6368" />
+      {/* BOOT and EN buttons */}
+      {[
+        { label: 'EN', by: y + 26 },
+        { label: 'BOOT', by: y + h - 40 },
+      ].map((b) => (
+        <g key={b.label}>
+          <rect x={x + 18} y={b.by} width={16} height={14} rx={2} fill="#dadce0" />
+          <rect x={x + 21} y={b.by + 3} width={10} height={8} rx={1.5} fill="#202124" />
+          <text x={x + 26} y={b.by - 3} fontSize={5.5} fill="#e8eaed" textAnchor="middle" fontWeight={700}>
+            {b.label}
+          </text>
+        </g>
+      ))}
+      {/* CP2102 USB bridge and the AMS1117 regulator */}
+      <rect x={x + 44} y={cy - 9} width={18} height={18} fill="#111" transform={`rotate(45 ${x + 53} ${cy})`} />
+      <rect x={x + 70} y={cy - 16} width={24} height={14} fill="#2a2a2a" />
+      <rect x={x + 74} y={cy - 22} width={16} height={6} fill="#9aa0a6" />
+      {/* LEDs: red power and blue GPIO2 */}
+      {[
+        { label: 'PWR', cx: x + 74, cy: cy + 14, color: '#ff3b30', lit: on ? 1 : 0 },
+        { label: 'D2', cx: x + 74, cy: cy + 26, color: '#2f7bff', lit: builtin },
+        { label: 'TX', cx: x + 92, cy: cy + 14, color: '#ffb300', lit: tx ? 1 : 0 },
+      ].map((l) => (
+        <g key={l.label}>
+          {l.lit > 0.02 && <circle cx={l.cx} cy={l.cy} r={4 + 6 * l.lit} fill={l.color} opacity={0.3 * l.lit + 0.2} />}
+          <rect x={l.cx - 3.5} y={l.cy - 2} width={7} height={4} rx={1} fill={l.lit > 0.02 ? l.color : '#e8eaed'} opacity={l.lit > 0.02 ? 0.55 + 0.45 * l.lit : 0.85} />
+          <text x={l.cx + 6} y={l.cy + 2.2} fontSize={5} fill="#e8eaed" fontWeight={700}>
+            {l.label}
+          </text>
+        </g>
+      ))}
+      {/* The WROOM module: its own board, a metal shield and the antenna that sticks out */}
+      <rect x={x + 128} y={y + 22} width={w - 112} height={h - 44} rx={2} fill="#262a31" stroke="#0b0d10" />
+      <rect x={x + 134} y={y + 28} width={w - 152} height={h - 56} rx={3} fill="#c9cdd2" stroke="#8a9096" />
+      <rect x={x + 134} y={y + 28} width={w - 152} height={h - 56} rx={3} fill="url(#shield)" opacity={0.7} />
+      <text x={x + 134 + (w - 152) / 2} y={cy - 4} fontSize={7.5} fill="#3c4043" textAnchor="middle" fontWeight={800}>
+        ESP32-WROOM-32
+      </text>
+      <text x={x + 134 + (w - 152) / 2} y={cy + 7} fontSize={5.5} fill="#5f6368" textAnchor="middle" fontWeight={700}>
+        Wi-Fi · Bluetooth
+      </text>
+      <path
+        d={`M${x + w - 14} ${y + 28} v12 h6 v8 h-6 v8 h6 v8 h-6 v8 h6 v8 h-6 v8 h6 v8`}
+        fill="none"
+        stroke="#c9a227"
+        strokeWidth={1.6}
+      />
+      {/* Male pins along both sides with their labels */}
+      {ESP32_HEADERS.map((hd) => {
+        const top = hd.y < cy
+        return (
+          <g key={hd.terminal}>
+            <rect x={hd.x - 3} y={hd.y - 3} width={6} height={6} fill="#111" />
+            <rect x={hd.x - 1.4} y={hd.y - 1.4} width={2.8} height={2.8} fill="#d4af37" />
+            <text
+              x={hd.x}
+              y={top ? hd.y + 8 : hd.y - 8}
+              fontSize={5}
+              fill="#e8eaed"
+              fontWeight={700}
+              textAnchor={top ? 'end' : 'start'}
+              transform={`rotate(-90 ${hd.x} ${top ? hd.y + 8 : hd.y - 8})`}
+              dominantBaseline="middle"
+            >
+              {hd.label}
+            </text>
+          </g>
+        )
+      })}
+    </g>
+  )
+})
+
 const Breadboard = memo(function Breadboard() {
   return (
     <g>
@@ -218,8 +308,13 @@ interface Drag {
 const snap = (v: number) => Math.round(v / P) * P
 
 /** Short name of a terminal for the tooltip. */
-function terminalLabel(terminal: string, doc: CircuitDoc, t: ElectronicsText): string {
-  if (terminal.startsWith('uno.')) return terminal.slice(4).replace(/\.\d$/, '')
+function terminalLabel(terminal: string, doc: CircuitDoc, t: ElectronicsText, board: BoardProfile): string {
+  if (terminal.startsWith(`${board.prefix}.`)) {
+    const header = board.headers.find((h) => h.terminal === terminal)
+    const pin = boardPin(board, terminal)
+    const label = header?.label ?? terminal.slice(board.prefix.length + 1)
+    return board.id === 'esp32' && pin !== null && `D${pin}` !== label ? `${label} · GPIO${pin}` : label
+  }
   if (terminal.startsWith('bb.')) {
     const name = terminal.slice(3)
     const rail = /^(t|b)(p|n)\d+$/.exec(name)
@@ -233,6 +328,7 @@ function terminalLabel(terminal: string, doc: CircuitDoc, t: ElectronicsText): s
 }
 
 export function Bench({ doc, onChange, frame, running, selection, onSelect, t }: BenchProps) {
+  const board = boardOf(doc)
   const svgRef = useRef<SVGSVGElement>(null)
   const [drag, setDrag] = useState<Drag | null>(null)
   const [wiringFrom, setWiringFrom] = useState<string | null>(null)
@@ -257,10 +353,10 @@ export function Bench({ doc, onChange, frame, running, selection, onSelect, t }:
   /** Legs that are not in a hole: wires attach to them directly. */
   const freeLegs = useMemo(() => {
     const list: { terminal: string; x: number; y: number }[] = []
-    for (const p of parts) for (const leg of legPoints(p)) if (!socketAtPoint(leg.x, leg.y)) list.push({ terminal: leg.terminal, x: leg.x, y: leg.y })
+    for (const p of parts) for (const leg of legPoints(p)) if (!socketAtPoint(leg.x, leg.y, board.id)) list.push({ terminal: leg.terminal, x: leg.x, y: leg.y })
     return list
-  }, [parts])
-  const terminals = useMemo(() => [...UNO_HEADERS, ...BB_HOLES, ...freeLegs], [freeLegs])
+  }, [parts, board.id])
+  const terminals = useMemo(() => [...board.headers, ...BB_HOLES, ...freeLegs], [freeLegs, board.headers])
 
   const updatePart = (id: string, change: Partial<Part>) => onChange({ ...doc, parts: doc.parts.map((p) => (p.id === id ? { ...p, ...change } : p)) })
   const setProps = (id: string, props: Part['props']) => onChange({ ...doc, parts: doc.parts.map((p) => (p.id === id ? { ...p, props: { ...p.props, ...props } } : p)) })
@@ -348,8 +444,8 @@ export function Bench({ doc, onChange, frame, running, selection, onSelect, t }:
   }
 
   const wirePath = (w: Wire) => {
-    const a = terminalPoint(w.a, parts)
-    const b = terminalPoint(w.b, parts)
+    const a = terminalPoint(w.a, parts, board.id)
+    const b = terminalPoint(w.b, parts, board.id)
     if (!a || !b) return null
     const len = Math.hypot(b.x - a.x, b.y - a.y)
     const sag = Math.min(40, len * 0.18)
@@ -374,11 +470,11 @@ export function Bench({ doc, onChange, frame, running, selection, onSelect, t }:
       data-terminal={term.terminal}
     />
   )
-  const sockets = useMemo(() => [...UNO_HEADERS, ...BB_HOLES], [])
+  const sockets = useMemo(() => [...board.headers, ...BB_HOLES], [board.headers])
 
   const hoverPoint = hover ? terminals.find((x) => x.terminal === hover) : null
   const hoverVolts = hover && frame && running ? frame.volts(hover) : null
-  const wiringStart = wiringFrom ? terminalPoint(wiringFrom, parts) : null
+  const wiringStart = wiringFrom ? terminalPoint(wiringFrom, parts, board.id) : null
 
   return (
     <div className="relative overflow-x-auto rounded-(--radius-md) border-(length:--stroke-thin) border-border bg-[var(--bench-bg)] [--bench-bg:#f1ede4] dark:[--bench-bg:#2a2d31]">
@@ -399,8 +495,28 @@ export function Bench({ doc, onChange, frame, running, selection, onSelect, t }:
         onKeyDown={onKey}
         data-testid="bench"
       >
-        <UnoBoard builtin={frame?.builtin ?? 0} tx={Boolean(frame?.tx)} on={running} />
-        <Breadboard />
+        <defs>
+          <pattern id="mat-dots" width={P} height={P} patternUnits="userSpaceOnUse">
+            <circle cx={P / 2} cy={P / 2} r={0.7} fill="currentColor" opacity={0.18} />
+          </pattern>
+          <linearGradient id="shield" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0" stopColor="#ffffff" stopOpacity={0.9} />
+            <stop offset="0.5" stopColor="#ffffff" stopOpacity={0} />
+            <stop offset="1" stopColor="#5f6368" stopOpacity={0.5} />
+          </linearGradient>
+        </defs>
+        {/* A work mat with a dot grid, then the board and the breadboard casting soft shadows. */}
+        <rect width={BENCH.w} height={BENCH.h} fill="url(#mat-dots)" className="text-foreground" />
+        <g style={{ filter: 'drop-shadow(0 4px 6px rgba(0,0,0,.28))' }}>
+          {board.id === 'esp32' ? (
+            <Esp32Board builtin={frame?.builtin ?? 0} tx={Boolean(frame?.tx)} on={running} />
+          ) : (
+            <UnoBoard builtin={frame?.builtin ?? 0} tx={Boolean(frame?.tx)} on={running} />
+          )}
+        </g>
+        <g style={{ filter: 'drop-shadow(0 3px 5px rgba(0,0,0,.2))' }}>
+          <Breadboard />
+        </g>
 
         {/* Sockets under the parts: a part covers the holes it sits on. */}
         {sockets.map(hit)}
@@ -419,7 +535,7 @@ export function Bench({ doc, onChange, frame, running, selection, onSelect, t }:
               data-type={part.type}
               style={{ color: 'var(--color-foreground)' }}
             >
-              <g filter={selected ? 'drop-shadow(0 0 3px #1a73e8)' : undefined}>
+              <g style={{ filter: selected ? 'drop-shadow(0 0 3px #1a73e8)' : 'drop-shadow(0 2px 1.5px rgba(0,0,0,.3))' }}>
                 <PartArt
                   part={part}
                   brightness={frame?.leds[part.id]}
@@ -458,7 +574,7 @@ export function Bench({ doc, onChange, frame, running, selection, onSelect, t }:
         })}
         {doc.wires.map((w) =>
           [w.a, w.b].map((end) => {
-            const p = terminalPoint(end, parts)
+            const p = terminalPoint(end, parts, board.id)
             return p ? <circle key={`${w.id}${end}`} cx={p.x} cy={p.y} r={2.4} fill={w.color} stroke="rgba(0,0,0,.4)" strokeWidth={0.6} pointerEvents="none" /> : null
           }),
         )}
@@ -472,7 +588,7 @@ export function Bench({ doc, onChange, frame, running, selection, onSelect, t }:
         {hover && hoverPoint && !drag && (
           <g pointerEvents="none">
             {(() => {
-              const text = terminalLabel(hover, doc, t) + (hoverVolts !== null ? ` · ${t.lab.voltage.replace('{v}', hoverVolts.toFixed(2))}` : '')
+              const text = terminalLabel(hover, doc, t, board) + (hoverVolts !== null ? ` · ${t.lab.voltage.replace('{v}', hoverVolts.toFixed(2))}` : '')
               const width = Math.max(30, text.length * 4.6 + 10)
               const x = Math.min(BENCH.w - width - 4, Math.max(4, hoverPoint.x - width / 2))
               const y = hoverPoint.y > 40 ? hoverPoint.y - 26 : hoverPoint.y + 10

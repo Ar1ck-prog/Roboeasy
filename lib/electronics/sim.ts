@@ -8,7 +8,7 @@
  * several phases, so a dimmed LED looks dimmer, as it does to the eye.
  */
 
-import { type CircuitDoc, type LedColor, type Part, PWM_PINS, UNO_PINS, buildNets, legPoints } from './board'
+import { type BoardProfile, type CircuitDoc, type LedColor, type Part, boardOf, buildNets, legPoints } from './board'
 import { type Element, type Solution, diodeFor, solve } from './circuit'
 import { type Hardware, Interpreter, type PinMode } from './interpreter'
 import { CodeError } from './lang'
@@ -17,14 +17,21 @@ import { CodeError } from './lang'
 export const LED_VF: Record<LedColor, number> = { red: 1.9, yellow: 2.0, green: 2.1, blue: 2.9, white: 2.9 }
 const LED_FULL_A = 0.01
 const LED_BURN_A = 0.05
-const PIN_MAX_A = 0.04
 const SHORT_A = 0.5
-const PIN_OHMS = 25
-const PULLUP_OHMS = 35_000
 const SERVO_DEG_PER_S = 500
 const PHASES = 8
 
-export type FaultCode = 'led_burned' | 'led_reversed' | 'pin_overcurrent' | 'short' | 'servo_unpowered' | 'sensor_unpowered' | 'serial_not_begun' | 'no_ground'
+export type FaultCode =
+  | 'led_burned'
+  | 'led_reversed'
+  | 'pin_overcurrent'
+  | 'pin_overvoltage'
+  | 'input_only'
+  | 'short'
+  | 'servo_unpowered'
+  | 'sensor_unpowered'
+  | 'serial_not_begun'
+  | 'no_ground'
 
 export interface Fault {
   code: FaultCode
@@ -41,7 +48,7 @@ export interface FrameState {
   /** Average LED current, mA. */
   ledMa: Record<string, number>
   burned: string[]
-  /** The Uno's own "L" LED on pin 13 and the TX LED. */
+  /** The board's own LED (L on pin 13 of the Uno, GPIO2 on the ESP32) and the TX LED. */
   builtin: number
   tx: boolean
   servos: Record<string, number>
@@ -53,27 +60,31 @@ export interface FrameState {
   pins: { mode: PinMode; level: number; duty: number }[]
 }
 
-const pinTerminal = (p: number) => `uno.${UNO_PINS[p]}`
-
 export class Board implements Hardware {
   now = 0
   deadline = 0
-  readonly pinCount = 20
-  readonly analogBase = 14
+  readonly profile: BoardProfile
+  readonly boardId: string
+  readonly intBits: 16 | 32
+  readonly constants: Record<string, number>
+  /** Number of pin slots (20 on the Uno, 40 GPIO numbers on the ESP32). */
+  private readonly n: number
+  /** Silkscreen label of each pin terminal, for messages. */
+  private readonly labels: Map<string, string>
 
   private nets: Map<string, string>
   private ground: string
   private net5v: string
-  readonly mode: PinMode[] = Array(20).fill(0)
-  readonly level: number[] = Array(20).fill(0)
-  private pwm: number[] = Array(20).fill(-1)
-  private toneFreq: number[] = Array(20).fill(0)
-  private toneEnd: number[] = Array(20).fill(Infinity)
-  private highTime: number[] = Array(20).fill(0)
-  private lastChange: number[] = Array(20).fill(0)
-  private toggled: boolean[] = Array(20).fill(false)
-  private trigAt: number[] = Array(20).fill(-Infinity)
-  private lastRead: number[] = Array(20).fill(0)
+  readonly mode: PinMode[]
+  readonly level: number[]
+  private pwm: number[]
+  private toneFreq: number[]
+  private toneEnd: number[]
+  private highTime: number[]
+  private lastChange: number[]
+  private toggled: boolean[]
+  private trigAt: number[]
+  private lastRead: number[]
   private frameStart = 0
   private solution: Solution | null = null
   private driven: Set<string> | null = null
@@ -91,18 +102,56 @@ export class Board implements Hardware {
   shorted = false
 
   constructor(private doc: CircuitDoc) {
+    this.profile = boardOf(doc)
+    this.boardId = this.profile.id
+    this.intBits = this.profile.intBits
+    this.constants = this.profile.constants
+    this.n = this.profile.pinNames.length
+    this.labels = new Map(this.profile.headers.map((h) => [h.terminal, h.label]))
+    const fill = <T,>(v: T) => Array<T>(this.n).fill(v)
+    this.mode = fill<PinMode>(0)
+    this.level = fill(0)
+    this.pwm = fill(-1)
+    this.toneFreq = fill(0)
+    this.toneEnd = fill(Infinity)
+    this.highTime = fill(0)
+    this.lastChange = fill(0)
+    this.toggled = fill(false)
+    this.trigAt = fill(-Infinity)
+    this.lastRead = fill(0)
     this.nets = buildNets(doc)
-    this.ground = this.net('uno.GND.1')
-    this.net5v = this.net('uno.5V')
+    this.ground = this.net(this.term(this.profile.ground))
+    this.net5v = this.net(this.term(this.profile.supplies[0].name))
     for (const p of doc.parts) if (p.type === 'servo') this.servoAngle.set(p.id, 90)
+  }
+
+  private term(name: string) {
+    return `${this.profile.prefix}.${name}`
+  }
+
+  private pinTerminal(p: number) {
+    return this.term(this.profile.pinNames[p] ?? `G${p}`)
+  }
+
+  private pinLabel(p: number) {
+    const t = this.pinTerminal(p)
+    return this.labels.get(t) ?? t.slice(this.profile.prefix.length + 1)
+  }
+
+  validPin(pin: number) {
+    return pin >= 0 && pin < this.n && this.profile.pinNames[pin] !== null
+  }
+
+  analogPin(n: number) {
+    return this.profile.analogPin(n)
   }
 
   /** The workbench changed while running (a knob turned, a button pressed, a wire added). */
   setDoc(doc: CircuitDoc) {
     this.doc = doc
     this.nets = buildNets(doc)
-    this.ground = this.net('uno.GND.1')
-    this.net5v = this.net('uno.5V')
+    this.ground = this.net(this.term(this.profile.ground))
+    this.net5v = this.net(this.term(this.profile.supplies[0].name))
     for (const p of doc.parts) if (p.type === 'servo' && !this.servoAngle.has(p.id)) this.servoAngle.set(p.id, 90)
     this.dirty = true
   }
@@ -125,14 +174,13 @@ export class Board implements Hardware {
   // ── The circuit ──────────────────────────────────────────────────────
 
   private elements(levels: number[]): Element[] {
-    const els: Element[] = [
-      { t: 'src', n: this.net5v, volts: 5, ohms: 0.05, id: 'v5' },
-      { t: 'src', n: this.net('uno.3V3'), volts: 3.3, ohms: 1, id: 'v33' },
-    ]
-    for (let p = 0; p < 20; p++) {
-      const n = this.net(pinTerminal(p))
-      if (this.mode[p] === 1) els.push({ t: 'src', n, volts: levels[p] ? 5 : 0, ohms: PIN_OHMS, id: `pin${p}` })
-      else if (this.mode[p] === 2) els.push({ t: 'src', n, volts: 5, ohms: PULLUP_OHMS, id: `pu${p}` })
+    const b = this.profile
+    const els: Element[] = b.supplies.map((sup, i) => ({ t: 'src' as const, n: this.net(this.term(sup.name)), volts: sup.volts, ohms: sup.ohms, id: `sup${i}` }))
+    for (let p = 0; p < this.n; p++) {
+      if (b.pinNames[p] === null) continue
+      const n = this.net(this.pinTerminal(p))
+      if (this.mode[p] === 1) els.push({ t: 'src', n, volts: levels[p] ? b.logicV : 0, ohms: b.pinOhms, id: `pin${p}` })
+      else if (this.mode[p] === 2) els.push({ t: 'src', n, volts: b.logicV, ohms: b.pullupOhms, id: `pu${p}` })
     }
     for (const part of this.doc.parts) {
       const id = part.id
@@ -212,7 +260,7 @@ export class Board implements Hardware {
 
   private pinVolts(p: number): { v: number; floating: boolean } {
     const s = this.current()
-    const n = this.net(pinTerminal(p))
+    const n = this.net(this.pinTerminal(p))
     return { v: s.v.get(n) ?? 0, floating: !this.driven!.has(n) }
   }
 
@@ -228,6 +276,11 @@ export class Board implements Hardware {
   }
 
   pinMode(pin: number, mode: PinMode) {
+    // GPIO 34–39 of the ESP32 have no output driver: OUTPUT does nothing there.
+    if (mode === 1 && this.profile.inputOnly.has(pin)) {
+      this.fault({ code: 'input_only', pin: this.pinLabel(pin) })
+      mode = 0
+    }
     this.mode[pin] = mode
     this.dirty = true
   }
@@ -257,22 +310,24 @@ export class Board implements Hardware {
       this.lastRead[pin] = r
       return r
     }
-    const r = v >= 3 ? 1 : v <= 1.5 ? 0 : this.lastRead[pin]
+    const r = v >= this.profile.vih ? 1 : v <= this.profile.vil ? 0 : this.lastRead[pin]
     this.lastRead[pin] = r
     return r
   }
 
   analogRead(pin: number): number {
     const { v, floating } = this.pinVolts(pin)
-    if (floating) return Math.round(350 + 150 * Math.sin(this.now / 40_000 + pin) + (this.noise() - 0.5) * 60)
-    return Math.max(0, Math.min(1023, Math.round((v / 5) * 1023 + (this.noise() < 0.2 ? 1 : this.noise() > 0.8 ? -1 : 0))))
+    const max = this.profile.adcMax
+    if (floating) return Math.round(((350 + 150 * Math.sin(this.now / 40_000 + pin) + (this.noise() - 0.5) * 60) / 1023) * max)
+    return Math.max(0, Math.min(max, Math.round((v / this.profile.logicV) * max + (this.noise() < 0.2 ? 1 : this.noise() > 0.8 ? -1 : 0))))
   }
 
   analogWrite(pin: number, value: number) {
-    if (this.mode[pin] !== 1) this.mode[pin] = 1
-    if (!PWM_PINS.has(pin) || value === 0 || value === 255) {
+    if (this.mode[pin] !== 1) this.pinMode(pin, 1)
+    const pwm = this.profile.pwm(pin)
+    if (!pwm || value === 0 || value === 255) {
       this.pwm[pin] = -1
-      const level = PWM_PINS.has(pin) ? (value === 255 ? 1 : 0) : value >= 128 ? 1 : 0
+      const level = pwm ? (value === 255 ? 1 : 0) : value >= 128 ? 1 : 0
       if (this.level[pin] !== level) {
         this.account(pin)
         this.level[pin] = level
@@ -301,7 +356,7 @@ export class Board implements Hardware {
   }
 
   pulseIn(pin: number, level: number, timeoutUs: number) {
-    const n = this.net(pinTerminal(pin))
+    const n = this.net(this.pinTerminal(pin))
     for (const part of this.doc.parts) {
       if (part.type !== 'ultrasonic' || this.legNet(part, 'echo') !== n || level !== 1) continue
       if (!this.sensorPowered(part)) {
@@ -309,7 +364,7 @@ export class Board implements Hardware {
         continue
       }
       const trig = this.legNet(part, 'trig')
-      const p = this.level.findIndex((_, i) => this.net(pinTerminal(i)) === trig && this.now - this.trigAt[i] < 100_000)
+      const p = this.level.findIndex((_, i) => this.validPin(i) && this.net(this.pinTerminal(i)) === trig && this.now - this.trigAt[i] < 100_000)
       if (p < 0) continue
       this.trigAt[p] = -Infinity
       const cm = part.props.distance ?? 30
@@ -377,7 +432,7 @@ export class Board implements Hardware {
   /** Solves the circuit for the frame that just ended and reports what can be seen and heard. */
   frame(dtMs: number): FrameState {
     const span = Math.max(1, this.now - this.frameStart)
-    for (let p = 0; p < 20; p++) if (this.toneFreq[p] && this.now >= this.toneEnd[p]) this.noTone(p)
+    for (let p = 0; p < this.n; p++) if (this.toneFreq[p] && this.now >= this.toneEnd[p]) this.noTone(p)
     const duty = this.level.map((l, p) => {
       if (this.pwm[p] >= 0) return this.pwm[p]
       if (!this.toggled[p]) return l
@@ -405,13 +460,18 @@ export class Board implements Hardware {
     this.dirty = true
 
     // Faults: a burnt LED, an overloaded pin, a short circuit.
-    if ((peakI.get('v5') ?? 0) > SHORT_A || [...Array(20).keys()].some((p) => (peakI.get(`pin${p}`) ?? 0) > 0.15)) {
+    const b = this.profile
+    if (b.supplies.some((_, i) => (peakI.get(`sup${i}`) ?? 0) > SHORT_A) || [...Array(this.n).keys()].some((p) => (peakI.get(`pin${p}`) ?? 0) > 0.15)) {
       this.shorted = true
       this.fault({ code: 'short' })
     }
-    for (let p = 0; p < 20; p++) {
+    for (let p = 0; p < this.n; p++) {
+      if (b.pinNames[p] === null) continue
       const i = peakI.get(`pin${p}`) ?? 0
-      if (i > PIN_MAX_A && !this.shorted) this.fault({ code: 'pin_overcurrent', pin: UNO_PINS[p], ma: Math.round(i * 1000) })
+      if (i > b.maxPinA && !this.shorted) this.fault({ code: 'pin_overcurrent', pin: this.pinLabel(p), ma: Math.round(i * 1000) })
+      // 3.3 V boards are not 5 V tolerant: 5 V on a pin damages it.
+      const v = solution!.v.get(this.net(this.pinTerminal(p))) ?? 0
+      if (v > b.logicV + 0.6 && !this.shorted) this.fault({ code: 'pin_overvoltage', pin: this.pinLabel(p) })
     }
     const ledState: Record<string, number> = {}
     const ledMa: Record<string, number> = {}
@@ -435,7 +495,7 @@ export class Board implements Hardware {
       const powered = (solution!.v.get(this.legNet(part, 'vcc')) ?? 0) - (solution!.v.get(this.legNet(part, 'gnd')) ?? 0) > 4
       const sig = this.legNet(part, 'sig')
       let target: number | undefined
-      for (const [id, pin] of this.servoPin) if (this.net(pinTerminal(pin)) === sig) target = this.servoTarget.get(id)
+      for (const [id, pin] of this.servoPin) if (this.net(this.pinTerminal(pin)) === sig) target = this.servoTarget.get(id)
       let angle = this.servoAngle.get(part.id) ?? 90
       if (target !== undefined) {
         if (powered) {
@@ -452,9 +512,9 @@ export class Board implements Hardware {
     for (const part of this.doc.parts.filter((p) => p.type === 'buzzer')) {
       const a = this.legNet(part, 'p')
       const b = this.legNet(part, 'n')
-      for (let p = 0; p < 20; p++) {
+      for (let p = 0; p < this.n; p++) {
         if (!this.toneFreq[p]) continue
-        const n = this.net(pinTerminal(p))
+        const n = this.net(this.pinTerminal(p))
         if ((n === a && b === this.ground) || (n === b && a === this.ground)) tones.push({ part: part.id, freq: this.toneFreq[p] })
       }
     }
@@ -470,7 +530,7 @@ export class Board implements Hardware {
       leds: ledState,
       ledMa,
       burned: [...this.burned],
-      builtin: duty[13] && this.mode[13] === 1 ? Math.min(1, duty[13]) ** 0.6 : 0,
+      builtin: duty[b.builtinLed] && this.mode[b.builtinLed] === 1 ? Math.min(1, duty[b.builtinLed]) ** 0.6 : 0,
       tx: this.txFrame,
       servos,
       tones,
@@ -483,7 +543,7 @@ export class Board implements Hardware {
     this.frameStart = this.now
     this.highTime.fill(0)
     this.toggled.fill(false)
-    for (let p = 0; p < 20; p++) this.lastChange[p] = this.now
+    this.lastChange.fill(this.now)
     return state
   }
 
