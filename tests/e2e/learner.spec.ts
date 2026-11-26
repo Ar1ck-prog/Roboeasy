@@ -24,6 +24,9 @@ test('new learner: placement, first lesson, XP, achievement, streak next day', a
   await expect(page.getByRole('heading', { name: 'Давай знакомиться' })).toBeVisible()
   await page.getByLabel('Ник', { exact: true }).fill('TestBot')
   await page.getByText('13–15', { exact: true }).click()
+  // Path: SPIKE Prime is suggested from 10 up; pick it explicitly.
+  await page.getByTestId('path-spike').click()
+  await expect(page.getByTestId('path-spike').getByRole('radio')).toBeChecked()
   await expect(page.getByRole('button', { name: 'Поехали!' })).toBeDisabled() // grown-up consent first
   await page.getByRole('checkbox', { name: /Я взрослый/ }).check()
   await page.getByRole('button', { name: 'Поехали!' }).click()
@@ -164,7 +167,61 @@ test('field simulator: the 3D simulator opens in its frame, in our fonts and wit
 
 test("a track card's Start button opens the track's first lesson", async ({ page }) => {
   await page.goto('/ru/learn')
+  // A new visitor picks a path first, then sees the map on that tab.
+  await page.getByTestId('path-spike').click()
+  await expect(page.getByTestId('tab-spike')).toHaveAttribute('aria-selected', 'true')
   const start = page.getByRole('listitem').filter({ has: page.getByRole('heading', { name: 'Старт', exact: true }) })
   await start.getByRole('link', { name: 'Начать' }).click()
   await expect(page).toHaveURL(/\/ru\/learn\/start\/start-01$/)
+})
+
+test('a learner under 10 picks WeDo 2.0, solves wedo-01 in the simulator and finds SPIKE Prime locked', async ({ page }) => {
+  const errors: string[] = []
+  page.on('pageerror', (e) => errors.push(e.message))
+  await page.clock.setFixedTime(DAY1)
+
+  // Onboarding: under 10 suggests WeDo 2.0
+  await page.goto('/ru/path')
+  await page.getByLabel('Ник', { exact: true }).fill('Kid')
+  await page.getByText('до 10', { exact: true }).click()
+  await expect(page.getByTestId('path-wedo').getByRole('radio')).toBeChecked()
+  await expect(page.getByTestId('path-wedo').getByText('Начни здесь')).toBeVisible()
+  await page.getByRole('checkbox', { name: /Я взрослый/ }).check()
+  await page.getByRole('button', { name: 'Поехали!' }).click()
+  // No SPIKE placement test on the WeDo path; Start leads to the first WeDo lesson.
+  await expect(page.getByRole('link', { name: 'Тест на уровень' })).toHaveCount(0)
+  await page.getByRole('link', { name: 'Начать' }).click()
+  await expect(page).toHaveURL(/\/ru\/learn\/wedo-start\/wedo-01$/)
+
+  // wedo-01: theory, a question, then the icon editor and the simulator
+  await page.getByRole('button', { name: /Начать урок|Продолжить урок/ }).click()
+  await next(page)
+  await page.getByRole('radio', { name: 'Смартхаб' }).click()
+  await page.getByRole('button', { name: 'Проверить' }).click()
+  await next(page)
+  await page.getByRole('button', { name: 'Мотор на время' }).click()
+  await page.getByRole('button', { name: /Блок 1: мотор включить на 1 с/ }).click()
+  await page.locator('main').getByRole('button', { name: 'Проверить' }).click()
+  await expect(page.getByText('Почти! Давай поправим.').filter({ visible: true })).toBeVisible()
+  await page.getByRole('button', { name: 'Больше' }).click()
+  await page.getByRole('button', { name: 'Больше' }).click()
+  await page.locator('main').getByRole('button', { name: 'Проверить' }).click()
+  await expect(page.getByText('Всё получилось!').filter({ visible: true })).toBeVisible()
+  await page.getByRole('button', { name: 'Урок пройден!' }).click()
+  await closeAchievements(page)
+
+  // The map opens on WeDo 2.0; the SPIKE Prime tab is locked with WeDo progress
+  await page.goto('/ru/learn')
+  await closeAchievements(page)
+  await expect(page.getByTestId('tab-wedo')).toHaveAttribute('aria-selected', 'true')
+  await page.getByTestId('tab-spike').click()
+  await expect(page.getByTestId('spike-locked')).toContainText('Откроется, когда пройдёшь все уроки WeDo')
+  await expect(page.getByTestId('spike-locked')).toContainText('WeDo: 1 из 35 уроков')
+
+  // A SPIKE lesson by direct link stays closed and points to the next WeDo lesson
+  await page.goto('/ru/learn/start/start-01')
+  await expect(page.getByTestId('wedo-first')).toBeVisible()
+  await expect(page.getByRole('link', { name: /К уроку WeDo: Смартхаб/ })).toBeVisible()
+
+  expect(errors).toEqual([])
 })
