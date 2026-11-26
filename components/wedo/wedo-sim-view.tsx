@@ -36,6 +36,8 @@ export interface WedoSimViewProps {
   lang: Lang
   onStep?: (path: string | null) => void
   onEnd?: (r: WedoResult) => void
+  /** false: the step has its own Run button; the scene keeps Pause, Start over and speed. */
+  showRun?: boolean
 }
 
 const W = 640
@@ -266,7 +268,7 @@ function GateScene({ f, k }: { f: WedoFrame; k: number }) {
   )
 }
 
-export function WedoSimView({ scene, program, scenario, runKey, mode, t, lang, onStep, onEnd }: WedoSimViewProps) {
+export function WedoSimView({ scene, program, scenario, runKey, mode, t, lang, onStep, onEnd, showRun = true }: WedoSimViewProps) {
   const reduce = usePrefersReducedMotion()
   const [, setTick] = useState(0)
   const [playing, setPlaying] = useState(false)
@@ -372,11 +374,11 @@ export function WedoSimView({ scene, program, scenario, runKey, mode, t, lang, o
             </g>
           )}
           {scene.model === 'spinner' && (
-            <text x={W - 16} y="30" fontSize="14" fontWeight="800" textAnchor="end" fill="var(--text)">
+            <text x={W - 16} y="52" fontSize="14" fontWeight="800" textAnchor="end" fill="var(--text)">
               {fill(t.sim.turns, { n: (Math.abs(frame.angle) / 360).toFixed(1) })}
             </text>
           )}
-          <text x={W - 16} y={H - 8} fontSize="12" fontFamily="var(--font-mono, monospace)" textAnchor="end" fill="var(--text-2)">
+          <text x={W - 16} y="28" fontSize="13" fontFamily="var(--font-mono, monospace)" textAnchor="end" fill="var(--text-2)">
             {frame.t.toFixed(1)} s
           </text>
         </svg>
@@ -400,7 +402,13 @@ export function WedoSimView({ scene, program, scenario, runKey, mode, t, lang, o
       )}
 
       <div className="flex flex-wrap items-center gap-2">
-        <button type="button" className={buttonVariants({ variant: 'secondary', size: 'lg' })} onClick={() => (r && !r.done ? setPlaying((p) => !p) : start())}>
+        <button
+          type="button"
+          className={buttonVariants({ variant: 'secondary', size: 'lg' })}
+          onClick={() => (r && !r.done ? setPlaying((p) => !p) : start())}
+          disabled={!showRun && !(r && !r.done)}
+          hidden={!showRun && !(r && !r.done)}
+        >
           {playing ? <Pause aria-hidden="true" /> : <Play aria-hidden="true" />}
           {playing ? t.sim.pause : t.sim.run}
         </button>

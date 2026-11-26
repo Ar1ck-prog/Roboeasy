@@ -3,6 +3,7 @@
 import { useMemo, useState } from 'react'
 import { ArrowDown, ArrowUp, Check, CircleHelp, X } from 'lucide-react'
 
+import { Illustration } from '@/components/learn/illustrations'
 import { RichText } from '@/components/learn/rich-text'
 import { buttonVariants } from '@/components/ui/button'
 import { fill } from '@/lib/i18n/config'
@@ -111,6 +112,13 @@ export function QuizStep({ step, lang, t, done, once = false, onDone, onMistake 
         <CircleHelp className="mt-1 size-6 shrink-0" aria-hidden="true" />
         {step.question[lang]}
       </h2>
+
+      {/* Optional picture for younger learners (WeDo lessons). */}
+      {step.illustration && (
+        <div className="mx-auto w-full max-w-sm rounded-(--radius-md) border-(length:--stroke-thin) border-outline bg-surface-2 p-3">
+          <Illustration name={step.illustration} lang={lang} />
+        </div>
+      )}
 
       {step.kind === 'choice' && (
         <div role={multi ? 'group' : 'radiogroup'} className="grid gap-2">

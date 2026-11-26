@@ -88,7 +88,8 @@ export function TrackMap({ trackId, lang, app, testUnits }: { trackId: string; l
         {track.units.map((unit) => {
           const ready = unit.lessons.filter((l) => l.status === 'ready')
           const unitDone = ready.length > 0 && ready.every((l) => done.has(l.id))
-          const canTest = hydrated && testUnits.includes(unit.id) && !unitDone
+          // On the WeDo path the SPIKE units have no "I already know this" test until WeDo is done.
+          const canTest = hydrated && testUnits.includes(unit.id) && !unitDone && !byWedo
           const nodes = unit.lessons.map((l) => {
             number++
             const state = hydrated ? (states.get(l.id) ?? 'locked') : 'locked'

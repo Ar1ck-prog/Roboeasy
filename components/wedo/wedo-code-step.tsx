@@ -159,7 +159,7 @@ export function WedoCodeStep({ step, lang, t, wt, done, onDone, onMistake }: Pro
           <WedoEditor program={program} onChange={edit} palette={step.palette} t={wt} highlight={highlight} initial={step.start} label={wt.editor.program} />
         </div>
         <div className={cn('grid gap-3', panel !== 'robot' && 'max-lg:hidden')}>
-          <WedoSimView scene={step.scene} program={program} scenario={step.scenario} runKey={runKey} mode={mode} t={wt} lang={lang} onStep={setHighlight} />
+          <WedoSimView scene={step.scene} program={program} scenario={step.scenario} runKey={runKey} mode={mode} t={wt} lang={lang} onStep={setHighlight} showRun={false} />
           <div className="max-lg:hidden">{reportBox}</div>
         </div>
       </div>
