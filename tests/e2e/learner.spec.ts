@@ -203,6 +203,9 @@ test('a learner under 10 picks WeDo 2.0, solves wedo-01 in the simulator and fin
   await page.getByRole('button', { name: /Блок 1: мотор включить на 1 с/ }).click()
   await page.locator('main').getByRole('button', { name: 'Проверить' }).click()
   await expect(page.getByText('Почти! Давай поправим.').filter({ visible: true })).toBeVisible()
+  // On tablets the check shows the robot tab; go back to the program to fix it.
+  const codeTab = page.getByRole('button', { name: 'Программа', exact: true })
+  if (await codeTab.isVisible()) await codeTab.click()
   await page.getByRole('button', { name: 'Больше' }).click()
   await page.getByRole('button', { name: 'Больше' }).click()
   await page.locator('main').getByRole('button', { name: 'Проверить' }).click()
