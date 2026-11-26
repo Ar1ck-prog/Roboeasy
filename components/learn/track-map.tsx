@@ -15,32 +15,42 @@ import { Skeleton } from '@/components/ui/skeleton'
 import { fill } from '@/lib/i18n/config'
 import type { LearnAppText } from '@/lib/i18n/learn-app'
 import { COURSE } from '@/lib/learn/course'
-import { lessonStates, trackProgress } from '@/lib/learn/progress'
+import { lessonStates, spikeLockedByWedo, trackProgress } from '@/lib/learn/progress'
 import { useHydrated } from '@/lib/learn/store'
 import { useProgress } from '@/lib/learn/use-progress'
+import { cn } from '@/lib/utils'
 
 type Lang = 'ru' | 'kk' | 'en'
 
 /** /learn/[track]: units as winding trails of lessons. `testUnits`: units that have an "I already know this" test. */
 export function TrackMap({ trackId, lang, app, testUnits }: { trackId: string; lang: Lang; app: LearnAppText; testUnits: string[] }) {
   const hydrated = useHydrated()
-  const { done } = useProgress()
+  const { done, path } = useProgress()
   const track = COURSE.tracks.find((t) => t.id === trackId)!
-  const progress = trackProgress(done, track, COURSE)
-  const states = lessonStates(done, track, COURSE)
-  const prereqs = track.prerequisites.map((id) => COURSE.tracks.find((t) => t.id === id)?.title[lang] ?? id).join(', ')
+  const progress = trackProgress(done, track, COURSE, path)
+  const states = lessonStates(done, track, COURSE, path)
+  const wedo = track.family === 'wedo'
+  const byWedo = spikeLockedByWedo(done, track, COURSE, path)
+  const prereqs = byWedo
+    ? 'WeDo 2.0'
+    : track.prerequisites.map((id) => COURSE.tracks.find((t) => t.id === id)?.title[lang] ?? id).join(', ')
   let number = 0
 
   return (
     <div className="container grid gap-8 py-8 md:py-12">
-      <Link href={`/${lang}/learn`} className={buttonVariants({ variant: 'ghost', size: 'sm', className: 'justify-self-start' })}>
+      <Link href={wedo ? `/${lang}/learn?family=wedo` : `/${lang}/learn`} className={buttonVariants({ variant: 'ghost', size: 'sm', className: 'justify-self-start' })}>
         <ArrowLeft aria-hidden="true" />
-        {app.track.all}
+        {wedo ? app.wedo.allTracks : app.track.all}
       </Link>
 
-      <header className="flex flex-wrap items-start gap-4">
+      <header className={cn('flex flex-wrap items-start gap-4', wedo && 'rounded-(--radius-xl) border-(length:--stroke) border-outline bg-(--wedo-accent-soft) p-5')}>
         <TrackIcon icon={track.icon} color={track.color} className="size-16 [&_svg]:size-8" />
         <div className="grid min-w-0 flex-1 gap-2">
+          {wedo && (
+            <Badge className="justify-self-start" style={{ background: 'var(--wedo-accent)', color: '#14110a' }}>
+              {app.wedo.badge}
+            </Badge>
+          )}
           <h1 className="m-0 text-4xl md:text-5xl">{track.title[lang]}</h1>
           <p className="m-0 max-w-2xl text-lg text-muted-foreground">{track.description[lang]}</p>
           {hydrated ? (
@@ -57,7 +67,7 @@ export function TrackMap({ trackId, lang, app, testUnits }: { trackId: string; l
       {hydrated && !progress.unlocked && (
         <p className="alert alert-warn m-0" role="note">
           <Lock size={18} aria-hidden="true" />
-          <span>{fill(app.track.locked, { tracks: prereqs })}</span>
+          <span>{byWedo ? app.wedo.lessonLocked : fill(app.track.locked, { tracks: prereqs })}</span>
         </p>
       )}
 

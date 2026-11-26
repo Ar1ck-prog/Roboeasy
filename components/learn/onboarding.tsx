@@ -16,6 +16,8 @@ import { AGE_RANGES, type AgeRange, DEFAULT_COSMETICS, type LearningPathChoice, 
 import { getGuestPath, setProfile } from '@/lib/learn/store'
 import { deviceTimeZone } from '@/lib/learn/streak'
 import { cn } from '@/lib/utils'
+import { PathPicker } from '@/components/wedo/path-picker'
+import type { WedoText } from '@/lib/i18n/wedo'
 
 type Lang = 'ru' | 'kk' | 'en'
 const GOALS = { l1: { kind: 'lessons', n: 1 }, l2: { kind: 'lessons', n: 2 }, m15: { kind: 'minutes', n: 15 } } as const satisfies Record<
@@ -83,7 +85,7 @@ function RobotPicker({ name, value, onChange, lang }: { name: string; value: str
 }
 
 /** First visit: nickname, robot buddy, age range, daily goal and, under 16, a grown-up's consent. Then: from scratch or placement. */
-export function Onboarding({ lang, app, play, onSaved, onDone }: { lang: Lang; app: LearnAppText; play: PlayText; onSaved: () => void; onDone: () => void }) {
+export function Onboarding({ lang, app, play, wt, onSaved, onDone }: { lang: Lang; app: LearnAppText; play: PlayText; wt: WedoText; onSaved: () => void; onDone: () => void }) {
   const id = useId()
   const t = app.onboarding
   const [nickname, setNickname] = useState('')
@@ -91,6 +93,12 @@ export function Onboarding({ lang, app, play, onSaved, onDone }: { lang: Lang; a
   const [botName, setBotName] = useState('')
   const [age, setAge] = useState<AgeRange | null>(null)
   const [path, setPath] = useState<LearningPathChoice | null>(() => getGuestPath())
+  const [pathTouched, setPathTouched] = useState(() => getGuestPath() !== null)
+  // The age suggests a path (WeDo under 10) until the learner picks one themselves.
+  const chooseAge = (a: AgeRange) => {
+    setAge(a)
+    if (!pathTouched) setPath(a === 'under-10' ? 'wedo' : 'spike')
+  }
   const [goal, setGoal] = useState<keyof typeof GOALS>('l1')
   const [consent, setConsent] = useState(false)
   const [saved, setSaved] = useState(false)
@@ -101,11 +109,11 @@ export function Onboarding({ lang, app, play, onSaved, onDone }: { lang: Lang; a
     if (window.location.hash === '#account') setSigningIn(true)
   }, [])
 
-  const valid = nickname.trim().length >= 1 && age !== null && (!needsConsent(age) || consent)
+  const valid = nickname.trim().length >= 1 && age !== null && path !== null && (!needsConsent(age) || consent)
 
   const save = (e: React.FormEvent) => {
     e.preventDefault()
-    if (!valid || !age) return
+    if (!valid || !age || !path) return
     setProfile({
       nickname: nickname.trim().slice(0, 24),
       ageRange: age,
@@ -132,13 +140,17 @@ export function Onboarding({ lang, app, play, onSaved, onDone }: { lang: Lang; a
         <div className="grid gap-4 sm:grid-cols-2">
           <Card className="gap-3">
             <Rocket className="size-8" aria-hidden="true" />
-            <h2 className="m-0 text-2xl">{t.fromScratch}</h2>
-            <p className="m-0 text-muted-foreground">{t.fromScratchText}</p>
-            <Link className={buttonVariants({ variant: 'primary', className: 'mt-auto justify-self-start' })} href={`/${lang}/learn/start/start-01`}>
+            <h2 className="m-0 text-2xl">{path === 'wedo' ? wt.picker.wedoTitle : t.fromScratch}</h2>
+            <p className="m-0 text-muted-foreground">{path === 'wedo' ? wt.picker.note : t.fromScratchText}</p>
+            <Link
+              className={buttonVariants({ variant: 'primary', className: 'mt-auto justify-self-start' })}
+              href={path === 'wedo' ? `/${lang}/learn/wedo-start/wedo-01` : `/${lang}/learn/start/start-01`}
+            >
               {app.map.start}
               <ArrowRight aria-hidden="true" />
             </Link>
           </Card>
+          {path !== 'wedo' && (
           <Card className="gap-3">
             <Gauge className="size-8" aria-hidden="true" />
             <h2 className="m-0 text-2xl">{t.placement}</h2>
@@ -148,6 +160,7 @@ export function Onboarding({ lang, app, play, onSaved, onDone }: { lang: Lang; a
               <ArrowRight aria-hidden="true" />
             </Link>
           </Card>
+          )}
         </div>
         <button type="button" className={buttonVariants({ variant: 'ghost', className: 'justify-self-start' })} onClick={onDone}>
           {app.placement.toPath}
@@ -228,8 +241,23 @@ export function Onboarding({ lang, app, play, onSaved, onDone }: { lang: Lang; a
 
           <fieldset className="m-0 grid gap-2 border-0 p-0">
             <legend className="mb-2 p-0 font-display text-lg font-bold">{t.age}</legend>
-            <Choice name={`${id}-age`} value={age} options={AGE_RANGES} onChange={setAge} labels={t.ages} />
+            <Choice name={`${id}-age`} value={age} options={AGE_RANGES} onChange={chooseAge} labels={t.ages} />
           </fieldset>
+
+          {age !== null && (
+            <fieldset className="m-0 grid gap-2 border-0 p-0" data-testid="onboarding-path">
+              <legend className="mb-2 p-0 font-display text-lg font-bold">{app.wedo.pathTitle}</legend>
+              <PathPicker
+                wt={wt}
+                ageRange={age}
+                value={path}
+                onPick={(p) => (setPath(p), setPathTouched(true))}
+                asRadio
+                name={`${id}-path`}
+                showHeader={false}
+              />
+            </fieldset>
+          )}
 
           <fieldset className="m-0 grid gap-2 border-0 p-0">
             <legend className="mb-2 p-0 font-display text-lg font-bold">{t.goal}</legend>

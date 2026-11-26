@@ -90,3 +90,34 @@ describe('WeDo scenes and checks', () => {
     expect(wedoCheckIssues(lift, [c({ type: 'reactsTo', sensor: 'tilt', action: 'light' })], undefined).length).toBe(2)
   })
 })
+
+describe('WeDo editor edits', async () => {
+  const { addBlock, allPaths, canAdd, getAt, moveAt, removeAt, updateAt } = await import('@/lib/wedo/edit')
+
+  it('adds at the end or inside a selected repeat, never past the limits', () => {
+    let p = addBlock([], 'light', null)!
+    expect(p.path).toBe('0')
+    p = addBlock(p.steps, 'repeat', null)!
+    expect(p.path).toBe('1')
+    p = addBlock(p.steps, 'sound', '1')!
+    expect(p.path).toBe('1.0')
+    p = addBlock(p.steps, 'repeat', '1')!
+    expect(p.path).toBe('1.1')
+    expect(canAdd(p.steps, 'repeat', '1.1')).toBe(false) // a third level
+    expect(canAdd(p.steps, 'sound', '1.1')).toBe(true)
+    expect(canAdd(p.steps, 'sound', '0')).toBe(false) // not a repeat
+    const full = Array.from({ length: 20 }, () => ({ op: 'motor_off' as const }))
+    expect(addBlock(full, 'light', null)).toBeNull()
+  })
+
+  it('moves, edits and removes blocks by path', () => {
+    const steps = ok([{ op: 'light', color: 'red' }, { op: 'repeat', times: 2, steps: [{ op: 'sound', sound: 1 }, { op: 'wait', seconds: 1 }] }])
+    const moved = moveAt(steps, '1.1', -1)
+    expect(moved.path).toBe('1.0')
+    expect(getAt(moved.steps, '1.0')).toEqual({ op: 'wait', seconds: 1 })
+    expect(moveAt(steps, '0', -1).steps).toBe(steps)
+    expect(getAt(updateAt(steps, '1.0', { op: 'sound', sound: 5 }), '1.0')).toEqual({ op: 'sound', sound: 5 })
+    expect(allPaths(removeAt(steps, '1.0'))).toEqual(['0', '1', '1.0'])
+    expect(allPaths(steps)).toEqual(['0', '1', '1.0', '1.1'])
+  })
+})

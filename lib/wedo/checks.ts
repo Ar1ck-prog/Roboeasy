@@ -196,10 +196,11 @@ export function runWedoChecks(steps: WedoStep[], scene: WedoScene, checks: WedoC
         return say(n >= c.min, { n, min: c.min })
       }
       case 'displayed': {
-        const want = c.text.trim().toUpperCase()
+        const norm = (s: string) => s.trim().toUpperCase()
+        const accepted = typeof c.text === 'string' ? [norm(c.text)] : [norm(c.text.ru), norm(c.text.kk), norm(c.text.en)]
         return say(
-          events.some((e) => e.kind === 'display' && e.value.trim().toUpperCase() === want),
-          { text: c.text },
+          events.some((e) => e.kind === 'display' && accepted.includes(norm(e.value))),
+          { text: typeof c.text === 'string' ? c.text : c.text[lang] },
         )
       }
       case 'usesBlock':

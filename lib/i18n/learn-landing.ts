@@ -107,7 +107,7 @@ const ru: LearnLandingCopy = {
   },
   tracks: {
     eyebrow: 'Обучение',
-    title: '10 треков от первой программы до соревнований, автономных роботов и ИИ',
+    title: 'Треки от первых шагов с WeDo 2.0 до соревнований, автономных роботов и ИИ',
     lead: 'Идёшь по шагам: каждый трек открывает следующий. Если уже что-то умеешь — пройди тест и начни с нужного места.',
     noKit: 'без набора',
     partKit: 'часть с набором',
@@ -257,7 +257,7 @@ const en: LearnLandingCopy = {
   },
   tracks: {
     eyebrow: 'Learning',
-    title: '10 tracks from the first program to competitions, autonomous robots and AI',
+    title: 'Tracks from first steps with WeDo 2.0 to competitions, autonomous robots and AI',
     lead: 'Go step by step: each track opens the next one. Already know some? Take the test and start in the right place.',
     noKit: 'no kit needed',
     partKit: 'partly with a kit',
@@ -404,7 +404,7 @@ const kk: LearnLandingCopy = {
   },
   tracks: {
     eyebrow: 'Оқу',
-    title: 'Алғашқы бағдарламадан жарыстарға, автономды роботтар мен ЖИ-ге дейін 10 трек',
+    title: 'WeDo 2.0-дегі алғашқы қадамдардан жарыстарға, автономды роботтар мен ЖИ-ге дейінгі тректер',
     lead: 'Қадам бойынша жүресің: әр трек келесісін ашады. Бірдеңе білсең — тест тапсырып, керекті жерден баста.',
     noKit: 'жиынтықсыз',
     partKit: 'бір бөлігі жиынтықпен',

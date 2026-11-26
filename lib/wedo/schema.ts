@@ -127,7 +127,18 @@ export const wedoCheckSchema = z.discriminatedUnion('type', [
   }),
   z.strictObject({ type: z.literal('light'), color: z.enum(WEDO_COLORS) }),
   z.strictObject({ type: z.literal('sound'), min: z.number().int().positive().default(1) }),
-  z.strictObject({ type: z.literal('displayed'), text: z.string().min(1).max(WEDO_LIMITS.displayChars) }),
+  /** The screen showed this text; a localized text accepts the word in any of the three languages. */
+  z.strictObject({
+    type: z.literal('displayed'),
+    text: z.union([
+      z.string().min(1).max(WEDO_LIMITS.displayChars),
+      z.object({
+        ru: z.string().min(1).max(WEDO_LIMITS.displayChars),
+        kk: z.string().min(1).max(WEDO_LIMITS.displayChars),
+        en: z.string().min(1).max(WEDO_LIMITS.displayChars),
+      }),
+    ]),
+  }),
   z.strictObject({ type: z.literal('usesBlock'), op: z.enum(WEDO_OPS), min: z.number().int().positive().default(1) }),
   z.strictObject({ type: z.literal('maxBlocks'), max: z.number().int().positive() }),
 ])

@@ -21,8 +21,10 @@ import type { PlayText } from '@/lib/i18n/play'
 import { variantFor } from '@/lib/flags'
 import { ACHIEVEMENTS, recordedAchievements } from '@/lib/learn/achievements'
 import { COURSE } from '@/lib/learn/course'
-import { nextLesson, skillRadar, trackHasContent, trackProgress } from '@/lib/learn/progress'
-import { useHydrated } from '@/lib/learn/store'
+import { nextLesson, pathOrder, skillRadar, trackHasContent, trackProgress } from '@/lib/learn/progress'
+import { setLearningPath, useHydrated } from '@/lib/learn/store'
+import { PathPicker } from '@/components/wedo/path-picker'
+import type { WedoText } from '@/lib/i18n/wedo'
 import { challengeIndex, isoWeek } from '@/lib/learn/streak'
 import { LEVELS } from '@/lib/learn/xp'
 import { useProgress } from '@/lib/learn/use-progress'
@@ -54,7 +56,7 @@ export function Ring({ value, children, label }: { value: number; children: Reac
 }
 
 /** /path: the learner's home. Shows onboarding first. */
-export function PathHome({ lang, app, play, challengeTitles }: { lang: Lang; app: LearnAppText; play: PlayText; challengeTitles: string[] }) {
+export function PathHome({ lang, app, play, wt, challengeTitles }: { lang: Lang; app: LearnAppText; play: PlayText; wt: WedoText; challengeTitles: string[] }) {
   const hydrated = useHydrated()
   const p = useProgress()
   const [joining, setJoining] = useState(false)
@@ -73,10 +75,18 @@ export function PathHome({ lang, app, play, challengeTitles }: { lang: Lang; app
       </div>
     )
 
-  if (!p.state.profile || joining) return <Onboarding lang={lang} app={app} play={play} onSaved={() => setJoining(true)} onDone={() => setJoining(false)} />
+  if (!p.state.profile || joining) return <Onboarding lang={lang} app={app} play={play} wt={wt} onSaved={() => setJoining(true)} onDone={() => setJoining(false)} />
+
+  // A profile from before learning paths, with no SPIKE lesson yet: pick a path first.
+  if (p.path === null)
+    return (
+      <div className="container grid max-w-4xl gap-8 py-8 md:py-12">
+        <PathPicker wt={wt} ageRange={p.state.profile.ageRange} onPick={setLearningPath} />
+      </div>
+    )
 
   const profile = p.state.profile
-  const next = nextLesson(p.done, COURSE)
+  const next = nextLesson(p.done, COURSE, p.path)
   const nextLevel = p.level.to !== null ? LEVELS[p.level.index + 1] : null
   const week = isoWeek(p.streak.today.key)
   const challengeDone = p.state.events.some((e) => e.kind === 'challenge_done' && e.week === week)
@@ -84,7 +94,10 @@ export function PathHome({ lang, app, play, challengeTitles }: { lang: Lang; app
   const recent = ACHIEVEMENTS.filter((a) => earned.has(a.id))
     .sort((a, b) => (earned.get(b.id) ?? 0) - (earned.get(a.id) ?? 0))
     .slice(0, 4)
-  const tracks = COURSE.tracks.filter((tr) => trackHasContent(tr) && trackProgress(p.done, tr, COURSE).unlocked)
+  // On the SPIKE path the optional WeDo tracks show once started; on the WeDo path they come first.
+  const tracks = pathOrder(COURSE, p.path).filter(
+    (tr) => trackHasContent(tr) && trackProgress(p.done, tr, COURSE, p.path).unlocked && (tr.family !== 'wedo' || p.path === 'wedo' || trackProgress(p.done, tr, COURSE).done > 0),
+  )
   const goal = profile.goal
   const goalText =
     goal.kind === 'lessons'
@@ -265,7 +278,7 @@ export function PathHome({ lang, app, play, challengeTitles }: { lang: Lang; app
             </div>
             <ul className="m-0 grid list-none gap-3 p-0">
               {tracks.map((tr) => {
-                const tp = trackProgress(p.done, tr, COURSE)
+                const tp = trackProgress(p.done, tr, COURSE, p.path)
                 return (
                   <li key={tr.id}>
                     <Link href={`/${lang}/learn/${tr.id}`} className="flex items-center gap-3 rounded-(--radius-sm) p-1 hover:bg-surface-2">
