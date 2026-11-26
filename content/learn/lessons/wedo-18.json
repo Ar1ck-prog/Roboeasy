@@ -1,0 +1,93 @@
+{
+  "id": "wedo-18",
+  "track": "wedo-motion",
+  "unit": "wedo-structures",
+  "minutes": 5,
+  "skills": [
+    "structures"
+  ],
+  "kit": false,
+  "title": {
+    "ru": "Устойчивая башня",
+    "kk": "Тұрақты мұнара",
+    "en": "A steady tower"
+  },
+  "goal": {
+    "ru": "Сегодня ты построишь раму, которая не шатается.",
+    "kk": "Бүгін сен шайқалмайтын жақтау құрастырасың.",
+    "en": "Today you will build a frame that does not wobble."
+  },
+  "summary": {
+    "ru": "Теперь ты знаешь: треугольник и широкое основание делают постройку крепкой.",
+    "kk": "Енді сен білесің: үшбұрыш пен кең негіз құрылысты берік етеді.",
+    "en": "Now you know: triangles and a wide base make a build strong."
+  },
+  "steps": [
+    {
+      "id": "strong",
+      "type": "theory",
+      "title": {
+        "ru": "Крепкие постройки",
+        "kk": "Берік құрылыстар",
+        "en": "Strong builds"
+      },
+      "body": {
+        "ru": "Квадрат из балок легко **шатается**.\n\nЕсли добавить балку наискосок, получится **треугольник**. Он не гнётся.\n\nА широкое основание не даёт башне упасть.",
+        "kk": "Арқалықтардан жасалған шаршы оңай **шайқалады**.\n\nҚиғаш арқалық қоссаң, **үшбұрыш** шығады. Ол майыспайды.\n\nКең негіз мұнараны құлатпайды.",
+        "en": "A square of beams **wobbles** easily.\n\nAdd a beam across it and you get a **triangle**. It does not bend.\n\nA wide base keeps a tower from falling."
+      },
+      "illustration": "r-triangle"
+    },
+    {
+      "id": "brace",
+      "type": "widget",
+      "widget": "brace",
+      "title": {
+        "ru": "Укрепи раму",
+        "kk": "Жақтауды бекіт",
+        "en": "Brace the frame"
+      },
+      "task": {
+        "ru": "Рама шатается. Добавь балки и нажми «Толкнуть раму».",
+        "kk": "Жақтау шайқалады. Арқалықтар қосып, «Жақтауды итеру» батырмасын бас.",
+        "en": "The frame wobbles. Add beams, then press “Push the frame”."
+      }
+    },
+    {
+      "id": "steady",
+      "type": "quiz",
+      "kind": "choice",
+      "question": {
+        "ru": "Какая башня устоит лучше?",
+        "kk": "Қай мұнара жақсырақ тұрады?",
+        "en": "Which tower stands best?"
+      },
+      "options": [
+        {
+          "ru": "С широким основанием",
+          "kk": "Кең негізді",
+          "en": "One with a wide base"
+        },
+        {
+          "ru": "Узкая и высокая",
+          "kk": "Тар әрі биік",
+          "en": "A thin tall one"
+        },
+        {
+          "ru": "Без опоры",
+          "kk": "Тірексіз",
+          "en": "One with no support"
+        }
+      ],
+      "correct": [
+        0
+      ],
+      "explanation": {
+        "ru": "Широкое основание держит башню.",
+        "kk": "Кең негіз мұнараны ұстайды.",
+        "en": "A wide base holds the tower up."
+      },
+      "skill": "structures"
+    }
+  ]
+}

@@ -1,6 +1,694 @@
 {
   "tracks": [
     {
+      "id": "wedo-start",
+      "title": {
+        "ru": "Привет, WeDo!",
+        "kk": "Сәлем, WeDo!",
+        "en": "Hello, WeDo!"
+      },
+      "description": {
+        "ru": "Из чего состоит робот WeDo 2.0. Первые программы: мотор, лампа, звук и вездеход Вжик.",
+        "kk": "WeDo 2.0 роботы неден тұрады. Алғашқы бағдарламалар: мотор, шам, дыбыс және Вжик жолтабары.",
+        "en": "What a WeDo 2.0 robot is made of. First programs: motor, light, sound and Zip the rover."
+      },
+      "icon": "Smile",
+      "color": "var(--wedo-accent)",
+      "family": "wedo",
+      "prerequisites": [],
+      "units": [
+        {
+          "id": "wedo-meet",
+          "title": {
+            "ru": "Знакомство",
+            "kk": "Танысу",
+            "en": "Meet the robot"
+          },
+          "lessons": [
+            {
+              "id": "wedo-01",
+              "title": {
+                "ru": "Что умеет робот",
+                "kk": "Робот не істей алады",
+                "en": "What a robot can do"
+              },
+              "skills": [
+                "robot-basics",
+                "sequence"
+              ],
+              "status": "ready",
+              "project": false,
+              "kit": false
+            },
+            {
+              "id": "wedo-02",
+              "title": {
+                "ru": "Смартхаб: мозг робота",
+                "kk": "Смартхаб: роботтың миы",
+                "en": "The Smarthub: the robot’s brain"
+              },
+              "skills": [
+                "wedo-hub"
+              ],
+              "status": "ready",
+              "project": false,
+              "kit": false
+            },
+            {
+              "id": "wedo-03",
+              "title": {
+                "ru": "Мотор крутится",
+                "kk": "Мотор айналады",
+                "en": "The motor turns"
+              },
+              "skills": [
+                "wedo-hub",
+                "motion"
+              ],
+              "status": "ready",
+              "project": false,
+              "kit": false
+            },
+            {
+              "id": "wedo-04",
+              "title": {
+                "ru": "Датчики движения и наклона",
+                "kk": "Қозғалыс және еңкею датчиктері",
+                "en": "Motion and tilt sensors"
+              },
+              "skills": [
+                "sensor-motion",
+                "sensor-tilt"
+              ],
+              "status": "ready",
+              "project": false,
+              "kit": false
+            },
+            {
+              "id": "wedo-05",
+              "title": {
+                "ru": "Собираем и подключаем",
+                "kk": "Құрастырамыз және қосамыз",
+                "en": "Build and connect"
+              },
+              "skills": [
+                "wedo-hub",
+                "structures"
+              ],
+              "status": "ready",
+              "project": false,
+              "kit": false
+            }
+          ]
+        },
+        {
+          "id": "wedo-first",
+          "title": {
+            "ru": "Первые программы",
+            "kk": "Алғашқы бағдарламалар",
+            "en": "First programs"
+          },
+          "lessons": [
+            {
+              "id": "wedo-06",
+              "title": {
+                "ru": "Порядок блоков",
+                "kk": "Блоктардың реті",
+                "en": "Block order"
+              },
+              "skills": [
+                "sequence"
+              ],
+              "status": "ready",
+              "project": false,
+              "kit": false
+            },
+            {
+              "id": "wedo-07",
+              "title": {
+                "ru": "Сколько ехать",
+                "kk": "Қанша жүру керек",
+                "en": "How long to drive"
+              },
+              "skills": [
+                "motion"
+              ],
+              "status": "ready",
+              "project": false,
+              "kit": false
+            },
+            {
+              "id": "wedo-08",
+              "title": {
+                "ru": "Сильнее и слабее",
+                "kk": "Күштірек және әлсіздеу",
+                "en": "Stronger and weaker"
+              },
+              "skills": [
+                "motion"
+              ],
+              "status": "ready",
+              "project": false,
+              "kit": false
+            },
+            {
+              "id": "wedo-09",
+              "title": {
+                "ru": "Проект «Посылка»",
+                "kk": "«Сәлемдеме» жобасы",
+                "en": "Project “Parcel”"
+              },
+              "skills": [
+                "motion",
+                "sequence"
+              ],
+              "status": "ready",
+              "project": true,
+              "kit": false
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "wedo-motion",
+      "title": {
+        "ru": "Механизмы и движение",
+        "kk": "Механизмдер мен қозғалыс",
+        "en": "Mechanisms and motion"
+      },
+      "description": {
+        "ru": "Шестерёнки, шкивы и червяк. Вжик едет вперёд и назад, кран поднимает груз.",
+        "kk": "Тісті доңғалақтар, шкивтер және бұрама. Вжик алға-артқа жүреді, кран жүк көтереді.",
+        "en": "Gears, pulleys and the worm. Zip drives forward and back, a crane lifts loads."
+      },
+      "icon": "Cog",
+      "color": "var(--wedo-accent)",
+      "family": "wedo",
+      "prerequisites": [
+        "wedo-start"
+      ],
+      "units": [
+        {
+          "id": "wedo-gears",
+          "title": {
+            "ru": "Шестерёнки и шкивы",
+            "kk": "Тісті доңғалақтар мен шкивтер",
+            "en": "Gears and pulleys"
+          },
+          "lessons": [
+            {
+              "id": "wedo-10",
+              "title": {
+                "ru": "Шестерёнки: быстрее или сильнее",
+                "kk": "Тісті доңғалақтар: жылдамырақ па, күштірек пе",
+                "en": "Gears: faster or stronger"
+              },
+              "skills": [
+                "gears",
+                "wedo-mechanics"
+              ],
+              "status": "ready",
+              "project": false,
+              "kit": false
+            },
+            {
+              "id": "wedo-11",
+              "title": {
+                "ru": "Ремень и шкив",
+                "kk": "Белдік пен шкив",
+                "en": "Belt and pulley"
+              },
+              "skills": [
+                "wedo-mechanics"
+              ],
+              "status": "ready",
+              "project": false,
+              "kit": false
+            },
+            {
+              "id": "wedo-12",
+              "title": {
+                "ru": "Червячная передача",
+                "kk": "Бұрамалы беріліс",
+                "en": "The worm gear"
+              },
+              "skills": [
+                "gears",
+                "mechanisms"
+              ],
+              "status": "ready",
+              "project": false,
+              "kit": false
+            },
+            {
+              "id": "wedo-13",
+              "title": {
+                "ru": "Проект «Вертушка»",
+                "kk": "«Айналғыш» жобасы",
+                "en": "Project “Spinner”"
+              },
+              "skills": [
+                "wedo-mechanics"
+              ],
+              "status": "ready",
+              "project": true,
+              "kit": false
+            }
+          ]
+        },
+        {
+          "id": "wedo-rover",
+          "title": {
+            "ru": "Вездеход",
+            "kk": "Жолтабар",
+            "en": "The rover"
+          },
+          "lessons": [
+            {
+              "id": "wedo-14",
+              "title": {
+                "ru": "Вперёд и назад",
+                "kk": "Алға және артқа",
+                "en": "Forward and back"
+              },
+              "skills": [
+                "motion"
+              ],
+              "status": "ready",
+              "project": false,
+              "kit": false
+            },
+            {
+              "id": "wedo-15",
+              "title": {
+                "ru": "Остановись вовремя",
+                "kk": "Уақытында тоқта",
+                "en": "Stop in time"
+              },
+              "skills": [
+                "motion",
+                "sequence"
+              ],
+              "status": "ready",
+              "project": false,
+              "kit": false
+            },
+            {
+              "id": "wedo-16",
+              "title": {
+                "ru": "Найди ошибку",
+                "kk": "Қатені тап",
+                "en": "Find the bug"
+              },
+              "skills": [
+                "sequence"
+              ],
+              "status": "ready",
+              "project": false,
+              "kit": false
+            },
+            {
+              "id": "wedo-17",
+              "title": {
+                "ru": "Проект «Разведчик»",
+                "kk": "«Барлаушы» жобасы",
+                "en": "Project “Scout”"
+              },
+              "skills": [
+                "motion",
+                "sequence"
+              ],
+              "status": "ready",
+              "project": true,
+              "kit": false
+            }
+          ]
+        },
+        {
+          "id": "wedo-structures",
+          "title": {
+            "ru": "Прочные постройки",
+            "kk": "Берік құрылыстар",
+            "en": "Strong builds"
+          },
+          "lessons": [
+            {
+              "id": "wedo-18",
+              "title": {
+                "ru": "Устойчивая башня",
+                "kk": "Тұрақты мұнара",
+                "en": "A steady tower"
+              },
+              "skills": [
+                "structures"
+              ],
+              "status": "ready",
+              "project": false,
+              "kit": false
+            },
+            {
+              "id": "wedo-19",
+              "title": {
+                "ru": "Подъёмник",
+                "kk": "Көтергіш",
+                "en": "The lift"
+              },
+              "skills": [
+                "mechanisms"
+              ],
+              "status": "ready",
+              "project": false,
+              "kit": false
+            },
+            {
+              "id": "wedo-20",
+              "title": {
+                "ru": "Проект «Подъёмный кран»",
+                "kk": "«Көтергіш кран» жобасы",
+                "en": "Project “Crane”"
+              },
+              "skills": [
+                "mechanisms",
+                "sequence"
+              ],
+              "status": "ready",
+              "project": true,
+              "kit": false
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "wedo-sensors",
+      "title": {
+        "ru": "Датчики",
+        "kk": "Датчиктер",
+        "en": "Sensors"
+      },
+      "description": {
+        "ru": "Датчик движения и датчик наклона. Умный шлагбаум, светофор, свет, звук и экран.",
+        "kk": "Қозғалыс датчигі мен еңкею датчигі. Ақылды шлагбаум, бағдаршам, жарық, дыбыс және экран.",
+        "en": "The motion sensor and the tilt sensor. A smart barrier, a traffic light, light, sound and screen."
+      },
+      "icon": "ScanEye",
+      "color": "var(--wedo-accent)",
+      "family": "wedo",
+      "prerequisites": [
+        "wedo-motion"
+      ],
+      "units": [
+        {
+          "id": "wedo-motion-sensor",
+          "title": {
+            "ru": "Датчик движения",
+            "kk": "Қозғалыс датчигі",
+            "en": "The motion sensor"
+          },
+          "lessons": [
+            {
+              "id": "wedo-21",
+              "title": {
+                "ru": "Как видит датчик",
+                "kk": "Датчик қалай көреді",
+                "en": "How the sensor sees"
+              },
+              "skills": [
+                "sensor-motion"
+              ],
+              "status": "ready",
+              "project": false,
+              "kit": false
+            },
+            {
+              "id": "wedo-22",
+              "title": {
+                "ru": "Жди, пока подъедут",
+                "kk": "Келгенше күт",
+                "en": "Wait until it arrives"
+              },
+              "skills": [
+                "sensor-motion"
+              ],
+              "status": "ready",
+              "project": false,
+              "kit": false
+            },
+            {
+              "id": "wedo-23",
+              "title": {
+                "ru": "Стоп перед стеной",
+                "kk": "Қабырға алдында тоқта",
+                "en": "Stop before the wall"
+              },
+              "skills": [
+                "sensor-motion"
+              ],
+              "status": "ready",
+              "project": false,
+              "kit": false
+            },
+            {
+              "id": "wedo-24",
+              "title": {
+                "ru": "Проект «Умный шлагбаум»",
+                "kk": "«Ақылды шлагбаум» жобасы",
+                "en": "Project “Smart barrier”"
+              },
+              "skills": [
+                "sensor-motion",
+                "sequence"
+              ],
+              "status": "ready",
+              "project": true,
+              "kit": false
+            }
+          ]
+        },
+        {
+          "id": "wedo-tilt",
+          "title": {
+            "ru": "Датчик наклона",
+            "kk": "Еңкею датчигі",
+            "en": "The tilt sensor"
+          },
+          "lessons": [
+            {
+              "id": "wedo-25",
+              "title": {
+                "ru": "Наклоны",
+                "kk": "Еңкеюлер",
+                "en": "Tilts"
+              },
+              "skills": [
+                "sensor-tilt"
+              ],
+              "status": "ready",
+              "project": false,
+              "kit": false
+            },
+            {
+              "id": "wedo-26",
+              "title": {
+                "ru": "Пульт-наклон",
+                "kk": "Еңкею пульті",
+                "en": "A tilt remote"
+              },
+              "skills": [
+                "sensor-tilt"
+              ],
+              "status": "ready",
+              "project": false,
+              "kit": false
+            },
+            {
+              "id": "wedo-27",
+              "title": {
+                "ru": "Светофор на наклоне",
+                "kk": "Еңкеюдегі бағдаршам",
+                "en": "A tilt traffic light"
+              },
+              "skills": [
+                "sensor-tilt"
+              ],
+              "status": "ready",
+              "project": false,
+              "kit": false
+            }
+          ]
+        },
+        {
+          "id": "wedo-light-sound",
+          "title": {
+            "ru": "Свет, звук и экран",
+            "kk": "Жарық, дыбыс және экран",
+            "en": "Light, sound and screen"
+          },
+          "lessons": [
+            {
+              "id": "wedo-28",
+              "title": {
+                "ru": "Лампа и звуки",
+                "kk": "Шам және дыбыстар",
+                "en": "Light and sounds"
+              },
+              "skills": [
+                "wedo-hub",
+                "sequence"
+              ],
+              "status": "ready",
+              "project": false,
+              "kit": false
+            },
+            {
+              "id": "wedo-29",
+              "title": {
+                "ru": "Экран планшета",
+                "kk": "Планшет экраны",
+                "en": "The tablet screen"
+              },
+              "skills": [
+                "wedo-hub"
+              ],
+              "status": "ready",
+              "project": false,
+              "kit": false
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "wedo-projects",
+      "title": {
+        "ru": "Большие проекты",
+        "kk": "Үлкен жобалар",
+        "en": "Big projects"
+      },
+      "description": {
+        "ru": "Повторение и большие проекты: патруль, охранник, спасатель. В конце — мост к SPIKE Prime.",
+        "kk": "Қайталау және үлкен жобалар: күзет, күзетші, құтқарушы. Соңында — SPIKE Prime-ға көпір.",
+        "en": "Repeats and big projects: patrol, guard, rescuer. At the end, a bridge to SPIKE Prime."
+      },
+      "icon": "Puzzle",
+      "color": "var(--wedo-accent)",
+      "family": "wedo",
+      "prerequisites": [
+        "wedo-sensors"
+      ],
+      "units": [
+        {
+          "id": "wedo-loops",
+          "title": {
+            "ru": "Повторение",
+            "kk": "Қайталау",
+            "en": "Repeating"
+          },
+          "lessons": [
+            {
+              "id": "wedo-30",
+              "title": {
+                "ru": "Повтори N раз",
+                "kk": "N рет қайтала",
+                "en": "Repeat N times"
+              },
+              "skills": [
+                "loops"
+              ],
+              "status": "ready",
+              "project": false,
+              "kit": false
+            },
+            {
+              "id": "wedo-31",
+              "title": {
+                "ru": "Повторять всегда",
+                "kk": "Әрдайым қайталау",
+                "en": "Repeat forever"
+              },
+              "skills": [
+                "loops",
+                "sensor-motion"
+              ],
+              "status": "ready",
+              "project": false,
+              "kit": false
+            },
+            {
+              "id": "wedo-32",
+              "title": {
+                "ru": "Патруль",
+                "kk": "Күзет",
+                "en": "Patrol"
+              },
+              "skills": [
+                "loops",
+                "sensor-motion"
+              ],
+              "status": "ready",
+              "project": false,
+              "kit": false
+            }
+          ]
+        },
+        {
+          "id": "wedo-final",
+          "title": {
+            "ru": "Финал WeDo",
+            "kk": "WeDo финалы",
+            "en": "WeDo finale"
+          },
+          "lessons": [
+            {
+              "id": "wedo-33",
+              "title": {
+                "ru": "Проект «Охранник»",
+                "kk": "«Күзетші» жобасы",
+                "en": "Project “Guard”"
+              },
+              "skills": [
+                "loops",
+                "sensor-motion"
+              ],
+              "status": "ready",
+              "project": false,
+              "kit": false
+            },
+            {
+              "id": "wedo-34",
+              "title": {
+                "ru": "Проект «Спасатель»",
+                "kk": "«Құтқарушы» жобасы",
+                "en": "Project “Rescuer”"
+              },
+              "skills": [
+                "motion",
+                "sensor-tilt"
+              ],
+              "status": "ready",
+              "project": true,
+              "kit": false
+            },
+            {
+              "id": "wedo-35",
+              "title": {
+                "ru": "Мост к SPIKE Prime",
+                "kk": "SPIKE Prime-ға көпір",
+                "en": "A bridge to SPIKE Prime"
+              },
+              "skills": [
+                "robot-basics"
+              ],
+              "status": "ready",
+              "project": false,
+              "kit": false
+            }
+          ]
+        }
+      ]
+    },
+    {
       "id": "start",
       "title": {
         "ru": "Старт",
@@ -14,6 +702,7 @@
       },
       "icon": "Rocket",
       "color": "var(--blk-events)",
+      "family": "spike",
       "prerequisites": [],
       "units": [
         {
@@ -171,6 +860,7 @@
       },
       "icon": "Blocks",
       "color": "var(--blk-move)",
+      "family": "spike",
       "prerequisites": [
         "start"
       ],
@@ -595,6 +1285,7 @@
       },
       "icon": "Hammer",
       "color": "var(--blk-control)",
+      "family": "spike",
       "prerequisites": [
         "start"
       ],
@@ -923,6 +1614,7 @@
       },
       "icon": "Radar",
       "color": "var(--blk-sensors)",
+      "family": "spike",
       "prerequisites": [
         "blocks"
       ],
@@ -1273,6 +1965,7 @@
       },
       "icon": "Compass",
       "color": "var(--blk-motor)",
+      "family": "spike",
       "prerequisites": [
         "sensors"
       ],
@@ -1522,6 +2215,7 @@
       },
       "icon": "Code2",
       "color": "var(--blk-light)",
+      "family": "spike",
       "prerequisites": [
         "sensors"
       ],
@@ -1814,6 +2508,7 @@
       },
       "icon": "Cog",
       "color": "var(--blk-sound)",
+      "family": "spike",
       "prerequisites": [
         "build",
         "sensors"
@@ -2035,6 +2730,7 @@
       },
       "icon": "Trophy",
       "color": "var(--blk-events)",
+      "family": "spike",
       "prerequisites": [
         "navigation",
         "mechanisms"
@@ -2290,6 +2986,7 @@
       },
       "icon": "Bot",
       "color": "var(--blk-control)",
+      "family": "spike",
       "prerequisites": [
         "sensors"
       ],
@@ -2530,6 +3227,7 @@
       },
       "icon": "Brain",
       "color": "var(--blk-sensors)",
+      "family": "general",
       "prerequisites": [],
       "units": [
         {

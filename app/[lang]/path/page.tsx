@@ -3,6 +3,7 @@ import { notFound } from 'next/navigation'
 
 import { AppShell } from '@/components/app-shell'
 import { PathHome } from '@/components/learn/path-home'
+import { getWedoText } from '@/lib/i18n/wedo'
 import { isLocale } from '@/lib/i18n'
 import { getLearnText } from '@/lib/i18n/learn'
 import { getLearnAppText } from '@/lib/i18n/learn-app'
@@ -22,7 +23,7 @@ export default async function PathPage({ params }: Params) {
   if (!isLocale(lang)) notFound()
   return (
     <AppShell lang={lang}>
-      <PathHome lang={lang} app={getLearnAppText(lang)} play={getPlayText(lang)} challengeTitles={CHALLENGES.map((c) => c.title[lang])} />
+      <PathHome lang={lang} app={getLearnAppText(lang)} play={getPlayText(lang)} wt={getWedoText(lang)} challengeTitles={CHALLENGES.map((c) => c.title[lang])} />
     </AppShell>
   )
 }

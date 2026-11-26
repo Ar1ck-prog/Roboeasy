@@ -92,3 +92,40 @@ describe('mentor hints', () => {
     expect(sanitizeHint('   ', reference)).toBeNull()
   })
 })
+
+describe('learning path in the profile', () => {
+  const base = {
+    nickname: 'Robo',
+    ageRange: 'under-10',
+    timezone: 'Asia/Almaty',
+    goal: { kind: 'lessons', n: 1 },
+    createdAt: 1,
+    anonId: 'anon_12345678',
+  }
+
+  it('reads an old saved state without learningPath as "not chosen"', () => {
+    const s = parseState({ version: 1, profile: base, events: [] })
+    expect(s.profile).not.toBeNull()
+    expect(s.profile!.learningPath).toBeNull()
+  })
+
+  it('keeps a chosen path and rejects unknown ones', () => {
+    expect(parseState({ version: 1, profile: { ...base, learningPath: 'wedo' }, events: [] }).profile!.learningPath).toBe('wedo')
+    expect(parseState({ version: 1, profile: { ...base, learningPath: 'ev3' }, events: [] })).toEqual(EMPTY_STATE)
+  })
+
+  it('survives the trip to the cloud profile row and back (settings jsonb, no migration)', async () => {
+    const { fromRow, toRow } = await import('@/lib/learn/cloud')
+    for (const learningPath of ['wedo', 'spike', null] as const) {
+      const profile = parseState({ version: 1, profile: { ...base, learningPath }, events: [] }).profile!
+      const row = toRow('00000000-0000-0000-0000-000000000001', profile)
+      expect(row.settings.learningPath).toBe(learningPath)
+      const back = fromRow(row)!
+      expect({ ...back, createdAt: profile.createdAt }).toEqual(profile)
+    }
+    // Rows written before paths existed come back as "not chosen".
+    const row = toRow('00000000-0000-0000-0000-000000000001', parseState({ version: 1, profile: base, events: [] }).profile!)
+    delete row.settings.learningPath
+    expect(fromRow(row)!.learningPath).toBeNull()
+  })
+})

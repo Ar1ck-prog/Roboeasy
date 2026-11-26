@@ -1,0 +1,121 @@
+{
+  "id": "wedo-35",
+  "track": "wedo-projects",
+  "unit": "wedo-final",
+  "minutes": 4,
+  "skills": [
+    "robot-basics"
+  ],
+  "kit": false,
+  "title": {
+    "ru": "Мост к SPIKE Prime",
+    "kk": "SPIKE Prime-ға көпір",
+    "en": "A bridge to SPIKE Prime"
+  },
+  "goal": {
+    "ru": "Сегодня ты узнаешь, что ждёт тебя в SPIKE Prime.",
+    "kk": "Бүгін сен SPIKE Prime-да сені не күтіп тұрғанын білесің.",
+    "en": "Today you will find out what waits for you in SPIKE Prime."
+  },
+  "summary": {
+    "ru": "Теперь ты знаешь, что похоже и что нового в SPIKE Prime. Ты готов!",
+    "kk": "Енді сен SPIKE Prime-да не ұқсас және не жаңа екенін білесің. Сен дайынсың!",
+    "en": "Now you know what is the same and what is new in SPIKE Prime. You are ready!"
+  },
+  "steps": [
+    {
+      "id": "same-new",
+      "type": "theory",
+      "title": {
+        "ru": "Что похоже, что новое",
+        "kk": "Не ұқсас, не жаңа",
+        "en": "What is the same, what is new"
+      },
+      "body": {
+        "ru": "В SPIKE Prime тоже есть **хаб**, **моторы** и **датчики**.\n\nНо хаб больше, моторов несколько, а датчики точнее.\n\nБлоки там **со словами**. Потом можно и **Python**.",
+        "kk": "SPIKE Prime-да да **хаб**, **моторлар** және **датчиктер** бар.\n\nБірақ хаб үлкенірек, моторлар бірнешеу, ал датчиктер дәлірек.\n\nОнда блоктар **сөздермен** жазылған. Кейін **Python** да болады.",
+        "en": "SPIKE Prime also has a **hub**, **motors** and **sensors**.\n\nBut the hub is bigger, there are several motors and the sensors are more exact.\n\nIts blocks have **words** on them. Later there is **Python** too."
+      }
+    },
+    {
+      "id": "bridge",
+      "type": "quiz",
+      "kind": "match",
+      "question": {
+        "ru": "Соедини часть WeDo и похожую часть SPIKE Prime.",
+        "kk": "WeDo бөлігін SPIKE Prime-дағы ұқсас бөлікпен сәйкестендір.",
+        "en": "Match each WeDo part with a similar SPIKE Prime part."
+      },
+      "pairs": [
+        {
+          "left": {
+            "ru": "Смартхаб",
+            "kk": "Смартхаб",
+            "en": "Smarthub"
+          },
+          "right": {
+            "ru": "Хаб SPIKE",
+            "kk": "SPIKE хабы",
+            "en": "SPIKE hub"
+          }
+        },
+        {
+          "left": {
+            "ru": "Датчик движения",
+            "kk": "Қозғалыс датчигі",
+            "en": "Motion sensor"
+          },
+          "right": {
+            "ru": "Датчик расстояния",
+            "kk": "Қашықтық датчигі",
+            "en": "Distance sensor"
+          }
+        },
+        {
+          "left": {
+            "ru": "Датчик наклона",
+            "kk": "Еңкею датчигі",
+            "en": "Tilt sensor"
+          },
+          "right": {
+            "ru": "Гироскоп",
+            "kk": "Гироскоп",
+            "en": "Gyro sensor"
+          }
+        },
+        {
+          "left": {
+            "ru": "Иконочные блоки",
+            "kk": "Белгішелі блоктар",
+            "en": "Icon blocks"
+          },
+          "right": {
+            "ru": "Блоки со словами",
+            "kk": "Сөзді блоктар",
+            "en": "Word blocks"
+          }
+        }
+      ],
+      "explanation": {
+        "ru": "Ты уже знаешь главное. В SPIKE всё то же, только больше и точнее.",
+        "kk": "Сен негізгісін білесің. SPIKE-та бәрі сол, тек көбірек әрі дәлірек.",
+        "en": "You already know the main ideas. SPIKE has the same, only more and more exact."
+      },
+      "skill": "robot-basics"
+    },
+    {
+      "id": "ready",
+      "type": "theory",
+      "title": {
+        "ru": "Ты готов к SPIKE Prime!",
+        "kk": "Сен SPIKE Prime-ға дайынсың!",
+        "en": "You are ready for SPIKE Prime!"
+      },
+      "body": {
+        "ru": "Ты научил робота **двигаться**, **светиться** и **чувствовать**.\n\nТы умеешь искать ошибки и повторять блоки.\n\nЗакончи урок, и откроется трек **«Старт»** SPIKE Prime. Вперёд!",
+        "kk": "Сен роботты **қозғалуға**, **жарқырауға** және **сезуге** үйреттің.\n\nСен қате іздеп, блоктарды қайталай аласың.\n\nСабақты аяқта, сонда SPIKE Prime **«Бастау»** тректері ашылады. Алға!",
+        "en": "You taught the robot to **move**, **light up** and **feel**.\n\nYou can find bugs and repeat blocks.\n\nFinish this lesson and the SPIKE Prime **Start** track opens. Off you go!"
+      }
+    }
+  ]
+}

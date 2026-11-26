@@ -1,0 +1,144 @@
+{
+  "id": "wedo-29",
+  "track": "wedo-sensors",
+  "unit": "wedo-light-sound",
+  "minutes": 4,
+  "skills": [
+    "wedo-hub"
+  ],
+  "kit": false,
+  "title": {
+    "ru": "Экран планшета",
+    "kk": "Планшет экраны",
+    "en": "The tablet screen"
+  },
+  "goal": {
+    "ru": "Сегодня робот поздоровается с тобой на экране.",
+    "kk": "Бүгін робот сенімен экранда амандасады.",
+    "en": "Today the robot will say hello to you on the screen."
+  },
+  "summary": {
+    "ru": "Теперь ты умеешь показывать слова и числа на экране.",
+    "kk": "Енді сен экранда сөздер мен сандарды көрсете аласың.",
+    "en": "Now you can show words and numbers on the screen."
+  },
+  "steps": [
+    {
+      "id": "screen",
+      "type": "theory",
+      "title": {
+        "ru": "Экран",
+        "kk": "Экран",
+        "en": "The screen"
+      },
+      "body": {
+        "ru": "У Смартхаба нет экрана. Зато есть **экран планшета** или компьютера.\n\nБлок **«Экран»** показывает там **текст** или **число**.",
+        "kk": "Смартхабта экран жоқ. Есесіне **планшет** немесе компьютер **экраны** бар.\n\n**«Экран»** блогы онда **мәтінді** немесе **санды** көрсетеді.",
+        "en": "The Smarthub has no screen. But the **tablet** or computer **screen** does.\n\nThe **Screen** block shows **text** or a **number** there."
+      }
+    },
+    {
+      "id": "where-screen",
+      "type": "quiz",
+      "kind": "choice",
+      "question": {
+        "ru": "Где появится надпись из блока «Экран»?",
+        "kk": "«Экран» блогындағы жазу қайда шығады?",
+        "en": "Where does the Screen block show its text?"
+      },
+      "options": [
+        {
+          "ru": "На планшете или компьютере",
+          "kk": "Планшетте немесе компьютерде",
+          "en": "On the tablet or computer"
+        },
+        {
+          "ru": "На Смартхабе",
+          "kk": "Смартхабта",
+          "en": "On the Smarthub"
+        },
+        {
+          "ru": "На моторе",
+          "kk": "Моторда",
+          "en": "On the motor"
+        }
+      ],
+      "correct": [
+        0
+      ],
+      "explanation": {
+        "ru": "Экран — это планшет или компьютер.",
+        "kk": "Экран — бұл планшет немесе компьютер.",
+        "en": "The screen is the tablet or the computer."
+      },
+      "skill": "wedo-hub"
+    },
+    {
+      "id": "hello",
+      "type": "wedo_code",
+      "mode": "code",
+      "title": {
+        "ru": "Привет!",
+        "kk": "Сәлем!",
+        "en": "Hello!"
+      },
+      "task": {
+        "ru": "Покажи слово **ПРИВЕТ**, подожди секунду и покажи число **3**.",
+        "kk": "**СӘЛЕМ** сөзін көрсет, бір секунд күтіп, **3** санын көрсет.",
+        "en": "Show the word **HELLO**, wait a second and show the number **3**."
+      },
+      "scene": {
+        "model": "spinner",
+        "ratio": 1
+      },
+      "palette": [
+        "display",
+        "wait"
+      ],
+      "start": [],
+      "checks": [
+        {
+          "type": "displayed",
+          "text": {
+            "ru": "ПРИВЕТ",
+            "kk": "СӘЛЕМ",
+            "en": "HELLO"
+          }
+        },
+        {
+          "type": "displayed",
+          "text": "3"
+        }
+      ],
+      "hints": [
+        {
+          "ru": "Нажми на блок экрана и напечатай слово.",
+          "kk": "Экран блогын басып, сөзді жаз.",
+          "en": "Tap the screen block and type the word."
+        },
+        {
+          "ru": "Для числа нажми «Число» и нажимай «+».",
+          "kk": "Сан үшін «Сан» батырмасын басып, «+» бас.",
+          "en": "For the number, tap Number and press +."
+        }
+      ],
+      "reference": [
+        {
+          "op": "display",
+          "kind": "text",
+          "value": "ПРИВЕТ"
+        },
+        {
+          "op": "wait",
+          "seconds": 1
+        },
+        {
+          "op": "display",
+          "kind": "number",
+          "value": "3"
+        }
+      ],
+      "skill": "wedo-hub"
+    }
+  ]
+}

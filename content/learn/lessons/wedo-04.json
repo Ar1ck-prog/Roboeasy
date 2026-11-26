@@ -1,0 +1,168 @@
+{
+  "id": "wedo-04",
+  "track": "wedo-start",
+  "unit": "wedo-meet",
+  "minutes": 4,
+  "skills": [
+    "sensor-motion",
+    "sensor-tilt"
+  ],
+  "kit": false,
+  "title": {
+    "ru": "Датчики движения и наклона",
+    "kk": "Қозғалыс және еңкею датчиктері",
+    "en": "Motion and tilt sensors"
+  },
+  "goal": {
+    "ru": "Сегодня ты узнаешь, что чувствуют датчики робота.",
+    "kk": "Бүгін сен робот датчиктерінің не сезетінін білесің.",
+    "en": "Today you will find out what the robot’s sensors feel."
+  },
+  "summary": {
+    "ru": "Теперь ты знаешь два датчика WeDo и что они чувствуют.",
+    "kk": "Енді сен WeDo-ның екі датчигін және олардың не сезетінін білесің.",
+    "en": "Now you know the two WeDo sensors and what they feel."
+  },
+  "steps": [
+    {
+      "id": "two-sensors",
+      "type": "theory",
+      "title": {
+        "ru": "Два датчика",
+        "kk": "Екі датчик",
+        "en": "Two sensors"
+      },
+      "body": {
+        "ru": "**Датчик движения** видит предмет рядом. Например, твою руку.\n\n**Датчик наклона** чувствует, куда его наклонили: вверх, вниз, влево или вправо.\n\nЕщё он чувствует, если его трясут.",
+        "kk": "**Қозғалыс датчигі** жақын тұрған затты көреді. Мысалы, сенің қолыңды.\n\n**Еңкею датчигі** оны қай жаққа еңкейткенін сезеді: жоғары, төмен, солға немесе оңға.\n\nОны сілкісе де сезеді.",
+        "en": "The **motion sensor** sees something close, like your hand.\n\nThe **tilt sensor** feels which way it is tipped: up, down, left or right.\n\nIt also feels a shake."
+      },
+      "illustration": "sensors"
+    },
+    {
+      "id": "sensor-feels",
+      "type": "quiz",
+      "kind": "match",
+      "question": {
+        "ru": "Соедини датчик и что он чувствует.",
+        "kk": "Датчикті және оның не сезетінін сәйкестендір.",
+        "en": "Match each sensor with what it feels."
+      },
+      "pairs": [
+        {
+          "left": {
+            "ru": "Датчик движения",
+            "kk": "Қозғалыс датчигі",
+            "en": "Motion sensor"
+          },
+          "right": {
+            "ru": "Предмет рядом",
+            "kk": "Жақын зат",
+            "en": "Something close"
+          }
+        },
+        {
+          "left": {
+            "ru": "Датчик наклона",
+            "kk": "Еңкею датчигі",
+            "en": "Tilt sensor"
+          },
+          "right": {
+            "ru": "Куда его наклонили",
+            "kk": "Оны қай жаққа еңкейткенін",
+            "en": "Which way it is tipped"
+          }
+        }
+      ],
+      "explanation": {
+        "ru": "Движение — про «близко» и «далеко». Наклон — про «куда».",
+        "kk": "Қозғалыс — «жақын» мен «алыс» туралы. Еңкею — «қай жаққа» туралы.",
+        "en": "Motion is about near and far. Tilt is about which way."
+      },
+      "skill": "sensor-motion"
+    },
+    {
+      "id": "hand-near",
+      "type": "wedo_predict",
+      "title": {
+        "ru": "Поднеси руку",
+        "kk": "Қолыңды жақындат",
+        "en": "Bring your hand close"
+      },
+      "question": {
+        "ru": "Программа ждёт датчик движения. Что будет, когда рука подойдёт близко?",
+        "kk": "Бағдарлама қозғалыс датчигін күтеді. Қол жақындағанда не болады?",
+        "en": "The program waits for the motion sensor. What happens when a hand comes close?"
+      },
+      "scene": {
+        "model": "spinner",
+        "ratio": 1,
+        "sensor": "motion"
+      },
+      "scenario": [
+        {
+          "at": 1,
+          "motion": "near"
+        }
+      ],
+      "program": [
+        {
+          "op": "wait_motion",
+          "event": "near"
+        },
+        {
+          "op": "motor_on_for",
+          "seconds": 2
+        }
+      ],
+      "options": [
+        {
+          "label": {
+            "ru": "Вертушка закрутится",
+            "kk": "Айналғыш айналады",
+            "en": "The spinner turns"
+          },
+          "expect": [
+            {
+              "type": "motorRan",
+              "minSeconds": 1.5
+            }
+          ]
+        },
+        {
+          "label": {
+            "ru": "Загорится зелёная лампа",
+            "kk": "Жасыл шам жанады",
+            "en": "The light turns green"
+          },
+          "expect": [
+            {
+              "type": "light",
+              "color": "green"
+            }
+          ]
+        },
+        {
+          "label": {
+            "ru": "Прозвучит звук",
+            "kk": "Дыбыс шығады",
+            "en": "A sound plays"
+          },
+          "expect": [
+            {
+              "type": "sound",
+              "min": 1
+            }
+          ]
+        }
+      ],
+      "correct": 0,
+      "explanation": {
+        "ru": "Сначала робот ждёт руку. Рука близко — и мотор крутится 2 секунды.",
+        "kk": "Алдымен робот қолды күтеді. Қол жақын — мотор 2 секунд айналады.",
+        "en": "First the robot waits for the hand. The hand is close, so the motor turns for 2 seconds."
+      },
+      "skill": "sensor-motion"
+    }
+  ]
+}

@@ -1,0 +1,177 @@
+{
+  "id": "wedo-32",
+  "track": "wedo-projects",
+  "unit": "wedo-loops",
+  "minutes": 6,
+  "skills": [
+    "loops",
+    "sensor-motion"
+  ],
+  "kit": false,
+  "title": {
+    "ru": "Патруль",
+    "kk": "Күзет",
+    "en": "Patrol"
+  },
+  "goal": {
+    "ru": "Сегодня Вжик будет патрулировать у стены.",
+    "kk": "Бүгін Вжик қабырғаның жанында күзетеді.",
+    "en": "Today Zip will patrol by the wall."
+  },
+  "summary": {
+    "ru": "Теперь ты умеешь повторять езду с датчиком.",
+    "kk": "Енді сен датчикпен жүруді қайталай аласың.",
+    "en": "Now you can repeat driving with the sensor."
+  },
+  "steps": [
+    {
+      "id": "patrol-story",
+      "type": "theory",
+      "title": {
+        "ru": "Патруль",
+        "kk": "Күзет",
+        "en": "Patrol"
+      },
+      "body": {
+        "ru": "Патруль ездит туда-сюда и всё проверяет.\n\nВжик отъезжает **назад**, потом едет **к стене**.\n\nУвидел стену **близко** — стоп. И так **3 раза**.",
+        "kk": "Күзетші әрі-бері жүріп, бәрін тексереді.\n\nВжик **артқа** шегініп, содан кейін **қабырғаға** қарай жүреді.\n\nҚабырғаны **жақын** көрді — тоқта. Осылай **3 рет**.",
+        "en": "A patrol drives back and forth and checks everything.\n\nZip backs up, then drives **to the wall**.\n\nIt sees the wall **near** and stops. **3 times** over."
+      }
+    },
+    {
+      "id": "no-crash-block",
+      "type": "quiz",
+      "kind": "choice",
+      "question": {
+        "ru": "Какой блок не даст Вжику врезаться?",
+        "kk": "Қай блок Вжиктің соғылуына жол бермейді?",
+        "en": "Which block keeps Zip from bumping?"
+      },
+      "options": [
+        {
+          "ru": "Ждать датчик движения: близко",
+          "kk": "Қозғалыс датчигін күту: жақын",
+          "en": "Wait for motion sensor: near"
+        },
+        {
+          "ru": "Звук",
+          "kk": "Дыбыс",
+          "en": "Sound"
+        },
+        {
+          "ru": "Экран",
+          "kk": "Экран",
+          "en": "Screen"
+        }
+      ],
+      "correct": [
+        0
+      ],
+      "explanation": {
+        "ru": "Датчик видит стену и останавливает Вжика вовремя.",
+        "kk": "Датчик қабырғаны көріп, Вжикті уақытында тоқтатады.",
+        "en": "The sensor sees the wall and stops Zip in time."
+      },
+      "skill": "sensor-motion"
+    },
+    {
+      "id": "patrol",
+      "type": "wedo_code",
+      "mode": "code",
+      "title": {
+        "ru": "Патруль у стены",
+        "kk": "Қабырға жанындағы күзет",
+        "en": "Patrol by the wall"
+      },
+      "task": {
+        "ru": "**3 раза**: отъехать назад на 1 секунду, потом ехать к стене и **остановиться перед ней**.",
+        "kk": "**3 рет**: артқа 1 секунд шегініп, содан кейін қабырғаға қарай жүріп, **оның алдында тоқта**.",
+        "en": "**3 times**: back up for 1 second, then drive to the wall and **stop before it**."
+      },
+      "scene": {
+        "model": "rover",
+        "length": 1200,
+        "start": 500,
+        "sensor": "motion",
+        "zones": [],
+        "obstacles": [
+          {
+            "id": "wall",
+            "at": 1000,
+            "label": {
+              "ru": "Стена",
+              "kk": "Қабырға",
+              "en": "Wall"
+            }
+          }
+        ]
+      },
+      "palette": [
+        "repeat",
+        "motor_on",
+        "motor_off",
+        "motor_on_for",
+        "motor_direction",
+        "wait_motion"
+      ],
+      "start": [],
+      "checks": [
+        {
+          "type": "stopBeforeObstacle",
+          "maxMm": 110
+        },
+        {
+          "type": "noCrash"
+        },
+        {
+          "type": "usesBlock",
+          "op": "repeat",
+          "min": 1
+        }
+      ],
+      "hints": [
+        {
+          "ru": "Внутри повтора: назад, вперёд до стены, стоп.",
+          "kk": "Қайталаудың ішінде: артқа, қабырғаға дейін алға, тоқта.",
+          "en": "Inside the repeat: back, forward to the wall, stop."
+        },
+        {
+          "ru": "В ту сторону 1 с → в эту сторону → мотор включить → ждать «близко» → выключить.",
+          "kk": "Ана жаққа 1 с → осы жаққа → моторды қосу → «жақынды» күту → өшіру.",
+          "en": "That way 1 s → this way → motor on → wait “near” → motor off."
+        }
+      ],
+      "reference": [
+        {
+          "op": "repeat",
+          "times": 3,
+          "steps": [
+            {
+              "op": "motor_direction",
+              "dir": "that"
+            },
+            {
+              "op": "motor_on_for",
+              "seconds": 1
+            },
+            {
+              "op": "motor_direction",
+              "dir": "this"
+            },
+            {
+              "op": "motor_on"
+            },
+            {
+              "op": "wait_motion",
+              "event": "near"
+            },
+            {
+              "op": "motor_off"
+            }
+          ]
+        }
+      ],
+      "skill": "loops"
+    }
+  ]
+}

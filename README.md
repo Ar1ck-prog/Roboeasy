@@ -1,6 +1,6 @@
 # RoboEasy AI
 
-A robotics course from scratch for LEGO SPIKE Prime: short lessons with a robot simulator and Blockly, autochecks, an AI mentor that gives hints (never solutions), a path map, streaks, achievements, daily quests, practice games (robot maze, program puzzles, term pairs, blitz), a robot buddy you upgrade in the garage with coins earned by learning, and a glossary with resources. Self-paced: no classes or teachers. Plus the original tools: describe a task in plain words and get a `.llsp3` program for the SPIKE App 3, and an FLL run-strategy helper. UI in Russian, Kazakh and English.
+A robotics course from scratch for LEGO SPIKE Prime, with a first step on LEGO WeDo 2.0 for ages 6–9 (the learner picks the path; on the WeDo path SPIKE opens after all WeDo lessons): short lessons with a robot simulator and Blockly, autochecks, an AI mentor that gives hints (never solutions), a path map, streaks, achievements, daily quests, practice games (robot maze, program puzzles, term pairs, blitz), a robot buddy you upgrade in the garage with coins earned by learning, and a glossary with resources. Self-paced: no classes or teachers. Plus the original tools: describe a task in plain words and get a `.llsp3` program for the SPIKE App 3, and an FLL run-strategy helper. UI in Russian, Kazakh and English.
 
 ## Run
 
@@ -45,7 +45,8 @@ The controller uses the [LEGO SPIKE Prime protocol](https://lego.github.io/spike
 
 ## Learning platform
 
-- Content is data: `content/learn/course.json` (10 tracks, 45 units, 153 lessons, all written) and `content/learn/lessons/*.json`, validated by `lib/learn/schema.ts` (zod). Tests run every reference solution through the simulator and its checks. Weekly challenges: `content/learn/challenges.json`.
+- Content is data: `content/learn/course.json` (14 tracks: 4 WeDo 2.0 + 10 more, 55 units, 188 lessons, all written; each track has a `family`: `wedo`, `spike` or `general`) and `content/learn/lessons/*.json`, validated by `lib/learn/schema.ts` (zod). Tests run every reference solution through the simulator and its checks. Weekly challenges: `content/learn/challenges.json`.
+- `lib/wedo/`, `components/wedo/` — the WeDo 2.0 part, kept apart from the SPIKE DSL: icon-block language and schema, a 10 ms simulator (rover, spinner, crane, barrier), checks, the left-to-right editor and the path picker. See `docs/curriculum.md` §9.
 - `lib/sim/` — the 2D robot simulator (fixed 10 ms step, mm, sensors); `lib/learn/checks.ts` — autochecks (zone, points, collisions, sensors, blocks…).
 - `lib/learn/state.ts` + `store.ts` — the learner's append-only event log in localStorage; XP (`xp.ts`), unlocking and spaced review (`progress.ts`), streaks in the learner's time zone with freezes (`streak.ts`), achievements, cosmetics, placement test, certificates (signed codes + PDF), analytics and A/B flags (`lib/flags.ts`) are all computed from it.
 - `lib/learn/cloud.ts` — optional Supabase client loaded on demand: email + password accounts (no confirmation email; turn off "Confirm email" in the Supabase project), two-way sync of the same event log (server keyed by event id, so replays change nothing). Schema and row-level security: `supabase/migrations/`.

@@ -1,0 +1,189 @@
+{
+  "id": "wedo-17",
+  "track": "wedo-motion",
+  "unit": "wedo-rover",
+  "minutes": 7,
+  "skills": [
+    "motion",
+    "sequence"
+  ],
+  "kit": false,
+  "title": {
+    "ru": "Проект «Разведчик»",
+    "kk": "«Барлаушы» жобасы",
+    "en": "Project “Scout”"
+  },
+  "goal": {
+    "ru": "Сегодня Вжик-разведчик осмотрит три места.",
+    "kk": "Бүгін барлаушы Вжик үш жерді қарап шығады.",
+    "en": "Today Zip the scout will check three places."
+  },
+  "summary": {
+    "ru": "Теперь ты умеешь вести робота по маршруту с остановками.",
+    "kk": "Енді сен роботты аялдамалары бар маршрутпен жүргізе аласың.",
+    "en": "Now you can drive the robot along a route with stops."
+  },
+  "steps": [
+    {
+      "id": "scout",
+      "type": "theory",
+      "title": {
+        "ru": "Разведчик",
+        "kk": "Барлаушы",
+        "en": "The scout"
+      },
+      "body": {
+        "ru": "Вжик — разведчик. Он едет по дорожке.\n\nУ **камня** он зажигает **синий** свет.\n\nУ **цветка** — **жёлтый**.\n\nПотом едет **на базу**.",
+        "kk": "Вжик — барлаушы. Ол жолмен жүреді.\n\n**Тастың** жанында **көк** жарық жағады.\n\n**Гүлдің** жанында — **сары**.\n\nСодан кейін **базаға** барады.",
+        "en": "Zip is a scout. It drives along the track.\n\nAt the **rock** it shows a **blue** light.\n\nAt the **flower**, **yellow**.\n\nThen it drives **to the base**."
+      }
+    },
+    {
+      "id": "route",
+      "type": "quiz",
+      "kind": "order",
+      "question": {
+        "ru": "В каком порядке Вжик встретит места?",
+        "kk": "Вжик жерлерді қандай ретпен кездестіреді?",
+        "en": "In what order will Zip meet the places?"
+      },
+      "items": [
+        {
+          "ru": "Камень",
+          "kk": "Тас",
+          "en": "Rock"
+        },
+        {
+          "ru": "Цветок",
+          "kk": "Гүл",
+          "en": "Flower"
+        },
+        {
+          "ru": "База",
+          "kk": "База",
+          "en": "Base"
+        }
+      ],
+      "explanation": {
+        "ru": "Камень ближе всех, база дальше всех.",
+        "kk": "Тас ең жақын, база ең алыс.",
+        "en": "The rock is nearest, the base is farthest."
+      },
+      "skill": "sequence"
+    },
+    {
+      "id": "scout-route",
+      "type": "wedo_code",
+      "mode": "project",
+      "title": {
+        "ru": "Маршрут разведчика",
+        "kk": "Барлаушы маршруты",
+        "en": "The scout’s route"
+      },
+      "task": {
+        "ru": "Проедь **камень**, **цветок** и **базу** по порядку. У камня зажги **синий**, у цветка **жёлтый**.",
+        "kk": "**Тас**, **гүл** және **базадан** ретімен өт. Тастың жанында **көк**, гүлдің жанында **сары** жақ.",
+        "en": "Pass the **rock**, the **flower** and the **base** in order. At the rock show **blue**, at the flower **yellow**."
+      },
+      "scene": {
+        "model": "rover",
+        "length": 1300,
+        "start": 100,
+        "zones": [
+          {
+            "id": "stone",
+            "from": 300,
+            "to": 450,
+            "label": {
+              "ru": "Камень",
+              "kk": "Тас",
+              "en": "Rock"
+            }
+          },
+          {
+            "id": "flower",
+            "from": 650,
+            "to": 800,
+            "label": {
+              "ru": "Цветок",
+              "kk": "Гүл",
+              "en": "Flower"
+            }
+          },
+          {
+            "id": "base",
+            "from": 1000,
+            "to": 1200,
+            "label": {
+              "ru": "База",
+              "kk": "База",
+              "en": "Base"
+            }
+          }
+        ],
+        "obstacles": []
+      },
+      "palette": [
+        "motor_on_for",
+        "light",
+        "wait",
+        "motor_direction"
+      ],
+      "start": [],
+      "checks": [
+        {
+          "type": "passZones",
+          "zones": [
+            "stone",
+            "flower",
+            "base"
+          ],
+          "ordered": true
+        },
+        {
+          "type": "light",
+          "color": "blue"
+        },
+        {
+          "type": "light",
+          "color": "yellow"
+        }
+      ],
+      "hints": [
+        {
+          "ru": "До камня 1,5 секунды.",
+          "kk": "Тасқа дейін 1,5 секунд.",
+          "en": "The rock is 1.5 seconds away."
+        },
+        {
+          "ru": "От камня до цветка ещё 1,5 секунды, до базы ещё 2.",
+          "kk": "Тастан гүлге дейін тағы 1,5 секунд, базаға дейін тағы 2.",
+          "en": "From the rock to the flower is 1.5 more seconds, to the base 2 more."
+        }
+      ],
+      "reference": [
+        {
+          "op": "motor_on_for",
+          "seconds": 1.5
+        },
+        {
+          "op": "light",
+          "color": "blue"
+        },
+        {
+          "op": "motor_on_for",
+          "seconds": 1.5
+        },
+        {
+          "op": "light",
+          "color": "yellow"
+        },
+        {
+          "op": "motor_on_for",
+          "seconds": 2
+        }
+      ],
+      "skill": "motion"
+    }
+  ]
+}
