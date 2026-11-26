@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState } from 'react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import { BookOpen, ChevronDown, Gamepad2, House, LogIn, Menu, Mic, Trophy, UserRound, Wand2, X } from 'lucide-react'
+import { BookOpen, ChevronDown, Cpu, Gamepad2, House, LogIn, Menu, Mic, Trophy, UserRound, Wand2, X } from 'lucide-react'
 
 import { CoinChip } from '@/components/learn/coin-chip'
 import { LogoMark } from '@/components/logo'
@@ -30,11 +30,11 @@ interface SiteHeaderProps {
 export const APP_SECTIONS = ['path', 'learn', 'play', 'garage', 'profile'] as const
 export type AppSection = (typeof APP_SECTIONS)[number]
 /** All header sections; the last ones are in the header and the menu only. */
-const HEADER_SECTIONS = ['path', 'learn', 'play', 'garage', 'library', 'sandbox', 'controller', 'voice', 'compete'] as const
+const HEADER_SECTIONS = ['path', 'learn', 'play', 'garage', 'library', 'sandbox', 'electronics', 'controller', 'voice', 'compete'] as const
 type HeaderSection = (typeof HEADER_SECTIONS)[number]
 /** Sections behind "More" on wide screens, so that the header fits on a laptop. */
-const MORE_SECTIONS: readonly HeaderSection[] = ['library', 'sandbox', 'controller', 'voice', 'compete']
-const MORE_ICONS = { library: BookOpen, sandbox: Wand2, controller: Gamepad2, voice: Mic, compete: Trophy } as const
+const MORE_SECTIONS: readonly HeaderSection[] = ['library', 'sandbox', 'electronics', 'controller', 'voice', 'compete']
+const MORE_ICONS = { library: BookOpen, sandbox: Wand2, electronics: Cpu, controller: Gamepad2, voice: Mic, compete: Trophy } as const
 
 const AI_SCHOOL_PATH = '/learn/ai-basics'
 
