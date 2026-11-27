@@ -83,9 +83,11 @@ test('ESP32: the 3D page and the lab with the board switched', async ({ page }) 
 test('lessons: the Arduino tab and a circuit step solved by wiring', async ({ page }) => {
   const errors: string[] = []
   page.on('pageerror', (e) => errors.push(e.message))
+  // A new learner meets the path picker; electronics opens from the card under it, no path needed.
   await page.goto('/ru/learn')
-  await page.locator('[data-platform="arduino"]').click()
-  await expect(page).toHaveURL(/platform=arduino/)
+  await page.getByTestId('pick-electronics').click()
+  await expect(page).toHaveURL(/family=arduino/)
+  await expect(page.getByTestId('tab-arduino')).toHaveAttribute('aria-selected', 'true')
   await expect(page.getByRole('heading', { name: 'Электричество с нуля' })).toBeVisible()
   await expect(page.getByRole('heading', { name: 'Arduino: первые программы' })).toBeVisible()
   await expect(page.getByRole('heading', { name: 'Что такое робот' })).toHaveCount(0)

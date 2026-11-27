@@ -7,6 +7,9 @@ import { BLOCK_TYPES } from '../lib/blockly/defs'
 import type { Step } from '../lib/dsl/types'
 import { runChecks } from '../lib/learn/checks'
 import { simulate } from '../lib/sim/interpreter'
+import { WEDO_STEP_TYPES } from '../lib/learn/schema'
+import { runWedoChecks } from '../lib/wedo/checks'
+import { type WedoStep, WEDO_LIMITS, wedoBlocks } from '../lib/wedo/types'
 import type { CircuitDoc } from '../lib/electronics/board'
 import { createCircuitChecker } from '../lib/electronics/lesson-checks'
 import { Simulation } from '../lib/electronics/sim'
@@ -52,8 +55,8 @@ const DIR = path.join(__dirname, '..', 'content', 'learn', 'lessons')
 const files = fs.readdirSync(DIR).filter((f) => f.endsWith('.json'))
 
 describe('course map', () => {
-  it('has 13 tracks with unique ids and known prerequisites', () => {
-    expect(COURSE.tracks).toHaveLength(13)
+  it('has 17 tracks (4 WeDo 2.0, 3 electronics + 10 more) with unique ids and known prerequisites', () => {
+    expect(COURSE.tracks).toHaveLength(17)
     const ids = COURSE.tracks.flatMap((t) => [t.id, ...t.units.map((u) => u.id), ...t.units.flatMap((u) => u.lessons.map((l) => l.id))])
     expect(new Set(ids).size).toBe(ids.length)
     const tracks = new Set(COURSE.tracks.map((t) => t.id))
@@ -133,5 +136,105 @@ describe.each(files)('lesson %s', (file) => {
 
   it('never sends reference solutions to the browser', () => {
     expect(JSON.stringify(toClientLesson(lesson))).not.toContain('"reference"')
+  })
+})
+
+// ── LEGO WeDo 2.0 lessons ───────────────────────────────────────────────
+
+const familyOf = (trackId: string) => COURSE.tracks.find((t) => t.id === trackId)?.family
+
+describe('WeDo and SPIKE stay apart', () => {
+  it('every track has a family; WeDo tracks come first and lean only on WeDo', () => {
+    for (const t of COURSE.tracks) expect(['spike', 'wedo', 'general', 'arduino', 'esp32'], t.id).toContain(t.family)
+    // The electronics tracks build only on each other.
+    for (const t of COURSE.tracks.filter((x) => x.family === 'arduino' || x.family === 'esp32'))
+      for (const p of t.prerequisites) expect(['arduino', 'esp32'], `${t.id} → ${p}`).toContain(familyOf(p))
+    const ids = COURSE.tracks.map((t) => t.id)
+    const wedo = COURSE.tracks.filter((t) => t.family === 'wedo')
+    for (const t of wedo) {
+      expect(ids.indexOf(t.id), `${t.id} before start`).toBeLessThan(ids.indexOf('start'))
+      for (const p of t.prerequisites) expect(familyOf(p), `${t.id} → ${p}`).toBe('wedo')
+    }
+  })
+
+  it('WeDo code never imports the SPIKE DSL, Blockly, simulator or compilers', () => {
+    const roots = ['lib/wedo', 'components/wedo'].map((d) => path.join(__dirname, '..', d)).filter((d) => fs.existsSync(d))
+    const forbidden = /from\s+['"][^'"]*(lib\/dsl|lib\/blockly|lib\/sim\/interpreter|lib\/spike|\.\.\/dsl|\.\.\/blockly|\.\.\/sim\/)/
+    for (const root of roots)
+      for (const file of fs.readdirSync(root)) {
+        const src = fs.readFileSync(path.join(root, file), 'utf8')
+        expect(forbidden.test(src), `${root}/${file}`).toBe(false)
+      }
+  })
+})
+
+/** Words in a text (for the "short sentences for under-10s" rule). */
+const words = (s: string) => s.split(/\s+/).filter((w) => /[\p{L}\p{N}]/u.test(w)).length
+
+describe.each(files.filter((f) => f.startsWith('wedo-')))('WeDo lesson %s', (file) => {
+  const lesson = readLesson(file.replace('.json', ''))!
+
+  it('lives in a WeDo track and uses only WeDo-friendly step types', () => {
+    expect(familyOf(lesson.track)).toBe('wedo')
+    for (const s of lesson.steps) {
+      expect(WEDO_STEP_TYPES as readonly string[], `${s.id}: ${s.type}`).toContain(s.type)
+      if (s.type === 'real_robot') expect(s.program, `${s.id}: no SPIKE .llsp3 in WeDo`).toBeUndefined()
+    }
+  })
+
+  it('fits learners under 10: 3–7 minutes, 3–6 steps, short theory, simple quizzes, something to do', () => {
+    expect(lesson.minutes).toBeGreaterThanOrEqual(3)
+    expect(lesson.minutes).toBeLessThanOrEqual(7)
+    expect(lesson.steps.length).toBeGreaterThanOrEqual(3)
+    expect(lesson.steps.length).toBeLessThanOrEqual(6)
+    for (const s of lesson.steps) {
+      if (s.type === 'theory') expect(words(s.body.ru), `${s.id}: theory too long`).toBeLessThanOrEqual(60)
+      if (s.type === 'quiz') {
+        expect(['choice', 'match', 'order'], `${s.id}: ${s.kind}`).toContain(s.kind)
+        if (s.kind === 'choice') expect(s.options.length, s.id).toBeLessThanOrEqual(3)
+      }
+    }
+    const handsOn = lesson.steps.some((s) => s.type === 'wedo_code' || s.type === 'wedo_predict' || s.type === 'widget' || s.type === 'quiz')
+    expect(handsOn).toBe(true)
+  })
+
+  it('reference solutions pass every check; debug starters fail; palettes cover the programs', () => {
+    for (const step of lesson.steps) {
+      if (step.type !== 'wedo_code') continue
+      const report = runWedoChecks(step.reference, step.scene, step.checks, 'ru', step.scenario)
+      expect(report.results.filter((r) => !r.ok).map((r) => `${step.id}: ${r.type} ${r.message}`)).toEqual([])
+      const starter = runWedoChecks(step.start, step.scene, step.checks, 'ru', step.scenario).ok
+      if (step.mode === 'debug') {
+        expect(step.start.length, `${step.id}: a debug task starts with a program`).toBeGreaterThan(0)
+        expect(starter, `${step.id} starter must fail`).toBe(false)
+      }
+      if (step.mode !== 'debug' && step.start.length) expect(starter, `${step.id} starter already passes`).toBe(false)
+      const ops = new Set<string>()
+      const walk = (l: WedoStep[]): void => l.forEach((s) => (ops.add(s.op), s.op === 'repeat' && walk(s.steps)))
+      walk(step.reference)
+      walk(step.start)
+      for (const op of ops) expect(step.palette, `${step.id}: ${op} missing from the palette`).toContain(op)
+      expect(wedoBlocks(step.reference)).toBeLessThanOrEqual(WEDO_LIMITS.maxBlocks)
+    }
+  })
+
+  it('predictions: the simulation confirms the correct answer and rules out the others', () => {
+    for (const step of lesson.steps) {
+      if (step.type !== 'wedo_predict') continue
+      step.options.forEach((o, i) => {
+        const ok = runWedoChecks(step.program, step.scene, o.expect, 'ru', step.scenario).ok
+        expect(ok, `${step.id} option ${i}`).toBe(i === step.correct)
+      })
+    }
+  })
+})
+
+describe('SPIKE lessons', () => {
+  it('never use WeDo steps', () => {
+    for (const file of files.filter((f) => !f.startsWith('wedo-'))) {
+      const lesson = readLesson(file.replace('.json', ''))!
+      expect(familyOf(lesson.track), file).not.toBe('wedo')
+      for (const s of lesson.steps) expect(s.type.startsWith('wedo_'), `${file}/${s.id}`).toBe(false)
+    }
   })
 })

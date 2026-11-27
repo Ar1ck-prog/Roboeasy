@@ -1,0 +1,167 @@
+{
+  "id": "wedo-03",
+  "track": "wedo-start",
+  "unit": "wedo-meet",
+  "minutes": 5,
+  "skills": [
+    "wedo-hub",
+    "motion"
+  ],
+  "kit": false,
+  "title": {
+    "ru": "Мотор крутится",
+    "kk": "Мотор айналады",
+    "en": "The motor turns"
+  },
+  "goal": {
+    "ru": "Сегодня ты научишь мотор крутиться в обе стороны.",
+    "kk": "Бүгін сен моторды екі жаққа да айналуға үйретесің.",
+    "en": "Today you will teach the motor to turn both ways."
+  },
+  "summary": {
+    "ru": "Теперь ты умеешь менять направление мотора.",
+    "kk": "Енді сен мотордың бағытын өзгерте аласың.",
+    "en": "Now you can change the motor’s direction."
+  },
+  "steps": [
+    {
+      "id": "two-ways",
+      "type": "theory",
+      "title": {
+        "ru": "В эту сторону и в ту",
+        "kk": "Осы жаққа және ана жаққа",
+        "en": "This way and that way"
+      },
+      "body": {
+        "ru": "Мотор крутится **в эту сторону** или **в ту сторону**.\n\nДля этого есть блок **«Направление»**.\n\nСначала поставь направление, потом включай мотор.",
+        "kk": "Мотор **осы жаққа** немесе **ана жаққа** айналады.\n\nОл үшін **«Бағыт»** блогы бар.\n\nАлдымен бағытты қой, содан кейін моторды қос.",
+        "en": "A motor turns **this way** or **that way**.\n\nThe **Direction** block chooses which.\n\nSet the direction first, then switch the motor on."
+      },
+      "illustration": "motor"
+    },
+    {
+      "id": "which-way",
+      "type": "wedo_predict",
+      "title": {
+        "ru": "Куда повернётся?",
+        "kk": "Қай жаққа бұрылады?",
+        "en": "Which way?"
+      },
+      "question": {
+        "ru": "Что сделает вертушка?",
+        "kk": "Айналғыш не істейді?",
+        "en": "What will the spinner do?"
+      },
+      "scene": {
+        "model": "spinner",
+        "ratio": 1
+      },
+      "program": [
+        {
+          "op": "motor_direction",
+          "dir": "that"
+        },
+        {
+          "op": "motor_on_for",
+          "seconds": 2
+        }
+      ],
+      "options": [
+        {
+          "label": {
+            "ru": "Закрутится в эту сторону",
+            "kk": "Осы жаққа айналады",
+            "en": "Turn this way"
+          },
+          "expect": [
+            {
+              "type": "spinnerTurns",
+              "minTurns": 1,
+              "direction": "this"
+            }
+          ]
+        },
+        {
+          "label": {
+            "ru": "Закрутится в ту сторону",
+            "kk": "Ана жаққа айналады",
+            "en": "Turn that way"
+          },
+          "expect": [
+            {
+              "type": "spinnerTurns",
+              "minTurns": 1,
+              "direction": "that"
+            }
+          ]
+        }
+      ],
+      "correct": 1,
+      "explanation": {
+        "ru": "Блок «Направление: в ту сторону» стоит первым. Мотор крутится в ту сторону.",
+        "kk": "«Бағыт: ана жаққа» блогы бірінші тұр. Мотор ана жаққа айналады.",
+        "en": "The “Direction: that way” block comes first, so the motor turns that way."
+      },
+      "skill": "motion"
+    },
+    {
+      "id": "that-way",
+      "type": "wedo_code",
+      "mode": "code",
+      "title": {
+        "ru": "В ту сторону",
+        "kk": "Ана жаққа",
+        "en": "That way"
+      },
+      "task": {
+        "ru": "Пусть вертушка крутится **в ту сторону 3 секунды**.",
+        "kk": "Айналғыш **ана жаққа 3 секунд** айналсын.",
+        "en": "Make the spinner turn **that way for 3 seconds**."
+      },
+      "scene": {
+        "model": "spinner",
+        "ratio": 1
+      },
+      "palette": [
+        "motor_on_for",
+        "motor_direction"
+      ],
+      "start": [
+        {
+          "op": "motor_on_for",
+          "seconds": 3
+        }
+      ],
+      "checks": [
+        {
+          "type": "motorRan",
+          "direction": "that",
+          "minSeconds": 3
+        }
+      ],
+      "hints": [
+        {
+          "ru": "Сейчас мотор крутится в эту сторону. Нужен ещё один блок.",
+          "kk": "Қазір мотор осы жаққа айналады. Тағы бір блок керек.",
+          "en": "Right now the motor turns this way. You need one more block."
+        },
+        {
+          "ru": "Добавь «Направление», выбери «в ту сторону» и поставь его первым.",
+          "kk": "«Бағыт» блогын қосып, «ана жаққа» таңда да, бірінші қой.",
+          "en": "Add Direction, pick “that way” and move it to the front."
+        }
+      ],
+      "reference": [
+        {
+          "op": "motor_direction",
+          "dir": "that"
+        },
+        {
+          "op": "motor_on_for",
+          "seconds": 3
+        }
+      ],
+      "skill": "motion"
+    }
+  ]
+}

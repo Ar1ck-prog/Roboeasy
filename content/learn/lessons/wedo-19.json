@@ -1,0 +1,157 @@
+{
+  "id": "wedo-19",
+  "track": "wedo-motion",
+  "unit": "wedo-structures",
+  "minutes": 5,
+  "skills": [
+    "mechanisms"
+  ],
+  "kit": false,
+  "title": {
+    "ru": "Подъёмник",
+    "kk": "Көтергіш",
+    "en": "The lift"
+  },
+  "goal": {
+    "ru": "Сегодня ты научишь кран поднимать груз на нужный уровень.",
+    "kk": "Бүгін сен кранды жүкті керекті деңгейге көтеруге үйретесің.",
+    "en": "Today you will teach the crane to lift a load to the right level."
+  },
+  "summary": {
+    "ru": "Теперь ты умеешь подбирать время для подъёма.",
+    "kk": "Енді сен көтеруге уақыт таңдай аласың.",
+    "en": "Now you can choose the time for lifting."
+  },
+  "steps": [
+    {
+      "id": "crane",
+      "type": "theory",
+      "title": {
+        "ru": "Как работает кран",
+        "kk": "Кран қалай жұмыс істейді",
+        "en": "How a crane works"
+      },
+      "body": {
+        "ru": "Мотор крутит барабан. На барабан наматывается **трос**.\n\nТрос тянет **крюк** с грузом вверх.\n\nКрутишь в ту сторону — груз едет вниз.",
+        "kk": "Мотор барабанды айналдырады. Барабанға **арқан** оралады.\n\nАрқан жүгі бар **ілгекті** жоғары тартады.\n\nАна жаққа айналдырсаң, жүк төмен түседі.",
+        "en": "The motor turns a drum. A **rope** winds onto the drum.\n\nThe rope pulls the **hook** and its load up.\n\nTurn it that way and the load goes down."
+      },
+      "illustration": "r-lift"
+    },
+    {
+      "id": "which-level",
+      "type": "wedo_predict",
+      "title": {
+        "ru": "Какой уровень?",
+        "kk": "Қай деңгей?",
+        "en": "Which level?"
+      },
+      "question": {
+        "ru": "Мотор крутится 2 секунды. На какой уровень поднимется груз?",
+        "kk": "Мотор 2 секунд айналады. Жүк қай деңгейге көтеріледі?",
+        "en": "The motor turns for 2 seconds. Which level does the load reach?"
+      },
+      "scene": {
+        "model": "lift",
+        "levels": 3,
+        "mmPerTurn": 12.5
+      },
+      "program": [
+        {
+          "op": "motor_on_for",
+          "seconds": 2
+        }
+      ],
+      "options": [
+        {
+          "label": {
+            "ru": "Уровень 1",
+            "kk": "1-деңгей",
+            "en": "Level 1"
+          },
+          "expect": [
+            {
+              "type": "liftAt",
+              "level": 1
+            }
+          ]
+        },
+        {
+          "label": {
+            "ru": "Уровень 3",
+            "kk": "3-деңгей",
+            "en": "Level 3"
+          },
+          "expect": [
+            {
+              "type": "liftAt",
+              "level": 3
+            }
+          ]
+        }
+      ],
+      "correct": 0,
+      "explanation": {
+        "ru": "Один уровень — это 2 секунды. Значит, уровень 1.",
+        "kk": "Бір деңгей — 2 секунд. Демек, 1-деңгей.",
+        "en": "One level takes 2 seconds, so it is level 1."
+      },
+      "skill": "mechanisms"
+    },
+    {
+      "id": "level-two",
+      "type": "wedo_code",
+      "mode": "code",
+      "title": {
+        "ru": "На уровень 2",
+        "kk": "2-деңгейге",
+        "en": "To level 2"
+      },
+      "task": {
+        "ru": "Подними груз на **уровень 2**.",
+        "kk": "Жүкті **2-деңгейге** көтер.",
+        "en": "Lift the load to **level 2**."
+      },
+      "scene": {
+        "model": "lift",
+        "levels": 3,
+        "mmPerTurn": 12.5
+      },
+      "palette": [
+        "motor_on_for",
+        "motor_direction"
+      ],
+      "start": [
+        {
+          "op": "motor_on_for",
+          "seconds": 1
+        }
+      ],
+      "checks": [
+        {
+          "type": "liftAt",
+          "level": 2
+        }
+      ],
+      "hints": [
+        {
+          "ru": "Один уровень — 2 секунды.",
+          "kk": "Бір деңгей — 2 секунд.",
+          "en": "One level is 2 seconds."
+        },
+        {
+          "ru": "Два уровня — 4 секунды.",
+          "kk": "Екі деңгей — 4 секунд.",
+          "en": "Two levels are 4 seconds."
+        }
+      ],
+      "reference": [
+        {
+          "op": "motor_on_for",
+          "seconds": 4
+        }
+      ],
+      "skill": "mechanisms"
+    }
+  ]
+}

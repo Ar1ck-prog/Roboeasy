@@ -20,12 +20,18 @@ import type { LearnAppText } from '@/lib/i18n/learn-app'
 import type { Dictionary } from '@/lib/i18n/ru'
 import type { ClientLesson } from '@/lib/learn/content'
 import { COURSE } from '@/lib/learn/course'
-import { lessonStates, trackLessons } from '@/lib/learn/progress'
+import { lessonStates, nextLesson, spikeLockedByWedo, trackLessons, wedoComplete } from '@/lib/learn/progress'
 import { completedLessons, doneSteps } from '@/lib/learn/state'
 import { record, useHydrated, useLearn } from '@/lib/learn/store'
 import { ledger } from '@/lib/learn/economy'
 import { CoinIcon } from '@/components/learn/coin'
 import { cn } from '@/lib/utils'
+import { ReadAloud } from '@/components/wedo/read-aloud'
+import { WedoCodeStep } from '@/components/wedo/wedo-code-step'
+import { WedoPredictStep } from '@/components/wedo/wedo-predict-step'
+import type { WedoText } from '@/lib/i18n/wedo'
+import type { TrackFamily } from '@/lib/learn/schema'
+import { useLearningPath } from '@/lib/learn/use-progress'
 
 // Camera and model code load only for the lessons that use them.
 const WidgetStep = dynamic(() => import('@/components/learn/steps/widget-step'), { ssr: false, loading: () => <Skeleton className="h-80" /> })
@@ -45,10 +51,36 @@ interface PlayerProps {
   next: { href: string; title: string } | null
   mapHref: string
   lockedT: LearnAppText['locked']
+  /** The track's kit: WeDo lessons get the kid mode (bigger text, read aloud, no AI). */
+  family?: TrackFamily
+  wedoT?: WedoText
+  pathT?: LearnAppText['wedo']
 }
 
-export function LessonPlayer({ lesson, lang, t, blocksT, trackTitle, unitTitle, isProject, next, mapHref, lockedT }: PlayerProps) {
+/** The text a step shows first, for "read aloud". */
+function stepText(step: ClientLesson['steps'][number], lang: Lang): string {
+  switch (step.type) {
+    case 'theory':
+      return `${step.title[lang]}. ${step.body[lang]}`
+    case 'quiz':
+      return step.question[lang]
+    case 'build':
+      return `${step.title[lang]}. ${step.intro[lang]}`
+    case 'real_robot':
+    case 'widget':
+    case 'wedo_code':
+      return `${step.title[lang]}. ${step.task[lang]}`
+    case 'wedo_predict':
+      return `${step.title[lang]}. ${step.question[lang]}`
+    default:
+      return ''
+  }
+}
+
+export function LessonPlayer({ lesson, lang, t, blocksT, trackTitle, unitTitle, isProject, next, mapHref, lockedT, family = 'spike', wedoT, pathT }: PlayerProps) {
   const learn = useLearn()
+  const path = useLearningPath()
+  const kid = family === 'wedo'
   const hydrated = useHydrated()
   const [forceOpen, setForceOpen] = useState(false)
   const done = useMemo(() => doneSteps(learn, lesson.id), [learn, lesson.id])
@@ -125,9 +157,15 @@ export function LessonPlayer({ lesson, lang, t, blocksT, trackTitle, unitTitle, 
 
   // A locked lesson (opened by URL) suggests the lesson to do first; "open anyway" is allowed.
   const track = COURSE.tracks.find((tr) => tr.id === lesson.track)
-  const states = track && hydrated ? lessonStates(completedLessons(learn), track, COURSE) : null
+  const completed = useMemo(() => completedLessons(learn), [learn])
+  const states = track && hydrated ? lessonStates(completed, track, COURSE, path) : null
   const firstOpen = track && states ? trackLessons(track).find(({ ref }) => states.get(ref.id) === 'current')?.ref : undefined
-  const locked = !forceOpen && states?.get(lesson.id) === 'locked' && firstOpen
+  // On the WeDo path a SPIKE lesson stays closed until WeDo is finished, even by direct link (no "open anyway").
+  const wedoFirst = !!track && hydrated && !completed.has(lesson.id) && spikeLockedByWedo(completed, track, COURSE, path)
+  const wedoNext = wedoFirst ? nextLesson(completed, COURSE, path) : null
+  const locked = !wedoFirst && !forceOpen && states?.get(lesson.id) === 'locked' && firstOpen
+  // Finishing the last WeDo lesson: "You are ready for SPIKE Prime!"
+  const spikeReady = finished && kid && wedoComplete(completed, COURSE)
 
   // ── Intro ───────────────────────────────────────────────────────────
   if (index < 0 && !finished)
@@ -156,7 +194,21 @@ export function LessonPlayer({ lesson, lang, t, blocksT, trackTitle, unitTitle, 
               </Badge>
             )}
           </div>
-          {locked ? (
+          {wedoFirst && pathT ? (
+            <div className="grid gap-3 rounded-(--radius-md) border-(length:--stroke-thin) border-dashed border-outline bg-surface-2 p-4" data-testid="wedo-first">
+              <p className="m-0 flex items-center gap-2 font-extrabold">
+                <Lock className="size-5" aria-hidden="true" />
+                {pathT.lessonLockedTitle}
+              </p>
+              <p className="m-0">{pathT.lessonLocked}</p>
+              {wedoNext && (
+                <Link className={buttonVariants({ variant: 'primary', className: 'justify-self-start' })} href={`/${lang}/learn/${wedoNext.track.id}/${wedoNext.id}`}>
+                  {fill(pathT.lessonLockedGo, { lesson: wedoNext.title[lang] })}
+                  <ArrowRight aria-hidden="true" />
+                </Link>
+              )}
+            </div>
+          ) : locked ? (
             <div className="grid gap-3 rounded-(--radius-md) border-(length:--stroke-thin) border-dashed border-outline bg-surface-2 p-4">
               <p className="m-0 flex items-center gap-2 font-extrabold">
                 <Lock className="size-5" aria-hidden="true" />
@@ -193,6 +245,18 @@ export function LessonPlayer({ lesson, lang, t, blocksT, trackTitle, unitTitle, 
           </span>
           <h1 className="m-0 text-(length:--text-3xl)">{t.lesson.done}</h1>
           <RichText text={lesson.summary[lang]} className="text-lg [&>p]:my-0" />
+          {spikeReady && pathT && (
+            <div className="grid justify-items-center gap-2 rounded-(--radius-md) border-(length:--stroke) border-outline bg-(--wedo-accent-soft) p-4" data-testid="spike-ready">
+              <p className="m-0 font-display text-2xl font-extrabold">
+                {pathT.readyTitle} <AnimIcon name="party" />
+              </p>
+              <p className="m-0">{pathT.readyText}</p>
+              <Link className={buttonVariants({ variant: 'primary' })} href={`/${lang}/learn/start/start-01`}>
+                {pathT.readyCta}
+                <ArrowRight aria-hidden="true" />
+              </Link>
+            </div>
+          )}
           {(gained.xp > 0 || gained.coins > 0) && (
             <span className="flex flex-wrap justify-center gap-2">
               {gained.xp > 0 && (
@@ -268,7 +332,8 @@ export function LessonPlayer({ lesson, lang, t, blocksT, trackTitle, unitTitle, 
         <p className="mt-0 mb-3 text-sm font-bold text-muted-foreground">
           {lesson.title[lang]} · {t.lesson.stepTypes[step!.type]}
         </p>
-        <div key={step!.id} className="animate-in duration-200 fade-in-0 slide-in-from-right-4 motion-reduce:animate-none">
+        <div key={step!.id} className={cn('animate-in duration-200 fade-in-0 slide-in-from-right-4 motion-reduce:animate-none', kid && 'kid-mode grid gap-4')}>
+          {kid && wedoT && <ReadAloud text={stepText(step!, lang)} lang={lang} label={wedoT.step.readAloud} stopLabel={wedoT.step.stopReading} />}
           {step!.type === 'theory' && <TheoryStep step={step!} lang={lang} blocksT={blocksT} onDone={onDone} />}
           {step!.type === 'build' && <BuildStep step={step!} lang={lang} t={t} onDone={onDone} />}
           {step!.type === 'widget' && <WidgetStep key={step!.id} step={step!} lang={lang} done={stepDone} onDone={onDone} />}
@@ -286,6 +351,12 @@ export function LessonPlayer({ lesson, lang, t, blocksT, trackTitle, unitTitle, 
               onDone={onDone}
               onMistake={onMistake}
             />
+          )}
+          {step!.type === 'wedo_code' && wedoT && (
+            <WedoCodeStep key={step!.id} step={step!} lang={lang} t={t} wt={wedoT} done={stepDone} onDone={onDone} onMistake={onMistake} />
+          )}
+          {step!.type === 'wedo_predict' && wedoT && (
+            <WedoPredictStep key={step!.id} step={step!} lang={lang} wt={wedoT} done={stepDone} onDone={onDone} onMistake={onMistake} />
           )}
           {step!.type === 'real_robot' && <RealRobotStep key={step!.id} step={step!} lang={lang} t={t} done={stepDone} onDone={onDone} />}
           {(step!.type === 'code' || step!.type === 'debug' || step!.type === 'project') && (

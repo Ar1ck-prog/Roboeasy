@@ -1,0 +1,162 @@
+{
+  "id": "wedo-25",
+  "track": "wedo-sensors",
+  "unit": "wedo-tilt",
+  "minutes": 5,
+  "skills": [
+    "sensor-tilt"
+  ],
+  "kit": false,
+  "title": {
+    "ru": "Наклоны",
+    "kk": "Еңкеюлер",
+    "en": "Tilts"
+  },
+  "goal": {
+    "ru": "Сегодня ты попробуешь датчик наклона.",
+    "kk": "Бүгін сен еңкею датчигін байқап көресің.",
+    "en": "Today you will try the tilt sensor."
+  },
+  "summary": {
+    "ru": "Теперь ты знаешь шесть состояний датчика наклона.",
+    "kk": "Енді сен еңкею датчигінің алты күйін білесің.",
+    "en": "Now you know the six states of the tilt sensor."
+  },
+  "steps": [
+    {
+      "id": "six",
+      "type": "theory",
+      "title": {
+        "ru": "Шесть состояний",
+        "kk": "Алты күй",
+        "en": "Six states"
+      },
+      "body": {
+        "ru": "Датчик наклона знает, как его держат.\n\n**Вверх**, **вниз**, **влево**, **вправо**.\n\n**Ровно** — когда он лежит на столе.\n\n**Потрясти** — когда его быстро качают.",
+        "kk": "Еңкею датчигі оны қалай ұстағанын біледі.\n\n**Жоғары**, **төмен**, **солға**, **оңға**.\n\n**Түзу** — үстелде жатқанда.\n\n**Сілку** — оны жылдам тербеткенде.",
+        "en": "The tilt sensor knows how it is held.\n\n**Up**, **down**, **left**, **right**.\n\n**Flat**: lying on the table.\n\n**Shake**: when it is rocked fast."
+      },
+      "illustration": "r-tilt"
+    },
+    {
+      "id": "tilt-states",
+      "type": "quiz",
+      "kind": "match",
+      "question": {
+        "ru": "Соедини состояние и что сделали с датчиком.",
+        "kk": "Күйді және датчикпен не істегенін сәйкестендір.",
+        "en": "Match each state with what happened to the sensor."
+      },
+      "pairs": [
+        {
+          "left": {
+            "ru": "Ровно",
+            "kk": "Түзу",
+            "en": "Flat"
+          },
+          "right": {
+            "ru": "Лежит на столе",
+            "kk": "Үстелде жатыр",
+            "en": "Lying on the table"
+          }
+        },
+        {
+          "left": {
+            "ru": "Потрясти",
+            "kk": "Сілку",
+            "en": "Shake"
+          },
+          "right": {
+            "ru": "Быстро покачали",
+            "kk": "Жылдам тербетті",
+            "en": "Rocked fast"
+          }
+        },
+        {
+          "left": {
+            "ru": "Влево",
+            "kk": "Солға",
+            "en": "Left"
+          },
+          "right": {
+            "ru": "Наклонили налево",
+            "kk": "Солға еңкейтті",
+            "en": "Tipped to the left"
+          }
+        }
+      ],
+      "explanation": {
+        "ru": "Каждое движение — своё состояние.",
+        "kk": "Әр қозғалыс — өз күйі.",
+        "en": "Each move is its own state."
+      },
+      "skill": "sensor-tilt"
+    },
+    {
+      "id": "try-tilt",
+      "type": "wedo_code",
+      "mode": "code",
+      "title": {
+        "ru": "Попробуй наклон",
+        "kk": "Еңкеюді байқап көр",
+        "en": "Try a tilt"
+      },
+      "task": {
+        "ru": "Собери: **ждать наклон вверх → зелёная лампа**. Нажми «Запустить» и жми стрелки датчика.",
+        "kk": "Құрастыр: **жоғары еңкеюді күту → жасыл шам**. «Іске қосу» батырмасын басып, датчик бағыттамаларын бас.",
+        "en": "Build: **wait for tilt up → green light**. Press Run and tap the sensor arrows."
+      },
+      "scene": {
+        "model": "spinner",
+        "ratio": 1,
+        "sensor": "tilt"
+      },
+      "scenario": [
+        {
+          "at": 1,
+          "tilt": "up"
+        }
+      ],
+      "palette": [
+        "wait_tilt",
+        "light",
+        "sound"
+      ],
+      "start": [],
+      "checks": [
+        {
+          "type": "reactsTo",
+          "sensor": "tilt",
+          "state": "up",
+          "action": "light",
+          "color": "green",
+          "withinSeconds": 1,
+          "times": 1
+        }
+      ],
+      "hints": [
+        {
+          "ru": "Первым поставь «Ждать наклон».",
+          "kk": "Бірінші «Еңкеюді күту» блогын қой.",
+          "en": "Put “Wait for tilt” first."
+        },
+        {
+          "ru": "Выбери в нём стрелку вверх, потом добавь зелёную лампу.",
+          "kk": "Онда жоғары бағыттаманы таңдап, содан кейін жасыл шам қос.",
+          "en": "Pick the up arrow in it, then add a green light."
+        }
+      ],
+      "reference": [
+        {
+          "op": "wait_tilt",
+          "state": "up"
+        },
+        {
+          "op": "light",
+          "color": "green"
+        }
+      ],
+      "skill": "sensor-tilt"
+    }
+  ]
+}

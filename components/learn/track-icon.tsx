@@ -1,8 +1,9 @@
-import { Blocks, Bot, Brain, Code2, Cog, Compass, Cpu, Hammer, Radar, Rocket, Trophy, Wifi, Zap } from 'lucide-react'
+import { Blocks, Bot, Brain, Code2, Cog, Compass, Cpu, Hammer, Puzzle, Radar, Rocket, ScanEye, Smile, Trophy, Wifi, Zap } from 'lucide-react'
 
 import { cn } from '@/lib/utils'
 
-const ICONS = { Rocket, Hammer, Blocks, Radar, Compass, Code2, Cog, Trophy, Brain, Bot, Zap, Cpu, Wifi }
+// WeDo 2.0 tracks use Smile, Cog, ScanEye and Puzzle; the electronics tracks Zap, Cpu and Wifi.
+const ICONS = { Rocket, Hammer, Blocks, Radar, Compass, Code2, Cog, Trophy, Brain, Bot, Smile, ScanEye, Puzzle, Zap, Cpu, Wifi }
 
 /** The track's icon on its colour (course.json: icon, color). */
 export function TrackIcon({ icon, color, className }: { icon: string; color: string; className?: string }) {

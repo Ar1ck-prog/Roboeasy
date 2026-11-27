@@ -44,6 +44,8 @@ export async function POST(req: NextRequest) {
     const h = authored[Math.min(body.level, authored.length) - 1]
     return h ? { ok: true, hint: h[body.lang], source: 'lesson' } : null
   }
+  // WeDo steps are for learners under 10: ready hints from the lesson only, never the AI (docs/privacy.md).
+  if (step.type === 'wedo_code' || step.type === 'wedo_predict') return reply(lessonHint() ?? { ok: false, error: 'bad_request' })
 
   const minute = await limitRequester(req.headers, 'mentor:m', MENTOR_LIMITS.perMinute, 60_000)
   if (!minute.ok) return reply({ ok: false, error: 'rate_limited', retryAfter: minute.retryAfterSeconds }, 429)

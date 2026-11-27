@@ -1,0 +1,127 @@
+{
+  "id": "wedo-01",
+  "track": "wedo-start",
+  "unit": "wedo-meet",
+  "minutes": 4,
+  "skills": [
+    "robot-basics",
+    "sequence"
+  ],
+  "kit": false,
+  "title": {
+    "ru": "Что умеет робот",
+    "kk": "Робот не істей алады",
+    "en": "What a robot can do"
+  },
+  "goal": {
+    "ru": "Сегодня ты научишь робота крутить вертушку.",
+    "kk": "Бүгін сен роботты айналғышты айналдыруға үйретесің.",
+    "en": "Today you will teach the robot to turn a spinner."
+  },
+  "summary": {
+    "ru": "Теперь ты умеешь запускать мотор блоком.",
+    "kk": "Енді сен моторды блокпен іске қоса аласың.",
+    "en": "Now you can start a motor with a block."
+  },
+  "steps": [
+    {
+      "id": "feel-think-act",
+      "type": "theory",
+      "title": {
+        "ru": "Робот чувствует, думает, действует",
+        "kk": "Робот сезеді, ойлайды, әрекет етеді",
+        "en": "A robot feels, thinks and acts"
+      },
+      "body": {
+        "ru": "Робот похож на тебя.\n\n**Датчик** чувствует, как твои глаза.\n\n**Смартхаб** думает, как голова.\n\n**Мотор** действует, как руки и ноги.",
+        "kk": "Робот саған ұқсайды.\n\n**Датчик** көзің сияқты сезеді.\n\n**Смартхаб** басың сияқты ойлайды.\n\n**Мотор** қол мен аяқ сияқты әрекет етеді.",
+        "en": "A robot is a bit like you.\n\nA **sensor** feels, like your eyes.\n\nThe **Smarthub** thinks, like your head.\n\nA **motor** acts, like your arms and legs."
+      },
+      "illustration": "robot-parts"
+    },
+    {
+      "id": "who-thinks",
+      "type": "quiz",
+      "kind": "choice",
+      "question": {
+        "ru": "Кто думает у робота?",
+        "kk": "Роботта кім ойлайды?",
+        "en": "Which part thinks?"
+      },
+      "options": [
+        {
+          "ru": "Мотор",
+          "kk": "Мотор",
+          "en": "The motor"
+        },
+        {
+          "ru": "Смартхаб",
+          "kk": "Смартхаб",
+          "en": "The Smarthub"
+        },
+        {
+          "ru": "Колесо",
+          "kk": "Дөңгелек",
+          "en": "A wheel"
+        }
+      ],
+      "correct": [
+        1
+      ],
+      "explanation": {
+        "ru": "Смартхаб — мозг робота. Он выполняет программу.",
+        "kk": "Смартхаб — роботтың миы. Ол бағдарламаны орындайды.",
+        "en": "The Smarthub is the robot’s brain. It runs the program."
+      },
+      "skill": "robot-basics"
+    },
+    {
+      "id": "first-spin",
+      "type": "wedo_code",
+      "mode": "code",
+      "title": {
+        "ru": "Первая программа",
+        "kk": "Алғашқы бағдарлама",
+        "en": "Your first program"
+      },
+      "task": {
+        "ru": "Нажми на блок мотора внизу. Пусть вертушка крутится **2 секунды**. Потом нажми «Проверить».",
+        "kk": "Төмендегі мотор блогын бас. Айналғыш **2 секунд** айналсын. Содан кейін «Тексеру» батырмасын бас.",
+        "en": "Tap the motor block below. Let the spinner turn for **2 seconds**. Then press Check."
+      },
+      "scene": {
+        "model": "spinner",
+        "ratio": 1
+      },
+      "palette": [
+        "motor_on_for"
+      ],
+      "start": [],
+      "checks": [
+        {
+          "type": "motorRan",
+          "minSeconds": 2
+        }
+      ],
+      "hints": [
+        {
+          "ru": "Блок с шестерёнкой и часами — это мотор на время.",
+          "kk": "Тісті доңғалақ пен сағаты бар блок — уақытқа мотор.",
+          "en": "The block with a gear and a clock is the timed motor."
+        },
+        {
+          "ru": "Нажми на блок в программе и нажимай «+», пока не будет 2 с.",
+          "kk": "Бағдарламадағы блокты басып, 2 с болғанша «+» бас.",
+          "en": "Tap the block in the program and press + until it says 2 s."
+        }
+      ],
+      "reference": [
+        {
+          "op": "motor_on_for",
+          "seconds": 2
+        }
+      ],
+      "skill": "sequence"
+    }
+  ]
+}

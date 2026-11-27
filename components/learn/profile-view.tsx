@@ -11,6 +11,8 @@ import { getPilotText } from '@/lib/i18n/pilot'
 import { Buddy } from '@/components/learn/buddy'
 import { CoinAmount } from '@/components/learn/coin'
 import { Onboarding } from '@/components/learn/onboarding'
+import { PathCard } from '@/components/wedo/path-card'
+import type { WedoText } from '@/lib/i18n/wedo'
 import { AnimIcon } from '@/components/ui/anim-icon'
 import { buttonVariants } from '@/components/ui/button'
 import { Card, CardTitle } from '@/components/ui/card'
@@ -54,7 +56,7 @@ function download(name: string, text: string, type: string) {
   setTimeout(() => URL.revokeObjectURL(url), 1000)
 }
 
-export function ProfileView({ lang, app, play }: { lang: Lang; app: LearnAppText; play: PlayText }) {
+export function ProfileView({ lang, app, play, wt }: { lang: Lang; app: LearnAppText; play: PlayText; wt: WedoText }) {
   const hydrated = useHydrated()
   const p = useProgress()
   const id = useId()
@@ -72,7 +74,7 @@ export function ProfileView({ lang, app, play }: { lang: Lang; app: LearnAppText
 
   if (!hydrated) return <Skeleton className="container my-10 h-96" />
   const profile = p.state.profile
-  if (!profile || joining) return <Onboarding lang={lang} app={app} play={play} onSaved={() => setJoining(true)} onDone={() => setJoining(false)} />
+  if (!profile || joining) return <Onboarding lang={lang} app={app} play={play} wt={wt} onSaved={() => setJoining(true)} onDone={() => setJoining(false)} />
 
   const dateFmt = new Intl.DateTimeFormat(lang === 'kk' ? 'kk-KZ' : lang, { day: 'numeric', month: 'long', year: 'numeric' })
   const certificates = p.state.events.flatMap((e) => (e.kind === 'certificate' ? [e] : []))
@@ -165,6 +167,8 @@ export function ProfileView({ lang, app, play }: { lang: Lang; app: LearnAppText
             {fill(app.path.freezes, { n: p.streak.freezes, max: p.ledger.maxFreezes })}. {app.path.freezesHint}
           </p>
         </Card>
+
+        <PathCard path={p.path} ageRange={profile.ageRange} app={app} wt={wt} />
 
         <Card className="gap-4">
           <CardTitle>{t.robot}</CardTitle>

@@ -108,7 +108,7 @@ export async function deleteAccount(): Promise<boolean> {
 
 // ── Profile ──────────────────────────────────────────────────────────────
 
-interface ProfileRow {
+export interface ProfileRow {
   id: string
   nickname: string
   age_range: Profile['ageRange']
@@ -120,22 +120,24 @@ interface ProfileRow {
     cosmetics?: Profile['cosmetics']
     buddy?: Profile['buddy']
     anonId?: string
+    learningPath?: Profile['learningPath']
   }
   parent_consent: boolean
 }
 
-function toRow(id: string, p: Profile): ProfileRow {
+/** Exported for tests: the profile goes to the `profiles` row and back without losing fields. */
+export function toRow(id: string, p: Profile): ProfileRow {
   return {
     id,
     nickname: p.nickname,
     age_range: p.ageRange,
     timezone: p.timezone,
-    settings: { goal: p.goal, skipWeekends: p.skipWeekends, reminders: p.reminders, cosmetics: p.cosmetics, buddy: p.buddy, anonId: p.anonId },
+    settings: { goal: p.goal, skipWeekends: p.skipWeekends, reminders: p.reminders, cosmetics: p.cosmetics, buddy: p.buddy, anonId: p.anonId, learningPath: p.learningPath },
     parent_consent: p.parentConsent,
   }
 }
 
-function fromRow(row: ProfileRow): Profile | null {
+export function fromRow(row: ProfileRow): Profile | null {
   const r = profileSchema.safeParse({
     nickname: row.nickname,
     ageRange: row.age_range,
@@ -145,6 +147,7 @@ function fromRow(row: ProfileRow): Profile | null {
     reminders: row.settings.reminders,
     cosmetics: row.settings.cosmetics,
     buddy: row.settings.buddy,
+    learningPath: row.settings.learningPath ?? null,
     parentConsent: row.parent_consent,
     createdAt: Date.now(),
     anonId: row.settings.anonId ?? `anon_${row.id.replace(/-/g, '').slice(0, 16)}`,

@@ -8,16 +8,29 @@
  *   does not block the ones after it;
  * - a track opens when its prerequisite tracks are finished, or when any of
  *   its lessons is done (placement test, "I already know this" test).
+ *
+ * Learning paths (the learner picks one, see effectiveLearningPath):
+ * - 'wedo': WeDo 2.0 tracks open along their own prerequisites; every SPIKE
+ *   track stays closed until all ready WeDo lessons are done (lessons done
+ *   earlier stay done and can be replayed, nothing new opens);
+ * - 'spike' and null (not chosen yet): SPIKE exactly as before, WeDo tracks
+ *   are open as an optional extra and block nothing;
+ * - 'general' tracks (AI from zero) follow their own rules on any path.
  */
 
-import type { Course, Skill } from './schema'
+import type { Course, Skill, TrackFamily } from './schema'
 import type { LearnState } from './state'
 
 type Track = Course['tracks'][number]
 export type LessonState = 'done' | 'current' | 'open' | 'locked' | 'soon'
+export type LearningPath = 'wedo' | 'spike' | null
 
 export function trackLessons(track: Track) {
   return track.units.flatMap((unit) => unit.lessons.map((ref) => ({ ref, unit })))
+}
+
+function familyOf(track: Track): TrackFamily {
+  return track.family ?? 'spike'
 }
 
 /** All ready lessons done (a track with no ready lessons yet counts as finished for unlocking). */
@@ -29,7 +42,26 @@ export function trackHasContent(track: Track): boolean {
   return trackLessons(track).some(({ ref }) => ref.status === 'ready')
 }
 
-export function trackUnlocked(done: Set<string>, track: Track, course: Course): boolean {
+/** Every ready lesson of every WeDo track is done (true when the course has no WeDo lessons). */
+export function wedoComplete(done: Set<string>, course: Course): boolean {
+  return course.tracks.filter((t) => familyOf(t) === 'wedo').every((t) => trackComplete(done, t))
+}
+
+/** Done and ready lessons over all WeDo tracks (for the "opens after WeDo" bar). */
+export function wedoProgress(done: Set<string>, course: Course): { done: number; ready: number } {
+  const refs = course.tracks.filter((t) => familyOf(t) === 'wedo').flatMap((t) => trackLessons(t).filter(({ ref }) => ref.status === 'ready'))
+  return { done: refs.filter(({ ref }) => done.has(ref.id)).length, ready: refs.length }
+}
+
+/** A SPIKE track closed because the learner is on the WeDo path and has not finished it. */
+export function spikeLockedByWedo(done: Set<string>, track: Track, course: Course, path: LearningPath): boolean {
+  return path === 'wedo' && familyOf(track) === 'spike' && !wedoComplete(done, course)
+}
+
+export function trackUnlocked(done: Set<string>, track: Track, course: Course, path: LearningPath = null): boolean {
+  if (spikeLockedByWedo(done, track, course, path)) return false
+  // Off the WeDo path, WeDo is an optional extra: always open.
+  if (familyOf(track) === 'wedo' && path !== 'wedo') return true
   if (trackLessons(track).some(({ ref }) => done.has(ref.id))) return true
   return track.prerequisites.every((id) => {
     const pre = course.tracks.find((t) => t.id === id)
@@ -37,8 +69,8 @@ export function trackUnlocked(done: Set<string>, track: Track, course: Course): 
   })
 }
 
-export function lessonStates(done: Set<string>, track: Track, course: Course): Map<string, LessonState> {
-  const unlocked = trackUnlocked(done, track, course)
+export function lessonStates(done: Set<string>, track: Track, course: Course, path: LearningPath = null): Map<string, LessonState> {
+  const unlocked = trackUnlocked(done, track, course, path)
   const states = new Map<string, LessonState>()
   let previousDone = true
   let currentGiven = false
@@ -70,44 +102,75 @@ export interface TrackProgress {
   complete: boolean
 }
 
-export function trackProgress(done: Set<string>, track: Track, course: Course): TrackProgress {
+export function trackProgress(done: Set<string>, track: Track, course: Course, path: LearningPath = null): TrackProgress {
   const lessons = trackLessons(track)
   const ready = lessons.filter(({ ref }) => ref.status === 'ready')
   return {
     done: lessons.filter(({ ref }) => done.has(ref.id)).length,
     ready: ready.length,
     total: lessons.length,
-    unlocked: trackUnlocked(done, track, course),
+    unlocked: trackUnlocked(done, track, course, path),
     complete: ready.length > 0 && trackComplete(done, track),
   }
 }
 
-/** The lesson to continue with: the first current lesson in course order. */
-export function nextLesson(done: Set<string>, course: Course): { track: Track; id: string; title: Track['units'][number]['lessons'][number]['title'] } | null {
-  for (const track of course.tracks) {
-    const states = lessonStates(done, track, course)
+/** Tracks in the order the path walks them: WeDo first on the WeDo path, WeDo last otherwise. */
+export function pathOrder(course: Course, path: LearningPath): Track[] {
+  const wedo = course.tracks.filter((t) => familyOf(t) === 'wedo')
+  const rest = course.tracks.filter((t) => familyOf(t) !== 'wedo')
+  return path === 'wedo' ? [...wedo, ...rest] : [...rest, ...wedo]
+}
+
+/** The lesson to continue with: the first current lesson in path order. */
+export function nextLesson(
+  done: Set<string>,
+  course: Course,
+  path: LearningPath = null,
+): { track: Track; id: string; title: Track['units'][number]['lessons'][number]['title'] } | null {
+  for (const track of pathOrder(course, path)) {
+    const states = lessonStates(done, track, course, path)
     for (const { ref } of trackLessons(track)) if (states.get(ref.id) === 'current') return { track, id: ref.id, title: ref.title }
   }
   return null
 }
 
 /** The lesson to open from a track's card: its first current lesson, or null when there is none. */
-export function trackNextLesson(done: Set<string>, track: Track, course: Course): string | null {
-  const states = lessonStates(done, track, course)
+export function trackNextLesson(done: Set<string>, track: Track, course: Course, path: LearningPath = null): string | null {
+  const states = lessonStates(done, track, course, path)
   for (const { ref } of trackLessons(track)) if (states.get(ref.id) === 'current') return ref.id
   return null
+}
+
+/**
+ * The learner's path: the one they picked, or 'spike' for learners who did a
+ * SPIKE lesson before paths existed (so nobody meets new locks), or null
+ * when nothing is chosen yet.
+ */
+export function effectiveLearningPath(state: Pick<LearnState, 'profile' | 'events'>, course: Course): LearningPath {
+  const chosen = state.profile?.learningPath ?? null
+  if (chosen) return chosen
+  const spikeLessons = new Set(course.tracks.filter((t) => familyOf(t) === 'spike').flatMap((t) => trackLessons(t).map(({ ref }) => ref.id)))
+  const didSpike = state.events.some(
+    (e) => (e.kind === 'lesson_done' && spikeLessons.has(e.lesson)) || (e.kind === 'known' && e.lessons.some((l) => spikeLessons.has(l))),
+  )
+  return didSpike ? 'spike' : null
+}
+
+/** The SPIKE placement test is offered unless the learner is still on the WeDo part of the WeDo path. */
+export function placementAvailable(done: Set<string>, course: Course, path: LearningPath): boolean {
+  return path !== 'wedo' || wedoComplete(done, course)
 }
 
 // ── Skills ──────────────────────────────────────────────────────────────
 
 /** Skill groups for the radar (8 axes are readable on a phone). */
 export const SKILL_GROUPS = [
-  { id: 'basics', skills: ['robot-basics', 'electricity'], title: { ru: 'Основы', kk: 'Негіздер', en: 'Basics' } },
+  { id: 'basics', skills: ['robot-basics', 'wedo-hub', 'electricity'], title: { ru: 'Основы', kk: 'Негіздер', en: 'Basics' } },
   { id: 'motion', skills: ['motion', 'turns'], title: { ru: 'Движение', kk: 'Қозғалыс', en: 'Motion' } },
   { id: 'algorithms', skills: ['sequence', 'loops', 'conditions', 'variables', 'functions'], title: { ru: 'Алгоритмы', kk: 'Алгоритмдер', en: 'Algorithms' } },
-  { id: 'sensors', skills: ['sensor-color', 'sensor-distance', 'sensor-force', 'gyro', 'line-follow'], title: { ru: 'Датчики', kk: 'Датчиктер', en: 'Sensors' } },
+  { id: 'sensors', skills: ['sensor-color', 'sensor-distance', 'sensor-force', 'gyro', 'line-follow', 'sensor-motion', 'sensor-tilt'], title: { ru: 'Датчики', kk: 'Датчиктер', en: 'Sensors' } },
   { id: 'precision', skills: ['control', 'calibration'], title: { ru: 'Точность', kk: 'Дәлдік', en: 'Precision' } },
-  { id: 'building', skills: ['parts', 'structures', 'gears', 'mechanisms'], title: { ru: 'Конструирование', kk: 'Құрастыру', en: 'Building' } },
+  { id: 'building', skills: ['parts', 'structures', 'gears', 'mechanisms', 'wedo-mechanics'], title: { ru: 'Конструирование', kk: 'Құрастыру', en: 'Building' } },
   { id: 'code', skills: ['python', 'microcontrollers'], title: { ru: 'Код', kk: 'Код', en: 'Code' } },
   { id: 'team', skills: ['strategy', 'teamwork'], title: { ru: 'Команда', kk: 'Команда', en: 'Team' } },
 ] as const satisfies readonly { id: string; skills: readonly Skill[]; title: Record<'ru' | 'kk' | 'en', string> }[]

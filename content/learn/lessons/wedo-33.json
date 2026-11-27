@@ -1,0 +1,203 @@
+{
+  "id": "wedo-33",
+  "track": "wedo-projects",
+  "unit": "wedo-final",
+  "minutes": 7,
+  "skills": [
+    "loops",
+    "sensor-motion"
+  ],
+  "kit": false,
+  "title": {
+    "ru": "Проект «Охранник»",
+    "kk": "«Күзетші» жобасы",
+    "en": "Project “Guard”"
+  },
+  "goal": {
+    "ru": "Сегодня ты сделаешь робота-охранника.",
+    "kk": "Бүгін сен робот-күзетші жасайсың.",
+    "en": "Today you will make a guard robot."
+  },
+  "summary": {
+    "ru": "Теперь ты умеешь соединять повтор, датчик, свет, звук и экран.",
+    "kk": "Енді сен қайталауды, датчикті, жарықты, дыбысты және экранды біріктіре аласың.",
+    "en": "Now you can combine repeat, sensor, light, sound and screen."
+  },
+  "steps": [
+    {
+      "id": "guard-story",
+      "type": "theory",
+      "title": {
+        "ru": "Охранник",
+        "kk": "Күзетші",
+        "en": "The guard"
+      },
+      "body": {
+        "ru": "Охранник сторожит коробку с печеньем.\n\nПока никого нет, свет **зелёный**.\n\nКто-то подошёл **близко** — свет **красный**, **звук** и надпись **СТОП**.\n\nОхранник работает **всегда**.",
+        "kk": "Күзетші печенье салынған қорапты күзетеді.\n\nЕшкім жоқ кезде жарық **жасыл**.\n\nБіреу **жақындады** — жарық **қызыл**, **дыбыс** және **ТОҚТА** жазуы.\n\nКүзетші **әрдайым** жұмыс істейді.",
+        "en": "The guard watches a box of biscuits.\n\nWhile nobody is around, the light is **green**.\n\nSomeone comes **near**: **red** light, a **sound** and the word **STOP**.\n\nThe guard works **forever**."
+      }
+    },
+    {
+      "id": "guard-does",
+      "type": "quiz",
+      "kind": "choice",
+      "question": {
+        "ru": "Что делает охранник, когда кто-то рядом?",
+        "kk": "Біреу жақын болғанда күзетші не істейді?",
+        "en": "What does the guard do when someone is near?"
+      },
+      "options": [
+        {
+          "ru": "Красный свет, звук и «СТОП»",
+          "kk": "Қызыл жарық, дыбыс және «ТОҚТА»",
+          "en": "Red light, a sound and “STOP”"
+        },
+        {
+          "ru": "Засыпает",
+          "kk": "Ұйықтап қалады",
+          "en": "Falls asleep"
+        },
+        {
+          "ru": "Уезжает",
+          "kk": "Кетіп қалады",
+          "en": "Drives away"
+        }
+      ],
+      "correct": [
+        0
+      ],
+      "explanation": {
+        "ru": "Охранник предупреждает: сюда нельзя!",
+        "kk": "Күзетші ескертеді: мұнда болмайды!",
+        "en": "The guard warns: no entry!"
+      },
+      "skill": "sensor-motion"
+    },
+    {
+      "id": "guard",
+      "type": "wedo_code",
+      "mode": "project",
+      "title": {
+        "ru": "Робот-охранник",
+        "kk": "Робот-күзетші",
+        "en": "The guard robot"
+      },
+      "task": {
+        "ru": "**Всегда**: зелёный свет, ждать **близко**, потом **красный** свет, **звук** и надпись **СТОП**, ждать **далеко**.",
+        "kk": "**Әрдайым**: жасыл жарық, **жақынды** күту, содан кейін **қызыл** жарық, **дыбыс** және **ТОҚТА** жазуы, **алысты** күту.",
+        "en": "**Forever**: green light, wait for **near**, then **red** light, a **sound** and the word **STOP**, wait for **far**."
+      },
+      "scene": {
+        "model": "spinner",
+        "ratio": 1,
+        "sensor": "motion"
+      },
+      "scenario": [
+        {
+          "at": 2,
+          "motion": "near"
+        },
+        {
+          "at": 4,
+          "motion": "far"
+        },
+        {
+          "at": 7,
+          "motion": "near"
+        },
+        {
+          "at": 9,
+          "motion": "far"
+        }
+      ],
+      "palette": [
+        "repeat",
+        "wait_motion",
+        "light",
+        "sound",
+        "display",
+        "wait"
+      ],
+      "start": [],
+      "checks": [
+        {
+          "type": "reactsTo",
+          "sensor": "motion",
+          "state": "near",
+          "action": "light",
+          "color": "red",
+          "withinSeconds": 1,
+          "times": 2
+        },
+        {
+          "type": "reactsTo",
+          "sensor": "motion",
+          "state": "near",
+          "action": "sound",
+          "withinSeconds": 1,
+          "times": 2
+        },
+        {
+          "type": "displayed",
+          "text": {
+            "ru": "СТОП",
+            "kk": "ТОҚТА",
+            "en": "STOP"
+          }
+        },
+        {
+          "type": "usesBlock",
+          "op": "repeat",
+          "min": 1
+        }
+      ],
+      "hints": [
+        {
+          "ru": "Все блоки положи внутрь «Повторять всегда».",
+          "kk": "Барлық блоктарды «Әрдайым қайталау» ішіне сал.",
+          "en": "Put every block inside “Repeat forever”."
+        },
+        {
+          "ru": "Зелёный → ждать близко → красный → звук → экран СТОП → ждать далеко.",
+          "kk": "Жасыл → жақынды күту → қызыл → дыбыс → ТОҚТА экраны → алысты күту.",
+          "en": "Green → wait near → red → sound → screen STOP → wait far."
+        }
+      ],
+      "reference": [
+        {
+          "op": "repeat",
+          "times": "forever",
+          "steps": [
+            {
+              "op": "light",
+              "color": "green"
+            },
+            {
+              "op": "wait_motion",
+              "event": "near"
+            },
+            {
+              "op": "light",
+              "color": "red"
+            },
+            {
+              "op": "sound",
+              "sound": 5
+            },
+            {
+              "op": "display",
+              "kind": "text",
+              "value": "СТОП"
+            },
+            {
+              "op": "wait_motion",
+              "event": "far"
+            }
+          ]
+        }
+      ],
+      "skill": "loops"
+    }
+  ]
+}

@@ -1,0 +1,160 @@
+{
+  "id": "wedo-26",
+  "track": "wedo-sensors",
+  "unit": "wedo-tilt",
+  "minutes": 5,
+  "skills": [
+    "sensor-tilt"
+  ],
+  "kit": false,
+  "title": {
+    "ru": "Пульт-наклон",
+    "kk": "Еңкею пульті",
+    "en": "A tilt remote"
+  },
+  "goal": {
+    "ru": "Сегодня ты будешь управлять Вжиком наклоном.",
+    "kk": "Бүгін сен Вжикті еңкеюмен басқарасың.",
+    "en": "Today you will drive Zip with a tilt."
+  },
+  "summary": {
+    "ru": "Теперь ты умеешь запускать робота по сигналу датчика наклона.",
+    "kk": "Енді сен роботты еңкею датчигінің белгісі бойынша іске қоса аласың.",
+    "en": "Now you can start the robot on a tilt sensor signal."
+  },
+  "steps": [
+    {
+      "id": "remote",
+      "type": "theory",
+      "title": {
+        "ru": "Датчик как пульт",
+        "kk": "Датчик пульт ретінде",
+        "en": "A sensor as a remote"
+      },
+      "body": {
+        "ru": "Датчик наклона можно взять в руку, как **пульт**.\n\nНаклонил **вверх** — Вжик поехал.\n\nПрограмма ждёт твой сигнал.",
+        "kk": "Еңкею датчигін қолға **пульт** сияқты алуға болады.\n\n**Жоғары** еңкейттің — Вжик жүрді.\n\nБағдарлама сенің белгіңді күтеді.",
+        "en": "You can hold the tilt sensor like a **remote**.\n\nTip it **up** and Zip drives.\n\nThe program waits for your signal."
+      }
+    },
+    {
+      "id": "when-go",
+      "type": "quiz",
+      "kind": "choice",
+      "question": {
+        "ru": "Как Вжик узнает, что пора ехать?",
+        "kk": "Вжик жүретін уақыт келгенін қалай біледі?",
+        "en": "How does Zip know it is time to go?"
+      },
+      "options": [
+        {
+          "ru": "Датчик наклона скажет «вверх»",
+          "kk": "Еңкею датчигі «жоғары» дейді",
+          "en": "The tilt sensor says “up”"
+        },
+        {
+          "ru": "Загорится лампа",
+          "kk": "Шам жанады",
+          "en": "The light comes on"
+        },
+        {
+          "ru": "Он сам угадает",
+          "kk": "Өзі болжайды",
+          "en": "It guesses"
+        }
+      ],
+      "correct": [
+        0
+      ],
+      "explanation": {
+        "ru": "Блок «Ждать наклон вверх» ждёт сигнала.",
+        "kk": "«Жоғары еңкеюді күту» блогы белгіні күтеді.",
+        "en": "The “Wait for tilt up” block waits for the signal."
+      },
+      "skill": "sensor-tilt"
+    },
+    {
+      "id": "tilt-drive",
+      "type": "wedo_code",
+      "mode": "code",
+      "title": {
+        "ru": "Поехали по сигналу",
+        "kk": "Белгі бойынша жүрдік",
+        "en": "Go on the signal"
+      },
+      "task": {
+        "ru": "Жди **наклон вверх**, потом поезжай **2 секунды** до стоянки.",
+        "kk": "**Жоғары еңкеюді** күт, содан кейін тұраққа дейін **2 секунд** жүр.",
+        "en": "Wait for **tilt up**, then drive **2 seconds** to the parking spot."
+      },
+      "scene": {
+        "model": "rover",
+        "length": 1200,
+        "start": 100,
+        "sensor": "tilt",
+        "zones": [
+          {
+            "id": "park",
+            "from": 450,
+            "to": 650,
+            "label": {
+              "ru": "Стоянка",
+              "kk": "Тұрақ",
+              "en": "Parking"
+            }
+          }
+        ],
+        "obstacles": []
+      },
+      "scenario": [
+        {
+          "at": 1,
+          "tilt": "up"
+        }
+      ],
+      "palette": [
+        "wait_tilt",
+        "motor_on_for",
+        "motor_direction"
+      ],
+      "start": [],
+      "checks": [
+        {
+          "type": "reactsTo",
+          "sensor": "tilt",
+          "state": "up",
+          "action": "motorStart",
+          "withinSeconds": 1,
+          "times": 1
+        },
+        {
+          "type": "roverInZone",
+          "zone": "park"
+        }
+      ],
+      "hints": [
+        {
+          "ru": "Сначала ждём сигнал, потом едем.",
+          "kk": "Алдымен белгіні күтеміз, содан кейін жүреміз.",
+          "en": "First wait for the signal, then drive."
+        },
+        {
+          "ru": "Ждать наклон вверх → мотор на 2 секунды.",
+          "kk": "Жоғары еңкеюді күту → мотор 2 секундқа.",
+          "en": "Wait for tilt up → motor for 2 seconds."
+        }
+      ],
+      "reference": [
+        {
+          "op": "wait_tilt",
+          "state": "up"
+        },
+        {
+          "op": "motor_on_for",
+          "seconds": 2
+        }
+      ],
+      "skill": "sensor-tilt"
+    }
+  ]
+}

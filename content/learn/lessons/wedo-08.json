@@ -1,0 +1,210 @@
+{
+  "id": "wedo-08",
+  "track": "wedo-start",
+  "unit": "wedo-first",
+  "minutes": 5,
+  "skills": [
+    "motion"
+  ],
+  "kit": false,
+  "title": {
+    "ru": "Сильнее и слабее",
+    "kk": "Күштірек және әлсіздеу",
+    "en": "Stronger and weaker"
+  },
+  "goal": {
+    "ru": "Сегодня ты научишь Вжика ехать быстрее и медленнее.",
+    "kk": "Бүгін сен Вжикті жылдамырақ және баяуырақ жүруге үйретесің.",
+    "en": "Today you will teach Zip to drive faster and slower."
+  },
+  "summary": {
+    "ru": "Теперь ты умеешь менять мощность мотора.",
+    "kk": "Енді сен мотордың қуатын өзгерте аласың.",
+    "en": "Now you can change the motor’s power."
+  },
+  "steps": [
+    {
+      "id": "power",
+      "type": "theory",
+      "title": {
+        "ru": "Мощность",
+        "kk": "Қуат",
+        "en": "Power"
+      },
+      "body": {
+        "ru": "Блок **«Мощность»** говорит мотору, как сильно крутиться.\n\nМощность бывает от 0 до 10.\n\nБольше мощность — Вжик едет быстрее и дальше за то же время.",
+        "kk": "**«Қуат»** блогы моторға қаншалықты күшті айналу керегін айтады.\n\nҚуат 0-ден 10-ға дейін болады.\n\nҚуат көп болса, Вжик сол уақытта жылдамырақ әрі алысырақ жүреді.",
+        "en": "The **Power** block tells the motor how hard to turn.\n\nPower goes from 0 to 10.\n\nMore power means Zip drives faster and farther in the same time."
+      },
+      "illustration": "speed"
+    },
+    {
+      "id": "weak-power",
+      "type": "wedo_predict",
+      "title": {
+        "ru": "Слабый мотор",
+        "kk": "Әлсіз мотор",
+        "en": "A weak motor"
+      },
+      "question": {
+        "ru": "Мощность 4, ехать 2 секунды. Где остановится Вжик?",
+        "kk": "Қуат 4, 2 секунд жүру. Вжик қайда тоқтайды?",
+        "en": "Power 4, drive for 2 seconds. Where will Zip stop?"
+      },
+      "scene": {
+        "model": "rover",
+        "length": 1200,
+        "start": 100,
+        "zones": [
+          {
+            "id": "rock",
+            "from": 250,
+            "to": 350,
+            "label": {
+              "ru": "Камень",
+              "kk": "Тас",
+              "en": "Rock"
+            }
+          },
+          {
+            "id": "flag",
+            "from": 450,
+            "to": 600,
+            "label": {
+              "ru": "Флажок",
+              "kk": "Жалауша",
+              "en": "Flag"
+            }
+          }
+        ],
+        "obstacles": []
+      },
+      "program": [
+        {
+          "op": "motor_power",
+          "power": 4
+        },
+        {
+          "op": "motor_on_for",
+          "seconds": 2
+        }
+      ],
+      "options": [
+        {
+          "label": {
+            "ru": "У камня",
+            "kk": "Тастың жанында",
+            "en": "At the rock"
+          },
+          "expect": [
+            {
+              "type": "roverInZone",
+              "zone": "rock"
+            }
+          ]
+        },
+        {
+          "label": {
+            "ru": "У флажка",
+            "kk": "Жалаушаның жанында",
+            "en": "At the flag"
+          },
+          "expect": [
+            {
+              "type": "roverInZone",
+              "zone": "flag"
+            }
+          ]
+        }
+      ],
+      "correct": 0,
+      "explanation": {
+        "ru": "Мощность 4 — это половина от 8. Вжик проехал вдвое меньше.",
+        "kk": "4 қуат — 8-дің жартысы. Вжик екі есе аз жүрді.",
+        "en": "Power 4 is half of 8, so Zip drove half as far."
+      },
+      "skill": "motion"
+    },
+    {
+      "id": "pick-power",
+      "type": "wedo_code",
+      "mode": "code",
+      "title": {
+        "ru": "Подбери мощность",
+        "kk": "Қуатты таңда",
+        "en": "Pick the power"
+      },
+      "task": {
+        "ru": "Вжик едет **2 секунды**. Подбери **мощность**, чтобы он доехал до флажка.",
+        "kk": "Вжик **2 секунд** жүреді. Ол жалаушаға жетуі үшін **қуатты** таңда.",
+        "en": "Zip drives for **2 seconds**. Pick the **power** so it reaches the flag."
+      },
+      "scene": {
+        "model": "rover",
+        "length": 1200,
+        "start": 100,
+        "zones": [
+          {
+            "id": "flag",
+            "from": 520,
+            "to": 660,
+            "label": {
+              "ru": "Флажок",
+              "kk": "Жалауша",
+              "en": "Flag"
+            }
+          }
+        ],
+        "obstacles": []
+      },
+      "palette": [
+        "motor_power",
+        "motor_on_for"
+      ],
+      "start": [
+        {
+          "op": "motor_power",
+          "power": 5
+        },
+        {
+          "op": "motor_on_for",
+          "seconds": 2
+        }
+      ],
+      "checks": [
+        {
+          "type": "roverInZone",
+          "zone": "flag"
+        },
+        {
+          "type": "usesBlock",
+          "op": "motor_power",
+          "min": 1
+        }
+      ],
+      "hints": [
+        {
+          "ru": "Секунды не меняй. Меняй мощность.",
+          "kk": "Секундты өзгертпе. Қуатты өзгерт.",
+          "en": "Keep the seconds. Change the power."
+        },
+        {
+          "ru": "Нажми на блок мощности и нажимай «+».",
+          "kk": "Қуат блогын басып, «+» бас.",
+          "en": "Tap the power block and press +."
+        }
+      ],
+      "reference": [
+        {
+          "op": "motor_power",
+          "power": 10
+        },
+        {
+          "op": "motor_on_for",
+          "seconds": 2
+        }
+      ],
+      "skill": "motion"
+    }
+  ]
+}

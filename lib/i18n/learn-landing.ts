@@ -107,7 +107,7 @@ const ru: LearnLandingCopy = {
   },
   tracks: {
     eyebrow: 'Обучение',
-    title: '13 треков: роботы LEGO SPIKE, ИИ, Arduino и ESP32 — от первой программы до соревнований',
+    title: '17 треков: LEGO WeDo 2.0, LEGO SPIKE, ИИ, Arduino и ESP32 — от первых шагов до соревнований',
     lead: 'Идёшь по шагам: каждый трек открывает следующий. Если уже что-то умеешь — пройди тест и начни с нужного места.',
     noKit: 'без набора',
     partKit: 'часть с набором',
@@ -257,7 +257,7 @@ const en: LearnLandingCopy = {
   },
   tracks: {
     eyebrow: 'Learning',
-    title: '13 tracks: LEGO SPIKE robots, AI, Arduino and ESP32, from the first program to competitions',
+    title: '17 tracks: LEGO WeDo 2.0, LEGO SPIKE, AI, Arduino and ESP32, from first steps to competitions',
     lead: 'Go step by step: each track opens the next one. Already know some? Take the test and start in the right place.',
     noKit: 'no kit needed',
     partKit: 'partly with a kit',
@@ -404,7 +404,7 @@ const kk: LearnLandingCopy = {
   },
   tracks: {
     eyebrow: 'Оқу',
-    title: '13 трек: LEGO SPIKE роботтары, ЖИ, Arduino және ESP32 — алғашқы бағдарламадан жарыстарға дейін',
+    title: '17 трек: LEGO WeDo 2.0, LEGO SPIKE, ЖИ, Arduino және ESP32 — алғашқы қадамдардан жарыстарға дейін',
     lead: 'Қадам бойынша жүресің: әр трек келесісін ашады. Бірдеңе білсең — тест тапсырып, керекті жерден баста.',
     noKit: 'жиынтықсыз',
     partKit: 'бір бөлігі жиынтықпен',

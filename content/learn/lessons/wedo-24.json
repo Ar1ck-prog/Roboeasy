@@ -1,0 +1,186 @@
+{
+  "id": "wedo-24",
+  "track": "wedo-sensors",
+  "unit": "wedo-motion-sensor",
+  "minutes": 7,
+  "skills": [
+    "sensor-motion",
+    "sequence"
+  ],
+  "kit": false,
+  "title": {
+    "ru": "Проект «Умный шлагбаум»",
+    "kk": "«Ақылды шлагбаум» жобасы",
+    "en": "Project “Smart barrier”"
+  },
+  "goal": {
+    "ru": "Сегодня шлагбаум сам пропустит машинку.",
+    "kk": "Бүгін шлагбаум машинаны өзі өткізеді.",
+    "en": "Today the barrier will let the car through by itself."
+  },
+  "summary": {
+    "ru": "Теперь ты умеешь отвечать на «близко» и «далеко».",
+    "kk": "Енді сен «жақын» мен «алысқа» жауап бере аласың.",
+    "en": "Now you can react to “near” and “far”."
+  },
+  "steps": [
+    {
+      "id": "smart-gate-story",
+      "type": "theory",
+      "title": {
+        "ru": "Умный шлагбаум",
+        "kk": "Ақылды шлагбаум",
+        "en": "A smart barrier"
+      },
+      "body": {
+        "ru": "Подъехала машинка — свет **зелёный**, шлагбаум **открывается**.\n\nМашинка уехала **далеко** — шлагбаум **закрывается**, свет **красный**.",
+        "kk": "Машина келді — жарық **жасыл**, шлагбаум **ашылады**.\n\nМашина **алысқа** кетті — шлагбаум **жабылады**, жарық **қызыл**.",
+        "en": "A car arrives: the light turns **green** and the barrier **opens**.\n\nThe car drives **far** away: the barrier **closes** and the light turns **red**."
+      }
+    },
+    {
+      "id": "gate-order",
+      "type": "quiz",
+      "kind": "order",
+      "question": {
+        "ru": "Расставь события по порядку.",
+        "kk": "Оқиғаларды ретімен қой.",
+        "en": "Put the events in order."
+      },
+      "items": [
+        {
+          "ru": "Машинка подъехала",
+          "kk": "Машина келді",
+          "en": "The car arrives"
+        },
+        {
+          "ru": "Свет зелёный, шлагбаум открылся",
+          "kk": "Жарық жасыл, шлагбаум ашылды",
+          "en": "Green light, the barrier opens"
+        },
+        {
+          "ru": "Машинка уехала",
+          "kk": "Машина кетті",
+          "en": "The car leaves"
+        },
+        {
+          "ru": "Шлагбаум закрылся, свет красный",
+          "kk": "Шлагбаум жабылды, жарық қызыл",
+          "en": "The barrier closes, red light"
+        }
+      ],
+      "explanation": {
+        "ru": "Сначала ждём машинку, потом ждём, когда она уедет.",
+        "kk": "Алдымен машинаны күтеміз, содан кейін оның кетуін күтеміз.",
+        "en": "First we wait for the car, then we wait for it to leave."
+      },
+      "skill": "sequence"
+    },
+    {
+      "id": "smart-gate",
+      "type": "wedo_code",
+      "mode": "project",
+      "title": {
+        "ru": "Пропусти машинку",
+        "kk": "Машинаны өткіз",
+        "en": "Let the car through"
+      },
+      "task": {
+        "ru": "Машинка **близко** — **зелёный** свет и открыть. Машинка **далеко** — закрыть и **красный** свет.",
+        "kk": "Машина **жақын** — **жасыл** жарық және ашу. Машина **алыс** — жабу және **қызыл** жарық.",
+        "en": "Car **near**: **green** light and open. Car **far**: close and **red** light."
+      },
+      "scene": {
+        "model": "gate",
+        "sensor": "motion"
+      },
+      "scenario": [
+        {
+          "at": 2,
+          "motion": "near"
+        },
+        {
+          "at": 5,
+          "motion": "far"
+        }
+      ],
+      "palette": [
+        "wait_motion",
+        "motor_on_for",
+        "motor_direction",
+        "light"
+      ],
+      "start": [],
+      "checks": [
+        {
+          "type": "reactsTo",
+          "sensor": "motion",
+          "state": "near",
+          "action": "light",
+          "color": "green",
+          "withinSeconds": 1,
+          "times": 1
+        },
+        {
+          "type": "reactsTo",
+          "sensor": "motion",
+          "state": "far",
+          "action": "motorStart",
+          "withinSeconds": 1,
+          "times": 1
+        },
+        {
+          "type": "light",
+          "color": "green"
+        },
+        {
+          "type": "light",
+          "color": "red"
+        }
+      ],
+      "hints": [
+        {
+          "ru": "Начни с «Ждать: близко», потом зелёная лампа и мотор.",
+          "kk": "«Күту: жақыннан» баста, содан кейін жасыл шам мен мотор.",
+          "en": "Start with “Wait: near”, then the green light and the motor."
+        },
+        {
+          "ru": "Потом «Ждать: далеко», направление «в ту сторону», мотор и красная лампа.",
+          "kk": "Содан кейін «Күту: алыс», «ана жаққа» бағыты, мотор және қызыл шам.",
+          "en": "Then “Wait: far”, direction “that way”, the motor and the red light."
+        }
+      ],
+      "reference": [
+        {
+          "op": "wait_motion",
+          "event": "near"
+        },
+        {
+          "op": "light",
+          "color": "green"
+        },
+        {
+          "op": "motor_on_for",
+          "seconds": 1.5
+        },
+        {
+          "op": "wait_motion",
+          "event": "far"
+        },
+        {
+          "op": "motor_direction",
+          "dir": "that"
+        },
+        {
+          "op": "motor_on_for",
+          "seconds": 1.5
+        },
+        {
+          "op": "light",
+          "color": "red"
+        }
+      ],
+      "skill": "sensor-motion"
+    }
+  ]
+}

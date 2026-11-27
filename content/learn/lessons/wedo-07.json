@@ -1,0 +1,216 @@
+{
+  "id": "wedo-07",
+  "track": "wedo-start",
+  "unit": "wedo-first",
+  "minutes": 5,
+  "skills": [
+    "motion"
+  ],
+  "kit": false,
+  "title": {
+    "ru": "Сколько ехать",
+    "kk": "Қанша жүру керек",
+    "en": "How long to drive"
+  },
+  "goal": {
+    "ru": "Сегодня ты научишь Вжика доезжать до флажка.",
+    "kk": "Бүгін сен Вжикті жалаушаға дейін жеткізуді үйретесің.",
+    "en": "Today you will teach Zip to reach the flag."
+  },
+  "summary": {
+    "ru": "Теперь ты умеешь выбирать, сколько секунд ехать.",
+    "kk": "Енді сен қанша секунд жүру керегін таңдай аласың.",
+    "en": "Now you can choose how many seconds to drive."
+  },
+  "steps": [
+    {
+      "id": "seconds",
+      "type": "theory",
+      "title": {
+        "ru": "Секунды",
+        "kk": "Секундтар",
+        "en": "Seconds"
+      },
+      "body": {
+        "ru": "Знакомься: это вездеход **Вжик**.\n\nМотор крутится столько секунд, сколько ты скажешь.\n\nБольше секунд — Вжик уедет дальше.",
+        "kk": "Танысып ал: бұл **Вжик** жолтабары.\n\nМотор сен айтқан секунд бойы айналады.\n\nСекунд көп болса, Вжик алысырақ кетеді.",
+        "en": "Meet **Zip** the rover.\n\nThe motor turns for as many seconds as you say.\n\nMore seconds means Zip drives farther."
+      },
+      "illustration": "speed"
+    },
+    {
+      "id": "where-stop",
+      "type": "wedo_predict",
+      "title": {
+        "ru": "Где остановится?",
+        "kk": "Қайда тоқтайды?",
+        "en": "Where will it stop?"
+      },
+      "question": {
+        "ru": "Вжик едет 2 секунды. Где он остановится?",
+        "kk": "Вжик 2 секунд жүреді. Ол қайда тоқтайды?",
+        "en": "Zip drives for 2 seconds. Where will it stop?"
+      },
+      "scene": {
+        "model": "rover",
+        "length": 1200,
+        "start": 100,
+        "zones": [
+          {
+            "id": "tree",
+            "from": 200,
+            "to": 400,
+            "label": {
+              "ru": "Дерево",
+              "kk": "Ағаш",
+              "en": "Tree"
+            }
+          },
+          {
+            "id": "flag",
+            "from": 450,
+            "to": 650,
+            "label": {
+              "ru": "Флажок",
+              "kk": "Жалауша",
+              "en": "Flag"
+            }
+          },
+          {
+            "id": "house",
+            "from": 800,
+            "to": 1000,
+            "label": {
+              "ru": "Домик",
+              "kk": "Үйшік",
+              "en": "Little house"
+            }
+          }
+        ],
+        "obstacles": []
+      },
+      "program": [
+        {
+          "op": "motor_on_for",
+          "seconds": 2
+        }
+      ],
+      "options": [
+        {
+          "label": {
+            "ru": "У дерева",
+            "kk": "Ағаштың жанында",
+            "en": "At the tree"
+          },
+          "expect": [
+            {
+              "type": "roverInZone",
+              "zone": "tree"
+            }
+          ]
+        },
+        {
+          "label": {
+            "ru": "У флажка",
+            "kk": "Жалаушаның жанында",
+            "en": "At the flag"
+          },
+          "expect": [
+            {
+              "type": "roverInZone",
+              "zone": "flag"
+            }
+          ]
+        },
+        {
+          "label": {
+            "ru": "У домика",
+            "kk": "Үйшіктің жанында",
+            "en": "At the house"
+          },
+          "expect": [
+            {
+              "type": "roverInZone",
+              "zone": "house"
+            }
+          ]
+        }
+      ],
+      "correct": 1,
+      "explanation": {
+        "ru": "За 2 секунды Вжик проезжает 40 см. Это как раз флажок.",
+        "kk": "2 секундта Вжик 40 см жүреді. Бұл дәл жалауша.",
+        "en": "In 2 seconds Zip drives 40 cm. That is right at the flag."
+      },
+      "skill": "motion"
+    },
+    {
+      "id": "reach-flag",
+      "type": "wedo_code",
+      "mode": "code",
+      "title": {
+        "ru": "До флажка",
+        "kk": "Жалаушаға дейін",
+        "en": "To the flag"
+      },
+      "task": {
+        "ru": "Выбери, сколько секунд ехать, чтобы Вжик остановился **у флажка**.",
+        "kk": "Вжик **жалаушаның жанында** тоқтауы үшін қанша секунд жүру керегін таңда.",
+        "en": "Choose how many seconds to drive so Zip stops **at the flag**."
+      },
+      "scene": {
+        "model": "rover",
+        "length": 1200,
+        "start": 100,
+        "zones": [
+          {
+            "id": "flag",
+            "from": 550,
+            "to": 750,
+            "label": {
+              "ru": "Флажок",
+              "kk": "Жалауша",
+              "en": "Flag"
+            }
+          }
+        ],
+        "obstacles": []
+      },
+      "palette": [
+        "motor_on_for",
+        "motor_direction"
+      ],
+      "start": [
+        {
+          "op": "motor_on_for",
+          "seconds": 1
+        }
+      ],
+      "checks": [
+        {
+          "type": "roverInZone",
+          "zone": "flag"
+        }
+      ],
+      "hints": [
+        {
+          "ru": "Вжик остановился рано? Дай ему больше секунд.",
+          "kk": "Вжик ерте тоқтады ма? Оған көбірек секунд бер.",
+          "en": "Did Zip stop too soon? Give it more seconds."
+        },
+        {
+          "ru": "Нажми на блок мотора и нажимай «+».",
+          "kk": "Мотор блогын басып, «+» бас.",
+          "en": "Tap the motor block and press +."
+        }
+      ],
+      "reference": [
+        {
+          "op": "motor_on_for",
+          "seconds": 3
+        }
+      ],
+      "skill": "motion"
+    }
+  ]
+}

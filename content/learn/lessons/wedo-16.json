@@ -1,0 +1,162 @@
+{
+  "id": "wedo-16",
+  "track": "wedo-motion",
+  "unit": "wedo-rover",
+  "minutes": 5,
+  "skills": [
+    "sequence"
+  ],
+  "kit": false,
+  "title": {
+    "ru": "Найди ошибку",
+    "kk": "Қатені тап",
+    "en": "Find the bug"
+  },
+  "goal": {
+    "ru": "Сегодня ты найдёшь и исправишь ошибку в программе.",
+    "kk": "Бүгін сен бағдарламадағы қатені тауып, түзетесің.",
+    "en": "Today you will find and fix a bug in a program."
+  },
+  "summary": {
+    "ru": "Теперь ты знаешь: ошибки бывают у всех, их можно найти и исправить.",
+    "kk": "Енді сен білесің: қате бәрінде болады, оны тауып, түзетуге болады.",
+    "en": "Now you know: everyone makes bugs, and you can find and fix them."
+  },
+  "steps": [
+    {
+      "id": "bugs",
+      "type": "theory",
+      "title": {
+        "ru": "Ошибка — это нормально",
+        "kk": "Қате — бұл қалыпты",
+        "en": "Bugs are normal"
+      },
+      "body": {
+        "ru": "Иногда робот делает не то, что мы хотели. Это **ошибка** в программе.\n\nОшибки бывают даже у инженеров.\n\nСмотри, что делает робот, и проверяй блоки **по одному**.",
+        "kk": "Кейде робот біз қалағанды істемейді. Бұл бағдарламадағы **қате**.\n\nҚате тіпті инженерлерде де болады.\n\nРоботтың не істейтініне қарап, блоктарды **бір-бірден** тексер.",
+        "en": "Sometimes the robot does not do what we wanted. That is a **bug** in the program.\n\nEven engineers make bugs.\n\nWatch what the robot does and check the blocks **one by one**."
+      },
+      "illustration": "debug"
+    },
+    {
+      "id": "what-to-do",
+      "type": "quiz",
+      "kind": "choice",
+      "question": {
+        "ru": "Программа не работает. Что делать?",
+        "kk": "Бағдарлама жұмыс істемейді. Не істеу керек?",
+        "en": "The program does not work. What do you do?"
+      },
+      "options": [
+        {
+          "ru": "Посмотреть шаги и найти ошибку",
+          "kk": "Қадамдарды қарап, қатені табу",
+          "en": "Look at the steps and find the bug"
+        },
+        {
+          "ru": "Сразу всё стереть",
+          "kk": "Бәрін бірден өшіру",
+          "en": "Delete everything at once"
+        },
+        {
+          "ru": "Бросить и уйти",
+          "kk": "Тастап кету",
+          "en": "Give up and leave"
+        }
+      ],
+      "correct": [
+        0
+      ],
+      "explanation": {
+        "ru": "Ищи ошибку спокойно, по одному блоку.",
+        "kk": "Қатені асықпай, бір блоктан ізде.",
+        "en": "Look for the bug calmly, one block at a time."
+      },
+      "skill": "sequence"
+    },
+    {
+      "id": "fix-direction",
+      "type": "wedo_code",
+      "mode": "debug",
+      "title": {
+        "ru": "Вжик едет не туда",
+        "kk": "Вжик басқа жаққа жүреді",
+        "en": "Zip goes the wrong way"
+      },
+      "task": {
+        "ru": "Вжик должен заехать **в гараж**. Но он едет не туда и врезается. Найди ошибку.",
+        "kk": "Вжик **гаражға** кіруі керек. Бірақ ол басқа жаққа жүріп, соғылады. Қатені тап.",
+        "en": "Zip should drive **into the garage**. But it goes the wrong way and bumps. Find the bug."
+      },
+      "scene": {
+        "model": "rover",
+        "length": 1300,
+        "start": 300,
+        "zones": [
+          {
+            "id": "garage",
+            "from": 800,
+            "to": 1000,
+            "label": {
+              "ru": "Гараж",
+              "kk": "Гараж",
+              "en": "Garage"
+            }
+          }
+        ],
+        "obstacles": []
+      },
+      "palette": [
+        "motor_on_for",
+        "motor_direction"
+      ],
+      "start": [
+        {
+          "op": "motor_direction",
+          "dir": "that"
+        },
+        {
+          "op": "motor_on_for",
+          "seconds": 3
+        }
+      ],
+      "checks": [
+        {
+          "type": "roverInZone",
+          "zone": "garage"
+        },
+        {
+          "type": "noCrash"
+        }
+      ],
+      "hints": [
+        {
+          "ru": "Нажми «Запустить» и посмотри, куда едет Вжик.",
+          "kk": "«Іске қосу» батырмасын басып, Вжиктің қайда жүретініне қара.",
+          "en": "Press Run and watch where Zip goes."
+        },
+        {
+          "ru": "Проверь блок направления.",
+          "kk": "Бағыт блогын тексер.",
+          "en": "Check the direction block."
+        },
+        {
+          "ru": "Поставь «в эту сторону».",
+          "kk": "«Осы жаққа» деп қой.",
+          "en": "Set it to “this way”."
+        }
+      ],
+      "reference": [
+        {
+          "op": "motor_direction",
+          "dir": "this"
+        },
+        {
+          "op": "motor_on_for",
+          "seconds": 3
+        }
+      ],
+      "skill": "sequence"
+    }
+  ]
+}

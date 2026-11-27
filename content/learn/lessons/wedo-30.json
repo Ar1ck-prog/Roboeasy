@@ -1,0 +1,230 @@
+{
+  "id": "wedo-30",
+  "track": "wedo-projects",
+  "unit": "wedo-loops",
+  "minutes": 5,
+  "skills": [
+    "loops"
+  ],
+  "kit": false,
+  "title": {
+    "ru": "Повтори N раз",
+    "kk": "N рет қайтала",
+    "en": "Repeat N times"
+  },
+  "goal": {
+    "ru": "Сегодня ты сделаешь программу короче с блоком «Повторять».",
+    "kk": "Бүгін сен «Қайталау» блогымен бағдарламаны қысқартасың.",
+    "en": "Today you will make a program shorter with the Repeat block."
+  },
+  "summary": {
+    "ru": "Теперь ты умеешь повторять блоки, не копируя их.",
+    "kk": "Енді сен блоктарды көшірмей қайталай аласың.",
+    "en": "Now you can repeat blocks without copying them."
+  },
+  "steps": [
+    {
+      "id": "repeat",
+      "type": "theory",
+      "title": {
+        "ru": "Повторять",
+        "kk": "Қайталау",
+        "en": "Repeat"
+      },
+      "body": {
+        "ru": "Иногда нужно сделать одно и то же много раз.\n\nБлок **«Повторять»** обнимает другие блоки, как **скобка**.\n\nВсё внутри скобки робот делает столько раз, сколько ты скажешь.",
+        "kk": "Кейде бір нәрсені көп рет істеу керек.\n\n**«Қайталау»** блогы басқа блоктарды **жақша** сияқты құшақтайды.\n\nЖақшаның ішіндегінің бәрін робот сен айтқан рет орындайды.",
+        "en": "Sometimes you need to do the same thing many times.\n\nThe **Repeat** block hugs other blocks like a **bracket**.\n\nThe robot does everything inside as many times as you say."
+      },
+      "illustration": "r-loop"
+    },
+    {
+      "id": "how-many",
+      "type": "wedo_predict",
+      "title": {
+        "ru": "Что будет?",
+        "kk": "Не болады?",
+        "en": "What happens?"
+      },
+      "question": {
+        "ru": "Повторять 3 раза: звук. Что сделает робот?",
+        "kk": "3 рет қайталау: дыбыс. Робот не істейді?",
+        "en": "Repeat 3 times: sound. What will the robot do?"
+      },
+      "scene": {
+        "model": "spinner",
+        "ratio": 1
+      },
+      "program": [
+        {
+          "op": "repeat",
+          "times": 3,
+          "steps": [
+            {
+              "op": "sound",
+              "sound": 1
+            }
+          ]
+        }
+      ],
+      "options": [
+        {
+          "label": {
+            "ru": "Прозвучит 3 звука",
+            "kk": "3 дыбыс шығады",
+            "en": "Play 3 sounds"
+          },
+          "expect": [
+            {
+              "type": "sound",
+              "min": 3
+            }
+          ]
+        },
+        {
+          "label": {
+            "ru": "Загорится зелёная лампа",
+            "kk": "Жасыл шам жанады",
+            "en": "Turn the light green"
+          },
+          "expect": [
+            {
+              "type": "light",
+              "color": "green"
+            }
+          ]
+        },
+        {
+          "label": {
+            "ru": "Закрутится вертушка",
+            "kk": "Айналғыш айналады",
+            "en": "Turn the spinner"
+          },
+          "expect": [
+            {
+              "type": "motorRan",
+              "minSeconds": 0.5
+            }
+          ]
+        }
+      ],
+      "correct": 0,
+      "explanation": {
+        "ru": "Внутри скобки один звук. Скобка повторяет его 3 раза.",
+        "kk": "Жақшаның ішінде бір дыбыс. Жақша оны 3 рет қайталайды.",
+        "en": "There is one sound inside the bracket. The bracket repeats it 3 times."
+      },
+      "skill": "loops"
+    },
+    {
+      "id": "blink-five",
+      "type": "wedo_code",
+      "mode": "code",
+      "title": {
+        "ru": "Мигни 5 раз",
+        "kk": "5 рет жыпылықта",
+        "en": "Blink 5 times"
+      },
+      "task": {
+        "ru": "Эта программа мигает лампой, но она длинная. Сделай, чтобы лампа мигнула **5 раз**, а блоков было **не больше 5**.",
+        "kk": "Бұл бағдарлама шаммен жыпылықтайды, бірақ ол ұзын. Шам **5 рет** жыпылықтайтындай ет, ал блоктар **5-тен аспасын**.",
+        "en": "This program blinks the light, but it is long. Make the light blink **5 times** with **no more than 5 blocks**."
+      },
+      "scene": {
+        "model": "spinner",
+        "ratio": 1
+      },
+      "palette": [
+        "repeat",
+        "light",
+        "wait"
+      ],
+      "start": [
+        {
+          "op": "light",
+          "color": "red"
+        },
+        {
+          "op": "wait",
+          "seconds": 0.5
+        },
+        {
+          "op": "light",
+          "color": "off"
+        },
+        {
+          "op": "wait",
+          "seconds": 0.5
+        },
+        {
+          "op": "light",
+          "color": "red"
+        },
+        {
+          "op": "wait",
+          "seconds": 0.5
+        },
+        {
+          "op": "light",
+          "color": "off"
+        },
+        {
+          "op": "wait",
+          "seconds": 0.5
+        }
+      ],
+      "checks": [
+        {
+          "type": "usesBlock",
+          "op": "repeat",
+          "min": 1
+        },
+        {
+          "type": "maxBlocks",
+          "max": 5
+        },
+        {
+          "type": "light",
+          "color": "red"
+        }
+      ],
+      "hints": [
+        {
+          "ru": "Одно мигание — это 4 блока: красный, ждать, выключить, ждать.",
+          "kk": "Бір жыпылықтау — 4 блок: қызыл, күту, өшіру, күту.",
+          "en": "One blink is 4 blocks: red, wait, off, wait."
+        },
+        {
+          "ru": "Нажми «Очистить», добавь «Повторять» и положи эти 4 блока внутрь. Поставь 5 раз.",
+          "kk": "«Тазалау» батырмасын басып, «Қайталау» блогын қос та, осы 4 блокты ішіне сал. 5 рет қой.",
+          "en": "Press Clear, add Repeat and put those 4 blocks inside. Set it to 5 times."
+        }
+      ],
+      "reference": [
+        {
+          "op": "repeat",
+          "times": 5,
+          "steps": [
+            {
+              "op": "light",
+              "color": "red"
+            },
+            {
+              "op": "wait",
+              "seconds": 0.5
+            },
+            {
+              "op": "light",
+              "color": "off"
+            },
+            {
+              "op": "wait",
+              "seconds": 0.5
+            }
+          ]
+        }
+      ],
+      "skill": "loops"
+    }
+  ]
+}

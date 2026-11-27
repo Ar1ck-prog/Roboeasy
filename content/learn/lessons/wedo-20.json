@@ -1,0 +1,155 @@
+{
+  "id": "wedo-20",
+  "track": "wedo-motion",
+  "unit": "wedo-structures",
+  "minutes": 6,
+  "skills": [
+    "mechanisms",
+    "sequence"
+  ],
+  "kit": false,
+  "title": {
+    "ru": "Проект «Подъёмный кран»",
+    "kk": "«Көтергіш кран» жобасы",
+    "en": "Project “Crane”"
+  },
+  "goal": {
+    "ru": "Сегодня кран переставит груз со второго этажа на первый.",
+    "kk": "Бүгін кран жүкті екінші қабаттан біріншіге ауыстырады.",
+    "en": "Today the crane will move a load from the second floor to the first."
+  },
+  "summary": {
+    "ru": "Теперь ты умеешь поднимать, ждать и опускать груз.",
+    "kk": "Енді сен жүкті көтеріп, күтіп, түсіре аласың.",
+    "en": "Now you can lift, wait and lower a load."
+  },
+  "steps": [
+    {
+      "id": "crane-story",
+      "type": "theory",
+      "title": {
+        "ru": "Работа для крана",
+        "kk": "Кранға жұмыс",
+        "en": "A job for the crane"
+      },
+      "body": {
+        "ru": "Кран поднимает груз на **уровень 2**.\n\nЖдёт **2 секунды**, пока рабочие посмотрят.\n\nОпускает груз на **уровень 1** и зажигает **зелёный** свет: готово!",
+        "kk": "Кран жүкті **2-деңгейге** көтереді.\n\nЖұмысшылар қарағанша **2 секунд** күтеді.\n\nЖүкті **1-деңгейге** түсіріп, **жасыл** жарық жағады: дайын!",
+        "en": "The crane lifts the load to **level 2**.\n\nIt waits **2 seconds** while the workers look.\n\nIt lowers the load to **level 1** and shows a **green** light: done!"
+      }
+    },
+    {
+      "id": "lower",
+      "type": "quiz",
+      "kind": "choice",
+      "question": {
+        "ru": "Как опустить груз?",
+        "kk": "Жүкті қалай түсіруге болады?",
+        "en": "How do you lower the load?"
+      },
+      "options": [
+        {
+          "ru": "Крутить мотор в ту сторону",
+          "kk": "Моторды ана жаққа айналдыру",
+          "en": "Turn the motor that way"
+        },
+        {
+          "ru": "Зажечь лампу",
+          "kk": "Шамды жағу",
+          "en": "Switch on the light"
+        },
+        {
+          "ru": "Просто подождать",
+          "kk": "Жай күту",
+          "en": "Just wait"
+        }
+      ],
+      "correct": [
+        0
+      ],
+      "explanation": {
+        "ru": "В ту сторону — трос разматывается, груз едет вниз.",
+        "kk": "Ана жаққа айналса, арқан босайды, жүк төмен түседі.",
+        "en": "That way unwinds the rope and the load goes down."
+      },
+      "skill": "mechanisms"
+    },
+    {
+      "id": "crane-job",
+      "type": "wedo_code",
+      "mode": "project",
+      "title": {
+        "ru": "Переставь груз",
+        "kk": "Жүкті ауыстыр",
+        "en": "Move the load"
+      },
+      "task": {
+        "ru": "Подними груз на **уровень 2**, подожди **2 секунды**, опусти на **уровень 1** и зажги **зелёный**.",
+        "kk": "Жүкті **2-деңгейге** көтер, **2 секунд** күт, **1-деңгейге** түсір және **жасыл** жақ.",
+        "en": "Lift the load to **level 2**, wait **2 seconds**, lower it to **level 1** and show **green**."
+      },
+      "scene": {
+        "model": "lift",
+        "levels": 3,
+        "mmPerTurn": 12.5
+      },
+      "palette": [
+        "motor_on_for",
+        "motor_direction",
+        "wait",
+        "light"
+      ],
+      "start": [],
+      "checks": [
+        {
+          "type": "liftAt",
+          "level": 1
+        },
+        {
+          "type": "light",
+          "color": "green"
+        },
+        {
+          "type": "usesBlock",
+          "op": "wait",
+          "min": 1
+        }
+      ],
+      "hints": [
+        {
+          "ru": "Уровень 2 — это 4 секунды вверх.",
+          "kk": "2-деңгей — жоғары 4 секунд.",
+          "en": "Level 2 is 4 seconds up."
+        },
+        {
+          "ru": "Вниз на один уровень — 2 секунды «в ту сторону».",
+          "kk": "Бір деңгей төмен — «ана жаққа» 2 секунд.",
+          "en": "One level down is 2 seconds “that way”."
+        }
+      ],
+      "reference": [
+        {
+          "op": "motor_on_for",
+          "seconds": 4
+        },
+        {
+          "op": "wait",
+          "seconds": 2
+        },
+        {
+          "op": "motor_direction",
+          "dir": "that"
+        },
+        {
+          "op": "motor_on_for",
+          "seconds": 2
+        },
+        {
+          "op": "light",
+          "color": "green"
+        }
+      ],
+      "skill": "sequence"
+    }
+  ]
+}

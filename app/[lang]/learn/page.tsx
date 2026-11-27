@@ -5,6 +5,7 @@ import { AppShell } from '@/components/app-shell'
 import { LearnMap } from '@/components/learn/learn-map'
 import { isLocale } from '@/lib/i18n'
 import { getLearnAppText } from '@/lib/i18n/learn-app'
+import { getWedoText } from '@/lib/i18n/wedo'
 
 type Params = { params: Promise<{ lang: string }> }
 
@@ -20,7 +21,7 @@ export default async function LearnPage({ params }: Params) {
   if (!isLocale(lang)) notFound()
   return (
     <AppShell lang={lang}>
-      <LearnMap lang={lang} app={getLearnAppText(lang)} />
+      <LearnMap lang={lang} app={getLearnAppText(lang)} wt={getWedoText(lang)} />
     </AppShell>
   )
 }

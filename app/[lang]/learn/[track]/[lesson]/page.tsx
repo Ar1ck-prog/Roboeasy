@@ -7,6 +7,7 @@ import { CloudSync } from '@/components/learn/use-cloud'
 import { getDictionary, isLocale, locales } from '@/lib/i18n'
 import { getLearnText } from '@/lib/i18n/learn'
 import { getLearnAppText } from '@/lib/i18n/learn-app'
+import { getWedoText } from '@/lib/i18n/wedo'
 import { COURSE, findLessonRef, readLesson, toClientLesson } from '@/lib/learn/content'
 
 type Params = { params: Promise<{ lang: string; track: string; lesson: string }> }
@@ -55,6 +56,9 @@ export default async function LessonPage({ params }: Params) {
         next={next}
         mapHref={`/${lang}/learn/${track}`}
         lockedT={app.locked}
+        family={found.track.family}
+        wedoT={found.track.family === 'wedo' ? getWedoText(lang) : undefined}
+        pathT={app.wedo}
       />
       <AchievementWatcher lang={lang} app={app} />
       <CloudSync />

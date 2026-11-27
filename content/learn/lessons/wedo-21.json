@@ -1,0 +1,168 @@
+{
+  "id": "wedo-21",
+  "track": "wedo-sensors",
+  "unit": "wedo-motion-sensor",
+  "minutes": 4,
+  "skills": [
+    "sensor-motion"
+  ],
+  "kit": false,
+  "title": {
+    "ru": "Как видит датчик",
+    "kk": "Датчик қалай көреді",
+    "en": "How the sensor sees"
+  },
+  "goal": {
+    "ru": "Сегодня ты узнаешь, как далеко видит датчик движения.",
+    "kk": "Бүгін сен қозғалыс датчигінің қаншалықты алыс көретінін білесің.",
+    "en": "Today you will find out how far the motion sensor sees."
+  },
+  "summary": {
+    "ru": "Теперь ты знаешь: датчик видит только близкие предметы.",
+    "kk": "Енді сен білесің: датчик тек жақын заттарды көреді.",
+    "en": "Now you know: the sensor only sees things that are close."
+  },
+  "steps": [
+    {
+      "id": "near-far",
+      "type": "theory",
+      "title": {
+        "ru": "Близко и далеко",
+        "kk": "Жақын және алыс",
+        "en": "Near and far"
+      },
+      "body": {
+        "ru": "Датчик движения видит предмет, если он **близко**. Примерно на длину ладошки.\n\nОн говорит: **«близко»**, **«далеко»** или **«изменилось»**.\n\nДалёкие предметы он не замечает.",
+        "kk": "Қозғалыс датчигі зат **жақын** болса, көреді. Шамамен алақан ұзындығындай.\n\nОл: **«жақын»**, **«алыс»** немесе **«өзгерді»** дейді.\n\nАлыстағы заттарды байқамайды.",
+        "en": "The motion sensor sees something when it is **close**, about one hand away.\n\nIt says **“near”**, **“far”** or **“changed”**.\n\nIt does not notice things far away."
+      },
+      "illustration": "r-distance"
+    },
+    {
+      "id": "stops-before",
+      "type": "wedo_predict",
+      "title": {
+        "ru": "Что сделает Вжик?",
+        "kk": "Вжик не істейді?",
+        "en": "What will Zip do?"
+      },
+      "question": {
+        "ru": "Вжик едет и ждёт «близко», потом выключает мотор. Что будет у стены?",
+        "kk": "Вжик жүріп, «жақынды» күтеді, содан кейін моторды өшіреді. Қабырғаның жанында не болады?",
+        "en": "Zip drives, waits for “near”, then switches the motor off. What happens at the wall?"
+      },
+      "scene": {
+        "model": "rover",
+        "length": 1200,
+        "start": 100,
+        "sensor": "motion",
+        "zones": [
+          {
+            "id": "start-zone",
+            "from": 60,
+            "to": 250,
+            "label": {
+              "ru": "Старт",
+              "kk": "Бастау",
+              "en": "Start"
+            }
+          }
+        ],
+        "obstacles": [
+          {
+            "id": "wall",
+            "at": 900,
+            "label": {
+              "ru": "Стена",
+              "kk": "Қабырға",
+              "en": "Wall"
+            }
+          }
+        ]
+      },
+      "program": [
+        {
+          "op": "motor_on"
+        },
+        {
+          "op": "wait_motion",
+          "event": "near"
+        },
+        {
+          "op": "motor_off"
+        }
+      ],
+      "options": [
+        {
+          "label": {
+            "ru": "Остановится перед стеной",
+            "kk": "Қабырғаның алдында тоқтайды",
+            "en": "It stops before the wall"
+          },
+          "expect": [
+            {
+              "type": "stopBeforeObstacle",
+              "maxMm": 120
+            }
+          ]
+        },
+        {
+          "label": {
+            "ru": "Останется на старте",
+            "kk": "Бастауда қалады",
+            "en": "It stays at the start"
+          },
+          "expect": [
+            {
+              "type": "roverInZone",
+              "zone": "start-zone"
+            }
+          ]
+        }
+      ],
+      "correct": 0,
+      "explanation": {
+        "ru": "Датчик увидел стену близко, и мотор выключился.",
+        "kk": "Датчик қабырғаны жақын көрді де, мотор өшті.",
+        "en": "The sensor saw the wall close up and the motor switched off."
+      },
+      "skill": "sensor-motion"
+    },
+    {
+      "id": "how-far",
+      "type": "quiz",
+      "kind": "choice",
+      "question": {
+        "ru": "Как далеко видит датчик движения?",
+        "kk": "Қозғалыс датчигі қаншалықты алыс көреді?",
+        "en": "How far does the motion sensor see?"
+      },
+      "options": [
+        {
+          "ru": "Примерно на ладошку",
+          "kk": "Шамамен бір алақандай",
+          "en": "About one hand away"
+        },
+        {
+          "ru": "Через всю комнату",
+          "kk": "Бүкіл бөлме арқылы",
+          "en": "Across the whole room"
+        },
+        {
+          "ru": "Сквозь стену",
+          "kk": "Қабырға арқылы",
+          "en": "Through a wall"
+        }
+      ],
+      "correct": [
+        0
+      ],
+      "explanation": {
+        "ru": "Датчик видит только близкие предметы, примерно до 15 см.",
+        "kk": "Датчик тек жақын заттарды көреді, шамамен 15 см-ге дейін.",
+        "en": "The sensor only sees close things, up to about 15 cm."
+      },
+      "skill": "sensor-motion"
+    }
+  ]
+}

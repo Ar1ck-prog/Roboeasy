@@ -1,0 +1,160 @@
+{
+  "id": "wedo-05",
+  "track": "wedo-start",
+  "unit": "wedo-meet",
+  "minutes": 6,
+  "skills": [
+    "wedo-hub",
+    "structures"
+  ],
+  "kit": false,
+  "title": {
+    "ru": "Собираем и подключаем",
+    "kk": "Құрастырамыз және қосамыз",
+    "en": "Build and connect"
+  },
+  "goal": {
+    "ru": "Сегодня ты соберёшь вертушку и узнаешь, как подключить Смартхаб.",
+    "kk": "Бүгін сен айналғышты құрастырып, Смартхабты қалай қосу керегін білесің.",
+    "en": "Today you will build a spinner and learn how to connect the Smarthub."
+  },
+  "summary": {
+    "ru": "Теперь ты знаешь, как собрать модель и подключить её.",
+    "kk": "Енді сен модельді құрастырып, оны қосуды білесің.",
+    "en": "Now you know how to build a model and connect it."
+  },
+  "steps": [
+    {
+      "id": "box",
+      "type": "theory",
+      "title": {
+        "ru": "Что в наборе",
+        "kk": "Жинақта не бар",
+        "en": "What is in the kit"
+      },
+      "body": {
+        "ru": "В наборе есть Смартхаб, мотор, два датчика и много деталей.\n\nМотор и датчик вставляют в порты Смартхаба.\n\nСмартхаб говорит с планшетом по **Bluetooth**. Это связь без провода.",
+        "kk": "Жинақта Смартхаб, мотор, екі датчик және көп бөлшек бар.\n\nМотор мен датчик Смартхаб порттарына қосылады.\n\nСмартхаб планшетпен **Bluetooth** арқылы сөйлеседі. Бұл сымсыз байланыс.",
+        "en": "The kit has a Smarthub, a motor, two sensors and lots of parts.\n\nThe motor and sensors plug into the Smarthub’s ports.\n\nThe Smarthub talks to a tablet over **Bluetooth**, a link without wires."
+      }
+    },
+    {
+      "id": "build-spinner",
+      "type": "build",
+      "title": {
+        "ru": "Собери вертушку",
+        "kk": "Айналғышты құрастыр",
+        "en": "Build a spinner"
+      },
+      "intro": {
+        "ru": "Простая вертушка из мотора и балки. Если набора нет, просто прочитай шаги.",
+        "kk": "Мотор мен арқалықтан жасалған қарапайым айналғыш. Жинақ болмаса, қадамдарды оқы.",
+        "en": "A simple spinner from a motor and a beam. No kit? Just read the steps."
+      },
+      "instructions": [
+        {
+          "text": {
+            "ru": "Возьми Смартхаб и мотор.",
+            "kk": "Смартхаб пен моторды ал.",
+            "en": "Take the Smarthub and the motor."
+          }
+        },
+        {
+          "text": {
+            "ru": "Вставь кабель мотора в порт A.",
+            "kk": "Мотор кабелін A портына қос.",
+            "en": "Plug the motor cable into port A."
+          }
+        },
+        {
+          "text": {
+            "ru": "Вставь ось в мотор и надень на неё длинную балку.",
+            "kk": "Моторға ось салып, оған ұзын арқалық кигіз.",
+            "en": "Push an axle into the motor and put a long beam on it."
+          }
+        },
+        {
+          "text": {
+            "ru": "Поставь мотор на крепкое основание, чтобы он не падал.",
+            "kk": "Мотор құламас үшін оны берік негізге қой.",
+            "en": "Fix the motor on a sturdy base so it does not tip over."
+          }
+        }
+      ]
+    },
+    {
+      "id": "connect",
+      "type": "real_robot",
+      "title": {
+        "ru": "Подключи настоящий Смартхаб",
+        "kk": "Нағыз Смартхабты қос",
+        "en": "Connect a real Smarthub"
+      },
+      "task": {
+        "ru": "Это бонус: если набора нет, нажми «Пропустить». Всё остальное работает в симуляторе.",
+        "kk": "Бұл бонус: жинақ болмаса, «Өткізіп жіберу» батырмасын бас. Қалғанының бәрі симуляторда жұмыс істейді.",
+        "en": "This is a bonus: no kit? Press Skip. Everything else works in the simulator."
+      },
+      "checklist": [
+        {
+          "ru": "Собери модель",
+          "kk": "Модельді құрастыр",
+          "en": "Build the model"
+        },
+        {
+          "ru": "Включи Смартхаб кнопкой",
+          "kk": "Смартхабты түймемен қос",
+          "en": "Switch on the Smarthub with its button"
+        },
+        {
+          "ru": "Подключи Смартхаб по Bluetooth в приложении WeDo 2.0",
+          "kk": "WeDo 2.0 қолданбасында Смартхабты Bluetooth арқылы қос",
+          "en": "Connect the Smarthub over Bluetooth in the WeDo 2.0 app"
+        },
+        {
+          "ru": "Запусти программу «Старт → мотор»",
+          "kk": "«Бастау → мотор» бағдарламасын іске қос",
+          "en": "Run the program Start → motor"
+        }
+      ]
+    },
+    {
+      "id": "connect-order",
+      "type": "quiz",
+      "kind": "order",
+      "question": {
+        "ru": "Расставь шаги подключения по порядку.",
+        "kk": "Қосу қадамдарын ретімен қой.",
+        "en": "Put the connecting steps in order."
+      },
+      "items": [
+        {
+          "ru": "Собери модель",
+          "kk": "Модельді құрастыр",
+          "en": "Build the model"
+        },
+        {
+          "ru": "Включи Смартхаб",
+          "kk": "Смартхабты қос",
+          "en": "Switch on the Smarthub"
+        },
+        {
+          "ru": "Подключи по Bluetooth",
+          "kk": "Bluetooth арқылы қос",
+          "en": "Connect over Bluetooth"
+        },
+        {
+          "ru": "Запусти программу",
+          "kk": "Бағдарламаны іске қос",
+          "en": "Run the program"
+        }
+      ],
+      "explanation": {
+        "ru": "Сначала модель, потом Смартхаб, связь и программа.",
+        "kk": "Алдымен модель, содан кейін Смартхаб, байланыс және бағдарлама.",
+        "en": "First the model, then the Smarthub, the link and the program."
+      },
+      "skill": "wedo-hub"
+    }
+  ]
+}
