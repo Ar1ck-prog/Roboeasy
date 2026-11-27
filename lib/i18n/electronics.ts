@@ -161,6 +161,9 @@ const ru = {
   },
   uno: {
     title: 'Arduino Uno в 3D',
+    maker: 'Arduino · 2010',
+    tagline: 'С неё начинают почти все',
+    level: 'Для новичков',
     lead: 'Покрути плату мышкой или пальцем. Приблизить — Ctrl + колёсико или двумя пальцами. Щёлкни по детали, чтобы узнать, что она делает.',
     loading: 'Собираем плату…',
     labels: 'Подписи',
@@ -175,6 +178,8 @@ const ru = {
     quizDone: 'Квиз пройден: {right} из {total} с первой попытки.',
     quizAgain: 'Ещё раз',
     explode: 'Разобрать',
+    callouts: 'Выноски',
+    findPart: 'Найди деталь',
     assemble: 'Собрать',
     boardsNav: 'Платы',
     noWebgl: 'Браузер не умеет 3D (WebGL). Список деталей и распиновка работают и без него.',
@@ -223,6 +228,9 @@ const ru = {
   },
   esp32: {
     title: 'ESP32 DevKit в 3D',
+    maker: 'Espressif · 2016',
+    tagline: 'Wi-Fi и Bluetooth в маленькой плате',
+    level: 'Следующий шаг',
     lead: 'Плата с Wi-Fi и Bluetooth. Покрути её, разбери на детали и найди антенну. Логика здесь 3,3 В — 5 В на пины подавать нельзя.',
     parts: {
       module: ['Модуль ESP32-WROOM-32', 'Под металлическим экраном — чип ESP32: два ядра по 240 МГц, Wi-Fi, Bluetooth и 4 МБ памяти для программы.'],
@@ -498,6 +506,9 @@ const kk: typeof ru = {
   },
   uno: {
     title: 'Arduino Uno 3D форматта',
+    maker: 'Arduino · 2010',
+    tagline: 'Бәрі дерлік осыдан бастайды',
+    level: 'Жаңадан бастаушыларға',
     lead: 'Тақтаны тінтуірмен немесе саусақпен айналдыр. Жақындату — Ctrl + дөңгелек немесе екі саусақпен. Бөлшектің не істейтінін білу үшін оны бас.',
     loading: 'Тақта құрастырылып жатыр…',
     labels: 'Жазулар',
@@ -512,6 +523,8 @@ const kk: typeof ru = {
     quizDone: 'Квиз аяқталды: бірінші әрекеттен {total} ішінен {right}.',
     quizAgain: 'Тағы бір рет',
     explode: 'Бөлшектеу',
+    callouts: 'Түсіндірмелер',
+    findPart: 'Бөлшекті тап',
     assemble: 'Жинау',
     boardsNav: 'Тақталар',
     noWebgl: 'Браузер 3D (WebGL) көрсете алмайды. Бөлшектер тізімі мен пиндер онсыз да жұмыс істейді.',
@@ -560,6 +573,9 @@ const kk: typeof ru = {
   },
   esp32: {
     title: 'ESP32 DevKit 3D форматта',
+    maker: 'Espressif · 2016',
+    tagline: 'Кішкентай тақтада Wi-Fi және Bluetooth',
+    level: 'Келесі қадам',
     lead: 'Wi-Fi және Bluetooth бар тақта. Оны айналдыр, бөлшектерге бөл және антеннаны тап. Мұнда логика 3,3 В — пиндерге 5 В беруге болмайды.',
     parts: {
       module: ['ESP32-WROOM-32 модулі', 'Металл экранның астында — ESP32 чипі: 240 МГц-тен екі ядро, Wi-Fi, Bluetooth және бағдарламаға 4 МБ жады.'],
@@ -835,6 +851,9 @@ const en: typeof ru = {
   },
   uno: {
     title: 'Arduino Uno in 3D',
+    maker: 'Arduino · 2010',
+    tagline: 'Where almost everyone starts',
+    level: 'Beginner',
     lead: 'Turn the board with the mouse or a finger. Zoom with Ctrl + wheel or two fingers. Click a part to see what it does.',
     loading: 'Building the board…',
     labels: 'Labels',
@@ -849,6 +868,8 @@ const en: typeof ru = {
     quizDone: 'Quiz done: {right} of {total} on the first try.',
     quizAgain: 'Again',
     explode: 'Take apart',
+    callouts: 'Callouts',
+    findPart: 'Find the part',
     assemble: 'Put together',
     boardsNav: 'Boards',
     noWebgl: 'This browser cannot show 3D (WebGL). The parts list and the pinout work without it.',
@@ -897,6 +918,9 @@ const en: typeof ru = {
   },
   esp32: {
     title: 'ESP32 DevKit in 3D',
+    maker: 'Espressif · 2016',
+    tagline: 'Wi-Fi and Bluetooth on a tiny board',
+    level: 'Next step',
     lead: 'A board with Wi-Fi and Bluetooth. Turn it around, take it apart and find the antenna. Logic is 3.3 V here: never put 5 V on its pins.',
     parts: {
       module: ['ESP32-WROOM-32 module', 'Under the metal shield is the ESP32 chip: two 240 MHz cores, Wi-Fi, Bluetooth and 4 MB for the program.'],

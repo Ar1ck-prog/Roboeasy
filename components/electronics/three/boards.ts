@@ -26,6 +26,8 @@ export interface Built {
   size: { L: number; W: number }
   /** Lowest point (pins under the board), for the shadow plane. */
   floor: number
+  /** Taking apart lifts the whole board by this much too (parts with a negative lift stay down). */
+  baseLift?: number
   /** Camera positions for the views. */
   views: Record<'iso' | 'top' | 'front', [number, number, number]>
 }
@@ -406,7 +408,7 @@ export function buildEsp32(T: Three, kit: Kit): Built {
   led('led', 9.5, W - 8.6, 0x2f7bff)
   // Two rows of pins pointing down under the board
   // The pins point down, so taking the board apart drops them.
-  const pins = part('gpio', -9, [25, 4, Z_TOP])
+  const pins = part('gpio', -12, [25, 4, Z_TOP])
   pins.add(place(kit.maleHeader(15, 1, 6, true), X0 + 7 * PITCH, Z_TOP, 0))
   pins.add(place(kit.maleHeader(15, 1, 6, true), X0 + 7 * PITCH, Z_BOTTOM, 0))
   // Small parts
@@ -433,6 +435,8 @@ export function buildEsp32(T: Three, kit: Kit): Built {
     blink: ['led'],
     size: { L, W },
     floor: -10.5,
+    // The board rises off its pins, which stay standing on the mat.
+    baseLift: 12,
     views: { iso: [-34, 40, 46], top: [0, 70, 0.01], front: [0, 14, 70] },
   }
 }
