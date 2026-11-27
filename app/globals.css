@@ -3688,3 +3688,25 @@ main h3 {
 .kid-mode > * + * {
   margin-top: var(--space-2, 0.5rem);
 }
+
+/* The 3D lab bench: drafting paper with a fine and a coarse grid (the canvas over it is transparent). */
+.bench-paper {
+  --paper: #f4efe4;
+  --paper-line: rgb(120 104 80 / 0.1);
+  --paper-line-strong: rgb(120 104 80 / 0.16);
+  background-color: var(--paper);
+  background-image:
+    linear-gradient(var(--paper-line-strong) 1px, transparent 1px), linear-gradient(90deg, var(--paper-line-strong) 1px, transparent 1px),
+    linear-gradient(var(--paper-line) 1px, transparent 1px), linear-gradient(90deg, var(--paper-line) 1px, transparent 1px);
+  background-size:
+    120px 120px,
+    120px 120px,
+    24px 24px,
+    24px 24px;
+  background-position: -1px -1px;
+}
+[data-theme='dark'] .bench-paper {
+  --paper: #1c2130;
+  --paper-line: rgb(170 185 215 / 0.07);
+  --paper-line-strong: rgb(170 185 215 / 0.12);
+}

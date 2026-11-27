@@ -1,6 +1,6 @@
 'use client'
 
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import { memo, useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import Link from 'next/link'
 import { AlertTriangle, ArrowLeft, Box, Check, Circle, Code2, Eraser, Grid3x3, Lightbulb, Maximize2, Minimize2, Play, Plus, RotateCcw, RotateCw, SlidersHorizontal, Square, Terminal, Trash2, Unplug, Volume2, VolumeX, Wand2 } from 'lucide-react'
 import { toast } from 'sonner'
@@ -137,6 +137,11 @@ export function Lab({ lang, t }: LabProps) {
   const [tab, setTab] = useState<'code' | 'part'>('code')
   const [full, setFull] = useState(false)
   const workspace = useRef<HTMLDivElement>(null)
+  /** The 3D bench draws every simulation frame itself; React state follows at 20 Hz (every frame for the 2D schematic). */
+  const push3d = useRef<((f: FrameState | null, running: boolean) => void) | null>(null)
+  const viewRef = useRef(view)
+  viewRef.current = view
+  const editCode = useCallback((code: string) => setWork((w) => ({ ...w, code })), [])
 
   const sim = useRef<Simulation | null>(null)
   const raf = useRef(0)
@@ -248,13 +253,18 @@ export function Lab({ lang, t }: LabProps) {
     void audio.current?.ctx.resume()
     setStatus('running')
     let last = performance.now()
+    let lastUi = 0
     const tick = (now: number) => {
       const current = sim.current
       if (!current) return
       const dt = Math.min(50, Math.max(1, now - last))
       last = now
       const f = current.step(dt)
-      setFrame(f)
+      push3d.current?.(f, true)
+      if (viewRef.current === '2d' || now - lastUi >= 50) {
+        lastUi = now
+        setFrame(f)
+      }
       const out = current.board.serialOut
       if (out) {
         current.board.serialOut = ''
@@ -491,13 +501,13 @@ export function Lab({ lang, t }: LabProps) {
           </div>
           <div className="grid min-h-0 content-start gap-2">
             <h2 className="m-0 text-xs font-extrabold tracking-wide text-muted-foreground uppercase">{t.lab.components}</h2>
-            <div className="-mx-1 grid min-h-0 grid-cols-3 gap-1.5 overflow-y-auto px-1 sm:grid-cols-5 md:grid-cols-7 xl:grid-cols-1 xl:gap-1">
+            <div className="-mx-1 flex min-h-0 gap-1.5 overflow-x-auto px-1 pb-1 xl:grid xl:grid-cols-1 xl:gap-1 xl:overflow-x-visible xl:overflow-y-auto xl:pb-0">
               {PART_TYPES.map((type) => (
                 <button
                   key={type}
                   type="button"
                   onClick={() => addPart(type)}
-                  className="grid cursor-pointer justify-items-center gap-1 rounded-(--radius-sm) border-(length:--stroke-thin) border-border bg-background p-1.5 text-center text-[11px] leading-tight font-bold transition-colors hover:border-outline hover:bg-surface-2 xl:flex xl:items-center xl:gap-2.5 xl:border-transparent xl:bg-transparent xl:px-2 xl:py-1 xl:text-left xl:text-[13px]"
+                  className="grid w-[88px] shrink-0 cursor-pointer justify-items-center gap-1 rounded-(--radius-sm) border-(length:--stroke-thin) border-border bg-background p-1.5 text-center xl:w-auto text-[11px] leading-tight font-bold transition-colors hover:border-outline hover:bg-surface-2 xl:flex xl:items-center xl:gap-2.5 xl:border-transparent xl:bg-transparent xl:px-2 xl:py-1 xl:text-left xl:text-[13px]"
                   aria-label={fill(t.lab.addPart, { name: t.parts[type] })}
                   title={fill(t.lab.addPart, { name: t.parts[type] })}
                   data-add={type}
@@ -612,7 +622,7 @@ export function Lab({ lang, t }: LabProps) {
 
           <div className="min-h-0 flex-1">
             {view === '3d' ? (
-              <Bench3D doc={work.doc} onChange={changeDoc} frame={frame} running={running} selection={selection} onSelect={setSelection} onInspect={() => setTab('part')} t={t} fill />
+              <Bench3D doc={work.doc} onChange={changeDoc} frame={frame} running={running} selection={selection} onSelect={setSelection} onInspect={() => setTab('part')} t={t} pushRef={push3d} fill />
             ) : (
               <div className="h-full overflow-auto">
                 <Bench doc={work.doc} onChange={changeDoc} frame={frame} running={running} selection={selection} onSelect={setSelection} t={t} />
@@ -644,7 +654,7 @@ export function Lab({ lang, t }: LabProps) {
 
           <div className={cn('min-h-0 flex-1 flex-col gap-2', tab === 'code' ? 'flex' : 'hidden')} role="tabpanel">
             <div className="h-[420px] min-h-0 xl:h-auto xl:flex-1">
-              <CodeEditor value={work.code} onChange={(code) => setWork((w) => ({ ...w, code }))} errorLine={error?.line ?? null} label={t.lab.code} loading={t.lab.loadingEditor} />
+              <CodeEditor value={work.code} onChange={editCode} errorLine={error?.line ?? null} label={t.lab.code} loading={t.lab.loadingEditor} />
             </div>
             <div className="grid gap-1.5">
               <div className="flex items-center justify-between gap-2">
@@ -790,7 +800,7 @@ export function SerialOutput({ text, empty, className }: { text: string; empty: 
   )
 }
 
-export function PartPreview({ type }: { type: PartType }) {
+export const PartPreview = memo(function PartPreview({ type }: { type: PartType }) {
   const part: Part = { id: 'preview', type, x: 0, y: 0, rot: 0, props: DEFAULT_PROPS[type] }
   const box: Record<PartType, string> = {
     led: '-6 -30 22 34',
@@ -812,7 +822,7 @@ export function PartPreview({ type }: { type: PartType }) {
       <PartArt part={part} />
     </svg>
   )
-}
+})
 
 export function PartInspector({ part, frame, t, setProps, running }: { part: Part; frame: FrameState | null; t: ElectronicsText; setProps: (id: string, p: Part['props']) => void; running: boolean }) {
   const range = (label: string, value: number, min: number, max: number, step: number, onInput: (v: number) => void, shown: string) => (

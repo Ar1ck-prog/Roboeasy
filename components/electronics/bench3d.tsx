@@ -14,6 +14,9 @@ import { cn } from '@/lib/utils'
  * wires on a workbench. Same contract as the 2D bench (components/electronics/bench.tsx):
  * click a pin or a hole, then another, to add a wire; drag a part to move it;
  * R rotates, Delete removes. While running, LEDs glow, the servo turns and the display shows text.
+ *
+ * The look is a cartoon (toon shading, ink outlines, an isometric camera, no shadow maps) and the
+ * scene is drawn only when something changes: it stays light on school laptops.
  */
 
 interface Bench3DProps {
@@ -30,6 +33,8 @@ interface Bench3DProps {
   fill?: boolean
   /** Open the settings of the selected part. */
   onInspect?: () => void
+  /** Filled with a function that shows a simulation frame at once, without a React render. */
+  pushRef?: { current: ((f: FrameState | null, running: boolean) => void) | null }
 }
 
 type Hover = { terminal: string; x: number; y: number } | null
@@ -44,7 +49,7 @@ interface Api {
   zoom: (factor: number) => void
 }
 
-export function Bench3D({ doc, onChange, frame, running, selection, onSelect, t, tall = false, fill = false, onInspect }: Bench3DProps) {
+export function Bench3D({ doc, onChange, frame, running, selection, onSelect, t, tall = false, fill = false, onInspect, pushRef }: Bench3DProps) {
   const host = useRef<HTMLDivElement>(null)
   const api = useRef<Api | null>(null)
   const [ready, setReady] = useState<'loading' | 'ready' | 'nogl'>('loading')
@@ -61,63 +66,93 @@ export function Bench3D({ doc, onChange, frame, running, selection, onSelect, t,
     let disposed = false
     let cleanup = () => {}
     void (async () => {
-      const [THREE, { OrbitControls }, { RoundedBoxGeometry }, { RoomEnvironment }, { createKit }, { BUILDERS }, { buildWorkbench }, lab] = await Promise.all([
+      const [THREE, { OrbitControls }, { RoundedBoxGeometry }, { mergeGeometries }, { createKit }, { BUILDERS }, { createToon }, lab] = await Promise.all([
         import('three'),
         import('three/examples/jsm/controls/OrbitControls.js'),
         import('three/examples/jsm/geometries/RoundedBoxGeometry.js'),
-        import('three/examples/jsm/environments/RoomEnvironment.js'),
+        import('three/examples/jsm/utils/BufferGeometryUtils.js'),
         import('@/components/electronics/three/kit'),
         import('@/components/electronics/three/boards'),
-        import('@/components/electronics/three/workbench'),
+        import('@/components/electronics/three/toon'),
         import('@/components/electronics/three/lab-parts'),
       ])
       const el = host.current
       if (disposed || !el) return
       let renderer: InstanceType<typeof THREE.WebGLRenderer>
       try {
-        renderer = new THREE.WebGLRenderer({ antialias: true, powerPreference: 'high-performance' })
+        renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true, powerPreference: 'high-performance' })
       } catch {
         setReady('nogl')
         return
       }
       const { toWorld, toBench, BB_TOP, createLabKit } = lab
-      const theme = document.documentElement.getAttribute('data-theme') === 'dark' ? 'dark' : 'light'
-      renderer.setPixelRatio(Math.min(2, window.devicePixelRatio))
+      renderer.setPixelRatio(Math.min(1.75, window.devicePixelRatio))
       renderer.outputColorSpace = THREE.SRGBColorSpace
-      renderer.toneMapping = THREE.ACESFilmicToneMapping
-      renderer.shadowMap.enabled = true
-      renderer.shadowMap.type = THREE.PCFSoftShadowMap
+      renderer.setClearColor(0x000000, 0)
       el.appendChild(renderer.domElement)
       renderer.domElement.style.display = 'block'
       renderer.domElement.style.touchAction = 'none'
       renderer.domElement.tabIndex = 0
       renderer.domElement.setAttribute('aria-label', live.current.t.lab.bench)
       renderer.domElement.dataset.testid = 'bench-3d-canvas'
+      // Draw-call and triangle counts for performance checks in development.
+      if (process.env.NODE_ENV !== 'production') (window as unknown as { __bench3d?: unknown }).__bench3d = renderer
 
       const scene = new THREE.Scene()
-      const pmrem = new THREE.PMREMGenerator(renderer)
-      scene.environment = pmrem.fromScene(new RoomEnvironment(), 0.04).texture
-      scene.environmentIntensity = 0.8
-      const camera = new THREE.PerspectiveCamera(34, 1, 1, 3000)
-      scene.add(new THREE.HemisphereLight(0xffffff, 0x3b4252, 0.55))
-      const key = new THREE.DirectionalLight(0xffffff, 2)
-      key.position.set(-60, 160, 90)
-      key.castShadow = true
-      key.shadow.mapSize.set(2048, 2048)
-      for (const side of ['left', 'bottom'] as const) key.shadow.camera[side] = -160
-      for (const side of ['right', 'top'] as const) key.shadow.camera[side] = 160
-      key.shadow.bias = -0.0004
+      // An isometric camera: no perspective, like a drawing. Sizes are set in resize().
+      const camera = new THREE.OrthographicCamera(-100, 100, 60, -60, -2000, 4000)
+      scene.add(new THREE.HemisphereLight(0xffffff, 0xd6dde8, 1.5))
+      const key = new THREE.DirectionalLight(0xffffff, 1.9)
+      key.position.set(-70, 160, 110)
       scene.add(key)
 
-      const bench = buildWorkbench(THREE, theme, -0.05, { L: 200, W: 128 })
-      scene.add(bench.root)
-      scene.background = new THREE.Color(bench.sky)
+      const toon = createToon(THREE, mergeGeometries)
+      /** Toon materials, ink lines, merged meshes; `keep` objects stay movable. */
+      const cartoon = (root: InstanceType<typeof THREE.Object3D>, keep = new Set<InstanceType<typeof THREE.Object3D>>()) => {
+        const seen = toon.toonify(root)
+        toon.outline(root, keep)
+        toon.flatten(root, keep)
+        return seen
+      }
+
+      // A soft shadow under the board and the breadboard: a blurred dark patch instead of a shadow map.
+      const blobTex = (() => {
+        const c = document.createElement('canvas')
+        c.width = 128
+        c.height = 128
+        const g = c.getContext('2d')!
+        const grad = g.createRadialGradient(64, 64, 10, 64, 64, 64)
+        grad.addColorStop(0, 'rgba(20,24,36,0.30)')
+        grad.addColorStop(0.6, 'rgba(20,24,36,0.16)')
+        grad.addColorStop(1, 'rgba(20,24,36,0)')
+        g.fillStyle = grad
+        g.fillRect(0, 0, 128, 128)
+        const tex = new THREE.CanvasTexture(c)
+        tex.colorSpace = THREE.SRGBColorSpace
+        return tex
+      })()
+      const blob = (root: InstanceType<typeof THREE.Object3D>) => {
+        const box = new THREE.Box3().setFromObject(root)
+        const m = new THREE.Mesh(new THREE.PlaneGeometry(1, 1), new THREE.MeshBasicMaterial({ map: blobTex, transparent: true, depthWrite: false }))
+        m.rotation.x = -Math.PI / 2
+        m.scale.set((box.max.x - box.min.x) * 1.25, (box.max.z - box.min.z) * 1.35, 1)
+        m.position.set((box.min.x + box.max.x) / 2 + 3, 0.02, (box.min.z + box.max.z) / 2 + 4)
+        m.renderOrder = -1
+        m.raycast = () => {}
+        return m
+      }
+
+      // The scene is drawn only when something changed.
+      let dirty = true
       const kit = createKit(THREE, RoundedBoxGeometry)
       const labKit = createLabKit(THREE)
-      scene.add(labKit.breadboard())
+      const breadboard = labKit.breadboard()
+      cartoon(breadboard)
+      scene.add(breadboard, blob(breadboard))
 
       // ── The board, lined up with the bench by one of its header pins ──
       let boardGroup: InstanceType<typeof THREE.Group> | null = null
+      let boardBlob: InstanceType<typeof THREE.Mesh> | null = null
       let boardLeds: { mat: InstanceType<typeof THREE.MeshStandardMaterial>; color: number; part: string | null }[] = []
       let socketY = 10
       let boardId = ''
@@ -126,6 +161,7 @@ export function Bench3D({ doc, onChange, frame, running, selection, onSelect, t,
         if (b.id === boardId) return
         boardId = b.id
         if (boardGroup) scene.remove(boardGroup)
+        if (boardBlob) scene.remove(boardBlob)
         const built = BUILDERS[b.id](THREE, kit, { labPins: true })
         socketY = built.socketY
         const ref = b.headers.find((h) => h.terminal === built.pinRef.terminal)!
@@ -133,17 +169,22 @@ export function Bench3D({ doc, onChange, frame, running, selection, onSelect, t,
         built.root.position.set(wx - built.pinRef.local[0], 0, wz - built.pinRef.local[1])
         boardGroup = built.root
         boardLeds = []
+        // Each board LED gets its own material (they light separately), then the whole board turns cartoon.
         built.root.traverse((o) => {
           const m = o as InstanceType<typeof THREE.Mesh>
-          if (!m.isMesh) return
-          if (m.userData.ledColor !== undefined) {
-            m.material = (m.material as InstanceType<typeof THREE.MeshStandardMaterial>).clone()
-            let p: InstanceType<typeof THREE.Object3D> | null = m
-            while (p && !p.userData.part) p = p.parent
-            boardLeds.push({ mat: m.material as InstanceType<typeof THREE.MeshStandardMaterial>, color: m.userData.ledColor as number, part: (p?.userData.part as string) ?? null })
-          }
+          if (m.isMesh && m.userData.ledColor !== undefined) m.material = (m.material as InstanceType<typeof THREE.MeshStandardMaterial>).clone()
+        })
+        cartoon(built.root)
+        built.root.traverse((o) => {
+          const m = o as InstanceType<typeof THREE.Mesh>
+          if (!m.isMesh || m.userData.ledColor === undefined) return
+          let p: InstanceType<typeof THREE.Object3D> | null = m
+          while (p && !p.userData.part) p = p.parent
+          boardLeds.push({ mat: m.material as InstanceType<typeof THREE.MeshStandardMaterial>, color: m.userData.ledColor as number, part: (p?.userData.part as string) ?? null })
         })
         scene.add(built.root)
+        boardBlob = blob(built.root)
+        scene.add(boardBlob)
       }
 
       // ── Parts and wires, rebuilt when the document changes ──
@@ -198,14 +239,20 @@ export function Bench3D({ doc, onChange, frame, running, selection, onSelect, t,
             next.set(p.id, old)
             continue
           }
-          if (old) partsRoot.remove(old.group)
-          const built = { ...labKit.part(p, inserted), part: p }
+          if (old) dispose(partsRoot, old.group)
+          const raw = labKit.part(p, inserted)
+          // Moving pieces (knob, horn, stick, cap, glow…) stay separate; the rest is merged.
+          const keep = new Set(Object.values(raw.live).filter((x): x is InstanceType<typeof THREE.Object3D> => (x as InstanceType<typeof THREE.Object3D>).isObject3D === true))
+          const seen = cartoon(raw.group, keep)
+          const swap = <M,>(m: M) => (seen.get(m as InstanceType<typeof THREE.Material>) as M | undefined) ?? m
+          const liveSwapped = Object.fromEntries(Object.entries(raw.live).map(([k, x]) => [k, (x as InstanceType<typeof THREE.Material>).isMaterial ? swap(x) : x]))
+          const built = { group: raw.group, glow: raw.glow.map(swap), live: liveSwapped as typeof raw.live, part: p }
           built.group.userData.inserted = inserted
           placePart(built, p)
           partsRoot.add(built.group)
           next.set(p.id, built)
         }
-        for (const [id, old] of builtParts) if (!next.has(id)) partsRoot.remove(old.group)
+        for (const [id, old] of builtParts) if (!next.has(id)) dispose(partsRoot, old.group)
         builtParts = next
         // Props shown by shape: knob angle, stick tilt.
         for (const b of builtParts.values()) {
@@ -219,13 +266,21 @@ export function Bench3D({ doc, onChange, frame, running, selection, onSelect, t,
           const cap = b.live.cap as InstanceType<typeof THREE.Object3D> | undefined
           if (cap) cap.position.y = b.part.props.pressed ? 4.3 : 4.7
         }
-        wiresRoot.clear()
-        for (const w of d.wires) {
+        // Wires are rebuilt only when they or what they plug into change.
+        const wireKey = (w: Wire) => {
           const a = terminalPos(w.a)
-          const bb = terminalPos(w.b)
-          if (!a || !bb) continue
-          const g = labKit.wire(a, bb, w.color)
+          const b = terminalPos(w.b)
+          return a && b ? `${w.id}|${w.color}|${a.toArray().map((n) => n.toFixed(2))}|${b.toArray().map((n) => n.toFixed(2))}` : null
+        }
+        const wanted = new Map(d.wires.map((w) => [wireKey(w), w] as const).filter(([k]) => k !== null))
+        for (const g of [...wiresRoot.children]) if (!wanted.has(g.userData.key as string)) dispose(wiresRoot, g)
+        const have = new Set(wiresRoot.children.map((g) => g.userData.key as string))
+        for (const [k, w] of wanted) {
+          if (!k || have.has(k)) continue
+          const g = labKit.wire(terminalPos(w.a)!, terminalPos(w.b)!, w.color)
+          cartoon(g)
           g.userData.wire = w.id
+          g.userData.key = k
           wiresRoot.add(g)
         }
         const b = boardOf(d)
@@ -235,6 +290,17 @@ export function Bench3D({ doc, onChange, frame, running, selection, onSelect, t,
           ...d.parts.flatMap((p) => legPoints(p).filter((l) => !socketAtPoint(l.x, l.y, b.id)).map((l) => ({ terminal: l.terminal, pos: terminalPos(l.terminal)! }))),
         ]
         paintSelection()
+        dirty = true
+      }
+
+      /** Removes a group and frees what only it used (shared textures and the ink stay). */
+      function dispose(parent: InstanceType<typeof THREE.Object3D>, g: InstanceType<typeof THREE.Object3D>) {
+        parent.remove(g)
+        g.traverse((o) => {
+          const m = o as InstanceType<typeof THREE.Mesh>
+          if (!m.isMesh && !(o as InstanceType<typeof THREE.LineSegments>).isLineSegments) return
+          m.geometry.dispose()
+        })
       }
 
       // ── Selection and hover marks ──
@@ -269,20 +335,20 @@ export function Bench3D({ doc, onChange, frame, running, selection, onSelect, t,
       // ── Camera ──
       const controls = new OrbitControls(camera, renderer.domElement)
       controls.enableDamping = true
-      controls.dampingFactor = 0.08
-      controls.minDistance = 60
-      controls.maxDistance = 420
+      controls.dampingFactor = 0.12
+      controls.minZoom = 0.6
+      controls.maxZoom = 5
       controls.maxPolarAngle = Math.PI * 0.46
+      controls.addEventListener('change', () => (dirty = true))
       // The middle of the board, the breadboard and the parking strip below them.
-      const aim = new THREE.Vector3(-8, 0, -4)
+      const aim = new THREE.Vector3(-16, 0, -15)
       controls.target.copy(aim)
-      const iso = new THREE.Vector3(0, 165, 150)
-      const top = new THREE.Vector3(0, 230, 1)
+      // Isometric: from the front-left, 50° above the bench.
+      const iso = new THREE.Vector3(-Math.sin(0.38), 1.2, Math.cos(0.38)).normalize().multiplyScalar(600).add(aim)
+      const top = new THREE.Vector3(0, 600, 1).add(aim)
       camera.position.copy(iso)
       let camGoal: InstanceType<typeof THREE.Vector3> | null = null
-      // Once the person turns the camera, resizing keeps their view.
-      let moved = false
-      controls.addEventListener('start', () => (moved = true))
+      let zoomGoal: number | null = null
       const onWheel = (e: WheelEvent) => {
         if (!e.ctrlKey && !e.metaKey) e.stopPropagation()
       }
@@ -339,6 +405,7 @@ export function Bench3D({ doc, onChange, frame, running, selection, onSelect, t,
       }
 
       const onDown = (e: PointerEvent) => {
+        dirty = true
         down = { x: e.clientX, y: e.clientY }
         const term = terminalAt(e.clientX, e.clientY)
         if (term) {
@@ -376,6 +443,7 @@ export function Bench3D({ doc, onChange, frame, running, selection, onSelect, t,
       }
 
       const onMove = (e: PointerEvent) => {
+        dirty = true
         if (drag && !drag.pressed) {
           if (Math.hypot(e.clientX - drag.sx, e.clientY - drag.sy) > 4) drag.moved = true
           const fp = floorPoint(e.clientX, e.clientY)
@@ -392,11 +460,11 @@ export function Bench3D({ doc, onChange, frame, running, selection, onSelect, t,
           const pos = terminals.find((x) => x.terminal === term.terminal)!.pos
           marker.position.copy(pos).add(new THREE.Vector3(0, 0.3, 0))
           marker.visible = true
-          setHover({ terminal: term.terminal, x: term.x, y: term.y })
+          setHover((h) => (h?.terminal === term.terminal ? h : { terminal: term.terminal, x: term.x, y: term.y }))
           renderer.domElement.style.cursor = 'crosshair'
         } else {
           marker.visible = false
-          setHover(null)
+          setHover((h) => (h ? null : h))
           renderer.domElement.style.cursor = objectAt(e.clientX, e.clientY) ? 'grab' : 'default'
         }
         if (wiring) {
@@ -411,6 +479,7 @@ export function Bench3D({ doc, onChange, frame, running, selection, onSelect, t,
       }
 
       const onUp = (e: PointerEvent) => {
+        dirty = true
         controls.enabled = true
         const wasClick = down && Math.hypot(e.clientX - down.x, e.clientY - down.y) < 5
         down = null
@@ -467,13 +536,15 @@ export function Bench3D({ doc, onChange, frame, running, selection, onSelect, t,
         renderer.setSize(w, h, false)
         renderer.domElement.style.width = `${w}px`
         renderer.domElement.style.height = `${h}px`
-        camera.aspect = w / Math.max(1, h)
+        // The frustum fits the bench (about 210 × 140 mm on screen) at zoom 1.
+        const aspect = w / Math.max(1, h)
+        const halfW = Math.max(104, 70 * aspect)
+        camera.left = -halfW
+        camera.right = halfW
+        camera.top = halfW / aspect
+        camera.bottom = -halfW / aspect
         camera.updateProjectionMatrix()
-        // Back off just enough for the board and the breadboard (about 170 mm, more for the near edge) to fill the width.
-        const fit = Math.max(150, Math.min(420, 124 / (Math.tan((17 * Math.PI) / 180) * camera.aspect)))
-        iso.set(0, 165, 150).normalize().multiplyScalar(fit).add(aim)
-        top.set(0, fit * 1.05, 1).add(aim)
-        if (!camGoal && !moved) camera.position.copy(iso)
+        dirty = true
       }
       const ro = new ResizeObserver(resize)
       ro.observe(el)
@@ -538,8 +609,18 @@ export function Bench3D({ doc, onChange, frame, running, selection, onSelect, t,
       const loop = () => {
         frameId = requestAnimationFrame(loop)
         if (camGoal) {
-          camera.position.lerp(camGoal, 0.12)
+          camera.position.lerp(camGoal, 0.15)
           if (camera.position.distanceTo(camGoal) < 0.5) camGoal = null
+          dirty = true
+        }
+        if (zoomGoal !== null) {
+          camera.zoom += (zoomGoal - camera.zoom) * 0.2
+          if (Math.abs(camera.zoom - zoomGoal) < 0.005) {
+            camera.zoom = zoomGoal
+            zoomGoal = null
+          }
+          camera.updateProjectionMatrix()
+          dirty = true
         }
         if (wiring) {
           const p = terminals.find((x) => x.terminal === wiring)?.pos
@@ -552,6 +633,8 @@ export function Bench3D({ doc, onChange, frame, running, selection, onSelect, t,
           rubber.visible = false
         }
         controls.update()
+        if (!dirty) return
+        dirty = false
         renderer.render(scene, camera)
         // The floating chip over the selected part.
         const sel = selected
@@ -574,27 +657,32 @@ export function Bench3D({ doc, onChange, frame, running, selection, onSelect, t,
       api.current = {
         setDoc: rebuild,
         setFrame: (f, r) => {
+          if (f === frame && r === isRunning) return
           frame = f
           isRunning = r
           if (!f) lastLcd = new Map()
           applyFrame()
+          dirty = true
         },
         setSelection: (s) => {
           selected = s
           paintSelection()
+          dirty = true
         },
         setWiring: (from) => {
           wiring = from
+          dirty = true
         },
         view: (topOn) => {
           camGoal = (topOn ? top : iso).clone()
           controls.target.copy(aim)
         },
         zoom: (f) => {
-          camGoal = camera.position.clone().sub(controls.target).multiplyScalar(f).add(controls.target)
+          zoomGoal = Math.max(controls.minZoom, Math.min(controls.maxZoom, (zoomGoal ?? camera.zoom) / f))
         },
       }
       rebuild(live.current.doc)
+      if (pushRef) pushRef.current = (f, r) => api.current?.setFrame(f, r)
       setReady('ready')
 
       cleanup = () => {
@@ -615,8 +703,8 @@ export function Bench3D({ doc, onChange, frame, running, selection, onSelect, t,
             mat.dispose()
           }
         })
-        scene.environment?.dispose()
-        pmrem.dispose()
+        blobTex.dispose()
+        if (pushRef) pushRef.current = null
         renderer.dispose()
         renderer.domElement.remove()
         api.current = null
@@ -645,7 +733,7 @@ export function Bench3D({ doc, onChange, frame, running, selection, onSelect, t,
   }
 
   return (
-    <div className={cn('relative overflow-hidden rounded-(--radius-md) border-(length:--stroke-thin) border-border bg-[#dde4ec] dark:bg-[#1a1f2b]', fill ? 'h-[62vh] min-h-[420px] xl:h-full' : tall ? 'h-[calc(100dvh-220px)] min-h-[520px]' : 'h-[min(66vh,620px)] min-h-[420px]')} data-testid="bench-3d" data-wires={doc.wires.length} data-parts={doc.parts.length}>
+    <div className={cn('relative overflow-hidden rounded-(--radius-md) border-(length:--stroke-thin) border-border bench-paper', fill ? 'h-[62vh] min-h-[420px] xl:h-full' : tall ? 'h-[calc(100dvh-220px)] min-h-[520px]' : 'h-[min(66vh,620px)] min-h-[420px]')} data-testid="bench-3d" data-wires={doc.wires.length} data-parts={doc.parts.length}>
       <div ref={host} className="absolute inset-0" />
       {ready === 'loading' && <p className="absolute inset-0 m-0 grid place-items-center text-sm font-bold text-[#454b5c]">{t.uno.loading}</p>}
       {ready === 'nogl' && <p className="absolute inset-0 m-0 grid place-items-center p-6 text-center text-muted-foreground">{t.uno.noWebgl}</p>}

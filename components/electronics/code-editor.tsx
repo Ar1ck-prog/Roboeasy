@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useRef, useState } from 'react'
+import { memo, useEffect, useRef, useState } from 'react'
 
 import type { EditorView } from '@codemirror/view'
 
@@ -18,7 +18,7 @@ interface CodeEditorProps {
  * CodeMirror 6 with C++ highlighting, loaded only on the lab page.
  * The error line is a line decoration that follows the text.
  */
-export function CodeEditor({ value, onChange, errorLine, label, loading }: CodeEditorProps) {
+export const CodeEditor = memo(function CodeEditor({ value, onChange, errorLine, label, loading }: CodeEditorProps) {
   const host = useRef<HTMLDivElement>(null)
   const view = useRef<EditorView | null>(null)
   const setError = useRef<((line: number | null) => void) | null>(null)
@@ -157,4 +157,4 @@ export function CodeEditor({ value, onChange, errorLine, label, loading }: CodeE
       )}
     </div>
   )
-}
+})
