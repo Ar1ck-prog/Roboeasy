@@ -53,6 +53,16 @@ function storedSession(): boolean {
   }
 }
 
+/**
+ * Pulls the latest progress from the server before something that spends coins
+ * (another device may have spent them). Gives up after `ms` — offline still works.
+ */
+export async function refreshProgress(ms = 3000): Promise<void> {
+  if (!CLOUD_CONFIGURED || !storedSession()) return
+  const m = await loadCloud()
+  await Promise.race([m.refreshNow().catch(() => {}), new Promise((r) => setTimeout(r, ms))])
+}
+
 /** Syncs progress in the background on every page when the learner has signed in before. */
 export function CloudSync() {
   useEffect(() => {

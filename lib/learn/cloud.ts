@@ -8,6 +8,11 @@
  * Sync: the server keeps the same append-only event log as the browser,
  * keyed by (user, event id), so pushing the same events twice changes
  * nothing (record_events in the migration).
+ *
+ * The same account can be open on a computer and a phone at once, so after
+ * the first full sync the page keeps pulling: when it comes back into view,
+ * goes online, every 20 s while visible, and right before a purchase
+ * (refreshNow). Otherwise coins spent on one device stay unspent on the other.
  */
 
 import { type SupabaseClient, createClient } from '@supabase/supabase-js'
@@ -158,6 +163,15 @@ export function fromRow(row: ProfileRow): Profile | null {
 // ── Sync ─────────────────────────────────────────────────────────────────
 
 let stop: (() => void) | null = null
+let refresher: (() => Promise<void>) | null = null
+
+/** Pulls what other devices added since the last pull (no-op when not syncing). */
+export async function refreshNow(): Promise<void> {
+  await refresher?.()
+}
+
+/** How far back an incremental pull looks: events can reach the server a little after their time. */
+export const PULL_OVERLAP_MS = 10 * 60_000
 
 function fromServer(row: { id: string; kind: string; at: string; data: Record<string, unknown> }): LearnEvent | null {
   const r = eventSchema.safeParse({ ...row.data, id: row.id, kind: row.kind, at: Date.parse(row.at) })
@@ -191,24 +205,31 @@ export async function startSync(): Promise<{ ok: boolean }> {
   }
 
   // Events: pull what the server has, merge, push the rest.
-  const server: LearnEvent[] = []
-  for (let from = 0; ; from += 1000) {
-    const { data, error } = await sb
-      .from('learn_events')
-      .select('id, kind, at, data')
-      .eq('user_id', user.id)
-      .order('at')
-      .range(from, from + 999)
-    if (error) return { ok: false }
-    for (const r of data ?? []) {
-      const e = fromServer(r)
-      if (e) server.push(e)
+  /** Server events at or after `since` (all of them without it); null on error. */
+  const pull = async (since?: number): Promise<LearnEvent[] | null> => {
+    const out: LearnEvent[] = []
+    for (let from = 0; ; from += 1000) {
+      let q = sb.from('learn_events').select('id, kind, at, data').eq('user_id', user.id)
+      if (since !== undefined) q = q.gte('at', new Date(since).toISOString())
+      const { data, error } = await q.order('at').range(from, from + 999)
+      if (error) return null
+      for (const r of data ?? []) {
+        const e = fromServer(r)
+        if (e) out.push(e)
+      }
+      if (!data || data.length < 1000) break
     }
-    if (!data || data.length < 1000) break
+    return out
   }
-  const before = getLearnState()
-  const merged = appendEvents(before, server)
-  if (merged !== before) replaceState(merged)
+  const merge = (events: LearnEvent[]) => {
+    const before = getLearnState()
+    const merged = appendEvents(before, events)
+    if (merged !== before) replaceState(merged)
+  }
+  const server = await pull()
+  if (!server) return { ok: false }
+  merge(server)
+  let pulledUpTo = server.reduce((m, e) => Math.max(m, e.at), 0)
   const known = new Set(server.map((e) => e.id))
   await push(
     sb,
@@ -229,6 +250,42 @@ export async function startSync(): Promise<{ ok: boolean }> {
     timer = setTimeout(flush, 1500)
   })
   let lastProfile = JSON.stringify(getLearnState().profile)
+
+  // Later pulls: only the recent part of the log, and the profile when this browser has not changed it.
+  let pulling: Promise<void> | null = null
+  const refresh = () =>
+    (pulling ??= (async () => {
+      try {
+        const fresh = await pull(pulledUpTo ? pulledUpTo - PULL_OVERLAP_MS : undefined)
+        if (fresh) {
+          merge(fresh)
+          pulledUpTo = fresh.reduce((m, e) => Math.max(m, e.at), pulledUpTo)
+        }
+        const { data: row } = await sb.from('profiles').select('*').eq('id', user.id).maybeSingle<ProfileRow>()
+        const mine = getLearnState().profile
+        const theirs = row ? fromRow(row) : null
+        // Looks or the robot changed on another device, and nothing is waiting to be saved here.
+        if (mine && theirs && JSON.stringify(mine) === lastProfile) {
+          const next = { ...theirs, createdAt: mine.createdAt, tour: mine.tour }
+          if (JSON.stringify(next) !== lastProfile) {
+            lastProfile = JSON.stringify(next)
+            setProfile(next)
+          }
+        }
+      } finally {
+        pulling = null
+      }
+    })())
+  refresher = refresh
+  const onVisible = () => {
+    if (document.visibilityState === 'visible') void refresh()
+  }
+  const onOnline = () => void refresh()
+  window.addEventListener('focus', onVisible)
+  window.addEventListener('online', onOnline)
+  document.addEventListener('visibilitychange', onVisible)
+  const poll = setInterval(() => document.visibilityState === 'visible' && void refresh(), 20_000)
+
   const offProfile = subscribeLearn(() => {
     const p = getLearnState().profile
     const json = JSON.stringify(p)
@@ -245,6 +302,11 @@ export async function startSync(): Promise<{ ok: boolean }> {
     offRecord()
     offProfile()
     document.removeEventListener('visibilitychange', flushOnHide)
+    window.removeEventListener('focus', onVisible)
+    window.removeEventListener('online', onOnline)
+    document.removeEventListener('visibilitychange', onVisible)
+    clearInterval(poll)
+    refresher = null
   }
   return { ok: true }
 }

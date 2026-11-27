@@ -28,7 +28,9 @@ import {
   itemKey,
   priceOf,
 } from '@/lib/learn/shop'
-import { record, updateProfile, useHydrated } from '@/lib/learn/store'
+import { refreshProgress } from '@/components/learn/use-cloud'
+import { ledger } from '@/lib/learn/economy'
+import { getLearnState, record, updateProfile, useHydrated } from '@/lib/learn/store'
 import { useProgress } from '@/lib/learn/use-progress'
 import { cn } from '@/lib/utils'
 
@@ -58,6 +60,7 @@ export function GarageView({ lang, app, t }: { lang: Lang; app: LearnAppText; t:
   const [tab, setTab] = useState<Tab>('upgrades')
   const [preview, setPreview] = useState<Partial<BuddyLooks> | null>(null)
   const [confirming, setConfirming] = useState<string | null>(null)
+  const [buying, setBuying] = useState(false)
   const [botName, setBotName] = useState('')
   const profile = p.state.profile
 
@@ -102,13 +105,24 @@ export function GarageView({ lang, app, t }: { lang: Lang; app: LearnAppText; t:
   const buy = (i: ShopItem) => {
     const key = itemKey(i)
     const price = priceOf(i) ?? 0
-    if (p.coins < price || owned.has(key) || !canBuyTier(i, owned)) return
+    if (buying || p.coins < price || owned.has(key) || !canBuyTier(i, owned)) return
     if (confirming !== key) return setConfirming(key)
     setConfirming(null)
-    record([{ kind: 'purchase', item: key }])
-    toast.success(fill(t.garage.bought, { name: i.title[lang] }))
-    if (i.kind === 'model') choose(i.id)
-    else if (i.kind !== 'upgrade') equip(i.kind as LookKind, i.id)
+    setBuying(true)
+    // Coins may have been spent on another device: check the balance against the server first.
+    void refreshProgress().then(() => {
+      setBuying(false)
+      const fresh = ledger(getLearnState())
+      if (fresh.owned.has(key)) return
+      if (fresh.coins < price) {
+        toast.error(t.garage.spentElsewhere)
+        return
+      }
+      record([{ kind: 'purchase', item: key }])
+      toast.success(fill(t.garage.bought, { name: i.title[lang] }))
+      if (i.kind === 'model') choose(i.id)
+      else if (i.kind !== 'upgrade') equip(i.kind as LookKind, i.id)
+    })
   }
   const equip = (kind: LookKind, value: string) => {
     updateProfile({ cosmetics: { ...profile.cosmetics, [kind]: value } })
@@ -129,7 +143,7 @@ export function GarageView({ lang, app, t }: { lang: Lang; app: LearnAppText; t:
       <button
         type="button"
         className={buttonVariants({ size: 'sm', variant: confirming === key ? 'primary' : 'secondary', className: 'gap-1.5' })}
-        disabled={short > 0 || blocked}
+        disabled={short > 0 || blocked || buying}
         onClick={() => buy(item)}
         title={blocked ? t.garage.needTier : short > 0 ? fill(t.garage.notEnough, { n: short }) : undefined}
       >
