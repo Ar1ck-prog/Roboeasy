@@ -19,7 +19,9 @@ test('a lab mission: build the circuit, load the solution, run, goals met', asyn
 
   await card.getByRole('button', { name: 'Собрать схему за меня' }).click()
   await card.getByRole('button', { name: 'Показать решение' }).click()
-  await expect(page.locator('[data-wire]')).toHaveCount(3)
+  // The bench is 3D by default; it reports what it holds.
+  await expect(page.getByTestId('bench-3d')).toHaveAttribute('data-wires', '3')
+  await expect(page.getByTestId('bench-3d-canvas')).toBeVisible()
   await page.getByTestId('run').click()
   await expect(page.getByTestId('status')).toHaveText('Работает')
   // The LED blinks every half second: three goals within a few seconds.
@@ -31,6 +33,36 @@ test('a lab mission: build the circuit, load the solution, run, goals met', asyn
   // The hub remembers the finished mission.
   await page.goto('/ru/electronics')
   await expect(page.getByRole('listitem').filter({ hasText: 'Свой светодиод' }).getByText('Готово')).toBeVisible()
+  expect(errors).toEqual([])
+})
+
+test('3D lab: add modules, build the thermometer and read it on the display', async ({ page }) => {
+  const errors: string[] = []
+  page.on('pageerror', (e) => errors.push(e.message))
+  page.on('dialog', (d) => d.accept())
+  await page.goto('/ru/electronics/lab?mission=thermo')
+  const bench = page.getByTestId('bench-3d')
+  await expect(page.getByTestId('bench-3d-canvas')).toBeVisible()
+  const card = page.getByTestId('mission-card')
+  await card.getByRole('button', { name: 'Собрать схему за меня' }).click()
+  await card.getByRole('button', { name: 'Показать решение' }).click()
+  await expect(bench).toHaveAttribute('data-wires', '7')
+  await page.getByTestId('run').click()
+  await expect(card.locator('[data-met="true"]')).toHaveCount(2, { timeout: 15_000 })
+  // Warm the sensor up in the part panel: the display follows.
+  await page.getByTestId('view-2d').click()
+  await page.locator('[data-part="t1"]').click()
+  await page.getByTestId('tab-part').click()
+  await page.getByTestId('inspector').getByRole('slider', { name: /Температура/ }).fill('31')
+  await expect(card.locator('[data-met="true"]')).toHaveCount(3, { timeout: 15_000 })
+
+  // The parts box adds a module next to the breadboard.
+  await page.getByRole('button', { name: 'Стоп' }).click()
+  await page.getByTestId('view-3d').click()
+  await page.locator('[data-add="joystick"]').click()
+  await expect(bench).toHaveAttribute('data-parts', '3')
+  await page.getByRole('button', { name: 'Убрать провода' }).click()
+  await expect(bench).toHaveAttribute('data-wires', '0')
   expect(errors).toEqual([])
 })
 
@@ -70,6 +102,7 @@ test('ESP32: the 3D page and the lab with the board switched', async ({ page }) 
   await page.getByRole('link', { name: 'В лаборатории' }).first().click()
   await expect(page).toHaveURL(/\/ru\/electronics\/lab\?board=esp32$/)
   await expect(page.locator('[data-board="esp32"]')).toHaveAttribute('aria-pressed', 'true')
+  await page.getByTestId('view-2d').click()
   await expect(page.locator('[data-terminal="esp.G2"]')).toHaveCount(1)
   await page.getByTestId('run').click()
   await expect(page.getByTestId('status')).toHaveText('Работает')

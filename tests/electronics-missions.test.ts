@@ -8,6 +8,11 @@ import { Simulation } from '@/lib/electronics/sim'
 type Action = { t: number; part: string; props: PartProps }
 
 const ACTIONS: Partial<Record<MissionId, Action[]>> = {
+  alarm: [
+    { t: 300, part: 'm1', props: { motion: true } },
+    { t: 900, part: 'm1', props: { motion: false } },
+  ],
+  thermo: [{ t: 1200, part: 't1', props: { temp: 31 } }],
   button: [
     { t: 300, part: 'b1', props: { pressed: true } },
     { t: 700, part: 'b1', props: { pressed: false } },
@@ -23,7 +28,7 @@ const ACTIONS: Partial<Record<MissionId, Action[]>> = {
   ],
 }
 
-const DURATION: Partial<Record<MissionId, number>> = { blink: 6000, traffic: 17000, servo: 4000, melody: 3000, radar: 2400 }
+const DURATION: Partial<Record<MissionId, number>> = { blink: 6000, traffic: 17000, servo: 4000, melody: 3000, radar: 2400, rgb: 3000, thermo: 2500 }
 
 function play(id: MissionId, which: 'solution' | 'starter') {
   const mission = getMission(id)

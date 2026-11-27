@@ -6,7 +6,8 @@
 
 export const P = 10
 
-export type PartType = 'led' | 'resistor' | 'button' | 'pot' | 'ldr' | 'buzzer' | 'servo' | 'ultrasonic'
+export type PartType = 'led' | 'resistor' | 'button' | 'pot' | 'ldr' | 'buzzer' | 'servo' | 'ultrasonic' | 'rgb' | 'pir' | 'dht' | 'lcd' | 'joystick'
+export const PART_TYPES: PartType[] = ['led', 'resistor', 'button', 'pot', 'ldr', 'buzzer', 'rgb', 'joystick', 'servo', 'ultrasonic', 'pir', 'dht', 'lcd']
 export type LedColor = 'red' | 'yellow' | 'green' | 'blue' | 'white'
 export const LED_COLORS: LedColor[] = ['red', 'yellow', 'green', 'blue', 'white']
 export const RESISTOR_VALUES = [100, 220, 330, 1000, 4700, 10000] as const
@@ -22,6 +23,14 @@ export interface PartProps {
   light?: number
   /** Distance to the obstacle in front of the ultrasonic sensor, cm. */
   distance?: number
+  /** Something moves in front of the motion sensor. */
+  motion?: boolean
+  /** Air around the DHT11: °C and % humidity. */
+  temp?: number
+  humidity?: number
+  /** Joystick stick position, 0…1 on each axis (0.5 is the middle). */
+  jx?: number
+  jy?: number
 }
 
 export interface Part {
@@ -97,6 +106,37 @@ export const LEGS: Record<PartType, { id: string; dx: number; dy: number }[]> = 
     { id: 'echo', dx: 2, dy: 0 },
     { id: 'gnd', dx: 3, dy: 0 },
   ],
+  // Common-cathode RGB LED: the long leg (second) is the minus.
+  rgb: [
+    { id: 'r', dx: 0, dy: 0 },
+    { id: 'k', dx: 1, dy: 0 },
+    { id: 'g', dx: 2, dy: 0 },
+    { id: 'b', dx: 3, dy: 0 },
+  ],
+  pir: [
+    { id: 'vcc', dx: 0, dy: 0 },
+    { id: 'out', dx: 1, dy: 0 },
+    { id: 'gnd', dx: 2, dy: 0 },
+  ],
+  dht: [
+    { id: 'vcc', dx: 0, dy: 0 },
+    { id: 'data', dx: 1, dy: 0 },
+    { id: 'gnd', dx: 2, dy: 0 },
+  ],
+  // The I²C backpack of a 16×2 LCD.
+  lcd: [
+    { id: 'gnd', dx: 0, dy: 0 },
+    { id: 'vcc', dx: 1, dy: 0 },
+    { id: 'sda', dx: 2, dy: 0 },
+    { id: 'scl', dx: 3, dy: 0 },
+  ],
+  joystick: [
+    { id: 'gnd', dx: 0, dy: 0 },
+    { id: 'vcc', dx: 1, dy: 0 },
+    { id: 'vrx', dx: 2, dy: 0 },
+    { id: 'vry', dx: 3, dy: 0 },
+    { id: 'sw', dx: 4, dy: 0 },
+  ],
 }
 
 export const DEFAULT_PROPS: Record<PartType, PartProps> = {
@@ -108,7 +148,15 @@ export const DEFAULT_PROPS: Record<PartType, PartProps> = {
   buzzer: {},
   servo: {},
   ultrasonic: { distance: 30 },
+  rgb: {},
+  pir: { motion: false },
+  dht: { temp: 24, humidity: 45 },
+  lcd: {},
+  joystick: { jx: 0.5, jy: 0.5, pressed: false },
 }
+
+/** Parts that are modules on their own little board (they sit beside the breadboard and take wires). */
+export const MODULES = new Set<PartType>(['servo', 'ultrasonic', 'pir', 'dht', 'lcd', 'joystick'])
 
 export function rotate(dx: number, dy: number, rot: number): [number, number] {
   switch (rot & 3) {
@@ -178,6 +226,8 @@ export interface BoardProfile {
   /** The pin analogRead(n) reads, or null when n is not an analog input. */
   analogPin: (n: number) => number | null
   defaultBaud: number
+  /** I²C pins (SDA, SCL) for displays. */
+  i2c: { sda: number; scl: number }
 }
 
 /** Where the Uno sits on the bench. Its size is that of the real board (68.6 × 53.3 mm). */
@@ -267,6 +317,7 @@ export const BOARDS: Record<BoardId, BoardProfile> = {
     constants: { LED_BUILTIN: 13, A0: 14, A1: 15, A2: 16, A3: 17, A4: 18, A5: 19 },
     analogPin: (n) => (n >= 0 && n < 6 ? 14 + n : n >= 14 && n < 20 ? n : null),
     defaultBaud: 9600,
+    i2c: { sda: 18, scl: 19 },
   },
   esp32: {
     id: 'esp32',
@@ -297,6 +348,7 @@ export const BOARDS: Record<BoardId, BoardProfile> = {
     },
     analogPin: (n) => (ESP_ADC.has(n) ? n : null),
     defaultBaud: 115200,
+    i2c: { sda: 21, scl: 22 },
   },
 }
 
@@ -370,7 +422,7 @@ function sockets(board: BoardId) {
 export const socketsFor = (board: BoardId = 'uno') => sockets(board).list
 export const socketAtPoint = (x: number, y: number, board: BoardId = 'uno') => sockets(board).at.get(`${x},${y}`) ?? null
 
-export const BENCH = { w: 680, h: 420 }
+export const BENCH = { w: 780, h: 500 }
 
 /** Where a terminal is drawn, for wires. */
 export function terminalPoint(terminal: string, parts: Part[], board: BoardId = 'uno'): Point | null {

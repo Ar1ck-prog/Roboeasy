@@ -49,6 +49,10 @@ export interface Hardware {
   servoAttach(id: number, pin: number): void
   servoWrite(id: number, angle: number): void
   servoDetach(id: number): void
+  /** A LiquidCrystal_I2C call: init, backlight, clear, setCursor, print… */
+  lcd(id: number, op: string, args: (number | string)[]): void
+  /** A DHT reading from the sensor on `pin`, or NaN when nothing answers. */
+  dhtRead(id: number, pin: number, what: 'temp' | 'humidity', type: number): number
   random(): number
 }
 
@@ -58,6 +62,8 @@ interface Var {
   arr?: Value[]
   isConst: boolean
   servo?: { id: number; angle: number; pin: number | null }
+  /** A display or a temperature sensor object. */
+  obj?: { id: number; pin: number; type: number }
 }
 
 type Scope = Map<string, Var>
@@ -138,6 +144,25 @@ const SERVO_METHODS: Record<string, [number, number, T | 'int' | 'void']> = {
   detach: [0, 0, 'void'],
 }
 
+const LCD_METHODS: Record<string, [number, number, T | 'int' | 'void']> = {
+  init: [0, 0, 'void'],
+  begin: [0, 2, 'void'],
+  backlight: [0, 0, 'void'],
+  noBacklight: [0, 0, 'void'],
+  clear: [0, 0, 'void'],
+  home: [0, 0, 'void'],
+  setCursor: [2, 2, 'void'],
+  print: [1, 2, 'int'],
+  display: [0, 0, 'void'],
+  noDisplay: [0, 0, 'void'],
+}
+
+const DHT_METHODS: Record<string, [number, number, T | 'int' | 'void']> = {
+  begin: [0, 0, 'void'],
+  readTemperature: [0, 1, 'f'],
+  readHumidity: [0, 0, 'f'],
+}
+
 const STRING_METHODS: Record<string, [number, number, T | 'int']> = {
   length: [0, 0, 'int'],
   toInt: [0, 0, 'i32'],
@@ -209,6 +234,7 @@ export class Interpreter {
   private depth = 0
   private retVal: Value = 0
   private servoCount = 0
+  private objCount = 0
   private steps = 0
   private readonly types = new WeakMap<Expr, T>()
   private readonly blocking = new WeakMap<Expr, boolean>()
@@ -233,6 +259,7 @@ export class Interpreter {
     const names: Record<string, T> = {
       HIGH: this.intT, LOW: this.intT, INPUT: this.intT, OUTPUT: this.intT, INPUT_PULLUP: this.intT, INPUT_PULLDOWN: this.intT,
       DEC: this.intT, HEX: this.intT, BIN: this.intT, OCT: this.intT, PI: 'f', HALF_PI: 'f', TWO_PI: 'f', true: this.intT, false: this.intT,
+      DHT11: this.intT, DHT22: this.intT, DHT21: this.intT,
     }
     for (const name of Object.keys(this.hw.constants)) names[name] = this.intT
     return names
@@ -260,6 +287,12 @@ export class Interpreter {
         return 2
       case 'OCT':
         return 8
+      case 'DHT11':
+        return 11
+      case 'DHT22':
+        return 22
+      case 'DHT21':
+        return 21
       case 'PI':
         return Math.PI
       case 'HALF_PI':
@@ -340,7 +373,7 @@ export class Interpreter {
           e.args.forEach(expr)
           const kind = e.object === 'Serial' ? 'serial' : find(e.object)
           if (!kind) throw new CodeError('unknown_name', e.line, { name: e.object })
-          const table = kind === 'serial' ? SERIAL_METHODS : kind === 'servo' ? SERVO_METHODS : kind === 'str' ? STRING_METHODS : null
+          const table = kind === 'serial' ? SERIAL_METHODS : kind === 'servo' ? SERVO_METHODS : kind === 'lcd' ? LCD_METHODS : kind === 'dht' ? DHT_METHODS : kind === 'str' ? STRING_METHODS : null
           const m = table?.[e.method]
           if (!m) throw new CodeError('unknown_method', e.line, { name: `${e.object}.${e.method}` })
           if (e.args.length < m[0] || e.args.length > m[1]) throw new CodeError('wrong_args', e.line, { name: `${e.object}.${e.method}`, n: m[0] === m[1] ? m[0] : `${m[0]}–${m[1]}` })
@@ -544,7 +577,7 @@ export class Interpreter {
       }
       case 'method': {
         const v = e.object === 'Serial' ? null : this.findVar(e.object)
-        const table = e.object === 'Serial' ? SERIAL_METHODS : v?.kind === 'servo' ? SERVO_METHODS : STRING_METHODS
+        const table = e.object === 'Serial' ? SERIAL_METHODS : v?.kind === 'servo' ? SERVO_METHODS : v?.kind === 'lcd' ? LCD_METHODS : v?.kind === 'dht' ? DHT_METHODS : STRING_METHODS
         const r = table[e.method]?.[2]
         if (r === 'int' || r === 'void' || !r) return this.intT
         return r
@@ -632,6 +665,12 @@ export class Interpreter {
         for (const d of s.items) {
           const v: Var = { kind: s.kind, value: s.kind === 'str' ? '' : 0, isConst: s.isConst }
           if (s.kind === 'servo') v.servo = { id: this.servoCount++, angle: 90, pin: null }
+          if (s.kind === 'lcd' || s.kind === 'dht') {
+            // DHT dht(pin, DHT11); LiquidCrystal_I2C lcd(0x27, 16, 2);
+            const args: number[] = []
+            for (const a of d.args ?? []) args.push(Number(yield* this.ev(a)))
+            v.obj = { id: this.objCount++, pin: s.kind === 'dht' ? (args[0] ?? -1) : -1, type: s.kind === 'dht' ? (args[1] ?? 11) : 0 }
+          }
           if (d.size !== undefined || d.list) {
             const size = d.size ? Number(yield* this.ev(d.size)) : (d.list?.length ?? 0)
             v.arr = new Array(Math.max(0, size)).fill(s.kind === 'str' ? '' : 0)
@@ -1238,6 +1277,19 @@ export class Interpreter {
       throw new CodeError('unknown_method', line, { name: `Serial.${e.method}` })
     }
     const v = this.lookup(e.object, line)
+    if (v.kind === 'lcd' && v.obj) {
+      this.spend(e.method === 'print' ? 400 : 100)
+      const args = e.method === 'print' ? [this.print(e.args[0], raw[0], raw.length > 1 ? Number(raw[1]) : undefined)] : raw
+      this.hw.lcd(v.obj.id, e.method, args)
+      return e.method === 'print' ? String(args[0]).length : 0
+    }
+    if (v.kind === 'dht' && v.obj) {
+      if (e.method === 'begin') return 0
+      // A DHT reading takes a few milliseconds of bit-banging on the real sensor.
+      this.spend(5000)
+      const pin = this.pin(v.obj.pin, line)
+      return this.hw.dhtRead(v.obj.id, pin, e.method === 'readHumidity' ? 'humidity' : 'temp', v.obj.type)
+    }
     if (v.kind === 'servo' && v.servo) {
       const s = v.servo
       switch (e.method) {

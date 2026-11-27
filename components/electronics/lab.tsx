@@ -2,15 +2,16 @@
 
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import Link from 'next/link'
-import { AlertTriangle, ArrowLeft, Check, Circle, Eraser, Lightbulb, Play, RotateCcw, RotateCw, Square, Trash2, Volume2, VolumeX, Wand2 } from 'lucide-react'
+import { AlertTriangle, ArrowLeft, Box, Check, Circle, Code2, Eraser, Grid3x3, Lightbulb, Maximize2, Minimize2, Play, Plus, RotateCcw, RotateCw, SlidersHorizontal, Square, Terminal, Trash2, Unplug, Volume2, VolumeX, Wand2 } from 'lucide-react'
 import { toast } from 'sonner'
 
 import { Bench, type Selection, removeSelection } from '@/components/electronics/bench'
+import { Bench3D } from '@/components/electronics/bench3d'
 import { CodeEditor } from '@/components/electronics/code-editor'
 import { PartArt, formatOhms } from '@/components/electronics/part-art'
 import { Button, buttonVariants } from '@/components/ui/button'
 import { Card } from '@/components/ui/card'
-import { BOARD_IDS, type BoardId, type CircuitDoc, DEFAULT_PROPS, LED_COLORS, type LedColor, type Part, type PartType, RESISTOR_VALUES } from '@/lib/electronics/board'
+import { BB, BENCH, BOARD_IDS, type BoardId, type CircuitDoc, DEFAULT_PROPS, P, LED_COLORS, type LedColor, MODULES, PART_TYPES, type Part, type PartType, RESISTOR_VALUES, boardOf } from '@/lib/electronics/board'
 import { MISSION_IDS, type MissionId, createChecker, getMission } from '@/lib/electronics/missions'
 import { type Fault, type FrameState, Simulation } from '@/lib/electronics/sim'
 import { CodeError } from '@/lib/electronics/lang'
@@ -22,7 +23,6 @@ import { cn } from '@/lib/utils'
 type Workspace = { code: string; doc: CircuitDoc }
 type Status = 'stopped' | 'running' | 'error' | 'shorted'
 
-const PART_TYPES: PartType[] = ['led', 'resistor', 'button', 'pot', 'ldr', 'buzzer', 'servo', 'ultrasonic']
 const ESP32_START = `void setup() {
   Serial.begin(115200);
   pinMode(LED_BUILTIN, OUTPUT); // GPIO2
@@ -58,14 +58,55 @@ export function faultText(f: Fault, t: ElectronicsText): string {
   return fill(t.faults[f.code], { ma: f.ma ?? '', pin: f.pin ?? '' })
 }
 
-/** Where to put a new part: the free strip under the breadboard, left to right. */
+/** What each part covers on the bench at rotation 0, from its first leg: [left, top, right, bottom] in px. */
+const FOOTPRINT: Record<PartType, [number, number, number, number]> = {
+  led: [-6, -30, 16, 4],
+  resistor: [-2, -10, 42, 10],
+  button: [-6, -2, 26, 32],
+  pot: [-6, -32, 26, 4],
+  ldr: [-4, -24, 24, 4],
+  buzzer: [-2, -34, 32, 2],
+  rgb: [-6, -34, 36, 6],
+  servo: [-52, -6, 60, 124],
+  ultrasonic: [-62, -90, 92, 4],
+  pir: [-44, -108, 64, 4],
+  dht: [-16, -80, 36, 4],
+  lcd: [-34, -104, 184, 4],
+  joystick: [-18, -146, 58, 4],
+}
+
+/** The footprint of a placed part, turned with it. */
+function footprintOf(p: Pick<Part, 'type' | 'x' | 'y' | 'rot'>): [number, number, number, number] {
+  let [l, t, r, b] = FOOTPRINT[p.type]
+  for (let i = 0; i < p.rot; i++) [l, t, r, b] = [-b, l, -t, r]
+  return [p.x + l, p.y + t, p.x + r, p.y + b]
+}
+
+/** Where to put a new part: the free spot nearest to the breadboard that overlaps nothing. */
 function parkingSpot(doc: CircuitDoc, type: PartType): { x: number; y: number } {
-  const big = type === 'servo' || type === 'ultrasonic'
-  const y = big ? 340 : 300
-  for (let x = big ? 400 : 340; x < 640; x += big ? 120 : 60) {
-    if (!doc.parts.some((p) => Math.abs(p.x - x) < (big ? 100 : 50) && Math.abs(p.y - y) < 30)) return { x, y }
+  const board = boardOf(doc).rect
+  const taken: [number, number, number, number][] = [
+    [board.x - 6, board.y - 6, board.x + board.w + 6, board.y + board.h + 6],
+    [BB.x - 6, BB.y - 6, BB.x + BB.w + 6, BB.y + BB.h + 6],
+    ...doc.parts.map((p) => {
+      const [l, t, r, b] = footprintOf(p)
+      return [l - 6, t - 6, r + 6, b + 6] as [number, number, number, number]
+    }),
+  ]
+  let best: { x: number; y: number; d: number } | null = null
+  for (let y = 0; y <= BENCH.h; y += P) {
+    for (let x = 0; x <= BENCH.w; x += P) {
+      const [l, t, r, b] = footprintOf({ type, x, y, rot: 0 })
+      if (l < 4 || t < 4 || r > BENCH.w - 4 || b > BENCH.h - 4) continue
+      if (taken.some(([L, T, R, B]) => l < R && r > L && t < B && b > T)) continue
+      const d = Math.hypot(x - (BB.x + BB.w / 2), (y - (BB.y + BB.h)) * 1.4)
+      if (!best || d < best.d) best = { x, y, d }
+    }
   }
-  return { x: 340, y }
+  if (best) return { x: best.x, y: best.y }
+  // The bench is full: stack it a little to the side of the last part.
+  const n = doc.parts.length
+  return { x: 340 + (n % 6) * 40, y: Math.min(BENCH.h - 20, 300 + Math.floor(n / 6) * 30) }
 }
 
 interface LabProps {
@@ -92,6 +133,10 @@ export function Lab({ lang, t }: LabProps) {
   const [sound, setSound] = useState(true)
   const [input, setInput] = useState('')
   const [loaded, setLoaded] = useState(false)
+  const [view, setView] = useState<'3d' | '2d'>('3d')
+  const [tab, setTab] = useState<'code' | 'part'>('code')
+  const [full, setFull] = useState(false)
+  const workspace = useRef<HTMLDivElement>(null)
 
   const sim = useRef<Simulation | null>(null)
   const raf = useRef(0)
@@ -161,6 +206,17 @@ export function Lab({ lang, t }: LabProps) {
   }, [silence])
 
   useEffect(() => stop, [stop])
+
+  // Full screen covers the three panels; Esc (handled by the browser) leaves it.
+  useEffect(() => {
+    const onChange = () => setFull(document.fullscreenElement === workspace.current && workspace.current !== null)
+    document.addEventListener('fullscreenchange', onChange)
+    return () => document.removeEventListener('fullscreenchange', onChange)
+  }, [])
+  const toggleFull = () => {
+    if (document.fullscreenElement) void document.exitFullscreen()
+    else void workspace.current?.requestFullscreen?.().catch(() => {})
+  }
 
   const run = () => {
     stop()
@@ -320,15 +376,21 @@ export function Lab({ lang, t }: LabProps) {
     shorted: { text: t.lab.shorted, cls: 'bg-(--danger-bg) text-destructive' },
   }[status]
 
+  const running = status === 'running'
+  const metGoals = goals.filter(Boolean).length
+  const toolBtn = 'inline-flex h-9 cursor-pointer items-center gap-1.5 rounded-(--radius-sm) px-2.5 text-sm font-bold text-foreground transition-colors hover:bg-surface-2 disabled:cursor-not-allowed disabled:opacity-40'
+
   return (
-    <div className="container grid gap-5 py-6 md:py-8">
-      <header className="grid gap-3">
-        <Link href={`/${lang}/electronics`} className="inline-flex w-fit items-center gap-1.5 text-sm font-bold text-muted-foreground hover:text-foreground">
-          <ArrowLeft className="size-4" aria-hidden="true" />
-          {t.lab.backToHub}
-        </Link>
-        <h1 className="m-0 text-3xl md:text-4xl">{t.lab.title}</h1>
-        <nav aria-label={t.lab.missions} className="-mx-1 flex gap-2 overflow-x-auto px-1 pb-1">
+    <div className="mx-auto grid w-full max-w-[1680px] grid-cols-[minmax(0,1fr)] gap-4 px-3 py-5 sm:px-5 md:py-6">
+      <header className="flex flex-wrap items-end justify-between gap-3">
+        <div className="grid gap-1.5">
+          <Link href={`/${lang}/electronics`} className="inline-flex w-fit items-center gap-1.5 text-sm font-bold text-muted-foreground hover:text-foreground">
+            <ArrowLeft className="size-4" aria-hidden="true" />
+            {t.lab.backToHub}
+          </Link>
+          <h1 className="m-0 text-3xl md:text-4xl">{t.lab.title}</h1>
+        </div>
+        <nav aria-label={t.lab.missions} className="-mx-1 flex max-w-full gap-2 overflow-x-auto px-1 pb-1">
           {(['free', ...MISSION_IDS] as const).map((id) => (
             <button
               key={id}
@@ -348,7 +410,7 @@ export function Lab({ lang, t }: LabProps) {
       </header>
 
       {missionText && mission !== 'free' && (
-        <Card flat className="gap-3 p-4 sm:p-5" data-testid="mission-card">
+        <Card flat className="gap-3 p-4" data-testid="mission-card">
           <div className="flex flex-wrap items-start justify-between gap-3">
             <div className="grid min-w-0 flex-1 gap-1">
               <h2 className="m-0 text-xl">{missionText.title}</h2>
@@ -364,110 +426,183 @@ export function Lab({ lang, t }: LabProps) {
               </Button>
             </div>
           </div>
-          <div>
-            <div className="mb-2 flex items-center gap-3">
-              <h3 className="m-0 text-sm font-extrabold tracking-wide text-muted-foreground uppercase">{t.lab.goals}</h3>
-              <div className="h-2 max-w-48 flex-1 overflow-hidden rounded-full bg-surface-2" aria-hidden="true">
-                <div className="h-full rounded-full bg-success transition-[width] duration-500" style={{ width: `${(goals.filter(Boolean).length / missionText.goals.length) * 100}%` }} />
+          <div className="grid gap-3 md:grid-cols-[minmax(0,1fr)_auto] md:items-start">
+            <div>
+              <div className="mb-2 flex items-center gap-3">
+                <h3 className="m-0 text-sm font-extrabold tracking-wide text-muted-foreground uppercase">{t.lab.goals}</h3>
+                <div className="h-2 max-w-48 flex-1 overflow-hidden rounded-full bg-surface-2" aria-hidden="true">
+                  <div className="h-full rounded-full bg-success transition-[width] duration-500" style={{ width: `${(metGoals / missionText.goals.length) * 100}%` }} />
+                </div>
+                <span className="font-mono text-sm font-bold tabular-nums">
+                  {metGoals}/{missionText.goals.length}
+                </span>
               </div>
-              <span className="font-mono text-sm font-bold tabular-nums">
-                {goals.filter(Boolean).length}/{missionText.goals.length}
-              </span>
+              <ul className="m-0 grid list-none gap-x-6 gap-y-1.5 p-0 lg:grid-cols-2">
+                {missionText.goals.map((g, i) => (
+                  <li key={g} className="flex items-start gap-2" data-goal={i} data-met={goals[i] ? 'true' : 'false'}>
+                    {goals[i] ? <Check className="mt-0.5 size-5 shrink-0 text-success" aria-hidden="true" /> : <Circle className="mt-0.5 size-5 shrink-0 text-muted-foreground" aria-hidden="true" />}
+                    <span className={goals[i] ? 'font-bold' : undefined}>{g}</span>
+                  </li>
+                ))}
+              </ul>
             </div>
-            <ul className="m-0 grid list-none gap-1.5 p-0">
-              {missionText.goals.map((g, i) => (
-                <li key={g} className="flex items-start gap-2" data-goal={i} data-met={goals[i] ? 'true' : 'false'}>
-                  {goals[i] ? <Check className="mt-0.5 size-5 shrink-0 text-success" aria-hidden="true" /> : <Circle className="mt-0.5 size-5 shrink-0 text-muted-foreground" aria-hidden="true" />}
-                  <span className={goals[i] ? 'font-bold' : undefined}>{g}</span>
-                </li>
-              ))}
-            </ul>
+            <details className="text-sm md:max-w-80">
+              <summary className="inline-flex cursor-pointer items-center gap-1.5 font-bold">
+                <Lightbulb className="size-4" aria-hidden="true" />
+                {t.lab.hint}
+              </summary>
+              <p className="m-0 mt-2 text-muted-foreground">{missionText.hint}</p>
+            </details>
           </div>
-          <details className="text-sm">
-            <summary className="inline-flex cursor-pointer items-center gap-1.5 font-bold">
-              <Lightbulb className="size-4" aria-hidden="true" />
-              {t.lab.hint}
-            </summary>
-            <p className="m-0 mt-2 text-muted-foreground">{missionText.hint}</p>
-          </details>
         </Card>
       )}
 
-      <div className="grid grid-cols-[minmax(0,1fr)] items-start gap-5 xl:grid-cols-[minmax(0,1.6fr)_minmax(0,1fr)]">
-        <section className="grid min-w-0 grid-cols-[minmax(0,1fr)] gap-3" aria-label={t.lab.bench}>
-          {mission === 'free' && (
-            <div className="flex flex-wrap items-center gap-2" role="group" aria-label={t.lab.board}>
-              <span className="text-sm font-extrabold text-muted-foreground">{t.lab.board}:</span>
-              <div className="inline-flex rounded-(--radius-pill) border-(length:--stroke-thin) border-outline bg-card p-1">
-                {BOARD_IDS.map((b) => (
-                  <button
-                    key={b}
-                    type="button"
-                    onClick={() => chooseBoard(b)}
-                    aria-pressed={board === b}
-                    className={cn(
-                      'cursor-pointer rounded-(--radius-pill) px-3 py-1 text-sm font-bold transition-colors',
-                      board === b ? 'bg-foreground text-background' : 'hover:bg-surface-2',
-                    )}
-                    data-board={b}
-                  >
-                    {t.lab.boards[b]}
-                  </button>
-                ))}
-              </div>
+      <div
+        ref={workspace}
+        className={cn(
+          'grid grid-cols-[minmax(0,1fr)] gap-3 xl:grid-cols-[236px_minmax(0,1fr)_minmax(340px,420px)]',
+          full ? 'h-dvh overflow-auto bg-background p-3 xl:overflow-hidden' : 'xl:h-[min(80vh,780px)] xl:min-h-[600px]',
+        )}
+        data-testid="lab-workspace"
+      >
+        {/* ── Left: the board and the parts box ── */}
+        <aside className="grid min-h-0 min-w-0 content-start gap-3 rounded-(--radius-md) border-(length:--stroke-thin) border-border bg-card p-3 xl:grid-rows-[auto_minmax(0,1fr)]" aria-label={t.lab.parts}>
+          <div className="grid gap-2" role="group" aria-label={t.lab.board}>
+            <h2 className="m-0 text-xs font-extrabold tracking-wide text-muted-foreground uppercase">{t.lab.board}</h2>
+            <div className="grid grid-cols-2 gap-1.5">
+              {(mission === 'free' ? BOARD_IDS : [board]).map((b) => (
+                <button
+                  key={b}
+                  type="button"
+                  onClick={() => chooseBoard(b)}
+                  aria-pressed={board === b}
+                  disabled={mission !== 'free'}
+                  className={cn(
+                    'grid cursor-pointer justify-items-center gap-1 rounded-(--radius-sm) border-(length:--stroke-thin) px-2 py-2 text-xs font-extrabold transition-colors disabled:cursor-default',
+                    board === b ? 'border-primary bg-primary/10 text-foreground' : 'border-border hover:bg-surface-2',
+                  )}
+                  data-board={b}
+                >
+                  <BoardIcon id={b} />
+                  {t.lab.boards[b]}
+                </button>
+              ))}
             </div>
-          )}
-          <div className="flex flex-wrap items-center gap-2">
-            {status === 'running' ? (
-              <Button variant="primary" onClick={() => (stop(), setStatus('stopped'))}>
+          </div>
+          <div className="grid min-h-0 content-start gap-2">
+            <h2 className="m-0 text-xs font-extrabold tracking-wide text-muted-foreground uppercase">{t.lab.components}</h2>
+            <div className="-mx-1 grid min-h-0 grid-cols-3 gap-1.5 overflow-y-auto px-1 sm:grid-cols-5 md:grid-cols-7 xl:grid-cols-1 xl:gap-1">
+              {PART_TYPES.map((type) => (
+                <button
+                  key={type}
+                  type="button"
+                  onClick={() => addPart(type)}
+                  className="grid cursor-pointer justify-items-center gap-1 rounded-(--radius-sm) border-(length:--stroke-thin) border-border bg-background p-1.5 text-center text-[11px] leading-tight font-bold transition-colors hover:border-outline hover:bg-surface-2 xl:flex xl:items-center xl:gap-2.5 xl:border-transparent xl:bg-transparent xl:px-2 xl:py-1 xl:text-left xl:text-[13px]"
+                  aria-label={fill(t.lab.addPart, { name: t.parts[type] })}
+                  title={fill(t.lab.addPart, { name: t.parts[type] })}
+                  data-add={type}
+                >
+                  <span className="grid size-12 shrink-0 place-items-center rounded-(--radius-xs) bg-surface-2/70 xl:size-11">
+                    <PartPreview type={type} />
+                  </span>
+                  <span className="line-clamp-2">{t.parts[type]}</span>
+                  <Plus className="ml-auto size-4 shrink-0 text-muted-foreground max-xl:hidden" aria-hidden="true" />
+                </button>
+              ))}
+            </div>
+          </div>
+        </aside>
+
+        {/* ── Centre: the toolbar and the bench ── */}
+        <section className="flex min-h-0 min-w-0 flex-col gap-2" aria-label={t.lab.bench}>
+          <div className="flex flex-wrap items-center gap-1 rounded-(--radius-md) border-(length:--stroke-thin) border-border bg-card p-1.5">
+            {running ? (
+              <Button size="sm" variant="primary" onClick={() => (stop(), setStatus('stopped'))}>
                 <Square aria-hidden="true" />
                 {t.lab.stop}
               </Button>
             ) : (
-              <Button variant="primary" onClick={run} data-testid="run">
+              <Button size="sm" variant="primary" onClick={run} data-testid="run">
                 <Play aria-hidden="true" />
                 {t.lab.run}
               </Button>
             )}
-            <Button onClick={run} disabled={status === 'stopped' || status === 'error'} aria-label={t.lab.restart}>
-              <RotateCcw aria-hidden="true" />
-              <span className="max-sm:hidden">{t.lab.restart}</span>
-            </Button>
-            <span className={cn('rounded-(--radius-pill) px-3 py-1 text-sm font-extrabold', statusChip.cls)} role="status" data-testid="status">
+            <button type="button" className={toolBtn} onClick={run} disabled={status === 'stopped' || status === 'error'} aria-label={t.lab.restart} title={t.lab.restart}>
+              <RotateCcw className="size-4" aria-hidden="true" />
+              <span className="max-md:hidden">{t.lab.restart}</span>
+            </button>
+            <span className={cn('ml-1 rounded-(--radius-pill) px-3 py-1 text-xs font-extrabold', statusChip.cls)} role="status" data-testid="status">
               {statusChip.text}
             </span>
             {frame && (
-              <span className="font-mono text-sm text-muted-foreground tabular-nums" aria-label={t.lab.time}>
+              <span className="px-1 font-mono text-xs text-muted-foreground tabular-nums" aria-label={t.lab.time}>
                 {(frame.t / 1000).toFixed(1)} s
               </span>
             )}
             <span className="flex-1" />
-            <Button variant="ghost" size="icon-sm" onClick={() => setSound((v) => !v)} aria-pressed={sound} aria-label={t.lab.sound} title={t.lab.sound}>
-              {sound ? <Volume2 aria-hidden="true" /> : <VolumeX aria-hidden="true" />}
-            </Button>
-            <Button
-              variant="ghost"
-              size="icon-sm"
+            <div className="inline-flex rounded-(--radius-sm) bg-surface-2 p-0.5" role="group" aria-label={t.lab.viewLabel}>
+              {(['3d', '2d'] as const).map((v) => (
+                <button
+                  key={v}
+                  type="button"
+                  onClick={() => setView(v)}
+                  aria-pressed={view === v}
+                  className={cn('inline-flex h-8 cursor-pointer items-center gap-1.5 rounded-(--radius-xs) px-2.5 text-xs font-extrabold transition-colors', view === v ? 'bg-card text-foreground shadow-sm' : 'text-muted-foreground hover:text-foreground')}
+                  data-testid={`view-${v}`}
+                >
+                  {v === '3d' ? <Box className="size-4" aria-hidden="true" /> : <Grid3x3 className="size-4" aria-hidden="true" />}
+                  {v === '3d' ? t.lab.view3d : t.lab.view2d}
+                </button>
+              ))}
+            </div>
+            <button
+              type="button"
+              className={toolBtn}
               onClick={() => {
-                if (window.confirm(t.lab.confirmClear)) changeDoc({ parts: [], wires: [] })
+                if (work.doc.wires.length && window.confirm(t.lab.confirmClearWires)) {
+                  changeDoc({ ...work.doc, wires: [] })
+                  setSelection(null)
+                }
+              }}
+              disabled={!work.doc.wires.length}
+              aria-label={t.lab.clearWires}
+              title={t.lab.clearWires}
+            >
+              <Unplug className="size-4" aria-hidden="true" />
+              <span className="max-2xl:hidden">{t.lab.clearWires}</span>
+            </button>
+            <button
+              type="button"
+              className={toolBtn}
+              onClick={() => {
+                if (window.confirm(t.lab.confirmClear)) {
+                  changeDoc({ ...work.doc, parts: [], wires: [] })
+                  setSelection(null)
+                }
               }}
               aria-label={t.lab.clearBench}
               title={t.lab.clearBench}
             >
-              <Eraser aria-hidden="true" />
-            </Button>
+              <Eraser className="size-4" aria-hidden="true" />
+            </button>
+            <button type="button" className={toolBtn} onClick={() => setSound((v) => !v)} aria-pressed={sound} aria-label={t.lab.sound} title={t.lab.sound}>
+              {sound ? <Volume2 className="size-4" aria-hidden="true" /> : <VolumeX className="size-4" aria-hidden="true" />}
+            </button>
+            <button type="button" className={toolBtn} onClick={toggleFull} aria-pressed={full} aria-label={full ? t.lab.exitFullscreen : t.lab.fullscreen} title={full ? t.lab.exitFullscreen : t.lab.fullscreen}>
+              {full ? <Minimize2 className="size-4" aria-hidden="true" /> : <Maximize2 className="size-4" aria-hidden="true" />}
+            </button>
           </div>
 
           {error && (
-            <p className="m-0 flex items-start gap-2 rounded-(--radius-sm) border-(length:--stroke-thin) border-destructive bg-(--danger-bg) p-3 text-sm font-bold text-destructive" role="alert" data-testid="code-error">
+            <p className="m-0 flex items-start gap-2 rounded-(--radius-sm) border-(length:--stroke-thin) border-destructive bg-(--danger-bg) p-2.5 text-sm font-bold text-destructive" role="alert" data-testid="code-error">
               <AlertTriangle className="mt-0.5 size-4 shrink-0" aria-hidden="true" />
               {fill(t.lab.errorLine, { line: error.line, text: errorText(error, t) })}
             </p>
           )}
           {uniqueFaults.length > 0 && (
-            <ul className="m-0 grid list-none gap-1.5 p-0" aria-label={t.lab.faults} data-testid="faults">
+            <ul className="m-0 grid max-h-28 list-none gap-1.5 overflow-y-auto p-0" aria-label={t.lab.faults} data-testid="faults">
               {uniqueFaults.map((f) => (
-                <li key={`${f.code}${f.part}${f.pin}`} className="flex items-start gap-2 rounded-(--radius-sm) bg-(--warn-bg) p-2.5 text-sm font-bold text-(--warn-text)" data-fault={f.code}>
+                <li key={`${f.code}${f.part}${f.pin}`} className="flex items-start gap-2 rounded-(--radius-sm) bg-(--warn-bg) p-2 text-sm font-bold text-(--warn-text)" data-fault={f.code}>
                   <AlertTriangle className="mt-0.5 size-4 shrink-0" aria-hidden="true" />
                   {faultText(f, t)}
                 </li>
@@ -475,117 +610,128 @@ export function Lab({ lang, t }: LabProps) {
             </ul>
           )}
 
-          <Bench doc={work.doc} onChange={changeDoc} frame={frame} running={status === 'running'} selection={selection} onSelect={setSelection} t={t} />
-          <p className="m-0 text-sm text-muted-foreground">{t.lab.howTo}</p>
-
-          <div className="grid gap-3 md:grid-cols-[minmax(0,1fr)_minmax(0,1fr)]">
-            <div className="grid content-start gap-2">
-              <h2 className="m-0 text-base">{t.lab.parts}</h2>
-              <div className="grid grid-cols-4 gap-2">
-                {PART_TYPES.map((type) => (
-                  <button
-                    key={type}
-                    type="button"
-                    onClick={() => addPart(type)}
-                    className="grid cursor-pointer justify-items-center gap-1 rounded-(--radius-sm) border-(length:--stroke-thin) border-border bg-card p-1.5 text-center text-[11px] leading-tight font-bold hover:border-outline hover:bg-surface-2"
-                    aria-label={fill(t.lab.addPart, { name: t.parts[type] })}
-                    data-add={type}
-                  >
-                    <PartPreview type={type} />
-                    <span className="line-clamp-2">{t.parts[type]}</span>
-                  </button>
-                ))}
+          <div className="min-h-0 flex-1">
+            {view === '3d' ? (
+              <Bench3D doc={work.doc} onChange={changeDoc} frame={frame} running={running} selection={selection} onSelect={setSelection} onInspect={() => setTab('part')} t={t} fill />
+            ) : (
+              <div className="h-full overflow-auto">
+                <Bench doc={work.doc} onChange={changeDoc} frame={frame} running={running} selection={selection} onSelect={setSelection} t={t} />
               </div>
-            </div>
-            <div className="grid content-start gap-2 rounded-(--radius-md) border-(length:--stroke-thin) border-border p-3" data-testid="inspector">
-              {selectedPart ? (
-                <PartInspector part={selectedPart} frame={frame} t={t} setProps={setProps} running={status === 'running'} />
-              ) : selectedWire ? (
-                <>
-                  <h2 className="m-0 text-base">{t.lab.wire}</h2>
-                  <label className="grid gap-1 text-sm font-bold">
-                    {t.lab.wireColor}
-                    <span className="flex flex-wrap gap-1.5">
-                      {['#d93025', '#202124', '#e8710a', '#f9ab00', '#188038', '#1a73e8', '#9334e6', '#ffffff'].map((c) => (
-                        <button
-                          key={c}
-                          type="button"
-                          className={cn('size-7 cursor-pointer rounded-full border-2', selectedWire.color === c ? 'border-ring' : 'border-border')}
-                          style={{ background: c }}
-                          aria-label={c}
-                          onClick={() => changeDoc({ ...work.doc, wires: work.doc.wires.map((w) => (w.id === selectedWire.id ? { ...w, color: c } : w)) })}
-                        />
-                      ))}
-                    </span>
-                  </label>
-                </>
-              ) : (
-                <p className="m-0 text-sm text-muted-foreground">{t.lab.nothingSelected}</p>
-              )}
-              {selection && (
-                <div className="flex flex-wrap gap-2 pt-1">
-                  {selectedPart && (
-                    <Button size="sm" onClick={() => changeDoc({ ...work.doc, parts: work.doc.parts.map((p) => (p.id === selectedPart.id ? { ...p, rot: ((p.rot + 1) % 4) as Part['rot'] } : p)) })}>
-                      <RotateCw aria-hidden="true" />
-                      {t.lab.rotate}
-                    </Button>
-                  )}
-                  <Button
-                    size="sm"
-                    variant="danger"
-                    onClick={() => {
-                      changeDoc(removeSelection(work.doc, selection))
-                      setSelection(null)
-                    }}
-                  >
-                    <Trash2 aria-hidden="true" />
-                    {t.lab.remove}
-                  </Button>
-                </div>
-              )}
-            </div>
+            )}
           </div>
+          <p className="m-0 text-xs text-muted-foreground">{view === '3d' ? t.lab.howTo3d : t.lab.howTo}</p>
         </section>
 
-        <section className="grid min-w-0 grid-cols-[minmax(0,1fr)] gap-3" aria-label={t.lab.code}>
-          <h2 className="m-0 text-base">{t.lab.code}</h2>
-          <div className="h-[420px]">
-            <CodeEditor value={work.code} onChange={(code) => setWork((w) => ({ ...w, code }))} errorLine={error?.line ?? null} label={t.lab.code} loading={t.lab.loadingEditor} />
+        {/* ── Right: code and serial monitor, or the selected part ── */}
+        <section className="flex min-h-0 min-w-0 flex-col gap-2 rounded-(--radius-md) border-(length:--stroke-thin) border-border bg-card p-2" aria-label={t.lab.code}>
+          <div className="flex gap-1 rounded-(--radius-sm) bg-surface-2 p-0.5" role="tablist" aria-label={t.lab.code}>
+            {(['code', 'part'] as const).map((id) => (
+              <button
+                key={id}
+                type="button"
+                role="tab"
+                aria-selected={tab === id}
+                onClick={() => setTab(id)}
+                className={cn('relative inline-flex h-8 flex-1 cursor-pointer items-center justify-center gap-1.5 rounded-(--radius-xs) text-sm font-extrabold transition-colors', tab === id ? 'bg-card text-foreground shadow-sm' : 'text-muted-foreground hover:text-foreground')}
+                data-testid={`tab-${id}`}
+              >
+                {id === 'code' ? <Code2 className="size-4" aria-hidden="true" /> : <SlidersHorizontal className="size-4" aria-hidden="true" />}
+                {id === 'code' ? t.lab.code : t.lab.partTab}
+                {id === 'part' && selection && tab !== 'part' && <span className="size-2 rounded-full bg-primary" aria-hidden="true" />}
+              </button>
+            ))}
           </div>
-          <div className="grid gap-2">
-            <div className="flex items-center justify-between gap-2">
-              <h2 className="m-0 text-base">{t.lab.serial}</h2>
-              <Button
-                size="sm"
-                variant="ghost"
-                onClick={() => {
-                  serialRef.current = ''
-                  setSerial('')
+
+          <div className={cn('min-h-0 flex-1 flex-col gap-2', tab === 'code' ? 'flex' : 'hidden')} role="tabpanel">
+            <div className="h-[420px] min-h-0 xl:h-auto xl:flex-1">
+              <CodeEditor value={work.code} onChange={(code) => setWork((w) => ({ ...w, code }))} errorLine={error?.line ?? null} label={t.lab.code} loading={t.lab.loadingEditor} />
+            </div>
+            <div className="grid gap-1.5">
+              <div className="flex items-center justify-between gap-2">
+                <h2 className="m-0 inline-flex items-center gap-1.5 text-sm">
+                  <Terminal className="size-4" aria-hidden="true" />
+                  {t.lab.serial}
+                </h2>
+                <Button
+                  size="sm"
+                  variant="ghost"
+                  onClick={() => {
+                    serialRef.current = ''
+                    setSerial('')
+                  }}
+                >
+                  {t.lab.clear}
+                </Button>
+              </div>
+              <SerialOutput text={serial} empty={t.lab.serialEmpty} className="h-36" />
+              <form
+                className="flex gap-2"
+                onSubmit={(e) => {
+                  e.preventDefault()
+                  send()
                 }}
               >
-                {t.lab.clear}
-              </Button>
+                <input
+                  className="min-h-9 min-w-0 flex-1 rounded-(--radius-sm) border-(length:--stroke-thin) border-border bg-background px-3 font-mono text-sm"
+                  value={input}
+                  onChange={(e) => setInput(e.target.value)}
+                  placeholder={t.lab.sendPlaceholder}
+                  aria-label={t.lab.sendPlaceholder}
+                  disabled={!running}
+                />
+                <Button size="sm" type="submit" disabled={!running || !input}>
+                  {t.lab.send}
+                </Button>
+              </form>
             </div>
-            <SerialOutput text={serial} empty={t.lab.serialEmpty} />
-            <form
-              className="flex gap-2"
-              onSubmit={(e) => {
-                e.preventDefault()
-                send()
-              }}
-            >
-              <input
-                className="min-h-10 min-w-0 flex-1 rounded-(--radius-sm) border-(length:--stroke-thin) border-border bg-card px-3 font-mono text-sm"
-                value={input}
-                onChange={(e) => setInput(e.target.value)}
-                placeholder={t.lab.sendPlaceholder}
-                aria-label={t.lab.sendPlaceholder}
-                disabled={status !== 'running'}
-              />
-              <Button size="sm" type="submit" disabled={status !== 'running' || !input}>
-                {t.lab.send}
-              </Button>
-            </form>
+          </div>
+
+          <div className={cn('min-h-0 flex-1 content-start gap-2 overflow-y-auto p-1', tab === 'part' ? 'grid' : 'hidden')} role="tabpanel" data-testid="inspector">
+            {selectedPart ? (
+              <PartInspector part={selectedPart} frame={frame} t={t} setProps={setProps} running={running} />
+            ) : selectedWire ? (
+              <>
+                <h2 className="m-0 text-base">{t.lab.wire}</h2>
+                <label className="grid gap-1 text-sm font-bold">
+                  {t.lab.wireColor}
+                  <span className="flex flex-wrap gap-1.5">
+                    {['#d93025', '#202124', '#e8710a', '#f9ab00', '#188038', '#1a73e8', '#9334e6', '#ffffff'].map((c) => (
+                      <button
+                        key={c}
+                        type="button"
+                        className={cn('size-7 cursor-pointer rounded-full border-2', selectedWire.color === c ? 'border-ring' : 'border-border')}
+                        style={{ background: c }}
+                        aria-label={c}
+                        onClick={() => changeDoc({ ...work.doc, wires: work.doc.wires.map((w) => (w.id === selectedWire.id ? { ...w, color: c } : w)) })}
+                      />
+                    ))}
+                  </span>
+                </label>
+              </>
+            ) : (
+              <p className="m-0 text-sm text-muted-foreground">{t.lab.nothingSelected}</p>
+            )}
+            {selection && (
+              <div className="flex flex-wrap gap-2 pt-1">
+                {selectedPart && (
+                  <Button size="sm" onClick={() => changeDoc({ ...work.doc, parts: work.doc.parts.map((p) => (p.id === selectedPart.id ? { ...p, rot: ((p.rot + 1) % 4) as Part['rot'] } : p)) })}>
+                    <RotateCw aria-hidden="true" />
+                    {t.lab.rotate}
+                  </Button>
+                )}
+                <Button
+                  size="sm"
+                  variant="danger"
+                  onClick={() => {
+                    changeDoc(removeSelection(work.doc, selection))
+                    setSelection(null)
+                  }}
+                >
+                  <Trash2 aria-hidden="true" />
+                  {t.lab.remove}
+                </Button>
+              </div>
+            )}
           </div>
         </section>
       </div>
@@ -593,7 +739,40 @@ export function Lab({ lang, t }: LabProps) {
   )
 }
 
-export function SerialOutput({ text, empty }: { text: string; empty: string }) {
+/** A tiny drawing of each board for the board picker. */
+function BoardIcon({ id }: { id: BoardId }) {
+  if (id === 'esp32')
+    return (
+      <svg viewBox="0 0 48 30" className="h-7 w-11" aria-hidden="true">
+        <rect x="4" y="5" width="40" height="20" rx="2" fill="#1d1f24" />
+        <rect x="30" y="8" width="12" height="14" rx="1" fill="#b9bec7" />
+        <path d="M34 10h6M34 13h6M34 16h6M34 19h6" stroke="#8a919c" strokeWidth="1" />
+        {Array.from({ length: 10 }, (_, i) => (
+          <g key={i}>
+            <rect x={7 + i * 2.6} y="5.5" width="1.4" height="1.4" fill="#d9b44a" />
+            <rect x={7 + i * 2.6} y="23" width="1.4" height="1.4" fill="#d9b44a" />
+          </g>
+        ))}
+        <rect x="1" y="12" width="5" height="6" rx="1" fill="#c9ced6" />
+      </svg>
+    )
+  return (
+    <svg viewBox="0 0 48 30" className="h-7 w-11" aria-hidden="true">
+      <rect x="3" y="3" width="42" height="25" rx="2.5" fill="#00878f" />
+      <rect x="0" y="6" width="8" height="7" rx="1" fill="#c9ced6" />
+      <rect x="0" y="19" width="7" height="6" rx="1" fill="#1d1f24" />
+      <rect x="20" y="14" width="18" height="5" rx="1" fill="#1d1f24" />
+      {Array.from({ length: 12 }, (_, i) => (
+        <rect key={i} x={15 + i * 2.4} y="4.5" width="1.6" height="2" fill="#1d1f24" />
+      ))}
+      {Array.from({ length: 10 }, (_, i) => (
+        <rect key={i} x={19 + i * 2.4} y="24.5" width="1.6" height="2" fill="#1d1f24" />
+      ))}
+    </svg>
+  )
+}
+
+export function SerialOutput({ text, empty, className }: { text: string; empty: string; className?: string }) {
   const ref = useRef<HTMLPreElement>(null)
   useEffect(() => {
     const el = ref.current
@@ -602,7 +781,7 @@ export function SerialOutput({ text, empty }: { text: string; empty: string }) {
   return (
     <pre
       ref={ref}
-      className="m-0 h-44 overflow-auto rounded-(--radius-md) border-(length:--stroke-thin) border-(--code-border) bg-(--code-bg) p-3 font-mono text-sm leading-relaxed whitespace-pre-wrap"
+      className={cn('m-0 h-44 overflow-auto rounded-(--radius-md) border-(length:--stroke-thin) border-(--code-border) bg-(--code-bg) p-3 font-mono text-[#e6e9ef] text-sm leading-relaxed whitespace-pre-wrap', className)}
       aria-live="off"
       data-testid="serial"
     >
@@ -622,6 +801,11 @@ export function PartPreview({ type }: { type: PartType }) {
     buzzer: '-2 -34 34 36',
     servo: '-40 -6 100 70',
     ultrasonic: '-62 -82 154 84',
+    rgb: '-6 -34 42 40',
+    pir: '-44 -108 108 112',
+    dht: '-16 -80 52 84',
+    lcd: '-34 -104 218 108',
+    joystick: '-18 -96 76 100',
   }
   return (
     <svg viewBox={box[type]} className="h-9 w-12" aria-hidden="true">
@@ -693,6 +877,34 @@ export function PartInspector({ part, frame, t, setProps, running }: { part: Par
       )}
       {part.type === 'pot' && range(t.lab.knob, part.props.pos ?? 0.5, 0, 1, 0.01, (v) => setProps(part.id, { pos: v }), `${Math.round((part.props.pos ?? 0.5) * 100)}%`)}
       {part.type === 'ldr' && range(t.lab.light, part.props.light ?? 0.5, 0, 1, 0.01, (v) => setProps(part.id, { light: v }), `${Math.round((part.props.light ?? 0.5) * 100)}%`)}
+      {part.type === 'pir' && (
+        <label className="flex items-center gap-2 text-sm font-bold">
+          <input type="checkbox" checked={Boolean(part.props.motion)} onChange={(e) => setProps(part.id, { motion: e.target.checked })} className="size-4 accent-(--color-primary)" />
+          {t.lab.motion}
+        </label>
+      )}
+      {part.type === 'dht' && (
+        <>
+          {range(t.lab.temp, part.props.temp ?? 24, -10, 50, 1, (v) => setProps(part.id, { temp: v }), `${part.props.temp ?? 24} °C`)}
+          {range(t.lab.humidity, part.props.humidity ?? 45, 0, 100, 1, (v) => setProps(part.id, { humidity: v }), `${part.props.humidity ?? 45} %`)}
+        </>
+      )}
+      {part.type === 'joystick' && (
+        <>
+          {range(t.lab.stickX, part.props.jx ?? 0.5, 0, 1, 0.01, (v) => setProps(part.id, { jx: v }), `${Math.round((part.props.jx ?? 0.5) * 100)}%`)}
+          {range(t.lab.stickY, part.props.jy ?? 0.5, 0, 1, 0.01, (v) => setProps(part.id, { jy: v }), `${Math.round((part.props.jy ?? 0.5) * 100)}%`)}
+          <Button
+            size="sm"
+            className="w-fit"
+            onPointerDown={() => setProps(part.id, { pressed: true })}
+            onPointerUp={() => setProps(part.id, { pressed: false })}
+            onPointerLeave={() => part.props.pressed && setProps(part.id, { pressed: false })}
+            aria-pressed={Boolean(part.props.pressed)}
+          >
+            {t.lab.press}
+          </Button>
+        </>
+      )}
       {part.type === 'ultrasonic' &&
         range(t.lab.distance, part.props.distance ?? 30, 2, 450, 1, (v) => setProps(part.id, { distance: v }), `${part.props.distance ?? 30} ${t.lab.cm}`)}
     </>

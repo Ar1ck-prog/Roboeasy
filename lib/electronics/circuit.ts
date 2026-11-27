@@ -31,11 +31,14 @@ export function diodeFor(vf: number): { is: number; nvt: number } {
   return { is: 0.01 / Math.exp(vf / nvt), nvt }
 }
 
-/** Current and conductance of a diode at `vd`, extended linearly above 40·nVt so exp() never overflows. */
+/**
+ * Current and conductance of a diode at `vd`, extended linearly above 90·nVt so exp() never overflows.
+ * (The limit must sit above the forward voltage of a blue or white LED, about 3 V = 58·nVt.)
+ */
 function diode(vd: number, is: number, nvt: number): { i: number; g: number } {
-  const lim = 40 * nvt
+  const lim = 90 * nvt
   if (vd > lim) {
-    const e = Math.exp(40)
+    const e = Math.exp(90)
     const g = (is / nvt) * e
     return { i: is * (e - 1) + g * (vd - lim), g }
   }

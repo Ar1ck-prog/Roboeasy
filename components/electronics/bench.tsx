@@ -308,7 +308,7 @@ interface Drag {
 const snap = (v: number) => Math.round(v / P) * P
 
 /** Short name of a terminal for the tooltip. */
-function terminalLabel(terminal: string, doc: CircuitDoc, t: ElectronicsText, board: BoardProfile): string {
+export function terminalLabel(terminal: string, doc: CircuitDoc, t: ElectronicsText, board: BoardProfile): string {
   if (terminal.startsWith(`${board.prefix}.`)) {
     const header = board.headers.find((h) => h.terminal === terminal)
     const pin = boardPin(board, terminal)
@@ -542,6 +542,9 @@ export function Bench({ doc, onChange, frame, running, selection, onSelect, t }:
                   burned={frame?.burned.includes(part.id)}
                   angle={frame?.servos[part.id]}
                   sounding={frame?.tones.some((x) => x.part === part.id)}
+                  rgb={frame?.rgb[part.id]}
+                  lcd={frame ? frame.lcd[part.id] : undefined}
+                  active={frame?.pir[part.id]}
                   cm={t.lab.cm}
                 />
               </g>

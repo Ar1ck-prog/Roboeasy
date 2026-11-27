@@ -28,6 +28,10 @@ export interface Built {
   floor: number
   /** Taking apart lifts the whole board by this much too (parts with a negative lift stay down). */
   baseLift?: number
+  /** One header pin, as a bench terminal and its spot on the board (x, z from the centre): the lab lines the board up with the bench by it. */
+  pinRef: { terminal: string; local: [number, number] }
+  /** Height of the tops of the header pins or sockets, where wires plug in. */
+  socketY: number
   /** Camera positions for the views. */
   views: Record<'iso' | 'top' | 'front', [number, number, number]>
 }
@@ -185,12 +189,13 @@ export function buildUno(T: Three, kit: Kit): Built {
   const top = thick + 0.12
   const { root, parts, anchors, lift, place, part } = frame(T, L, W)
 
-  const X_TOP10 = 18.4
-  const X_TOP8 = 45.4
-  const X_POWER = 27.9
-  const X_ANALOG = 50.8
-  const Z_TOP = 2.4
-  const Z_BOTTOM = W - 2.4
+  // Header positions match the bench (lib/electronics/board.ts: UNO_HEADERS), on the 2.54 mm grid.
+  const X_TOP10 = 20.32
+  const X_TOP8 = 48.26
+  const X_POWER = 25.4
+  const X_ANALOG = 48.26
+  const Z_TOP = 2.54
+  const Z_BOTTOM = W - 2.54
   const holes: [number, number, number][] = [
     [14, 2.5, 1.6],
     [15.2, W - 2.5, 1.6],
@@ -315,20 +320,24 @@ export function buildUno(T: Three, kit: Kit): Built {
     size: { L, W },
     floor: -0.2,
     views: { iso: [-46, 52, 62], top: [0, 92, 0.01], front: [0, 22, 92] },
+    pinRef: { terminal: 'uno.SCL', local: [X_TOP10 - L / 2, Z_TOP - W / 2] },
+    socketY: top + 8.5,
   }
 }
 
 // ── ESP32 DevKit V1 ─────────────────────────────────────────────────────
 
-export function buildEsp32(T: Three, kit: Kit): Built {
+/** `labPins`: the header pins point up (the lab plugs wires onto them), not down into a breadboard. */
+export function buildEsp32(T: Three, kit: Kit, opts: { labPins?: boolean } = {}): Built {
   const L = 51.4
   const W = 28.3
   const thick = 1.6
   const top = thick + 0.12
   const { root, parts, anchors, lift, place, part } = frame(T, L, W)
   const X0 = 7.3
-  const Z_TOP = 1.4
-  const Z_BOTTOM = W - 1.4
+  // Rows 25.4 mm apart, as on the bench.
+  const Z_TOP = 1.45
+  const Z_BOTTOM = W - 1.45
   const topLabels = ['VIN', 'GND', 'D13', 'D12', 'D14', 'D27', 'D26', 'D25', 'D33', 'D32', 'D35', 'D34', 'VN', 'VP', 'EN']
   const bottomLabels = ['3V3', 'GND', 'D15', 'D2', 'D4', 'RX2', 'TX2', 'D5', 'D18', 'D19', 'D21', 'RX0', 'TX0', 'D22', 'D23']
   const holes: [number, number, number][] = [
@@ -409,8 +418,9 @@ export function buildEsp32(T: Three, kit: Kit): Built {
   // Two rows of pins pointing down under the board
   // The pins point down, so taking the board apart drops them.
   const pins = part('gpio', -12, [25, 4, Z_TOP])
-  pins.add(place(kit.maleHeader(15, 1, 6, true), X0 + 7 * PITCH, Z_TOP, 0))
-  pins.add(place(kit.maleHeader(15, 1, 6, true), X0 + 7 * PITCH, Z_BOTTOM, 0))
+  const down = !opts.labPins
+  pins.add(place(kit.maleHeader(15, 1, 6, down), X0 + 7 * PITCH, Z_TOP, down ? 0 : top))
+  pins.add(place(kit.maleHeader(15, 1, 6, down), X0 + 7 * PITCH, Z_BOTTOM, down ? 0 : top))
   // Small parts
   const avoid: [number, number, number, number][] = [
     [38.6, W / 2, 27, 19],
@@ -438,7 +448,9 @@ export function buildEsp32(T: Three, kit: Kit): Built {
     // The board rises off its pins, which stay standing on the mat.
     baseLift: 12,
     views: { iso: [-34, 40, 46], top: [0, 70, 0.01], front: [0, 14, 70] },
+    pinRef: { terminal: 'esp.VIN', local: [X0 - L / 2, Z_TOP - W / 2] },
+    socketY: opts.labPins ? top + 7 : top,
   }
 }
 
-export const BUILDERS: Record<Board3DId, (T: Three, kit: Kit) => Built> = { uno: buildUno, esp32: buildEsp32 }
+export const BUILDERS: Record<Board3DId, (T: Three, kit: Kit, opts?: { labPins?: boolean }) => Built> = { uno: buildUno, esp32: buildEsp32 }

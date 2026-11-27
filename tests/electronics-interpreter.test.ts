@@ -48,6 +48,8 @@ function fakeBoard() {
     servoAttach: (id) => (servo[id] = 90),
     servoWrite: (id, a) => (servo[id] = a),
     servoDetach: () => {},
+    lcd: () => {},
+    dhtRead: () => 25,
     random: () => 0.5,
   }
   return hw

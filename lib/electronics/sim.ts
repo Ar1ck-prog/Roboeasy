@@ -33,6 +33,8 @@ export type FaultCode =
   | 'sensor_unpowered'
   | 'serial_not_begun'
   | 'no_ground'
+  | 'i2c_missing'
+  | 'dht_missing'
 
 export interface Fault {
   code: FaultCode
@@ -59,7 +61,16 @@ export interface FrameState {
   faults: Fault[]
   /** 0/1 level and duty per pin for checks. */
   pins: { mode: PinMode; level: number; duty: number }[]
+  /** RGB LEDs: brightness of red, green and blue, 0…1. */
+  rgb: Record<string, [number, number, number]>
+  /** 16×2 displays that are wired and powered: their two lines and the backlight. */
+  lcd: Record<string, { lines: [string, string]; backlight: boolean } | null>
+  /** Motion sensors that see motion and have power (their red indicator). */
+  pir: Record<string, boolean>
 }
+
+/** Forward voltages of the three colours of an RGB LED. */
+const RGB_VF: Record<'r' | 'g' | 'b', number> = { r: 2.0, g: 3.0, b: 3.0 }
 
 export class Board implements Hardware {
   now = 0
@@ -218,11 +229,118 @@ export class Board implements Hardware {
           els.push({ t: 'r', a: this.legNet(part, 'vcc'), b: this.legNet(part, 'gnd'), ohms: 2000, id: `${id}.p` })
           if (this.sensorPowered(part)) els.push({ t: 'src', n: this.legNet(part, 'echo'), volts: 0, ohms: 100, id: `${id}.echo` })
           break
+        case 'rgb':
+          for (const c of ['r', 'g', 'b'] as const) {
+            if (this.burned.has(`${id}:${c}`)) continue
+            const j = `${id}:${c}:junction`
+            els.push({ t: 'r', a: this.legNet(part, c), b: j, ohms: LED_OHMS })
+            els.push({ t: 'd', a: j, k: this.legNet(part, 'k'), id: `${id}:${c}`, ...diodeFor(RGB_VF[c]) })
+          }
+          break
+        case 'pir':
+          els.push({ t: 'r', a: this.legNet(part, 'vcc'), b: this.legNet(part, 'gnd'), ohms: 5000 })
+          // The HC-SR501 drives its output with 3.3 V while it sees motion.
+          if (this.modulePowered(part)) els.push({ t: 'src', n: this.legNet(part, 'out'), volts: part.props.motion ? 3.3 : 0, ohms: 100, id: `${id}.out` })
+          break
+        case 'dht':
+          els.push({ t: 'r', a: this.legNet(part, 'vcc'), b: this.legNet(part, 'gnd'), ohms: 2000 })
+          els.push({ t: 'r', a: this.legNet(part, 'data'), b: this.legNet(part, 'vcc'), ohms: 10_000 })
+          break
+        case 'lcd':
+          // Backlight current, and the I²C pull-ups on the backpack.
+          els.push({ t: 'r', a: this.legNet(part, 'vcc'), b: this.legNet(part, 'gnd'), ohms: 220, id: `${id}.p` })
+          els.push({ t: 'r', a: this.legNet(part, 'sda'), b: this.legNet(part, 'vcc'), ohms: 4700 })
+          els.push({ t: 'r', a: this.legNet(part, 'scl'), b: this.legNet(part, 'vcc'), ohms: 4700 })
+          break
+        case 'joystick': {
+          const x = Math.max(0, Math.min(1, part.props.jx ?? 0.5))
+          const y = Math.max(0, Math.min(1, part.props.jy ?? 0.5))
+          const vcc = this.legNet(part, 'vcc')
+          const gnd = this.legNet(part, 'gnd')
+          els.push({ t: 'r', a: vcc, b: this.legNet(part, 'vrx'), ohms: 50 + (1 - x) * 10_000 })
+          els.push({ t: 'r', a: this.legNet(part, 'vrx'), b: gnd, ohms: 50 + x * 10_000 })
+          els.push({ t: 'r', a: vcc, b: this.legNet(part, 'vry'), ohms: 50 + (1 - y) * 10_000 })
+          els.push({ t: 'r', a: this.legNet(part, 'vry'), b: gnd, ohms: 50 + y * 10_000 })
+          if (part.props.pressed) els.push({ t: 'r', a: this.legNet(part, 'sw'), b: gnd, ohms: 0.05 })
+          break
+        }
         default:
           break
       }
     }
     return els
+  }
+
+  /** A module with VCC on one of the board's supplies and GND on ground. */
+  private modulePowered(part: Part) {
+    const vcc = this.legNet(part, 'vcc')
+    return this.legNet(part, 'gnd') === this.ground && this.profile.supplies.some((s) => this.net(this.term(s.name)) === vcc)
+  }
+
+  /** Displays that answer on the I²C bus: powered, SDA and SCL on the board's I²C pins. */
+  private lcdParts(): Part[] {
+    const sda = this.net(this.pinTerminal(this.profile.i2c.sda))
+    const scl = this.net(this.pinTerminal(this.profile.i2c.scl))
+    return this.doc.parts.filter((p) => p.type === 'lcd' && this.modulePowered(p) && this.legNet(p, 'sda') === sda && this.legNet(p, 'scl') === scl)
+  }
+
+  private lcdText: [string[], string[]] = [Array(16).fill(' '), Array(16).fill(' ')]
+  private lcdCursor = { col: 0, row: 0 }
+  private lcdBacklight = false
+  private lcdOn = true
+
+  lcd(_id: number, op: string, args: (number | string)[]) {
+    if (!this.lcdParts().length) {
+      this.fault({ code: 'i2c_missing' })
+      return
+    }
+    switch (op) {
+      case 'init':
+      case 'begin':
+        this.lcdText = [Array(16).fill(' '), Array(16).fill(' ')]
+        this.lcdCursor = { col: 0, row: 0 }
+        break
+      case 'backlight':
+        this.lcdBacklight = true
+        break
+      case 'noBacklight':
+        this.lcdBacklight = false
+        break
+      case 'display':
+        this.lcdOn = true
+        break
+      case 'noDisplay':
+        this.lcdOn = false
+        break
+      case 'clear':
+        this.lcdText = [Array(16).fill(' '), Array(16).fill(' ')]
+        this.lcdCursor = { col: 0, row: 0 }
+        break
+      case 'home':
+        this.lcdCursor = { col: 0, row: 0 }
+        break
+      case 'setCursor':
+        this.lcdCursor = { col: Math.max(0, Math.min(15, Number(args[0]) | 0)), row: Math.max(0, Math.min(1, Number(args[1]) | 0)) }
+        break
+      case 'print':
+        for (const ch of String(args[0] ?? '')) {
+          if (this.lcdCursor.col < 16) this.lcdText[this.lcdCursor.row][this.lcdCursor.col] = ch
+          this.lcdCursor.col++
+        }
+        break
+    }
+  }
+
+  dhtRead(_id: number, pin: number, what: 'temp' | 'humidity', type: number): number {
+    const n = this.net(this.pinTerminal(pin))
+    const part = this.doc.parts.find((p) => p.type === 'dht' && this.legNet(p, 'data') === n && this.modulePowered(p))
+    if (!part) {
+      this.fault({ code: 'dht_missing', pin: this.pinLabel(pin) })
+      return Number.NaN
+    }
+    const value = what === 'temp' ? (part.props.temp ?? 24) : (part.props.humidity ?? 45)
+    // The DHT11 gives whole numbers; the DHT22 tenths.
+    return type === 11 ? Math.round(value) : Math.round(value * 10) / 10
   }
 
   private sensorPowered(part: Part) {
@@ -531,6 +649,24 @@ export class Board implements Hardware {
       return solution!.v.get(n) ?? 0
     }
 
+    const rgb: FrameState['rgb'] = {}
+    for (const part of this.doc.parts.filter((p) => p.type === 'rgb')) {
+      rgb[part.id] = (['r', 'g', 'b'] as const).map((c) => {
+        const key = `${part.id}:${c}`
+        if ((peakI.get(key) ?? 0) > LED_BURN_A) {
+          this.burned.add(key)
+          this.fault({ code: 'led_burned', part: part.id, ma: Math.round((peakI.get(key) ?? 0) * 1000) })
+        }
+        return this.burned.has(key) ? 0 : Math.min(1, Math.max(0, sumI.get(key) ?? 0) / LED_FULL_A) ** 0.6
+      }) as [number, number, number]
+    }
+    const lcdLive = new Set(this.lcdParts().map((p) => p.id))
+    const lcd: FrameState['lcd'] = {}
+    for (const part of this.doc.parts.filter((p) => p.type === 'lcd'))
+      lcd[part.id] = lcdLive.has(part.id) && this.lcdOn ? { lines: [this.lcdText[0].join(''), this.lcdText[1].join('')], backlight: this.lcdBacklight } : null
+    const pir: FrameState['pir'] = {}
+    for (const part of this.doc.parts.filter((p) => p.type === 'pir')) pir[part.id] = Boolean(part.props.motion) && this.modulePowered(part)
+
     const state: FrameState = {
       t: this.now / 1000,
       leds: ledState,
@@ -543,6 +679,9 @@ export class Board implements Hardware {
       volts,
       faults: this.pendingFaults,
       pins: this.mode.map((mode, p) => ({ mode, level: this.level[p], duty: duty[p] })),
+      rgb,
+      lcd,
+      pir,
     }
     this.pendingFaults = []
     this.txFrame = false

@@ -181,11 +181,13 @@ export function lex(source: string): Token[] {
 // ── Types ───────────────────────────────────────────────────────────────
 
 /** How a variable stores its value. */
-export type Kind = 'i8' | 'u8' | 'char' | 'bool' | 'i16' | 'u16' | 'i32' | 'u32' | 'f' | 'str' | 'servo' | 'void'
+export type Kind = 'i8' | 'u8' | 'char' | 'bool' | 'i16' | 'u16' | 'i32' | 'u32' | 'f' | 'str' | 'servo' | 'lcd' | 'dht' | 'void'
+/** Kinds that are library objects (Servo, LiquidCrystal_I2C, DHT). */
+export const OBJECT_KINDS: Kind[] = ['servo', 'lcd', 'dht']
 
 /** Words of a type name and the kind they make (int is 16 bits on the Uno; the board may widen it). */
 const TYPE_WORDS = new Set([
-  'int', 'long', 'short', 'unsigned', 'signed', 'char', 'byte', 'bool', 'boolean', 'float', 'double', 'void', 'String', 'Servo', 'word',
+  'int', 'long', 'short', 'unsigned', 'signed', 'char', 'byte', 'bool', 'boolean', 'float', 'double', 'void', 'String', 'Servo', 'LiquidCrystal_I2C', 'DHT', 'word',
   'uint8_t', 'int8_t', 'uint16_t', 'int16_t', 'uint32_t', 'int32_t', 'size_t',
 ])
 
@@ -224,6 +226,10 @@ export function kindOf(words: string[], intBits: 16 | 32): Kind | null {
       return 'str'
     case 'Servo':
       return 'servo'
+    case 'LiquidCrystal_I2C':
+      return 'lcd'
+    case 'DHT':
+      return 'dht'
     case 'word':
     case 'uint16_t':
       return 'u16'
@@ -262,7 +268,8 @@ export interface Declarator {
   size?: Expr | null
   init?: Expr
   list?: Expr[]
-  /** Constructor arguments: `Servo s;` has none. */
+  /** Constructor arguments of a library object: `DHT dht(2, DHT11);` */
+  args?: Expr[]
   line: number
 }
 
@@ -504,7 +511,7 @@ export function parse(source: string, intBits: 16 | 32 = 16): Program {
         d.size = is(']') ? null : expression()
         expect(']')
       }
-      if (type.kind === 'servo' && is('(')) args() // Servo s(); is unusual but harmless
+      if (OBJECT_KINDS.includes(type.kind) && is('(')) d.args = args()
       if (accept('=')) {
         if (accept('{')) {
           d.list = []
@@ -618,7 +625,7 @@ export function parse(source: string, intBits: 16 | 32 = 16): Program {
         const before = p
         const type = readType()
         // `void loop() {` inside a function: the function before it lacks its closing brace.
-        if (peek().kind === 'id' && is('(', 1)) throw new CodeError('expected', before > 0 ? tokens[before - 1].line : line, { what: '}', got: '' })
+        if (peek().kind === 'id' && is('(', 1) && !OBJECT_KINDS.includes(type.kind)) throw new CodeError('expected', before > 0 ? tokens[before - 1].line : line, { what: '}', got: '' })
         return declaration(type)
       }
     }
@@ -642,8 +649,8 @@ export function parse(source: string, intBits: 16 | 32 = 16): Program {
     if (accept(';')) continue
     if (!startsType()) throw new CodeError('unexpected_token', peek().line, { got: describe(peek()) })
     const type = readType()
-    // A function: type name ( … )
-    if (peek().kind === 'id' && is('(', 1)) {
+    // A function: type name ( … ) — unless the type is a library object with constructor arguments.
+    if (peek().kind === 'id' && is('(', 1) && !OBJECT_KINDS.includes(type.kind)) {
       const line = peek().line
       const name = ident()
       expect('(')

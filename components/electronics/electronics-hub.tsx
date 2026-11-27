@@ -26,6 +26,9 @@ const MISSION_PART: Record<MissionId, { type: PartType; box: string; props?: obj
   servo: { type: 'servo', box: '-40 -6 100 70' },
   radar: { type: 'ultrasonic', box: '-62 -82 154 84' },
   night: { type: 'ldr', box: '-4 -24 28 28' },
+  rgb: { type: 'rgb', box: '-6 -34 42 40' },
+  alarm: { type: 'pir', box: '-44 -108 108 112' },
+  thermo: { type: 'dht', box: '-16 -80 52 84' },
 }
 
 export function ElectronicsHub({ lang, t }: { lang: Locale; t: ElectronicsText }) {

@@ -7,7 +7,7 @@
 import { BB_ROW_Y, type CircuitDoc, DEFAULT_PROPS, type Part, type PartType, type Wire, bbColX } from './board'
 import type { FrameState } from './sim'
 
-export const MISSION_IDS = ['blink', 'led', 'button', 'dimmer', 'traffic', 'melody', 'servo', 'radar', 'night'] as const
+export const MISSION_IDS = ['blink', 'led', 'button', 'dimmer', 'traffic', 'melody', 'servo', 'radar', 'night', 'rgb', 'alarm', 'thermo'] as const
 export type MissionId = (typeof MISSION_IDS)[number]
 
 const at = (id: string, type: PartType, row: string, col: number, props = {}): Part => ({
@@ -292,6 +292,139 @@ void loop() {
       },
     }
   })(),
+  rgb: (() => {
+    // Three resistors stand across the channel (top strip → bottom strip); the RGB LED sits in the bottom strips.
+    const res = (col: number): Part => ({ ...at(`r${col}`, 'resistor', 'd', col, { ohms: 220 }), rot: 1 })
+    const doc = {
+      parts: [res(20), res(22), res(23), at('c1', 'rgb', 'h', 20)],
+      wires: [
+        w('uno.GND.2', 'bb.bn1', COLORS.black),
+        w('uno.D9', 'bb.a20', COLORS.red),
+        w('uno.D10', 'bb.a22', COLORS.green),
+        w('uno.D11', 'bb.a23', COLORS.blue),
+        w('bb.j21', 'bb.bn21', COLORS.black),
+      ],
+    }
+    return {
+      starter: { doc: unwired(doc), code: STARTER_CODE },
+      solution: {
+        doc,
+        code: `const int R = 9;
+const int G = 10;
+const int B = 11;
+
+void color(int r, int g, int b) {
+  analogWrite(R, r);
+  analogWrite(G, g);
+  analogWrite(B, b);
+}
+
+void setup() {
+  pinMode(R, OUTPUT);
+  pinMode(G, OUTPUT);
+  pinMode(B, OUTPUT);
+}
+
+void loop() {
+  color(255, 0, 0);    // red
+  delay(600);
+  color(0, 255, 0);    // green
+  delay(600);
+  color(0, 0, 255);    // blue
+  delay(600);
+  color(255, 0, 255);  // purple: red + blue
+  delay(600);
+}
+`,
+      },
+    }
+  })(),
+  alarm: (() => {
+    const doc = {
+      parts: [free('m1', 'pir', 690, 230), at('z1', 'buzzer', 'e', 24)],
+      wires: [
+        gndRail,
+        w('m1.vcc', 'uno.5V', COLORS.red),
+        w('m1.out', 'uno.D2', COLORS.yellow),
+        w('m1.gnd', 'uno.GND.2', COLORS.black),
+        w('uno.D8', 'bb.a24', COLORS.orange),
+        w('bb.a27', 'bb.tn27', COLORS.black),
+      ],
+    }
+    return {
+      starter: { doc: unwired(doc), code: STARTER_CODE },
+      solution: {
+        doc,
+        code: `const int PIR = 2;
+const int BUZZER = 8;
+
+void setup() {
+  Serial.begin(9600);
+  pinMode(PIR, INPUT);
+}
+
+void loop() {
+  if (digitalRead(PIR) == HIGH) {
+    Serial.println("Motion!");
+    tone(BUZZER, 1200);
+    digitalWrite(LED_BUILTIN, HIGH);
+  } else {
+    noTone(BUZZER);
+    digitalWrite(LED_BUILTIN, LOW);
+  }
+  delay(100);
+}
+`,
+      },
+    }
+  })(),
+  thermo: (() => {
+    const doc = {
+      parts: [free('t1', 'dht', 690, 230, { temp: 24, humidity: 45 }), free('d1', 'lcd', 60, 400)],
+      wires: [
+        w('t1.vcc', 'uno.5V', COLORS.red),
+        w('t1.data', 'uno.D4', COLORS.yellow),
+        w('t1.gnd', 'uno.GND.2', COLORS.black),
+        w('d1.gnd', 'uno.GND.1', COLORS.black),
+        w('d1.vcc', 'uno.IOREF', COLORS.red),
+        w('d1.sda', 'uno.A4', COLORS.blue),
+        w('d1.scl', 'uno.A5', COLORS.green),
+      ],
+    }
+    return {
+      starter: { doc: unwired(doc), code: `#include <Wire.h>\n#include <LiquidCrystal_I2C.h>\n#include <DHT.h>\n\n${STARTER_CODE}` },
+      solution: {
+        doc,
+        code: `#include <Wire.h>
+#include <LiquidCrystal_I2C.h>
+#include <DHT.h>
+
+LiquidCrystal_I2C lcd(0x27, 16, 2);
+DHT dht(4, DHT11);
+
+void setup() {
+  lcd.init();
+  lcd.backlight();
+  dht.begin();
+}
+
+void loop() {
+  int t = dht.readTemperature();
+  int h = dht.readHumidity();
+  lcd.setCursor(0, 0);
+  lcd.print("Temp: ");
+  lcd.print(t);
+  lcd.print(" C   ");
+  lcd.setCursor(0, 1);
+  lcd.print("Humidity: ");
+  lcd.print(h);
+  lcd.print("%  ");
+  delay(500);
+}
+`,
+      },
+    }
+  })(),
 }
 
 export function getMission(id: MissionId): Mission {
@@ -354,6 +487,7 @@ const anyLed = (f: FrameState, doc: CircuitDoc, min = ON) => ledsOf(doc).some((p
 const allLedsOff = (f: FrameState, doc: CircuitDoc) => ledsOf(doc).every((p) => (f.leds[p.id] ?? 0) < OFF)
 
 export function createChecker(id: MissionId): Checker {
+  const keep2 = latch(1)
   switch (id) {
     case 'blink': {
       const e = edges()
@@ -461,6 +595,48 @@ export function createChecker(id: MissionId): Checker {
         const onInDark = light < 0.3 && anyLed(frame, doc)
         if (onInDark) litOnce = true
         return keep([onInDark, litOnce && light > 0.7 && allLedsOff(frame, doc)])
+      }
+    }
+    case 'rgb': {
+      const keep = latch(3)
+      let burned = false
+      return ({ frame, doc }) => {
+        const led = doc.parts.find((p) => p.type === 'rgb')
+        const [r, g, b] = led ? (frame.rgb[led.id] ?? [0, 0, 0]) : [0, 0, 0]
+        if (frame.burned.some((id) => id.startsWith(`${led?.id}:`)) || frame.faults.some((f) => f.code === 'led_burned')) burned = true
+        const on = (v: number) => v >= ON
+        const off = (v: number) => v < OFF
+        const met = keep([on(r) && off(g) && off(b), off(r) && on(g) && off(b), off(r) && off(g) && on(b)])
+        const all = met.every(Boolean)
+        const mixed = keep2([[r, g, b].filter(on).length >= 2])[0]
+        return [all, mixed, all && !burned]
+      }
+    }
+    case 'alarm': {
+      const keep = latch(2)
+      let rang = false
+      return ({ frame, doc }) => {
+        const pir = doc.parts.find((p) => p.type === 'pir')
+        const motion = Boolean(pir?.props.motion)
+        const sound = frame.tones.length > 0
+        if (motion && sound) rang = true
+        return keep([motion && sound, rang && !motion && !sound])
+      }
+    }
+    case 'thermo': {
+      const keep = latch(3)
+      const seen = new Set<number>()
+      return ({ frame, doc }) => {
+        const dht = doc.parts.find((p) => p.type === 'dht')
+        const screens = Object.values(frame.lcd).filter((s): s is NonNullable<typeof s> => Boolean(s))
+        const text = screens.map((s) => s.lines.join('\n')).join('\n')
+        const lit = screens.some((s) => s.backlight && s.lines.some((l) => l.trim()))
+        const temp = Math.round(dht?.props.temp ?? 24)
+        const showsTemp = Boolean(dht) && new RegExp(`(^|[^0-9])${temp}([^0-9]|$)`).test(text)
+        if (showsTemp) seen.add(temp)
+        const hum = Math.round(dht?.props.humidity ?? 45)
+        const showsHum = Boolean(dht) && new RegExp(`(^|[^0-9])${hum}([^0-9]|$)`).test(text) && text.includes('%')
+        return keep([lit, showsTemp && showsHum, seen.size >= 2])
       }
     }
   }

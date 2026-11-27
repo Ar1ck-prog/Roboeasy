@@ -54,6 +54,18 @@ describe('circuit physics', () => {
     expect(state.faults).toEqual([])
   })
 
+  it('blue and white LEDs (about 3 V) light up as well as red ones', () => {
+    for (const color of ['blue', 'white', 'green']) {
+      const doc: CircuitDoc = {
+        parts: [part('r1', 'resistor', 'a', 10), part('l1', 'led', 'e', 14, { color })],
+        wires: [wire('uno.D13', 'bb.c10'), wire('bb.c15', 'uno.GND.1')],
+      }
+      const { state } = runFor(ON13, doc, 100)
+      expect(state.ledMa.l1, color).toBeGreaterThan(7)
+      expect(state.leds.l1, color).toBeGreaterThan(0.8)
+    }
+  })
+
   it('a bigger resistor makes the LED dimmer', () => {
     const doc = (ohms: number): CircuitDoc => ({
       parts: [part('r1', 'resistor', 'a', 10, { ohms }), part('l1', 'led', 'e', 14)],
@@ -219,5 +231,70 @@ describe('ESP32 DevKit', () => {
     const adc = new Simulation(`void setup() { analogRead(5); } void loop() {}`, esp({ parts: [], wires: [] }))
     adc.step(20)
     expect(adc.status).toMatchObject({ kind: 'error', error: { code: 'bad_analog_pin' } })
+  })
+})
+
+describe('modules: RGB LED, motion sensor, DHT11, I2C display, joystick', () => {
+  const mod = (id: string, type: PartType, x: number, props = {}): Part => ({ id, type, x, y: 340, rot: 0, props: { ...DEFAULT_PROPS[type], ...props } })
+
+  it('an RGB LED mixes its colours by channel', () => {
+    const doc: CircuitDoc = {
+      parts: [part('r1', 'resistor', 'a', 6), part('c1', 'rgb', 'e', 10)],
+      wires: [wire('uno.D9', 'bb.b6'), wire('bb.b11', 'uno.GND.1')],
+    }
+    const { state } = runFor(`void setup() { pinMode(9, OUTPUT); digitalWrite(9, HIGH); } void loop() {}`, doc, 60)
+    expect(state.rgb.c1[0]).toBeGreaterThan(0.8)
+    expect(state.rgb.c1[1]).toBe(0)
+    expect(state.rgb.c1[2]).toBe(0)
+  })
+
+  it('the motion sensor drives its output HIGH while something moves', () => {
+    const src = `void setup() { Serial.begin(9600); pinMode(2, INPUT); } void loop() { Serial.println(digitalRead(2)); delay(50); }`
+    const doc = (motion: boolean): CircuitDoc => ({ parts: [mod('m1', 'pir', 400, { motion })], wires: [wire('m1.vcc', 'uno.5V'), wire('m1.out', 'uno.D2'), wire('m1.gnd', 'uno.GND.1')] })
+    expect(runFor(src, doc(false), 60).sim.board.serialOut.split('\r\n')[0]).toBe('0')
+    const moving = runFor(src, doc(true), 60)
+    expect(moving.sim.board.serialOut.split('\r\n')[0]).toBe('1')
+    expect(moving.state.pir.m1).toBe(true)
+  })
+
+  it('the DHT11 library reads the air around the sensor', () => {
+    const src = `#include <DHT.h>\nDHT dht(4, DHT11);\nvoid setup() { Serial.begin(9600); dht.begin(); Serial.println(dht.readTemperature()); Serial.println(dht.readHumidity()); } void loop() {}`
+    const doc: CircuitDoc = { parts: [mod('t1', 'dht', 400, { temp: 27.4, humidity: 61 })], wires: [wire('t1.vcc', 'uno.5V'), wire('t1.data', 'uno.D4'), wire('t1.gnd', 'uno.GND.1')] }
+    expect(runFor(src, doc, 40).sim.board.serialOut.split('\r\n').slice(0, 2)).toEqual(['27.00', '61.00'])
+    const lonely = new Simulation(src, { parts: [], wires: [] })
+    const f = lonely.step(20)
+    expect(lonely.board.serialOut.split('\r\n')[0]).toBe('nan')
+    expect(f.faults.map((x) => x.code)).toContain('dht_missing')
+  })
+
+  it('a 16x2 display shows what the sketch prints, only with SDA and SCL wired', () => {
+    const src = `#include <LiquidCrystal_I2C.h>\nLiquidCrystal_I2C lcd(0x27, 16, 2);\nvoid setup() { lcd.init(); lcd.backlight(); lcd.setCursor(0, 1); lcd.print("Hi "); lcd.print(42); } void loop() {}`
+    const wires = [wire('d1.gnd', 'uno.GND.1'), wire('d1.vcc', 'uno.5V'), wire('d1.sda', 'uno.A4'), wire('d1.scl', 'uno.A5')]
+    const ok = runFor(src, { parts: [mod('d1', 'lcd', 400)], wires }, 40).state
+    expect(ok.lcd.d1).toEqual({ lines: [' '.repeat(16), 'Hi 42' + ' '.repeat(11)], backlight: true })
+    const sim = new Simulation(src, { parts: [mod('d1', 'lcd', 400)], wires: wires.slice(0, 2) })
+    const s = sim.step(20)
+    expect(s.lcd.d1).toBeNull()
+    expect(s.faults.map((x) => x.code)).toContain('i2c_missing')
+  })
+
+  it('the joystick is two potentiometers and a button', () => {
+    const src = `void setup() { Serial.begin(9600); pinMode(2, INPUT_PULLUP); } void loop() { Serial.println(analogRead(A0)); Serial.println(digitalRead(2)); delay(100); }`
+    const doc = (jx: number, pressed: boolean): CircuitDoc => ({
+      parts: [mod('j1', 'joystick', 400, { jx, pressed })],
+      wires: [wire('j1.gnd', 'uno.GND.1'), wire('j1.vcc', 'uno.5V'), wire('j1.vrx', 'uno.A0'), wire('j1.sw', 'uno.D2')],
+    })
+    const right = runFor(src, doc(1, false), 60).sim.board.serialOut.split('\r\n')
+    expect(Number(right[0])).toBeGreaterThan(1000)
+    expect(right[1]).toBe('1')
+    const left = runFor(src, doc(0, true), 60).sim.board.serialOut.split('\r\n')
+    expect(Number(left[0])).toBeLessThan(20)
+    expect(left[1]).toBe('0')
+  })
+
+  it('on the ESP32 the display uses GPIO21 and GPIO22', () => {
+    const src = `#include <LiquidCrystal_I2C.h>\nLiquidCrystal_I2C lcd(0x27, 16, 2);\nvoid setup() { lcd.init(); lcd.print("ESP"); } void loop() {}`
+    const doc: CircuitDoc = { board: 'esp32', parts: [mod('d1', 'lcd', 400)], wires: [wire('d1.gnd', 'esp.GND.1'), wire('d1.vcc', 'esp.VIN'), wire('d1.sda', 'esp.G21'), wire('d1.scl', 'esp.G22')] }
+    expect(runFor(src, doc, 40).state.lcd.d1?.lines[0].startsWith('ESP')).toBe(true)
   })
 })
